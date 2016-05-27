@@ -1,0 +1,128 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MainPage.master.cs" Inherits="WebHome.template.MainPage" %>
+
+<%@ Register Src="~/Module/Common/CommonScriptManager.ascx" TagPrefix="uc1" TagName="CommonScriptManager" %>
+<%@ Register Src="~/Views/Shared/Script.ascx" TagPrefix="uc1" TagName="Script" %>
+
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>BEYOND FITNESS</title>
+
+    <!-- Define Charset -->
+    <meta charset="utf-8" />
+
+    <!-- Responsive Metatag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!-- Page Description and Author -->
+    <meta name="description" content="BEYOND FITNESS" />
+
+    <!-- Bootstrap CSS  -->
+    <link rel="stylesheet" href="~/asset/css/bootstrap.min.css" type="text/css" media="screen" />
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css" media="screen" />
+
+    <!-- Slicknav -->
+    <link rel="stylesheet" type="text/css" href="~/css/slicknav.css" media="screen" />
+
+    <!-- Margo CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" media="screen" />
+
+    <!-- Responsive CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/responsive.css" media="screen" />
+
+    <!-- Css3 Transitions Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/animate.css" media="screen" />
+
+    <!-- Color CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/colors/orange.css" title="orange" media="screen" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="theForm" runat="server">
+        <uc1:CommonScriptManager runat="server" ID="CommonScriptManager" />
+        <%= Html.AntiForgeryToken() %>
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.6";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+        <!-- Container -->
+        <div id="container">
+
+            <!-- Start Header -->
+            <div class="hidden-header"></div>
+            <header class="clearfix">
+
+                <!-- Start Header ( Logo & Naviagtion ) -->
+                <div class="navbar navbar-default navbar-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <!-- Stat Toggle Nav Link For Mobiles -->
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <!-- End Toggle Nav Link For Mobiles -->
+                            <a class="navbar-brand" href="index.htm">
+                                <img src="<%= VirtualPathUtility.ToAbsolute("~/images/Beyond-Fitness.png") %>" alt=""></a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <!-- Start Navigation List -->
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a id="home" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">首頁</a></li>
+                                <li><a id="professional" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Professional") %>">專業體能訓練</a></li>
+                                <li><a id="blog" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Blog") %>">專業知識</a></li>
+                                <li><a id="rental" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Rental") %>">場地租借</a></li>
+                                <li><a id="products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
+                                <li><a id="cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
+                                <li><a id="contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
+                                <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>
+                            </ul>
+                            <!-- End Navigation List -->
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Start -->
+                    <ul class="wpb-mobile-menu">
+                        <li><a id="m_home" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">首頁</a></li>
+                        <li><a id="m_professional" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Professional") %>">專業體能訓練</a></li>
+                        <li><a id="m_blog" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Blog") %>">專業知識</a></li>
+                        <li><a id="m_rental" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Rental") %>">場地租借</a></li>
+                        <li><a id="m_products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
+                        <li><a id="m_cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
+                        <li><a id="m_contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
+                        <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>
+
+                    </ul>
+                    <!-- Mobile Menu End -->
+
+                </div>
+                <!-- End Header ( Logo & Naviagtion ) -->
+
+            </header>
+            <!-- End Header -->
+
+            <asp:ContentPlaceHolder ID="mainContent" runat="server">
+            </asp:ContentPlaceHolder>
+
+            <!-- Start Footer -->
+            <div id="footer">
+            </div>
+            <!-- End Footer -->
+
+        </div>
+        <!-- End Container -->
+
+        <!-- Go To Top Link -->
+        <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+        <uc1:Script runat="server" ID="Script" />
+    </form>
+</body>
+</html>

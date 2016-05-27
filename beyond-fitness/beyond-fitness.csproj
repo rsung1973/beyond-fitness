@@ -13,7 +13,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>beyond_fitness</RootNamespace>
+    <RootNamespace>WebHome</RootNamespace>
     <AssemblyName>beyond-fitness</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
@@ -48,6 +48,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -102,20 +105,240 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="add-blog.htm" />
+    <Content Include="add-coach.htm" />
+    <Content Include="add-student.htm" />
+    <Content Include="asset\css\bootstrap.min.css" />
+    <Content Include="asset\js\bootstrap.min.js" />
+    <Content Include="blog-content.htm" />
+    <Content Include="blog-manager.htm" />
+    <Content Include="blog.htm" />
+    <Content Include="class-list.htm" />
+    <Content Include="coach-edit-verify.htm" />
+    <Content Include="coach-verify.htm" />
+    <Content Include="coach.htm" />
+    <Content Include="contact-us.htm" />
+    <Content Include="cooperation.htm" />
+    <Content Include="css\animate.css" />
+    <Content Include="css\bootstrap-datetimepicker.min.css" />
+    <Content Include="css\colors\beige.css" />
+    <Content Include="css\colors\blue.css" />
+    <Content Include="css\colors\cyan.css" />
+    <Content Include="css\colors\green.css" />
+    <Content Include="css\colors\jade.css" />
+    <Content Include="css\colors\orange.css" />
+    <Content Include="css\colors\peach.css" />
+    <Content Include="css\colors\pink.css" />
+    <Content Include="css\colors\purple.css" />
+    <Content Include="css\colors\red.css" />
+    <Content Include="css\colors\sky-blue.css" />
+    <Content Include="css\colors\yellow.css" />
+    <Content Include="css\font-awesome.min.css" />
+    <Content Include="css\responsive.css" />
+    <Content Include="css\slicknav.css" />
+    <Content Include="css\style.css" />
+    <Content Include="Default.aspx" />
+    <Content Include="edit-blog.htm" />
+    <Content Include="edit-coach.htm" />
+    <Content Include="edit-vip-info-verify.htm" />
+    <Content Include="edit-vip-info.htm" />
+    <Content Include="equipment-rental-test.htm" />
+    <Content Include="equipment-rental.htm" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="footer.htm" />
+    <Content Include="forgetpw.htm" />
     <Content Include="Global.asax" />
+    <Content Include="images\Beyond-Fitness.png" />
+    <Content Include="images\blog_pic.png" />
+    <Content Include="images\COOPERATION-01.png" />
+    <Content Include="images\favicon.png" />
+    <Content Include="images\footer-beyond.png" />
+    <Content Include="images\index-01.jpg" />
+    <Content Include="images\map.png" />
+    <Content Include="images\page_banner_bg.gif" />
+    <Content Include="images\partner-Akrofitness.png" />
+    <Content Include="images\partner-BOOM.png" />
+    <Content Include="images\partner-lightfitness.png" />
+    <Content Include="images\partner-X-Revolution.png" />
+    <Content Include="images\place\place_01.jpg" />
+    <Content Include="images\place\place_02.jpg" />
+    <Content Include="images\place\place_03.jpg" />
+    <Content Include="images\place\place_04.jpg" />
+    <Content Include="images\place\place_05.jpg" />
+    <Content Include="images\place\place_06.jpg" />
+    <Content Include="images\place\place_07.jpg" />
+    <Content Include="images\place\place_08.jpg" />
+    <Content Include="images\place\place_09.jpg" />
+    <Content Include="images\place\place_10.jpg" />
+    <Content Include="images\product\product_01.jpg" />
+    <Content Include="images\product\product_02.jpg" />
+    <Content Include="images\product\product_03.jpg" />
+    <Content Include="images\product\product_04.jpg" />
+    <Content Include="images\product\product_05.jpg" />
+    <Content Include="images\product\product_06.jpg" />
+    <Content Include="images\product\product_07.jpg" />
+    <Content Include="images\product\product_08.jpg" />
+    <Content Include="images\product\product_09.jpg" />
+    <Content Include="images\product\product_10.jpg" />
+    <Content Include="images\product\product_11.jpg" />
+    <Content Include="images\product\product_12.jpg" />
+    <Content Include="images\product\product_13.jpg" />
+    <Content Include="images\product\product_14.jpg" />
+    <Content Include="images\product\product_15.jpg" />
+    <Content Include="images\product\product_16.jpg" />
+    <Content Include="images\product\product_17.jpg" />
+    <Content Include="images\product\product_18.jpg" />
+    <Content Include="images\product\product_19.jpg" />
+    <Content Include="images\product\product_20.jpg" />
+    <Content Include="images\product\product_21.jpg" />
+    <Content Include="images\product\product_22.jpg" />
+    <Content Include="images\product\product_23.jpg" />
+    <Content Include="images\product\product_24.jpg" />
+    <Content Include="images\product\product_25.jpg" />
+    <Content Include="images\professional-fitness-01.jpg" />
+    <Content Include="images\professional-fitness-02.jpg" />
+    <Content Include="images\professional-fitness-03.jpg" />
+    <Content Include="images\professional-fitness-04.jpg" />
+    <Content Include="images\professional-fitness-05.jpg" />
+    <Content Include="images\professional-fitness-06.jpg" />
+    <Content Include="images\professional-fitness-07.jpg" />
+    <Content Include="images\professional-fitness-08.jpg" />
+    <Content Include="images\slide-02-bg - Copy.jpg" />
+    <Content Include="images\slide-02-bg.jpg" />
+    <Content Include="images\slider\bg1.jpg" />
+    <Content Include="images\slider\bg2.jpg" />
+    <Content Include="images\slider\bg3.jpg" />
+    <Content Include="index.htm" />
+    <Content Include="js\bootstrap-datetimepicker.js" />
+    <Content Include="js\contact.js" />
+    <Content Include="js\count-to.js" />
+    <Content Include="js\jquery-2.1.4.min.js" />
+    <Content Include="js\jquery-migrate-1.2.1.min.js" />
+    <Content Include="js\jquery.appear.js" />
+    <Content Include="js\jquery.easypiechart.js" />
+    <Content Include="js\jquery.easypiechart.min.js" />
+    <Content Include="js\jquery.fitvids.js" />
+    <Content Include="js\jquery.isotope.js" />
+    <Content Include="js\jquery.isotope.min.js" />
+    <Content Include="js\jquery.lettering.js" />
+    <Content Include="js\jquery.migrate.js" />
+    <Content Include="js\jquery.nicescroll.js" />
+    <Content Include="js\jquery.nicescroll.min.js" />
+    <Content Include="js\jquery.parallax.js" />
+    <Content Include="js\jquery.slicknav.js" />
+    <Content Include="js\jquery.textillate.js" />
+    <Content Include="js\mediaelement-and-player.js" />
+    <Content Include="js\modernizrr.js" />
+    <Content Include="js\nivo-lightbox.js" />
+    <Content Include="js\nivo-lightbox.min.js" />
+    <Content Include="js\owl.carousel.js" />
+    <Content Include="js\owl.carousel.min.js" />
+    <Content Include="js\script.js" />
+    <Content Include="login.htm" />
+    <Content Include="member-manager.htm" />
+    <Content Include="Module\Common\CommonScriptInclude.ascx" />
+    <Content Include="Module\Common\CommonScriptManager.ascx" />
+    <Content Include="preview-blog.htm" />
+    <Content Include="products.htm" />
+    <Content Include="professional-fitness-content.htm" />
+    <Content Include="professional-fitness-content01.htm" />
+    <Content Include="professional-fitness-content02.htm" />
+    <Content Include="professional-fitness-content03.htm" />
+    <Content Include="professional-fitness-content04.htm" />
+    <Content Include="professional-fitness-content05.htm" />
+    <Content Include="professional-fitness-content06.htm" />
+    <Content Include="professional-fitness-content07.htm" />
+    <Content Include="professional-fitness-content08.htm" />
+    <Content Include="professional-fitness.htm" />
+    <Content Include="register-2.htm" />
+    <Content Include="register-3.htm" />
+    <Content Include="register.htm" />
+    <Content Include="Views\Account\Index.aspx" />
+    <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\Account\Login.aspx" />
+    <Content Include="Views\Information\Blog.aspx" />
+    <Content Include="Views\Information\Content00.aspx" />
+    <Content Include="Views\Information\Footer.ascx" />
+    <Content Include="Views\Information\ContactUs.aspx" />
+    <Content Include="Views\Information\Products.aspx" />
+    <Content Include="Views\Information\Content03.aspx" />
+    <Content Include="Views\Information\Content04.aspx" />
+    <Content Include="Views\Information\Content05.aspx" />
+    <Content Include="Views\Information\Content06.aspx" />
+    <Content Include="Views\Information\Content07.aspx" />
+    <Content Include="Views\Information\Content08.aspx" />
+    <Content Include="Views\Information\Content02.aspx" />
+    <Content Include="Views\Information\Content01.aspx" />
+    <Content Include="Views\Information\BlogDetail.aspx" />
+    <Content Include="Views\Information\Vip.aspx" />
+    <Content Include="Views\Information\Professional.aspx" />
+    <Content Include="Views\Information\Cooperation.aspx" />
+    <Content Include="Views\Information\Rental.aspx" />
+    <Content Include="Views\Shared\PageBanner.ascx" />
+    <Content Include="Views\Shared\Sample.ascx" />
+    <Content Include="Views\Shared\PagingControl.ascx" />
+    <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="Views\Shared\Script.ascx" />
+    <Content Include="vip.htm" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Models\DataEntity\BF.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BF.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataEntity\ModelSource.cs" />
+    <Compile Include="Models\Locale\Naming.cs" />
+    <Compile Include="Models\ViewModel\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModel\PagingIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="template\MainPage.Master.cs">
+      <DependentUpon>MainPage.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="template\MainPage.Master.designer.cs">
+      <DependentUpon>MainPage.Master</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="README.md" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="template\MainPage.Master" />
+    <Content Include="Models\DataEntity\BF.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>BF.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Properties\PublishProfiles\beyond-fitness.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -125,8 +348,28 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
+    <Folder Include="calendar\" />
+    <Folder Include="jQuerySelect\" />
+    <Folder Include="js\locales\" />
+    <Folder Include="lockScreen\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">
+      <Project>{8146e629-552a-4b36-8711-08ae8245b8fa}</Project>
+      <Name>CommonLib.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{c0ad239c-2ac4-46d2-ae7c-5e97266ef4ea}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\DataEntity\BF.dbml.layout">
+      <DependentUpon>BF.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

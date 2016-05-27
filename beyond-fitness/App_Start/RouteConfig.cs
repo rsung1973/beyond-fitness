@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace beyond_fitness
+namespace WebHome
 {
     public class RouteConfig
     {
