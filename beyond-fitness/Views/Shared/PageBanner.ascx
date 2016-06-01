@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
 <!-- Start Page Banner -->
-<div class="page-banner" style="padding: 40px 0; background: url(../images/page_banner_bg.gif);">
+<div class="page-banner" style="padding: 40px 0; background: url(<%= VirtualPathUtility.ToAbsolute("~/images/page_banner_bg.gif") %>);">
     <div class="container">
         <div class="row">
             <div class="col-md-6">

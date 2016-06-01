@@ -30,9 +30,6 @@ namespace WebHome.Models.DataEntity
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertArticle(Article instance);
-    partial void UpdateArticle(Article instance);
-    partial void DeleteArticle(Article instance);
     partial void InsertUserRoleDefinition(UserRoleDefinition instance);
     partial void UpdateUserRoleDefinition(UserRoleDefinition instance);
     partial void DeleteUserRoleDefinition(UserRoleDefinition instance);
@@ -51,6 +48,12 @@ namespace WebHome.Models.DataEntity
     partial void InsertUserRole(UserRole instance);
     partial void UpdateUserRole(UserRole instance);
     partial void DeleteUserRole(UserRole instance);
+    partial void InsertAttachment(Attachment instance);
+    partial void UpdateAttachment(Attachment instance);
+    partial void DeleteAttachment(Attachment instance);
+    partial void InsertArticle(Article instance);
+    partial void UpdateArticle(Article instance);
+    partial void DeleteArticle(Article instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -81,14 +84,6 @@ namespace WebHome.Models.DataEntity
 				base(connection, mappingSource)
 		{
 			OnCreated();
-		}
-		
-		public System.Data.Linq.Table<Article> Articles
-		{
-			get
-			{
-				return this.GetTable<Article>();
-			}
 		}
 		
 		public System.Data.Linq.Table<UserRoleDefinition> UserRoleDefinitions
@@ -138,220 +133,20 @@ namespace WebHome.Models.DataEntity
 				return this.GetTable<UserRole>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Article")]
-	public partial class Article : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _DocID;
-		
-		private string _Title;
-		
-		private string _ArticleContent;
-		
-		private System.Nullable<int> _AuthorID;
-		
-		private EntityRef<Document> _Document;
-		
-		private EntityRef<UserProfile> _UserProfile;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnDocIDChanging(int value);
-    partial void OnDocIDChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnArticleContentChanging(string value);
-    partial void OnArticleContentChanged();
-    partial void OnAuthorIDChanging(System.Nullable<int> value);
-    partial void OnAuthorIDChanged();
-    #endregion
-		
-		public Article()
-		{
-			this._Document = default(EntityRef<Document>);
-			this._UserProfile = default(EntityRef<UserProfile>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int DocID
+		public System.Data.Linq.Table<Attachment> Attachments
 		{
 			get
 			{
-				return this._DocID;
-			}
-			set
-			{
-				if ((this._DocID != value))
-				{
-					if (this._Document.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnDocIDChanging(value);
-					this.SendPropertyChanging();
-					this._DocID = value;
-					this.SendPropertyChanged("DocID");
-					this.OnDocIDChanged();
-				}
+				return this.GetTable<Attachment>();
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
-		public string Title
+		public System.Data.Linq.Table<Article> Articles
 		{
 			get
 			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleContent", DbType="NVarChar(MAX)")]
-		public string ArticleContent
-		{
-			get
-			{
-				return this._ArticleContent;
-			}
-			set
-			{
-				if ((this._ArticleContent != value))
-				{
-					this.OnArticleContentChanging(value);
-					this.SendPropertyChanging();
-					this._ArticleContent = value;
-					this.SendPropertyChanged("ArticleContent");
-					this.OnArticleContentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorID", DbType="Int")]
-		public System.Nullable<int> AuthorID
-		{
-			get
-			{
-				return this._AuthorID;
-			}
-			set
-			{
-				if ((this._AuthorID != value))
-				{
-					if (this._UserProfile.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAuthorIDChanging(value);
-					this.SendPropertyChanging();
-					this._AuthorID = value;
-					this.SendPropertyChanged("AuthorID");
-					this.OnAuthorIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_Article", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true)]
-		public Document Document
-		{
-			get
-			{
-				return this._Document.Entity;
-			}
-			set
-			{
-				Document previousValue = this._Document.Entity;
-				if (((previousValue != value) 
-							|| (this._Document.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Document.Entity = null;
-						previousValue.Article = null;
-					}
-					this._Document.Entity = value;
-					if ((value != null))
-					{
-						value.Article = this;
-						this._DocID = value.DocID;
-					}
-					else
-					{
-						this._DocID = default(int);
-					}
-					this.SendPropertyChanged("Document");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_UserProfile", ThisKey="AuthorID", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile
-		{
-			get
-			{
-				return this._UserProfile.Entity;
-			}
-			set
-			{
-				UserProfile previousValue = this._UserProfile.Entity;
-				if (((previousValue != value) 
-							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserProfile.Entity = null;
-						previousValue.Articles.Remove(this);
-					}
-					this._UserProfile.Entity = value;
-					if ((value != null))
-					{
-						value.Articles.Add(this);
-						this._AuthorID = value.UID;
-					}
-					else
-					{
-						this._AuthorID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("UserProfile");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this.GetTable<Article>();
 			}
 		}
 	}
@@ -510,6 +305,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _ChannelID;
 		
+		private EntitySet<Attachment> _Attachments;
+		
 		private EntityRef<Article> _Article;
 		
 		private EntityRef<DocumentType> _DocumentType;
@@ -534,6 +331,7 @@ namespace WebHome.Models.DataEntity
 		
 		public Document()
 		{
+			this._Attachments = new EntitySet<Attachment>(new Action<Attachment>(this.attach_Attachments), new Action<Attachment>(this.detach_Attachments));
 			this._Article = default(EntityRef<Article>);
 			this._DocumentType = default(EntityRef<DocumentType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
@@ -645,6 +443,19 @@ namespace WebHome.Models.DataEntity
 					this.SendPropertyChanged("ChannelID");
 					this.OnChannelIDChanged();
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_Attachment", Storage="_Attachments", ThisKey="DocID", OtherKey="DocID")]
+		public EntitySet<Attachment> Attachments
+		{
+			get
+			{
+				return this._Attachments;
+			}
+			set
+			{
+				this._Attachments.Assign(value);
 			}
 		}
 		
@@ -763,6 +574,18 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Document = this;
+		}
+		
+		private void detach_Attachments(Attachment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Document = null;
 		}
 	}
 	
@@ -1074,13 +897,13 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Password2;
 		
-		private EntitySet<Article> _Articles;
-		
 		private EntitySet<UserProfile> _UserProfiles;
 		
 		private EntitySet<UserProfile> _UserProfiles1;
 		
 		private EntitySet<UserRole> _UserRoles;
+		
+		private EntitySet<Article> _Articles;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
 		
@@ -1118,10 +941,10 @@ namespace WebHome.Models.DataEntity
 		
 		public UserProfile()
 		{
-			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
 			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
 			this._UserProfiles1 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles1), new Action<UserProfile>(this.detach_UserProfiles1));
 			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
+			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
 			this._UserProfile2 = default(EntityRef<UserProfile>);
@@ -1360,19 +1183,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Articles", ThisKey="UID", OtherKey="AuthorID")]
-		public EntitySet<Article> Articles
-		{
-			get
-			{
-				return this._Articles;
-			}
-			set
-			{
-				this._Articles.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfiles", ThisKey="UID", OtherKey="Creator")]
 		public EntitySet<UserProfile> UserProfiles
 		{
@@ -1409,6 +1219,19 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._UserRoles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Articles", ThisKey="UID", OtherKey="AuthorID")]
+		public EntitySet<Article> Articles
+		{
+			get
+			{
+				return this._Articles;
+			}
+			set
+			{
+				this._Articles.Assign(value);
 			}
 		}
 		
@@ -1534,18 +1357,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		private void attach_Articles(Article entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = this;
-		}
-		
-		private void detach_Articles(Article entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = null;
-		}
-		
 		private void attach_UserProfiles(UserProfile entity)
 		{
 			this.SendPropertyChanging();
@@ -1577,6 +1388,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_UserRoles(UserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_Articles(Article entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -1726,6 +1549,466 @@ namespace WebHome.Models.DataEntity
 						this._RoleID = default(int);
 					}
 					this.SendPropertyChanged("UserRoleDefinition");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Attachment")]
+	public partial class Attachment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AttachmentID;
+		
+		private string _StoredPath;
+		
+		private System.Nullable<int> _DocID;
+		
+		private EntitySet<Article> _Articles;
+		
+		private EntityRef<Document> _Document;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAttachmentIDChanging(int value);
+    partial void OnAttachmentIDChanged();
+    partial void OnStoredPathChanging(string value);
+    partial void OnStoredPathChanged();
+    partial void OnDocIDChanging(System.Nullable<int> value);
+    partial void OnDocIDChanged();
+    #endregion
+		
+		public Attachment()
+		{
+			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
+			this._Document = default(EntityRef<Document>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttachmentID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int AttachmentID
+		{
+			get
+			{
+				return this._AttachmentID;
+			}
+			set
+			{
+				if ((this._AttachmentID != value))
+				{
+					this.OnAttachmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AttachmentID = value;
+					this.SendPropertyChanged("AttachmentID");
+					this.OnAttachmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StoredPath", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string StoredPath
+		{
+			get
+			{
+				return this._StoredPath;
+			}
+			set
+			{
+				if ((this._StoredPath != value))
+				{
+					this.OnStoredPathChanging(value);
+					this.SendPropertyChanging();
+					this._StoredPath = value;
+					this.SendPropertyChanged("StoredPath");
+					this.OnStoredPathChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int")]
+		public System.Nullable<int> DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_Article", Storage="_Articles", ThisKey="AttachmentID", OtherKey="Illustration")]
+		public EntitySet<Article> Articles
+		{
+			get
+			{
+				return this._Articles;
+			}
+			set
+			{
+				this._Articles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_Attachment", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true)]
+		public Document Document
+		{
+			get
+			{
+				return this._Document.Entity;
+			}
+			set
+			{
+				Document previousValue = this._Document.Entity;
+				if (((previousValue != value) 
+							|| (this._Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Document.Entity = null;
+						previousValue.Attachments.Remove(this);
+					}
+					this._Document.Entity = value;
+					if ((value != null))
+					{
+						value.Attachments.Add(this);
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Document");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.Attachment = this;
+		}
+		
+		private void detach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.Attachment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Article")]
+	public partial class Article : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private string _Title;
+		
+		private string _ArticleContent;
+		
+		private System.Nullable<int> _AuthorID;
+		
+		private System.Nullable<int> _Illustration;
+		
+		private EntityRef<Attachment> _Attachment;
+		
+		private EntityRef<Document> _Document;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnArticleContentChanging(string value);
+    partial void OnArticleContentChanged();
+    partial void OnAuthorIDChanging(System.Nullable<int> value);
+    partial void OnAuthorIDChanged();
+    partial void OnIllustrationChanging(System.Nullable<int> value);
+    partial void OnIllustrationChanged();
+    #endregion
+		
+		public Article()
+		{
+			this._Attachment = default(EntityRef<Attachment>);
+			this._Document = default(EntityRef<Document>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArticleContent", DbType="NVarChar(MAX)")]
+		public string ArticleContent
+		{
+			get
+			{
+				return this._ArticleContent;
+			}
+			set
+			{
+				if ((this._ArticleContent != value))
+				{
+					this.OnArticleContentChanging(value);
+					this.SendPropertyChanging();
+					this._ArticleContent = value;
+					this.SendPropertyChanged("ArticleContent");
+					this.OnArticleContentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorID", DbType="Int")]
+		public System.Nullable<int> AuthorID
+		{
+			get
+			{
+				return this._AuthorID;
+			}
+			set
+			{
+				if ((this._AuthorID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIDChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorID = value;
+					this.SendPropertyChanged("AuthorID");
+					this.OnAuthorIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Illustration", DbType="Int")]
+		public System.Nullable<int> Illustration
+		{
+			get
+			{
+				return this._Illustration;
+			}
+			set
+			{
+				if ((this._Illustration != value))
+				{
+					if (this._Attachment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIllustrationChanging(value);
+					this.SendPropertyChanging();
+					this._Illustration = value;
+					this.SendPropertyChanged("Illustration");
+					this.OnIllustrationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_Article", Storage="_Attachment", ThisKey="Illustration", OtherKey="AttachmentID", IsForeignKey=true)]
+		public Attachment Attachment
+		{
+			get
+			{
+				return this._Attachment.Entity;
+			}
+			set
+			{
+				Attachment previousValue = this._Attachment.Entity;
+				if (((previousValue != value) 
+							|| (this._Attachment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Attachment.Entity = null;
+						previousValue.Articles.Remove(this);
+					}
+					this._Attachment.Entity = value;
+					if ((value != null))
+					{
+						value.Articles.Add(this);
+						this._Illustration = value.AttachmentID;
+					}
+					else
+					{
+						this._Illustration = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Attachment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_Article", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true)]
+		public Document Document
+		{
+			get
+			{
+				return this._Document.Entity;
+			}
+			set
+			{
+				Document previousValue = this._Document.Entity;
+				if (((previousValue != value) 
+							|| (this._Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Document.Entity = null;
+						previousValue.Article = null;
+					}
+					this._Document.Entity = value;
+					if ((value != null))
+					{
+						value.Article = this;
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("Document");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_UserProfile", ThisKey="AuthorID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.Articles.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.Articles.Add(this);
+						this._AuthorID = value.UID;
+					}
+					else
+					{
+						this._AuthorID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile");
 				}
 			}
 		}

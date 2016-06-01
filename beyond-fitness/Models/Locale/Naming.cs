@@ -28,5 +28,13 @@ namespace WebHome.Models.Locale
             Cooperation = 5,
             ContactUs = 6
         }
+
+        public enum DocumentLevelDefinition
+        {
+            已刪除 = 0,
+            正常 = 1,
+            暫存 = 2
+        }
+
     }
 }

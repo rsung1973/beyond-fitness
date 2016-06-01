@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Http;
+using Utility;
 
 namespace WebHome
 {
@@ -18,6 +19,14 @@ namespace WebHome
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);            
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            // Code that runs when an unhandled error occurs
+            var ex = Server.GetLastError();
+            if (ex != null)
+                Logger.Error(ex);
         }
     }
 }

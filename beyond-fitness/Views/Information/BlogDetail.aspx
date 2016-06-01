@@ -66,6 +66,9 @@
         </div>
     </div>
     <!-- End content -->
+    <script>
+    $('#blog,#m_blog').addClass('active');
+    </script>
 
 </asp:Content>
 <script runat="server">

@@ -41,7 +41,7 @@
                                                 <p><%# getBrief(Item.ArticleContent) %></p>
                                                 <!-- Divider -->
                                                 <div class="hr1" style="margin-bottom: 10px;"></div>
-                                                <p><a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/") + Item.DocID.ToString() %>" class="btn-system btn-small">閱讀內容 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                                <p><a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+ Item.DocID.ToString())  %>" class="btn-system btn-small">閱讀內容 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                                             </div>
                                         </div>
                                     </div>
@@ -118,7 +118,7 @@
     {
         if (content == null)
             return null;
-        String result = Regex.Replace(content.Substring(0, 150), "<\\s*[Bb][Rr]\\s*/?\\s*>", "\r\n").Trim();
+        String result = Regex.Replace(content.Substring(0, Math.Min(150,content.Length)), "<\\s*[Bb][Rr]\\s*/?\\s*>", "\r\n").Trim();
         result = Regex.Replace(result, @"<[^>]+>|&nbsp;", String.Empty);
         result = Regex.Replace(result, "(\\r\\n){2,}", "\r\n");
         return result.Length > 100 ? (result.Substring(0, 100) + "...").Replace("\r\n","<br/>") : result.Replace("\r\n","<br/>");

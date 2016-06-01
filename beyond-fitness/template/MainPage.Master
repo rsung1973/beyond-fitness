@@ -38,6 +38,11 @@
 
     <!-- Color CSS Styles  -->
     <link rel="stylesheet" type="text/css" href="~/css/colors/orange.css" title="orange" media="screen" />
+    <!-- calendar slider -->
+    <link href="~/calendar/responsive-calendar.css" rel="stylesheet">
+
+    <!-- 日曆設定-->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-datetimepicker.min.css">
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -61,6 +66,29 @@
             <div class="hidden-header"></div>
             <header class="clearfix">
 
+                <!-- Start Top Bar -->
+                <div class="top-bar">
+                    <div class="container">
+                        <div class="row">
+                            <!-- .col-md-6 -->
+                            <div class="col-md-12">
+                                <!-- Start Social Links -->
+                                <ul class="social-list">
+                                    <li>
+                                        <a href="https://www.facebook.com/beyond.fitness.pro/" title="Facebook" target="_blank" class="facebook itl-tooltip" data-placement="bottom"><i class="fa fa-facebook"></i></a>
+                                    </li>
+                                </ul>
+                                <!-- End Social Links -->
+                            </div>
+                            <!-- .col-md-6 -->
+                        </div>
+                        <!-- .row -->
+                    </div>
+                    <!-- .container -->
+                </div>
+                <!-- .top-bar -->
+                <!-- End Top Bar -->
+
                 <!-- Start Header ( Logo & Naviagtion ) -->
                 <div class="navbar navbar-default navbar-top">
                     <div class="container">
@@ -70,7 +98,7 @@
                                 <i class="fa fa-bars"></i>
                             </button>
                             <!-- End Toggle Nav Link For Mobiles -->
-                            <a class="navbar-brand" href="index.htm">
+                            <a class="navbar-brand" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">
                                 <img src="<%= VirtualPathUtility.ToAbsolute("~/images/Beyond-Fitness.png") %>" alt=""></a>
                         </div>
                         <div class="navbar-collapse collapse">
@@ -83,7 +111,19 @@
                                 <li><a id="products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
                                 <li><a id="cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
                                 <li><a id="contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
-                                <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>
+                                <li><a id="vip" href="#">會員專區</a>
+                                    <ul class="dropdown">
+                                        <li><a id="login" href="login.htm">登入</a>
+                                        </li>
+                                        <li><a id="coach" href="coach.htm">教練專區</a>
+                                        </li>
+                                        <li><a id="member" href="member-manager.htm">人員管理</a>
+                                        </li>
+                                        <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <%--<li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>--%>
                             </ul>
                             <!-- End Navigation List -->
                         </div>
@@ -98,8 +138,19 @@
                         <li><a id="m_products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
                         <li><a id="m_cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
                         <li><a id="m_contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
-                        <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>
-
+                        <li><a id="m_vip" href="#">會員專區</a>
+                            <ul class="dropdown">
+                                <li><a id="m_login" href="login.htm">登入</a>
+                                </li>
+                                <li><a id="m_coach" href="coach.htm">教練專區</a>
+                                </li>
+                                <li><a id="m_member" href="member-manager.htm">人員管理</a>
+                                </li>
+                                <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <%--<li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>--%>
                     </ul>
                     <!-- Mobile Menu End -->
 

@@ -15,15 +15,7 @@
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.nicescroll.min.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.parallax.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.slicknav.js") %>"></script>
-<%--<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/jquery-ui-1.11.4.js") %>"></script>
-<script src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/bootstrap.min.js") %>" type="text/javascript"></script>
-<script src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.prettyPhoto.js") %>"></script>
-<script src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.isotope.min.js") %>"></script>
-<script src="<%=VirtualPathUtility.ToAbsolute("~/js/main.js") %>"></script>
-<script src="<%=VirtualPathUtility.ToAbsolute("~/js/wow.min.js") %>"></script>--%>
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/bootstrap-datetimepicker.js") %>"></script>
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/bootstrap-datetimepicker.zh-TW.js") %>"></script>
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.form.js") %>"></script>
 
-
-<%--<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/bootstrap.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/jquery.ui.datepicker-zh-TW.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/jquery.form.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/Scripts/uxeivo.js") %>"></script>--%>
