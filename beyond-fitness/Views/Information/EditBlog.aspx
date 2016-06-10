@@ -14,7 +14,7 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../../CKEditor/ckeditor.js"></script>
+    <script type="text/javascript" src="<%= VirtualPathUtility.ToAbsolute("~/CKEditor/ckeditor.js") %>"></script>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group has-feedback">
+                        <%--<div class="form-group has-feedback">
                             <label class="control-label" for="docType">文章分類：</label>
                             <div class="form-control">
                                 <select name="docType">
@@ -62,7 +62,7 @@
                                     <option value="6">聯絡我們</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>--%>
 
                         <uc1:UploadResource runat="server" ID="uploadResource" />
                         <div id="resource" class="form-group has-feedback">
@@ -70,7 +70,7 @@
 
                         <div class="form-group has-feedback">
                             <label class="control-label" for="nickname">內文：</label>
-                            <textarea class="form-control" id="articleContent" rows="20"><%= _item.ArticleContent!=null ? _item.ArticleContent.Replace("\r\n","<br/>"):null %></textarea>
+                            <textarea class="form-control" id="articleContent" rows="20"><%= _item.ArticleContent %></textarea>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/UpdateArticle")%>', 
                 { 
                     'docID': <%= _item.DocID %>, 
-                    'docType': $('select[name="docType"]').val(),
+                    'docType': 2, //$('select[name="docType"]').val(),
                     'docDate': $('input[name="docDate"]').val(),
                     'title': $('input[name="title"]').val(),
                     'content': $('<div>').text(CKEDITOR.instances.articleContent.getData()).html()
@@ -137,14 +137,14 @@
         }
 
     </script>
-    <% if (_item.Document.DocType.HasValue)
+<%--    <% if (_item.Document.DocType.HasValue)
         { %>
     <script>
         $(function(){
             $('select[name="docType"]').val(<%= _item.Document.DocType %>);
         });
     </script>
-    <%  } %>
+    <%  } %>--%>
 </asp:Content>
 <script runat="server">
 

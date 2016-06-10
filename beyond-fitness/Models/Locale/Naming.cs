@@ -36,5 +36,12 @@ namespace WebHome.Models.Locale
             暫存 = 2
         }
 
+        public enum MemberStatusDefinition
+        {
+            ReadyToRegister = 1001,
+            Deleted = 1002,
+            Checked = 1003 
+        }
+
     }
 }

@@ -588,7 +588,7 @@ ul.social-list li:last-child a i {
 }
 .navbar {
 	margin-bottom: 0;
-	background: #fff;
+	background: #000;
 	border: none;
 	border-radius: 0;
     -webkit-border-radius: 0;
@@ -624,7 +624,7 @@ ul.social-list li:last-child a i {
 }
 
 .navbar-default .navbar-nav > li > a {
-	color: #666;
+	color: #FFF;
 	display: block;
     font-size: 14px;
 	font-weight: 300;
@@ -1147,6 +1147,10 @@ input[type="submit"] {
 }
 
 .widget-search input[type="search"],
+.contact-form input[type="text"],
+.contact-form textarea,
+.respond input[type="text"],
+.respond textarea,
 #contact-form input[type="text"],
 #contact-form textarea,
 #respond input[type="text"],
@@ -5742,4 +5746,17 @@ ul.footer-nav li a:hover {
     background-color: #ccc;
     border-color: #ccc;
 		padding: 5px 10px 4px;
+}
+.form-control{
+	margin-bottom:5px;
+}
+.Section2{
+		padding-top:60px;
+		padding-bottom:60px;
+		border-top:1px solid #eee;
+		border-bottom:1px solid #eee;
+		background:#DDD;
+}
+.bg_white{
+		background-color:#FFF;
 }

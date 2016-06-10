@@ -63,7 +63,7 @@
                             </asp:Repeater>
                         </table>
                     </div>
-                    <uc1:PagingControl runat="server" ID="pagingControl" />
+                    <%--<uc1:PagingControl runat="server" ID="pagingControl" />--%>
 
                     <!-- End Contact Form -->
 
@@ -100,8 +100,8 @@
         models = TempData.GetModelSource<Article>();
         rpList.DataSource = models.Items;
         rpList.DataBind();
-        pagingControl.Item = (PagingIndexViewModel)ViewBag.PagingModel;
-        pagingControl.RecordCount = models.EntityList.Count();
+        //pagingControl.Item = (PagingIndexViewModel)ViewBag.PagingModel;
+        //pagingControl.RecordCount = models.EntityList.Count();
     }
 
     public override void Dispose()

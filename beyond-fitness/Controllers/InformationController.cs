@@ -13,15 +13,17 @@ using WebHome.Models.ViewModel;
 
 namespace WebHome.Controllers
 {
+    [Authorize]
     public class InformationController : Controller
     {
         // GET: Information
+        [AllowAnonymous]
         public ActionResult Blog(PagingIndexViewModel viewModel)
         {
             ViewBag.PagingModel = viewModel;
             ModelSource<Article> models = new ModelSource<Article>();
             TempData.SetModelSource(models);
-            models.Items = models.Items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.正常)
+            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
                 .OrderByDescending(a => a.DocID)
                 .Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 .Take(viewModel.PageSize);
@@ -29,6 +31,7 @@ namespace WebHome.Controllers
             return View(models.Items);
         }
 
+        [AllowAnonymous]
         public ActionResult BlogDetail(int id)
         {
             ModelSource<Article> models = new ModelSource<Article>();
@@ -70,10 +73,10 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
             ModelSource<Article> models = new ModelSource<Article>();
             TempData.SetModelSource(models);
-            models.Items = models.Items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.正常)
-                .OrderByDescending(a => a.DocID)
-                .Skip(viewModel.CurrentIndex * viewModel.PageSize)
-                .Take(viewModel.PageSize);
+            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
+                .OrderByDescending(a => a.DocID);
+                //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
+                //.Take(viewModel.PageSize);
 
             return View(models.Items);
         }
@@ -114,6 +117,7 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        [AllowAnonymous]
         public ActionResult Resource(int id)
         {
             ModelSource<Article> models = new ModelSource<Article>();
@@ -123,6 +127,7 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        [AllowAnonymous]
         public ActionResult UploadResource(int id)
         {
             using (ModelSource<Article> models = new ModelSource<Article>())
@@ -161,6 +166,7 @@ namespace WebHome.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult RetrieveResource(int docID,String imgUrl)
         {
             using (ModelSource<Article> models = new ModelSource<Article>())
@@ -252,6 +258,7 @@ namespace WebHome.Controllers
                 {
                     item.Document.DocType = docType;
                     item.Document.DocDate = DateTime.ParseExact(docDate, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture);
+                    item.Document.CurrentStep = (int)Naming.DocumentLevelDefinition.正常;
                     item.Title = title;
                     item.ArticleContent = HttpUtility.HtmlDecode(content);
 
@@ -309,6 +316,7 @@ namespace WebHome.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult GetResource(int id)
         {
             using (ModelSource<Attachment> models = new ModelSource<Attachment>())
@@ -324,34 +332,42 @@ namespace WebHome.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         public ActionResult Footer()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Rental()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Products()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Cooperation()
         {
             return View();
         }
+
+        [AllowAnonymous]
         public ActionResult ContactUs()
         {
             return View();
         }
+
         public ActionResult Vip()
         {
             return View();
         }
+
+        [AllowAnonymous]
         public ActionResult Professional(String content)
         {
             if (String.IsNullOrEmpty(content))
@@ -362,6 +378,7 @@ namespace WebHome.Controllers
             return View(content);
         }
 
+        [AllowAnonymous]
         public ActionResult Error()
         {
             return View();

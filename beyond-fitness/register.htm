@@ -84,28 +84,6 @@
     <div class="hidden-header"></div>
     <header class="clearfix">
     
-      <!-- Start Top Bar -->
-      <div class="top-bar">
-        <div class="container">
-          <div class="row">
-            <!-- .col-md-6 -->
-            <div class="col-md-12">
-              <!-- Start Social Links -->
-              <ul class="social-list">
-                <li>
-                  <a href="https://www.facebook.com/beyond.fitness.pro/" title="Facebook" target="_blank" class="facebook itl-tooltip" data-placement="bottom"><i class="fa fa-facebook"></i></a>
-                </li>
-              </ul>
-              <!-- End Social Links -->
-            </div>
-            <!-- .col-md-6 -->
-          </div>
-          <!-- .row -->
-        </div>
-        <!-- .container -->
-      </div>
-      <!-- .top-bar -->
-      <!-- End Top Bar -->
 
       <!-- Start Header ( Logo & Naviagtion ) -->
       <div class="navbar navbar-default navbar-top">
@@ -128,18 +106,7 @@
               <li><a href="products.htm">相關商品</a></li>
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
-              <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">
-                  <li><a href="login.htm">登入</a>
-                  </li>
-                  <li><a href="coach.htm">教練專區</a>
-                  </li>
-                  <li><a href="member-manager.htm">人員管理</a>
-                  </li>
-                  <li><a href="blog-manager.htm">知識上稿</a>
-                  </li>
-                </ul>
-               </li>
+              <li><a class="active" href="login.htm">會員專區</a></li>
             </ul>
             <!-- End Navigation List -->
           </div>
@@ -154,18 +121,7 @@
           <li><a href="products.htm">相關商品</a></li>
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
-          <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">
-              <li><a href="login.htm">登入</a>
-              </li>
-              <li><a href="coach.htm">教練專區</a>
-              </li>
-              <li><a href="member-manager.htm">人員管理</a>
-              </li>
-              <li><a href="blog-manager.htm">知識上稿</a>
-              </li>
-            </ul>
-           </li>
+          <li><a class="active" href="login.htm">會員專區</a></li>
         </ul>
         <!-- Mobile Menu End -->
 
@@ -177,7 +133,7 @@
 
 
     <!-- Start Page Banner -->
-    <div class="page-banner" style="padding:30px 0; background: url(images/page_banner_bg.gif);">
+    <div class="page-banner" style="padding:20px 0; background: url(images/page_banner_bg.gif);">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -213,37 +169,21 @@
               <div class="form-group has-feedback">
                   <label class="control-label" for="vipno">會員編號：</label>
                   <input type="email" class="form-control" placeholder="會員編號" name="會員編號" id="vipno" aria-describedby="vipnoStatus">
-                  <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
+                  <!--<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>-->
                   <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
-                  <span id="vipnoStatus" class="sr-only">(success)</span>
+                  <span id="vipnoStatus" class="sr-only">(學員編號不存在)</span>
               </div>
-                          
+
+                
+                <button type="button" class="btn btn-primary btn-lg btn-block" onClick="location.href='register-FB.htm';"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook</button>                          
               <div class="tabs-section">
 
-              <!-- Tab panels -->
-              <div class="call-action call-action-boxed call-action-style1 no-descripton clearfix">
-                <!-- Tab Content 1 -->
-                
-                <button type="button" class="btn btn-primary btn-lg btn-block"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook</button>
 
-                
-                <!-- Divider -->
-            		<div class="hr5" style="margin-top:30px; margin-bottom:15px;"></div>
-
-                <div class="form-group has-feedback">
-                    <label class="control-label" for="email">Email：</label>
-                    <input type="email" class="form-control" placeholder="Email" name="Email" id="email" aria-describedby="emailStatus">
-                    <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
-                    <span id="emailStatus" class="sr-only">(success)</span>
-                </div>
-              </div>
-              </div>
-
-              <!-- End Tab Panels -->
               <div class="hr1" style="margin:5px 0px;"></div>
-              <a href="register-2.htm" class="btn-system btn-medium">下一步</a>
-              <a href="#" class="btn-system btn-medium border-btn">取消</a>
+              <button type="button" class="btn btn-warning btn-lg btn-block" onClick="location.href='register-1.htm';"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 登入</button>
+
+              </div>
+
             </form>
             <!-- End Contact Form -->
             

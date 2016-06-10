@@ -22,10 +22,35 @@ namespace WebHome.Models.ViewModel
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "PWD")]
-        public string PWD { get; set; }
+        [Display(Name = "Password")]
+        public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+    }
+
+    public class RegisterViewModel
+    {
+        [Required]
+        [Display(Name = "memberCode")]
+        //[EmailAddress]
+        public string MemberCode { get; set; }
+
+        [Display(Name = "email")]
+        [EmailAddress]
+        public string EMail { get; set; }
+
+        [Display(Name = "userName")]
+        public string UserName { get; set; }
+
+
+        [Required]
+        [Display(Name = "userID")]
+        public string UserID { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
     }
 }

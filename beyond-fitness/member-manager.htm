@@ -91,29 +91,6 @@
     <!-- Start Header -->
     <div class="hidden-header"></div>
     <header class="clearfix">
-    
-      <!-- Start Top Bar -->
-      <div class="top-bar">
-        <div class="container">
-          <div class="row">
-            <!-- .col-md-6 -->
-            <div class="col-md-12">
-              <!-- Start Social Links -->
-              <ul class="social-list">
-                <li>
-                  <a href="https://www.facebook.com/beyond.fitness.pro/" title="Facebook" target="_blank" class="facebook itl-tooltip" data-placement="bottom"><i class="fa fa-facebook"></i></a>
-                </li>
-              </ul>
-              <!-- End Social Links -->
-            </div>
-            <!-- .col-md-6 -->
-          </div>
-          <!-- .row -->
-        </div>
-        <!-- .container -->
-      </div>
-      <!-- .top-bar -->
-      <!-- End Top Bar -->
 
       <!-- Start Header ( Logo & Naviagtion ) -->
       <div class="navbar navbar-default navbar-top">
@@ -137,10 +114,8 @@
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
               <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">
-                  <li><a href="login.htm">登入</a>
-                  </li>
-                  <li><a href="coach.htm">教練專區</a>
+                <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
                   </li>
@@ -163,16 +138,14 @@
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
           <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">
-              <li><a href="login.htm">登入</a>
-              </li>
-              <li><a href="coach.htm">教練專區</a>
-              </li>
-              <li><a href="member-manager.htm">人員管理</a>
-              </li>
-              <li><a href="blog-manager.htm">知識上稿</a>
-              </li>
-            </ul>
+            <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
+                  </li>
+                  <li><a href="member-manager.htm">人員管理</a>
+                  </li>
+                  <li><a href="blog-manager.htm">知識上稿</a>
+                  </li>
+                </ul>
            </li>
         </ul>
         <!-- Mobile Menu End -->
@@ -185,7 +158,7 @@
 
 
     <!-- Start Page Banner -->
-    <div class="page-banner" style="padding:30px 0; background: url(images/page_banner_bg.gif);">
+    <div class="page-banner" style="padding:20px 0; background: url(images/page_banner_bg.gif);">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -219,44 +192,77 @@
             <!-- Stat Search -->
             <div class="navbar" style="min-height:30px;">
             	<div class="search-side">
+                <a href="add-vip.htm" class="btn-system btn-small">新增學員 <span class="glyphicon glyphicon-calendar"></span></a>
                 <a href="add-coach.htm" class="btn-system btn-small">新增教練 <span class="glyphicon glyphicon-calendar"></span></a>
                 <a href="coach.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
               </div>
             </div>
-            
-            <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
-            
-              <div class="panel panel-default">
-                	<!-- TABLE 1 -->
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="glyphicon glyphicon-edit"></i> 教練清單</a></li>
+                <li><a href="#tab-2" data-toggle="tab"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> 學員清單</a></li>
+              </ul>
+           <!-- Tab panels -->
+              <div class="tab-content">
+                <!-- Tab Content 1 -->
+                <div class="tab-pane fade in active" id="tab-1">
+                <!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
                       <th>姓名</th>
                       <th>帳號</th>
-                      <th>密碼</th>
                       <th>功能</th>
                     </tr>
                     <tr>
                       <td>王大民</td>
-                      <td>A545132132</td>
-                      <td>hjlkljkl;</td>
+                      <td>xxx@gmail.com</td>
                       <td>
-                      	<a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
                       <td>林志玲</td>
-                      <td>A545132132</td>
-                      <td>jlkjjlml</td>
+                      <td>xxx@gmail.com</td>
                       <td>
-                      	<a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
+                </div>
+                <!-- Tab Content 2 -->
+                <div class="tab-pane fade" id="tab-2">
+                  <!-- TABLE 1 -->
+                  <table class="table">
+                    <tr class="info">
+                      <th>姓名</th>
+                      <th>帳號</th>
+                      <th>功能</th>
+                    </tr>
+                    <tr>
+                      <td>王建民</td>
+                      <td>xxx@gmail.com</td>
+                      <td>
+                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>黃大明</td>
+                      <td>xxx@gmail.com</td>
+                      <td>
+                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </div>
+
               
             <!-- End Contact Form -->
         	

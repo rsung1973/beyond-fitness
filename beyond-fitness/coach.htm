@@ -137,10 +137,8 @@
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
               <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">
-                  <li><a href="login.htm">登入</a>
-                  </li>
-                  <li><a href="coach.htm">教練專區</a>
+                <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
                   </li>
@@ -163,16 +161,14 @@
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
           <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">
-              <li><a href="login.htm">登入</a>
-              </li>
-              <li><a href="coach.htm">教練專區</a>
-              </li>
-              <li><a href="member-manager.htm">人員管理</a>
-              </li>
-              <li><a href="blog-manager.htm">知識上稿</a>
-              </li>
-            </ul>
+            <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
+                  </li>
+                  <li><a href="member-manager.htm">人員管理</a>
+                  </li>
+                  <li><a href="blog-manager.htm">知識上稿</a>
+                  </li>
+                </ul>
            </li>
         </ul>
         <!-- Mobile Menu End -->
@@ -185,7 +181,7 @@
 
 
     <!-- Start Page Banner -->
-    <div class="page-banner" style="padding:30px 0; background: url(images/page_banner_bg.gif);">
+    <div class="page-banner" style="padding:20px 0; background: url(images/page_banner_bg.gif);">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -213,7 +209,7 @@
           <div class="col-md-3">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>王建民 的行事曆</span></h4>
+            <!--<h4 class="classic-title"><span>王建民 的行事曆</span></h4>-->
 
             <!-- Start Contact Form -->
             <!-- Categories Widget -->
@@ -401,10 +397,10 @@
         time: '2016-04-29',
         events: {
           "2016-04-29": {
-					"number": 2, 
+					"number": 220, 
 					"badgeClass": 
 					"badge-warning", 
-					"url": "http://w3widgets.com/responsive-calendar",
+					"url": "coach.htm",
 					"dayEvents": [
 						{
 							"name": "Important meeting",
@@ -416,7 +412,7 @@
 						}
 					]
 				},
-          //"2016-04-29": {"number": 1, "url": "http://w3widgets.com"}, 
+          //"2016-04-29": {"number": 1, "url": "coach.htm"}, 
           "2016-05-03":{"number": 1}, 
           "2016-06-12": {}}
       });
@@ -467,7 +463,7 @@ $(function () {
             enabled: false
         },
         tooltip: {
-            pointFormat: '有: <b>{point.y:.1f} 個學員</b>'
+            pointFormat: '有: <b>{point.y:.0f} 個學員</b>'
         },
         series: [{
             name: '時間',
@@ -493,7 +489,7 @@ $(function () {
                 rotation: -90,
                 color: '#FFFFFF',
                 align: 'right',
-                format: '{point.y:.1f}', // one decimal
+                format: '{point.y:.0f}', // one decimal
                 y: 10, // 10 pixels down from the top
                 style: {
                     fontSize: '13px',

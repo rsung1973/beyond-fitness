@@ -42,9 +42,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertLevelExpression(LevelExpression instance);
     partial void UpdateLevelExpression(LevelExpression instance);
     partial void DeleteLevelExpression(LevelExpression instance);
-    partial void InsertUserProfile(UserProfile instance);
-    partial void UpdateUserProfile(UserProfile instance);
-    partial void DeleteUserProfile(UserProfile instance);
     partial void InsertUserRole(UserRole instance);
     partial void UpdateUserRole(UserRole instance);
     partial void DeleteUserRole(UserRole instance);
@@ -54,6 +51,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertArticle(Article instance);
     partial void UpdateArticle(Article instance);
     partial void DeleteArticle(Article instance);
+    partial void InsertUserProfile(UserProfile instance);
+    partial void UpdateUserProfile(UserProfile instance);
+    partial void DeleteUserProfile(UserProfile instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -118,14 +118,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<UserProfile> UserProfiles
-		{
-			get
-			{
-				return this.GetTable<UserProfile>();
-			}
-		}
-		
 		public System.Data.Linq.Table<UserRole> UserRoles
 		{
 			get
@@ -147,6 +139,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<Article>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserProfile> UserProfiles
+		{
+			get
+			{
+				return this.GetTable<UserProfile>();
 			}
 		}
 	}
@@ -869,543 +869,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserProfile")]
-	public partial class UserProfile : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _UID;
-		
-		private string _UserName;
-		
-		private string _PID;
-		
-		private string _Password;
-		
-		private string _EMail;
-		
-		private System.Nullable<System.DateTime> _Expiration;
-		
-		private System.Nullable<int> _Creator;
-		
-		private System.Nullable<int> _AuthID;
-		
-		private System.Nullable<int> _LevelID;
-		
-		private string _ThemeName;
-		
-		private string _Password2;
-		
-		private EntitySet<UserProfile> _UserProfiles;
-		
-		private EntitySet<UserProfile> _UserProfiles1;
-		
-		private EntitySet<UserRole> _UserRoles;
-		
-		private EntitySet<Article> _Articles;
-		
-		private EntityRef<LevelExpression> _LevelExpression;
-		
-		private EntityRef<UserProfile> _UserProfile1;
-		
-		private EntityRef<UserProfile> _UserProfile2;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnUIDChanging(int value);
-    partial void OnUIDChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
-    partial void OnPIDChanging(string value);
-    partial void OnPIDChanged();
-    partial void OnPasswordChanging(string value);
-    partial void OnPasswordChanged();
-    partial void OnEMailChanging(string value);
-    partial void OnEMailChanged();
-    partial void OnExpirationChanging(System.Nullable<System.DateTime> value);
-    partial void OnExpirationChanged();
-    partial void OnCreatorChanging(System.Nullable<int> value);
-    partial void OnCreatorChanged();
-    partial void OnAuthIDChanging(System.Nullable<int> value);
-    partial void OnAuthIDChanged();
-    partial void OnLevelIDChanging(System.Nullable<int> value);
-    partial void OnLevelIDChanged();
-    partial void OnThemeNameChanging(string value);
-    partial void OnThemeNameChanged();
-    partial void OnPassword2Changing(string value);
-    partial void OnPassword2Changed();
-    #endregion
-		
-		public UserProfile()
-		{
-			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
-			this._UserProfiles1 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles1), new Action<UserProfile>(this.detach_UserProfiles1));
-			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
-			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
-			this._LevelExpression = default(EntityRef<LevelExpression>);
-			this._UserProfile1 = default(EntityRef<UserProfile>);
-			this._UserProfile2 = default(EntityRef<UserProfile>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int UID
-		{
-			get
-			{
-				return this._UID;
-			}
-			set
-			{
-				if ((this._UID != value))
-				{
-					this.OnUIDChanging(value);
-					this.SendPropertyChanging();
-					this._UID = value;
-					this.SendPropertyChanged("UID");
-					this.OnUIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(40)")]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this.OnUserNameChanging(value);
-					this.SendPropertyChanging();
-					this._UserName = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PID", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
-		public string PID
-		{
-			get
-			{
-				return this._PID;
-			}
-			set
-			{
-				if ((this._PID != value))
-				{
-					this.OnPIDChanging(value);
-					this.SendPropertyChanging();
-					this._PID = value;
-					this.SendPropertyChanged("PID");
-					this.OnPIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(64)")]
-		public string Password
-		{
-			get
-			{
-				return this._Password;
-			}
-			set
-			{
-				if ((this._Password != value))
-				{
-					this.OnPasswordChanging(value);
-					this.SendPropertyChanging();
-					this._Password = value;
-					this.SendPropertyChanged("Password");
-					this.OnPasswordChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMail", DbType="NVarChar(512)")]
-		public string EMail
-		{
-			get
-			{
-				return this._EMail;
-			}
-			set
-			{
-				if ((this._EMail != value))
-				{
-					this.OnEMailChanging(value);
-					this.SendPropertyChanging();
-					this._EMail = value;
-					this.SendPropertyChanged("EMail");
-					this.OnEMailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expiration", DbType="DateTime")]
-		public System.Nullable<System.DateTime> Expiration
-		{
-			get
-			{
-				return this._Expiration;
-			}
-			set
-			{
-				if ((this._Expiration != value))
-				{
-					this.OnExpirationChanging(value);
-					this.SendPropertyChanging();
-					this._Expiration = value;
-					this.SendPropertyChanged("Expiration");
-					this.OnExpirationChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creator", DbType="Int")]
-		public System.Nullable<int> Creator
-		{
-			get
-			{
-				return this._Creator;
-			}
-			set
-			{
-				if ((this._Creator != value))
-				{
-					if (this._UserProfile1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCreatorChanging(value);
-					this.SendPropertyChanging();
-					this._Creator = value;
-					this.SendPropertyChanged("Creator");
-					this.OnCreatorChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthID", DbType="Int")]
-		public System.Nullable<int> AuthID
-		{
-			get
-			{
-				return this._AuthID;
-			}
-			set
-			{
-				if ((this._AuthID != value))
-				{
-					if (this._UserProfile2.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAuthIDChanging(value);
-					this.SendPropertyChanging();
-					this._AuthID = value;
-					this.SendPropertyChanged("AuthID");
-					this.OnAuthIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LevelID", DbType="Int")]
-		public System.Nullable<int> LevelID
-		{
-			get
-			{
-				return this._LevelID;
-			}
-			set
-			{
-				if ((this._LevelID != value))
-				{
-					if (this._LevelExpression.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnLevelIDChanging(value);
-					this.SendPropertyChanging();
-					this._LevelID = value;
-					this.SendPropertyChanged("LevelID");
-					this.OnLevelIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThemeName", DbType="NVarChar(16)")]
-		public string ThemeName
-		{
-			get
-			{
-				return this._ThemeName;
-			}
-			set
-			{
-				if ((this._ThemeName != value))
-				{
-					this.OnThemeNameChanging(value);
-					this.SendPropertyChanging();
-					this._ThemeName = value;
-					this.SendPropertyChanged("ThemeName");
-					this.OnThemeNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password2", DbType="NVarChar(64)")]
-		public string Password2
-		{
-			get
-			{
-				return this._Password2;
-			}
-			set
-			{
-				if ((this._Password2 != value))
-				{
-					this.OnPassword2Changing(value);
-					this.SendPropertyChanging();
-					this._Password2 = value;
-					this.SendPropertyChanged("Password2");
-					this.OnPassword2Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfiles", ThisKey="UID", OtherKey="Creator")]
-		public EntitySet<UserProfile> UserProfiles
-		{
-			get
-			{
-				return this._UserProfiles;
-			}
-			set
-			{
-				this._UserProfiles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfiles1", ThisKey="UID", OtherKey="AuthID")]
-		public EntitySet<UserProfile> UserProfiles1
-		{
-			get
-			{
-				return this._UserProfiles1;
-			}
-			set
-			{
-				this._UserProfiles1.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserRoles", ThisKey="UID", OtherKey="UID")]
-		public EntitySet<UserRole> UserRoles
-		{
-			get
-			{
-				return this._UserRoles;
-			}
-			set
-			{
-				this._UserRoles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Articles", ThisKey="UID", OtherKey="AuthorID")]
-		public EntitySet<Article> Articles
-		{
-			get
-			{
-				return this._Articles;
-			}
-			set
-			{
-				this._Articles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_UserProfile", Storage="_LevelExpression", ThisKey="LevelID", OtherKey="LevelID", IsForeignKey=true)]
-		public LevelExpression LevelExpression
-		{
-			get
-			{
-				return this._LevelExpression.Entity;
-			}
-			set
-			{
-				LevelExpression previousValue = this._LevelExpression.Entity;
-				if (((previousValue != value) 
-							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LevelExpression.Entity = null;
-						previousValue.UserProfiles.Remove(this);
-					}
-					this._LevelExpression.Entity = value;
-					if ((value != null))
-					{
-						value.UserProfiles.Add(this);
-						this._LevelID = value.LevelID;
-					}
-					else
-					{
-						this._LevelID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("LevelExpression");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfile1", ThisKey="Creator", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile1
-		{
-			get
-			{
-				return this._UserProfile1.Entity;
-			}
-			set
-			{
-				UserProfile previousValue = this._UserProfile1.Entity;
-				if (((previousValue != value) 
-							|| (this._UserProfile1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserProfile1.Entity = null;
-						previousValue.UserProfiles.Remove(this);
-					}
-					this._UserProfile1.Entity = value;
-					if ((value != null))
-					{
-						value.UserProfiles.Add(this);
-						this._Creator = value.UID;
-					}
-					else
-					{
-						this._Creator = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("UserProfile1");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile2", ThisKey="AuthID", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile2
-		{
-			get
-			{
-				return this._UserProfile2.Entity;
-			}
-			set
-			{
-				UserProfile previousValue = this._UserProfile2.Entity;
-				if (((previousValue != value) 
-							|| (this._UserProfile2.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserProfile2.Entity = null;
-						previousValue.UserProfiles1.Remove(this);
-					}
-					this._UserProfile2.Entity = value;
-					if ((value != null))
-					{
-						value.UserProfiles1.Add(this);
-						this._AuthID = value.UID;
-					}
-					else
-					{
-						this._AuthID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("UserProfile2");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_UserProfiles(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile1 = this;
-		}
-		
-		private void detach_UserProfiles(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile1 = null;
-		}
-		
-		private void attach_UserProfiles1(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile2 = this;
-		}
-		
-		private void detach_UserProfiles1(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile2 = null;
-		}
-		
-		private void attach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = this;
-		}
-		
-		private void detach_UserRoles(UserRole entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = null;
-		}
-		
-		private void attach_Articles(Article entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = this;
-		}
-		
-		private void detach_Articles(Article entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRole")]
 	public partial class UserRole : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1416,9 +879,9 @@ namespace WebHome.Models.DataEntity
 		
 		private int _RoleID;
 		
-		private EntityRef<UserProfile> _UserProfile;
-		
 		private EntityRef<UserRoleDefinition> _UserRoleDefinition;
+		
+		private EntityRef<UserProfile> _UserProfile;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1432,8 +895,8 @@ namespace WebHome.Models.DataEntity
 		
 		public UserRole()
 		{
-			this._UserProfile = default(EntityRef<UserProfile>);
 			this._UserRoleDefinition = default(EntityRef<UserRoleDefinition>);
+			this._UserProfile = default(EntityRef<UserProfile>);
 			OnCreated();
 		}
 		
@@ -1485,40 +948,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public UserProfile UserProfile
-		{
-			get
-			{
-				return this._UserProfile.Entity;
-			}
-			set
-			{
-				UserProfile previousValue = this._UserProfile.Entity;
-				if (((previousValue != value) 
-							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserProfile.Entity = null;
-						previousValue.UserRoles.Remove(this);
-					}
-					this._UserProfile.Entity = value;
-					if ((value != null))
-					{
-						value.UserRoles.Add(this);
-						this._UID = value.UID;
-					}
-					else
-					{
-						this._UID = default(int);
-					}
-					this.SendPropertyChanged("UserProfile");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserRoleDefinition_UserRole", Storage="_UserRoleDefinition", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
 		public UserRoleDefinition UserRoleDefinition
 		{
@@ -1549,6 +978,40 @@ namespace WebHome.Models.DataEntity
 						this._RoleID = default(int);
 					}
 					this.SendPropertyChanged("UserRoleDefinition");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.UserRoles.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.UserRoles.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
 				}
 			}
 		}
@@ -1588,6 +1051,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<Article> _Articles;
 		
+		private EntitySet<UserProfile> _UserProfiles;
+		
 		private EntityRef<Document> _Document;
 		
     #region Extensibility Method Definitions
@@ -1605,6 +1070,7 @@ namespace WebHome.Models.DataEntity
 		public Attachment()
 		{
 			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
+			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
 			this._Document = default(EntityRef<Document>);
 			OnCreated();
 		}
@@ -1686,6 +1152,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_UserProfiles", ThisKey="AttachmentID", OtherKey="PictureID")]
+		public EntitySet<UserProfile> UserProfiles
+		{
+			get
+			{
+				return this._UserProfiles;
+			}
+			set
+			{
+				this._UserProfiles.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_Attachment", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true)]
 		public Document Document
 		{
@@ -1747,6 +1226,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.Attachment = null;
+		}
+		
+		private void attach_UserProfiles(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.Attachment = this;
+		}
+		
+		private void detach_UserProfiles(UserProfile entity)
 		{
 			this.SendPropertyChanging();
 			entity.Attachment = null;
@@ -2031,6 +1522,632 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserProfile")]
+	public partial class UserProfile : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UID;
+		
+		private string _UserName;
+		
+		private string _PID;
+		
+		private string _Password;
+		
+		private string _EMail;
+		
+		private System.Nullable<System.DateTime> _Expiration;
+		
+		private System.Nullable<int> _Creator;
+		
+		private System.Nullable<int> _AuthID;
+		
+		private System.Nullable<int> _LevelID;
+		
+		private string _ThemeName;
+		
+		private string _Password2;
+		
+		private string _MemberCode;
+		
+		private System.Nullable<int> _PictureID;
+		
+		private EntitySet<UserRole> _UserRoles;
+		
+		private EntitySet<Article> _Articles;
+		
+		private EntitySet<UserProfile> _UserProfiles;
+		
+		private EntitySet<UserProfile> _UserProfiles1;
+		
+		private EntityRef<Attachment> _Attachment;
+		
+		private EntityRef<LevelExpression> _LevelExpression;
+		
+		private EntityRef<UserProfile> _UserProfile1;
+		
+		private EntityRef<UserProfile> _UserProfile2;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
+    partial void OnPIDChanging(string value);
+    partial void OnPIDChanged();
+    partial void OnPasswordChanging(string value);
+    partial void OnPasswordChanged();
+    partial void OnEMailChanging(string value);
+    partial void OnEMailChanged();
+    partial void OnExpirationChanging(System.Nullable<System.DateTime> value);
+    partial void OnExpirationChanged();
+    partial void OnCreatorChanging(System.Nullable<int> value);
+    partial void OnCreatorChanged();
+    partial void OnAuthIDChanging(System.Nullable<int> value);
+    partial void OnAuthIDChanged();
+    partial void OnLevelIDChanging(System.Nullable<int> value);
+    partial void OnLevelIDChanged();
+    partial void OnThemeNameChanging(string value);
+    partial void OnThemeNameChanged();
+    partial void OnPassword2Changing(string value);
+    partial void OnPassword2Changed();
+    partial void OnMemberCodeChanging(string value);
+    partial void OnMemberCodeChanged();
+    partial void OnPictureIDChanging(System.Nullable<int> value);
+    partial void OnPictureIDChanged();
+    #endregion
+		
+		public UserProfile()
+		{
+			this._UserRoles = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRoles), new Action<UserRole>(this.detach_UserRoles));
+			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
+			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
+			this._UserProfiles1 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles1), new Action<UserProfile>(this.detach_UserProfiles1));
+			this._Attachment = default(EntityRef<Attachment>);
+			this._LevelExpression = default(EntityRef<LevelExpression>);
+			this._UserProfile1 = default(EntityRef<UserProfile>);
+			this._UserProfile2 = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(40)")]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PID", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
+		public string PID
+		{
+			get
+			{
+				return this._PID;
+			}
+			set
+			{
+				if ((this._PID != value))
+				{
+					this.OnPIDChanging(value);
+					this.SendPropertyChanging();
+					this._PID = value;
+					this.SendPropertyChanged("PID");
+					this.OnPIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(64)")]
+		public string Password
+		{
+			get
+			{
+				return this._Password;
+			}
+			set
+			{
+				if ((this._Password != value))
+				{
+					this.OnPasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Password = value;
+					this.SendPropertyChanged("Password");
+					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMail", DbType="NVarChar(512)")]
+		public string EMail
+		{
+			get
+			{
+				return this._EMail;
+			}
+			set
+			{
+				if ((this._EMail != value))
+				{
+					this.OnEMailChanging(value);
+					this.SendPropertyChanging();
+					this._EMail = value;
+					this.SendPropertyChanged("EMail");
+					this.OnEMailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expiration", DbType="DateTime")]
+		public System.Nullable<System.DateTime> Expiration
+		{
+			get
+			{
+				return this._Expiration;
+			}
+			set
+			{
+				if ((this._Expiration != value))
+				{
+					this.OnExpirationChanging(value);
+					this.SendPropertyChanging();
+					this._Expiration = value;
+					this.SendPropertyChanged("Expiration");
+					this.OnExpirationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Creator", DbType="Int")]
+		public System.Nullable<int> Creator
+		{
+			get
+			{
+				return this._Creator;
+			}
+			set
+			{
+				if ((this._Creator != value))
+				{
+					if (this._UserProfile1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCreatorChanging(value);
+					this.SendPropertyChanging();
+					this._Creator = value;
+					this.SendPropertyChanged("Creator");
+					this.OnCreatorChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthID", DbType="Int")]
+		public System.Nullable<int> AuthID
+		{
+			get
+			{
+				return this._AuthID;
+			}
+			set
+			{
+				if ((this._AuthID != value))
+				{
+					if (this._UserProfile2.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthIDChanging(value);
+					this.SendPropertyChanging();
+					this._AuthID = value;
+					this.SendPropertyChanged("AuthID");
+					this.OnAuthIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LevelID", DbType="Int")]
+		public System.Nullable<int> LevelID
+		{
+			get
+			{
+				return this._LevelID;
+			}
+			set
+			{
+				if ((this._LevelID != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLevelIDChanging(value);
+					this.SendPropertyChanging();
+					this._LevelID = value;
+					this.SendPropertyChanged("LevelID");
+					this.OnLevelIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ThemeName", DbType="NVarChar(16)")]
+		public string ThemeName
+		{
+			get
+			{
+				return this._ThemeName;
+			}
+			set
+			{
+				if ((this._ThemeName != value))
+				{
+					this.OnThemeNameChanging(value);
+					this.SendPropertyChanging();
+					this._ThemeName = value;
+					this.SendPropertyChanged("ThemeName");
+					this.OnThemeNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password2", DbType="NVarChar(64)")]
+		public string Password2
+		{
+			get
+			{
+				return this._Password2;
+			}
+			set
+			{
+				if ((this._Password2 != value))
+				{
+					this.OnPassword2Changing(value);
+					this.SendPropertyChanging();
+					this._Password2 = value;
+					this.SendPropertyChanged("Password2");
+					this.OnPassword2Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MemberCode", DbType="NVarChar(16)")]
+		public string MemberCode
+		{
+			get
+			{
+				return this._MemberCode;
+			}
+			set
+			{
+				if ((this._MemberCode != value))
+				{
+					this.OnMemberCodeChanging(value);
+					this.SendPropertyChanging();
+					this._MemberCode = value;
+					this.SendPropertyChanged("MemberCode");
+					this.OnMemberCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PictureID", DbType="Int")]
+		public System.Nullable<int> PictureID
+		{
+			get
+			{
+				return this._PictureID;
+			}
+			set
+			{
+				if ((this._PictureID != value))
+				{
+					if (this._Attachment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPictureIDChanging(value);
+					this.SendPropertyChanging();
+					this._PictureID = value;
+					this.SendPropertyChanged("PictureID");
+					this.OnPictureIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserRoles", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<UserRole> UserRoles
+		{
+			get
+			{
+				return this._UserRoles;
+			}
+			set
+			{
+				this._UserRoles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Articles", ThisKey="UID", OtherKey="AuthorID")]
+		public EntitySet<Article> Articles
+		{
+			get
+			{
+				return this._Articles;
+			}
+			set
+			{
+				this._Articles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfiles", ThisKey="UID", OtherKey="Creator")]
+		public EntitySet<UserProfile> UserProfiles
+		{
+			get
+			{
+				return this._UserProfiles;
+			}
+			set
+			{
+				this._UserProfiles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfiles1", ThisKey="UID", OtherKey="AuthID")]
+		public EntitySet<UserProfile> UserProfiles1
+		{
+			get
+			{
+				return this._UserProfiles1;
+			}
+			set
+			{
+				this._UserProfiles1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
+		public Attachment Attachment
+		{
+			get
+			{
+				return this._Attachment.Entity;
+			}
+			set
+			{
+				Attachment previousValue = this._Attachment.Entity;
+				if (((previousValue != value) 
+							|| (this._Attachment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Attachment.Entity = null;
+						previousValue.UserProfiles.Remove(this);
+					}
+					this._Attachment.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfiles.Add(this);
+						this._PictureID = value.AttachmentID;
+					}
+					else
+					{
+						this._PictureID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Attachment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_UserProfile", Storage="_LevelExpression", ThisKey="LevelID", OtherKey="LevelID", IsForeignKey=true)]
+		public LevelExpression LevelExpression
+		{
+			get
+			{
+				return this._LevelExpression.Entity;
+			}
+			set
+			{
+				LevelExpression previousValue = this._LevelExpression.Entity;
+				if (((previousValue != value) 
+							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LevelExpression.Entity = null;
+						previousValue.UserProfiles.Remove(this);
+					}
+					this._LevelExpression.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfiles.Add(this);
+						this._LevelID = value.LevelID;
+					}
+					else
+					{
+						this._LevelID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LevelExpression");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfile1", ThisKey="Creator", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile1
+		{
+			get
+			{
+				return this._UserProfile1.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile1.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile1.Entity = null;
+						previousValue.UserProfiles.Remove(this);
+					}
+					this._UserProfile1.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfiles.Add(this);
+						this._Creator = value.UID;
+					}
+					else
+					{
+						this._Creator = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile1");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile2", ThisKey="AuthID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile2
+		{
+			get
+			{
+				return this._UserProfile2.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile2.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile2.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile2.Entity = null;
+						previousValue.UserProfiles1.Remove(this);
+					}
+					this._UserProfile2.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfiles1.Add(this);
+						this._AuthID = value.UID;
+					}
+					else
+					{
+						this._AuthID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile2");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_UserRoles(UserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_UserRoles(UserRole entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_Articles(Article entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_UserProfiles(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile1 = this;
+		}
+		
+		private void detach_UserProfiles(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile1 = null;
+		}
+		
+		private void attach_UserProfiles1(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile2 = this;
+		}
+		
+		private void detach_UserProfiles1(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile2 = null;
 		}
 	}
 }

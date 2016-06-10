@@ -30,7 +30,7 @@
                     <!-- End Big Heading -->
 
                     <!-- Some Text -->
-                    <pre><%= _item.ArticleContent %></pre>
+                    <p><%= _item.ArticleContent %></p>
 
                 </div>
                 <!-- End Blog Posts -->

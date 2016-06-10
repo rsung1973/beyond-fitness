@@ -33,7 +33,7 @@
                                         <!-- Post Content -->
                                         <div class="author-info clearfix">
                                             <div class="author-image">
-                                                <img alt="" src="../images/blog_pic.png" />
+                                                <img runat="server" id="img1" alt="" src='<%# Item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+Item.Attachment.AttachmentID.ToString() : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>' />
                                             </div>
                                             <div class="author-date"><%# Item.Document.DocDate.ToString("yyyy-MM-dd") %></div>
                                             <div class="author-bio">
@@ -103,7 +103,7 @@
         rpList.DataSource = models.Items;
         rpList.DataBind();
         pagingControl.Item = (PagingIndexViewModel)ViewBag.PagingModel;
-        pagingControl.RecordCount = models.EntityList.Count();
+        pagingControl.RecordCount = models.GetDataContext().GetNormalArticles(models.EntityList).Count();
     }
 
     public override void Dispose()
@@ -118,7 +118,7 @@
     {
         if (content == null)
             return null;
-        String result = Regex.Replace(content.Substring(0, Math.Min(150,content.Length)), "<\\s*[Bb][Rr]\\s*/?\\s*>", "\r\n").Trim();
+        String result = Regex.Replace(content.Substring(0, Math.Min(500,content.Length)), "<\\s*[Bb][Rr]\\s*/?\\s*>", "\r\n").Trim();
         result = Regex.Replace(result, @"<[^>]+>|&nbsp;", String.Empty);
         result = Regex.Replace(result, "(\\r\\n){2,}", "\r\n");
         return result.Length > 100 ? (result.Substring(0, 100) + "...").Replace("\r\n","<br/>") : result.Replace("\r\n","<br/>");

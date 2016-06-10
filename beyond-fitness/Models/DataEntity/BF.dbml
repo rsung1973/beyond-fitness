@@ -37,34 +37,12 @@
       <Association Name="LevelExpression_UserProfile" Member="UserProfiles" ThisKey="LevelID" OtherKey="LevelID" Type="UserProfile" />
     </Type>
   </Table>
-  <Table Name="dbo.UserProfile" Member="UserProfiles">
-    <Type Name="UserProfile">
-      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="UserName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
-      <Column Name="PID" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="Password" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="EMail" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
-      <Column Name="Expiration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="Creator" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="AuthID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LevelID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ThemeName" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
-      <Column Name="Password2" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Association Name="UserProfile_UserProfile" Member="UserProfiles" ThisKey="UID" OtherKey="Creator" Type="UserProfile" />
-      <Association Name="UserProfile_UserProfile1" Member="UserProfiles1" ThisKey="UID" OtherKey="AuthID" Type="UserProfile" />
-      <Association Name="UserProfile_UserRole" Member="UserRoles" ThisKey="UID" OtherKey="UID" Type="UserRole" />
-      <Association Name="UserProfile_Article" Member="Articles" ThisKey="UID" OtherKey="AuthorID" Type="Article" />
-      <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
-      <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
-      <Association Name="UserProfile_UserProfile1" Member="UserProfile2" ThisKey="AuthID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.UserRole" Member="UserRoles">
     <Type Name="UserRole">
       <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="UserProfile_UserRole" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="UserRoleDefinition_UserRole" Member="UserRoleDefinition" ThisKey="RoleID" OtherKey="RoleID" Type="UserRoleDefinition" IsForeignKey="true" />
+      <Association Name="UserProfile_UserRole" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -73,6 +51,7 @@
       <Column Name="StoredPath" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="DocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Attachment_Article" Member="Articles" ThisKey="AttachmentID" OtherKey="Illustration" Type="Article" />
+      <Association Name="Attachment_UserProfile" Member="UserProfiles" ThisKey="AttachmentID" OtherKey="PictureID" Type="UserProfile" />
       <Association Name="Document_Attachment" Member="Document" ThisKey="DocID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
     </Type>
   </Table>
@@ -86,6 +65,31 @@
       <Association Name="Attachment_Article" Member="Attachment" ThisKey="Illustration" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="Document_Article" Member="Document" ThisKey="DocID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
       <Association Name="UserProfile_Article" Member="UserProfile" ThisKey="AuthorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserProfile" Member="UserProfiles">
+    <Type Name="UserProfile">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="PID" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="EMail" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Column Name="Expiration" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Creator" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AuthID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LevelID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ThemeName" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="Password2" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="MemberCode" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="PictureID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="UserProfile_UserRole" Member="UserRoles" ThisKey="UID" OtherKey="UID" Type="UserRole" />
+      <Association Name="UserProfile_Article" Member="Articles" ThisKey="UID" OtherKey="AuthorID" Type="Article" />
+      <Association Name="UserProfile_UserProfile" Member="UserProfiles" ThisKey="UID" OtherKey="Creator" Type="UserProfile" />
+      <Association Name="UserProfile_UserProfile1" Member="UserProfiles1" ThisKey="UID" OtherKey="AuthID" Type="UserProfile" />
+      <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
+      <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+      <Association Name="UserProfile_UserProfile1" Member="UserProfile2" ThisKey="AuthID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

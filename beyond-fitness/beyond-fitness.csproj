@@ -108,6 +108,7 @@
     <Content Include="add-blog.htm" />
     <Content Include="add-coach.htm" />
     <Content Include="add-student.htm" />
+    <Content Include="add-vip.htm" />
     <Content Include="asset\css\bootstrap.min.css" />
     <Content Include="asset\js\bootstrap.min.js" />
     <Content Include="blog-content.htm" />
@@ -396,12 +397,14 @@
     <Content Include="forgetpw.htm" />
     <Content Include="Global.asax" />
     <Content Include="images\Beyond-Fitness.png" />
+    <Content Include="images\Beyond-Fitness_bk.png" />
     <Content Include="images\blog_pic.png" />
     <Content Include="images\COOPERATION-01.png" />
     <Content Include="images\favicon.png" />
     <Content Include="images\footer-beyond.png" />
     <Content Include="images\index-01.jpg" />
     <Content Include="images\map.png" />
+    <Content Include="images\noMember.jpg" />
     <Content Include="images\page_banner_bg.gif" />
     <Content Include="images\partner-Akrofitness.png" />
     <Content Include="images\partner-BOOM.png" />
@@ -456,6 +459,13 @@
     <Content Include="images\slider\bg2.jpg" />
     <Content Include="images\slider\bg3.jpg" />
     <Content Include="index.htm" />
+    <Content Include="jQuerySelect\chosen-sprite%402x.png" />
+    <Content Include="jQuerySelect\chosen-sprite.png" />
+    <Content Include="jQuerySelect\chosen.css" />
+    <Content Include="jQuerySelect\chosen.jquery.js" />
+    <Content Include="jQuerySelect\prism.css" />
+    <Content Include="jQuerySelect\prism.js" />
+    <Content Include="jQuerySelect\style.css" />
     <Content Include="js\bootstrap-datetimepicker.js" />
     <Content Include="js\contact.js" />
     <Content Include="js\count-to.js" />
@@ -485,11 +495,17 @@
     <Content Include="js\owl.carousel.js" />
     <Content Include="js\owl.carousel.min.js" />
     <Content Include="js\script.js" />
+    <Content Include="lockScreen\app.css" />
+    <Content Include="lockScreen\html5-android-pattern-lockScreen.js" />
+    <Content Include="lockScreen\html5-android-pattern-lockScreen.min.js" />
+    <Content Include="lockScreen\kinetic-v4.6.js" />
+    <Content Include="login-email.htm" />
     <Content Include="login.htm" />
     <Content Include="member-manager.htm" />
     <Content Include="Module\Common\CommonScriptInclude.ascx" />
     <Content Include="Module\Common\CommonScriptManager.ascx" />
     <Content Include="preview-blog.htm" />
+    <Content Include="preview-vip.htm" />
     <Content Include="products.htm" />
     <Content Include="professional-fitness-content.htm" />
     <Content Include="professional-fitness-content01.htm" />
@@ -501,12 +517,23 @@
     <Content Include="professional-fitness-content07.htm" />
     <Content Include="professional-fitness-content08.htm" />
     <Content Include="professional-fitness.htm" />
+    <Content Include="register-1.htm" />
     <Content Include="register-2.htm" />
     <Content Include="register-3.htm" />
+    <Content Include="register-FB.htm" />
+    <Content Include="register-result.htm" />
     <Content Include="register.htm" />
     <Content Include="Views\Account\Index.aspx" />
-    <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\Account\Logout.aspx" />
     <Content Include="Views\Account\Login.aspx" />
+    <Content Include="Views\Account\LoginTest.aspx" />
+    <Content Include="Views\Account\Register.aspx" />
+    <Content Include="Views\Account\LoginByMail.aspx" />
+    <Content Include="Views\Account\RegisterByMail.aspx" />
+    <Content Include="Views\Account\RegisterByFB.aspx" />
+    <Content Include="Views\Account\CompleteRegister.aspx" />
+    <Content Include="Views\Account\SampleWithDB.aspx" />
+    <Content Include="Views\Account\Sample.aspx" />
     <Content Include="Views\Information\Blog.aspx" />
     <Content Include="Views\Information\Resource.aspx" />
     <Content Include="Views\Information\EditBlog.aspx" />
@@ -535,8 +562,12 @@
     <Content Include="Views\Shared\PagingControl.ascx" />
     <Content Include="Views\Information\Error.aspx" />
     <Content Include="Views\Shared\Script.ascx" />
+    <Content Include="vip-pdq-1.htm" />
+    <Content Include="vip-verify.htm" />
     <Content Include="vip.htm" />
     <Content Include="Web.config" />
+    <Content Include="_test\TestFB.htm" />
+    <Content Include="_test\TestFB01.htm" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -547,6 +578,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -554,6 +586,7 @@
     </Compile>
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
+    <Compile Include="Models\Security\UserProfileManager.cs" />
     <Compile Include="Models\ViewModel\LoginViewModel.cs" />
     <Compile Include="Models\ViewModel\PagingIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -604,8 +637,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="jQuerySelect\" />
-    <Folder Include="lockScreen\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">

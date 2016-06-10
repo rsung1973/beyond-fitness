@@ -8,11 +8,37 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Http;
 using Utility;
+using System.Security.Claims;
 
 namespace WebHome
 {
     public class Global : HttpApplication
     {
+        public Global() : base()
+        {
+            this.AuthenticateRequest += Global_AuthenticateRequest;
+            this.AuthorizeRequest += Global_AuthorizeRequest;
+        }
+
+        private void Global_AuthorizeRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Global_AuthenticateRequest(object sender, EventArgs e)
+        {
+            if (Context.User == null)
+            {
+                HttpCookie cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];
+                if (cookie != null && !String.IsNullOrEmpty(cookie.Value))
+                {
+                    FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                    FormsIdentity identity = new FormsIdentity(ticket);
+                    Context.User = new ClaimsPrincipal(identity);
+                }
+            }
+        }
+
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup

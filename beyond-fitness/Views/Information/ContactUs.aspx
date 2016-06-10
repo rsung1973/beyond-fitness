@@ -1,28 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
 
+<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <!-- Start Page Banner -->
-    <div class="page-banner" style="padding: 40px 0; background: url(../images/page_banner_bg.gif);">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>聯絡我們</h2>
-                    <p>Contact Us</p>
-                </div>
-                <div class="col-md-6">
-                    <ul class="breadcrumbs">
-                        <li><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">首頁</a></li>
-                        <li>聯絡我們</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Page Banner -->
+
+    <uc1:PageBanner runat="server" ID="pageBanner" Title="聯絡我們" TitleInEng="Contact Us" />
 
     <!-- Start Map -->
     <div id="map" data-position-latitude="25.0519269" data-position-longitude="121.55007599999999"></div>
@@ -176,7 +163,7 @@
     </script>
     <!-- End Map -->
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3614.472973471831!2d121.55001928836059!3d25.051953560977104!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abe83c187613%3A0x896b13dfd50e7a7b!2zMTA15Y-w5YyX5biC5p2-5bGx5Y2A5Y2X5Lqs5p2x6Lev5Zub5q61MTfomZ8!5e0!3m2!1szh-TW!2stw!4v1422857105442" width="1000" height="450" frameborder="0" style="border: 0"></iframe>
+<%--    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3614.472973471831!2d121.55001928836059!3d25.051953560977104!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abe83c187613%3A0x896b13dfd50e7a7b!2zMTA15Y-w5YyX5biC5p2-5bGx5Y2A5Y2X5Lqs5p2x6Lev5Zub5q61MTfomZ8!5e0!3m2!1szh-TW!2stw!4v1422857105442" width="1000" height="450" frameborder="0" style="border: 0"></iframe>--%>
 
     <!-- Start Content -->
     <div id="content">

@@ -137,10 +137,8 @@
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
               <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">
-                  <li><a href="login.htm">登入</a>
-                  </li>
-                  <li><a href="coach.htm">教練專區</a>
+                <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
                   </li>
@@ -163,16 +161,14 @@
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
           <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">
-              <li><a href="login.htm">登入</a>
-              </li>
-              <li><a href="coach.htm">教練專區</a>
-              </li>
-              <li><a href="member-manager.htm">人員管理</a>
-              </li>
-              <li><a href="blog-manager.htm">知識上稿</a>
-              </li>
-            </ul>
+            <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
+                  </li>
+                  <li><a href="member-manager.htm">人員管理</a>
+                  </li>
+                  <li><a href="blog-manager.htm">知識上稿</a>
+                  </li>
+                </ul>
            </li>
         </ul>
         <!-- Mobile Menu End -->
@@ -185,7 +181,7 @@
 
 
     <!-- Start Page Banner -->
-    <div class="page-banner" style="padding:30px 0; background: url(images/page_banner_bg.gif);">
+    <div class="page-banner" style="padding:20px 0; background: url(images/page_banner_bg.gif);">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -210,23 +206,100 @@
 
         <div class="row">
 
+          <div class="col-md-3">
+
+            <!-- Classic Heading -->
+            <!--<h4 class="classic-title"><span>王建民 的行事曆</span></h4>-->
+
+            <!-- Start Contact Form -->
+            <!-- Categories Widget -->
+            <div class="widget widget-categories">
+              <ul>
+                <li>
+                  <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> 修改個人資料</a>
+                </li>
+              </ul>
+            </div>
+            <div class="hr1" style="margin-top:5px;margin-bottom:5px;"></div>
+            
+            <!-- Responsive calendar - START -->
+            <div class="responsive-calendar">
+              <div class="controls">
+                  <a class="pull-left" data-go="prev"><div class="btn btn-primary">上個月</div></a>
+                  <h4><span data-head-year></span> <span data-head-month></span></h4>
+                  <a class="pull-right" data-go="next"><div class="btn btn-primary">下個月</div></a>
+              </div><hr/>
+              <div class="day-headers">
+                <div class="day header">一</div>
+                <div class="day header">二</div>
+                <div class="day header">三</div>
+                <div class="day header">四</div>
+                <div class="day header">五</div>
+                <div class="day header">六</div>
+                <div class="day header">日</div>
+              </div>
+              <div class="days" data-group="days">
+                
+              </div>
+            </div>
+            <!-- Responsive calendar - END -->
+
+            <!-- End Contact Form -->
+          
+          </div>
           <div class="col-md-9">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>4/29 學員課程表</span></h4>
+            <h4 class="classic-title"><span>行事曆清單</span></h4>
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
             <div class="navbar" style="min-height:30px;">
-            	<div class="search-side">
-                <a href="coach.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+              <div class="search-side">
+                <a href="add-student.htm" class="btn-system btn-small">登記上課時間 <span class="glyphicon glyphicon-calendar"></span></a>
+                <a href="#" class="btn-system btn-small">自由教練打卡 <i class="fa fa-check-square" aria-hidden="true"></i></a>
+                <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
               </div>
             </div>
             
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
             
               <div class="panel panel-default">
-                	<!-- TABLE 1 -->
+                  <!-- TABLE 1 -->
+                  <table class="table">
+                    <tr class="info">
+                      <th>日期</th>
+                      <th>時段</th>
+                      <th>人數</th>
+                      <th>功能</th>
+                    </tr>
+                    <tr>
+                      <td>05/13</td>
+                      <td>8:00 - 9:00</td>
+                      <td>5</td>
+                      <td>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>05/13</td>
+                      <td>9:00 - 10:00</td>
+                      <td>10</td>
+                      <td>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                      </td>
+                    </tr>
+                  </table>
+              </div>
+              
+            <!-- End Contact Form -->
+            
+            <div id="rotated-labels" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+          
+                     <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
+            
+              <div class="panel panel-default">
+                  <!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
                       <th>時間</th>
@@ -237,27 +310,26 @@
                       <td>8:00 - 9:00</td>
                       <td>王大民</td>
                       <td>
-                      	<a href="before-class.htm" class="btn btn-system btn-small">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="after-class.htm" class="btn btn-system btn-small">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="before-class.htm" class="btn btn-system btn-small">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="after-class.htm" class="btn btn-system btn-small">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
                       <td>8:00 - 9:00</td>
                       <td>林志玲</td>
                       <td>
-                      	<a href="before-class.htm" class="btn btn-system btn-small disabled" role="button">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="after-class.htm" class="btn btn-system btn-small disabled" role="button">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="before-class.htm" class="btn btn-system btn-small disabled" role="button">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="after-class.htm" class="btn btn-system btn-small disabled" role="button">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
               </div>
               
-            <!-- End Contact Form -->
-        	
+   
           </div>
 
       </div>
@@ -319,16 +391,16 @@
           <div class="form-group">
             <label for="exampleInputFile" class="col-md-2 control-label">起訖日：</label>
             <div class="col-md-10">
-            	<div class="row">
-              	<div class="col-md-5">
+              <div class="row">
+                <div class="col-md-5">
                   <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
                   <input class="form-control" size="16" type="text" value="" readonly>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
                 </div>
-              	<div class="col-md-1">
+                <div class="col-md-1">
                 <span style="line-height:30px;"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
                 </div>
-              	<div class="col-md-5">
+                <div class="col-md-5">
                   <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input2">
                   <input class="form-control" size="16" type="text" value="" readonly>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
@@ -347,33 +419,33 @@
   </form>
 
   
-	<script src="js/bootstrap-datetimepicker.js"></script> 
-	<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script> 
+  <script src="js/bootstrap-datetimepicker.js"></script> 
+  <script type="text/javascript" src="js/locales/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script> 
 
-	<script type="text/javascript" src="js/script.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
   <script src="calendar/responsive-calendar.js"></script>
   <script type="text/javascript">
-	  //行事曆
+    //行事曆
     $(document).ready(function () {
       $(".responsive-calendar").responsiveCalendar({
         time: '2016-04-29',
         events: {
           "2016-04-29": {
-					"number": 2, 
-					"badgeClass": 
-					"badge-warning", 
-					"url": "http://w3widgets.com/responsive-calendar",
-					"dayEvents": [
-						{
-							"name": "Important meeting",
-							"hour": "17:30" 
-						},
-						{
-							"name": "Morning meeting at coffee house",
-							"hour": "08:15" 
-						}
-					]
-				},
+          "number": 2, 
+          "badgeClass": 
+          "badge-warning", 
+          "url": "http://w3widgets.com/responsive-calendar",
+          "dayEvents": [
+            {
+              "name": "Important meeting",
+              "hour": "17:30" 
+            },
+            {
+              "name": "Morning meeting at coffee house",
+              "hour": "08:15" 
+            }
+          ]
+        },
           //"2016-04-29": {"number": 1, "url": "http://w3widgets.com"}, 
           "2016-05-03":{"number": 1}, 
           "2016-06-12": {}}
@@ -381,7 +453,7 @@
     });
       
   //搜尋對話方塊
-	$('#searchdil').on('show.bs.modal', function (event) {
+  $('#searchdil').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -391,6 +463,77 @@
     //modal.find('.modal-body label').text('確認' + recipient + '這筆採購單?')
   })
   </script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script type="text/javascript">
+$(function () {
+    $('#rotated-labels').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '5/13 日上課人數圖'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            type: 'category',
+            labels: {
+                rotation: -45,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '人數 (個)'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '有: <b>{point.y:.1f} 個學員</b>'
+        },
+        series: [{
+            name: '時間',
+            data: [
+                ['8:00', 10],
+                ['9:00', 16],
+                ['10:00', 5],
+                ['11:00', 4],
+                ['12:00', 2],
+                ['13:00', 10],
+                ['14:00', 20],
+                ['15:00', 12],
+                ['16:00', 10],
+                ['17:00', 5],
+                ['18:00', 4],
+                ['19:00', 2],
+                ['20:00', 5],
+                ['21:00', 10],
+                ['22:00', 5],
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}', // one decimal
+                y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        }]
+    });
+});
+    </script>
   
 </div>
 </body>
