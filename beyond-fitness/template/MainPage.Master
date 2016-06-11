@@ -55,7 +55,7 @@
 <body>
     <form id="theForm" runat="server">
         <uc1:CommonScriptManager runat="server" ID="CommonScriptManager" />
-        <%= Html.AntiForgeryToken() %>
+        <%= Html!=null ? Html.AntiForgeryToken() : null %>
         <div id="fb-root"></div>
         <script>(function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -117,21 +117,23 @@
                                 <li><a id="products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
                                 <li><a id="cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
                                 <li><a id="contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
-                                <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">會員專區</a>
-                                    <%--<a id="vip" href="#">會員專區</a>
+                                <% if (_userProfile == null)
+                                    { %>
+                                <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">會員專區</a></li>
+                                <%  }
+                                    else
+                                    { %>
+                                <li><a id="vip" href="#">會員專區</a>
                                     <ul class="dropdown">
-                                        <li><a id="login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
-                                        </li>
+                                        <%--<li><a id="login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
+                                        </li>--%>
                                         <li><a id="coach" href="coach.htm">教練專區</a>
                                         </li>
-                                        <li><a id="member" href="member-manager.htm">人員管理</a>
+                                        <li><a id="member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                                         </li>
                                         <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
                                         </li>
-                                    </ul>--%>
-                                </li>
-                                <% if (_userProfile != null)
-                                    { %>
+                                    </ul></li>
                                 <li><a id="logout" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>">登出</a></li>
                                 <%  } %>
 
@@ -150,19 +152,26 @@
                         <li><a id="m_products" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>">相關商品</a></li>
                         <li><a id="m_cooperation" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>">相關合作</a></li>
                         <li><a id="m_contactUs" href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>">聯絡我們</a></li>
-                        <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">會員專區</a>
-                            <%--<a id="m_vip" href="#">會員專區</a>
+                        <% if (_userProfile == null)
+                                    { %>
+                        <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">會員專區</a></li>
+                        <%  }
+                                    else
+                                    { %>
+                        <li><a id="m_vip" href="#">會員專區</a>
                             <ul class="dropdown">
-                                <li><a id="m_login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
-                                </li>
+                                <%--<li><a id="m_login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
+                                </li>--%>
                                 <li><a id="m_coach" href="coach.htm">教練專區</a>
                                 </li>
                                 <li><a id="m_member" href="member-manager.htm">人員管理</a>
                                 </li>
                                 <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
                                 </li>
-                            </ul>--%>
+                            </ul>
                         </li>
+                        <li><a id="m_logout" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>">登出</a></li>
+                        <%  } %>
                         <%--<li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>">會員專區</a></li>--%>
                     </ul>
                     <!-- Mobile Menu End -->

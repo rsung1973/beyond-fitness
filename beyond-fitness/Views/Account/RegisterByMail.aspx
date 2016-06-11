@@ -9,14 +9,11 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+<%@ Register Src="~/Views/Shared/LockScreen.ascx" TagPrefix="uc1" TagName="LockScreen" %>
+
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <!-- lockScreen CSS Styles  -->
-    <link rel="stylesheet" href="<%= VirtualPathUtility.ToAbsolute("~/lockScreen/app.css") %>" type="text/css" />
-
-    <script src="<%= VirtualPathUtility.ToAbsolute("~/lockScreen/kinetic-v4.6.js") %>"></script>
-    <script src="<%= VirtualPathUtility.ToAbsolute("~/lockScreen/html5-android-pattern-lockScreen.js") %>"></script>
 
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
@@ -81,11 +78,7 @@
                         <div class="tab-content">
                             <!-- Tab Content 1 -->
                             <div class="tab-pane fade in active" id="tab-1">
-                                <button id="reset-button" class="button blue">Reset</button>
-                                <div class="hr1" style="margin: 5px 0px;"></div>
-                                <div id="lock-screen-container">
-                                    <div id="lock-screen" />
-                                </div>
+                                <uc1:LockScreen runat="server" ID="lockScreen" />
                             </div>
                         </div>
                         <!-- Tab Content 2 -->

@@ -175,35 +175,53 @@
 
             <!-- Classic Heading -->
             <h4 class="classic-title"><span>新增學員 - Step 1</span></h4>
-						
-            <!-- Start Contact Form -->            
+            
+			<!-- Start Contact Form -->            
             <form role="form" class="contact-form" id="contact-form" method="post">
                 
               <div class="form-group has-feedback">
                   <label class="control-label" for="coachname">學員姓名：</label>
-                  <input type="text" class="form-control" placeholder="姓名" name="coachname" id="nickname" aria-describedby="coachnameStatus">
+                  <input type="text" class="form-control" placeholder="請輸入姓名" name="coachname" id="nickname" aria-describedby="coachnameStatus">
                   <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-                  <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
+                  <!--<span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>-->
                   <span id="coachnameStatus" class="sr-only">(success)</span>
               </div>
               
               <div class="form-group has-feedback">
                   <label class="control-label" for="nickname">電話：</label>
-                  <input type="text" class="form-control" placeholder="電話" name="telno" id="nickname" aria-describedby="telnoStatus">
-                  <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
+                  <input type="text" class="form-control" placeholder="請輸入市話或手機號碼" name="telno" id="nickname" aria-describedby="telnoStatus">
+                  <!--<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>-->
                   <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
                   <span id="telnoStatus" class="sr-only">(success)</span>
               </div>
-                          
+			  
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="nickname">上課總次數：</label>
+                  <input type="text" class="form-control" placeholder="請輸入數字" name="times" id="times" aria-describedby="timesStatus">
+                  <!--<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>-->
+                  <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
+                  <span id="timesStatus" class="sr-only">(success)</span>
+              </div>			  
+
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="nickname">課程類別：</label>
+                      <select class="form-control">
+                        <option>A-1500</option>
+                        <option>B-1600</option>
+						<option>C-1800</option>
+						<option>D-1900</option>
+                      </select>
+              </div>	
+			  
               <div class="tabs-section">
              
               <div class="hr1" style="margin:5px 0px;"></div>
               
-              <div style="height:60px;border:1px solid #000;">驗證碼區塊</div>
+              <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
               
               <div class="hr1" style="margin:5px 0px;"></div>
-              <a href="vip-pdq-1.htm" class="btn-system btn-medium">下一步</a>
-              <a href="#" class="btn-system btn-medium border-btn">取消</a>
+			  <a href="member-manager.htm" class="btn-system btn-medium">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+              <a href="vip-pdq-1.htm" class="btn-system btn-medium">下一步 <i class="fa fa-hand-o-right" aria-hidden="true"></i></a>
               
             <!-- End Contact Form -->
             

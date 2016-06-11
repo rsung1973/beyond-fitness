@@ -109,8 +109,11 @@
     <Content Include="add-coach.htm" />
     <Content Include="add-student.htm" />
     <Content Include="add-vip.htm" />
+    <Content Include="add_item.htm" />
+    <Content Include="after-class.htm" />
     <Content Include="asset\css\bootstrap.min.css" />
     <Content Include="asset\js\bootstrap.min.js" />
+    <Content Include="before-class.htm" />
     <Content Include="blog-content.htm" />
     <Content Include="blog-manager.htm" />
     <Content Include="blog.htm" />
@@ -387,6 +390,8 @@
     <Content Include="Default.aspx" />
     <Content Include="edit-blog.htm" />
     <Content Include="edit-coach.htm" />
+    <Content Include="edit-vip-info-bycoach.htm" />
+    <Content Include="edit-vip-info-verify-bycoach.htm" />
     <Content Include="edit-vip-info-verify.htm" />
     <Content Include="edit-vip-info.htm" />
     <Content Include="equipment-rental-test.htm" />
@@ -485,9 +490,13 @@
     <Content Include="js\jquery.parallax.js" />
     <Content Include="js\jquery.slicknav.js" />
     <Content Include="js\jquery.textillate.js" />
+    <Content Include="js\jquery.validate.js" />
+    <Content Include="js\jquery.validate.min.js" />
     <Content Include="js\locales\bootstrap-datetimepicker.uk.js" />
     <Content Include="js\locales\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="js\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="js\locales\messages_zh_TW.js" />
+    <Content Include="js\locales\messages_zh_TW.min.js" />
     <Content Include="js\mediaelement-and-player.js" />
     <Content Include="js\modernizrr.js" />
     <Content Include="js\nivo-lightbox.js" />
@@ -523,6 +532,7 @@
     <Content Include="register-FB.htm" />
     <Content Include="register-result.htm" />
     <Content Include="register.htm" />
+    <Content Include="view-vip.htm" />
     <Content Include="Views\Account\Index.aspx" />
     <Content Include="Views\Account\Logout.aspx" />
     <Content Include="Views\Account\Login.aspx" />
@@ -532,6 +542,9 @@
     <Content Include="Views\Account\RegisterByMail.aspx" />
     <Content Include="Views\Account\RegisterByFB.aspx" />
     <Content Include="Views\Account\CompleteRegister.aspx" />
+    <Content Include="Views\Member\CoachUpdated.aspx" />
+    <Content Include="Views\Member\EditCoach.aspx" />
+    <Content Include="Views\Member\CoachCreated.aspx" />
     <Content Include="Views\Account\SampleWithDB.aspx" />
     <Content Include="Views\Account\Sample.aspx" />
     <Content Include="Views\Information\Blog.aspx" />
@@ -556,16 +569,32 @@
     <Content Include="Views\Information\Professional.aspx" />
     <Content Include="Views\Information\Cooperation.aspx" />
     <Content Include="Views\Information\Rental.aspx" />
+    <Content Include="Views\Member\ListAll.aspx" />
+    <Content Include="Views\Member\ListLearners.ascx" />
+    <Content Include="Views\Member\ListCoaches.ascx" />
+    <Content Include="Views\Member\AddLeaner.aspx" />
+    <Content Include="Views\Member\AddCoach.aspx" />
+    <Content Include="Views\Member\CoachItem.ascx" />
+    <Content Include="Views\Member\VipPDQ_1.aspx" />
+    <Content Include="Views\Member\Test.aspx" />
     <Content Include="Views\Shared\PageBanner.ascx" />
+    <Content Include="Views\Shared\LockScreen.ascx" />
+    <Content Include="Views\Shared\HtmlInput.ascx" />
+    <Content Include="Views\Shared\BSModal.ascx" />
     <Content Include="Views\Shared\UploadResource.ascx" />
     <Content Include="Views\Shared\Sample.ascx" />
     <Content Include="Views\Shared\PagingControl.ascx" />
     <Content Include="Views\Information\Error.aspx" />
     <Content Include="Views\Shared\Script.ascx" />
     <Content Include="vip-pdq-1.htm" />
+    <Content Include="vip-pdq-2.htm" />
+    <Content Include="vip-pdq-3.htm" />
+    <Content Include="vip-pdq-4.htm" />
+    <Content Include="vip-single-day.htm" />
     <Content Include="vip-verify.htm" />
     <Content Include="vip.htm" />
     <Content Include="Web.config" />
+    <Content Include="_test\Test01.aspx" />
     <Content Include="_test\TestFB.htm" />
     <Content Include="_test\TestFB01.htm" />
   </ItemGroup>
@@ -574,11 +603,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
+    <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -587,6 +618,7 @@
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />
+    <Compile Include="Models\ViewModel\InputViewModel.cs" />
     <Compile Include="Models\ViewModel\LoginViewModel.cs" />
     <Compile Include="Models\ViewModel\PagingIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -43,7 +43,6 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "userName")]
         public string UserName { get; set; }
 
-
         [Required]
         [Display(Name = "userID")]
         public string UserID { get; set; }
@@ -51,6 +50,43 @@ namespace WebHome.Models.ViewModel
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
+
+    }
+
+    public class LeanerViewModel
+    {
+        [Required]
+        [Display(Name = "真實姓名")]
+        public string RealName { get; set; }
+
+        [Display(Name = "電話")]
+        public string Phone { get; set; }
+
+        [Required]
+        [Display(Name = "上課總次數")]
+        public int Lessons { get; set; }
+
+        [Required]
+        [Display(Name = "課程類別")]
+        public int ClassLevel { get; set; }
+        public int? UID { get; set; }
+
+    }
+
+    public class CoachViewModel
+    {
+        [Required]
+        [Display(Name = "真實姓名")]
+        public string RealName { get; set; }
+
+        [Display(Name = "電話")]
+        public string Phone { get; set; }
+
+        [Required]
+        [Display(Name = "課程類別")]
+        public int CoachRole { get; set; }
+
+        public int? UID { get; set; }
 
     }
 }

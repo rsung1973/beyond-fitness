@@ -29,11 +29,11 @@
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
                         <!-- Post Content -->
-                        <div class="author-info clearfix">
+                        <div class="user-info clearfix">
                             <div class="author-image">
                                 <img alt="" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" />
                             </div>
-                            <div class="author-bio">
+                            <div class="user-bio">
                                 <h2 class="text-primary"><%= _item.UserName %> <span class="subtext">您好</span></h2>
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>

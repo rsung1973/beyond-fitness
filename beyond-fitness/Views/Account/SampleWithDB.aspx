@@ -24,11 +24,14 @@
 <script runat="server">
 
     ModelSource<Article> models;
+    ModelStateDictionary _modelState;
+
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = TempData.GetModelSource<Article>();
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
 
     public override void Dispose()

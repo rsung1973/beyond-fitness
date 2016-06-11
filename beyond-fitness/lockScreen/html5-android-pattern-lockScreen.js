@@ -727,8 +727,8 @@ var $appLock;
     window.addEventListener('load', function() {
         var app = new PatternLockScreen({
             container: "lock-screen",
-            width: 400,
-            height: 400,
+            width: 300,
+            height: 300,
             onSuccess: function(){
                 console.log('success');
             },

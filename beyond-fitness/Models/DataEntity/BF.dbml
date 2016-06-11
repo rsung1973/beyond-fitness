@@ -5,7 +5,7 @@
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="SiteMenu" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="Role" Type="System.String" DbType="NVarChar(16) NOT NULL" CanBeNull="false" />
-      <Association Name="UserRoleDefinition_UserRole" Member="UserRoles" ThisKey="RoleID" OtherKey="RoleID" Type="UserRole" />
+      <Association Name="UserRoleDefinition_UserRole" Member="UserRole" ThisKey="RoleID" OtherKey="RoleID" Type="UserRole" />
     </Type>
   </Table>
   <Table Name="dbo.Document" Member="Documents">
@@ -35,14 +35,7 @@
       <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="LevelExpression_Document" Member="Documents" ThisKey="LevelID" OtherKey="CurrentStep" Type="Document" />
       <Association Name="LevelExpression_UserProfile" Member="UserProfiles" ThisKey="LevelID" OtherKey="LevelID" Type="UserProfile" />
-    </Type>
-  </Table>
-  <Table Name="dbo.UserRole" Member="UserRoles">
-    <Type Name="UserRole">
-      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="UserRoleDefinition_UserRole" Member="UserRoleDefinition" ThisKey="RoleID" OtherKey="RoleID" Type="UserRoleDefinition" IsForeignKey="true" />
-      <Association Name="UserProfile_UserRole" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="LevelExpression_RegisterLesson" Member="RegisterLesson" ThisKey="LevelID" OtherKey="ClassLevel" Type="RegisterLesson" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -82,14 +75,37 @@
       <Column Name="Password2" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="MemberCode" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
       <Column Name="PictureID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="UserProfile_UserRole" Member="UserRoles" ThisKey="UID" OtherKey="UID" Type="UserRole" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
       <Association Name="UserProfile_Article" Member="Articles" ThisKey="UID" OtherKey="AuthorID" Type="Article" />
       <Association Name="UserProfile_UserProfile" Member="UserProfiles" ThisKey="UID" OtherKey="Creator" Type="UserProfile" />
       <Association Name="UserProfile_UserProfile1" Member="UserProfiles1" ThisKey="UID" OtherKey="AuthID" Type="UserProfile" />
+      <Association Name="UserProfile_UserRole" Member="UserRole" ThisKey="UID" OtherKey="UID" Type="UserRole" />
+      <Association Name="UserProfile_RegisterLesson" Member="RegisterLesson" ThisKey="UID" OtherKey="UID" Type="RegisterLesson" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile1" Member="UserProfile2" ThisKey="AuthID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRole" Member="UserRole">
+    <Type Name="UserRole">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="UserProfile_UserRole" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="UserRoleDefinition_UserRole" Member="UserRoleDefinition" ThisKey="RoleID" OtherKey="RoleID" Type="UserRoleDefinition" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RegisterLesson" Member="RegisterLesson">
+    <Type Name="RegisterLesson">
+      <Column Name="RegisterID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RegisterDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Lessons" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClassLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="LevelExpression_RegisterLesson" Member="LevelExpression" ThisKey="ClassLevel" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="UserProfile_RegisterLesson" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

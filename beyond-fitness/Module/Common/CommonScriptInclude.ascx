@@ -18,4 +18,12 @@
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/bootstrap-datetimepicker.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/bootstrap-datetimepicker.zh-TW.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.form.js") %>"></script>
-
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.validate.js") %>"></script>
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/messages_zh_TW.js") %>"></script>
+<script>
+    $(function () {
+        $.validator.addMethod("regex", function (value, element, regexpr) {
+            return regexpr.test(value);
+        }, "資料格式錯誤!!");
+    });
+</script>

@@ -40,7 +40,12 @@
   
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
-   
+
+  
+  <!-- 選單設定-->
+  <link rel="stylesheet" href="jQuerySelect/prism.css">
+  <link rel="stylesheet" href="jQuerySelect/chosen.css">
+  
   <!-- 日曆設定-->
   <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
 
@@ -190,16 +195,16 @@
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
-            <div class="navbar" style="min-height:30px;">
+            <div class="navbar bg_white" style="min-height:30px;">
             	<div class="search-side">
-                <a href="add-vip.htm" class="btn-system btn-small">新增學員 <span class="glyphicon glyphicon-calendar"></span></a>
-                <a href="add-coach.htm" class="btn-system btn-small">新增教練 <span class="glyphicon glyphicon-calendar"></span></a>
-                <a href="coach.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+                <a href="add-vip.htm" class="btn-system btn-small">新增學員 <span class="glyphicon glyphicon-plus"></span></a>
+                <a href="add-coach.htm" class="btn-system btn-small">新增教練 <span class="glyphicon glyphicon-plus"></span></a>
+                <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
               </div>
             </div>
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="glyphicon glyphicon-edit"></i> 教練清單</a></li>
-                <li><a href="#tab-2" data-toggle="tab"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> 學員清單</a></li>
+                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="glyphicon glyphicon-list"></i> 教練清單</a></li>
+                <li><a href="#tab-2" data-toggle="tab"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> 學員清單</a></li>
               </ul>
            <!-- Tab panels -->
               <div class="tab-content">
@@ -209,24 +214,24 @@
                   <table class="table">
                     <tr class="info">
                       <th>姓名</th>
-                      <th>帳號</th>
+                      <th>教練編號</th>
                       <th>功能</th>
                     </tr>
                     <tr>
                       <td>王大民</td>
-                      <td>xxx@gmail.com</td>
+                      <td>AB12345</td>
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
                       <td>林志玲</td>
-                      <td>xxx@gmail.com</td>
+                      <td>AB12345</td>
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
@@ -238,25 +243,27 @@
                   <table class="table">
                     <tr class="info">
                       <th>姓名</th>
-                      <th>帳號</th>
+                      <th>學員編號</th>
                       <th>功能</th>
                     </tr>
                     <tr>
                       <td>王建民</td>
-                      <td>xxx@gmail.com</td>
+                      <td>AK1234</td>
                       <td>
-                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+						<a href="view-vip.htm" class="btn btn-system btn-small">新增上課數 <i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>						
+                        <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
                       <td>黃大明</td>
-                      <td>xxx@gmail.com</td>
+                      <td>AK1234</td>
                       <td>
-                        <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+						<a href="view-vip.htm" class="btn btn-system btn-small">新增上課數 <i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
@@ -284,11 +291,26 @@
 
   <!-- Go To Top Link -->
   <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
-  
-  
-  
-  
-  
+    <!-- 確認提示遮罩 -->
+  <form class="form-horizontal" role="form" action="member-manager.htm">
+    <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="confirmLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h3 class="modal-title" id="confirmLabel origan-text"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <label></label></h3>
+          </div>
+          <div class="modal-body text-center">
+          <p><label></label></p>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-system btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 確認</button>
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
   
     <!-- 搜尋料提示遮罩 -->
   <form class="form-horizontal" role="form">
@@ -303,45 +325,18 @@
             <div class="form-group">
             <label for="exampleInputFile" class="col-md-2 control-label">依學員：</label>
             <div class="col-md-10" >
-              <select name="select1" class="form-control">
-                <option value=""></option>
-                <option value="O">A12345678 林志玲</option>
-                <option value="I">A45646545 謝金燕</option>
-                <option value="I">A78564456 王力宏</option>
-                <option value="I">A45465456 李安</option>
-              </select>
+				<input class="form-control" type="text" value="">
             </div>
           </div>
           <div class="form-group">
             <label for="exampleInputFile" class="col-md-2 control-label">依教練：</label>
             <div class="col-md-10" >
               <select name="select1" class="form-control">
-                <option value=""></option>
                 <option value="O">李連杰</option>
                 <option value="I">巨石強森</option>
                 <option value="I">阿諾</option>
                 <option value="I">史蒂芬席格</option>
               </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">起訖日：</label>
-            <div class="col-md-10">
-            	<div class="row">
-              	<div class="col-md-5">
-                  <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                  <input class="form-control" size="16" type="text" value="" readonly>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
-                </div>
-              	<div class="col-md-1">
-                <span style="line-height:30px;"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
-                </div>
-              	<div class="col-md-5">
-                  <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input2">
-                  <input class="form-control" size="16" type="text" value="" readonly>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
-                </div>
-              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -360,33 +355,10 @@
 
 	<script type="text/javascript" src="js/script.js"></script>
   <script src="calendar/responsive-calendar.js"></script>
+  <script src="jQuerySelect/chosen.jquery.js" type="text/javascript"></script> 
+	<script src="jQuerySelect/prism.js" type="text/javascript" charset="utf-8"></script> 
+	
   <script type="text/javascript">
-	  //行事曆
-    $(document).ready(function () {
-      $(".responsive-calendar").responsiveCalendar({
-        time: '2016-04-29',
-        events: {
-          "2016-04-29": {
-					"number": 2, 
-					"badgeClass": 
-					"badge-warning", 
-					"url": "http://w3widgets.com/responsive-calendar",
-					"dayEvents": [
-						{
-							"name": "Important meeting",
-							"hour": "17:30" 
-						},
-						{
-							"name": "Morning meeting at coffee house",
-							"hour": "08:15" 
-						}
-					]
-				},
-          //"2016-04-29": {"number": 1, "url": "http://w3widgets.com"}, 
-          "2016-05-03":{"number": 1}, 
-          "2016-06-12": {}}
-      });
-    });
       
   //搜尋對話方塊
 	$('#searchdil').on('show.bs.modal', function (event) {
@@ -398,6 +370,27 @@
     //modal.find('.modal-title label').text(recipient + '採購單')
     //modal.find('.modal-body label').text('確認' + recipient + '這筆採購單?')
   })
+  
+  //刪除對話方塊
+	$('#confirm').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    modal.find('.modal-title label').text(recipient + '學員資料')
+    modal.find('.modal-body label').text('確認' + recipient + '這筆學員資料?')
+  })  
+      var config = {
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : {allow_single_deselect:true},
+        '.chosen-select-no-single' : {disable_search_threshold:8},
+        '.chosen-select-no-results': {no_results_text:'目前無選項！'},
+        '.chosen-select-width'     : {width:"95%"}
+      }
+      for (var selector in config) {
+        $(selector).chosen(config[selector]);
+      }
   </script>
   
 </div>

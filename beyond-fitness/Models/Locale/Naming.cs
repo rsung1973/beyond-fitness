@@ -43,5 +43,13 @@ namespace WebHome.Models.Locale
             Checked = 1003 
         }
 
+        public enum RoleID
+        {
+            Administrator = 1,
+            Coach = 2,
+            FreeAgent = 3,
+            Learner = 4
+        }
+
     }
 }

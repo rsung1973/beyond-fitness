@@ -24,7 +24,7 @@ namespace WebHome.Controllers
             ModelSource<Article> models = new ModelSource<Article>();
             TempData.SetModelSource(models);
             models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
-                .OrderByDescending(a => a.DocID)
+                .OrderByDescending(a => a.Document.DocDate)
                 .Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 .Take(viewModel.PageSize);
 
@@ -74,7 +74,7 @@ namespace WebHome.Controllers
             ModelSource<Article> models = new ModelSource<Article>();
             TempData.SetModelSource(models);
             models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
-                .OrderByDescending(a => a.DocID);
+                .OrderByDescending(a => a.Document.DocDate);
                 //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 //.Take(viewModel.PageSize);
 

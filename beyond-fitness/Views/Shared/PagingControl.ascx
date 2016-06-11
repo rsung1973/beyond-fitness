@@ -49,7 +49,7 @@
 
         if (item != null && item.PageSize > 0 && item.PagingSize > 0 && item.CurrentIndex >= 0)
         {
-            pagingCount = RecordCount / item.PageSize;
+            pagingCount = (RecordCount + item.PageSize - 1) / item.PageSize;
             startPaging = item.CurrentIndex / item.PagingSize * item.PagingSize;
             prevPaging = pagingCount > 0 && startPaging >= item.PagingSize;
             nextPaging = pagingCount > 0 && (startPaging + item.PagingSize) < pagingCount;

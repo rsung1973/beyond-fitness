@@ -182,18 +182,24 @@
 						
             <!-- Start Contact Form -->            
             <form role="form" class="contact-form" id="contact-form" method="post">
-            	<p><strong>姓名：</strong><span class="text-primary">王建民</span></p>
               <p><strong>員工編號：</strong><span class="text-primary">Ａ13215645</span></p>
               
               <!-- Divider -->
               <div class="hr5" style="margin-top:10px; margin-bottom:10px;"></div>
                 
-                
+               <div class="form-group has-feedback">
+                  <label class="control-label" for="coachname">姓名：</label>
+                  <input type="text" class="form-control" placeholder="王建明" name="coachname" id="nickname" aria-describedby="coachnameStatus">
+                  <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
+                  <!--<span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>-->
+                  <span id="coachnameStatus" class="sr-only">(success)</span>
+              </div>
+			  
               <div class="form-group has-feedback">
                   <label class="control-label" for="coachname">Email：</label>
                   <input type="email" class="form-control" placeholder="wang@usa.com" name="email" id="nickname" aria-describedby="emailStatus">
                   <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-                  <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
+                  <!--<span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>-->
                   <span id="emailStatus" class="sr-only">(success)</span>
               </div>
               
@@ -202,17 +208,26 @@
                   <label class="control-label" for="nickname">電話：</label>
                   <input type="text" class="form-control" placeholder="09100000111" name="telno" id="nickname" aria-describedby="telnoStatus">
                   <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-                  <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
+                  <!--<span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>-->
                   <span id="telnoStatus" class="sr-only">(success)</span>
               </div>
-               
+
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="nickname">是否為自由教練：</label>
+                      <select class="form-control">
+                        <option>是</option>
+                        <option>否</option>
+                      </select>
+              </div>
+			  
               <div class="hr1" style="margin:5px 0px;"></div>
               
-              <div style="height:60px;border:1px solid #000;">驗證碼區塊</div>
+              <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
               
               <div class="hr1" style="margin:5px 0px;"></div>
-              <a href="coach-edit-verify.htm" class="btn-system btn-medium">下一步</a>
-              <a href="#" class="btn-system btn-medium border-btn">取消</a>
+
+			  <a href="member-manager.htm" class="btn-system btn-medium">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+              <a href="coach-edit-verify.htm" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
               
             <!-- End Contact Form -->
             

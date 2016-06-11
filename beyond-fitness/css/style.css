@@ -139,6 +139,9 @@ p strong {
 .table {
     margin-bottom: 0px;
 }
+.table td{
+		vertical-align:middle !important;
+}
 
 .accent-color-bg {
 	color: #fff;
@@ -1548,7 +1551,13 @@ input[type="submit"] {
 	border-top: none;
 }
 
-
+.panel-Scroll{
+	height:250px;
+	overflow: scroll;
+	-webkit-overflow-scrolling:touch;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
 
 /*************** Dropcaps ***************/
 
@@ -3865,6 +3874,30 @@ ul.post-meta li, ul.post-meta li a {
 	font-size: 1em;
 }
 
+.blog-post .user-info {
+	display: block;
+	margin-bottom: 10px;
+	position:relative;
+}
+
+.blog-post .user-info .user-image {
+	float: left;
+}
+
+.blog-post .user-info .user-image img {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+	border: 4px solid #eee;
+}
+.blog-post .user-info .user-bio {
+	padding-left: 110px;
+}
+
+
 .blog-post .author-info {
 	display: block;
 	margin-bottom: 10px;
@@ -5759,4 +5792,10 @@ ul.footer-nav li a:hover {
 }
 .bg_white{
 		background-color:#FFF;
+}
+
+.error {
+    color: red;
+    font-style: italic;
+    border: 1px dotted red;
 }
