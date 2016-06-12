@@ -54,7 +54,7 @@ namespace WebHome.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddLeaner(LeanerViewModel viewModel)
+        public ActionResult AddLeaner(LearnerViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -223,6 +223,45 @@ namespace WebHome.Controllers
             models.SubmitChanges();
 
             return View("CoachUpdated", item);
+        }
+
+        public ActionResult EditLearner(int id)
+        {
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+
+            TempData.SetModelSource(models);
+            UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.Message = "資料錯誤!!";
+                return View("ListAll");
+            }
+
+            return View(item);
+
+        }
+
+        [HttpPost]
+        public ActionResult EditLearner(LearnerViewModel viewModel)
+        {
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+
+            TempData.SetModelSource(models);
+            UserProfile item = models.EntityList.Where(u => u.UID == viewModel.UID).FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.Message = "資料錯誤!!";
+                return View("ListAll");
+            }
+
+            item.RealName = viewModel.RealName;
+            item.Phone = viewModel.Phone;
+            item.EMail = viewModel.Email;
+            models.SubmitChanges();
+
+            return View("LearnerUpdated", item);
         }
 
 

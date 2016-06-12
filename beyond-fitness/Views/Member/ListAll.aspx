@@ -35,8 +35,8 @@
                     <!-- Stat Search -->
                     <div class="navbar bg_white" style="min-height: 30px;">
                         <div class="search-side">
-                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLeaner") %>">新增學員 <span class="glyphicon glyphicon-plus"></span></a>
                             <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>">新增教練 <span class="glyphicon glyphicon-plus"></span></a>
+                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLeaner") %>">新增學員 <span class="glyphicon glyphicon-plus"></span></a>
                             <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
@@ -63,8 +63,7 @@
     <!-- End content -->
     <input type="hidden" name="uid" id="uid" />
     <uc1:BSModal runat="server" ID="confirm" />
-
-    <div class="modal fade" id="searchdil" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
+    <div class="form-horizontal modal fade" id="searchdil" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

@@ -4,24 +4,23 @@
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
 <%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 
 <div class="form-group has-feedback">
-    <% Html.RenderInput( "教練姓名：","realName","realName","請輸入姓名",_modelState); %>
+    <% Html.RenderInput( "學員姓名：","realName","realName","請輸入姓名",_modelState); %>
+</div>
+
+<div class="form-group has-feedback">
+    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState); %>
 </div>
 
 <div class="form-group has-feedback">
     <% Html.RenderInput("電話：", "phone", "phone", "請輸入市話或手機號碼", _modelState); %>
 </div>
 
-<div class="form-group has-feedback">
-    <label class="control-label" for="nickname">是否為自由教練：</label>
-    <select name="coachRole" class="form-control">
-        <option value="3">是</option>
-        <option value="2">否</option>
-    </select>
-</div>
+
 <% if (_model!=null && _model.UID.HasValue)
     { %>
 <input type="hidden" name="uid" value="<%= _model.UID %>" />
@@ -32,7 +31,7 @@
     $(function () {
         $('#realName').val('<%= _model.RealName %>');
         $('#phone').val('<%= _model.Phone %>');
-        $('#coachRole').val('<%= _model.CoachRole %>');
+        $('#email').val('<%= _model.Email %>');
     });
 </script>
 <%  } %>
@@ -61,6 +60,11 @@
             phone: {
                 required: true,
                 regex: /^[0-9]{6,20}$/
+            },
+            // compound rule
+            email: {
+                required: false,
+                email: true
             }
         }
     });
@@ -69,23 +73,23 @@
 <script runat="server">
 
     ModelStateDictionary _modelState;
-    CoachViewModel _model;
+    LearnerViewModel _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = this.Model as CoachViewModel;
+        _model = this.Model as LearnerViewModel;
         if (_model == null)
         {
             UserProfile item = (UserProfile)this.Model;
             if(item!=null)
             {
-                _model = new CoachViewModel
+                _model = new LearnerViewModel
                 {
-                    CoachRole = item.UserRole[0].RoleID,
                     Phone = item.Phone,
                     RealName = item.RealName,
+                    Email = item.EMail,
                     UID = item.UID
                 };
             }

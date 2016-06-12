@@ -25,27 +25,29 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>教練資料更新完成</span></h4>
+                    <h4 class="classic-title"><span>修改個人資料</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
                         <!-- Post Content -->
                         <div class="user-info clearfix">
-                            <div class="author-image">
-                                <div class="user-image">
-                                    <% _model.RenderUserPicture(this.Writer, "authorImg"); %>
-                                </div>
-                                <div class="user-bio">
-                                    <h2 class="text-primary"><%= _model.RealName %> </h2>
+                            <div class="user-image">
+                                <% _model.RenderUserPicture(this.Writer, "userImg"); %>
+                            </div>
+                            <div class="user-bio">
 
-                                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
+                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
-                                    <p><strong>教練編號：</strong><%= _model.MemberCode %></p>
+                                <p><strong>姓名：</strong><%= _model.RealName %></p>
+                                <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
+                                <p><strong>Email：</strong><%= _model.EMail %></p>
 
-                                    <!-- Divider -->
-                                    <div class="hr1" style="margin-bottom: 10px;"></div>
-                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-small">繼續修改教練 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
-                                </div>
+                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
+
+                                <p>相關資料已修改完成。</p>
+                                <!-- Divider -->
+                                <div class="hr1" style="margin-bottom: 10px;"></div>
+                                <p><a href="#" class="btn-system btn-small">繼續修改學員 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                             </div>
                         </div>
                     </div>

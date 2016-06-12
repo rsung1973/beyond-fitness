@@ -542,6 +542,10 @@
     <Content Include="Views\Account\RegisterByMail.aspx" />
     <Content Include="Views\Account\RegisterByFB.aspx" />
     <Content Include="Views\Account\CompleteRegister.aspx" />
+    <Content Include="Views\Member\LearnerUpdated.aspx" />
+    <Content Include="Views\Member\EditLearner.aspx" />
+    <Content Include="Views\Member\EditLearnerItem.ascx" />
+    <Content Include="Views\Member\LearnerItem.ascx" />
     <Content Include="Views\Member\CoachUpdated.aspx" />
     <Content Include="Views\Member\EditCoach.aspx" />
     <Content Include="Views\Member\CoachCreated.aspx" />

@@ -51,48 +51,22 @@
 
             </div>
         </div>
-        <!-- End content -->
+    </div>
+    <!-- End content -->
 
 
-        <script>
-            $('#vip,#m_vip').addClass('active');
-            $('#theForm').addClass('contact-form');
+    <script>
+        $('#vip,#m_vip').addClass('active');
+        $('#theForm').addClass('contact-form');
 
-            $('#nextStep').on('click', function (evt) {
+        $('#nextStep').on('click', function (evt) {
 
-                $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach") %>')
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach") %>')
               .submit();
 
-        });
+            });
 
-        $("form").validate({
-            //debug: true,
-            //errorClass: "label label-danger",
-            success: function (label, element) {
-                label.remove();
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                    .addClass('glyphicon-ok').addClass('text-success');
-            },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                    .removeClass('glyphicon-ok').removeClass('text-success');
-            },
-            rules: {
-                realName: {
-                    required: true,
-                    maxlength: 20
-                },
-                phone: {
-                    required: true,
-                    regex: /^[0-9]{6,20}$/
-                }
-            }
-        });
-
-        </script>
+    </script>
 </asp:Content>
 <script runat="server">
 

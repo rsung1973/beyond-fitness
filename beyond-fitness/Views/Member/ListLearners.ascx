@@ -21,9 +21,9 @@
         <td><%= item.RealName %></td>
         <td><%= item.MemberCode %></td>
         <td>
-            <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditLearner/") + item.UID %>">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
             <a href="view-vip.htm" class="btn btn-system btn-small">新增上課數 <i class="fa fa-plus-square" aria-hidden="true"></i></a>
-            <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+            <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="學員資料">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
             <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
         </td>
     </tr>

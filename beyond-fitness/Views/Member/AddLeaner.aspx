@@ -29,29 +29,9 @@
 
                     <!-- Start Contact Form -->
 
-                        <div class="form-group has-feedback">
-                            <% Html.RenderInput( "學員姓名：","realName","realName","請輸入姓名",_modelState); %>
-                        </div>
+                    <% Html.RenderPartial("~/Views/Member/LearnerItem.ascx",_model); %>
 
-                        <div class="form-group has-feedback">
-                            <% Html.RenderInput("電話：", "phone", "phone", "請輸入市話或手機號碼", _modelState); %>
-                        </div>
-
-                        <div class="form-group has-feedback">
-                            <% Html.RenderInput("上課總次數：", "lessons", "lessons", "請輸入數字", _modelState); %>
-                        </div>
-
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="classLevel">課程類別：</label>
-                            <select class="form-control" name="classLevel">
-                                <option value="2001">A-1500</option>
-                                <option value="2002">B-1600</option>
-                                <option value="2003">C-1800</option>
-                                <option value="2004">D-1900</option>
-                            </select>
-                        </div>
-
-                        <div class="tabs-section">
+                    <div class="tabs-section">
 
                             <div class="hr1" style="margin: 5px 0px;"></div>
 
@@ -84,52 +64,18 @@
 
         });
 
-        $("form").validate({
-            //debug: true,
-            //errorClass: "label label-danger",
-            success: function (label, element) {
-                label.remove();
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                    .addClass('glyphicon-ok').addClass('text-success');
-            },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                    .removeClass('glyphicon-ok').removeClass('text-success');
-            },
-            rules: {
-                realName: {
-                    required: true,
-                    maxlength: 20
-                },
-                lessons: {
-                    required : true,
-                    max: 9999
-                },
-                phone: {
-                    required : true,
-                    regex : /^[0-9]{6,20}$/
-                },
-                // compound rule
-                email: {
-                    required: true,
-                    email: true
-                }
-            }
-        });
-
     </script>
 
 </asp:Content>
 <script runat="server">
 
     ModelStateDictionary _modelState;
+    LearnerViewModel _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        _model = (LearnerViewModel)this.Model;
     }
 </script>

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using System.Web.UI;
+using WebHome.Models.DataEntity;
 using WebHome.Models.ViewModel;
 
 namespace WebHome.Helper
@@ -23,6 +25,15 @@ namespace WebHome.Helper
                     PlaceHolder = placeHolder,
                     Name = name
                 });
+        }
+
+        public static void RenderUserPicture(this UserProfile profile, HtmlTextWriter writer, String tagId)
+        {
+            writer.WriteLine(
+                String.Concat("<img width=\"100\" id=\"", tagId,
+                "\" alt=\"\" src=\"", 
+                profile.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + profile.PictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg"),
+                "\" />"));
         }
     }
 }

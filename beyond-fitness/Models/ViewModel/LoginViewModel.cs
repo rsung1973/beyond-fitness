@@ -53,7 +53,7 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class LeanerViewModel
+    public class LearnerViewModel
     {
         [Required]
         [Display(Name = "真實姓名")]
@@ -62,13 +62,15 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "電話")]
         public string Phone { get; set; }
 
-        [Required]
         [Display(Name = "上課總次數")]
         public int Lessons { get; set; }
 
-        [Required]
         [Display(Name = "課程類別")]
         public int ClassLevel { get; set; }
+
+        [Display(Name = "EMail")]
+        public string Email { get; set; }
+
         public int? UID { get; set; }
 
     }

@@ -62,33 +62,6 @@
 
         });
 
-        $("form").validate({
-            //debug: true,
-            //errorClass: "label label-danger",
-            success: function (label, element) {
-                label.remove();
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                    .addClass('glyphicon-ok').addClass('text-success');
-            },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                    .removeClass('glyphicon-ok').removeClass('text-success');
-            },
-            rules: {
-                realName: {
-                    required: true,
-                    maxlength: 20
-                },
-                phone: {
-                    required : true,
-                    regex : /^[0-9]{6,20}$/
-                }
-            }
-        });
-
     </script>
 
 </asp:Content>
