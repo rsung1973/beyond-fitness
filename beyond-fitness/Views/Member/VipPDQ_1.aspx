@@ -54,8 +54,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.減肥/身強體壯/運動表現/克服疾病=  挑戰型</a>
-                                        <a href="#">B.獲得肌肉/肌肉結實和有彈性=  保守型</a>
+                                        <a >A.減肥/身強體壯/運動表現/克服疾病=  挑戰型</a>
+                                        <a >B.獲得肌肉/肌肉結實和有彈性=  保守型</a>
                                     </div>
                                 </div>
 
@@ -81,10 +81,10 @@
                                 <h6 class="classic-title"><span>確定最佳化私人教練目標</span></h6>
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.獲得肌肉/使肌肉有彈性=  健美</a>
-                                        <a href="#">B.體重減輕=  減肥</a>
-                                        <a href="#">C.身強體壯/克服疾病= 健康</a>
-                                        <a href="#">D.改善運動表現/表現=  運動訓練</a>
+                                        <a >A.獲得肌肉/使肌肉有彈性=  健美</a>
+                                        <a >B.體重減輕=  減肥</a>
+                                        <a >C.身強體壯/克服疾病= 健康</a>
+                                        <a >D.改善運動表現/表現=  運動訓練</a>
                                     </div>
                                 </div>
 
@@ -93,7 +93,7 @@
 
                     </div>
 
-                    <a href="#" class="btn-system btn-medium border-btn"><i class="fa fa-times" aria-hidden="true"></i>取消</a>
+                    <a  class="btn-system btn-medium border-btn"><i class="fa fa-times" aria-hidden="true"></i>取消</a>
                     <a href="vip-pdq-2.htm" class="btn-system btn-medium">下一步<i class="fa fa-hand-o-right" aria-hidden="true"></i></a>
 
 

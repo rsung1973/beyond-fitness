@@ -37,7 +37,7 @@
 
                         <div class="hr1" style="margin: 5px 0px;"></div>
                         <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-                        <a href="#" id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
+                        <a  id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
                         <!-- End Contact Form -->
 
                     </div>

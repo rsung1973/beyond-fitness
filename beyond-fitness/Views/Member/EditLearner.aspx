@@ -57,8 +57,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.減肥/身強體壯/運動表現/克服疾病=  挑戰型</a>
-                                        <a href="#">B.獲得肌肉/肌肉結實和有彈性=  保守型</a>
+                                        <a >A.減肥/身強體壯/運動表現/克服疾病=  挑戰型</a>
+                                        <a >B.獲得肌肉/肌肉結實和有彈性=  保守型</a>
                                     </div>
                                 </div>
 
@@ -84,10 +84,10 @@
                                 <h6 class="classic-title"><span>確定最佳化私人教練目標</span></h6>
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.獲得肌肉/使肌肉有彈性=  健美</a>
-                                        <a href="#">B.體重減輕=  減肥</a>
-                                        <a href="#">C.身強體壯/克服疾病= 健康</a>
-                                        <a href="#">D.改善運動表現/表現=  運動訓練</a>
+                                        <a >A.獲得肌肉/使肌肉有彈性=  健美</a>
+                                        <a >B.體重減輕=  減肥</a>
+                                        <a >C.身強體壯/克服疾病= 健康</a>
+                                        <a >D.改善運動表現/表現=  運動訓練</a>
                                     </div>
                                 </div>
 
@@ -106,8 +106,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">Ａ.挑戰、冒險=   挑戰型</a>
-                                        <a href="#">B.穩定、單純、實用=  保守型</a>
+                                        <a >Ａ.挑戰、冒險=   挑戰型</a>
+                                        <a >B.穩定、單純、實用=  保守型</a>
                                     </div>
                                 </div>
                             </div>
@@ -122,8 +122,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.多樣化=   挑戰型</a>
-                                        <a href="#">B.常規=  保守型</a>
+                                        <a >A.多樣化=   挑戰型</a>
+                                        <a >B.常規=  保守型</a>
                                     </div>
                                 </div>
                             </div>
@@ -138,9 +138,9 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">A.是否需要長時間坐著？   是= 挑戰型  否=保守型</a>
-                                        <a href="#">B.是否需要重複性動作？   是= 挑戰型  否=保守型</a>
-                                        <a href="#">C.導致你焦慮或精神緊張?  是= 挑戰型  否=保守型</a>
+                                        <a >A.是否需要長時間坐著？   是= 挑戰型  否=保守型</a>
+                                        <a >B.是否需要重複性動作？   是= 挑戰型  否=保守型</a>
+                                        <a >C.導致你焦慮或精神緊張?  是= 挑戰型  否=保守型</a>
                                     </div>
                                 </div>
                             </div>
@@ -161,9 +161,9 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">0.久坐型</a>
-                                        <a href="#">1.活動型</a>
-                                        <a href="#">2.耗費體力型</a>
+                                        <a >0.久坐型</a>
+                                        <a >1.活動型</a>
+                                        <a >2.耗費體力型</a>
                                     </div>
                                 </div>
                             </div>
@@ -178,8 +178,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">0.非活動型（例如：閱讀）</a>
-                                        <a href="#">1.活動型（例如：園藝）</a>
+                                        <a >0.非活動型（例如：閱讀）</a>
+                                        <a >1.活動型（例如：園藝）</a>
                                     </div>
                                 </div>
                             </div>
@@ -194,9 +194,9 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">0.每月/每週少於一次(更不頻繁)</a>
-                                        <a href="#">1.每月/每週一次</a>
-                                        <a href="#">2.每月/每週超過一次(更頻繁)</a>
+                                        <a >0.每月/每週少於一次(更不頻繁)</a>
+                                        <a >1.每月/每週一次</a>
+                                        <a >2.每月/每週超過一次(更頻繁)</a>
                                     </div>
                                 </div>
                             </div>
@@ -211,8 +211,8 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">0.過去訓練或者從不訓練</a>
-                                        <a href="#">2.目前在訓練（何種類型的訓練？）</a>
+                                        <a >0.過去訓練或者從不訓練</a>
+                                        <a >2.目前在訓練（何種類型的訓練？）</a>
                                     </div>
                                 </div>
                             </div>
@@ -295,11 +295,11 @@
                                 <!-- Tags Widget -->
                                 <div class="widget widget-tags">
                                     <div class="tagcloud">
-                                        <a href="#">疲累</a>
-                                        <a href="#">開心</a>
-                                        <a href="#">壓力</a>
-                                        <a href="#">努力</a>
-                                        <a href="#">放鬆</a>
+                                        <a >疲累</a>
+                                        <a >開心</a>
+                                        <a >壓力</a>
+                                        <a >努力</a>
+                                        <a >放鬆</a>
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +345,7 @@
 
                     <div class="hr1" style="margin: 5px 0px;"></div>
                     <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-                    <a href="#" id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
+                    <a  id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
 
                     <!-- End Contact Form -->
 

@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
+
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -25,34 +26,23 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>修改個人資料</span></h4>
+                    <h4 class="classic-title"><span>重新設定密碼</span></h4>
 
-                    <!-- Start Post -->
-                    <div class="blog-post quote-post">
-                        <!-- Post Content -->
-                        <div class="user-info clearfix">
-                            <div class="user-image">
-                                <% _model.RenderUserPicture(this.Writer, "userImg"); %>
-                            </div>
-                            <div class="user-bio">
+                    <!-- Start Contact Form -->
+                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
+                    <p><strong>會員編號：</strong><span class="text-primary"><%= _item.MemberCode %></span></p>
+                    <p><strong>Email：</strong><%= _item.EMail %></p>
 
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p><strong>姓名：</strong><%= _model.RealName %></p>
-                                <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _model.EMail %></p>
-
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p>相關資料已修改完成。</p>
-                                <!-- Divider -->
-                                <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a  class="btn-system btn-small">繼續修改學員 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
-                            </div>
-                        </div>
+                    <div class="form-group has-feedback">
+                        <label class="text-success">密碼設定完成，請重新登入。</label>
                     </div>
-                    <!-- End Post -->
 
+                    <!--<div class="hr1" style="margin:10px 0px;"></div>
+              
+              <div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
+
+                    <!-- End Contact Form -->
+                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>" class="btn-system btn-small">登入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                 </div>
 
             </div>
@@ -60,24 +50,33 @@
     </div>
     <!-- End content -->
 
+
     <script>
         $('#vip,#m_vip').addClass('active');
         $('#theForm').addClass('contact-form');
+
+        $('#nextStep').on('click', function (evt) {
+
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Account/ForgetPassword") %>')
+              .submit();
+
+        });
     </script>
+
 
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
-    UserProfile _model;
+    UserProfile _item;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (UserProfile)this.Model;
+        models = TempData.GetModelSource<UserProfile>();
+        _item = (UserProfile)this.Model;
     }
 
     public override void Dispose()

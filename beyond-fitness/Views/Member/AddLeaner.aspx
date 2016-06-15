@@ -39,7 +39,7 @@
 
                             <div class="hr1" style="margin: 5px 0px;"></div>
                             <a href="member-manager.htm" class="btn-system btn-medium">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-                            <a href="#" id="nextStep" class="btn-system btn-medium">下一步 <i class="fa fa-hand-o-right" aria-hidden="true"></i></a>
+                            <a  id="nextStep" class="btn-system btn-medium">下一步 <i class="fa fa-hand-o-right" aria-hidden="true"></i></a>
 
                             <!-- End Contact Form -->
 

@@ -57,6 +57,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertRegisterLesson(RegisterLesson instance);
     partial void UpdateRegisterLesson(RegisterLesson instance);
     partial void DeleteRegisterLesson(RegisterLesson instance);
+    partial void InsertResetPassword(ResetPassword instance);
+    partial void UpdateResetPassword(ResetPassword instance);
+    partial void DeleteResetPassword(ResetPassword instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -158,6 +161,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<RegisterLesson>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ResetPassword> ResetPasswords
+		{
+			get
+			{
+				return this.GetTable<ResetPassword>();
 			}
 		}
 	}
@@ -1444,6 +1455,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
+		private EntitySet<ResetPassword> _ResetPasswords;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -1497,6 +1510,7 @@ namespace WebHome.Models.DataEntity
 			this._UserProfiles1 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles1), new Action<UserProfile>(this.detach_UserProfiles1));
 			this._UserRole = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRole), new Action<UserRole>(this.detach_UserRole));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			this._ResetPasswords = new EntitySet<ResetPassword>(new Action<ResetPassword>(this.attach_ResetPasswords), new Action<ResetPassword>(this.detach_ResetPasswords));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -1905,6 +1919,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_ResetPasswords", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<ResetPassword> ResetPasswords
+		{
+			get
+			{
+				return this._ResetPasswords;
+			}
+			set
+			{
+				this._ResetPasswords.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -2116,6 +2143,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_ResetPasswords(ResetPassword entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_ResetPasswords(ResetPassword entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -2498,6 +2537,133 @@ namespace WebHome.Models.DataEntity
 					if ((value != null))
 					{
 						value.RegisterLesson.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ResetPassword")]
+	public partial class ResetPassword : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _ResetID;
+		
+		private int _UID;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnResetIDChanging(System.Guid value);
+    partial void OnResetIDChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    #endregion
+		
+		public ResetPassword()
+		{
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResetID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid ResetID
+		{
+			get
+			{
+				return this._ResetID;
+			}
+			set
+			{
+				if ((this._ResetID != value))
+				{
+					this.OnResetIDChanging(value);
+					this.SendPropertyChanging();
+					this._ResetID = value;
+					this.SendPropertyChanged("ResetID");
+					this.OnResetIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.ResetPasswords.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.ResetPasswords.Add(this);
 						this._UID = value.UID;
 					}
 					else

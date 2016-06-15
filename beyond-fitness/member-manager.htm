@@ -195,7 +195,7 @@
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
-            <div class="navbar bg_white" style="min-height:30px;">
+            <div class="navbar bg_grey" style="min-height:30px;">
             	<div class="search-side">
                 <a href="add-vip.htm" class="btn-system btn-small">新增學員 <span class="glyphicon glyphicon-plus"></span></a>
                 <a href="add-coach.htm" class="btn-system btn-small">新增教練 <span class="glyphicon glyphicon-plus"></span></a>
@@ -211,10 +211,10 @@
                 <!-- Tab Content 1 -->
                 <div class="tab-pane fade in active" id="tab-1">
                 <!-- TABLE 1 -->
-                  <table class="table">
+                  <table class="panel panel-grey table">
                     <tr class="info">
-                      <th>姓名</th>
-                      <th>教練編號</th>
+                      <th width="25%">姓名</th>
+                      <th width="30%">教練編號</th>
                       <th>功能</th>
                     </tr>
                     <tr>
@@ -223,7 +223,7 @@
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="view-coach.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
@@ -232,7 +232,7 @@
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a href="view-coach.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
@@ -240,7 +240,7 @@
                 <!-- Tab Content 2 -->
                 <div class="tab-pane fade" id="tab-2">
                   <!-- TABLE 1 -->
-                  <table class="table">
+                  <table class="panel panel-grey table">
                     <tr class="info">
                       <th>姓名</th>
                       <th>學員編號</th>
@@ -328,19 +328,8 @@
 				<input class="form-control" type="text" value="">
             </div>
           </div>
-          <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">依教練：</label>
-            <div class="col-md-10" >
-              <select name="select1" class="form-control">
-                <option value="O">李連杰</option>
-                <option value="I">巨石強森</option>
-                <option value="I">阿諾</option>
-                <option value="I">史蒂芬席格</option>
-              </select>
-            </div>
-          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-system btn-sm" onClick="location.href='coach.htm'"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 確認</button>
+            <button type="button" class="btn btn-system btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 確認</button>
             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 取消</button>
           </div>
         </div>

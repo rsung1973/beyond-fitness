@@ -659,7 +659,7 @@ PatternLockScreen.prototype.validatePattern = function(){
 
 PatternLockScreen.prototype.getUserPath = function () {
     if (this._pattern._userDots.length > 0) {
-        var path = this._pattern._userDots[0].pos;
+        var path = this._pattern._userDots[0].pos + '';
         for (var i = 1; i < this._pattern._userDots.length; i++) {
             path += ('-' + this._pattern._userDots[i].pos);
         }

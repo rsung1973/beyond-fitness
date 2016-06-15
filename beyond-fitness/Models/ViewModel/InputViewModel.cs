@@ -14,6 +14,6 @@ namespace WebHome.Models.ViewModel
         public String PlaceHolder { get; set; }
         public String ErrorMessage { get; set; }
         public bool? IsValid { get; set; }
-
+        public String InputType { get; set; }
     }
 }

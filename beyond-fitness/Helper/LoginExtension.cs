@@ -18,11 +18,29 @@ namespace WebHome.Helper
         {
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(profile.PID, false, Settings.Default.UserTimeoutInMinutes);
             context.Response.SetCookie(new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket)));
-
-            DataModelCache caching = new DataModelCache(context);
-            caching["userProfile"] = profile;
-
+            context.ClearCache();
+            context.SetCacheValue("userProfile",profile);
         }
+
+        public static void ClearCache(this HttpContextBase context)
+        {
+            DataModelCache caching = new DataModelCache(context);
+            caching.Clear();
+        }
+
+
+        public static void SetCacheValue(this HttpContextBase context,String keyName,Object value)
+        {
+            DataModelCache caching = new DataModelCache(context);
+            caching[keyName] = value;
+        }
+
+        public static Object GetCacheValue(this HttpContextBase context, String keyName)
+        {
+            DataModelCache caching = new DataModelCache(context);
+            return caching[keyName];
+        }
+
 
         public static String MakePassword(this String password)
         {
@@ -32,14 +50,12 @@ namespace WebHome.Helper
         public static void Logout(this HttpContextBase context)
         {
             context.Response.SetCookie(new HttpCookie(FormsAuthentication.FormsCookieName, ""));
-            DataModelCache caching = new DataModelCache(context);
-            caching["userProfile"] = null;
+            context.ClearCache();
         }
 
         public static UserProfile GetUser(this HttpContextBase context)
         {
-            DataModelCache caching = new DataModelCache(context);
-            return (UserProfile)caching["userProfile"];
+            return (UserProfile)context.GetCacheValue("userProfile");
         }
 
         public static UserProfile GetUser(this HttpContext context)

@@ -29,27 +29,51 @@ namespace WebHome.Models.ViewModel
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+    public class FBRegisterViewModel
     {
         [Required]
-        [Display(Name = "memberCode")]
-        //[EmailAddress]
+        [Display(Name = "會員編號")]
         public string MemberCode { get; set; }
 
-        [Display(Name = "email")]
+        [Display(Name = "EMail")]
         [EmailAddress]
         public string EMail { get; set; }
 
-        [Display(Name = "userName")]
+        [Display(Name = "暱稱")]
         public string UserName { get; set; }
 
         [Required]
-        [Display(Name = "userID")]
+        [Display(Name = "UserID")]
         public string UserID { get; set; }
 
+    }
+
+    public class RegisterViewModel : PasswordViewModel
+    {
+
+        [Display(Name = "EMail")]
+        [EmailAddress]
+        public string EMail { get; set; }
+
+        [Display(Name = "暱稱")]
+        public string UserName { get; set; }
+
+    }
+
+    public class PasswordViewModel
+    {
+
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "密碼")]
         public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "確認密碼")]
+        public string Password2 { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "圖形密碼")]
+        public string lockPattern { get; set; }
 
     }
 

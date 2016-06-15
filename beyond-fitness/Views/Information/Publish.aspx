@@ -32,7 +32,7 @@
 
                     <!-- Start Contact Form -->
                     <!-- Stat Search -->
-                    <div class="navbar" style="min-height: 30px;">
+                    <div class="navbar bg_gray" style="min-height: 30px;">
                         <div class="search-side">
                             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/CreateNew") %>" class="btn-system btn-small">新增體適能資訊 <span class="glyphicon glyphicon-calendar"></span></a>
                         </div>
@@ -55,7 +55,7 @@
                                         <td><%# Item.Title %></td>
                                         <td>
                                             <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/EditBlog/"+Item.DocID) %>" class="btn btn-system btn-small">修改文章 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                            <a href="#" onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                                            <a  onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                                             <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/Preview/"+Item.DocID) %>" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>

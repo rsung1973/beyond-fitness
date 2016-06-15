@@ -75,8 +75,8 @@
                     </div>
 
                     <div class="hr1" style="margin: 5px 0px;"></div>
-                    <a href="#" onclick="javascript:updateArticle();" class="btn-system btn-medium">送出</a>
-                    <a href="#" onclick="window.location.href = '<%= Request.UrlReferrer %>';" class="btn-system btn-medium border-btn">取消</a>
+                    <a  onclick="javascript:updateArticle();" class="btn-system btn-medium">送出</a>
+                    <a  onclick="window.location.href = '<%= Request.UrlReferrer %>';" class="btn-system btn-medium border-btn">取消</a>
 
                     <!-- End Contact Form -->
                 </div>

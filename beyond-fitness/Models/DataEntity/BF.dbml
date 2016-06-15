@@ -83,6 +83,7 @@
       <Association Name="UserProfile_UserProfile1" Member="UserProfiles1" ThisKey="UID" OtherKey="AuthID" Type="UserProfile" />
       <Association Name="UserProfile_UserRole" Member="UserRole" ThisKey="UID" OtherKey="UID" Type="UserRole" />
       <Association Name="UserProfile_RegisterLesson" Member="RegisterLesson" ThisKey="UID" OtherKey="UID" Type="RegisterLesson" />
+      <Association Name="UserProfile_ResetPassword" Member="ResetPasswords" ThisKey="UID" OtherKey="UID" Type="ResetPassword" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -106,6 +107,13 @@
       <Column Name="ClassLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="LevelExpression_RegisterLesson" Member="LevelExpression" ThisKey="ClassLevel" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_RegisterLesson" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ResetPassword" Member="ResetPasswords">
+    <Type Name="ResetPassword">
+      <Column Name="ResetID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="UserProfile_ResetPassword" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -64,17 +64,17 @@
                             <h4 class="classic-title"><span>熱門關鍵字</span></h4>
                             <div class="widget widget-tags">
                                 <div class="tagcloud">
-                                    <a href="#">啞鈴訓練</a>
-                                    <a href="#">單邊訓練</a>
-                                    <a href="#">團體課程</a>
-                                    <a href="#">均衡訓練</a>
-                                    <a href="#">增強式訓練</a>
-                                    <a href="#">壺鈴</a>
-                                    <a href="#">多關節活動</a>
-                                    <a href="#">奧林匹克槓片</a>
-                                    <a href="#">女性減脂</a>
-                                    <a href="#">女性運動</a>
-                                    <a href="#">孕婦運動</a>
+                                    <a >啞鈴訓練</a>
+                                    <a >單邊訓練</a>
+                                    <a >團體課程</a>
+                                    <a >均衡訓練</a>
+                                    <a >增強式訓練</a>
+                                    <a >壺鈴</a>
+                                    <a >多關節活動</a>
+                                    <a >奧林匹克槓片</a>
+                                    <a >女性減脂</a>
+                                    <a >女性運動</a>
+                                    <a >孕婦運動</a>
                                 </div>
                             </div>
 

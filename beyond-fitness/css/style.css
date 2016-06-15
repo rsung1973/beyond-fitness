@@ -124,7 +124,7 @@ h6 {
 }
 
 p {
-    color: #666;
+    color: #333;
     font-size: 13px;
     font-family: 'Open Sans', sans-serif;
     line-height: 22px;
@@ -141,6 +141,7 @@ p strong {
 }
 .table td{
 		vertical-align:middle !important;
+		background-color: #fff;
 }
 
 .accent-color-bg {
@@ -220,6 +221,7 @@ input[type="submit"] {
 
 #content {
 	padding: 60px 0;
+	background-color: #DDD;
 }
 
 #content.full-sections {
@@ -2077,6 +2079,7 @@ ul.icons-list li i {
 	border: 1px solid #eee;
 	border-top: none;
 	padding: 12px 16px;
+	background-color: #fff
 }
 
 .tab-content p {
@@ -5776,7 +5779,7 @@ ul.footer-nav li a:hover {
 
 .btn-search {
     color: #fff;
-    background-color: #ccc;
+    background-color: #666;
     border-color: #ccc;
 		padding: 5px 10px 4px;
 }
@@ -5793,9 +5796,14 @@ ul.footer-nav li a:hover {
 .bg_white{
 		background-color:#FFF;
 }
+.bg_gray{
+		background-color:#DDD;
+}
 
 .error {
     color: red;
     font-style: italic;
     border: 1px dotted red;
 }
+
+

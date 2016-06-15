@@ -43,7 +43,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>HYPERICE振動滾筒</h4>
                                     <span></span>
                                 </a>
@@ -67,7 +67,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>HYPERICE 冰敷袋</h4>
                                     <span>（通用部件：膝、肘、腕及小腿）</span>
                                 </a>
@@ -91,7 +91,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>HYPERICE冰敷袋</h4>
                                     <span>（膝蓋部件）</span>
                                 </a>
@@ -115,7 +115,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>HYPERICE冰敷袋</h4>
                                     <span>（腰背部件）</span>
                                 </a>
@@ -139,7 +139,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>HYPERICE人造冰</h4>
                                     <span></span>
                                 </a>
@@ -163,7 +163,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩滾筒（長版）</h4>
                                     <span></span>
                                 </a>
@@ -187,7 +187,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩滾筒</h4>
                                     <span>（長版狼牙棒）</span>
                                 </a>
@@ -211,7 +211,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩滾筒（短版）</h4>
                                     <span></span>
                                 </a>
@@ -235,7 +235,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>MINI BAND 迷你彈力帶</h4>
                                     <span>（1組）</span>
                                 </a>
@@ -259,7 +259,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>SUPER BAND 長版彈力帶</h4>
                                     <span>（1組）</span>
                                 </a>
@@ -283,7 +283,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩滾棒（長版）</h4>
                                     <span></span>
                                 </a>
@@ -307,7 +307,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩滾棒（短版）</h4>
                                     <span></span>
                                 </a>
@@ -331,7 +331,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>GYM BOSS電子訓練計時器</h4>
                                     <span></span>
                                 </a>
@@ -355,7 +355,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>RIVAL拳擊手套</h4>
                                     <span></span>
                                 </a>
@@ -379,7 +379,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>瑜珈墊</h4>
                                     <span>(24*68*3.5cm)</span>
                                 </a>
@@ -403,7 +403,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>BOSU半圓球</h4>
                                     <span>(直徑60cm, 附plastic rim)</span>
                                 </a>
@@ -427,7 +427,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>敏捷標示圈</h4>
                                     <span>(直徑50cm, 60cm)</span>
                                 </a>
@@ -451,7 +451,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>敏捷角錐套組</h4>
                                     <span>(碗型, 40個, 附收納掛勾)</span>
                                 </a>
@@ -475,7 +475,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>敏捷角錐</h4>
                                     <span>(高15cm)</span>
                                 </a>
@@ -499,7 +499,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>重量訓練桿</h4>
                                     <span>(4磅,6磅,9磅；長120cm)</span>
                                 </a>
@@ -523,7 +523,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>專利BEASTIE®深層按摩球</h4>
                                     <span></span>
                                 </a>
@@ -547,7 +547,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>T-BALL 按摩花生球</h4>
                                     <span></span>
                                 </a>
@@ -571,7 +571,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>平衡墊</h4>
                                     <span></span>
                                 </a>
@@ -595,7 +595,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>按摩花生球(大)</h4>
                                     <span></span>
                                 </a>
@@ -619,7 +619,7 @@
                             <!-- End Project Thumb -->
                             <!-- Start Project Details -->
                             <div class="portfolio-details">
-                                <a href="#">
+                                <a >
                                     <h4>滑板</h4>
                                     <span>（3公尺可調式滑板，附一對鞋套）</span>
                                 </a>

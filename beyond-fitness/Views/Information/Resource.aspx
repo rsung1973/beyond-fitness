@@ -22,7 +22,7 @@
                     <div class="col-md-4">
                         ( <%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) %> ) <br />
                         <input type="radio" name="rbTitleImg" value="<%# Item.AttachmentID %>" /> 設成主題圖片 &nbsp;&nbsp;
-                        <a href="#" onclick="javascript:deleteResource(<%# Item.AttachmentID %>)" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a  onclick="javascript:deleteResource(<%# Item.AttachmentID %>)" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 </li>

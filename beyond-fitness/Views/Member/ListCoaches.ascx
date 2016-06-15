@@ -24,8 +24,8 @@
         <td><%= item.MemberCode %></td>
         <td>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach/") + item.UID %>">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="教練資料">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-            <a href="#" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+            <a  class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="教練資料">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+            <a  class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
         </td>
     </tr>
     <%     } %>

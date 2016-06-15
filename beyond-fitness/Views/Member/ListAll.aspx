@@ -33,7 +33,7 @@
 
                     <!-- Start Contact Form -->
                     <!-- Stat Search -->
-                    <div class="navbar bg_white" style="min-height: 30px;">
+                    <div class="navbar bg_gray" style="min-height: 30px;">
                         <div class="search-side">
                             <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>">新增教練 <span class="glyphicon glyphicon-plus"></span></a>
                             <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLeaner") %>">新增學員 <span class="glyphicon glyphicon-plus"></span></a>

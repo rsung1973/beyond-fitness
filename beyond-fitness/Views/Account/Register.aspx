@@ -30,20 +30,16 @@
                     <!-- Start Contact Form -->
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
                         <div class="form-group has-feedback">
-                            <label class="control-label" for="vipno">會員編號：</label>
-                            <input type="text" class="form-control" placeholder="會員編號" name="memberCode" id="vipno" class="form-control" required autofocus aria-describedby="vipnoStatus" />
+                            <% Html.RenderInput( "會員編號：","memberCode","memberCode","會員編號",_modelState); %>
+                            <label id="memberCode-error" class="error" for="memberCode" style="display: none;"></label>
                             <input type="hidden" name="userName" id="userName" />
                             <input type="hidden" name="userID" id="userID" />
                             <input type="hidden" name="email" id="email" />
-                            <!--<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>-->
-                            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
-                            <span id="vipnoStatus" class="sr-only">(學員編號不存在)</span>
                         </div>
 
 
                         <button type="button" class="btn btn-primary btn-lg btn-block" id="btnFB"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook</button>
                         <div class="tabs-section">
-
 
                             <div class="hr1" style="margin: 5px 0px;"></div>
                             <button type="button" id="btnMail" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 登入</button>
@@ -66,9 +62,10 @@
 
         function checkMemberCode(channel) {
 
-            var $memberCode = $('#vipno').val();
+            var $memberCode = $('#memberCode').val();
             if ($memberCode == '') {
-                alert('請輸入學員編號!!');
+                $('#memberCode-error').css('display', 'block');
+                $('#memberCode-error').text('請輸入學員編號!!');
                 return;
             }
 
@@ -85,7 +82,8 @@
                         registerByMail();
                     }
                 } else {
-                    alert(data.message);
+                    $('#memberCode-error').css('display', 'block');
+                    $('#memberCode-error').text(data.message);
                 }
             });
         }
@@ -133,7 +131,8 @@
         { %>
     <script>
         $(function () {
-            alert('<%= ViewBag.Message %>');
+            $('#memberCode-error').css('display', 'block');
+            $('#memberCode-error').text('<%= ViewBag.Message %>');
         });
     </script>
     <%  } %>
@@ -212,7 +211,7 @@
   function registerByFB() {
       console.log('Welcome!  Fetching your information.... ');
       FB.api('/me/picture', function (response) {
-          $.post('<%= VirtualPathUtility.ToAbsolute("~/Account/UpdateMemberPicture") %>', { 'memberCode': $('#vipno').val(), 'imgUrl': response.data.url }, function (data) {
+          $.post('<%= VirtualPathUtility.ToAbsolute("~/Account/UpdateMemberPicture") %>', { 'memberCode': $('#memberCode').val(), 'imgUrl': response.data.url }, function (data) {
               if (!data.result) {
                   alert(data.message);
               } else {
@@ -235,3 +234,13 @@
     </script>
 
 </asp:Content>
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    }
+</script>

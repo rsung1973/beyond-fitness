@@ -135,7 +135,7 @@ namespace WebHome.Controllers
         }
 
         
-        public ActionResult RegisterByFB(RegisterViewModel viewModel)
+        public ActionResult RegisterByFB(FBRegisterViewModel viewModel)
         {
             ModelSource<UserProfile> models = new ModelSource<UserProfile>();
             TempData.SetModelSource(models);
@@ -153,29 +153,36 @@ namespace WebHome.Controllers
                 return View("Register");
             }
 
-            if (String.IsNullOrEmpty(viewModel.UserID))
+            viewModel.UserID = viewModel.UserID.GetEfficientString();
+            if (viewModel.UserID == null)
             {
                 ViewBag.Message = "無法取得您的FaceBook帳號識別碼!!";
                 return View("Register");
             }
 
-            if (models.EntityList.Any(u=>u.PID==viewModel.UserID))
+            if (item.PID != viewModel.UserID && models.EntityList.Any(u => u.PID == viewModel.UserID))
             {
-                ViewBag.Message = "您的FaceBook帳號已經是註冊使用者!!\\r\\n請直接登入系統!!";
+                ViewBag.Message = "您的FaceBook帳號已經是註冊使用者!!請直接登入系統!!";
                 return View("Register");
             }
 
-            ViewBag.ViewModel = viewModel;
+            item.PID = viewModel.UserID;
+            item.UserName = viewModel.UserName.GetEfficientString();
+            item.EMail = viewModel.EMail.GetEfficientString();
+            models.SubmitChanges();
+
+            HttpContext.SetCacheValue("uid", item.UID);
 
             return View(item);
         }
 
         
-        public ActionResult RegisterByMail(RegisterViewModel viewModel)
+        public ActionResult RegisterByMail(String memberCode)
         {
             ModelSource<UserProfile> models = new ModelSource<UserProfile>();
             TempData.SetModelSource(models);
-            UserProfile item = models.EntityList.Where(u => u.MemberCode == viewModel.MemberCode).FirstOrDefault();
+
+            UserProfile item = models.EntityList.Where(u => u.MemberCode == memberCode).FirstOrDefault();
 
             if (item == null)
             {
@@ -189,7 +196,7 @@ namespace WebHome.Controllers
                 return View("Register");
             }
 
-            ViewBag.ViewModel = viewModel;
+            HttpContext.SetCacheValue("uid", item.UID);
 
             return View(item);
         }
@@ -197,44 +204,44 @@ namespace WebHome.Controllers
         
         public ActionResult CompleteRegister(RegisterViewModel viewModel)
         {
+            if(!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("RegisterByMail");
+            }
+
             ModelSource<UserProfile> models = new ModelSource<UserProfile>();
             TempData.SetModelSource(models);
-            UserProfile item = models.EntityList.Where(u => u.MemberCode == viewModel.MemberCode).FirstOrDefault();
+            UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue("uid")).FirstOrDefault();
 
             if (item == null)
             {
-                ViewBag.Message = "學員編號錯誤!!";
-                return View("Register");
-            }
-
-            viewModel.UserID = viewModel.UserID.GetEfficientString();
-            if (viewModel.UserID == null)
-            {
-                ViewBag.Message = "無法取得您的帳號識別碼!!";
-                return View("Register");
-            }
-
-            if (models.EntityList.Any(u => u.PID == viewModel.UserID))
-            {
-                ViewBag.Message = "您的帳號已經是註冊使用者!!\\r\\n請直接登入系統!!";
+                ViewBag.Message = "會員編號錯誤!!";
+                HttpContext.SetCacheValue("uid", null);
                 return View("Register");
             }
 
             viewModel.EMail = viewModel.EMail.GetEfficientString();
             if (viewModel.EMail == null)
             {
-                ViewBag.Message = "email錯誤!!";
+                this.ModelState.AddModelError("email", "請輸入Email");
+                ViewBag.ModelState = ModelState;
+                return View("RegisterByMail");
+            }
+
+            if (models.EntityList.Any(u => u.PID == viewModel.EMail))
+            {
+                ViewBag.Message = "您的Email已經是註冊使用者!!請直接登入系統!!";
+                HttpContext.SetCacheValue("uid", null);
                 return View("Register");
             }
 
-
-            item.EMail = viewModel.EMail;
-            item.UserName = viewModel.UserName;
-            item.PID = viewModel.UserID;
+            item.PID = item.EMail = viewModel.EMail;
+            item.UserName = viewModel.UserName.GetEfficientString();
             item.LevelID = (int)Naming.MemberStatusDefinition.Checked;
             if(!String.IsNullOrEmpty(viewModel.Password))
             {
-                item.Password = (viewModel.UserID + viewModel.Password).MakePassword();
+                item.Password = (item.PID.ToUpper() + viewModel.Password).MakePassword();
             }
 
             models.SubmitChanges();
@@ -244,20 +251,35 @@ namespace WebHome.Controllers
             return View(item);
         }
 
-        
-        public ActionResult RegisterComplete(int id)
+        public ActionResult FBCompleteRegister(String email)
         {
-            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+            email = email.GetEfficientString();
+            if (email==null)
+            {
+                ModelState.AddModelError("email", "請輸入Email");
+                ViewBag.ModelState = ModelState;
+                return View("RegisterByFB");
+            }
 
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
             TempData.SetModelSource(models);
-            UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();
+            UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue("uid")).FirstOrDefault();
 
             if (item == null)
-                return Json(new { result = false, message = "學員資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+            {
+                ViewBag.Message = "會員編號錯誤!!";
+                HttpContext.SetCacheValue("uid", null);
+                return View("Register");
+            }
 
-            return View(item);
+            item.EMail = email;
+            item.LevelID = (int)Naming.MemberStatusDefinition.Checked;
+            models.SubmitChanges();
+
+            this.HttpContext.SignOn(item);
+
+            return View("CompleteRegister",item);
         }
-
 
 
         [Authorize]
@@ -344,7 +366,7 @@ namespace WebHome.Controllers
                 return View("LoginByMail");
             }
 
-            if(item.Password != (viewModel.PID+viewModel.Password).MakePassword())
+            if (item.Password != (viewModel.PID.ToUpper() + viewModel.Password).MakePassword())
             {
                 ViewBag.Message = "學員資料錯誤!!";
                 return View("LoginByMail");
@@ -366,5 +388,106 @@ namespace WebHome.Controllers
             this.HttpContext.Logout();
             return View();
         }
+
+        public ActionResult ForgetPassword(String email)
+        {
+            if(String.IsNullOrEmpty(email))
+            {
+                return View();
+            }
+
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+
+            TempData.SetModelSource(models);
+            UserProfile item = models.EntityList.Where(u => u.PID == email.Trim()).FirstOrDefault();
+
+            if (item == null)
+            {
+                ModelState.AddModelError("email", "您提供的email資料不存在!!");
+                ViewBag.ModelState = this.ModelState;
+                return View();
+            }
+
+            ResetPassword toReset = new ResetPassword
+            {
+                ResetID = Guid.NewGuid(),
+                UserProfile = item
+            };
+
+            models.GetTable<ResetPassword>().InsertOnSubmit(toReset);
+            models.SubmitChanges();
+
+            toReset.NotifyResetPassword();
+
+            ViewBag.Success = "重設密碼通知郵件已寄出。";
+
+            return View();
+
+        }
+
+        [HttpGet]
+        public ActionResult ResetPass(Guid id)
+        {
+
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+
+            TempData.SetModelSource(models);
+            UserProfile item = models.GetTable<ResetPassword>().Where(r => r.ResetID == id)
+                .Select(r => r.UserProfile).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Redirect("~/Account/Login");
+            }
+
+            HttpContext.SetCacheValue("uid", item.UID);
+            return View(item);
+
+        }
+
+        [HttpPost]
+        public ActionResult ResetPass(PasswordViewModel viewModel)
+        {
+
+            ModelSource<UserProfile> models = new ModelSource<UserProfile>();
+
+            TempData.SetModelSource(models);
+            UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue("uid")).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Redirect("~/Account/Login");
+            }
+            ViewBag.ModelState = this.ModelState;
+
+            if (String.IsNullOrEmpty(viewModel.lockPattern))
+            {
+                if (String.IsNullOrEmpty(viewModel.Password))
+                {
+                    ModelState.AddModelError("password", "請輸入密碼!!");
+                    return View(item);
+                }
+                else if (viewModel.Password != viewModel.Password2)
+                {
+                    ModelState.AddModelError("password2", "密碼確認錯誤!!");
+                    return View(item);
+                }
+            }
+            else
+            {
+                viewModel.Password = viewModel.lockPattern;
+            }
+
+            item.Password = (item.PID.ToUpper() + viewModel.Password).MakePassword();
+            //models.DeleteAllOnSubmit<ResetPassword>(r => r.UID == item.UID);
+            models.SubmitChanges();
+
+            HttpContext.SetCacheValue("uid", null);
+
+            return View("CompleteResetPass",item);
+
+        }
+
+
     }
 }
