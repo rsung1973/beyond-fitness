@@ -44,11 +44,15 @@
   <!-- 日曆設定-->
   <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
 
-
-  
-  <!-- pie -->
-  
+  <!-- FloatChart-->
+  <link href="flot/custom.css" rel="stylesheet" type="text/css">
+ 
+    <link rel='stylesheet' href='fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css' />
+    <link href='fullcalendar-2.8.0/fullcalendar.css' rel='stylesheet' />
+    <link href='fullcalendar-2.8.0/fullcalendar.print.css' rel='stylesheet' media='print' />  
+  <!-- pie -->  
   <style type="text/css">
+ 
 	</style>
 
 
@@ -69,7 +73,11 @@
   <script type="text/javascript" src="js/jquery.nicescroll.min.js"></script>
   <script type="text/javascript" src="js/jquery.parallax.js"></script>
   <script type="text/javascript" src="js/jquery.slicknav.js"></script>
-
+  <script type="text/javascript" src="flot/jquery.flot.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.stack.js"></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/lib/moment.min.js'></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/fullcalendar.min.js'></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/lang-all.js'></script>
   <!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -102,7 +110,8 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand hidden-xs" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="index.htm"><img src="images/Beyond-Fitness.png" alt="" width="270" height="41"></a>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
@@ -184,7 +193,7 @@
 
         <div class="row">
 
-          <div class="col-md-3">
+          <div class="col-md-4">
 
             <!-- Classic Heading -->
             <div class="blog-post">
@@ -212,34 +221,16 @@
             <div class="hr1" style="margin-top:5px;margin-bottom:5px;"></div>
             
             <!-- Responsive calendar - START -->
-            <div class="responsive-calendar">
-              <div class="controls">
-                  <a class="pull-left" data-go="prev"><div class="btn btn-primary">上個月</div></a>
-                  <h4><span data-head-year></span> <span data-head-month></span></h4>
-                  <a class="pull-right" data-go="next"><div class="btn btn-primary">下個月</div></a>
-              </div><hr/>
-              <div class="day-headers">
-                <div class="day header">一</div>
-                <div class="day header">二</div>
-                <div class="day header">三</div>
-                <div class="day header">四</div>
-                <div class="day header">五</div>
-                <div class="day header">六</div>
-                <div class="day header">日</div>
-              </div>
-              <div class="days" data-group="days">
-                
-              </div>
-            </div>
+              <div id='calendar'></div>
             <!-- Responsive calendar - END -->
 
             <!-- End Contact Form -->
         	
           </div>
-          <div class="col-md-9">
-
+          <div class="col-md-8">
+ 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>行事曆清單</span></h4>
+            <h4 class="classic-title"><span class="fa fa-calendar"> 行事曆清單</span></h4>
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
@@ -279,12 +270,13 @@
                       </td>
                     </tr>
                   </table>
-              </div>
+              </div>                      
               
             <!-- End Contact Form -->
-            
-            <div id="rotated-labels" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-        	
+             <div class="stack-container">
+              <div id="placeholder" class="stack-placeholder"></div>
+            </div> 
+
           </div>
 
       </div>
@@ -417,78 +409,83 @@
     //modal.find('.modal-title label').text(recipient + '採購單')
     //modal.find('.modal-body label').text('確認' + recipient + '這筆採購單?')
   })
-  </script>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
-  <script type="text/javascript">
-$(function () {
-    $('#rotated-labels').highcharts({
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: '5/13 日上課人數圖'
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'category',
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: '人數 (個)'
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            pointFormat: '有: <b>{point.y:.0f} 個學員</b>'
-        },
-        series: [{
-            name: '時間',
-            data: [
-                ['8:00', 10],
-                ['9:00', 16],
-                ['10:00', 5],
-                ['11:00', 4],
-                ['12:00', 2],
-                ['13:00', 10],
-                ['14:00', 20],
-                ['15:00', 12],
-                ['16:00', 10],
-                ['17:00', 5],
-                ['18:00', 4],
-                ['19:00', 2],
-                ['20:00', 5],
-                ['21:00', 10],
-                ['22:00', 5],
-            ],
-            dataLabels: {
-                enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.0f}', // one decimal
-                y: 10, // 10 pixels down from the top
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        }]
+
+  $(function() {
+
+    var d1 = [];
+    for (var i = 0; i <= 14; i += 1) {
+      d1.push([i, parseInt(Math.random() * 20)]);
+    }
+
+    var stack = 0,
+      bars = true,
+      lines = false,
+      steps = false;
+
+    function plotWithOptions() {
+      $.plot("#placeholder", [ d1], {
+        series: {
+          stack: stack,
+          lines: {
+            show: lines,
+            fill: true,
+            steps: steps
+          },
+          bars: {
+            show: bars,
+            barWidth: 0.6
+          } 
+        }
+      });
+    }
+
+    plotWithOptions();
+
+    $(".stackControls button").click(function (e) {
+      e.preventDefault();
+      stack = $(this).text() == "With stacking" ? true : null;
+      plotWithOptions();
     });
-});
-		</script>
+
+    $(".graphControls button").click(function (e) {
+      e.preventDefault();
+      bars = $(this).text().indexOf("Bars") != -1;
+      lines = $(this).text().indexOf("Lines") != -1;
+      steps = $(this).text().indexOf("steps") != -1;
+      plotWithOptions();
+    });
+
+    // Add the Flot version string to the footer
+
+    $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+  });  
+
+  $(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+      lang: 'zh-TW',
+      theme: true,
+      header: {
+        left: 'prev,next today',
+        center: 'title'
+      },
+      defaultDate: '2016-06-25',
+      editable: false,
+      eventLimit: false, // allow "more" link when too many events
+      events: [
+        {
+          title: '20',
+          start: '2016-06-01'
+        },
+        {
+          title: '25',
+          start: '2016-06-07'
+        }
+      ]
+    });
+    
+  });  
+  </script>
   
 </div>
 </body>
