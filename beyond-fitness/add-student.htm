@@ -104,7 +104,8 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand hidden-xs" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="index.htm"><img src="images/Beyond-Fitness.png" alt="" width="270" height="41"></a>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
@@ -189,7 +190,7 @@
           <div class="col-md-5">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>登記上課時間</span></h4>
+            <h4 class="classic-title"><span class="fa fa-calendar-plus-o"> 登記上課時間</span></h4>
 
             <!-- Start Contact Form -->  
             <form role="form" method="post">
@@ -207,15 +208,9 @@
               </div>
               <div class="form-group has-feedback">
                   <label class="control-label" for="classno">學員：</label>
-                  <select name="select4" class="form-control chosen-select" tabindex="2" data-placeholder="請選擇學員...">
-                    <option value=""></option>
-                    <option value="O">林志玲</option>
-                    <option value="I">謝金燕</option>
-                    <option value="I">王力宏</option>
-                    <option value="I">李安</option>
-					<option value="O">林大明</option>
-                  </select>
-
+                  
+                  <label class="control-label" for="classno">王大明 25堂課(25-1 小時)-團體「陳小瓦/劉加菲」</label>
+                  <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
               </div>
               <div class="form-group has-feedback">
                   <label class="control-label" for="classno">日期：</label>
@@ -235,36 +230,83 @@
                       <input class="form-control" size="16" type="text" value="" readonly>
                       <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span> </div>
                     </div>
-                    <div class="col-md-1">
-                    <span style="line-height:30px;"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
-                    </div>
-                    <div class="col-md-5">
-                      <div class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input2">
-                      <input class="form-control" size="16" type="text" value="" readonly>
-                      <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span> </div>
-                    </div>
                   </div>
                 </div>
                 </div>
               </div>
-              
+
+              <div class="form-group">
+                <label for="exampleInputFile" class="control-label">課程時間： </label>
+                <div class="row">
+                <div class="col-md-10">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <select class="form-control" name="selitem" id="selitem">
+                      <option>1小時</option>
+                      <option>1.5小時</option>
+                      </select>                    
+                     </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+
               </div> 
-                             
-              <a href="coach.htm" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 確認</a>
-              <a href="coach.htm" class="btn-system btn-medium border-btn"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 取消</a>
-                         
+ 
             </form>
             
-              
+            <a href="coach.htm" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+            <a href="class-list.htm" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>              
             <!-- End Contact Form -->
         	
           </div>
 
       </div>
     </div>
+
 </div>
     <!-- End content -->
+    <!-- POPUP提示遮罩 -->
+  <form class="form-horizontal" role="form">
+    <div class="modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title orange-text" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 新增團體上課學員</h4>
+          </div>
+          <div class="modal-body">
+            <!-- Stat Search -->  
+        <div class="form-group">
+        <label for="exampleInputFile" class="col-md-2 control-label">依姓名：</label>
+        <div class="col-md-6" >
+          <input class="form-control" type="text" value="">           
+        </div>    
+        <div class="col-md-4">
+          <a class="btn btn-search"><i class="fa fa-search"></i></a>
+        </div>
+        
+        <div class="col-md-12">
+                 <table class="table">
+                    <tr class="info">
+                      <td><input type="radio"> 王大明 15堂課(單堂-1.5 小時)-個人</td>      
+                    </tr>
+                    <tr class="info">
+                      <td><input type="radio"> 王大明 25堂課(25-1 小時)-團體「陳小瓦/劉加菲」</td>      
+                    </tr>                    
+                  </table>        
+        </div>
+        
+          <div class="col-md-12 modal-footer">
+          <button type="button" class="btn btn-system btn-sm" data-dismiss="modal"><span class="fa fa fa-thumbs-o-up" aria-hidden="true"></span> 確定</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span> 取消</button>
+          </div>
 
+        </div>
+      </div>
+    </div>
+    </div>
+  </form>
     <!-- Start Footer -->
     <div id="footer">
 

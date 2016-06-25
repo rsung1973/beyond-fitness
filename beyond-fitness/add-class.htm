@@ -116,7 +116,8 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand hidden-xs" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="index.htm"><img src="images/Beyond-Fitness.png" alt="" width="270" height="41"></a>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
@@ -198,10 +199,10 @@
 
         <div class="row">
 
-          <div class="col-md-6">
+          <div class="col-md-5">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span class="fa fa-calendar-o"> 新增/刪除上課堂數</span></h4>
+            <h4 class="classic-title"><span>新增上課次數</span></h4>
             <!-- Stat Search -->				
             <!-- Start Post -->
             <div class="blog-post quote-post">
@@ -219,79 +220,51 @@
 						<p><strong>會員編號：</strong>A122122</p>
 						<p><strong>電話：</strong>0922186668</p>
 						<p><strong>Email：</strong>xxxx@xxx.xxx</p>
-											  
 						
 					  </div>
 					</div>					
                </div>                
             </div>        
-
-			<!-- TABLE 1 -->
-			 <table class="panel panel-default table">
-				<tr class="info">
-				  <th class="text-center">建檔日期</th>
-				  <th>課程類別</th>
-				   <th class="text-center">團體課程</th>
-				  <th class="text-center">堂數</th>
-				  <th class="text-center">功能</th>
-				</tr>
-				<tr>
-				  <td class="text-center">2016/7/25</td>
-				  <td>50堂-1.5 小時 1800</td>
-				  <td class="text-center"><i class="fa fa-check-circle" aria-hidden="true"></i> 3人</td>
-				  <td class="text-center">25</td>
-				  <td  class="text-center"><a href="#"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a></td>
-				</tr>			
-				<tr>
-				  <td class="text-center">2016/7/1</td>
-				  <td>單堂-1 小時 1900</td>
-				  <td  class="text-center"></td>
-				  <td class="text-center">10</td>
-				  <td  class="text-center"></td>
-				</tr>
-			 </table>	
-							  
-			<div class="hr1" style="margin:20px 0px;"></div>
-			
+			<h4 class="classic-title"><span>購買上課紀錄</span></h4>
+                <!-- TABLE 1 -->
+                  <table class="panel panel-default table">
+                    <tr class="info">
+                      <th>建檔日期</th>
+                      <th>總次數</th>
+                      <th>課程類別</th>
+                    </tr>
+                    <tr>
+                      <td>2015/7/1</td>
+                      <td>50</td>
+                      <td>A-1500</td>
+                    </tr>
+                    <tr>
+                      <td>2016/7/1</td>
+                      <td>50</td>
+                      <td>A-1500</td>
+                    </tr>
+                  </table>			
+		    <div class="hr1" style="margin-bottom:10px;"></div>
+			<h4 class="classic-title"><span>新增上課次數</span></h4>
             <form role="form" class="contact-form" id="contact-form" method="post">
+
               <div class="form-group has-feedback">
-                  <label class="control-label" for="nickname">課程類別：</label>
-					<select name="classLevel" ">
-						<option selected="selected" value="1">單堂-1.5 小時 2200</option>
-						<option value="2">單堂-1 小時 1900</option>
-						<option value="3" selected>25堂-1.5 小時 2000</option>
-						<option value="4">25堂-1 小時 1700</option>
-						<option value="5">50堂-1.5 小時 1800</option>
-						<option value="6">50堂-1 小時 1500</option>
-						<option value="7">75堂-1.5 小時 1700</option>
-						<option value="8">75堂-1 小時 1400</option>
-					</select>
-              </div>
-			  
-			  <div class="form-group has-feedback">
-                  <label class="control-label" for="nickname">本次購買上課堂數：</label>
-                  <input type="text" class="form-control" placeholder="25" name="times" id="times" aria-describedby="timesStatus">
+                  <label class="control-label" for="nickname">上課次數：</label>
+                  <input type="text" class="form-control" placeholder="請輸入數字" name="times" id="times" aria-describedby="timesStatus">
                   <!--<span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>-->
                   <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
                   <span id="timesStatus" class="sr-only">(success)</span>
-              </div>	
-			  
-			   <div class="form-group has-feedback">
-					<input type="checkbox" name="group" value="1">
-					<label class="control-label" for="nickname">是否選用團體課程</label>
-              </div>
-              <div class="form-group has-feedback">
-                  <label class="control-label" for="nickname">團體人數：</label>
-					<select name="classLevel" ">
-						<option value="2">2人</option>
-						<option value="3" selected>3人</option>
-						<option value="4">4人</option>
-						<option value="5">5人</option>
-						<option value="6">6人</option>
-					</select>
-              </div>		  
+              </div>			  
 
-	
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="nickname">課程類別：</label>
+                      <select class="form-control">
+                        <option>A-1500</option>
+                        <option>B-1600</option>
+						<option>C-1800</option>
+						<option>D-1900</option>
+                      </select>
+              </div>	
 			  
              <div class="tabs-section">
              
@@ -300,8 +273,9 @@
               <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
               
               <div class="hr1" style="margin:5px 0px;"></div>
-			  <a href="member-manager.htm" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
-              <a href="add-class-verify.htm" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>	              
+			  <a href="member-manager.htm" class="btn-system btn-medium">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+              <a href="add-class-verify.htm" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
+              
             <!-- End Contact Form -->
             
           </div>

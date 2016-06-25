@@ -41,10 +41,14 @@
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
    
+
+  <!-- FloatChart-->
+  <link href="flot/custom.css" rel="stylesheet" type="text/css">
+
   <!-- 日曆設定-->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
-
-
+    <link rel='stylesheet' href='fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css' />
+    <link href='fullcalendar-2.8.0/fullcalendar.css' rel='stylesheet' />
+    <link href='fullcalendar-2.8.0/fullcalendar.print.css' rel='stylesheet' media='print' /> 
   
   <!-- pie -->
   
@@ -69,8 +73,11 @@
   <script type="text/javascript" src="js/jquery.nicescroll.min.js"></script>
   <script type="text/javascript" src="js/jquery.parallax.js"></script>
   <script type="text/javascript" src="js/jquery.slicknav.js"></script>
-
-  <!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script type="text/javascript" src="flot/jquery.flot.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.categories.js"></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/lib/moment.min.js'></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/fullcalendar.min.js'></script>
+  <script type="text/javascript" src='fullcalendar-2.8.0/lang-all.js'></script><!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 </head>
@@ -102,7 +109,8 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand hidden-xs" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="index.htm"><img src="images/Beyond-Fitness.png" alt="" width="270" height="41"></a>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
@@ -184,7 +192,7 @@
 
         <div class="row">
 
-          <div class="col-md-3">
+          <div class="col-md-4">
             <!-- Classic Heading -->
             <div class="blog-post">
               <!-- Classic Content -->
@@ -193,52 +201,23 @@
                     <img alt="" src="images/noMember.jpg" />                    
               		</div>
                   <div class="user-bio" style="padding-top:20px;">
-                    <h4 class="classic-title"><span>Hi 王建明</span></h4>
+                    <h4 class="classic-title"><span>Hi 王建明</span>
+                     <a href="edit-coach.htm" class="pull-right" style="font-size:13px;margin-bottom:5px;"><i class="fa fa-cog" aria-hidden="true"></i> 修改個人資料</a>
+                    </h4>
                   </div>
                 </div>                
             </div>            
             <!-- End Classic -->
-
-            <!-- Start Contact Form -->
-            <!-- Categories Widget -->
-            <div class="widget widget-categories">
-              <ul>
-                <li>
-                  <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> 修改個人資料</a>
-                </li>
-              </ul>
-            </div>
-            <div class="hr1" style="margin-top:5px;margin-bottom:5px;"></div>
             
             <!-- Responsive calendar - START -->
-            <div class="responsive-calendar">
-              <div class="controls">
-                  <a class="pull-left" data-go="prev"><div class="btn btn-primary">上個月</div></a>
-                  <h4><span data-head-year></span> <span data-head-month></span></h4>
-                  <a class="pull-right" data-go="next"><div class="btn btn-primary">下個月</div></a>
-              </div><hr/>
-              <div class="day-headers">
-                <div class="day header">一</div>
-                <div class="day header">二</div>
-                <div class="day header">三</div>
-                <div class="day header">四</div>
-                <div class="day header">五</div>
-                <div class="day header">六</div>
-                <div class="day header">日</div>
-              </div>
-              <div class="days" data-group="days">
-                
-              </div>
-            </div>
+            <div id='calendar'></div>
             <!-- Responsive calendar - END -->
-
-            <!-- End Contact Form -->
           
           </div>
-          <div class="col-md-9">
+          <div class="col-md-8">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>行事曆清單</span></h4>
+            <h4 class="classic-title"><span class="fa fa-calendar"> 行事曆清單</span></h4>
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
@@ -266,7 +245,7 @@
                       <td>8:00 - 9:00</td>
                       <td>5</td>
                       <td>
-                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
@@ -274,15 +253,16 @@
                       <td>9:00 - 10:00</td>
                       <td>10</td>
                       <td>
-                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
               </div>
               
             <!-- End Contact Form -->
-            
-            <div id="rotated-labels" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+             <div class="stack-container">
+              <div id="placeholder" class="stack-placeholder"></div>
+            </div> 
           
                      <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
             
@@ -413,33 +393,7 @@
   <script type="text/javascript" src="js/script.js"></script>
   <script src="calendar/responsive-calendar.js"></script>
   <script type="text/javascript">
-    //行事曆
-    $(document).ready(function () {
-      $(".responsive-calendar").responsiveCalendar({
-        time: '2016-04-29',
-        events: {
-          "2016-04-29": {
-          "number": 2, 
-          "badgeClass": 
-          "badge-warning", 
-          "url": "http://w3widgets.com/responsive-calendar",
-          "dayEvents": [
-            {
-              "name": "Important meeting",
-              "hour": "17:30" 
-            },
-            {
-              "name": "Morning meeting at coffee house",
-              "hour": "08:15" 
-            }
-          ]
-        },
-          //"2016-04-29": {"number": 1, "url": "http://w3widgets.com"}, 
-          "2016-05-03":{"number": 1}, 
-          "2016-06-12": {}}
-      });
-    });
-      
+
   //搜尋對話方塊
   $('#searchdil').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
@@ -451,76 +405,56 @@
     //modal.find('.modal-body label').text('確認' + recipient + '這筆採購單?')
   })
   </script>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
   <script type="text/javascript">
-$(function () {
-    $('#rotated-labels').highcharts({
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: '5/13 日上課人數圖'
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            type: 'category',
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: '人數 (個)'
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            pointFormat: '有: <b>{point.y:.0f} 個學員</b>'
-        },
-        series: [{
-            name: '時間',
-            data: [
-                ['8:00', 10],
-                ['9:00', 16],
-                ['10:00', 5],
-                ['11:00', 4],
-                ['12:00', 2],
-                ['13:00', 10],
-                ['14:00', 20],
-                ['15:00', 12],
-                ['16:00', 10],
-                ['17:00', 5],
-                ['18:00', 4],
-                ['19:00', 2],
-                ['20:00', 5],
-                ['21:00', 10],
-                ['22:00', 5],
-            ],
-            dataLabels: {
-                enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.0f}', // one decimal
-                y: 10, // 10 pixels down from the top
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        }]
+   $(function() {
+
+        var data = [ ["8:00", 10], ["9:00", 8], ["10:00", 4], ["11:00", 13], ["12:00", 17], ["13:00", 9] , ["14:00", 29], ["15:00", 10], ["16:00", 21], ["17:00", 8], ["18:00", 30], ["19:00", 15], ["20:00", 23], ["21:00", 9], ["22:00", 2]];
+
+    $.plot("#placeholder", [ data ], {
+      series: {
+        bars: {
+          show: true,
+          barWidth: 0.6,
+          align: "center"
+        }
+      },
+      xaxis: {
+        mode: "categories",
+        tickLength: 0
+      }
     });
-});
+
+    // Add the Flot version string to the footer
+
+    $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+  }); 
+
+  $(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+      lang: 'zh-TW',
+      theme: true,
+      header: {
+        left: 'prev,next today',
+        center: 'title'
+      },
+      defaultDate: '2016-06-25',
+      editable: false,
+      eventLimit: false, // allow "more" link when too many events
+      events: [
+        {
+          title: '20',
+          start: '2016-06-01'
+        },
+        {
+          title: '25',
+          start: '2016-06-07'
+        }
+      ]
+    });
+    
+  });  
+ 
     </script>
   
 </div>

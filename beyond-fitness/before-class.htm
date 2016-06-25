@@ -102,7 +102,8 @@
               <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand hidden-xs" href="index.htm"><img src="images/Beyond-Fitness.png" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="index.htm"><img src="images/Beyond-Fitness.png" alt="" width="270" height="41"></a>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
@@ -184,10 +185,10 @@
 
         <div class="row">
 
-          <div class="col-md-9">
+          <div class="col-md-12">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>預排課程</span></h4>
+            <h4 class="classic-title"><span class="fa fa-edit"> 預編課程</span></h4>
 
             <!-- Start Contact Form -->
             
@@ -237,7 +238,7 @@
               </div>
 			  <textarea class="form-control" rows="5"></textarea>
               <div>
-                  <a href="add_item.htm" class="btn-system btn-small">新增項目組 <i class="fa fa-plus" aria-hidden="true"></i></a>
+                  <a href="add_item.htm" class="btn-system btn-small">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
               </div>
 
               </div> 
@@ -245,11 +246,11 @@
                 	<!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th>排序</th>
-                      <th>項目</th>
-                      <th>目標次數</th>
-                      <th>目標強度</th>
-                      <th>目標組數</th>
+                      <th width="5%">排序</th>
+                      <th width="40%">肌力訓練</th>
+                      <th width="10%">目標次數</th>
+                      <th width="10%">目標強度</th>
+                      <th width="5%">組數</th>
                       <th>功能</th>
                     </tr>
                     <tr>
@@ -276,7 +277,7 @@
                       <td rowspan="3" class="text-center">4</td>
                       <td rowspan="3">
                       	<a href="add_item.htm" class="btn btn-system btn-small disabled" role="button">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
@@ -297,7 +298,7 @@
                       <td rowspan="2" class="text-center">4</td>
                       <td rowspan="2">
                       	<a href="add_item.htm" class="btn btn-system btn-small">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr class="warning">
@@ -311,12 +312,18 @@
               <div class="form-group has-feedback">
                   <label class="control-label" for="classno"><strong>收操：</label>
               </div>
-			  <textarea class="form-control" rows="5"></textarea>
-			  
-			  <a href="class-list.htm" class="btn-system btn-small border-btn">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-              <a href="#" class="btn-system btn-medium"><i class="fa fa-times" aria-hidden="true"></i> 刪除課表</a>
-              <a href="#" class="btn-system btn-medium"><i class="fa fa-refresh" aria-hidden="true"></i> 更新課表</a>
-                         
+			         <textarea class="form-control" rows="5"></textarea>
+
+            <div class="hr2" style="margin-bottom:10px;"></div>
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="classno"><strong>：</label>
+              </div>
+               <textarea class="form-control" rows="5"></textarea>
+
+            <a href="class-list.htm" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+            <a href="befort-class.htm" class="btn-system btn-medium">更新課表 <i class="fa fa-refresh" aria-hidden="true"></i></a> 
+              <a href="#" class="btn-system btn-medium">刪除課表 <i class="fa fa-trash-o" aria-hidden="true"></i></a>            
+
             </form>
               
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>

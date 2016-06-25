@@ -40,13 +40,11 @@
   
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
-   
-  <!-- 日曆設定-->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
 
   <!-- FloatChart-->
   <link href="flot/custom.css" rel="stylesheet" type="text/css">
- 
+
+  <!-- 日曆設定-->
     <link rel='stylesheet' href='fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css' />
     <link href='fullcalendar-2.8.0/fullcalendar.css' rel='stylesheet' />
     <link href='fullcalendar-2.8.0/fullcalendar.print.css' rel='stylesheet' media='print' />  
@@ -74,10 +72,11 @@
   <script type="text/javascript" src="js/jquery.parallax.js"></script>
   <script type="text/javascript" src="js/jquery.slicknav.js"></script>
   <script type="text/javascript" src="flot/jquery.flot.js"></script>
-  <script type="text/javascript" src="flot/jquery.flot.stack.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.categories.js"></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/lib/moment.min.js'></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/fullcalendar.min.js'></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/lang-all.js'></script>
+    
   <!--[if IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -203,28 +202,17 @@
                     <img alt="" src="images/noMember.jpg" />                    
               		</div>
                   <div class="user-bio" style="padding-top:20px;">
-                    <h4 class="classic-title"><span>Hi 王建明</span></h4>
+                    <h4 class="classic-title"><span>Hi 王建明</span>
+                     <a href="edit-coach.htm" class="pull-right" style="font-size:13px;margin-bottom:5px;"><i class="fa fa-cog" aria-hidden="true"></i> 修改個人資料</a>
+                    </h4>
                   </div>
                 </div>                
             </div>            
             <!-- End Classic -->
-
-            <!-- Start Contact Form -->
-            <!-- Categories Widget -->
-            <div class="widget widget-categories">
-              <ul>
-                <li>
-                  <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> 修改個人資料</a>
-                </li>
-              </ul>
-            </div>
-            <div class="hr1" style="margin-top:5px;margin-bottom:5px;"></div>
             
             <!-- Responsive calendar - START -->
               <div id='calendar'></div>
             <!-- Responsive calendar - END -->
-
-            <!-- End Contact Form -->
         	
           </div>
           <div class="col-md-8">
@@ -370,34 +358,7 @@
 	<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.zh-TW.js" charset="UTF-8"></script> 
 
 	<script type="text/javascript" src="js/script.js"></script>
-  <script src="calendar/responsive-calendar.js"></script>
   <script type="text/javascript">
-	  //行事曆
-    $(document).ready(function () {
-      $(".responsive-calendar").responsiveCalendar({
-        time: '2016-04-29',
-        events: {
-          "2016-04-29": {
-					"number": 220, 
-					"badgeClass": 
-					"badge-warning", 
-					"url": "coach.htm",
-					"dayEvents": [
-						{
-							"name": "Important meeting",
-							"hour": "17:30" 
-						},
-						{
-							"name": "Morning meeting at coffee house",
-							"hour": "08:15" 
-						}
-					]
-				},
-          //"2016-04-29": {"number": 1, "url": "coach.htm"}, 
-          "2016-05-03":{"number": 1}, 
-          "2016-06-12": {}}
-      });
-    });
       
   //搜尋對話方塊
 	$('#searchdil').on('show.bs.modal', function (event) {
@@ -412,47 +373,20 @@
 
   $(function() {
 
-    var d1 = [];
-    for (var i = 0; i <= 14; i += 1) {
-      d1.push([i, parseInt(Math.random() * 20)]);
-    }
+        var data = [ ["8:00", 10], ["9:00", 8], ["10:00", 4], ["11:00", 13], ["12:00", 17], ["13:00", 9] , ["14:00", 29], ["15:00", 10], ["16:00", 21], ["17:00", 8], ["18:00", 30], ["19:00", 15], ["20:00", 23], ["21:00", 9], ["22:00", 2]];
 
-    var stack = 0,
-      bars = true,
-      lines = false,
-      steps = false;
-
-    function plotWithOptions() {
-      $.plot("#placeholder", [ d1], {
-        series: {
-          stack: stack,
-          lines: {
-            show: lines,
-            fill: true,
-            steps: steps
-          },
-          bars: {
-            show: bars,
-            barWidth: 0.6
-          } 
+    $.plot("#placeholder", [ data ], {
+      series: {
+        bars: {
+          show: true,
+          barWidth: 0.6,
+          align: "center"
         }
-      });
-    }
-
-    plotWithOptions();
-
-    $(".stackControls button").click(function (e) {
-      e.preventDefault();
-      stack = $(this).text() == "With stacking" ? true : null;
-      plotWithOptions();
-    });
-
-    $(".graphControls button").click(function (e) {
-      e.preventDefault();
-      bars = $(this).text().indexOf("Bars") != -1;
-      lines = $(this).text().indexOf("Lines") != -1;
-      steps = $(this).text().indexOf("steps") != -1;
-      plotWithOptions();
+      },
+      xaxis: {
+        mode: "categories",
+        tickLength: 0
+      }
     });
 
     // Add the Flot version string to the footer

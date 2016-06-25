@@ -179,6 +179,45 @@ namespace WebHome.Controllers
             return View(items);
         }
 
+        public ActionResult BookingEvents(DateTime start, DateTime end)
+        {
+            return Json(models.GetTable<LessonTimeExpansion>()
+                .Where(t => t.ClassDate >= start && t.ClassDate <= end)
+                .Select(t=>t.ClassDate).ToList()
+                .GroupBy(t => t)
+                .Select(g => new
+                {
+                    title = g.Count(),
+                    start = g.Key.ToString("yyyy-MM-dd")
+                }), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DailyBookingList(DateTime lessonDate)
+        {
+            return View(lessonDate);
+        }
+
+        public ActionResult DailyBookingSummary(DateTime lessonDate)
+        {
+            Dictionary<int, int> index = new Dictionary<int, int>();
+            foreach(int idx in  Enumerable.Range(8, 15))
+            {
+                index[idx] = 0;
+            }
+
+            var items = models.GetTable<LessonTimeExpansion>()
+                .Where(t => t.ClassDate == lessonDate)
+                .Select(t => t.Hour).ToList()
+                .GroupBy(t => t);
+
+            foreach(var item in items)
+            {
+                index[item.Key] = item.Count();
+            }
+
+            return Json(index.Select(i => new object[] { i.Key + ":" + "00", i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }

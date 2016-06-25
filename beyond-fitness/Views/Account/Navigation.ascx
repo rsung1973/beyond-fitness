@@ -17,8 +17,10 @@
                 <i class="fa fa-bars"></i>
             </button>
             <!-- End Toggle Nav Link For Mobiles -->
-            <a class="navbar-brand" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">
+            <a class="navbar-brand hidden-xs" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">
                 <img src="<%= VirtualPathUtility.ToAbsolute("~/images/Beyond-Fitness.png") %>" alt=""></a>
+            <a class="navbar-brand visible-xs-block" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>">
+                <img src="<%= VirtualPathUtility.ToAbsolute("~/images/Beyond-Fitness.png") %>" alt="" width="270" height="41"></a>
         </div>
         <div class="navbar-collapse collapse">
             <!-- Start Navigation List -->
