@@ -24,6 +24,7 @@
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
                     <button type="button" id="btnFB" class="btn btn-primary btn-lg btn-block"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook 登入</button>
+                    <label id="btnFB-error" class="error" for="btnFB" style="display: none;"></label>
                     <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
                     <button type="button" class="btn btn-warning btn-lg btn-block" onclick="location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/LoginByMail") %>';"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 登入</button>
                     <!-- End Contact Form -->
@@ -125,7 +126,11 @@
                 if (data.result) {
                     window.location.href = data.url;
                 } else {
-                    alert(data.message);
+                    $('#btnFB-error').css('display', 'block');
+                    $('#btnFB-error').text(data.message);
+                    FB.logout(function (response) {
+                        console.log(response);
+                    });
                 }
             });
 

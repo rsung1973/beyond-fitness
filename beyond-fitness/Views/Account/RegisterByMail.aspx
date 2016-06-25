@@ -4,9 +4,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 <%@ Register Src="~/Views/Shared/LockScreen.ascx" TagPrefix="uc1" TagName="LockScreen" %>
@@ -50,7 +51,7 @@
                         <% Html.RenderInput("頭像：", "photopic", "photopic", "", _modelState, "file"); %>
                     </div>
                     <div class="author-image">
-                        <img width="100" id="authorImg" alt="" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg") %>" />
+                        <% _item.RenderUserPicture(this.Writer, "authorImg"); %>
                     </div>
 
                     <% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
@@ -85,10 +86,13 @@
 
         });
 
-        $('#email').rules('add', {
-            'required': true,
-            'email': true
+        $(function () {
+            $('#email').rules('add', {
+                'required': true,
+                'email': true
+            });
         });
+
 
         var fileUpload = $('#photopic');
         var elmt = fileUpload.prev();
@@ -135,17 +139,11 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (UserProfile)this.Model;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
 
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
 
-        base.Dispose();
-    }
 
 </script>

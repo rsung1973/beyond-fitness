@@ -242,9 +242,9 @@
 
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
-            <div class="navbar bg_grey" style="min-height:30px;">
+            <div class="navbar bg_gray" style="min-height:30px;">
               <div class="search-side">
-                <a href="add-student.htm" class="btn-system btn-small">登記上課時間 <span class="glyphicon glyphicon-calendar"></span></a>
+                <a href="add-student.htm" class="btn-system btn-small">登記上課時間 <span class="fa fa-calendar-plus-o"></span></a>
                 <a href="#" class="btn-system btn-small">自由教練打卡 <i class="fa fa-check-square" aria-hidden="true"></i></a>
                 <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
               </div>
@@ -266,7 +266,7 @@
                       <td>8:00 - 9:00</td>
                       <td>5</td>
                       <td>
-                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                     <tr>
@@ -274,7 +274,7 @@
                       <td>9:00 - 10:00</td>
                       <td>10</td>
                       <td>
-                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
@@ -299,8 +299,8 @@
                       <td>王大民</td>
                       <td>
                         <a href="before-class.htm" class="btn btn-system btn-small">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="after-class.htm" class="btn btn-system btn-small">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="after-class.htm" class="btn btn-system btn-small">上課囉 <i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
                         <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
@@ -309,8 +309,8 @@
                       <td>林志玲</td>
                       <td>
                         <a href="before-class.htm" class="btn btn-system btn-small disabled" role="button">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="after-class.htm" class="btn btn-system btn-small disabled" role="button">上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-times" aria-hidden="true"></i></a>
+                        <a href="after-class.htm" class="btn btn-system btn-small disabled" role="button">上課囉 <i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                        <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
                         <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                       </td>
                     </tr>
@@ -485,7 +485,7 @@ $(function () {
             enabled: false
         },
         tooltip: {
-            pointFormat: '有: <b>{point.y:.1f} 個學員</b>'
+            pointFormat: '有: <b>{point.y:.0f} 個學員</b>'
         },
         series: [{
             name: '時間',
@@ -511,7 +511,7 @@ $(function () {
                 rotation: -90,
                 color: '#FFFFFF',
                 align: 'right',
-                format: '{point.y:.1f}', // one decimal
+                format: '{point.y:.0f}', // one decimal
                 y: 10, // 10 pixels down from the top
                 style: {
                     fontSize: '13px',

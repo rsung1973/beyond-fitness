@@ -187,35 +187,64 @@
           <div class="col-md-12">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>上課了</span></h4>
+            <h4 class="classic-title"><span>上課囉</span></h4>
 
+			 <div class="blog-post quote-post">
+				 <div class="user-info clearfix">
+					  <div class="author-image">
+						<div class="user-image">
+							<img alt="" src="images/noMember.jpg" />                    
+						</div>
+						  <div class="user-bio">
+							<h2 class="text-primary">王大明 </h2>
+							
+							<div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>
+							<p><strong>日期：</strong>2016/06/16</p>
+							<p><strong>時間：</strong>16:30 - 17:30</p>
+							
+							<div class="row">
+							  <div class="col-md-2">
+								<strong>教練：</strong>
+							  </div>
+								<div class="col-md-4">
+								  <select name="select1" class="form-control">
+									<option value="O">李連杰</option>
+									<option value="I" selected>巨石強森</option>
+									<option value="I">阿諾</option>
+									<option value="I">史蒂芬席格</option>
+								  </select>								
+								</div>
+							</div>							
+				  
+							<h4 class="classic-title"><span>適配結果</span></h4>
+							  <div class="panel panel-default">
+								 <table class="table">
+									<tr class="info">
+									  <th>目標</th>
+									  <th>風格</th>
+									  <th>訓練水準</th>
+									</tr>
+									<tr>
+									  <td>減肥</td>
+									  <td>保守型</td>		
+									  <td>初期</td>					  
+									</tr>
+								  </table>						  
+							  </div>	
+							 <h4 class="classic-title"><span>目前近況</span></h4>
+							 <textarea class="form-control" rows="3"></textarea>
+						</div>					
+				   </div>  
+				</div>
+			</div>
             <!-- Start Contact Form -->
-            
+			  
             <form role="form" method="post">
-               <div class="row">
-
-          		<div class="col-md-6">            
-              
               <div class="form-group has-feedback">
-                  <label class="control-label" for="classno"><strong>學員：</strong> 王大明</label>
+                  <label class="control-label" for="classno"><strong>暖身：</label>
               </div>
-              <div class="form-group has-feedback">
-                  <label class="control-label" for="classno"><strong>教練：</strong> 巨石強森</label>
-              </div>
-              
-              </div>
-              <div class="col-md-6">
-              <div class="form-group has-feedback">
-                  <label class="control-label" for="classno"><strong>日期：</strong> 2016/06/16</label>
-              </div>
-              <div class="form-group has-feedback">
-                  <label class="control-label" for="classno"><strong>時間：</strong> 16:30 - 17:30</label>
-              </div>
-              </div>
-              </div>
-            <div class="hr2" style="margin-bottom:10px;"></div>
-
-              
+			  <textarea class="form-control" rows="5"></textarea>
+			  
               <div>
                   <a href="add_item.htm" class="btn-system btn-small">新增項目組 <i class="fa fa-plus" aria-hidden="true"></i></a>
               </div>
@@ -225,30 +254,29 @@
                   <table class="table">
                     <tr class="info">
                       <th>排序</th>
-                      <th>回合</th>
                       <th>項目</th>
-                      <th>實際 / 目標 次數</th>
-                      <th>實際 / 目標 強度</th>
+                      <th>實際次數<br/>目標次數</th>
+                      <th>實際強度<br/>目標強度</th>
                       <th>組數</th>
                       <th>評論</th>
                       <th>上傳照片</th>
                     </tr>
                     <tr>
-                      <td rowspan="5" class="text-center">1</td>
                       <td rowspan="2" class="text-center">1</td>
-                      <td>啞鈴</td>
+                      <td>RDL</td>
                       <td>
                       <select class="form-control">
+						<option>0</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
                         <option>4</option>
                         <option>5</option>
                       </select>
-                      / 10</td>
+                      10</td>
                       <td>
-                      <input class="form-control" size="5" type="number" value="">
-                      / 25kg</td>
+                      <input class="form-control" size="5" value="">
+                      25KG</td>
                       <td rowspan="2" class="text-center">4</td>
                       <td rowspan="2">
                       <textarea class="form-control" rows="3"></textarea>
@@ -257,26 +285,27 @@
                       <input type="file" class="form-control" name="photopic" id="photopic" aria-describedby="photopicStatus">
                       </td>
                     </tr>
-                    <tr>
+                    <tr class="warning">
                       <td>休息</td>
                       <td>90秒</td>
                       <td>&nbsp;</td>
                     </tr>
                     <tr>
                       <td rowspan="3" class="text-center">2</td>
-                      <td>拉背</td>
+                      <td>TRX</td>
                       <td>
                       <select class="form-control">
+						<option>0</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
                         <option>4</option>
                         <option>5</option>
                       </select>
-                      / 12</td>
+                      12</td>
                       <td>
-                      <input class="form-control" size="5" type="number" value="">
-                      / 7kg</td>
+                      <input class="form-control" size="5" value="">
+                      --</td>
                       <td rowspan="3" class="text-center">4</td>
                       <td rowspan="3">
                       <textarea class="form-control" rows="3"></textarea>
@@ -286,21 +315,22 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>伸腰</td>
+                      <td>棒式</td>
                       <td>
                       <select class="form-control">
+						<option>0</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
                         <option>4</option>
                         <option>5</option>
                       </select>
-                      / 10</td>
+                      10</td>
                       <td>
-                      <input class="form-control" size="5" type="number" value="">
-                      / 10kg</td>
+                      <input class="form-control" size="5"  value="">
+                      30秒</td>
                     </tr>
-                    <tr>
+                    <tr class="warning">
                       <td>休息</td>
                       <td>90秒</td>
                       <td>&nbsp;</td>
@@ -310,109 +340,107 @@
               <div class="row">
 
           		<div class="col-md-6">
-              <h4 class="classic-title"><span>著重方向比例 100%</span></h4>
+				<h4 class="orange-text"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span> 著重方向：</h4>
               
-              <div class="panel panel-default">
-                <div class="panel-body">
-                <div class="hr1" style="margin-bottom:15px;"></div>
+					  <div class="panel panel-default">
+						<div class="panel-body">
+						<div class="hr1" style="margin-bottom:15px;"></div>
 
-                  <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">動作學習</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputEmail3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">姿勢矯正</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">訓練</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
+						   <form class="form-horizontal" role="form">
+							<div class="form-group">
+							  <label for="inputEmail3" class="col-sm-3 control-label text-right">動作學習</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputEmail3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">姿勢矯正</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">訓練</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>				
+						  </form>
+						</div>
+					  </div>
 
-              </div>
+				</div>
           		<div class="col-md-6">
-              <h4 class="classic-title"><span>體適能評比</span></h4>
+					<h4 class="orange-text"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 體適能：</h4>
               
-              <div class="panel panel-default">
-                <div class="panel-body">
-                <div class="hr1" style="margin-bottom:15px;"></div>
+					  <div class="panel panel-default">
+						<div class="panel-body">
+						<div class="hr1" style="margin-bottom:15px;"></div>
 
-                  <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">柔軟度</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputEmail3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">心肺</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">肌力</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-2 control-label">肌耐力</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputEmail3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">爆發力</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-sm-2 control-label">運動表現</label>
-                      <div class="col-sm-10 input-group">
-                        <input type="number" class="form-control" id="inputPassword3">
-                        <span class="input-group-addon">%</span>
-                      </div>
-                    </div>
-                  </form>
-                </div>
+						  <form class="form-horizontal" role="form">
+							<div class="form-group">
+							  <label for="inputEmail3" class="col-sm-3 control-label text-right">柔軟度</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputEmail3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">心肺</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">肌力</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputEmail3" class="col-sm-3 control-label text-right">肌耐力</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputEmail3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">爆發力</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+							<div class="form-group">
+							  <label for="inputPassword3" class="col-sm-3 control-label text-right">運動表現</label>
+							  <div class="col-sm-9 input-group">
+								<input type="number" class="form-control" id="inputPassword3">
+								<span class="input-group-addon">%</span>
+							  </div>
+							</div>
+						  </form>
+						</div>
+					  </div>
+					  </div>
               </div>
+
+			  <div class="hr2" style="margin-bottom:10px;"></div>
+              <div class="form-group has-feedback">
+                  <label class="control-label" for="classno"><strong>收操：</label>
               </div>
-              </div>
-              
+			  <textarea class="form-control" rows="5"></textarea>
+			  
               <div class="hr2" style="margin-bottom:10px;"></div>
-
-
+			  <a href="class-list.htm" class="btn-system btn-small border-btn">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
               <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> 暫存</a>
               <a href="class-list.htm" class="btn-system btn-medium"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 上完課了</a>
                          
             </form>
-              
-            <!-- Stat Search -->
-            <div class="navbar bg_white" style="min-height:30px;">
-            	<div class="search-side">
-                <a href="coach.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-              </div>
-            </div>
             
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
             

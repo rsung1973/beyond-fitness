@@ -4,9 +4,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <div class="tabs-section">
     <!-- Nav Tabs -->
@@ -22,24 +23,24 @@
             <uc1:LockScreen runat="server" ID="lockScreen" />
         </div>
         <input type="text" name="lockPattern" id="lockPattern" style="display: none" />
-        <label id="lockPattern-error" class="error" for="lockPattern" style="display:none;"></label>
+        <label id="lockPattern-error" class="error" for="lockPattern" style="display: none;"></label>
+        <div class="tab-pane fade" id="tab-2">
+            <div class="form-group has-feedback">
+                <% Html.RenderPassword("密碼：", "password", "password", "密碼", _modelState); %>
+            </div>
+            <div class="form-group has-feedback">
+                <% Html.RenderPassword("請再輸入一次密碼：", "password2", "password2", "再輸入一次密碼", _modelState); %>
+            </div>
+        </div>
     </div>
     <!-- Tab Content 2 -->
-    <div class="tab-pane fade" id="tab-2">
-        <div class="form-group has-feedback">
-            <% Html.RenderPassword("密碼：", "password", "password", "密碼", _modelState); %>
-        </div>
-        <div class="form-group has-feedback">
-            <% Html.RenderPassword("請再輸入一次密碼：", "password2", "password2", "再輸入一次密碼", _modelState); %>
-        </div>
-    </div>
 </div>
 
 <script>
-    $("form").validate({
-        //debug: true,
-        //errorClass: "label label-danger",
-        submitHandler: function (form) {
+
+    $(function () {
+
+        $formValidator.settings.submitHandler = function (form) {
 
             if ($('#tab-1').css('display') == 'block') {
                 var userPath = $appLock.getUserPath();
@@ -58,60 +59,26 @@
 
             //$(form).submit();
             return true;
-        },
-        success: function (label, element) {
-            label.remove();
-            var id = $(element).prop("id");
-            $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                .addClass('glyphicon-ok').addClass('text-success');
-        },
-        errorPlacement: function (error, element) {
-            error.insertAfter(element);
-            var id = $(element).prop("id");
-            $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                .removeClass('glyphicon-ok').removeClass('text-success');
-        },
-        rules: {
-            password: {
-                required: {
-                    param: true,
-                    depends: function (elment) {
-                        return $('input[name="lockPattern"]').val() == '';
-                    }
-                },
-                maxlength: 20
-            },
-            password2: {
-                required: false,
-                confirmPassword: $('#password')
-            }
-        }
-    });
+        };
 
-    $(function () {
         $.validator.addMethod("confirmPassword", function (value, element, pwd) {
             return $(element).val() == pwd.val();
         }, "密碼確認錯誤!!");
 
-<%--        $.validator.addMethod("confirmLockScreen", function (value, element,param) {
-
-            if ($('#tab-1').css('display') == 'block') {
-                var userPath = $appLock.getUserPath();
-                if (userPath == null) {
-                    $.validator.messages['lockPattern'] = '請您設圖形密碼!!';
-                    return false;
-                } else if (userPath.length < param) {
-                    $.validator.messages['lockPattern'] = '您設定圖形的密碼過短!!';
-                    return false;
-                } else {
-                    $(element).val(userPath);
-                    return true;
+        $('#password').rules('add', {
+            'required': {
+                param: true,
+                depends: function (elment) {
+                    return $('input[name="lockPattern"]').val() == '';
                 }
-            } else {
-                return true;
-            }
-        }, '');
---%>
+            },
+            'maxlength': 20
+        });
+
+        $('#password2').rules('add', {
+            'required': false,
+            'confirmPassword': $('#password')
+        });
 
     });
 </script>

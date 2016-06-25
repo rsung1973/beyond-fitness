@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 <%@ Register Src="~/Views/Shared/PagingControl.ascx" TagPrefix="uc1" TagName="PagingControl" %>
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -99,19 +100,11 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<Article>();
+        models = ((SampleController<Article>)ViewContext.Controller).DataSource;
         rpList.DataSource = models.Items;
         rpList.DataBind();
         pagingControl.Item = (PagingIndexViewModel)ViewBag.PagingModel;
         pagingControl.RecordCount = models.GetDataContext().GetNormalArticles(models.EntityList).Count();
-    }
-
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
-
-        base.Dispose();
     }
 
     String getBrief(String content)

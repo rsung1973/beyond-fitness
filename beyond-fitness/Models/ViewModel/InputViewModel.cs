@@ -15,5 +15,9 @@ namespace WebHome.Models.ViewModel
         public String ErrorMessage { get; set; }
         public bool? IsValid { get; set; }
         public String InputType { get; set; }
+        public Object DefaultValue { get; set; }
+        public String ButtonStyle { get; set; }
+        public String IconStyle { get; set; }
+        public String Href { get; set; }
     }
 }

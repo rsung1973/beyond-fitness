@@ -20,6 +20,10 @@ namespace WebHome.Helper
             context.Response.SetCookie(new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(ticket)));
             context.ClearCache();
             context.SetCacheValue("userProfile",profile);
+
+            /// process sign-on user profile
+            /// 
+            var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
         }
 
         public static void ClearCache(this HttpContextBase context)
@@ -28,6 +32,15 @@ namespace WebHome.Helper
             caching.Clear();
         }
 
+        public static void SetCacheValue(this HttpContextBase context, CachingKey keyName, Object value)
+        {
+            context.SetCacheValue(keyName.ToString(), value);
+        }
+
+        public static Object GetCacheValue(this HttpContextBase context, CachingKey keyName)
+        {
+            return context.GetCacheValue(keyName.ToString());
+        }
 
         public static void SetCacheValue(this HttpContextBase context,String keyName,Object value)
         {
@@ -55,13 +68,29 @@ namespace WebHome.Helper
 
         public static UserProfile GetUser(this HttpContextBase context)
         {
-            return (UserProfile)context.GetCacheValue("userProfile");
+            UserProfile profile = (UserProfile)context.GetCacheValue("userProfile");
+            //if (profile == null)
+            //{
+            //    if(!context.Request.Url.AbsolutePath.EndsWith("Account/Login"))
+            //    {
+            //        FormsAuthentication.RedirectToLoginPage();
+            //    }
+            //}
+            return profile;
         }
 
         public static UserProfile GetUser(this HttpContext context)
         {
             HttpContextDataModelCache caching = new HttpContextDataModelCache(context);
-            return (UserProfile)caching["userProfile"];
+            UserProfile profile =  (UserProfile)caching["userProfile"];
+            //if (profile == null)
+            //{
+            //    if (!context.Request.Url.AbsolutePath.EndsWith("Account/Login"))
+            //    {
+            //        FormsAuthentication.RedirectToLoginPage();
+            //    }
+            //}
+            return profile;
         }
     }
 }

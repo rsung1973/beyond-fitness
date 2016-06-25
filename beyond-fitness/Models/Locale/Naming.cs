@@ -51,5 +51,12 @@ namespace WebHome.Models.Locale
             Learner = 4
         }
 
+        public enum LessonStatus
+        {
+            準備上課 = 100,
+            上課中 = 101,
+            課程結束 = 102
+        }
+
     }
 }

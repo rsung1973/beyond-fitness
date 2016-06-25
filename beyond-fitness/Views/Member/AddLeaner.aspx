@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -38,9 +39,8 @@
                             <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
 
                             <div class="hr1" style="margin: 5px 0px;"></div>
-                            <a href="member-manager.htm" class="btn-system btn-medium">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
+                            <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
                             <a  id="nextStep" class="btn-system btn-medium">下一步 <i class="fa fa-hand-o-right" aria-hidden="true"></i></a>
-
                             <!-- End Contact Form -->
 
                         </div>
@@ -71,11 +71,15 @@
 
     ModelStateDictionary _modelState;
     LearnerViewModel _model;
+    ModelSource<UserProfile> models;
+
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (LearnerViewModel)this.Model;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     }
+
 </script>

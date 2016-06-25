@@ -297,6 +297,17 @@
       for (var selector in config) {
         $(selector).chosen(config[selector]);
       }
+	  
+		document.getElementById("otheritem").style.display="none";
+		function selitemName(selectobj){
+			var itemname = $("#selitem option:selected").val();
+			
+			if (itemname=="其他"){
+				document.getElementById('otheritem').style.display='block';
+			}else{
+				document.getElementById('otheritem').style.display='none';
+			}
+		} 	  
   </script>
 
   

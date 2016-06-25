@@ -21,7 +21,7 @@
                 // they are logged into this app or not.
                 //document.getElementById('status').innerHTML = 'Please log ' +
                 //  'into Facebook.';
-                window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>';
+                window.location.href = '<%= FormsAuthentication.LoginUrl %>';
             }
         }
 
@@ -63,7 +63,7 @@
         function logoutFB() {
             FB.logout(function (response) {
                 console.log(response);
-                window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>';
+                window.location.href = '<%= FormsAuthentication.LoginUrl %>';
             });
         }
     </script>

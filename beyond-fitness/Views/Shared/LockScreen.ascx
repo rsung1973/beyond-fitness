@@ -8,6 +8,6 @@
 <button id="reset-button" class="button blue">Reset</button>
 <div class="hr1" style="margin: 5px 0px;"></div>
 <div id="lock-screen-container">
-    <div id="lock-screen" />
+    <div id="lock-screen"></div>
 </div>
 

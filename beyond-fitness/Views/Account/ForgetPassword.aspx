@@ -4,9 +4,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -71,29 +72,13 @@
     </script>
 
     <script>
-    $("form").validate({
-        //debug: true,
-        //errorClass: "label label-danger",
-        success: function (label, element) {
-            label.remove();
-            var id = $(element).prop("id");
-            $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                .addClass('glyphicon-ok').addClass('text-success');
-        },
-        errorPlacement: function (error, element) {
-            error.insertAfter(element);
-            var id = $(element).prop("id");
-            $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                .removeClass('glyphicon-ok').removeClass('text-success');
-        },
-        rules: {
-            // compound rule
-            email: {
-                required: true,
-                email: true
-            }
-        }
-    });
+        $(function () {
+            $('#email').rules('add', {
+                'required': true,
+                'email': true
+            });
+        });
+
     </script>
 
 
@@ -107,15 +92,7 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = TempData.GetModelSource<UserProfile>();
-    }
-
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
-
-        base.Dispose();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     }
 
 </script>

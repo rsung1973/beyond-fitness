@@ -48,18 +48,33 @@ namespace WebHome.Models.DataEntity
     partial void InsertArticle(Article instance);
     partial void UpdateArticle(Article instance);
     partial void DeleteArticle(Article instance);
-    partial void InsertUserProfile(UserProfile instance);
-    partial void UpdateUserProfile(UserProfile instance);
-    partial void DeleteUserProfile(UserProfile instance);
     partial void InsertUserRole(UserRole instance);
     partial void UpdateUserRole(UserRole instance);
     partial void DeleteUserRole(UserRole instance);
-    partial void InsertRegisterLesson(RegisterLesson instance);
-    partial void UpdateRegisterLesson(RegisterLesson instance);
-    partial void DeleteRegisterLesson(RegisterLesson instance);
     partial void InsertResetPassword(ResetPassword instance);
     partial void UpdateResetPassword(ResetPassword instance);
     partial void DeleteResetPassword(ResetPassword instance);
+    partial void InsertServingCoach(ServingCoach instance);
+    partial void UpdateServingCoach(ServingCoach instance);
+    partial void DeleteServingCoach(ServingCoach instance);
+    partial void InsertUserProfile(UserProfile instance);
+    partial void UpdateUserProfile(UserProfile instance);
+    partial void DeleteUserProfile(UserProfile instance);
+    partial void InsertLessonPriceType(LessonPriceType instance);
+    partial void UpdateLessonPriceType(LessonPriceType instance);
+    partial void DeleteLessonPriceType(LessonPriceType instance);
+    partial void InsertGroupingLesson(GroupingLesson instance);
+    partial void UpdateGroupingLesson(GroupingLesson instance);
+    partial void DeleteGroupingLesson(GroupingLesson instance);
+    partial void InsertRegisterLesson(RegisterLesson instance);
+    partial void UpdateRegisterLesson(RegisterLesson instance);
+    partial void DeleteRegisterLesson(RegisterLesson instance);
+    partial void InsertLessonTime(LessonTime instance);
+    partial void UpdateLessonTime(LessonTime instance);
+    partial void DeleteLessonTime(LessonTime instance);
+    partial void InsertLessonTimeExpansion(LessonTimeExpansion instance);
+    partial void UpdateLessonTimeExpansion(LessonTimeExpansion instance);
+    partial void DeleteLessonTimeExpansion(LessonTimeExpansion instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -140,7 +155,31 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<UserProfile> UserProfiles
+		public System.Data.Linq.Table<UserRole> UserRole
+		{
+			get
+			{
+				return this.GetTable<UserRole>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ResetPassword> ResetPasswords
+		{
+			get
+			{
+				return this.GetTable<ResetPassword>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ServingCoach> ServingCoach
+		{
+			get
+			{
+				return this.GetTable<ServingCoach>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserProfile> UserProfile
 		{
 			get
 			{
@@ -148,11 +187,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<UserRole> UserRole
+		public System.Data.Linq.Table<LessonPriceType> LessonPriceType
 		{
 			get
 			{
-				return this.GetTable<UserRole>();
+				return this.GetTable<LessonPriceType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GroupingLesson> GroupingLesson
+		{
+			get
+			{
+				return this.GetTable<GroupingLesson>();
 			}
 		}
 		
@@ -164,11 +211,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<ResetPassword> ResetPasswords
+		public System.Data.Linq.Table<LessonTime> LessonTime
 		{
 			get
 			{
-				return this.GetTable<ResetPassword>();
+				return this.GetTable<LessonTime>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonTimeExpansion> LessonTimeExpansion
+		{
+			get
+			{
+				return this.GetTable<LessonTimeExpansion>();
 			}
 		}
 	}
@@ -739,7 +794,9 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<Document> _Documents;
 		
-		private EntitySet<UserProfile> _UserProfiles;
+		private EntitySet<UserProfile> _UserProfile;
+		
+		private EntitySet<LessonPriceType> _LessonPriceType;
 		
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
@@ -758,7 +815,8 @@ namespace WebHome.Models.DataEntity
 		public LevelExpression()
 		{
 			this._Documents = new EntitySet<Document>(new Action<Document>(this.attach_Documents), new Action<Document>(this.detach_Documents));
-			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
+			this._UserProfile = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfile), new Action<UserProfile>(this.detach_UserProfile));
+			this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
 			OnCreated();
 		}
@@ -836,20 +894,33 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_UserProfile", Storage="_UserProfiles", ThisKey="LevelID", OtherKey="LevelID")]
-		public EntitySet<UserProfile> UserProfiles
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_UserProfile", Storage="_UserProfile", ThisKey="LevelID", OtherKey="LevelID")]
+		public EntitySet<UserProfile> UserProfile
 		{
 			get
 			{
-				return this._UserProfiles;
+				return this._UserProfile;
 			}
 			set
 			{
-				this._UserProfiles.Assign(value);
+				this._UserProfile.Assign(value);
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_RegisterLesson", Storage="_RegisterLesson", ThisKey="LevelID", OtherKey="ClassLevel")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LessonPriceType", ThisKey="LevelID", OtherKey="Status")]
+		public EntitySet<LessonPriceType> LessonPriceType
+		{
+			get
+			{
+				return this._LessonPriceType;
+			}
+			set
+			{
+				this._LessonPriceType.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_RegisterLesson", Storage="_RegisterLesson", ThisKey="LevelID", OtherKey="Attended")]
 		public EntitySet<RegisterLesson> RegisterLesson
 		{
 			get
@@ -894,13 +965,25 @@ namespace WebHome.Models.DataEntity
 			entity.LevelExpression = null;
 		}
 		
-		private void attach_UserProfiles(UserProfile entity)
+		private void attach_UserProfile(UserProfile entity)
 		{
 			this.SendPropertyChanging();
 			entity.LevelExpression = this;
 		}
 		
-		private void detach_UserProfiles(UserProfile entity)
+		private void detach_UserProfile(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = null;
+		}
+		
+		private void attach_LessonPriceType(LessonPriceType entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = this;
+		}
+		
+		private void detach_LessonPriceType(LessonPriceType entity)
 		{
 			this.SendPropertyChanging();
 			entity.LevelExpression = null;
@@ -933,7 +1016,7 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<Article> _Articles;
 		
-		private EntitySet<UserProfile> _UserProfiles;
+		private EntitySet<UserProfile> _UserProfile;
 		
 		private EntityRef<Document> _Document;
 		
@@ -952,7 +1035,7 @@ namespace WebHome.Models.DataEntity
 		public Attachment()
 		{
 			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
-			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
+			this._UserProfile = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfile), new Action<UserProfile>(this.detach_UserProfile));
 			this._Document = default(EntityRef<Document>);
 			OnCreated();
 		}
@@ -1034,16 +1117,16 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_UserProfiles", ThisKey="AttachmentID", OtherKey="PictureID")]
-		public EntitySet<UserProfile> UserProfiles
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_UserProfile", ThisKey="AttachmentID", OtherKey="PictureID")]
+		public EntitySet<UserProfile> UserProfile
 		{
 			get
 			{
-				return this._UserProfiles;
+				return this._UserProfile;
 			}
 			set
 			{
-				this._UserProfiles.Assign(value);
+				this._UserProfile.Assign(value);
 			}
 		}
 		
@@ -1113,13 +1196,13 @@ namespace WebHome.Models.DataEntity
 			entity.Attachment = null;
 		}
 		
-		private void attach_UserProfiles(UserProfile entity)
+		private void attach_UserProfile(UserProfile entity)
 		{
 			this.SendPropertyChanging();
 			entity.Attachment = this;
 		}
 		
-		private void detach_UserProfiles(UserProfile entity)
+		private void detach_UserProfile(UserProfile entity)
 		{
 			this.SendPropertyChanging();
 			entity.Attachment = null;
@@ -1369,12 +1452,12 @@ namespace WebHome.Models.DataEntity
 					if ((previousValue != null))
 					{
 						this._UserProfile.Entity = null;
-						previousValue.Articles.Remove(this);
+						previousValue.Article.Remove(this);
 					}
 					this._UserProfile.Entity = value;
 					if ((value != null))
 					{
-						value.Articles.Add(this);
+						value.Article.Add(this);
 						this._AuthorID = value.UID;
 					}
 					else
@@ -1407,6 +1490,460 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRole")]
+	public partial class UserRole : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UID;
+		
+		private int _RoleID;
+		
+		private EntityRef<UserRoleDefinition> _UserRoleDefinition;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    partial void OnRoleIDChanging(int value);
+    partial void OnRoleIDChanged();
+    #endregion
+		
+		public UserRole()
+		{
+			this._UserRoleDefinition = default(EntityRef<UserRoleDefinition>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RoleID
+		{
+			get
+			{
+				return this._RoleID;
+			}
+			set
+			{
+				if ((this._RoleID != value))
+				{
+					if (this._UserRoleDefinition.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoleIDChanging(value);
+					this.SendPropertyChanging();
+					this._RoleID = value;
+					this.SendPropertyChanged("RoleID");
+					this.OnRoleIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserRoleDefinition_UserRole", Storage="_UserRoleDefinition", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
+		public UserRoleDefinition UserRoleDefinition
+		{
+			get
+			{
+				return this._UserRoleDefinition.Entity;
+			}
+			set
+			{
+				UserRoleDefinition previousValue = this._UserRoleDefinition.Entity;
+				if (((previousValue != value) 
+							|| (this._UserRoleDefinition.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserRoleDefinition.Entity = null;
+						previousValue.UserRole.Remove(this);
+					}
+					this._UserRoleDefinition.Entity = value;
+					if ((value != null))
+					{
+						value.UserRole.Add(this);
+						this._RoleID = value.RoleID;
+					}
+					else
+					{
+						this._RoleID = default(int);
+					}
+					this.SendPropertyChanged("UserRoleDefinition");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.UserRole.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.UserRole.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ResetPassword")]
+	public partial class ResetPassword : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _ResetID;
+		
+		private int _UID;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnResetIDChanging(System.Guid value);
+    partial void OnResetIDChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    #endregion
+		
+		public ResetPassword()
+		{
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResetID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid ResetID
+		{
+			get
+			{
+				return this._ResetID;
+			}
+			set
+			{
+				if ((this._ResetID != value))
+				{
+					this.OnResetIDChanging(value);
+					this.SendPropertyChanging();
+					this._ResetID = value;
+					this.SendPropertyChanged("ResetID");
+					this.OnResetIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.ResetPassword.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.ResetPassword.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ServingCoach")]
+	public partial class ServingCoach : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CoachID;
+		
+		private EntitySet<LessonTime> _LessonTime;
+		
+		private EntitySet<LessonTime> _LessonTime1;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCoachIDChanging(int value);
+    partial void OnCoachIDChanged();
+    #endregion
+		
+		public ServingCoach()
+		{
+			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
+			this._LessonTime1 = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime1), new Action<LessonTime>(this.detach_LessonTime1));
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoachID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int CoachID
+		{
+			get
+			{
+				return this._CoachID;
+			}
+			set
+			{
+				if ((this._CoachID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCoachIDChanging(value);
+					this.SendPropertyChanging();
+					this._CoachID = value;
+					this.SendPropertyChanged("CoachID");
+					this.OnCoachIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_LessonTime", Storage="_LessonTime", ThisKey="CoachID", OtherKey="InvitedCoach")]
+		public EntitySet<LessonTime> LessonTime
+		{
+			get
+			{
+				return this._LessonTime;
+			}
+			set
+			{
+				this._LessonTime.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_LessonTime1", Storage="_LessonTime1", ThisKey="CoachID", OtherKey="AttendingCoach")]
+		public EntitySet<LessonTime> LessonTime1
+		{
+			get
+			{
+				return this._LessonTime1;
+			}
+			set
+			{
+				this._LessonTime1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ServingCoach", Storage="_UserProfile", ThisKey="CoachID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.ServingCoach = null;
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.ServingCoach = this;
+						this._CoachID = value.UID;
+					}
+					else
+					{
+						this._CoachID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach = this;
+		}
+		
+		private void detach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach = null;
+		}
+		
+		private void attach_LessonTime1(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach1 = this;
+		}
+		
+		private void detach_LessonTime1(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach1 = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserProfile")]
 	public partial class UserProfile : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1421,7 +1958,7 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Password;
 		
-		private string _EMail;
+		private string _ExternalID;
 		
 		private System.Nullable<System.DateTime> _Expiration;
 		
@@ -1445,17 +1982,19 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Phone;
 		
-		private EntitySet<Article> _Articles;
-		
-		private EntitySet<UserProfile> _UserProfiles;
-		
-		private EntitySet<UserProfile> _UserProfiles1;
+		private EntitySet<Article> _Article;
 		
 		private EntitySet<UserRole> _UserRole;
 		
-		private EntitySet<RegisterLesson> _RegisterLesson;
+		private EntitySet<ResetPassword> _ResetPassword;
 		
-		private EntitySet<ResetPassword> _ResetPasswords;
+		private EntityRef<ServingCoach> _ServingCoach;
+		
+		private EntitySet<UserProfile> _UserProfile2;
+		
+		private EntitySet<UserProfile> _UserProfile4;
+		
+		private EntitySet<RegisterLesson> _RegisterLesson;
 		
 		private EntityRef<Attachment> _Attachment;
 		
@@ -1463,7 +2002,7 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<UserProfile> _UserProfile1;
 		
-		private EntityRef<UserProfile> _UserProfile2;
+		private EntityRef<UserProfile> _UserProfile3;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1477,8 +2016,8 @@ namespace WebHome.Models.DataEntity
     partial void OnPIDChanged();
     partial void OnPasswordChanging(string value);
     partial void OnPasswordChanged();
-    partial void OnEMailChanging(string value);
-    partial void OnEMailChanged();
+    partial void OnExternalIDChanging(string value);
+    partial void OnExternalIDChanged();
     partial void OnExpirationChanging(System.Nullable<System.DateTime> value);
     partial void OnExpirationChanged();
     partial void OnCreatorChanging(System.Nullable<int> value);
@@ -1505,16 +2044,17 @@ namespace WebHome.Models.DataEntity
 		
 		public UserProfile()
 		{
-			this._Articles = new EntitySet<Article>(new Action<Article>(this.attach_Articles), new Action<Article>(this.detach_Articles));
-			this._UserProfiles = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles), new Action<UserProfile>(this.detach_UserProfiles));
-			this._UserProfiles1 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfiles1), new Action<UserProfile>(this.detach_UserProfiles1));
+			this._Article = new EntitySet<Article>(new Action<Article>(this.attach_Article), new Action<Article>(this.detach_Article));
 			this._UserRole = new EntitySet<UserRole>(new Action<UserRole>(this.attach_UserRole), new Action<UserRole>(this.detach_UserRole));
+			this._ResetPassword = new EntitySet<ResetPassword>(new Action<ResetPassword>(this.attach_ResetPassword), new Action<ResetPassword>(this.detach_ResetPassword));
+			this._ServingCoach = default(EntityRef<ServingCoach>);
+			this._UserProfile2 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfile2), new Action<UserProfile>(this.detach_UserProfile2));
+			this._UserProfile4 = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfile4), new Action<UserProfile>(this.detach_UserProfile4));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
-			this._ResetPasswords = new EntitySet<ResetPassword>(new Action<ResetPassword>(this.attach_ResetPasswords), new Action<ResetPassword>(this.detach_ResetPasswords));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
-			this._UserProfile2 = default(EntityRef<UserProfile>);
+			this._UserProfile3 = default(EntityRef<UserProfile>);
 			OnCreated();
 		}
 		
@@ -1598,22 +2138,22 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EMail", DbType="NVarChar(512)")]
-		public string EMail
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExternalID", DbType="NVarChar(64)")]
+		public string ExternalID
 		{
 			get
 			{
-				return this._EMail;
+				return this._ExternalID;
 			}
 			set
 			{
-				if ((this._EMail != value))
+				if ((this._ExternalID != value))
 				{
-					this.OnEMailChanging(value);
+					this.OnExternalIDChanging(value);
 					this.SendPropertyChanging();
-					this._EMail = value;
-					this.SendPropertyChanged("EMail");
-					this.OnEMailChanged();
+					this._ExternalID = value;
+					this.SendPropertyChanged("ExternalID");
+					this.OnExternalIDChanged();
 				}
 			}
 		}
@@ -1673,7 +2213,7 @@ namespace WebHome.Models.DataEntity
 			{
 				if ((this._AuthID != value))
 				{
-					if (this._UserProfile2.HasLoadedOrAssignedValue)
+					if (this._UserProfile3.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -1854,42 +2394,16 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Articles", ThisKey="UID", OtherKey="AuthorID")]
-		public EntitySet<Article> Articles
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_Article", Storage="_Article", ThisKey="UID", OtherKey="AuthorID")]
+		public EntitySet<Article> Article
 		{
 			get
 			{
-				return this._Articles;
+				return this._Article;
 			}
 			set
 			{
-				this._Articles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfiles", ThisKey="UID", OtherKey="Creator")]
-		public EntitySet<UserProfile> UserProfiles
-		{
-			get
-			{
-				return this._UserProfiles;
-			}
-			set
-			{
-				this._UserProfiles.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfiles1", ThisKey="UID", OtherKey="AuthID")]
-		public EntitySet<UserProfile> UserProfiles1
-		{
-			get
-			{
-				return this._UserProfiles1;
-			}
-			set
-			{
-				this._UserProfiles1.Assign(value);
+				this._Article.Assign(value);
 			}
 		}
 		
@@ -1906,6 +2420,74 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_ResetPassword", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<ResetPassword> ResetPassword
+		{
+			get
+			{
+				return this._ResetPassword;
+			}
+			set
+			{
+				this._ResetPassword.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ServingCoach", Storage="_ServingCoach", ThisKey="UID", OtherKey="CoachID", IsUnique=true, IsForeignKey=false)]
+		public ServingCoach ServingCoach
+		{
+			get
+			{
+				return this._ServingCoach.Entity;
+			}
+			set
+			{
+				ServingCoach previousValue = this._ServingCoach.Entity;
+				if (((previousValue != value) 
+							|| (this._ServingCoach.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ServingCoach.Entity = null;
+						previousValue.UserProfile = null;
+					}
+					this._ServingCoach.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfile = this;
+					}
+					this.SendPropertyChanged("ServingCoach");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile", Storage="_UserProfile2", ThisKey="UID", OtherKey="Creator")]
+		public EntitySet<UserProfile> UserProfile2
+		{
+			get
+			{
+				return this._UserProfile2;
+			}
+			set
+			{
+				this._UserProfile2.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile4", ThisKey="UID", OtherKey="AuthID")]
+		public EntitySet<UserProfile> UserProfile4
+		{
+			get
+			{
+				return this._UserProfile4;
+			}
+			set
+			{
+				this._UserProfile4.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_RegisterLesson", Storage="_RegisterLesson", ThisKey="UID", OtherKey="UID")]
 		public EntitySet<RegisterLesson> RegisterLesson
 		{
@@ -1916,19 +2498,6 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._RegisterLesson.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_ResetPasswords", ThisKey="UID", OtherKey="UID")]
-		public EntitySet<ResetPassword> ResetPasswords
-		{
-			get
-			{
-				return this._ResetPasswords;
-			}
-			set
-			{
-				this._ResetPasswords.Assign(value);
 			}
 		}
 		
@@ -1949,12 +2518,12 @@ namespace WebHome.Models.DataEntity
 					if ((previousValue != null))
 					{
 						this._Attachment.Entity = null;
-						previousValue.UserProfiles.Remove(this);
+						previousValue.UserProfile.Remove(this);
 					}
 					this._Attachment.Entity = value;
 					if ((value != null))
 					{
-						value.UserProfiles.Add(this);
+						value.UserProfile.Add(this);
 						this._PictureID = value.AttachmentID;
 					}
 					else
@@ -1983,12 +2552,12 @@ namespace WebHome.Models.DataEntity
 					if ((previousValue != null))
 					{
 						this._LevelExpression.Entity = null;
-						previousValue.UserProfiles.Remove(this);
+						previousValue.UserProfile.Remove(this);
 					}
 					this._LevelExpression.Entity = value;
 					if ((value != null))
 					{
-						value.UserProfiles.Add(this);
+						value.UserProfile.Add(this);
 						this._LevelID = value.LevelID;
 					}
 					else
@@ -2017,12 +2586,12 @@ namespace WebHome.Models.DataEntity
 					if ((previousValue != null))
 					{
 						this._UserProfile1.Entity = null;
-						previousValue.UserProfiles.Remove(this);
+						previousValue.UserProfile2.Remove(this);
 					}
 					this._UserProfile1.Entity = value;
 					if ((value != null))
 					{
-						value.UserProfiles.Add(this);
+						value.UserProfile2.Add(this);
 						this._Creator = value.UID;
 					}
 					else
@@ -2034,36 +2603,36 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile2", ThisKey="AuthID", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile2
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfile1", Storage="_UserProfile3", ThisKey="AuthID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile3
 		{
 			get
 			{
-				return this._UserProfile2.Entity;
+				return this._UserProfile3.Entity;
 			}
 			set
 			{
-				UserProfile previousValue = this._UserProfile2.Entity;
+				UserProfile previousValue = this._UserProfile3.Entity;
 				if (((previousValue != value) 
-							|| (this._UserProfile2.HasLoadedOrAssignedValue == false)))
+							|| (this._UserProfile3.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._UserProfile2.Entity = null;
-						previousValue.UserProfiles1.Remove(this);
+						this._UserProfile3.Entity = null;
+						previousValue.UserProfile4.Remove(this);
 					}
-					this._UserProfile2.Entity = value;
+					this._UserProfile3.Entity = value;
 					if ((value != null))
 					{
-						value.UserProfiles1.Add(this);
+						value.UserProfile4.Add(this);
 						this._AuthID = value.UID;
 					}
 					else
 					{
 						this._AuthID = default(Nullable<int>);
 					}
-					this.SendPropertyChanged("UserProfile2");
+					this.SendPropertyChanged("UserProfile3");
 				}
 			}
 		}
@@ -2088,40 +2657,16 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		private void attach_Articles(Article entity)
+		private void attach_Article(Article entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = this;
 		}
 		
-		private void detach_Articles(Article entity)
+		private void detach_Article(Article entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
-		}
-		
-		private void attach_UserProfiles(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile1 = this;
-		}
-		
-		private void detach_UserProfiles(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile1 = null;
-		}
-		
-		private void attach_UserProfiles1(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile2 = this;
-		}
-		
-		private void detach_UserProfiles1(UserProfile entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile2 = null;
 		}
 		
 		private void attach_UserRole(UserRole entity)
@@ -2136,6 +2681,42 @@ namespace WebHome.Models.DataEntity
 			entity.UserProfile = null;
 		}
 		
+		private void attach_ResetPassword(ResetPassword entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_ResetPassword(ResetPassword entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_UserProfile2(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile1 = this;
+		}
+		
+		private void detach_UserProfile2(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile1 = null;
+		}
+		
+		private void attach_UserProfile4(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile3 = this;
+		}
+		
+		private void detach_UserProfile4(UserProfile entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile3 = null;
+		}
+		
 		private void attach_RegisterLesson(RegisterLesson entity)
 		{
 			this.SendPropertyChanging();
@@ -2147,163 +2728,174 @@ namespace WebHome.Models.DataEntity
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
 		}
-		
-		private void attach_ResetPasswords(ResetPassword entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = this;
-		}
-		
-		private void detach_ResetPasswords(ResetPassword entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = null;
-		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRole")]
-	public partial class UserRole : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonPriceType")]
+	public partial class LessonPriceType : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _UID;
+		private int _PriceID;
 		
-		private int _RoleID;
+		private string _Description;
 		
-		private EntityRef<UserProfile> _UserProfile;
+		private System.Nullable<int> _ListPrice;
 		
-		private EntityRef<UserRoleDefinition> _UserRoleDefinition;
+		private System.Nullable<int> _Status;
+		
+		private EntitySet<RegisterLesson> _RegisterLesson;
+		
+		private EntityRef<LevelExpression> _LevelExpression;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnUIDChanging(int value);
-    partial void OnUIDChanged();
-    partial void OnRoleIDChanging(int value);
-    partial void OnRoleIDChanged();
+    partial void OnPriceIDChanging(int value);
+    partial void OnPriceIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnListPriceChanging(System.Nullable<int> value);
+    partial void OnListPriceChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
     #endregion
 		
-		public UserRole()
+		public LessonPriceType()
 		{
-			this._UserProfile = default(EntityRef<UserProfile>);
-			this._UserRoleDefinition = default(EntityRef<UserRoleDefinition>);
+			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int UID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int PriceID
 		{
 			get
 			{
-				return this._UID;
+				return this._PriceID;
 			}
 			set
 			{
-				if ((this._UID != value))
+				if ((this._PriceID != value))
 				{
-					if (this._UserProfile.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUIDChanging(value);
+					this.OnPriceIDChanging(value);
 					this.SendPropertyChanging();
-					this._UID = value;
-					this.SendPropertyChanged("UID");
-					this.OnUIDChanged();
+					this._PriceID = value;
+					this.SendPropertyChanged("PriceID");
+					this.OnPriceIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoleID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int RoleID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(64)")]
+		public string Description
 		{
 			get
 			{
-				return this._RoleID;
+				return this._Description;
 			}
 			set
 			{
-				if ((this._RoleID != value))
+				if ((this._Description != value))
 				{
-					if (this._UserRoleDefinition.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnRoleIDChanging(value);
+					this.OnDescriptionChanging(value);
 					this.SendPropertyChanging();
-					this._RoleID = value;
-					this.SendPropertyChanged("RoleID");
-					this.OnRoleIDChanged();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserRole", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public UserProfile UserProfile
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ListPrice", DbType="Int")]
+		public System.Nullable<int> ListPrice
 		{
 			get
 			{
-				return this._UserProfile.Entity;
+				return this._ListPrice;
 			}
 			set
 			{
-				UserProfile previousValue = this._UserProfile.Entity;
+				if ((this._ListPrice != value))
+				{
+					this.OnListPriceChanging(value);
+					this.SendPropertyChanging();
+					this._ListPrice = value;
+					this.SendPropertyChanged("ListPrice");
+					this.OnListPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_RegisterLesson", ThisKey="PriceID", OtherKey="ClassLevel")]
+		public EntitySet<RegisterLesson> RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson;
+			}
+			set
+			{
+				this._RegisterLesson.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LevelExpression", ThisKey="Status", OtherKey="LevelID", IsForeignKey=true)]
+		public LevelExpression LevelExpression
+		{
+			get
+			{
+				return this._LevelExpression.Entity;
+			}
+			set
+			{
+				LevelExpression previousValue = this._LevelExpression.Entity;
 				if (((previousValue != value) 
-							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._UserProfile.Entity = null;
-						previousValue.UserRole.Remove(this);
+						this._LevelExpression.Entity = null;
+						previousValue.LessonPriceType.Remove(this);
 					}
-					this._UserProfile.Entity = value;
+					this._LevelExpression.Entity = value;
 					if ((value != null))
 					{
-						value.UserRole.Add(this);
-						this._UID = value.UID;
+						value.LessonPriceType.Add(this);
+						this._Status = value.LevelID;
 					}
 					else
 					{
-						this._UID = default(int);
+						this._Status = default(Nullable<int>);
 					}
-					this.SendPropertyChanged("UserProfile");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserRoleDefinition_UserRole", Storage="_UserRoleDefinition", ThisKey="RoleID", OtherKey="RoleID", IsForeignKey=true)]
-		public UserRoleDefinition UserRoleDefinition
-		{
-			get
-			{
-				return this._UserRoleDefinition.Entity;
-			}
-			set
-			{
-				UserRoleDefinition previousValue = this._UserRoleDefinition.Entity;
-				if (((previousValue != value) 
-							|| (this._UserRoleDefinition.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserRoleDefinition.Entity = null;
-						previousValue.UserRole.Remove(this);
-					}
-					this._UserRoleDefinition.Entity = value;
-					if ((value != null))
-					{
-						value.UserRole.Add(this);
-						this._RoleID = value.RoleID;
-					}
-					else
-					{
-						this._RoleID = default(int);
-					}
-					this.SendPropertyChanged("UserRoleDefinition");
+					this.SendPropertyChanged("LevelExpression");
 				}
 			}
 		}
@@ -2326,6 +2918,136 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonPriceType = this;
+		}
+		
+		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonPriceType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GroupingLesson")]
+	public partial class GroupingLesson : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _GroupID;
+		
+		private EntitySet<RegisterLesson> _RegisterLesson;
+		
+		private EntitySet<LessonTime> _LessonTime;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnGroupIDChanging(int value);
+    partial void OnGroupIDChanged();
+    #endregion
+		
+		public GroupingLesson()
+		{
+			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int GroupID
+		{
+			get
+			{
+				return this._GroupID;
+			}
+			set
+			{
+				if ((this._GroupID != value))
+				{
+					this.OnGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._GroupID = value;
+					this.SendPropertyChanged("GroupID");
+					this.OnGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_RegisterLesson", Storage="_RegisterLesson", ThisKey="GroupID", OtherKey="RegisterGroupID")]
+		public EntitySet<RegisterLesson> RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson;
+			}
+			set
+			{
+				this._RegisterLesson.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_LessonTime", Storage="_LessonTime", ThisKey="GroupID", OtherKey="GroupID")]
+		public EntitySet<LessonTime> LessonTime
+		{
+			get
+			{
+				return this._LessonTime;
+			}
+			set
+			{
+				this._LessonTime.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = this;
+		}
+		
+		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = null;
+		}
+		
+		private void attach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = this;
+		}
+		
+		private void detach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = null;
 		}
 	}
 	
@@ -2345,6 +3067,20 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _ClassLevel;
 		
+		private System.Nullable<int> _Attended;
+		
+		private System.Nullable<int> _RegisterGroupID;
+		
+		private int _GroupingMemberCount;
+		
+		private EntitySet<LessonTime> _LessonTime;
+		
+		private EntitySet<LessonTimeExpansion> _LessonTimeExpansion;
+		
+		private EntityRef<GroupingLesson> _GroupingLesson;
+		
+		private EntityRef<LessonPriceType> _LessonPriceType;
+		
 		private EntityRef<LevelExpression> _LevelExpression;
 		
 		private EntityRef<UserProfile> _UserProfile;
@@ -2363,10 +3099,20 @@ namespace WebHome.Models.DataEntity
     partial void OnUIDChanged();
     partial void OnClassLevelChanging(System.Nullable<int> value);
     partial void OnClassLevelChanged();
+    partial void OnAttendedChanging(System.Nullable<int> value);
+    partial void OnAttendedChanged();
+    partial void OnRegisterGroupIDChanging(System.Nullable<int> value);
+    partial void OnRegisterGroupIDChanged();
+    partial void OnGroupingMemberCountChanging(int value);
+    partial void OnGroupingMemberCountChanged();
     #endregion
 		
 		public RegisterLesson()
 		{
+			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
+			this._LessonTimeExpansion = new EntitySet<LessonTimeExpansion>(new Action<LessonTimeExpansion>(this.attach_LessonTimeExpansion), new Action<LessonTimeExpansion>(this.detach_LessonTimeExpansion));
+			this._GroupingLesson = default(EntityRef<GroupingLesson>);
+			this._LessonPriceType = default(EntityRef<LessonPriceType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
 			OnCreated();
@@ -2467,7 +3213,7 @@ namespace WebHome.Models.DataEntity
 			{
 				if ((this._ClassLevel != value))
 				{
-					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					if (this._LessonPriceType.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -2480,7 +3226,169 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_RegisterLesson", Storage="_LevelExpression", ThisKey="ClassLevel", OtherKey="LevelID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Attended", DbType="Int")]
+		public System.Nullable<int> Attended
+		{
+			get
+			{
+				return this._Attended;
+			}
+			set
+			{
+				if ((this._Attended != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttendedChanging(value);
+					this.SendPropertyChanging();
+					this._Attended = value;
+					this.SendPropertyChanged("Attended");
+					this.OnAttendedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterGroupID", DbType="Int")]
+		public System.Nullable<int> RegisterGroupID
+		{
+			get
+			{
+				return this._RegisterGroupID;
+			}
+			set
+			{
+				if ((this._RegisterGroupID != value))
+				{
+					if (this._GroupingLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegisterGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterGroupID = value;
+					this.SendPropertyChanged("RegisterGroupID");
+					this.OnRegisterGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupingMemberCount", DbType="Int NOT NULL")]
+		public int GroupingMemberCount
+		{
+			get
+			{
+				return this._GroupingMemberCount;
+			}
+			set
+			{
+				if ((this._GroupingMemberCount != value))
+				{
+					this.OnGroupingMemberCountChanging(value);
+					this.SendPropertyChanging();
+					this._GroupingMemberCount = value;
+					this.SendPropertyChanged("GroupingMemberCount");
+					this.OnGroupingMemberCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonTime", Storage="_LessonTime", ThisKey="RegisterID", OtherKey="RegisterID")]
+		public EntitySet<LessonTime> LessonTime
+		{
+			get
+			{
+				return this._LessonTime;
+			}
+			set
+			{
+				this._LessonTime.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonTimeExpansion", Storage="_LessonTimeExpansion", ThisKey="RegisterID", OtherKey="RegisterID")]
+		public EntitySet<LessonTimeExpansion> LessonTimeExpansion
+		{
+			get
+			{
+				return this._LessonTimeExpansion;
+			}
+			set
+			{
+				this._LessonTimeExpansion.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_RegisterLesson", Storage="_GroupingLesson", ThisKey="RegisterGroupID", OtherKey="GroupID", IsForeignKey=true, DeleteRule="SET NULL")]
+		public GroupingLesson GroupingLesson
+		{
+			get
+			{
+				return this._GroupingLesson.Entity;
+			}
+			set
+			{
+				GroupingLesson previousValue = this._GroupingLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._GroupingLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._GroupingLesson.Entity = null;
+						previousValue.RegisterLesson.Remove(this);
+					}
+					this._GroupingLesson.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLesson.Add(this);
+						this._RegisterGroupID = value.GroupID;
+					}
+					else
+					{
+						this._RegisterGroupID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("GroupingLesson");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_LessonPriceType", ThisKey="ClassLevel", OtherKey="PriceID", IsForeignKey=true)]
+		public LessonPriceType LessonPriceType
+		{
+			get
+			{
+				return this._LessonPriceType.Entity;
+			}
+			set
+			{
+				LessonPriceType previousValue = this._LessonPriceType.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonPriceType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonPriceType.Entity = null;
+						previousValue.RegisterLesson.Remove(this);
+					}
+					this._LessonPriceType.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLesson.Add(this);
+						this._ClassLevel = value.PriceID;
+					}
+					else
+					{
+						this._ClassLevel = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LessonPriceType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_RegisterLesson", Storage="_LevelExpression", ThisKey="Attended", OtherKey="LevelID", IsForeignKey=true)]
 		public LevelExpression LevelExpression
 		{
 			get
@@ -2503,18 +3411,18 @@ namespace WebHome.Models.DataEntity
 					if ((value != null))
 					{
 						value.RegisterLesson.Add(this);
-						this._ClassLevel = value.LevelID;
+						this._Attended = value.LevelID;
 					}
 					else
 					{
-						this._ClassLevel = default(Nullable<int>);
+						this._Attended = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("LevelExpression");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_RegisterLesson", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_RegisterLesson", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public UserProfile UserProfile
 		{
 			get
@@ -2567,110 +3475,621 @@ namespace WebHome.Models.DataEntity
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+		
+		private void attach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = this;
+		}
+		
+		private void detach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = null;
+		}
+		
+		private void attach_LessonTimeExpansion(LessonTimeExpansion entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = this;
+		}
+		
+		private void detach_LessonTimeExpansion(LessonTimeExpansion entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = null;
+		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ResetPassword")]
-	public partial class ResetPassword : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonTime")]
+	public partial class LessonTime : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private System.Guid _ResetID;
+		private int _LessonID;
 		
-		private int _UID;
+		private int _RegisterID;
 		
-		private EntityRef<UserProfile> _UserProfile;
+		private System.Nullable<System.DateTime> _ClassTime;
+		
+		private System.Nullable<int> _DurationInMinutes;
+		
+		private System.Nullable<int> _InvitedCoach;
+		
+		private System.Nullable<int> _AttendingCoach;
+		
+		private System.Nullable<int> _GroupID;
+		
+		private EntitySet<LessonTimeExpansion> _LessonTimeExpansion;
+		
+		private EntityRef<GroupingLesson> _GroupingLesson;
+		
+		private EntityRef<RegisterLesson> _RegisterLesson;
+		
+		private EntityRef<ServingCoach> _ServingCoach;
+		
+		private EntityRef<ServingCoach> _ServingCoach1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnResetIDChanging(System.Guid value);
-    partial void OnResetIDChanged();
-    partial void OnUIDChanging(int value);
-    partial void OnUIDChanged();
+    partial void OnLessonIDChanging(int value);
+    partial void OnLessonIDChanged();
+    partial void OnRegisterIDChanging(int value);
+    partial void OnRegisterIDChanged();
+    partial void OnClassTimeChanging(System.Nullable<System.DateTime> value);
+    partial void OnClassTimeChanged();
+    partial void OnDurationInMinutesChanging(System.Nullable<int> value);
+    partial void OnDurationInMinutesChanged();
+    partial void OnInvitedCoachChanging(System.Nullable<int> value);
+    partial void OnInvitedCoachChanged();
+    partial void OnAttendingCoachChanging(System.Nullable<int> value);
+    partial void OnAttendingCoachChanged();
+    partial void OnGroupIDChanging(System.Nullable<int> value);
+    partial void OnGroupIDChanged();
     #endregion
 		
-		public ResetPassword()
+		public LessonTime()
 		{
-			this._UserProfile = default(EntityRef<UserProfile>);
+			this._LessonTimeExpansion = new EntitySet<LessonTimeExpansion>(new Action<LessonTimeExpansion>(this.attach_LessonTimeExpansion), new Action<LessonTimeExpansion>(this.detach_LessonTimeExpansion));
+			this._GroupingLesson = default(EntityRef<GroupingLesson>);
+			this._RegisterLesson = default(EntityRef<RegisterLesson>);
+			this._ServingCoach = default(EntityRef<ServingCoach>);
+			this._ServingCoach1 = default(EntityRef<ServingCoach>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ResetID", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid ResetID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int LessonID
 		{
 			get
 			{
-				return this._ResetID;
+				return this._LessonID;
 			}
 			set
 			{
-				if ((this._ResetID != value))
+				if ((this._LessonID != value))
 				{
-					this.OnResetIDChanging(value);
+					this.OnLessonIDChanging(value);
 					this.SendPropertyChanging();
-					this._ResetID = value;
-					this.SendPropertyChanged("ResetID");
-					this.OnResetIDChanged();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
-		public int UID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterID", DbType="Int NOT NULL")]
+		public int RegisterID
 		{
 			get
 			{
-				return this._UID;
+				return this._RegisterID;
 			}
 			set
 			{
-				if ((this._UID != value))
+				if ((this._RegisterID != value))
 				{
-					if (this._UserProfile.HasLoadedOrAssignedValue)
+					if (this._RegisterLesson.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnUIDChanging(value);
+					this.OnRegisterIDChanging(value);
 					this.SendPropertyChanging();
-					this._UID = value;
-					this.SendPropertyChanged("UID");
-					this.OnUIDChanged();
+					this._RegisterID = value;
+					this.SendPropertyChanged("RegisterID");
+					this.OnRegisterIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_ResetPassword", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClassTime", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ClassTime
 		{
 			get
 			{
-				return this._UserProfile.Entity;
+				return this._ClassTime;
 			}
 			set
 			{
-				UserProfile previousValue = this._UserProfile.Entity;
+				if ((this._ClassTime != value))
+				{
+					this.OnClassTimeChanging(value);
+					this.SendPropertyChanging();
+					this._ClassTime = value;
+					this.SendPropertyChanged("ClassTime");
+					this.OnClassTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DurationInMinutes", DbType="Int")]
+		public System.Nullable<int> DurationInMinutes
+		{
+			get
+			{
+				return this._DurationInMinutes;
+			}
+			set
+			{
+				if ((this._DurationInMinutes != value))
+				{
+					this.OnDurationInMinutesChanging(value);
+					this.SendPropertyChanging();
+					this._DurationInMinutes = value;
+					this.SendPropertyChanged("DurationInMinutes");
+					this.OnDurationInMinutesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvitedCoach", DbType="Int")]
+		public System.Nullable<int> InvitedCoach
+		{
+			get
+			{
+				return this._InvitedCoach;
+			}
+			set
+			{
+				if ((this._InvitedCoach != value))
+				{
+					if (this._ServingCoach.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInvitedCoachChanging(value);
+					this.SendPropertyChanging();
+					this._InvitedCoach = value;
+					this.SendPropertyChanged("InvitedCoach");
+					this.OnInvitedCoachChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttendingCoach", DbType="Int")]
+		public System.Nullable<int> AttendingCoach
+		{
+			get
+			{
+				return this._AttendingCoach;
+			}
+			set
+			{
+				if ((this._AttendingCoach != value))
+				{
+					if (this._ServingCoach1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAttendingCoachChanging(value);
+					this.SendPropertyChanging();
+					this._AttendingCoach = value;
+					this.SendPropertyChanged("AttendingCoach");
+					this.OnAttendingCoachChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupID", DbType="Int")]
+		public System.Nullable<int> GroupID
+		{
+			get
+			{
+				return this._GroupID;
+			}
+			set
+			{
+				if ((this._GroupID != value))
+				{
+					if (this._GroupingLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._GroupID = value;
+					this.SendPropertyChanged("GroupID");
+					this.OnGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonTimeExpansion", Storage="_LessonTimeExpansion", ThisKey="LessonID", OtherKey="LessonID")]
+		public EntitySet<LessonTimeExpansion> LessonTimeExpansion
+		{
+			get
+			{
+				return this._LessonTimeExpansion;
+			}
+			set
+			{
+				this._LessonTimeExpansion.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_LessonTime", Storage="_GroupingLesson", ThisKey="GroupID", OtherKey="GroupID", IsForeignKey=true)]
+		public GroupingLesson GroupingLesson
+		{
+			get
+			{
+				return this._GroupingLesson.Entity;
+			}
+			set
+			{
+				GroupingLesson previousValue = this._GroupingLesson.Entity;
 				if (((previousValue != value) 
-							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+							|| (this._GroupingLesson.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._UserProfile.Entity = null;
-						previousValue.ResetPasswords.Remove(this);
+						this._GroupingLesson.Entity = null;
+						previousValue.LessonTime.Remove(this);
 					}
-					this._UserProfile.Entity = value;
+					this._GroupingLesson.Entity = value;
 					if ((value != null))
 					{
-						value.ResetPasswords.Add(this);
-						this._UID = value.UID;
+						value.LessonTime.Add(this);
+						this._GroupID = value.GroupID;
 					}
 					else
 					{
-						this._UID = default(int);
+						this._GroupID = default(Nullable<int>);
 					}
-					this.SendPropertyChanged("UserProfile");
+					this.SendPropertyChanged("GroupingLesson");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonTime", Storage="_RegisterLesson", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true)]
+		public RegisterLesson RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson.Entity;
+			}
+			set
+			{
+				RegisterLesson previousValue = this._RegisterLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RegisterLesson.Entity = null;
+						previousValue.LessonTime.Remove(this);
+					}
+					this._RegisterLesson.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTime.Add(this);
+						this._RegisterID = value.RegisterID;
+					}
+					else
+					{
+						this._RegisterID = default(int);
+					}
+					this.SendPropertyChanged("RegisterLesson");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_LessonTime", Storage="_ServingCoach", ThisKey="InvitedCoach", OtherKey="CoachID", IsForeignKey=true)]
+		public ServingCoach ServingCoach
+		{
+			get
+			{
+				return this._ServingCoach.Entity;
+			}
+			set
+			{
+				ServingCoach previousValue = this._ServingCoach.Entity;
+				if (((previousValue != value) 
+							|| (this._ServingCoach.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ServingCoach.Entity = null;
+						previousValue.LessonTime.Remove(this);
+					}
+					this._ServingCoach.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTime.Add(this);
+						this._InvitedCoach = value.CoachID;
+					}
+					else
+					{
+						this._InvitedCoach = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("ServingCoach");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_LessonTime1", Storage="_ServingCoach1", ThisKey="AttendingCoach", OtherKey="CoachID", IsForeignKey=true)]
+		public ServingCoach ServingCoach1
+		{
+			get
+			{
+				return this._ServingCoach1.Entity;
+			}
+			set
+			{
+				ServingCoach previousValue = this._ServingCoach1.Entity;
+				if (((previousValue != value) 
+							|| (this._ServingCoach1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ServingCoach1.Entity = null;
+						previousValue.LessonTime1.Remove(this);
+					}
+					this._ServingCoach1.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTime1.Add(this);
+						this._AttendingCoach = value.CoachID;
+					}
+					else
+					{
+						this._AttendingCoach = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("ServingCoach1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_LessonTimeExpansion(LessonTimeExpansion entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = this;
+		}
+		
+		private void detach_LessonTimeExpansion(LessonTimeExpansion entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonTimeExpansion")]
+	public partial class LessonTimeExpansion : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.DateTime _ClassDate;
+		
+		private int _Hour;
+		
+		private int _RegisterID;
+		
+		private System.Nullable<int> _LessonID;
+		
+		private EntityRef<LessonTime> _LessonTime;
+		
+		private EntityRef<RegisterLesson> _RegisterLesson;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnClassDateChanging(System.DateTime value);
+    partial void OnClassDateChanged();
+    partial void OnHourChanging(int value);
+    partial void OnHourChanged();
+    partial void OnRegisterIDChanging(int value);
+    partial void OnRegisterIDChanged();
+    partial void OnLessonIDChanging(System.Nullable<int> value);
+    partial void OnLessonIDChanged();
+    #endregion
+		
+		public LessonTimeExpansion()
+		{
+			this._LessonTime = default(EntityRef<LessonTime>);
+			this._RegisterLesson = default(EntityRef<RegisterLesson>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClassDate", DbType="Date NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime ClassDate
+		{
+			get
+			{
+				return this._ClassDate;
+			}
+			set
+			{
+				if ((this._ClassDate != value))
+				{
+					this.OnClassDateChanging(value);
+					this.SendPropertyChanging();
+					this._ClassDate = value;
+					this.SendPropertyChanged("ClassDate");
+					this.OnClassDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Hour", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Hour
+		{
+			get
+			{
+				return this._Hour;
+			}
+			set
+			{
+				if ((this._Hour != value))
+				{
+					this.OnHourChanging(value);
+					this.SendPropertyChanging();
+					this._Hour = value;
+					this.SendPropertyChanged("Hour");
+					this.OnHourChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RegisterID
+		{
+			get
+			{
+				return this._RegisterID;
+			}
+			set
+			{
+				if ((this._RegisterID != value))
+				{
+					if (this._RegisterLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegisterIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterID = value;
+					this.SendPropertyChanged("RegisterID");
+					this.OnRegisterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int")]
+		public System.Nullable<int> LessonID
+		{
+			get
+			{
+				return this._LessonID;
+			}
+			set
+			{
+				if ((this._LessonID != value))
+				{
+					if (this._LessonTime.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLessonIDChanging(value);
+					this.SendPropertyChanging();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonTimeExpansion", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public LessonTime LessonTime
+		{
+			get
+			{
+				return this._LessonTime.Entity;
+			}
+			set
+			{
+				LessonTime previousValue = this._LessonTime.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTime.Entity = null;
+						previousValue.LessonTimeExpansion.Remove(this);
+					}
+					this._LessonTime.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTimeExpansion.Add(this);
+						this._LessonID = value.LessonID;
+					}
+					else
+					{
+						this._LessonID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LessonTime");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonTimeExpansion", Storage="_RegisterLesson", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true)]
+		public RegisterLesson RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson.Entity;
+			}
+			set
+			{
+				RegisterLesson previousValue = this._RegisterLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RegisterLesson.Entity = null;
+						previousValue.LessonTimeExpansion.Remove(this);
+					}
+					this._RegisterLesson.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTimeExpansion.Add(this);
+						this._RegisterID = value.RegisterID;
+					}
+					else
+					{
+						this._RegisterID = default(int);
+					}
+					this.SendPropertyChanged("RegisterLesson");
 				}
 			}
 		}

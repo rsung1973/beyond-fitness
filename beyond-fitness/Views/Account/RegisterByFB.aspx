@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -32,7 +33,7 @@
                         <!-- Post Content -->
                         <div class="author-info clearfix">
                             <div class="author-image">
-                                <img alt="" width="100" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg") %>" />
+                                <% _item.RenderUserPicture(this.Writer, "userImg"); %>
                             </div>
                             <div class="author-bio">
                                 <h2 class="text-primary"><%= _item.UserName %> <span class="subtext">您好</span></h2>
@@ -42,7 +43,7 @@
                                 <p><strong>會員編號：</strong><%= _item.MemberCode %></p>
 
                                 <div class="form-group has-feedback">
-                                    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState, defaultValue: _item.EMail); %>
+                                    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState, defaultValue: _item.PID); %>
                                 </div>
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
@@ -75,26 +76,14 @@
 
         });
 
-        $("form").validate({
-            success: function (label, element) {
-                label.remove();
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').removeClass('glyphicon-remove').removeClass('text-danger')
-                    .addClass('glyphicon-ok').addClass('text-success');
-            },
-            errorPlacement: function (error, element) {
-                error.insertAfter(element);
-                var id = $(element).prop("id");
-                $('#' + id + 'Icon').addClass('glyphicon-remove').addClass('text-danger')
-                    .removeClass('glyphicon-ok').removeClass('text-success');
-            },
-            rules: {
-                email: {
-                    required: true,
-                    email: true
-                }
-            }
+        $(function () {
+            $('#email').rules('add', {
+                'required': true,
+                'email': true
+            });
         });
+
+
     </script>
 
 </asp:Content>
@@ -108,17 +97,10 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (UserProfile)this.Model;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
 
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
-
-        base.Dispose();
-    }
 
 </script>

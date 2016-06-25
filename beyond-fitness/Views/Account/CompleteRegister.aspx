@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -39,7 +40,7 @@
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
                                 <p><strong>會員編號：</strong><%= _item.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _item.EMail %></p>
+                                <p><strong>Email：</strong><%= _item.PID %></p>
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
@@ -71,16 +72,9 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (UserProfile)this.Model;
     }
 
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
-
-        base.Dispose();
-    }
 
 </script>

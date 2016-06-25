@@ -4,9 +4,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -31,7 +32,7 @@
                     <!-- Start Contact Form -->
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
                     <p><strong>會員編號：</strong><span class="text-primary"><%= _item.MemberCode %></span></p>
-                    <p><strong>Email：</strong><%= _item.EMail %></p>
+                    <p><strong>Email：</strong><%= _item.PID %></p>
 
                     <div class="form-group has-feedback">
                         <label class="text-success">密碼設定完成，請重新登入。</label>
@@ -42,7 +43,7 @@
               <div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
 
                     <!-- End Contact Form -->
-                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>" class="btn-system btn-small">登入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                    <p><a href="<%= FormsAuthentication.LoginUrl %>" class="btn-system btn-small">登入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                 </div>
 
             </div>
@@ -75,16 +76,8 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (UserProfile)this.Model;
-    }
-
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
-
-        base.Dispose();
     }
 
 </script>

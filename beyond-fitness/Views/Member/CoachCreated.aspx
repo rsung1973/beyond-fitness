@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -33,7 +34,7 @@
                         <div class="user-info clearfix">
                             <div class="author-image">
                                 <div class="user-image">
-                                    <img alt="" src="<%= VirtualPathUtility.ToAbsolute("~/images/noMember.jpg") %>" />
+                                    <% _model.RenderUserPicture(this.Writer, "userImg"); %>
                                 </div>
                                 <div class="user-bio">
                                     <h2 class="text-primary"><%= _model.RealName %> </h2>
@@ -73,17 +74,11 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
     }
 
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
 
-        base.Dispose();
-    }
 
 </script>

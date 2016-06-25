@@ -115,10 +115,8 @@
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
               <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">
-                  <li><a href="login.htm">登入</a>
-                  </li>
-                  <li><a href="coach.htm">教練專區</a>
+                <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
                   </li>
@@ -141,16 +139,14 @@
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
           <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">
-              <li><a href="login.htm">登入</a>
-              </li>
-              <li><a href="coach.htm">教練專區</a>
-              </li>
-              <li><a href="member-manager.htm">人員管理</a>
-              </li>
-              <li><a href="blog-manager.htm">知識上稿</a>
-              </li>
-            </ul>
+            <ul class="dropdown">                  
+                  <li><a href="coach.htm">課程管理</a>
+                  </li>
+                  <li><a href="member-manager.htm">人員管理</a>
+                  </li>
+                  <li><a href="blog-manager.htm">知識上稿</a>
+                  </li>
+                </ul>
            </li>
         </ul>
         <!-- Mobile Menu End -->
@@ -201,10 +197,10 @@
 
               <div class="form-group has-feedback">
               	<div class="row">
-                  <div class="col-md-1 text-right">
+                  <div class="col-md-2">
                   	<label class="control-label" for="classno">組數：</label>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <select class="form-control">
                       <option>1</option>
                       <option>2</option>
@@ -218,10 +214,10 @@
               
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-1 text-right">
+                  <div class="col-md-2">
                     <label for="exampleInputFile" class="control-label">休息：</label>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="input-group">
                     <input class="form-control" size="16" type="number" value="">
                     <span class="input-group-addon">秒</span>
@@ -238,17 +234,20 @@
                 	<!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th>項目</th>
-                      <th>次數</th>
-                      <th>強度</th>
+                      <th>肌力訓練</th>
+                      <th>目標次數</th>
+                      <th>目標強度</th>
                       <th>功能</th>
                     </tr>
                     <tr>
                       <td>
                       <select class="form-control">
-                        <option>拉背</option>
-                        <option>硬舉</option>
-                      </select>
+						<option>上肢</option>
+						<option>上肢</option>
+						<option>全身</option>
+						<option>特殊性動作</otpion>
+                      </select>					  
+						<input type="text" class="form-control" value="RDL">
                       </td>
                       <td>
                       <select class="form-control">
@@ -257,10 +256,7 @@
                       </select>
                       </td>
                       <td>
-                      <select class="form-control">
-                        <option>25kg</option>
-                        <option>30kg</option>
-                      </select>
+						  <input type="text" class="form-control" value="20KG">
                       </td>
                       <td>
                       	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
@@ -269,9 +265,12 @@
                     <tr>
                       <td>
                       <select class="form-control">
-                        <option>拉背</option>
-                        <option>硬舉</option>
-                      </select>
+						<option>上肢</option>
+						<option>上肢</option>
+						<option>全身</option>
+						<option>特殊性動作</otpion>
+                      </select>						  
+						<input type="text" class="form-control" value="TRX">
                       </td>
                       <td>
                       <select class="form-control">
@@ -280,33 +279,7 @@
                       </select>
                       </td>
                       <td>
-                      <select class="form-control">
-                        <option>25kg</option>
-                        <option>30kg</option>
-                      </select>
-                      </td>
-                      <td>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                      <select class="form-control">
-                        <option>拉背</option>
-                        <option>硬舉</option>
-                      </select>
-                      </td>
-                      <td>
-                      <select class="form-control">
-                        <option>10</option>
-                        <option>20</option>
-                      </select>
-                      </td>
-                      <td>
-                      <select class="form-control">
-                        <option>25kg</option>
-                        <option>30kg</option>
-                      </select>
+						  <input type="text" class="form-control" value="20KG">
                       </td>
                       <td>
                       	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
@@ -314,17 +287,13 @@
                     </tr>
                   </table>
               </div>
+			  
+			  
+			  <a href="before-class.htm" class="btn-system btn-small border-btn">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
               <a href="#" class="btn-system btn-medium"><i class="fa fa-times" aria-hidden="true"></i> 刪除</a>
               <a href="before-class.htm" class="btn-system btn-medium"><i class="fa fa-check" aria-hidden="true"></i> 確定</a>
                          
             </form>
-              
-            <!-- Stat Search -->
-            <div class="navbar bg_white" style="min-height:30px;">
-            	<div class="search-side">
-                <a href="before-class.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-              </div>
-            </div>
             
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
             
@@ -359,26 +328,40 @@
   <form name="myForm" class="form-horizontal" role="form">
     <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="confirmLabel" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content bg_gray">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <h4 class="modal-title orange-text" id="confirmLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 新增項目</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">項目：</label>
-            <div class="col-md-10" >
-              <select class="form-control" name="selitem" id="selitem" onChange="javascript:selitemName(this);">
-                <option>拉背</option>
-                <option>硬舉</option>
-                <option>其他</option>
-              </select>
-              <input type="text" class="form-control" id="otheritem">
-            </div>
-          </div>
+				<label for="exampleInputFile" class="col-md-3 control-label">肌力訓練：</label>
+				<div class="col-md-9" >
+				  <select class="form-control" name="selitem" id="selitem">
+					<option>上肢</option>
+					<option>上肢</option>
+					<option>全身</option>
+					<option>特殊性動作</otpion>
+				  </select>
+				  <input type="text" class="form-control" id="otheritem">
+				</div>
+			
+			</div>
+            <div class="form-group">
+				<label for="exampleInputFile" class="col-md-3 control-label">能量系統訓練：</label>
+				<div class="col-md-9" >
+				  <input type="text" class="form-control" id="otheritem">
+				</div>
+			</div>
+            <div class="form-group">
+				<label for="exampleInputFile" class="col-md-3 control-label">柔軟度訓練：</label>
+				<div class="col-md-9" >
+				  <input type="text" class="form-control" id="otheritem">
+				</div>
+			</div>
           <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">次數：</label>
-            <div class="col-md-10" >
+            <label for="exampleInputFile" class="col-md-3 control-label">目標次數：</label>
+            <div class="col-md-9" >
               <select class="form-control">
                 <option>10</option>
                 <option>20</option>
@@ -386,12 +369,10 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">強度：</label>
-            <div class="col-md-10" >
-              <select class="form-control">
-                <option>25kg</option>
-                <option>30kg</option>
-              </select>
+            <label for="exampleInputFile" class="col-md-3 control-label">目標強度：</label>
+            <div class="col-md-9" >
+			  <input type="text" class="form-control" value="20KG">
+			  <span>例：20KG或30秒</span>
             </div>
           </div>
           <div class="modal-footer">
@@ -439,17 +420,6 @@
 		
 		
     }); 
-		
-		document.getElementById("otheritem").style.display="none";
-		function selitemName(selectobj){
-			var itemname = $("#selitem option:selected").val();
-			
-			if (itemname=="其他"){
-				document.getElementById('otheritem').style.display='block';
-			}else{
-				document.getElementById('otheritem').style.display='none';
-			}
-		} 
 		 
   //新增項目對話方塊
 	$('#confirm').on('show.bs.modal', function (event) {

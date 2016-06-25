@@ -106,8 +106,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="add-blog.htm" />
+    <Content Include="add-class-verify.htm" />
+    <Content Include="add-class.htm" />
     <Content Include="add-coach.htm" />
+    <Content Include="add-PDQ.htm" />
     <Content Include="add-student.htm" />
+    <Content Include="add-vip-group-verify.htm" />
+    <Content Include="add-vip-group.htm" />
     <Content Include="add-vip.htm" />
     <Content Include="add_item.htm" />
     <Content Include="after-class.htm" />
@@ -499,6 +504,9 @@
     <Content Include="js\locales\messages_zh_TW.min.js" />
     <Content Include="js\mediaelement-and-player.js" />
     <Content Include="js\modernizrr.js" />
+    <Content Include="js\moment-with-locales.js" />
+    <Content Include="js\moment-with-locales.min.js" />
+    <Content Include="js\moment.js" />
     <Content Include="js\nivo-lightbox.js" />
     <Content Include="js\nivo-lightbox.min.js" />
     <Content Include="js\owl.carousel.js" />
@@ -546,15 +554,34 @@
     <Content Include="Views\Account\RegisterByFB.aspx" />
     <Content Include="Views\Account\CompleteRegister.aspx" />
     <Content Include="Views\Account\ForgetPassword.aspx" />
+    <Content Include="Views\Account\Coach.aspx" />
+    <Content Include="Views\Account\Navigation.ascx" />
+    <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\Lessons\BookingByCoach.aspx" />
+    <Content Include="Views\Lessons\CoachSelector.ascx" />
+    <Content Include="Views\Lessons\Attendee.ascx" />
+    <Content Include="Views\Lessons\AttendeeSelector.ascx" />
+    <Content Include="Views\Lessons\DailyBookingList.ascx" />
+    <Content Include="Views\Member\EditLearnerItem.ascx" />
+    <Content Include="Views\Member\GroupLessonUsersSelector.ascx" />
+    <Content Include="Views\Member\LessonsItem.ascx" />
+    <Content Include="Views\Member\LessonsList.ascx" />
+    <Content Include="Views\Member\GroupLessons.aspx" />
+    <Content Include="Views\Member\GroupLessonUsers.ascx" />
+    <Content Include="Views\Member\SimpleMemberInfo.ascx" />
+    <Content Include="Views\Member\ShowLearner.aspx" />
+    <Content Include="Views\Member\ShowMember.aspx" />
+    <Content Include="Views\Member\MemberInfo.ascx" />
+    <Content Include="Views\Member\LessonsUpdated.aspx" />
+    <Content Include="Views\Member\AddLessons.aspx" />
+    <Content Include="Views\Member\LearnerClassLevel.ascx" />
     <Content Include="Views\Member\LearnerUpdated.aspx" />
     <Content Include="Views\Member\EditLearner.aspx" />
-    <Content Include="Views\Member\EditLearnerItem.ascx" />
     <Content Include="Views\Member\LearnerItem.ascx" />
     <Content Include="Views\Member\CoachUpdated.aspx" />
     <Content Include="Views\Member\EditCoach.aspx" />
     <Content Include="Views\Member\CoachCreated.aspx" />
-    <Content Include="Views\Account\SampleWithDB.aspx" />
-    <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\MyTest\Index.ascx" />
     <Content Include="Views\Information\Blog.aspx" />
     <Content Include="Views\Information\Resource.aspx" />
     <Content Include="Views\Information\EditBlog.aspx" />
@@ -573,7 +600,7 @@
     <Content Include="Views\Information\Content01.aspx" />
     <Content Include="Views\Information\BlogDetail.aspx" />
     <Content Include="Views\Information\Publish.aspx" />
-    <Content Include="Views\Information\Vip.aspx" />
+    <Content Include="Views\Account\Vip.aspx" />
     <Content Include="Views\Information\Professional.aspx" />
     <Content Include="Views\Information\Cooperation.aspx" />
     <Content Include="Views\Information\Rental.aspx" />
@@ -585,13 +612,17 @@
     <Content Include="Views\Member\CoachItem.ascx" />
     <Content Include="Views\Member\VipPDQ_1.aspx" />
     <Content Include="Views\Member\Test.aspx" />
+    <Content Include="Views\Sample\Sample.aspx" />
+    <Content Include="Views\Sample\SampleWithDB.aspx" />
+    <Content Include="Views\Shared\LinkButton.ascx" />
     <Content Include="Views\Shared\PageBanner.ascx" />
     <Content Include="Views\Shared\LockScreen.ascx" />
     <Content Include="Views\Shared\HtmlInput.ascx" />
     <Content Include="Views\Shared\BSModal.ascx" />
+    <Content Include="Views\Shared\AlertMessage.ascx" />
     <Content Include="Views\Shared\SetPassword.ascx" />
     <Content Include="Views\Shared\UploadResource.ascx" />
-    <Content Include="Views\Shared\Sample.ascx" />
+    <Content Include="Views\Sample\Sample.ascx" />
     <Content Include="Views\Shared\PagingControl.ascx" />
     <Content Include="Views\Information\Error.aspx" />
     <Content Include="Views\Shared\Script.ascx" />
@@ -612,11 +643,15 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
+    <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\MyTestController.cs" />
+    <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Helper\GlobalDefinition.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
@@ -624,8 +659,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BF.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataEntity\DataEntityExtendsions.cs" />
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
+    <Compile Include="Models\Resource\SiteMenuItem.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />
     <Compile Include="Models\ViewModel\InputViewModel.cs" />
     <Compile Include="Models\ViewModel\LoginViewModel.cs" />
@@ -669,6 +706,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Resource\AllMenu.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

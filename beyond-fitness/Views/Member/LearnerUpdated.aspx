@@ -3,9 +3,10 @@
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="WebHome.Helper" %>
-<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
@@ -40,14 +41,14 @@
 
                                 <p><strong>姓名：</strong><%= _model.RealName %></p>
                                 <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _model.EMail %></p>
+                                <p><strong>Email：</strong><%= _model.PID %></p>
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
                                 <p>相關資料已修改完成。</p>
                                 <!-- Divider -->
                                 <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a  class="btn-system btn-small">繼續修改學員 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>"  class="btn-system btn-small">繼續修改學員 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                             </div>
                         </div>
                     </div>
@@ -75,17 +76,11 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = TempData.GetModelSource<UserProfile>();
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
     }
 
-    public override void Dispose()
-    {
-        if (models != null)
-            models.Dispose();
 
-        base.Dispose();
-    }
 
 </script>

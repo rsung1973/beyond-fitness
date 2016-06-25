@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebHome.Models.Locale;
 
 namespace WebHome.Models.ViewModel
 {
@@ -46,6 +47,8 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "UserID")]
         public string UserID { get; set; }
 
+        public int? PictureID { get; set; }
+
     }
 
     public class RegisterViewModel : PasswordViewModel
@@ -79,6 +82,11 @@ namespace WebHome.Models.ViewModel
 
     public class LearnerViewModel
     {
+        //public LearnerViewModel()
+        //{
+        //    ClassLevel = 1;
+        //}
+
         [Required]
         [Display(Name = "真實姓名")]
         public string RealName { get; set; }
@@ -86,33 +94,93 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "電話")]
         public string Phone { get; set; }
 
-        [Display(Name = "上課總次數")]
+        [Display(Name = "EMail")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Display(Name = "會員編號")]
+        public string MemberCode { get; set; }
+
+    }
+
+    public class LessonViewModel
+    {
+        public LessonViewModel()
+        {
+            ClassLevel = 1;
+            MemberCount = 1;
+        }
+
+        [Display(Name = "上課堂數")]
         public int Lessons { get; set; }
 
         [Display(Name = "課程類別")]
         public int ClassLevel { get; set; }
 
-        [Display(Name = "EMail")]
-        public string Email { get; set; }
+        public string Grouping { get; set; }
 
-        public int? UID { get; set; }
+        [Display(Name = "會員編號")]
+        public int MemberCount { get; set; }
 
     }
 
+
     public class CoachViewModel
     {
+        public CoachViewModel()
+        {
+            CoachRole = (int)Naming.RoleID.Coach;
+        }
+
         [Required]
         [Display(Name = "真實姓名")]
         public string RealName { get; set; }
+
+        [Display(Name = "EMail")]
+        [EmailAddress]
+        public string Email { get; set; }
+
 
         [Display(Name = "電話")]
         public string Phone { get; set; }
 
         [Required]
-        [Display(Name = "課程類別")]
+        [Display(Name = "教練身份")]
         public int CoachRole { get; set; }
 
-        public int? UID { get; set; }
+        [Display(Name = "會員編號")]
+        public string MemberCode { get; set; }
+
+    }
+
+    public class LessonTimeViewModel
+    {
+        public LessonTimeViewModel()
+        {
+            ClassDate = DateTime.Today;
+            ClassTime = new TimeSpan(8, 0, 0);
+            Duration = 60;
+        }
+
+        [Required]
+        [Display(Name = "學員姓名")]
+        public int RegisterID { get; set; }
+
+        [Required]
+        [Display(Name = "教練姓名")]
+        public int CoachID { get; set; }
+
+        [Required]
+        [Display(Name = "上課日期")]
+        public DateTime ClassDate { get; set; }
+
+        [Required]
+        [Display(Name = "上課時段")]
+        public TimeSpan ClassTime { get; set; }
+
+        [Required]
+        [Display(Name = "上課時間")]
+        public int Duration { get; set; }
 
     }
 }

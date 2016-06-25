@@ -5803,7 +5803,7 @@ ul.footer-nav li a:hover {
 .error {
     color: red;
     font-style: italic;
-    border: 1px dotted red;
+    /*border: 1px dotted red;*/
 }
 
 

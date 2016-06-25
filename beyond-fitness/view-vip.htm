@@ -37,7 +37,7 @@
 
   <!-- Color CSS Styles  -->
   <link rel="stylesheet" type="text/css" href="css/colors/orange.css" title="orange" media="screen" />
-  
+
   <!-- lockScreen CSS Styles  -->
   <link rel="stylesheet" href="lockScreen/app.css" />
 
@@ -83,7 +83,7 @@
     <!-- Start Header -->
     <div class="hidden-header"></div>
     <header class="clearfix">
-    
+
       <!-- Start Top Bar -->
       <div class="top-bar">
         <div class="container">
@@ -129,7 +129,7 @@
               <li><a href="cooperation.htm">相關合作</a></li>
               <li><a href="contact-us.htm">聯絡我們</a></li>
               <li><a class="active" href="#">會員專區</a>
-                <ul class="dropdown">                  
+                <ul class="dropdown">
                   <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
@@ -153,7 +153,7 @@
           <li><a href="cooperation.htm">相關合作</a></li>
           <li><a href="contact-us.htm">聯絡我們</a></li>
           <li><a class="active" href="#">會員專區</a>
-            <ul class="dropdown">                  
+            <ul class="dropdown">
                   <li><a href="coach.htm">課程管理</a>
                   </li>
                   <li><a href="member-manager.htm">人員管理</a>
@@ -198,61 +198,265 @@
 
         <div class="row">
 
-          <div class="col-md-5">
+          <div class="col-md-8">
 
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span>檢視人員清單</span></h4>
-            <!-- Stat Search -->
-            <div class="navbar bg_grey" style="min-height:30px;">
-            	<div class="search-side">
-                <a href="member-manager.htm" class="btn-system btn-small">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-              </div>
-            </div>						
+            <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
             <!-- Start Post -->
             <div class="blog-post quote-post">
               <!-- Post Content -->
               <div class="user-info clearfix">
                   <div class="author-image">
 					<div class="user-image">
-						<img alt="" src="images/noMember.jpg" />                    
+						<img alt="" src="images/noMember.jpg" />
               		</div>
 					  <div class="user-bio">
 						<h2 class="text-primary">林志玲 </h2>
-						
+
 						<div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>
-						
+
 						<p><strong>會員編號：</strong>A122122</p>
 						<p><strong>電話：</strong>0922186668</p>
 						<p><strong>Email：</strong>xxxx@xxx.xxx</p>
-						
+						<p class="fa fa-tags"><strong>方案設計工具結果</strong></p>
+						 <table class="table">
+							<tr class="info">
+							  <th>目標</th>
+							  <th>風格</th>
+							  <th>訓練水準</th>
+							</tr>
+							<tr>
+							  <td>健身</td>
+							  <td>保守型</td>
+							  <td>初期</td>
+							</tr>
+						  </table>	
 					  </div>
-					</div>					
-               </div>                
-            </div>        
-			<h4 class="classic-title"><span>購買上課紀錄</span></h4>
+					</div>
+               </div>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-calendar-o"></i> 購買上課紀錄</a></li>
+                <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-pencil" aria-hidden="true"></i> 問卷調查</a></li>
+              </ul>
+             <div class="tab-content">
+                <!-- Tab Content 1 -->
+                <div class="tab-pane fade in active" id="tab-1">
                 <!-- TABLE 1 -->
-                  <table class="panel panel-default table">
-                    <tr class="info">
-                      <th>建檔日期</th>
-                      <th>總次數</th>
-                      <th>課程類別</th>
-                    </tr>
-                    <tr>
-                      <td>2015/7/1</td>
-                      <td>50</td>
-                      <td>A-1500</td>
-                    </tr>
-                    <tr>
-                      <td>2016/7/1</td>
-                      <td>50</td>
-                      <td>A-1500</td>
-                    </tr>
-                  </table>			
-				  
-		    <h4 class="classic-title"><span>PDQ問卷調查</span></h4>
+					 <table class="panel panel-default table">
+						<tr class="info">
+						  <th class="text-center">建檔日期</th>
+						  <th>課程類別</th>
+						   <th class="text-center">團體課程</th>
+						  <th class="text-center">堂數</th>
+						</tr>
+						<tr>
+						  <td class="text-center" rowspan="3">2016/7/25</td>
+						  <td rowspan="3">50堂-1.5 小時 1800</td>
+						  <td class="text-center">
+							<i class="fa fa-check-circle" aria-hidden="true"></i> 3人
+						  </td>
+						  <td class="text-center" rowspan="3">25</td>
+						</tr>
+						<tr>
+						  <td class="text-center">王大明</td>
+						</tr>
+						<tr>
+						  <td class="text-center">陳小瓦</td>
+						</tr>
+						<tr>
+						  <td class="text-center">2016/7/1</td>
+						  <td>單堂-1 小時 1900</td>
+						  <td  class="text-center"></td>
+						  <td class="text-center">10</td>
+						</tr>
+					 </table>
+				</div>
+                <!-- Tab Content 2 -->
+                <div class="tab-pane fade" id="tab-2">
+					<h4 class="orange-text"><span class="fa fa-hourglass-start"> 第一步：目標</span></h4>
+					 <table class="panel panel-default table">
+						<tr class="info">
+						  <th>1.對於你我相處一小時，你有什麼期望？</th>
+						</tr>
+						<tr>
+						  <td>想增強體力</td>
+						</tr>
+						<tr class="info">
+						  <th>2.你希望你的訓練中產生怎樣的結果？</th>
+						</tr>
+						<tr>
+						  <td>希望身體健康</td>
+						</tr>
+						<tr class="info">
+						  <th>3.在訓練方案中，你需要實現的最重要目標是什麼？</th>
+						</tr>
+						<tr>
+						  <td>挑戰型(減肥/身強體壯/運動表現/克服疾病)</td>
+						</tr>
+						<tr class="info">
+						  <th>4.你希望實現自身目標的時間是多久？</th>
+						</tr>
+						<tr>
+						  <td>半年</td>
+						</tr>
+						<tr class="info">
+						  <th>5.除了訓練時段，每天願意額外花多少時間參加幫助你完成目標的活動？</th>
+						</tr>
+						<tr>
+						  <td>30分鐘</td>
+						</tr>
+						<tr class="info">
+						  <th>6.訓練計劃是否完全取決於你自己，或者有其他人、事會影響你的訓練</th>
+						</tr>
+						<tr>
+						  <td>自己</td>
+						</tr>
+						<tr class="warning">
+						  <td>
+							<span class="fa fa-commenting"> 確定最佳化私人教練目標：</span>
+							健康(身強體壯/克服疾病)
+						  </td>
+						</tr>
+					 </table>
+					<h4 class="orange-text"><span class="fa fa-hourglass-half"> 第二步：風格</span></h4>
+					 <table class="panel panel-default table">
+						<tr class="info">
+						  <th>1.在訓練過程中，處在充滿挑戰性的環境，或是在比較有安全感的環境下，對你而言哪一個比較重要？</th>
+						</tr>
+						<tr>
+						  <td>保守型(穩定、單純、實用)</td>
+						</tr>
+						<tr class="info">
+						  <th>2.每次訓練內容上循序漸進穩定的課程編排或是提供有趣多樣化的課程編排，你是否更享受這樣的訓練？</th>
+						</tr>
+						<tr>
+						  <td>保守型(常規)</td>
+						</tr>
+						<tr class="info">
+						  <th>3.你的職業？</th>
+						</tr>
+						<tr>
+						  <td>挑戰型(長時間久坐、重複性動作、容易焦慮或精神緊張)</td>
+						</tr>
+						<tr class="warning">
+						  <td>
+							<span class="fa fa-commenting"> 風格評分：傳統型</span>
+						  </td>
+						</tr>
+					 </table>
+					<h4 class="orange-text"><span class="fa fa-hourglass-end"> 第三步：訓練水平</span></h4>
+					 <table class="panel panel-default table">
+						<tr class="info">
+						  <th>1.你認為你的工作是？</th>
+						</tr>
+						<tr>
+						  <td>久坐型</td>
+						</tr>
+						<tr class="info">
+						  <th>2.你的愛好是什麼？</th>
+						</tr>
+						<tr>
+						  <td>非活動型（例如：閱讀）</td>
+						</tr>
+						<tr class="info">
+						  <th>3.你是否定期參加娛樂活動？</th>
+						</tr>
+						<tr>
+						  <td>每月/每週一次</td>
+						</tr>
+						<tr class="info">
+						  <th>4.你現在鍛鍊嗎？</th>
+						</tr>
+						<tr>
+						  <td>目前在訓練（核心訓練）</td>
+						</tr>
+						<tr class="warning">
+						  <td>
+							<span class="fa fa-commenting"> 訓練水平得分：0-2=初期(初級階段)</span>
+						  </td>
+						</tr>
+					 </table>
+					 <h4 class="orange-text"><span class="fa fa-hourglass"> 第四步：參與目標動機</span></h4>
+					 <table class="panel panel-default table">
+						<tr class="info">
+						  <th>1.這個目標為什麼對你來說是最重要的?</th>
+						</tr>
+						<tr>
+						  <td>身體健康頭好壯壯</td>
+						</tr>
+						<tr class="info">
+						  <th>2.如果你不做這些改變，保持原狀，或是你的健康與健身出現退步，這將對你的生活產生怎樣的影響？將會出現什麼樣的後果？</th>
+						</tr>
+						<tr>
+						  <td>無法正常生活</td>
+						</tr>
+						<tr class="info">
+						  <th>3.當你成功達成自己的目標時，你的生活會發生何種變化？</th>
+						</tr>
+						<tr>
+						  <td>健康</td>
+						</tr>
+						<tr class="info">
+						  <th>4.對你而言，最大的益處是什麼？</th>
+						</tr>
+						<tr>
+						  <td>健康</td>
+						</tr>
+						<tr class="info">
+						  <th>5.立刻做出這些變化對你而言有多重要？請在1-10內打分數</th>
+						</tr>
+						<tr>
+						  <td>5分</td>
+						</tr>
+						<tr class="info">
+						  <th>6.根據第五題之分數，為什麼不是2分或3分？</th>
+						</tr>
+						<tr>
+						  <td>如果只有２分只需要自己平常去公園走走即可</td>
+						</tr>
+						<tr class="info">
+						  <th>7.根據第五題之分數，你如何得更高的分數？</th>
+						</tr>
+						<tr>
+						  <td>養成良好的運動習慣</td>
+						</tr>
+						<tr class="info">
+						  <th>8.根據第五題之分數，你是否相信你可以做出這些改變？(請在1-10分內為你的信心打分)</th>
+						</tr>
+						<tr>
+						  <td>5分</td>
+						</tr>
+						<tr class="info">
+						  <th>9.根據第五題之分數，如何讓你得信心提高1分？</th>
+						</tr>
+						<tr>
+						  <td>有人在旁邊加油打氣與督促</td>
+						</tr>
+						<tr class="info">
+						  <th>10.根據第五題之分數，你是否準備好？並願意在此時做出改變!</th>
+						</tr>
+						<tr>
+						  <td>是</td>
+						</tr>
+						<tr class="info">
+						  <th>11.根據第五題之分數，你認為我能以何種方式為你提供幫助？</th>
+						</tr>
+						<tr>
+						  <td>督促</td>
+						</tr>
+						<tr class="warning">
+						  <td>
+							<span class="fa fa-commenting"> 請在下面寫出會員所使用的關鍵情緒詞語：督促與打氣</span>
+						  </td>
+						</tr>
+					 </table>
+                </div>
+			</div>
             <!-- End Post -->
-			
-			
+              <div class="hr1" style="margin:5px 0px;"></div>
+			  <a href="member-manager.htm" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
+
         </div>
 
       </div>
@@ -266,7 +470,7 @@
     </div>
     <!-- End Footer -->
 
-  
+
   <!-- End Container -->
 
   <!-- Go To Top Link -->

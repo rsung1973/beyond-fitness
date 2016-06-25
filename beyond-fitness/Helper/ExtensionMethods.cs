@@ -71,7 +71,7 @@ namespace WebHome.Helper
                     MailMessage message = new MailMessage();
                     message.ReplyToList.Add(Settings.Default.WebMaster);
                     message.From = new MailAddress(Settings.Default.WebMaster);
-                    message.To.Add(item.UserProfile.EMail);
+                    message.To.Add(item.UserProfile.PID);
                     message.Subject = "Beyond-fitness會員密碼重設通知";
                     message.IsBodyHtml = true;
 
