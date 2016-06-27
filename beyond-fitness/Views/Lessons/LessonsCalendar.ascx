@@ -36,6 +36,7 @@
 
                 $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
                 plotData(calEvent.start.format('YYYY-MM-DD'));
+                $('#attendeeList').empty();
                 //alert('Event: ' + calEvent.title);
                 //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
                 //alert('View: ' + view.name);

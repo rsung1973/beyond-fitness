@@ -25,10 +25,10 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-8">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-link">設定團體上課學員</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-link"> 設定團體學員</span></h4>
                     <!-- Stat Search -->
                     <!-- Start Post -->
                     <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
@@ -55,9 +55,9 @@
                             </td>
                             <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>"><%= item.Lessons %></td>
                             <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>">
-                                <%  if (item.GroupingLesson.LessonTime.Count() == 0)
+                                <%  if (item.GroupingLesson == null || item.GroupingLesson.LessonTime.Count() == 0)
                                     {   %>
-                                <a onclick="addGroupingUser(<%= item.RegisterID %>);" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a>
+                                <a onclick="addGroupingUser(<%= item.RegisterID %>);" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">設定<i class="fa fa-users" aria-hidden="true"></i></a>
                                 <%  } %>
                             </td>
                         </tr>
@@ -67,7 +67,7 @@
                             <td class="text-center"><%= g.UserProfile.RealName %> 
                                 <%  if (g.GroupingLesson.LessonTime.Count() == 0)
                                     { %>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>"><i class="fa fa-user-times" aria-hidden="true"></i></a>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>" class="btn btn-system btn-small">刪除<i class="fa fa-user-times" aria-hidden="true"></i></a>
                                 <%  } %>
                             </td>
                         </tr>

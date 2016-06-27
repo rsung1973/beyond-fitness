@@ -30,7 +30,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>註冊 - Step 2</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-envelope-o"> 註冊 - Step 2</span></h4>
 
                     <!-- Start Contact Form -->
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
@@ -40,11 +40,11 @@
                     <div class="hr5" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
                     <div class="form-group has-feedback">
-                        <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState); %>
+                        <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState); %>
                     </div>
 
                     <div class="form-group has-feedback">
-                        <% Html.RenderInput("暱稱：", "userName", "userName", "暱稱", _modelState); %>
+                        <% Html.RenderInput("暱稱：", "userName", "userName", "請輸入暱稱", _modelState); %>
                     </div>
 
                     <div class="form-group has-feedback">

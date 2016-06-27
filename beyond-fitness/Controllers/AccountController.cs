@@ -603,6 +603,81 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        [HttpGet]
+        public ActionResult EditMySelf()
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            RegisterViewModel model = new RegisterViewModel
+            {
+                EMail = item.PID.Contains("@") ? item.PID : null,
+                MemberCode = item.MemberCode,
+                PictureID = item.PictureID,
+                UserName = item.UserName
+            };
+
+            return View(model);
+        }
+
+
+        public ActionResult EditMySelf(RegisterViewModel viewModel)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("EditMySelf");
+            }
+
+            int uid = item.UID;
+            item = models.EntityList.Where(u => u.UID == uid).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+            viewModel.PictureID = item.PictureID;
+            viewModel.EMail = viewModel.EMail.GetEfficientString();
+            if (viewModel.EMail == null)
+            {
+                this.ModelState.AddModelError("email", "請輸入Email");
+                ViewBag.ModelState = ModelState;
+                return View(viewModel);
+            }
+
+            viewModel.EMail = viewModel.EMail.GetEfficientString();
+            if (viewModel.EMail != null)
+            {
+                if (item.PID != viewModel.EMail && models.EntityList.Any(u => u.PID == viewModel.EMail))
+                {
+                    ViewBag.Message = "您的Email已經是註冊使用者!!請重新設定Email!!";
+                    return View(viewModel);
+                }
+                item.PID = viewModel.EMail;
+            }
+
+            item.UserName = viewModel.UserName.GetEfficientString();
+
+            if (!createPassword(viewModel))
+                return View(viewModel);
+
+            models.SubmitChanges();
+
+            this.HttpContext.SignOn(item);
+
+            return View("CompleteEditMySelf", item);
+        }
+
+
 
     }
 }

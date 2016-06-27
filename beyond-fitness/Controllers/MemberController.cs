@@ -14,6 +14,7 @@ using Utility;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using System.Web.Security;
 
 namespace WebHome.Controllers
 {
@@ -52,7 +53,7 @@ namespace WebHome.Controllers
 
 
         [HttpGet]
-        public ActionResult AddLeaner()
+        public ActionResult AddLearner()
         {
             
             
@@ -62,7 +63,7 @@ namespace WebHome.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddLeaner(LearnerViewModel viewModel)
+        public ActionResult AddLearner(LearnerViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -102,7 +103,7 @@ namespace WebHome.Controllers
             models.EntityList.InsertOnSubmit(item);
             models.SubmitChanges();
 
-            return View("VipPDQ_1", item);
+            return View("LearnerCreated", item);
         }
 
         private String createMemberCode()
@@ -272,7 +273,7 @@ namespace WebHome.Controllers
                 Phone = item.Phone,
                 RealName = item.RealName,
                 MemberCode = item.MemberCode,
-                Email = item.PID
+                Email = item.PID.Contains("@") ? item.PID : null
             };
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, item.UID);
@@ -334,8 +335,8 @@ namespace WebHome.Controllers
 
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
-            item.UserRole[0].RoleID = viewModel.CoachRole;
             models.SubmitChanges();
+            models.ExecuteCommand("update UserRole set RoleID = {0} where UID = {1}", viewModel.CoachRole, item.UID);
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
 

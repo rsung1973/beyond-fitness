@@ -26,7 +26,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>註冊 - Step 2</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-facebook-square"> 註冊 - Step 2</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
@@ -43,7 +43,7 @@
                                 <p><strong>會員編號：</strong><%= _item.MemberCode %></p>
 
                                 <div class="form-group has-feedback">
-                                    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState, defaultValue: _item.PID); %>
+                                    <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState, defaultValue: _item.PID); %>
                                 </div>
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>

@@ -13,7 +13,7 @@
 </div>
 
 <div class="form-group has-feedback">
-    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState, defaultValue: _model.Email); %>
+    <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState, defaultValue: _model.Email); %>
 </div>
 
 <div class="form-group has-feedback">

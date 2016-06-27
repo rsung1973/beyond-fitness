@@ -404,6 +404,7 @@
     <Content Include="flot\background.png" />
     <Content Include="flot\custom.css" />
     <Content Include="flot\jquery.colorhelpers.js" />
+    <Content Include="flot\jquery.flot.axislabels.js" />
     <Content Include="flot\jquery.flot.canvas.js" />
     <Content Include="flot\jquery.flot.categories.js" />
     <Content Include="flot\jquery.flot.crosshair.js" />
@@ -412,6 +413,7 @@
     <Content Include="flot\jquery.flot.image.js" />
     <Content Include="flot\jquery.flot.js" />
     <Content Include="flot\jquery.flot.navigate.js" />
+    <Content Include="flot\jquery.flot.orderBars.js" />
     <Content Include="flot\jquery.flot.pie.js" />
     <Content Include="flot\jquery.flot.resize.js" />
     <Content Include="flot\jquery.flot.selection.js" />
@@ -640,6 +642,7 @@
     <Content Include="register.htm" />
     <Content Include="view-coach.htm" />
     <Content Include="view-vip.htm" />
+    <Content Include="Views\Account\CompleteEditMySelf.aspx" />
     <Content Include="Views\Account\CompleteResetPass.aspx" />
     <Content Include="Views\Account\Index.aspx" />
     <Content Include="Views\Account\Logout.aspx" />
@@ -647,6 +650,7 @@
     <Content Include="Views\Account\LoginTest.aspx" />
     <Content Include="Views\Account\Register.aspx" />
     <Content Include="Views\Account\LoginByMail.aspx" />
+    <Content Include="Views\Account\RegisterItem.ascx" />
     <Content Include="Views\Account\ResetPass.aspx" />
     <Content Include="Views\Account\RegisterByMail.aspx" />
     <Content Include="Views\Account\RegisterByFB.aspx" />
@@ -659,17 +663,20 @@
     <Content Include="Views\Lessons\CoachSelector.ascx" />
     <Content Include="Views\Lessons\Attendee.ascx" />
     <Content Include="Views\Lessons\AttendeeSelector.ascx" />
+    <Content Include="Views\Lessons\DailyBookingMembers.ascx" />
     <Content Include="Views\Lessons\DailyStackView.ascx" />
     <Content Include="Views\Lessons\DailyBookingList.ascx" />
     <Content Include="Views\Lessons\LessonsCalendar.ascx" />
+    <Content Include="Views\Account\EditMySelf.aspx" />
+    <Content Include="Views\Member\LearnerCreated.aspx" />
     <Content Include="Views\Member\EditLearnerItem.ascx" />
     <Content Include="Views\Member\GroupLessonUsersSelector.ascx" />
     <Content Include="Views\Member\LessonsItem.ascx" />
     <Content Include="Views\Member\LessonsList.ascx" />
     <Content Include="Views\Member\GroupLessons.aspx" />
     <Content Include="Views\Member\GroupLessonUsers.ascx" />
-    <Content Include="Views\Member\SimpleMemberInfo.ascx" />
     <Content Include="Views\Member\ShowLearner.aspx" />
+    <Content Include="Views\Member\SimpleMemberInfo.ascx" />
     <Content Include="Views\Member\ShowMember.aspx" />
     <Content Include="Views\Member\MemberInfo.ascx" />
     <Content Include="Views\Member\LessonsUpdated.aspx" />
@@ -707,7 +714,7 @@
     <Content Include="Views\Member\ListAll.aspx" />
     <Content Include="Views\Member\ListLearners.ascx" />
     <Content Include="Views\Member\ListCoaches.ascx" />
-    <Content Include="Views\Member\AddLeaner.aspx" />
+    <Content Include="Views\Member\AddLearner.aspx" />
     <Content Include="Views\Member\AddCoach.aspx" />
     <Content Include="Views\Member\CoachItem.ascx" />
     <Content Include="Views\Member\VipPDQ_1.aspx" />
@@ -736,6 +743,7 @@
     <Content Include="wait.htm" />
     <Content Include="Web.config" />
     <Content Include="_test\Test01.aspx" />
+    <Content Include="_test\TestBarChart.html" />
     <Content Include="_test\TestFB.htm" />
     <Content Include="_test\TestFB01.htm" />
   </ItemGroup>

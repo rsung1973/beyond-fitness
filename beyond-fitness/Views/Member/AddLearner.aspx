@@ -1,5 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
-
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -8,7 +7,9 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
+
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -21,16 +22,33 @@
         <div class="container">
 
             <div class="row">
+
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
-                    <!-- Start Post -->
-                    <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
-                    <!-- End Post -->
-                    <div class="hr1" style="margin-bottom: 10px;"></div>
-                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
+                    <h4 class="classic-title"><span class="fa fa-user-plus"> 新增學員 - Step 1</span></h4>
+
+                    <!-- Start Contact Form -->
+
+                    <% Html.RenderPartial("~/Views/Member/LearnerItem.ascx",_model); %>
+
+                    <div class="tabs-section">
+
+                            <div class="hr1" style="margin: 5px 0px;"></div>
+
+                            <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
+
+                            <div class="hr1" style="margin: 5px 0px;"></div>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
+                            <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
+
+                            <!-- End Contact Form -->
+
+                        </div>
+                    
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -40,21 +58,29 @@
         $('#vip,#m_vip').addClass('active');
         $('#theForm').addClass('contact-form');
 
+        $('#nextStep').on('click', function (evt) {
+
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>')
+              .submit();
+
+        });
+
     </script>
+
 </asp:Content>
 <script runat="server">
 
-    ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
-    UserProfile _model;
+    LearnerViewModel _model;
+    ModelSource<UserProfile> models;
+
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (UserProfile)this.Model;
+        _model = (LearnerViewModel)this.Model;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     }
-
 
 </script>

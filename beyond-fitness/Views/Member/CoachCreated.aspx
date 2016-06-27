@@ -26,7 +26,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>教練新增完成</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-user-plus"> 教練新增完成</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
@@ -41,11 +41,11 @@
 
                                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
-                                    <p><strong>教練編號：</strong><%= _model.MemberCode %></p>
+                                    <p><strong>員工編號：</strong><%= _model.MemberCode %></p>
 
                                     <!-- Divider -->
                                     <div class="hr1" style="margin-bottom: 10px;"></div>
-                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>" class="btn-system btn-small">繼續新增教練 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>" class="btn-system btn-small">繼續新增教練 <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
                                 </div>
                             </div>
                         </div>

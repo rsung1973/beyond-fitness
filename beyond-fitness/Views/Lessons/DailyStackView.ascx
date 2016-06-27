@@ -18,52 +18,70 @@
 
 <script>
 
+    var $p;
+
     function plotData(lessonDate) {
         $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingSummary") %>', { 'lessonDate': lessonDate }, function (data) {
-            $.plot("#placeholder", [data], {
+            $p = $.plot("#placeholder", [data], {
                 series: {
                     bars: {
                         show: true,
                         barWidth: 0.6,
-                        align: "center"
+                        align: "center",
+                        fillColor: {
+                            colors: ["#f8ba01", "#f36510"]
+                        }
+                    },
+                    color: "#f8ba01"
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: false,
+                    borderColor: '#666',
+                    labelMargin: 8,
+                    backgroundColor: { colors: ["#eee", "#ddd"] },
+                    borderWidth: {
+                        top: 1,
+                        right: 1,
+                        bottom: 2,
+                        left: 2
                     }
                 },
                 xaxis: {
-                    mode: "categories",
-                    tickLength: 0
+                    //mode: "categories",
+                    tickLength: 0,
+                    ticks: [[8, '8:00'], [9, '9:00'], [10, '10:00'], [11, '11:00'], [12, '12:00'], [13, '13:00'], [14, '14:00'], [15, '15:00'], [16, '16:00'], [17, '17:00'], [18, '18:00'], [19, '19:00'], [20, '20:00'], [21, '21:00'], [22, '22:00']]
                 },
                 yaxis: {
-                    minTickSize: 1,
+                    minTickSize: 5,
                     tickDecimals: 0,
-                    min: 0
+                    min: 0,
+                    tickFormatter: function (val, axis) {
+                        return val + "人";
+                    }
                 }
             });
+
+            $.each($p.getData()[0].data, function(i, el){
+                var o = $p.pointOffset({x: el[0], y: el[1]});
+                if(el[1]>0) {
+                    console.log(o);
+                    $('<div class="data-point-label">' + el[1] + '人</div>').css( {
+                        position: 'absolute',
+                        left: o.left - 15,
+                        top: o.top - 20,
+                        display: 'none'
+                    }).appendTo($p.getPlaceholder()).fadeIn('slow');
+                }
+            });
+
+
         });
     }
 
     $(function () {
 
-        var data = <% Html.RenderAction("DailyBookingSummary", "Lessons", new { lessonDate = _lessonDate }); %>;
-
-        $.plot("#placeholder", [data], {
-            series: {
-                bars: {
-                    show: true,
-                    barWidth: 0.6,
-                    align: "center"
-                }
-            },
-            xaxis: {
-                mode: "categories",
-                tickLength: 0
-            },
-            yaxis: {
-                minTickSize: 1,
-                tickDecimals: 0,
-                min: 0
-            }
-        });
-
+        plotData('<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>');
         // Add the Flot version string to the footer
 
         $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");

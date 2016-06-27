@@ -142,7 +142,10 @@
                         <div class="hr1" style="margin-bottom: 10px;"></div>
 
                         <!-- Some Text -->
-                        <p>BEYOND FITNESS秉持著科學化訓練的原則，有系統、有計畫、有科學實證根據地進行專業訓練。並結合本公司專業體能團隊的訓練實務經驗，以藝術般的手法設計課程活動，提供給客戶最優的訓練品質與體能顧問水準。</p>
+                        <blockquote style="background-color: #EEE;">
+                            <q>BEYOND FITNESS 秉持著科學化訓練的原則，有系統、有計畫、有科學實證根據地進行專業訓練。並結合本公司專業體能團隊的訓練實務經驗，以藝術般的手法設計課程活動，提供給客戶最優的訓練品質與體能顧問水準。</q>
+                        </blockquote>
+                        <!-- Divider -->
 
                         <!-- Divider -->
                         <div class="hr1" style="margin-bottom: 10px;"></div>

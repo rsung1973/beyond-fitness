@@ -24,7 +24,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>新增教練</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-user-plus"> 新增教練</span></h4>
 
                     <!-- Start Contact Form -->
 
@@ -37,8 +37,8 @@
                         <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
 
                         <div class="hr1" style="margin: 5px 0px;"></div>
-                        <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">回上頁 <i class="fa fa-reply" aria-hidden="true"></i></a>
-                        <a  id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
+                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
+                        <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
                         <!-- End Contact Form -->
 
                     </div>

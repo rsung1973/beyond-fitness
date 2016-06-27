@@ -72,7 +72,9 @@
   <script type="text/javascript" src="js/jquery.parallax.js"></script>
   <script type="text/javascript" src="js/jquery.slicknav.js"></script>
   <script type="text/javascript" src="flot/jquery.flot.js"></script>
-  <script type="text/javascript" src="flot/jquery.flot.categories.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.time.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.orderBars.js"></script>
+  <script type="text/javascript" src="flot/jquery.flot.axislabels.js"></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/lib/moment.min.js'></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/fullcalendar.min.js'></script>
   <script type="text/javascript" src='fullcalendar-2.8.0/lang-all.js'></script>
@@ -261,10 +263,9 @@
               </div>                      
               
             <!-- End Contact Form -->
-             <div class="stack-container">
-              <div id="placeholder" class="stack-placeholder"></div>
-            </div> 
-
+			<div class="stack-container">
+				<div id="placeholder-bar-chart" class="stack-placeholder"></div>
+			</div>
           </div>
 
       </div>
@@ -372,26 +373,160 @@
   })
 
   $(function() {
+	var d1_1 = [
+	    [1325376000000, 10],
+	    [1328054400000, 20],
+	    [1330560000000, 30],
+	    [1333238400000, 40],
+	    [1335830400000, 35]
+	];
 
-        var data = [ ["8:00", 10], ["9:00", 8], ["10:00", 4], ["11:00", 13], ["12:00", 17], ["13:00", 9] , ["14:00", 29], ["15:00", 10], ["16:00", 21], ["17:00", 8], ["18:00", 30], ["19:00", 15], ["20:00", 23], ["21:00", 9], ["22:00", 2]];
+	var d1_2 = [
+	    [1325376000000, 80],
+	    [1328054400000, 60],
+	    [1330560000000, 20],
+	    [1333238400000, 90],
+	    [1335830400000, 30]
+	];
 
-    $.plot("#placeholder", [ data ], {
-      series: {
-        bars: {
-          show: true,
-          barWidth: 0.6,
-          align: "center"
-        }
-      },
-      xaxis: {
-        mode: "categories",
-        tickLength: 0
-      }
-    });
+	var data1 = [
+	    {
+	        //label: "Product 1",
+	        data: d1_1,
+	        bars: {
+	            show: true,
+	            barWidth: 12*44*60*60*300,
+	            fill: true,
+	            lineWidth:0,
+	            order: 1,
+	            fillColor:  {
+	            	colors: ["#f8ba01", "#f36510"] 
+	            }
+	        },
+	        color: "#f8ba01"
+	    },
+	    {
+	        //label: "Product 2",
+	        data: d1_2,
+	        bars: {
+	            show: true,
+	            barWidth: 12*44*60*60*300,
+	            fill: true,
+	            lineWidth: 0,
+	            order: 2,
+	            fillColor:  {
+	            	colors: ["#94c523", "#0bb586"] 
+	        	}
+	        },
+	        color: "#94c523"
+	    },
 
-    // Add the Flot version string to the footer
+	];
+	var p = $.plot($("#placeholder-bar-chart"), data1, {
+	    xaxis: {
+	    	font: {
+			    size: 14,
+			    lineHeight: 13,
+			    weight: "bold",
+			    family: "Verdana, Arial, Helvetica, Tahoma, sans-serif",
+			    color: "#000"	    		
+	    	},
+	        min: (new Date(2011, 11, 15)).getTime(),
+	        max: (new Date(2012, 04, 18)).getTime(),
+	        mode: "time",
+	        timeformat: "%b",
+	        tickSize: [1, "month"],
+	        //monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+	        tickLength: 0, // hide gridlines
+	        //axisLabel: 'Month',
+	        //axisLabelUseCanvas: true,
+	        //axisLabelFontSizePixels: 20,
+	        //axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+	        //axisLabelPadding: 5,
+	        ticks:[[1325376000000,'Takaoma'],[1328054400000,'Giacompany'],[1330560000000,'FreshFields'],[1333238400000,'Generalisimo'],[1335830400000, 'Greenleaves']]
+	    },
+	    yaxis: {
+	    	font: {
+			    size: 14,
+			    lineHeight: 13,
+			    weight: "bold",
+			    family: "Verdana, Arial, Helvetica, Tahoma, sans-serif",
+			    color: "#000"	    		
+	    	},	    	
+	        //axisLabel: '人',
+	        //axisLabelUseCanvas: true,
+	        //axisLabelFontSizePixels: 12,
+	        //axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+	        //axisLabelPadding: 5,
+	        tickSize: 5,
+	        tickFormatter: function (val, axis) {
+	                return val + "人";
+	            },
 
-    $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	    },
+	    grid: {
+	        hoverable: true,
+	        clickable: false,
+	        borderColor:'#666',
+	        labelMargin:8,
+	        backgroundColor: { colors: [ "#eee", "#ddd" ] },
+	        borderWidth: {
+	          top: 1,
+	          right: 1,
+	          bottom: 2,
+	          left: 2
+	        }	        
+	    },
+	    series: {
+	        shadowSize: 1,
+
+	    },
+
+	    /*legend: {
+	        show: true,
+	        noColumns: 2,
+	        container: "#bar-legend"
+	    },*/
+	    tooltip:true,
+	    tooltipOpts: {
+	        id:"chart-tooltip",
+	        content: "<p><b>20</b> Outgoing Filings</p>" +
+	             "<p>Out of <b>10</b> committed;</p>" +
+	             "<br />" +
+	             "<p><b>30%</b>% Ratio</p>",
+	        shifts: {
+	            x:-74,
+	            y:-125
+	        },
+	        lines:{
+	        track: true
+	        },
+	        compat: true,
+	    },
+	 });
+
+	$.each(p.getData()[0].data, function(i, el){
+	  var o = p.pointOffset({x: el[0], y: el[1]});
+	  $('<div class="data-point-label">' + el[1] + '人</div>').css( {
+	    position: 'absolute',
+	    left: o.left - 25,
+	    top: o.top - 20,
+	    display: 'none'
+	  }).appendTo(p.getPlaceholder()).fadeIn('slow');
+	});
+
+	$.each(p.getData()[1].data, function(i, el){
+	  var o = p.pointOffset({x: el[0], y: el[1]});
+	  $('<div class="data-point-label">' + el[1] + '人</div>').css( {
+	    position: 'absolute',
+	    left: o.left + 4,
+	    top: o.top - 20,
+	    display: 'none'
+	  }).appendTo(p.getPlaceholder()).fadeIn('slow');
+
+	});
+
+
   });  
 
   $(document).ready(function() {

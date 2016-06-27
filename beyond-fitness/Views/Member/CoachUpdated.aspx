@@ -26,7 +26,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>教練資料更新完成</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-edit"> 修改教練資料完成</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
@@ -40,12 +40,13 @@
                                     <h2 class="text-primary"><%= _model.RealName %> </h2>
 
                                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                    <p><strong>教練編號：</strong><%= _model.MemberCode %></p>
+                                    <p><strong>姓名：</strong><%= _model.RealName %></p>
+                                    <p><strong>員工編號：</strong><%= _model.MemberCode %></p>
+                                    <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
 
                                     <!-- Divider -->
                                     <div class="hr1" style="margin-bottom: 10px;"></div>
-                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-small">繼續修改教練 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a></p>
                                 </div>
                             </div>
                         </div>

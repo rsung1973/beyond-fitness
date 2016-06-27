@@ -26,7 +26,7 @@
         <label id="lockPattern-error" class="error" for="lockPattern" style="display: none;"></label>
         <div class="tab-pane fade" id="tab-2">
             <div class="form-group has-feedback">
-                <% Html.RenderPassword("密碼：", "password", "password", "密碼", _modelState); %>
+                <% Html.RenderPassword("密碼：", "password", "password", "請輸入密碼", _modelState); %>
             </div>
             <div class="form-group has-feedback">
                 <% Html.RenderPassword("請再輸入一次密碼：", "password2", "password2", "再輸入一次密碼", _modelState); %>

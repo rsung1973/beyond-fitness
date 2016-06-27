@@ -26,7 +26,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>註冊 - Step 1</span></h4>
+                    <h4 class="classic-title"><span class="glyphicon glyphicon-user">註冊 - Step 1</span></h4>
 
                     <!-- Start Contact Form -->
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
@@ -44,7 +44,7 @@
                         <div class="tabs-section">
 
                             <div class="hr1" style="margin: 5px 0px;"></div>
-                            <button type="button" id="btnMail" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 登入</button>
+                            <button type="button" id="btnMail" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 註冊</button>
 
                         </div>
                     <!-- End Contact Form -->

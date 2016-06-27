@@ -33,14 +33,14 @@
                     <!-- Stat Search -->
                     <div class="navbar bg_gray" style="min-height: 30px;">
                         <div class="search-side">
-                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>">新增教練 <span class="glyphicon glyphicon-plus"></span></a>
-                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLeaner") %>">新增學員 <span class="glyphicon glyphicon-plus"></span></a>
+                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>">新增教練 <span class="fa fa-user-plus"></span></a>
+                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>">新增學員 <span class="fa fa-user-plus"></span></a>
                             <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="active"><a id="toggleTab-1" href="#tab-1" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>教練清單</a></li>
-                        <li><a id="toggleTab-2" href="#tab-2" data-toggle="tab"><i class="glyphicon glyphicon-list" aria-hidden="true"></i>學員清單</a></li>
+                        <li class="active"><a id="toggleTab-1" href="#tab-1" data-toggle="tab"><i class="fa fa-th-list"></i>教練清單</a></li>
+                        <li><a id="toggleTab-2" href="#tab-2" data-toggle="tab"><i class="fa fa-th-list" aria-hidden="true"></i>學員清單</a></li>
                     </ul>
                     <!-- Tab panels -->
                     <div class="tab-content">

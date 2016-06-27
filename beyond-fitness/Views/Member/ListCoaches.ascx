@@ -14,8 +14,8 @@
     { %>
 <table class="table">
     <tr class="info">
-        <th>姓名</th>
-        <th>教練編號</th>
+        <th width="10%">姓名</th>
+        <th width="10%">員工編號</th>
         <th>功能</th>
     </tr>
     <% foreach (var item in _items)
@@ -24,14 +24,14 @@
         <td><%= item.RealName %></td>
         <td><%= item.MemberCode %></td>
         <td>
-            <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach/") + item.UID %>">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach/") + item.UID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
             <% if (item.LevelID == (int)Naming.MemberStatusDefinition.Deleted)
                 { %>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EnableUser/") + item.UID %>">啟用 <i class="fa fa-plus-square" aria-hidden="true"></i></a>
             <%  }
                 else
                 { %>
-            <a  class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="教練資料">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+            <a  class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="教練資料">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
             <%  } %>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowMember/") + item.UID %>">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
         </td>

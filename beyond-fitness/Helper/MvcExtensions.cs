@@ -48,11 +48,17 @@ namespace WebHome.Helper
 
         public static void RenderUserPicture(this UserProfile profile, HtmlTextWriter writer, String tagId)
         {
+            profile.PictureID.RenderUserPicture(writer, tagId);
+        }
+
+        public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, String tagId)
+        {
             writer.WriteLine(
                 String.Concat("<img width=\"100\" id=\"", tagId,
-                "\" alt=\"\" src=\"", 
-                profile.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + profile.PictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg"),
+                "\" alt=\"\" src=\"",
+                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg"),
                 "\" />"));
         }
+
     }
 }

@@ -28,7 +28,7 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>登記上課時間</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-calendar-plus-o"> 登記上課時間</span></h4>
 
                     <!-- Start Contact Form -->
 
@@ -38,9 +38,11 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="classno">學員：</label>
-                            <a onclick="addUser();" data-toggle="modal" data-target="#addUserItem" data-whatever="請選擇"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a>
-                            <div id="attendee"></div>
+                            <label class="control-label" for="classno">
+                                <div id="attendee"></div>
+                            </label>
                             <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
+                            <a onclick="addUser();" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
                         </div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="classno">日期：</label>
@@ -73,8 +75,8 @@
                         </div>
                     </div>
 
-                    <a id="nextStep" class="btn-system btn-medium"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確認</a>
-                    <a class="btn-system btn-medium border-btn" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>取消</a>
+                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+                    <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
 
                     <!-- End Contact Form -->
 

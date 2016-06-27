@@ -26,7 +26,7 @@
         <td><%= item.Key %>:00 - <%= item.Key + 1 %>:00</td>
         <td><%= item.Count() %></td>
         <td>
-            <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+            <a class="btn-system btn-small" onclick="showAttendee('<%= String.Format("{0:yyyy/MM/dd}",_lessonDate) %>',<%= item.Key %>);" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
         </td>
     </tr>
     <%      } %>
@@ -38,6 +38,13 @@
     </tr>
     <%  } %>
 </table>
+<script>
+    function showAttendee(lessonDate, hour) {
+        $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': lessonDate, 'hour': hour }, function () {
+
+        });
+    }
+</script>
 
 <script runat="server">
 

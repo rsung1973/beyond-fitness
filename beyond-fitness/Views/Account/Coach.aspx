@@ -26,17 +26,7 @@
                 <div class="col-md-4">
 
                     <!-- Classic Heading -->
-                    <div class="blog-post">
-                        <!-- Classic Content -->
-                        <div class="user-info clearfix">
-                            <div class="user-image">
-                                <% _model.RenderUserPicture(this.Writer, "userImg"); %>
-                            </div>
-                            <div class="user-bio" style="padding-top: 20px;">
-                                <h4 class="classic-title"><span>Hi <%= _model.RealName %></span></h4>
-                            </div>
-                        </div>
-                    </div>
+                    <% Html.RenderPartial("~/Views/Member/SimpleMemberInfo.ascx", _model); %>
                     <!-- End Classic -->
 
                     <!-- Start Contact Form -->
@@ -44,7 +34,7 @@
                     <div class="widget widget-categories">
                         <ul>
                             <li>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach/")+_model.UID %>"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
                             </li>
                         </ul>
                     </div>
@@ -61,7 +51,7 @@
                 <div class="col-md-8">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-calendar">行事曆清單</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-calendar"> 行事曆清單</span></h4>
 
                     <!-- Start Contact Form -->
                     <!-- Stat Search -->
@@ -83,7 +73,9 @@
                     <!-- End Contact Form -->
                     <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
 
-                </div>
+                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
+                    <div id="attendeeList" class="panel panel-default">
+                    </div>
 
             </div>
         </div>

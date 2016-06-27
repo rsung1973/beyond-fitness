@@ -61,6 +61,11 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "暱稱")]
         public string UserName { get; set; }
 
+        [Display(Name = "會員編號")]
+        public string MemberCode { get; set; }
+
+        public int? PictureID { get; set; }
+
     }
 
     public class PasswordViewModel

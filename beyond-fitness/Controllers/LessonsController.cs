@@ -215,9 +215,16 @@ namespace WebHome.Controllers
                 index[item.Key] = item.Count();
             }
 
-            return Json(index.Select(i => new object[] { i.Key + ":" + "00", i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
+            return Json(index.Select(i => new object[] { i.Key , i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DailyBookingMembers(DateTime lessonDate,int hour)
+        {
+            var items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate
+                    && t.Hour == hour)
+                .GroupBy(l => l.LessonID).Select(g => g.First());
+            return View(items);
+        }
 
     }
 }

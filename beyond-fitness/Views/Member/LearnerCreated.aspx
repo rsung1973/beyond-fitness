@@ -26,26 +26,27 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-edit"> 修改學員資料完成</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-user-plus"> 學員新增完成</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
                         <!-- Post Content -->
                         <div class="user-info clearfix">
-                            <div class="user-image">
-                                <% _model.RenderUserPicture(this.Writer, "userImg"); %>
-                            </div>
-                            <div class="user-bio">
+                            <div class="author-image">
+                                <div class="user-image">
+                                    <% _model.RenderUserPicture(this.Writer, "userImg"); %>
+                                </div>
+                                <div class="user-bio">
+                                    <h2 class="text-primary"><%= _model.RealName %> </h2>
 
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
+                                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
-                                <p><strong>姓名：</strong><%= _model.RealName %></p>
-                                <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
+                                    <p><strong>學員編號：</strong><%= _model.MemberCode %></p>
 
-                                <!-- Divider -->
-                                <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a></p>
+                                    <!-- Divider -->
+                                    <div class="hr1" style="margin-bottom: 10px;"></div>
+                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>" class="btn-system btn-small">繼續新增學員 <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
+                                </div>
                             </div>
                         </div>
                     </div>

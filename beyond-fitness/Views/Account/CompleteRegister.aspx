@@ -25,13 +25,13 @@
                 <div class="col-md-5">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>註冊 - Step 3</span></h4>
+                    <h4 class="classic-title"><span class="<%= _item.ExternalID==null ? "fa fa-envelope-o" : "fa fa-facebook-square" %>">註冊 - Step 3</span></h4>
 
                     <!-- Start Post -->
                     <div class="blog-post quote-post">
                         <!-- Post Content -->
                         <div class="user-info clearfix">
-                            <div class="author-image">
+                            <div class="user-image">
                                 <img alt="" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" />
                             </div>
                             <div class="user-bio">
@@ -47,7 +47,7 @@
                                 <p>您的註冊已經完成。歡迎加入BEYOND FITNESS。</p>
                                 <!-- Divider -->
                                 <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Vip") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                             </div>
                         </div>
                     </div>
