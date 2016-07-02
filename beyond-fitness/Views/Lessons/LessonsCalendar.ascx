@@ -32,8 +32,10 @@
             editable: false,
             eventLimit: false, // allow "more" link when too many events
             events: '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingEvents") %>',
+            aspectRatio: 1,
             eventClick: function (calEvent, jsEvent, view) {
 
+                pageParam.lessonDate = calEvent.start.format('YYYY-MM-DD');
                 $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
                 plotData(calEvent.start.format('YYYY-MM-DD'));
                 $('#attendeeList').empty();

@@ -587,10 +587,11 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult Test()
+        public ActionResult Test(String alertMsg)
         {
             ModelState.AddModelError("realName", "test error...");
             ViewBag.ModelState = this.ModelState;
+            ViewBag.Message = alertMsg ?? "Test Alert Message...";
             return View();
         }
 

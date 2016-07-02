@@ -25,6 +25,8 @@
                    Name = "realName"
                }); %>
 
+    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
     <script>
     $('#vip,#m_vip').addClass('active');
     </script>

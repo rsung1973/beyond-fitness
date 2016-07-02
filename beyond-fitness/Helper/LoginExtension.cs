@@ -37,6 +37,12 @@ namespace WebHome.Helper
             context.SetCacheValue(keyName.ToString(), value);
         }
 
+        public static void RemoveCache(this HttpContextBase context, CachingKey keyName)
+        {
+            context.SetCacheValue(keyName.ToString(), null);
+        }
+
+
         public static Object GetCacheValue(this HttpContextBase context, CachingKey keyName)
         {
             return context.GetCacheValue(keyName.ToString());

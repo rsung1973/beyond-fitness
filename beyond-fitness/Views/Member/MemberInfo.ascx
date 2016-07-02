@@ -22,9 +22,12 @@
 
                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
-                <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
-                <p><strong>電話：</strong><%= _model.Phone %></p>
-                <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
+                <%  if (ViewBag.Argument == null)
+                    { %>
+                        <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
+                        <p><strong>電話：</strong><%= _model.Phone %></p>
+                        <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
+                <%  } %>
 
                 <%  if (ViewBag.ShowPerson == true)
                     {   %>
@@ -49,8 +52,12 @@
                         <p>您的修改已經完成。</p>
                         <!-- Divider -->
                         <div class="hr1" style="margin-bottom: 10px;"></div>
-                        <p><a href="<%= VirtualPathUtility.ToAbsolute(_model.CurrentUserRole.RoleID==(int)Naming.RoleID.Learner ? "~/Account/Vip" : "~/Account/Coach") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
-                <%  } %>
+                        <p><a href="<%= VirtualPathUtility.ToAbsolute(_model.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner ? "~/Account/Vip" : "~/Account/Coach") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                <%  }
+                    else if (ViewBag.Argument is ArgumentModel)
+                    {
+                        Html.RenderPartial(((ArgumentModel)ViewBag.Argument).PartialViewName, ((ArgumentModel)ViewBag.Argument).Model);
+                    } %>
             </div>
         </div>
     </div>

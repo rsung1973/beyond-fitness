@@ -188,4 +188,73 @@ namespace WebHome.Models.ViewModel
         public int Duration { get; set; }
 
     }
+
+    public class LessonTimeExpansionViewModel
+    {
+        public DateTime? ClassDate { get; set; }
+        public int Hour { get; set; }
+        public int RegisterID { get; set; }
+        public int LessonID { get; set; }
+    }
+
+    public class TrainingExecutionViewModel
+    {
+
+        [Display(Name = "組數")]
+        public int? Repeats { get; set; }
+
+        [Display(Name = "休息秒數")]
+        public int? BreakInterval { get; set; }
+
+        [Display(Name = "肌力訓練")]
+        public int?[] TrainingID { get; set; }
+
+        public String[] Description { get; set; }
+
+        [Display(Name = "目標次數")]
+        public int?[] GoalTurns { get; set; }
+
+        [Display(Name = "目標強度")]
+        public String[] GoalStrength { get; set; }
+    }
+
+    public class TrainingItemViewModel
+    {
+
+        [Display(Name = "肌力訓練")]
+        [Required]
+        public int? TrainingID { get; set; }
+
+        public String Description { get; set; }
+
+        [Display(Name = "目標次數")]
+        public int? GoalTurns { get; set; }
+
+        [Display(Name = "目標強度")]
+        public String GoalStrength { get; set; }
+    }
+
+    public class TrainingPlanViewModel
+    {
+        [Display(Name = "目前近況")]
+        public String RecentStatus { get; set; }
+
+        [Display(Name = "暖身")]
+        public String Warming { get; set; }
+
+        [Display(Name = "收操")]
+        public String EndingOperation { get; set; }
+
+        [Display(Name = "教練評鑑")]
+        public String Remark { get; set; }
+    }
+
+
+
+
+    public class ArgumentModel
+    {
+        public String PartialViewName { get; set; }
+        public object Model { get; set; }
+    }
 }

@@ -60,5 +60,11 @@ namespace WebHome.Helper
                 "\" />"));
         }
 
+        public static String ErrorMessage(this ModelStateDictionary modelState)
+        {
+            return String.Join("、", modelState.Keys.Where(k => modelState[k].Errors.Count > 0)
+                    .Select(k => /*k + " : " +*/ String.Join("/", modelState[k].Errors.Select(r => r.ErrorMessage))));
+        }
+
     }
 }

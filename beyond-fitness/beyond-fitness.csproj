@@ -659,6 +659,14 @@
     <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\Navigation.ascx" />
     <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\Lessons\EditTrainingItem.ascx" />
+    <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
+    <Content Include="Views\Lessons\LessonGoal.ascx" />
+    <Content Include="Views\Lessons\AddTraining.aspx" />
+    <Content Include="Views\Lessons\BodyPartsSelector.ascx" />
+    <Content Include="Views\Lessons\AddTrainingItem.ascx" />
+    <Content Include="Views\Lessons\EditTrainingItemList.ascx" />
+    <Content Include="Views\Lessons\TrainingPlan.aspx" />
     <Content Include="Views\Lessons\BookingByCoach.aspx" />
     <Content Include="Views\Lessons\CoachSelector.ascx" />
     <Content Include="Views\Lessons\Attendee.ascx" />
@@ -721,6 +729,7 @@
     <Content Include="Views\Member\Test.aspx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />
+    <Content Include="Views\Shared\ConfirmationDialog.ascx" />
     <Content Include="Views\Shared\LinkButton.ascx" />
     <Content Include="Views\Shared\PageBanner.ascx" />
     <Content Include="Views\Shared\LockScreen.ascx" />

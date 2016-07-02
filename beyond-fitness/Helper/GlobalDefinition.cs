@@ -12,6 +12,8 @@ namespace WebHome.Helper
     public enum CachingKey
     {
         UID = 10001,
-        EditMemberUID = 10002
+        EditMemberUID = 10002,
+        Training = 10003,
+        TrainingExecution = 10004
     }
 }

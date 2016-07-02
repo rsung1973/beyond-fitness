@@ -18,10 +18,12 @@ using System.Web.Security;
 
 namespace WebHome.Controllers
 {
+    [Authorize]
     public class LessonsController : SampleController<UserProfile>
     {
         public LessonsController() : base() { }
         // GET: Lessons
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -51,7 +53,7 @@ namespace WebHome.Controllers
             }
 
             ViewBag.ViewModel = viewModel;
-            
+
             if (!this.ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
@@ -75,12 +77,13 @@ namespace WebHome.Controllers
             LessonTime timeItem = new LessonTime
             {
                 InvitedCoach = viewModel.CoachID,
+                AttendingCoach = viewModel.CoachID,
                 ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
                 DurationInMinutes = viewModel.Duration
             };
 
             var users = checkOverlapedBooking(timeItem, lesson);
-            if(users.Count()>0)
+            if (users.Count() > 0)
             {
                 ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
                 return View(item);
@@ -102,7 +105,8 @@ namespace WebHome.Controllers
                 {
                     foreach (var regles in lesson.GroupingLesson.RegisterLesson)
                     {
-                        timeExpansion.InsertOnSubmit(new LessonTimeExpansion {
+                        timeExpansion.InsertOnSubmit(new LessonTimeExpansion
+                        {
                             ClassDate = timeItem.ClassTime.Value.Date,
                             LessonID = timeItem.LessonID,
                             Hour = timeItem.ClassTime.Value.Hour + i,
@@ -183,7 +187,7 @@ namespace WebHome.Controllers
         {
             return Json(models.GetTable<LessonTimeExpansion>()
                 .Where(t => t.ClassDate >= start && t.ClassDate <= end)
-                .Select(t=>t.ClassDate).ToList()
+                .Select(t => t.ClassDate).ToList()
                 .GroupBy(t => t)
                 .Select(g => new
                 {
@@ -200,7 +204,7 @@ namespace WebHome.Controllers
         public ActionResult DailyBookingSummary(DateTime lessonDate)
         {
             Dictionary<int, int> index = new Dictionary<int, int>();
-            foreach(int idx in  Enumerable.Range(8, 15))
+            foreach (int idx in Enumerable.Range(8, 15))
             {
                 index[idx] = 0;
             }
@@ -210,20 +214,351 @@ namespace WebHome.Controllers
                 .Select(t => t.Hour).ToList()
                 .GroupBy(t => t);
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 index[item.Key] = item.Count();
             }
 
-            return Json(index.Select(i => new object[] { i.Key , i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
+            return Json(index.Select(i => new object[] { i.Key, i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DailyBookingMembers(DateTime lessonDate,int hour)
+        public ActionResult DailyBookingMembers(DateTime lessonDate, int hour)
         {
             var items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate
                     && t.Hour == hour)
                 .GroupBy(l => l.LessonID).Select(g => g.First());
             return View(items);
+        }
+
+        public ActionResult RevokeBooking(int lessonID)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TrainingPlan(LessonTimeExpansionViewModel viewModel)
+        {
+
+            var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
+                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+
+            HttpContext.SetCacheValue(CachingKey.Training, item);
+            return View(item);
+        }
+
+        public ActionResult DeletePlan()
+        {
+            LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+
+            if (item == null)
+            {
+                ViewBag.Message = "未登記此上課時間!!";
+                return RedirectToAction("Coach", "Account");
+            }
+
+            models.DeleteAllOnSubmit<TrainingPlan>(p => p.LessonID == item.LessonID);
+            models.DeleteAllOnSubmit<LessonPlan>(p => p.LessonID == item.LessonID);
+            models.SubmitChanges();
+
+            HttpContext.RemoveCache(CachingKey.Training);
+            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.RegisterID, lessonID = item.LessonID });
+        }
+
+        public ActionResult CompletePlan()
+        {
+            LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+
+            if (item == null)
+            {
+                return RedirectToAction("Coach", "Account");
+            }
+
+            HttpContext.RemoveCache(CachingKey.Training);
+            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.RegisterID, lessonID = item.LessonID });
+        }
+
+
+        public ActionResult CommitPlan(TrainingPlanViewModel viewModel)
+        {
+            ActionResult result;
+            LessonTimeExpansion model;
+            LessonPlan plan = prepareLessonPlan(out result,out model);
+
+            if (result != null)
+                return result;
+
+            plan.Warming = viewModel.Warming;
+            plan.RecentStatus = viewModel.RecentStatus;
+            plan.EndingOperation = viewModel.EndingOperation;
+            plan.Remark = viewModel.Remark;
+
+
+            //execution.Repeats = viewModel.Repeats;
+            //execution.BreakIntervalInSecond = viewModel.BreakInterval;
+
+            //for (int i = 0; i < execution.TrainingItem.Count && i < viewModel.TrainingID.Length; i++)
+            //{
+            //    var item = execution.TrainingItem[i];
+            //    item.TrainingID = (viewModel.TrainingID[i]).Value;
+            //    item.GoalStrength = viewModel.GoalStrength[i];
+            //    item.GoalTurns = viewModel.GoalTurns[i];
+            //    item.Description = viewModel.Description[i];
+            //}
+
+            //execution.TrainingPlan.PlanStatus = (int)Naming.DocumentLevelDefinition.正常;
+
+            models.SubmitChanges();
+            //HttpContext.RemoveCache(CachingKey.Training);
+
+            //return RedirectToAction("Coach", "Account", new { lessonDate = model.ClassDate, hour = model.Hour, registerID = model.RegisterID, lessonID = model.LessonID });
+            ViewBag.Message = "資料更新完成!!";
+            return View("TrainingPlan", model);
+
+        }
+
+        private LessonPlan prepareLessonPlan(out ActionResult result,out LessonTimeExpansion model)
+        {
+            result = null;
+            LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+
+            model = null;
+            if (item != null)
+            {
+                model = models.GetTable<LessonTimeExpansion>()
+                    .Where(l => l.ClassDate == item.ClassDate
+                        && l.RegisterID == item.RegisterID
+                        && l.Hour == item.Hour).FirstOrDefault();
+            }
+
+            if (model == null)
+            {
+                ViewBag.Message = "未登記此上課時間!!";
+                result = RedirectToAction("Coach", "Account");
+                return null;
+            }
+
+            LessonPlan plan = model.LessonTime.LessonPlan;
+            if (plan == null)
+                plan = model.LessonTime.LessonPlan = new LessonPlan { };
+
+            return plan;
+        }
+
+        public ActionResult DeleteTraining(int id)
+        {
+            LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+            models.DeleteAny<TrainingPlan>(t => t.ExecutionID == id && t.LessonID == item.LessonID);
+
+            LessonTimeExpansion model = models.GetTable<LessonTimeExpansion>()
+                .Where(l => l.ClassDate == item.ClassDate
+                    && l.RegisterID == item.RegisterID 
+                    && l.Hour == item.Hour).First();
+            return View("TrainingPlan", model);
+        }
+
+
+        public ActionResult AddTraining(TrainingPlanViewModel viewModel)
+        {
+            ActionResult result;
+            LessonTimeExpansion model;
+            LessonPlan plan = prepareLessonPlan(out result,out model);
+
+            if (result != null)
+                return result;
+
+            plan.Warming = viewModel.Warming;
+            plan.RecentStatus = viewModel.RecentStatus;
+            plan.EndingOperation = viewModel.EndingOperation;
+            plan.Remark = viewModel.Remark;
+
+            models.SubmitChanges();
+
+            HttpContext.RemoveCache(CachingKey.TrainingExecution);
+            return View(new TrainingExecution { });
+        }
+
+
+        public ActionResult AddTrainingItem()
+        {
+            return View();
+        }
+
+        public ActionResult EditTraining(int id)
+        {
+
+            TrainingExecution execution = models.GetTable<TrainingExecution>().Where(t => t.ExecutionID == id).FirstOrDefault();
+            if(execution==null)
+            {
+                ViewBag.Message = "修改項目不存在!!";
+                return View("AddTraining", new TrainingExecution { });
+            }
+            HttpContext.SetCacheValue(CachingKey.TrainingExecution, execution.ExecutionID);
+            return View("AddTraining", execution);
+        }
+
+
+        public ActionResult CommitTrainingItem(TrainingItemViewModel viewModel)
+        {
+            TrainingExecution execution = prepareTrainingExecution();
+
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Message = ModelState.ErrorMessage();
+                return View("AddTraining", execution);
+            }
+
+            execution.TrainingItem.Add(new TrainingItem
+            {
+                Description = viewModel.Description,
+                GoalStrength = viewModel.GoalStrength,
+                GoalTurns = viewModel.GoalTurns,
+                TrainingID = viewModel.TrainingID.Value
+            });
+
+            models.SubmitChanges();
+
+            HttpContext.SetCacheValue(CachingKey.TrainingExecution, execution.ExecutionID);
+
+            return View("AddTraining", execution);
+        }
+
+        public ActionResult CreateTrainingItem(TrainingExecutionViewModel viewModel)
+        {
+            TrainingExecution execution = prepareTrainingExecution();
+
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, message = ModelState.ErrorMessage() });
+            }
+
+            execution.Repeats = viewModel.Repeats;
+            execution.BreakIntervalInSecond = viewModel.BreakInterval;
+
+            TrainingItem item = new TrainingItem
+            {
+                TrainingID = 1
+            };
+            execution.TrainingItem.Add(item);
+
+            models.SubmitChanges();
+
+            HttpContext.SetCacheValue(CachingKey.TrainingExecution, execution.ExecutionID);
+
+            return View("EditTrainingItem", item);
+        }
+
+        private TrainingExecution prepareTrainingExecution(bool createNew = true)
+        {
+            TrainingExecution execution = models.GetTable<TrainingExecution>()
+                .Where(t => t.ExecutionID == (int?)HttpContext.GetCacheValue(CachingKey.TrainingExecution)).FirstOrDefault();
+
+            if (execution == null && createNew)
+            {
+                LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+
+                Models.DataEntity.TrainingPlan plan = new Models.DataEntity.TrainingPlan
+                {
+                    LessonID = item.LessonID.Value,
+                    PlanStatus = (int)Naming.DocumentLevelDefinition.暫存
+                };
+                execution = new TrainingExecution
+                {
+                    TrainingPlan = plan
+                };
+                models.GetTable<Models.DataEntity.TrainingPlan>().InsertOnSubmit(plan);
+            }
+
+            return execution;
+        }
+
+        public ActionResult DeleteTrainingItem(int id)
+        {
+            TrainingExecution execution = prepareTrainingExecution(false);
+            if (execution == null)
+            {
+                ViewBag.Message = "修改項目不存在!!";
+                return View("AddTraining", new TrainingExecution { });
+            }
+
+            var item = execution.TrainingItem.Where(i => i.ItemID == id).FirstOrDefault();
+            if (item == null)
+            {
+                ViewBag.Message = "課程項目不存在!!";
+                return View("AddTraining", execution);
+            }
+
+            execution.TrainingItem.Remove(item);
+            models.SubmitChanges();
+            return View("AddTraining", execution);
+        }
+
+        public ActionResult ValidateToCommitTraining(TrainingExecutionViewModel viewModel)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return Json(new { result = false, message = ModelState.ErrorMessage() });
+            }
+            return Json(new { result = true });
+        }
+
+        public ActionResult CommitTraining(TrainingExecutionViewModel viewModel)
+        {
+            TrainingExecution execution = prepareTrainingExecution();
+
+            if(execution.TrainingItem.Count==0)
+            {
+                ViewBag.Message = "尚未設定上課項目!!";
+                return View("AddTraining", execution);
+            }
+
+            if(!ModelState.IsValid)
+            {
+                ViewBag.Message = ModelState.ErrorMessage();
+                return View("AddTraining", execution);
+            }
+
+            execution.Repeats = viewModel.Repeats;
+            execution.BreakIntervalInSecond = viewModel.BreakInterval;
+
+            for (int i = 0; i < execution.TrainingItem.Count && i < viewModel.TrainingID.Length; i++)
+            {
+                var item = execution.TrainingItem[i];
+                item.TrainingID = (viewModel.TrainingID[i]).Value;
+                item.GoalStrength = viewModel.GoalStrength[i];
+                item.GoalTurns = viewModel.GoalTurns[i];
+                item.Description = viewModel.Description[i];
+            }
+
+            execution.TrainingPlan.PlanStatus = (int)Naming.DocumentLevelDefinition.正常;
+
+            models.SubmitChanges();
+            HttpContext.RemoveCache(CachingKey.TrainingExecution);
+
+            LessonTimeExpansion cacheItem = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+            var timeItem = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == cacheItem.ClassDate
+                && l.RegisterID == cacheItem.RegisterID && l.Hour == cacheItem.Hour).First();
+
+            ViewBag.DataItem = timeItem.LessonTime;
+            return View("TrainingPlan",timeItem);
+
+        }
+
+        public ActionResult CompleteTraining()
+        {
+            LessonTimeExpansion cacheItem = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+            var timeItem = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == cacheItem.ClassDate
+                && l.RegisterID == cacheItem.RegisterID && l.Hour == cacheItem.Hour).First();
+
+            ViewBag.DataItem = timeItem.LessonTime;
+            return View("TrainingPlan", timeItem);
+
         }
 
     }

@@ -71,21 +71,26 @@
                     </div>
 
                     <!-- End Contact Form -->
-                    <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
-
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
                     <div id="attendeeList" class="panel panel-default">
                     </div>
+
+                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
+                    <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
 
             </div>
         </div>
     </div>
     <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
-    <!-- End content -->
+    <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
+        <!-- End content -->
 
     <script>
     $('#vip,#m_vip').addClass('active');
     $('#theForm').addClass('contact-form');
+
+    var pageParam = {
+        lessonDate: '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>'
+    };
 
     </script>
 </asp:Content>
