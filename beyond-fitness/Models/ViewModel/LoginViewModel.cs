@@ -249,6 +249,51 @@ namespace WebHome.Models.ViewModel
         public String Remark { get; set; }
     }
 
+    public class TrainingAssessmentViewModel : TrainingPlanViewModel
+    {
+
+        [Display(Name = "教練")]
+        public int CoachID { get; set; }
+
+        [Display(Name = "實際次數")]
+        public int?[] ActualTurns { get; set; }
+
+        [Display(Name = "實際強度")]
+        public String[] ActualStrength { get; set; }
+
+        [Display(Name = "評論")]
+        public String[] Conclusion { get; set; }
+
+        [Display(Name = "動作學習")]
+        public int? ActionLearning { get; set; }
+
+        [Display(Name = "姿勢矯正")]
+        public int? PostureRedress { get; set; }
+
+        [Display(Name = "訓練")]
+        public int? Training { get; set; }
+
+        [Display(Name = "柔軟度")]
+        public int? Flexibility { get; set; }
+
+        [Display(Name = "心肺")]
+        public int? Cardiopulmonary { get; set; }
+
+        [Display(Name = "肌力")]
+        public int? Strength { get; set; }
+
+        [Display(Name = "肌耐力")]
+        public int? Endurance { get; set; }
+
+        [Display(Name = "爆發力")]
+        public int? ExplosiveForce { get; set; }
+
+        [Display(Name = "運動表現")]
+        public int? SportsPerformance { get; set; }
+
+
+    }
+
 
 
 

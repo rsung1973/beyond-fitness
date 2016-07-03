@@ -9,8 +9,12 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<label class="control-label" for="classno">教練：</label>
-<% Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", _model); %>
+<select name="<%= _model.Name ?? "coach" %>" id="<%= _model.Id ?? "coach" %>" class="form-control">
+    <% foreach (var item in _items)
+        { %>
+    <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %></option>
+    <%  } %>
+</select>
 <script runat="server">
 
     InputViewModel _model;

@@ -659,6 +659,9 @@
     <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\Navigation.ascx" />
     <Content Include="Views\Account\Sample.aspx" />
+    <Content Include="Views\Attendance\AddTraining.ascx" />
+    <Content Include="Views\Attendance\TrainingPlan.aspx" />
+    <Content Include="Views\Lessons\SimpleCoachSelector.ascx" />
     <Content Include="Views\Lessons\EditTrainingItem.ascx" />
     <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
     <Content Include="Views\Lessons\LessonGoal.ascx" />
@@ -760,6 +763,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\MemberController.cs" />

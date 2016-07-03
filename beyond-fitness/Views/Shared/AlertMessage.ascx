@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="alertMsg" class="col-md-12"><%= ViewBag.Message %></label>
                     <div class="col-md-12 modal-footer">
-                        <button type="button" id="btnDismiss" class="btn btn-default btn-sm" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span>關閉</button>
+                        <button type="button" id="btnDismiss" class="btn btn-system btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>關閉</button>
                     </div>
                 </div>
             </div>

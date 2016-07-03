@@ -232,14 +232,26 @@ namespace WebHome.Controllers
 
         public ActionResult RevokeBooking(int lessonID)
         {
-            UserProfile item = HttpContext.GetUser();
-            if (item == null)
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
             {
                 return Redirect(FormsAuthentication.LoginUrl);
             }
 
+            LessonTime item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
+            if (item == null)
+            {
+                return Json(new { result = false ,message="課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
+            }
+            else if (item.LessonPlan!=null || item.TrainingPlan.Count>0)
+            {
+                return Json(new { result = false, message = "請先刪除預編課程!!" }, JsonRequestBehavior.AllowGet);
+            }
+
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { result = true });
+
         }
 
         public ActionResult TrainingPlan(LessonTimeExpansionViewModel viewModel)
@@ -363,7 +375,7 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult AddTraining(TrainingPlanViewModel viewModel)
+        public virtual ActionResult AddTraining(TrainingPlanViewModel viewModel)
         {
             ActionResult result;
             LessonTimeExpansion model;
@@ -550,7 +562,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult CompleteTraining()
+        public virtual ActionResult CompleteTraining()
         {
             LessonTimeExpansion cacheItem = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
             var timeItem = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == cacheItem.ClassDate

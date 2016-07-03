@@ -87,8 +87,15 @@
                             <!-- TABLE 1 -->
                             <% Html.RenderPartial("~/Views/Lessons/EditTrainingItemList.ascx", _item); %>
                         </div>
-
-                        <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CompleteTraining") %>">回預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        
+                        <%  if (ViewBag.AssessLesson == true)
+                            { %>
+                                <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Attendance/CompleteTraining") %>">回上課囉 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                    <%      }
+                            else
+                            { %>
+                                <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CompleteTraining") %>">回預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                        <%  } %>
                         <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
                   
                     
@@ -127,7 +134,7 @@
         $('#nextStep').on('click', function (evt) {
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/ValidateToCommitTraining") %>', $('form').serialize(), function (data) {
                 if (data.result) {
-                    $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTraining") %>')
+                    $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute(ViewBag.AssessLesson==true ? "~/Attendance/CommitTraining" : "~/Lessons/CommitTraining") %>')
                         .submit();
                 } else {
                     alert(data.message);
