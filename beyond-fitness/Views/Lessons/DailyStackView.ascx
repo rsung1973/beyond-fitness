@@ -21,6 +21,7 @@
     var $p;
 
     function plotData(lessonDate) {
+        $('.stack-container').css('display', 'block');
         $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingSummary") %>', { 'lessonDate': lessonDate }, function (data) {
             $p = $.plot("#placeholder", [data], {
                 series: {
@@ -49,10 +50,24 @@
                 },
                 xaxis: {
                     //mode: "categories",
+                    font: {
+                        size: 14,
+                        lineHeight: 13,
+                        weight: "bold",
+                        family: "Verdana, Arial, Helvetica, Tahoma, sans-serif",
+                        color: "#000"
+                    },
                     tickLength: 0,
-                    ticks: [[8, '8:00'], [9, '9:00'], [10, '10:00'], [11, '11:00'], [12, '12:00'], [13, '13:00'], [14, '14:00'], [15, '15:00'], [16, '16:00'], [17, '17:00'], [18, '18:00'], [19, '19:00'], [20, '20:00'], [21, '21:00'], [22, '22:00']]
+                    ticks: [[8, '8'], [9, ''], [10, '10'], [11, ''], [12, '12'], [13, ''], [14, '14'], [15, ''], [16, '16'], [17, ''], [18, '18'], [19, ''], [20, '20'], [21, ''], [22, '22']]
                 },
                 yaxis: {
+                    font: {
+                        size: 14,
+                        lineHeight: 13,
+                        weight: "bold",
+                        family: "Verdana, Arial, Helvetica, Tahoma, sans-serif",
+                        color: "#000"
+                    },
                     minTickSize: 5,
                     tickDecimals: 0,
                     min: 0,

@@ -45,14 +45,14 @@
                             <a onclick="addUser();" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
                         </div>
                         <div class="form-group has-feedback">
-                            <label class="control-label" for="classno">日期：</label>
-                            <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                            <label class="control-label" for="classno">日期、時段：</label>
+                            <div class="input-group date form_time" data-date="" data-date-format="yyyy/mm/dd hh:ii" data-link-field="dtp_input1">
                                 <input id="classDate" name="classDate" class="form-control" size="16" type="text" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd") %>" readonly>
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
 
-                        <div class="form-group">
+<%--                        <div class="form-group">
                             <label for="exampleInputFile" class="control-label">上課時段：</label>
                             <div class="row">
                                 <div class="col-md-5">
@@ -61,11 +61,8 @@
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                                     </div>
                                 </div>
-                                <%--                                            <div class="col-md-1">
-                                                <span style="line-height: 30px;"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
-                                            </div>--%>
                             </div>
-                        </div>
+                        </div>--%>
                         <div class="form-group">
                             <label for="exampleInputFile" class="control-label">課程時間：</label>
                             <select name="duration">
@@ -116,9 +113,9 @@
                 'date': true
             });
 
-            $('#classTime').rules('add', {
-                'required': true
-            });
+            //$('#classTime').rules('add', {
+            //    'required': true
+            //});
         });
 
 

@@ -15,7 +15,21 @@
                 <% _model.RenderUserPicture(this.Writer, "userImg"); %>
         </div>
         <div class="user-bio" style="padding-top: 20px;">
-            <h4 class="classic-title"><span>Hi <%= _model.RealName %></span></h4>
+            <h4 class="classic-title"><span>
+                <%  if (ViewBag.UserInfo == null)
+                    { %> 
+                        Hi <%= String.IsNullOrEmpty(_model.UserName) ? _model.RealName :_model.UserName %>
+                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>" class="pull-right" style="font-size: 13px; margin-bottom: 5px;"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
+                <%  }
+                    else
+                    { %>
+                        <%= ViewBag.UserInfo %>
+                <%  } %>
+                </span></h4>
+            <%  if (ViewBag.Argument is ArgumentModel)
+                {
+                    Html.RenderPartial(((ArgumentModel)ViewBag.Argument).PartialViewName, ((ArgumentModel)ViewBag.Argument).Model);
+                } %>
         </div>
     </div>
 </div>

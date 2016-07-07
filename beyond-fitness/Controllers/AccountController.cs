@@ -578,17 +578,46 @@ namespace WebHome.Controllers
             return true;
         }
 
-        public ActionResult Vip()
+        public ActionResult Vip(DateTime? lessonDate,DateTime? endQueryDate)
         {
-            UserProfile item = HttpContext.GetUser();
-            if (item == null)
+            return commonEntry(ref lessonDate, endQueryDate);
+        }
+
+        public ActionResult EditVip(int id,DateTime? lessonDate)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
             {
                 return Redirect(FormsAuthentication.LoginUrl);
             }
-            return View(item);
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
+            if (item == null)
+            {
+                ViewBag.Message = "學員資料不存在!!";
+                return RedirectToAction("Coach");
+            }
+
+            RegisterViewModel model = new RegisterViewModel
+            {
+                EMail = item.PID.Contains("@") ? item.PID : null,
+                MemberCode = item.MemberCode,
+                PictureID = item.PictureID,
+                UserName = item.UserName
+            };
+
+            ViewBag.LessonDate = lessonDate.HasValue ? lessonDate : DateTime.Today;
+            return View("EditMySelf", model);
         }
 
-        public ActionResult Coach(DateTime? lessonDate)
+
+
+        public ActionResult Coach(DateTime? lessonDate,DateTime? endQueryDate)
+        {
+            return commonEntry(ref lessonDate, endQueryDate);
+        }
+
+        private ActionResult commonEntry(ref DateTime? lessonDate, DateTime? endQueryDate)
         {
             UserProfile item = HttpContext.GetUser();
             if (item == null)
@@ -597,9 +626,10 @@ namespace WebHome.Controllers
             }
             if (!lessonDate.HasValue)
                 lessonDate = DateTime.Today;
-                        
+
             ViewBag.LessonDate = lessonDate;
-            
+            ViewBag.EndQueryDate = endQueryDate;
+
             return View(item);
         }
 
@@ -669,6 +699,7 @@ namespace WebHome.Controllers
 
             if (!createPassword(viewModel))
                 return View(viewModel);
+            item.Password = (viewModel.Password).MakePassword();
 
             models.SubmitChanges();
 

@@ -49,7 +49,17 @@
                 { %>
                     <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
             <%  } %>
-            <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+            <%  if (item.LessonTime.LessonPlan != null)
+                      { %>
+            <a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
+                    {
+                        classDate = item.ClassDate.ToString("yyyy-MM-dd"),
+                        hour = item.Hour,
+                        registerID = item.RegisterID,
+                        lessonID = item.LessonID
+                    }) %>);'
+                class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+            <%  } %>
         </td>
     </tr>
     <%  } %>
@@ -95,6 +105,18 @@
         $form.submit();
     }
 
+    function previewLesson(arg)
+    {
+        var $form = $('<form method="post"/>')
+            .appendTo($('body'))
+            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
+        for (var key in arg) {
+            $('<input type="hidden"/>')
+            .prop('name', key).prop('value', arg[key]).appendTo($form);
+        }
+        $form.submit();
+    }
+
 </script>
 
 <script runat="server">
@@ -109,7 +131,7 @@
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _items = (IEnumerable<LessonTimeExpansion>)this.Model;
+        _items = ((IEnumerable<LessonTimeExpansion>)this.Model).OrderBy(t => t.ClassDate).ThenBy(t => t.Hour);
     }
 
 </script>

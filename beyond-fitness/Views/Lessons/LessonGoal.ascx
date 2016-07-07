@@ -8,8 +8,8 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<p><strong>日期：</strong><%= _model.ClassTime.Value.ToString("yyyy/MM/dd") %></p>
-<p><strong>時間：</strong><%= _model.ClassTime.Value.ToString("HH:mm") %> - <%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></p>
+<p><strong>日期：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd") %></strong></p>
+<p><strong>時間：<%= _model.ClassTime.Value.ToString("HH:mm") %> - <%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></strong></p>
 <%  if (_assessment == true)
     { %>
         <div class="row">
@@ -23,7 +23,7 @@
 <%  }
     else
     { %>
-        <p><strong>教練：</strong><%= _model.AsAttendingCoach.UserProfile.RealName %></p>
+        <p><strong>教練：<%= _model.AsAttendingCoach.UserProfile.RealName %></strong></p>
 <%  } %>
 
 <h4 class="classic-title"><span>適配結果</span></h4>
@@ -42,7 +42,16 @@
     </table>
 </div>
 <h4 class="classic-title"><span>目前近況</span></h4>
-<textarea class="form-control" name="recentStatus" rows="3"><%= _model.LessonPlan!=null ? _model.LessonPlan.RecentStatus : null %></textarea>
+<%  if (ViewBag.Preview == true)
+    { %>
+        <div class="call-action call-action-boxed call-action-style4 clearfix">
+            <p><%= String.IsNullOrEmpty(_model.RegisterLesson.UserProfile.RecentStatus) ? "目前尚無任何近況哦!!" : _model.RegisterLesson.UserProfile.RecentStatus %></p>
+        </div>
+<%  }
+    else
+    { %>
+        <textarea class="form-control" name="recentStatus" rows="3"><%= _model.RegisterLesson.UserProfile.RecentStatus %></textarea>
+<%  } %>
 
 <script runat="server">
 

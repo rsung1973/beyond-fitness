@@ -28,7 +28,7 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-edit">預編課程</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-edit"> 預編課程</span></h4>
 
                     <!-- Start Contact Form -->
 
@@ -36,18 +36,21 @@
 
                         <%  ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
                             Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
-
-                        <div class="hr2" style="margin-bottom: 10px;"></div>
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="classno"><strong>暖身：</strong></label>
-                        </div>
-                        <textarea name="warming" class="form-control" rows="5"><%= _plan.Warming %></textarea>
+                        
                         <div>
                             <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
                         </div>
-
+                        <div class="hr1" style="margin-bottom: 10px;"></div>
                         <div class="panel panel-default">
-                            <!-- TABLE 1 -->
+                            <table class="table">
+                                <tr class="info">
+                                    <th>暖身</th>
+                                </tr>
+                                <tr>
+                                    <td><textarea name="warming" class="form-control" rows="5"><%= _plan.Warming %></textarea>
+                                        </td>
+                                </tr>
+                            </table>
                             <table class="table">
                                 <tr class="info">
                                     <th width="5%">排序</th>
@@ -93,20 +96,15 @@
                                 </tr>
                                 <%                  }
                                     }   %>
-                                <tr class="warning">
-                                    <td>休息</td>
-                                    <td><%= execution.BreakIntervalInSecond %>秒</td>
-                                    <td>&nbsp;</td>
+                                <tr class="active">
+                                    <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                 </tr>
                                 <%              }
                                     else
                                     {   %>
                                 <tr>
                                     <td class="text-center"><%= idx %></td>
-                                    <td>休息</td>
-                                    <td><%= execution.BreakIntervalInSecond %>秒</td>
-                                    <td>&nbsp;</td>
-                                    <td class="text-center">&nbsp;</td>
+                                    <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                     <td>
                                         <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
                                         <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
@@ -122,12 +120,15 @@
                                 </tr>
                                 <%  }%>
                             </table>
+                            <table class="table">
+                                <tr class="info">
+                                    <th>收操</th>
+                                </tr>
+                                <tr>
+                                    <td><textarea class="form-control" name="endingOperation" rows="5"><%= _plan.EndingOperation %></textarea></td>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="hr2" style="margin-bottom: 10px;"></div>
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="classno"><strong>收操：</strong></label>
-                        </div>
-                        <textarea class="form-control" name="endingOperation" rows="5"><%= _plan.EndingOperation %></textarea>
 
                         <div class="hr2" style="margin-bottom: 10px;"></div>
                         <h4 class="orange-text classic-title"><span class="fa fa-commenting" aria-hidden="true">教練總評：</span></h4>

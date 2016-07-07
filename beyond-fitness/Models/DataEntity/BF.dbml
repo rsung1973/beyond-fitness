@@ -103,6 +103,7 @@
       <Column Name="RealName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
       <Column Name="Address" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="Phone" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="RecentStatus" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="UserProfile_Article" Member="Article" ThisKey="UID" OtherKey="AuthorID" Type="Article" />
       <Association Name="UserProfile_UserRole" Member="UserRole" ThisKey="UID" OtherKey="UID" Type="UserRole" />
       <Association Name="UserProfile_ResetPassword" Member="ResetPassword" ThisKey="UID" OtherKey="UID" Type="ResetPassword" />
@@ -196,6 +197,7 @@
       <Column Name="Warming" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="RecentStatus" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="EndingOperation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FeedBack" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="LessonTime_LessonPlan" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
     </Type>
   </Table>
@@ -252,6 +254,7 @@
       <Column Name="ActualBreakIntervalInSecond" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ActualRepeats" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Conclusion" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExecutionFeedBack" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="TrainingExecution_TrainingItem" Member="TrainingItem" ThisKey="ExecutionID" OtherKey="ExecutionID" Type="TrainingItem" />
       <Association Name="TrainingPlan_TrainingExecution" Member="TrainingPlan" ThisKey="ExecutionID" OtherKey="ExecutionID" Type="TrainingPlan" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>

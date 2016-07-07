@@ -33,5 +33,11 @@ namespace WebHome.Controllers
         {
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Test(String view)
+        {
+            return View(view, null);
+        }
+
     }
 }

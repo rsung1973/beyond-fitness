@@ -44,7 +44,7 @@
                                         </li>--%>
                         <%  if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent)
                             { %>
-                                <li><a id="coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">教練專區</a>
+                                <li><a id="coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                                 </li>
                                 <li><a id="member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                                 </li>
@@ -57,7 +57,7 @@
                         <%  }
                             else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator)
                             {  %>
-                                <li><a id="coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">教練專區</a>
+                                <li><a id="coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                                 </li>
                                 <li><a id="member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                                 </li>
@@ -95,7 +95,7 @@
                                         </li>--%>
                 <%  if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent)
                             { %>
-                <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">教練專區</a>
+                <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                 </li>
                 <li><a id="m_member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                 </li>
@@ -108,7 +108,7 @@
                 <%  }
                             else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator)
                             {  %>
-                <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">教練專區</a>
+                <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                 </li>
                 <li><a id="m_member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                 </li>

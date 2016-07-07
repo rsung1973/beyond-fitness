@@ -17,6 +17,7 @@
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.slicknav.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/bootstrap-datetimepicker.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/bootstrap-datetimepicker.zh-TW.js") %>"></script>
+<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/moment.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.form.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.validate.js") %>"></script>
 <script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/messages_zh_TW.js") %>"></script>

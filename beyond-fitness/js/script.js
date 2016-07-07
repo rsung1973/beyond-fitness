@@ -733,3 +733,13 @@ $('.form_time').datetimepicker({
 		maxView: 1,
 		forceParse: 0
 });
+$('.form_month').datetimepicker({
+    language: 'zh-TW',
+    weekStart: 1,
+    todayBtn: 1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 1,
+    minView: 1,
+    forceParse: 0
+});

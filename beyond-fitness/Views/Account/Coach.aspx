@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
+
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -31,19 +32,14 @@
 
                     <!-- Start Contact Form -->
                     <!-- Categories Widget -->
-                    <div class="widget widget-categories">
-                        <ul>
-                            <li>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
+
 
                     <!-- Responsive calendar - START -->
                     <% Html.RenderPartial("~/Views/Lessons/LessonsCalendar.ascx"); %>
 
                     <!-- Responsive calendar - END -->
+                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
+                    <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
 
                     <!-- End Contact Form -->
 
@@ -59,7 +55,10 @@
                         <div class="search-side">
                             <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>">登記上課時間 <span class="fa fa-calendar-plus-o"></span></a>
                             <a href="#" class="btn-system btn-small">自由教練打卡 <i class="fa fa-check-square" aria-hidden="true"></i></a>
-                            <a class="btn btn-search" data-toggle="modal" data-target="#searchdil" data-whatever="搜尋"><i class="fa fa-search"></i></a>
+                            <a class="btn btn-search" onclick="inquire();"><i class="fa fa-search"></i></a>
+                        </div>
+                        <div class="form-horizontal" style="display:none;" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
+                            <% Html.RenderPartial("~/Views/Lessons/QueryModal.ascx"); %>
                         </div>
                     </div>
 
@@ -74,23 +73,38 @@
                     <div id="attendeeList" class="panel panel-default">
                     </div>
 
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                    <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
-
+                </div>
             </div>
         </div>
     </div>
     <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
-        <!-- End content -->
+    <!-- End content -->
 
     <script>
-    $('#vip,#m_vip').addClass('active');
-    $('#theForm').addClass('contact-form');
+        $('#vip,#m_vip').addClass('active');
+        //$('#theForm').addClass('contact-form');
 
-    var pageParam = {
-        lessonDate: '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>'
-    };
+        var pageParam = {
+            lessonDate: '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>',
+            endQueryDate: '<%= String.Format("{0:yyyy-MM-dd}",ViewBag.EndQueryDate??_lessonDate) %>'
+        };
+
+        function inquire() {
+            <%--        var $modal = $('<div class="form-horizontal modal fade" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
+        $modal.on('hidden.bs.modal', function (evt) {
+            $modal.remove();
+        });
+        $modal.appendTo($('body'))
+            .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryModal") %>', pageParam, function () {
+                    $modal.modal('show');
+                });--%>
+            $('#queryModal').css('display', 'block');
+        }
+
+        $(function () {
+            $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>' }, function () { });
+        });
 
     </script>
 </asp:Content>

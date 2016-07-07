@@ -38,7 +38,9 @@
                 pageParam.lessonDate = calEvent.start.format('YYYY-MM-DD');
                 $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
                 plotData(calEvent.start.format('YYYY-MM-DD'));
-                $('#attendeeList').empty();
+                //$('#attendeeList').empty();
+                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+
                 //alert('Event: ' + calEvent.title);
                 //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
                 //alert('View: ' + view.name);

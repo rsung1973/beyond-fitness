@@ -716,7 +716,7 @@
         });
         $('.form_date').datetimepicker({
             language: 'zh-TW',
-            weekStart: 1,
+            weekStart: 0,
             todayBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
@@ -726,13 +726,27 @@
         });
         $('.form_time').datetimepicker({
             language: 'zh-TW',
-            weekStart: 1,
-            todayBtn: 1,
+            weekStart: 0,
+            todayBtn: 0,
             autoclose: 1,
             todayHighlight: 1,
-            startView: 1,
+            startView: 2,
             minView: 0,
-            maxView: 1,
+            maxView: 2,
+            forceParse: 0,
+            minuteStep: 30,
+            startDate: '<%= DateTime.Today.AddHours(8).ToString("yyyy-MM-dd HH:mm") %>',
+            showMeridian: false
+        });
+
+        $('.form_month').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            //todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 3,
+            minView: 3,
             forceParse: 0
         });
 

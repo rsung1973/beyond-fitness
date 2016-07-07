@@ -10,6 +10,10 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <select name="<%= _model.Name ?? "coach" %>" id="<%= _model.Id ?? "coach" %>" class="form-control">
+    <%  if (ViewBag.SelectAll == true)
+        { %>
+            <option value="">全部</option>
+    <%  } %>
     <% foreach (var item in _items)
         { %>
     <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %></option>

@@ -28,24 +28,27 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-heartbeat">上課囉</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-heartbeat"> 上課囉</span></h4>
 
                     <%  ViewBag.Assessment = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
                         Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
 
                     <!-- Start Contact Form -->
-
-                    <div class="form-group has-feedback">
-                        <label class="control-label" for="classno"><strong>暖身：</strong></label>
-                    </div>
-                    <textarea name="warming" class="form-control" rows="5"><%= _plan.Warming %></textarea>
-
                     <div>
                         <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
                     </div>
                     <div class="hr1" style="margin-bottom: 10px;"></div>
                     <div class="panel panel-default">
-                        <!-- TABLE 1 -->
+                        <table class="table">
+                            <tr class="info">
+                                <th>暖身</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <textarea name="warming" class="form-control" rows="5"><%= _plan.Warming %></textarea>
+                                </td>
+                            </tr>
+                        </table>
                         <table class="table">
                             <tr class="info">
                                 <th width="5%">排序</th>
@@ -85,7 +88,7 @@
                                 </td>
                                 <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
                                 <td rowspan="<%= training.Count() + 1 %>">
-                                    <textarea class="form-control" rows="3" name="conclusion"></textarea>
+                                    <textarea class="form-control" rows="3" name="conclusion"><%= execution.Conclusion %></textarea>
                                 </td>
                             </tr>
                             <%                  }
@@ -104,22 +107,17 @@
                             </tr>
                             <%                  }
                                     }   %>
-                            <tr class="warning">
-                                <td>休息</td>
-                                <td><%= execution.BreakIntervalInSecond %>秒</td>
-                                <td>&nbsp;</td>
+                            <tr class="active">
+                                <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                             </tr>
                             <%              }
                                     else
                                     {   %>
                             <tr>
                                 <td class="text-center"><%= idx %></td>
-                                <td>休息</td>
-                                <td><%= execution.BreakIntervalInSecond %>秒</td>
-                                <td>&nbsp;</td>
-                                <td class="text-center">&nbsp;</td>
+                                <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                 <td>
-                                    <textarea class="form-control" rows="3" name="conclusion"></textarea>
+                                    <textarea class="form-control" rows="3" name="conclusion" value><%= execution.Conclusion %></textarea>
                                 </td>
                             </tr>
                             <%              }
@@ -131,6 +129,16 @@
                                 <td colspan="6">未建立任何項目</td>
                             </tr>
                             <%  }%>
+                        </table>
+                        <table class="table">
+                            <tr class="info">
+                                <th>收操</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <textarea class="form-control" name="endingOperation" rows="5"><%= _plan.EndingOperation %></textarea>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                     <div class="row">
@@ -219,13 +227,6 @@
                         </div>
                     </div>
 
-
-                    <div class="hr2" style="margin-bottom: 10px;"></div>
-                    <div class="form-group has-feedback">
-                        <label class="control-label" for="classno"><strong>收操：</strong></label>
-                    </div>
-                    <textarea class="form-control" name="endingOperation" rows="5"><%= _plan.EndingOperation %></textarea>
-
                     <h4 class="orange-text classic-title"><span class="fa fa-commenting" aria-hidden="true">教練總評：</span></h4>
                     <div class="form-group has-feedback">
                         <textarea class="form-control" name="remark" rows="5"><%= _plan.Remark %></textarea>
@@ -270,7 +271,7 @@
         });
 
         function addTraining() {
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/AddTraining") %>')
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/SaveThenAddTraining") %>')
                 .submit();
         }
 

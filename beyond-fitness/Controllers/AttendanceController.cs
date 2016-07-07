@@ -39,6 +39,19 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult SaveThenAddTraining(TrainingAssessmentViewModel viewModel)
+        {
+            ActionResult result;
+            LessonTimeExpansion model = storeAssessment(viewModel, out result);
+
+            if (result != null)
+                return result;
+
+            models.SubmitChanges();
+
+            return AddTraining(viewModel);
+        }
+
         private LessonTimeExpansion storeAssessment(TrainingAssessmentViewModel viewModel,out ActionResult result)
         {
             result = null;
@@ -97,6 +110,13 @@ namespace WebHome.Controllers
 
             model.LessonTime.AttendingCoach = viewModel.CoachID;
             model.LessonTime.RegisterLesson.Attended = (int)Naming.LessonStatus.上課中;
+
+            LessonPlan plan = model.LessonTime.LessonPlan;
+            plan.Warming = viewModel.Warming;
+            plan.RecentStatus = viewModel.RecentStatus;
+            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
+            plan.EndingOperation = viewModel.EndingOperation;
+            plan.Remark = viewModel.Remark;
 
             return model;
         }

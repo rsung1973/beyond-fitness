@@ -2098,6 +2098,8 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Phone;
 		
+		private string _RecentStatus;
+		
 		private EntitySet<Article> _Article;
 		
 		private EntitySet<UserRole> _UserRole;
@@ -2156,6 +2158,8 @@ namespace WebHome.Models.DataEntity
     partial void OnAddressChanged();
     partial void OnPhoneChanging(string value);
     partial void OnPhoneChanged();
+    partial void OnRecentStatusChanging(string value);
+    partial void OnRecentStatusChanged();
     #endregion
 		
 		public UserProfile()
@@ -2506,6 +2510,26 @@ namespace WebHome.Models.DataEntity
 					this._Phone = value;
 					this.SendPropertyChanged("Phone");
 					this.OnPhoneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecentStatus", DbType="NVarChar(MAX)")]
+		public string RecentStatus
+		{
+			get
+			{
+				return this._RecentStatus;
+			}
+			set
+			{
+				if ((this._RecentStatus != value))
+				{
+					this.OnRecentStatusChanging(value);
+					this.SendPropertyChanging();
+					this._RecentStatus = value;
+					this.SendPropertyChanged("RecentStatus");
+					this.OnRecentStatusChanged();
 				}
 			}
 		}
@@ -4517,6 +4541,8 @@ namespace WebHome.Models.DataEntity
 		
 		private string _EndingOperation;
 		
+		private string _FeedBack;
+		
 		private EntityRef<LessonTime> _LessonTime;
 		
     #region Extensibility Method Definitions
@@ -4533,6 +4559,8 @@ namespace WebHome.Models.DataEntity
     partial void OnRecentStatusChanged();
     partial void OnEndingOperationChanging(string value);
     partial void OnEndingOperationChanged();
+    partial void OnFeedBackChanging(string value);
+    partial void OnFeedBackChanged();
     #endregion
 		
 		public LessonPlan()
@@ -4641,6 +4669,26 @@ namespace WebHome.Models.DataEntity
 					this._EndingOperation = value;
 					this.SendPropertyChanged("EndingOperation");
 					this.OnEndingOperationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBack", DbType="NVarChar(MAX)")]
+		public string FeedBack
+		{
+			get
+			{
+				return this._FeedBack;
+			}
+			set
+			{
+				if ((this._FeedBack != value))
+				{
+					this.OnFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._FeedBack = value;
+					this.SendPropertyChanged("FeedBack");
+					this.OnFeedBackChanged();
 				}
 			}
 		}
@@ -5676,6 +5724,8 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Conclusion;
 		
+		private string _ExecutionFeedBack;
+		
 		private EntitySet<TrainingItem> _TrainingItem;
 		
 		private EntityRef<TrainingPlan> _TrainingPlan;
@@ -5696,6 +5746,8 @@ namespace WebHome.Models.DataEntity
     partial void OnActualRepeatsChanged();
     partial void OnConclusionChanging(string value);
     partial void OnConclusionChanged();
+    partial void OnExecutionFeedBackChanging(string value);
+    partial void OnExecutionFeedBackChanged();
     #endregion
 		
 		public TrainingExecution()
@@ -5825,6 +5877,26 @@ namespace WebHome.Models.DataEntity
 					this._Conclusion = value;
 					this.SendPropertyChanged("Conclusion");
 					this.OnConclusionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBack", DbType="NVarChar(MAX)")]
+		public string ExecutionFeedBack
+		{
+			get
+			{
+				return this._ExecutionFeedBack;
+			}
+			set
+			{
+				if ((this._ExecutionFeedBack != value))
+				{
+					this.OnExecutionFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionFeedBack = value;
+					this.SendPropertyChanged("ExecutionFeedBack");
+					this.OnExecutionFeedBackChanged();
 				}
 			}
 		}

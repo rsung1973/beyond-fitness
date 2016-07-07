@@ -373,6 +373,14 @@
     <Content Include="coach-verify.htm" />
     <Content Include="coach.htm" />
     <Content Include="contact-us.htm" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="cooperation.htm" />
     <Content Include="css\animate.css" />
     <Content Include="css\bootstrap-datetimepicker.min.css" />
@@ -640,8 +648,28 @@
     <Content Include="register-FB.htm" />
     <Content Include="register-result.htm" />
     <Content Include="register.htm" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-3.0.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.0.0.js" />
+    <Content Include="Scripts\jquery-3.0.0.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\npm.js" />
     <Content Include="view-coach.htm" />
     <Content Include="view-vip.htm" />
+    <Content Include="Views\Account\LessonSummary.ascx" />
+    <Content Include="Views\Lessons\DailyBookingQuery.ascx" />
+    <Content Include="Views\Lessons\DailyFitnessPieView.ascx" />
+    <Content Include="Views\Lessons\DailyTrendPieView.ascx" />
+    <Content Include="Views\Lessons\VipCalendar.ascx" />
+    <Content Include="Views\Lessons\PreviewLesson.aspx" />
     <Content Include="Views\Account\CompleteEditMySelf.aspx" />
     <Content Include="Views\Account\CompleteResetPass.aspx" />
     <Content Include="Views\Account\Index.aspx" />
@@ -661,6 +689,7 @@
     <Content Include="Views\Account\Sample.aspx" />
     <Content Include="Views\Attendance\AddTraining.ascx" />
     <Content Include="Views\Attendance\TrainingPlan.aspx" />
+    <Content Include="Views\Lessons\QueryModal.ascx" />
     <Content Include="Views\Lessons\SimpleCoachSelector.ascx" />
     <Content Include="Views\Lessons\EditTrainingItem.ascx" />
     <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
@@ -732,7 +761,9 @@
     <Content Include="Views\Member\Test.aspx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />
+    <Content Include="Views\Shared\CommonModal.ascx" />
     <Content Include="Views\Shared\ConfirmationDialog.ascx" />
+    <Content Include="Views\Shared\PieView.ascx" />
     <Content Include="Views\Shared\LinkButton.ascx" />
     <Content Include="Views\Shared\PageBanner.ascx" />
     <Content Include="Views\Shared\LockScreen.ascx" />
@@ -754,6 +785,7 @@
     <Content Include="vip.htm" />
     <Content Include="wait.htm" />
     <Content Include="Web.config" />
+    <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="_test\Test01.aspx" />
     <Content Include="_test\TestBarChart.html" />
     <Content Include="_test\TestFB.htm" />
@@ -832,6 +864,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Resource\AllMenu.json" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.0.0.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

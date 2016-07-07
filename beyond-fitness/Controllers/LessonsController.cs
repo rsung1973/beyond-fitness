@@ -15,6 +15,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web.Security;
+using System.Linq.Expressions;
 
 namespace WebHome.Controllers
 {
@@ -78,7 +79,8 @@ namespace WebHome.Controllers
             {
                 InvitedCoach = viewModel.CoachID,
                 AttendingCoach = viewModel.CoachID,
-                ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
+                //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
+                ClassTime = viewModel.ClassDate,
                 DurationInMinutes = viewModel.Duration
             };
 
@@ -185,21 +187,78 @@ namespace WebHome.Controllers
 
         public ActionResult BookingEvents(DateTime start, DateTime end)
         {
-            return Json(models.GetTable<LessonTimeExpansion>()
-                .Where(t => t.ClassDate >= start && t.ClassDate <= end)
-                .Select(t => t.ClassDate).ToList()
-                .GroupBy(t => t)
-                .Select(g => new
-                {
-                    title = g.Count(),
-                    start = g.Key.ToString("yyyy-MM-dd")
-                }), JsonRequestBehavior.AllowGet);
+            //return Json(models.GetTable<LessonTimeExpansion>()
+            //    .Where(t => t.ClassDate >= start && t.ClassDate <= end)
+            //    .Select(t => t.ClassDate).ToList()
+            //    .GroupBy(t => t)
+            //    .Select(g => new
+            //    {
+            //        title = g.Count(),
+            //        start = g.Key.ToString("yyyy-MM-dd")
+            //    }), JsonRequestBehavior.AllowGet);
+            return Json(models.GetTable<LessonTime>()
+                    .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                    .Select(t => t.ClassTime).ToList()
+                    .Select(t => t.Value.Date)
+                    .GroupBy(t => t)
+                    .Select(g => new
+                    {
+                        title = g.Count(),
+                        start = g.Key.ToString("yyyy-MM-dd")
+                    }), JsonRequestBehavior.AllowGet);
+
         }
 
-        public ActionResult DailyBookingList(DateTime lessonDate)
+        public ActionResult VipEvents(DateTime start, DateTime end)
         {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(models.GetTable<LessonTime>()
+                    .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                    .Where(t => t.RegisterLesson.UID == item.UID).ToArray()
+                    .Select(g => new
+                    {
+                        title = "與" + g.AsAttendingCoach.UserProfile.RealName + "一起上課喔",
+                        start = g.ClassTime.Value.ToString("yyyy-MM-dd")
+                    }), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult DailyBookingList(DateTime lessonDate,DateTime? endQueryDate)
+        {
+            ViewBag.EndQueryDate = endQueryDate;
             return View(lessonDate);
         }
+
+        public ActionResult DailyBookingQuery(DateTime? dateFrom, DateTime? dateTo,String userName,int? coachID,int? monthInterval)
+        {
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+            if (dateFrom.HasValue)
+            {
+                items = items.Where(l => l.ClassTime >= dateFrom.Value);
+                if (monthInterval.HasValue)
+                {
+                    items = items.Where(l => l.ClassTime < dateFrom.Value.AddMonths(monthInterval.Value));
+                }
+            }
+            if(dateTo.HasValue)
+                items = items.Where(l => l.ClassTime < dateTo.Value.AddDays(1));
+
+            if (coachID.HasValue)
+                items = items.Where(l => l.AttendingCoach == coachID);
+            if(!string.IsNullOrEmpty(userName))
+            {
+                items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(userName));
+            }
+
+            ViewBag.DataItems = items;
+            return View(DateTime.Today);
+        }
+
 
         public ActionResult DailyBookingSummary(DateTime lessonDate)
         {
@@ -222,12 +281,15 @@ namespace WebHome.Controllers
             return Json(index.Select(i => new object[] { i.Key, i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult DailyBookingMembers(DateTime lessonDate, int hour)
+        public ActionResult DailyBookingMembers(DateTime lessonDate, int? hour)
         {
-            var items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate
-                    && t.Hour == hour)
-                .GroupBy(l => l.LessonID).Select(g => g.First());
-            return View(items);
+            IQueryable<LessonTimeExpansion> items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate);
+            if(hour.HasValue)
+            {
+                items = items.Where(t => t.Hour == hour);
+            }
+                
+            return View(items.GroupBy(l => l.LessonID).Select(g => g.First()));
         }
 
         public ActionResult RevokeBooking(int lessonID)
@@ -253,6 +315,82 @@ namespace WebHome.Controllers
             return Json(new { result = true });
 
         }
+
+        public ActionResult PreviewLesson(LessonTimeExpansionViewModel viewModel)
+        {
+            var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
+                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+
+            return View(item);
+
+        }
+
+        public ActionResult DailyTrendPie(LessonTimeExpansionViewModel viewModel)
+        {
+            var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
+                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+
+            var trend = item.LessonTime.LessonTrend;
+
+            if (trend == null)
+                return Json(new object[] { },JsonRequestBehavior.AllowGet);
+
+            return Json(new object[] {
+                new {
+                    label = "動作學習",
+                    data = trend.ActionLearning
+                },
+                new {
+                    label = "姿勢矯正",
+                    data = trend.PostureRedress
+                },
+                new {
+                    label = "訓練",
+                    data = trend.Training
+                }
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult DailyFitnessPie(LessonTimeExpansionViewModel viewModel)
+        {
+            var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
+                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+
+            var fitness = item.LessonTime.FitnessAssessment;
+
+            if (fitness == null)
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+
+            return Json(new object[] {
+                new {
+                    label = "柔軟度",
+                    data = fitness.Flexibility
+                },
+                new {
+                    label = "心肺",
+                    data = fitness.Cardiopulmonary
+                },
+                new {
+                    label = "肌力",
+                    data = fitness.Strength
+                },
+                new {
+                    label = "肌耐力",
+                    data = fitness.Endurance
+                },
+                new {
+                    label = "爆發力",
+                    data = fitness.ExplosiveForce
+                },
+                new {
+                    label = "運動表現",
+                    data = fitness.SportsPerformance
+                }
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
 
         public ActionResult TrainingPlan(LessonTimeExpansionViewModel viewModel)
         {
@@ -307,6 +445,7 @@ namespace WebHome.Controllers
 
             plan.Warming = viewModel.Warming;
             plan.RecentStatus = viewModel.RecentStatus;
+            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
             plan.EndingOperation = viewModel.EndingOperation;
             plan.Remark = viewModel.Remark;
 
@@ -386,6 +525,7 @@ namespace WebHome.Controllers
 
             plan.Warming = viewModel.Warming;
             plan.RecentStatus = viewModel.RecentStatus;
+            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
             plan.EndingOperation = viewModel.EndingOperation;
             plan.Remark = viewModel.Remark;
 
@@ -571,6 +711,11 @@ namespace WebHome.Controllers
             ViewBag.DataItem = timeItem.LessonTime;
             return View("TrainingPlan", timeItem);
 
+        }
+
+        public ActionResult QueryModal()
+        {
+            return View();
         }
 
     }

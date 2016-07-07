@@ -163,7 +163,7 @@ namespace WebHome.Models.ViewModel
         public LessonTimeViewModel()
         {
             ClassDate = DateTime.Today;
-            ClassTime = new TimeSpan(8, 0, 0);
+            //ClassTime = new TimeSpan(8, 0, 0);
             Duration = 60;
         }
 
@@ -179,9 +179,9 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "上課日期")]
         public DateTime ClassDate { get; set; }
 
-        [Required]
-        [Display(Name = "上課時段")]
-        public TimeSpan ClassTime { get; set; }
+        //[Required]
+        //[Display(Name = "上課時段")]
+        //public TimeSpan ClassTime { get; set; }
 
         [Required]
         [Display(Name = "上課時間")]

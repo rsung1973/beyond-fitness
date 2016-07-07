@@ -215,13 +215,14 @@
             <!-- Responsive calendar - START -->
               <div id='calendar'></div>
             <!-- Responsive calendar - END -->
-        	
+             <div class="stack-container">
+              <div id="placeholder-bar-chart" class="stack-placeholder"></div>
+            </div>       	
           </div>
           <div class="col-md-8">
  
             <!-- Classic Heading -->
             <h4 class="classic-title"><span class="fa fa-calendar"> 行事曆清單</span></h4>
-
             <!-- Start Contact Form -->  
             <!-- Stat Search -->
             <div class="navbar bg_gray" style="min-height:30px;">
@@ -263,10 +264,7 @@
               </div>                      
               
             <!-- End Contact Form -->
-			<div class="stack-container">
-				<div id="placeholder-bar-chart" class="stack-placeholder"></div>
-			</div>
-          </div>
+
 
       </div>
     </div>
@@ -284,13 +282,7 @@
 
   <!-- Go To Top Link -->
   <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
-  
-  
-  
-  
-  
-  
-    <!-- 搜尋料提示遮罩 -->
+     <!-- 搜尋料提示遮罩 -->
   <form class="form-horizontal" role="form">
     <div class="modal fade" id="searchdil" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -301,17 +293,17 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">依學員：</label>
-            <div class="col-md-10" >
-              <select name="select1" class="form-control">
-                <option value=""></option>
-                <option value="O">A12345678 林志玲</option>
-                <option value="I">A45646545 謝金燕</option>
-                <option value="I">A78564456 王力宏</option>
-                <option value="I">A45465456 李安</option>
-              </select>
+              <label for="exampleInputFile" class="col-md-2 control-label">依學員：</label>
+              <div class="col-md-10" >
+                <select name="select1" class="form-control">
+                  <option value=""></option>
+                  <option value="O">A12345678 林志玲</option>
+                  <option value="I">A45646545 謝金燕</option>
+                  <option value="I">A78564456 王力宏</option>
+                  <option value="I">A45465456 李安</option>
+                </select>
+              </div>
             </div>
-          </div>
           <div class="form-group">
             <label for="exampleInputFile" class="col-md-2 control-label">依教練：</label>
             <div class="col-md-10" >
@@ -325,25 +317,23 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="exampleInputFile" class="col-md-2 control-label">起訖日：</label>
+            <label for="exampleInputFile" class="col-md-2 control-label">起月：</label>
             <div class="col-md-10">
-            	<div class="row">
-              	<div class="col-md-5">
                   <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
                   <input class="form-control" size="16" type="text" value="" readonly>
                   <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
-                </div>
-              	<div class="col-md-1">
-                <span style="line-height:30px;"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></span>
-                </div>
-              	<div class="col-md-5">
-                  <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input2">
-                  <input class="form-control" size="16" type="text" value="" readonly>
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span> </div>
-                </div>
-              </div>
             </div>
           </div>
+          <div class="form-group">
+            <label for="exampleInputFile" class="col-md-2 control-label">區間：</label>
+            <div class="col-md-10">
+              <select name="select1" class="form-control">
+                <option value=""></option>
+                <option value="1">一個月</option>
+                <option value="2">二個月</option>
+              </select>
+            </div>
+          </div>          
           <div class="modal-footer">
             <button type="button" class="btn btn-system btn-sm" onClick="location.href='coach.htm'"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 確認</button>
             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 取消</button>
@@ -353,6 +343,7 @@
     </div>
     </div>
   </form>
+
 
   
 	<script src="js/bootstrap-datetimepicker.js"></script> 
@@ -443,7 +434,7 @@
 	        //axisLabelFontSizePixels: 20,
 	        //axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
 	        //axisLabelPadding: 5,
-	        ticks:[[1325376000000,'Takaoma'],[1328054400000,'Giacompany'],[1330560000000,'FreshFields'],[1333238400000,'Generalisimo'],[1335830400000, 'Greenleaves']]
+	        ticks:[[1325376000000,'8'],[1328054400000,'9'],[1330560000000,'10'],[1333238400000,'11'],[1335830400000, '12']]
 	    },
 	    yaxis: {
 	    	font: {

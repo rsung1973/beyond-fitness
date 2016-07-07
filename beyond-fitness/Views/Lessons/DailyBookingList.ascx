@@ -15,18 +15,17 @@
         <th>人數</th>
         <th>功能</th>
     </tr>
-    <%  var items = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == _lessonDate.Value.Date)
-            .GroupBy(l => l.Hour);
+    <%  var items = _items.GroupBy(l => new { ClassDate = l.ClassDate, Hour = l.Hour });
         if (items != null && items.Count() > 0)
         {
             foreach (var item in items)
             {%>
     <tr>
-        <td><%= _lessonDate.Value.ToString("MM/dd") %></td>
-        <td><%= item.Key %>:00 - <%= item.Key + 1 %>:00</td>
+        <td><%= item.Key.ClassDate.ToString("MM/dd") %></td>
+        <td><%= item.Key.Hour %>:00 - <%= item.Key.Hour + 1 %>:00</td>
         <td><%= item.Count() %></td>
         <td>
-            <a class="btn-system btn-small" onclick="showAttendee('<%= String.Format("{0:yyyy/MM/dd}",_lessonDate) %>',<%= item.Key %>);" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+            <a class="btn-system btn-small" onclick="showAttendee('<%= String.Format("{0:yyyy/MM/dd}", item.Key.ClassDate) %>',<%= item.Key.Hour %>);" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
         </td>
     </tr>
     <%      } %>
@@ -51,6 +50,7 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     DateTime? _lessonDate;
+    IEnumerable<LessonTimeExpansion> _items;
 
     protected override void OnInit(EventArgs e)
     {
@@ -58,6 +58,20 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _lessonDate = (DateTime?)this.Model;
+        if(ViewBag.DataItems!=null)
+        {
+            _items = (IEnumerable<LessonTimeExpansion>)ViewBag.DataItems;
+        }
+        else if (ViewBag.EndQueryDate == null)
+        {
+            _items = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == _lessonDate.Value.Date);
+        }
+        else
+        {
+            DateTime? endDate = (DateTime?)ViewBag.EndQueryDate;
+            _items = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate >= _lessonDate.Value.Date
+                && l.ClassDate <= endDate.Value);
+        }
     }
 
 </script>
