@@ -7,32 +7,44 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 
-<div class="row">
-    <div class="col-md-12">
-        <%
-            int? lessons = models.GetTable<RegisterLesson>().Where(l => l.UID == _model.UID)
-                .Sum(l => (int?)l.Lessons);
-            int? attendances = models.GetTable<RegisterLesson>().Where(l => l.UID == _model.UID)
-                .Sum(l => (int?)l.LessonTime.Where(t => t.LessonAttendance != null).Count());
-             %>
-        <p class="text-right">總上課次數/剩餘上課次數：<%= lessons %>/<%= lessons-attendances %> </p>
-    </div>
+
+<div class="stack-container">
+    <div id="fitnessholder" class="stack-placeholder"></div>
 </div>
+
+<script>
+
+    $(function () {
+        var lessonDate = <%= JsonConvert.SerializeObject(new
+                    {
+                        start = _lessonDate.Value.ToString("yyyy-MM-dd"),
+                        end = _endQueryDate.Value.ToString("yyyy-MM-dd")
+                    }) %>;
+
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/FitnessGraph") %>', lessonDate, function (data) {
+            drawGraph($("#fitnessholder"),data.data,data.ticks);
+        });
+    });
+
+
+</script>
 
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    UserProfile _model;
+    DateTime? _lessonDate;
+    DateTime? _endQueryDate;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-
+        _lessonDate = (DateTime?)ViewBag.LessonDate;
+        _endQueryDate = (DateTime?)ViewBag.EndQueryDate ?? _lessonDate;
     }
 
 </script>

@@ -53,6 +53,14 @@
            RegisterID = 57,
            LessonID = 31
         }); %>
+    <% Html.RenderPartial("~/Views/Shared/PieView.ascx"); %>
+    <h3>Popover Example</h3>
+    <a data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>
+    <a tabindex="0" id="test1" data-placement="bottom" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
+    <a tabindex="0" id="test2" data-placement="bottom" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
+    <div id="test3" style="display:none;">
+        <a onclick="alert('...');">test</a>
+    </div>
 
     <script>
         $('#vip,#m_vip').addClass('active');
@@ -62,6 +70,12 @@
             //    viewMode: 'years',
             //    format: 'YYYY/MM'
             //});
+            $('[data-toggle="popover"]').popover();
+            //$('#test1').popover('toggle');
+            //$('#test2').popover('toggle');
+            $('#test3').on('click', function (evt) {
+                $(this).css('display', 'none');
+            }).css('display', 'block');
         });
 
     </script>

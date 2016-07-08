@@ -27,20 +27,11 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <%  ViewBag.Preview = true;
-                        ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
-                        Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);  %>
+                    <h4 class="classic-title"><span><%= _model.ClassTime.Value.ToString("M/d") %> 課程內容 - <%= _profile.RealName %></span></h4>
                     <!-- End Classic -->
 
                     <!-- Start Contact Form -->
                     <!-- Categories Widget -->
-<%--                    <div class="widget widget-categories">
-                        <ul>
-                            <li>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditVip/") + _profile.UID %>"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
-                            </li>
-                        </ul>
-                    </div>--%>
                     <!-- End Contact Form -->
 
                     <!-- Classic Heading -->
@@ -50,13 +41,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="orange-text"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _lessonTime); %>
                         </div>
 
 
                         <div class="col-md-6">
                             <h4 class="orange-text"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _lessonTime); %>
                         </div>
 
 
@@ -70,7 +61,7 @@
                                             <th>暖身</th>
                                         </tr>
                                         <tr>
-                                            <td><pre><%= _model.LessonTime.LessonPlan!=null ? _model.LessonTime.LessonPlan.Warming : null %></pre></td>
+                                            <td><pre><%= _model.LessonPlan!=null ? _model.LessonPlan.Warming : null %></pre></td>
                                         </tr>
                                     </table>
                                     <table class="table">
@@ -81,10 +72,10 @@
                                             <th>實際/目標強度</th>
                                             <th>組數</th>
                                         </tr>
-                                        <%      if (_model.LessonTime.TrainingPlan.Count > 0)
+                                        <%      if (_model.TrainingPlan.Count > 0)
                                     {
                                         int idx = 0;
-                                        foreach (var item in _model.LessonTime.TrainingPlan)
+                                        foreach (var item in _model.TrainingPlan)
                                         {
                                             idx++;
                                             var execution = item.TrainingExecution;
@@ -136,8 +127,10 @@
                                         </tr>
                                         <tr class="active">
                                             <td colspan="4">
-                                                <li class="fa fa-commenting-o"></li>
-                                                <strong>迴響：</strong><%= execution.ExecutionFeedBack %></td>
+                                                <li class="fa fa-commenting-o"></li><strong>迴響：</strong>
+                                                <a onclick="saveAll();"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                                                <input class="form-control" name="executionFeedBack" value='<%= HttpUtility.HtmlEncode(execution.ExecutionFeedBack) %>' />
+                                            </td>
                                         </tr>                                        
                                         <%              }
                                     else
@@ -156,7 +149,11 @@
                                         <tr class="active">
                                             <td colspan="4">
                                                 <li class="fa fa-commenting-o"></li>
-                                                <strong>迴響：</strong><%= execution.ExecutionFeedBack %></td>
+                                                <li class="fa fa-commenting-o"></li>
+                                                <strong>迴響：</strong>
+                                                <a onclick="saveAll();"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+                                                <input class="form-control" name="executionFeedBack" value='<%= HttpUtility.HtmlEncode(execution.ExecutionFeedBack) %>' />
+                                            </td>
                                         </tr>
                                         <%              }
                                         }
@@ -173,7 +170,7 @@
                                             <th>收操</th>
                                         </tr>
                                         <tr>
-                                            <td><pre><%= _model.LessonTime.LessonPlan!=null ?_model.LessonTime.LessonPlan.EndingOperation : null %></pre></td>
+                                            <td><pre><%= _model.LessonPlan!=null ?_model.LessonPlan.EndingOperation : null %></pre></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -181,28 +178,27 @@
                         </div>
                     </div>
 
-                    <%  if (_model.LessonTime.LessonPlan != null)
-                        { %>
-                            <div class="col-md-6">
-                                <div class="hr1" style="margin-top: 20px; margin-bottom: 5px;"></div>
-                                <h4 class="orange-text"><span class="fa fa-commenting" aria-hidden="true"></span> 教練總評：</h4>
-                                <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
-                                <!-- Start Call Action -->
-                                <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= String.IsNullOrEmpty(_model.LessonTime.LessonPlan.Remark) ? "目前尚無總評" : _model.LessonTime.LessonPlan.Remark %></pre>
-                                <!-- End Call Action -->
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 5px;"></div>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
-                            </div>
+                        <div class="col-md-6">
+                            <div class="hr1" style="margin-top: 20px; margin-bottom: 5px;"></div>
+                            <h4 class="orange-text"><span class="fa fa-commenting" aria-hidden="true"></span> 教練總評：</h4>
+                            <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
+                            <!-- Start Call Action -->
+                            <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= _model.LessonPlan == null || String.IsNullOrEmpty(_model.LessonPlan.Remark) ? "目前尚無總評" : _model.LessonPlan.Remark %></pre>
+                            <!-- End Call Action -->
+                            <div class="hr1" style="margin-top: 10px; margin-bottom: 5px;"></div>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+                        </div>
 
-                            <div class="col-md-6">
-                                <div class="hr1" style="margin-top: 20px; margin-bottom: 5px;"></div>
-                                <h4 class="orange-text"><span class="fa fa-comments-o" aria-hidden="true"></span> 學員意見反饋：</h4>
-                                <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
-                                <!-- Start Call Action -->
-                                <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= String.IsNullOrEmpty(_model.LessonTime.LessonPlan.FeedBack) ? "目前尚無意見反饋" : _model.LessonTime.LessonPlan.FeedBack %></pre>
-                                <!-- End Call Action -->
-                            </div>
-                    <%  } %>
+                        <div class="col-md-6">
+                            <div class="hr1" style="margin-top: 20px; margin-bottom: 5px;"></div>
+                            <h4 class="orange-text"><span class="fa fa-comments-o" aria-hidden="true"></span> 學員意見反饋：</h4>
+                            <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
+                            <!-- Start Call Action -->
+                            <textarea class="form-control" name="feedBack" rows="4"><%= _model.LessonPlan != null ? _model.LessonPlan.FeedBack : null %></textarea>
+                            <div class="text-right" style="margin-bottom: 5px;">
+                                <a onclick="saveAll();" class="btn-system  btn-sm">更新 <i class="fa fa-refresh" aria-hidden="true"></i></a>
+                            </div>                                <!-- End Call Action -->
+                        </div>
                     
                 </div>
 
@@ -223,13 +219,24 @@
         $('#vip,#m_vip').addClass('active');
         $('#theForm').addClass('contact-form');
 
+        function saveAll() {
+            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Feedback/") + _model.LessonID %>', $('form').serialize(), function (data) {
+                if (data.result) {
+                    alert("資已更新!!");
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
     </script>
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
-    LessonTimeExpansion _model;
+    LessonTime _model;
+    LessonTimeExpansion _lessonTime;
     UserProfile _profile;
     
 
@@ -238,8 +245,9 @@
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (LessonTimeExpansion)this.Model;
-        _profile = _model.LessonTime.RegisterLesson.UserProfile;
+        _model = (LessonTime)this.Model;
+        _lessonTime = (LessonTimeExpansion)ViewBag.LessonTimeExpansion;
+        _profile = _model.RegisterLesson.UserProfile;
     }
 
 </script>

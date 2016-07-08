@@ -219,12 +219,91 @@ namespace WebHome.Controllers
 
             return Json(models.GetTable<LessonTime>()
                     .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                    .Where(l => l.TrainingPlan != null)
+                    .Where(l => l.LessonPlan != null)
                     .Where(t => t.RegisterLesson.UID == item.UID).ToArray()
                     .Select(g => new
                     {
-                        title = "與" + g.AsAttendingCoach.UserProfile.RealName + "一起上課喔",
-                        start = g.ClassTime.Value.ToString("yyyy-MM-dd")
+                        title = "與" + (!String.IsNullOrEmpty(g.AsAttendingCoach.UserProfile.UserName) ? g.AsAttendingCoach.UserProfile.UserName : g.AsAttendingCoach.UserProfile.RealName) + "上課嘍",
+                        start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                        lessonID = g.LessonID
                     }), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult VipEvent(DateTime lessonDate)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
+
+            var items = models.GetTable<LessonTime>().Where(t => t.ClassTime >= lessonDate
+                && t.ClassTime < lessonDate.AddDays(1)
+                && t.RegisterLesson.UID == profile.UID);
+
+            if (items.Count() == 0)
+            {
+                return Json(new { result = false, message = "課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if(items.Count()>1)
+            {
+                return View("SelectVipDay", items);
+            }
+            else
+            {
+                return View("ToVipDay", items.First());
+            }
+
+        }
+
+        public ActionResult VipDay(int id)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            var item = models.GetTable<LessonTime>().Where(t => t.LessonID == id
+                && t.RegisterLesson.UID == profile.UID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return RedirectToAction("Vip", "Account");
+            }
+
+            ViewBag.LessonTimeExpansion = item.LessonTimeExpansion.First();
+            return View(item);
+
+        }
+
+        public ActionResult Feedback(int id,FeedBackViewModel viewModel)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            var item = models.GetTable<LessonTime>().Where(t => t.LessonID == id
+                && t.RegisterLesson.UID == profile.UID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Json(new { result = false, message = "課程資料不存在!!" });
+            }
+
+            item.LessonPlan.FeedBack = viewModel.FeedBack;
+            for(int i=0;i<item.TrainingPlan.Count && i<viewModel.ExecutionFeedBack.Length;i++)
+            {
+                item.TrainingPlan[i].TrainingExecution.ExecutionFeedBack = viewModel.ExecutionFeedBack[i];
+            }
+            models.SubmitChanges();
+
+            return Json(new { result = true });
 
         }
 
@@ -280,6 +359,283 @@ namespace WebHome.Controllers
 
             return Json(index.Select(i => new object[] { i.Key, i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
         }
+
+        class GraphDataItem
+        {
+            public DateTime? ClassTime { get; set; }
+            public int ActionLearning { get; set; }
+            public int PostureRedress { get; set; }
+            public int Training { get; set; }
+            public int Cardiopulmonary { get; set; }
+            public int Endurance { get; set; }
+            public int ExplosiveForce { get; set; }
+            public int Flexibility { get; set; }
+            public int SportsPerformance { get; set; }
+            public int Strength { get; set; }
+        }
+
+        GraphDataItem calcAverage(LessonTime item)
+        {
+            var trend = item.LessonTrend;
+            decimal total = trend.ActionLearning.Value + trend.PostureRedress.Value + trend.Training.Value;
+            var r = new GraphDataItem
+            {
+                ClassTime = item.ClassTime.Value,
+                ActionLearning = (int)Math.Round(trend.ActionLearning.Value * 100m / total),
+                PostureRedress = (int)Math.Round(trend.PostureRedress.Value * 100m / total)
+            };
+            r.Training = 100 - r.ActionLearning - r.PostureRedress;
+            return r;
+        }
+
+        GraphDataItem fitnessAverage(LessonTime item)
+        {
+            var fitness = item.FitnessAssessment;
+            decimal total = fitness.Cardiopulmonary.Value 
+                + fitness.Endurance.Value 
+                + fitness.ExplosiveForce.Value
+                + fitness.Flexibility.Value
+                + fitness.SportsPerformance.Value 
+                + fitness.Strength.Value;
+
+            var r = new GraphDataItem
+            {
+                ClassTime = item.ClassTime.Value,
+                Cardiopulmonary = (int)Math.Round(fitness.Cardiopulmonary.Value * 100m / total),
+                Endurance = (int)Math.Round(fitness.Endurance.Value * 100m / total),
+                ExplosiveForce = (int)Math.Round(fitness.ExplosiveForce.Value * 100m / total),
+                Flexibility = (int)Math.Round(fitness.Flexibility.Value * 100m / total),
+                SportsPerformance = (int)Math.Round(fitness.SportsPerformance.Value * 100m / total)
+            };
+
+            r.Strength = 100
+                - r.Cardiopulmonary
+                - r.Endurance
+                - r.ExplosiveForce
+                - r.Flexibility
+                - r.SportsPerformance;
+
+            return r;
+        }
+
+
+        public ActionResult FitnessGraph(DateTime start, DateTime end)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new object[] { });
+            }
+
+            DateTime startDate = start < end ? new DateTime(start.Year, start.Month, 1) : new DateTime(end.Year, end.Month, 1);
+            DateTime endDate = start >= end ? start : end;
+
+            var items = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= startDate && t.ClassTime < endDate.AddDays(1))
+                .Where(t => t.RegisterLesson.UID == profile.UID)
+                .Where(t => t.LessonAttendance != null).ToArray()
+                .Select(t => fitnessAverage(t)).ToArray();
+
+            var idx = Enumerable.Range(0, items.Length);
+            int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+
+            return Json(
+                new
+                {
+                    data = new object[]
+                    {
+                        new
+                        {
+                            label = "柔軟度",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].Flexibility
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "心肺",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].Cardiopulmonary
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "肌力",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].Strength
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "肌耐力",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].Endurance
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "爆發力",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].ExplosiveForce
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "運動表現",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].SportsPerformance
+                            }).ToArray()
+                        }
+                    },
+                    ticks = idx.Select(g => new object[]
+                        {
+                            g,
+                            g%section==0 ? (g+1).ToString() : ""
+                        }).ToArray()
+                }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult TrendGraph(DateTime start, DateTime end)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new object[] { });
+            }
+
+            DateTime startDate = start < end ? new DateTime(start.Year, start.Month, 1) : new DateTime(end.Year, end.Month, 1);
+            DateTime endDate = start >= end ? start : end;
+
+            var items = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= startDate && t.ClassTime < endDate.AddDays(1))
+                .Where(t => t.RegisterLesson.UID == profile.UID)
+                .Where(t => t.LessonAttendance != null).ToArray()
+                .Select(t => calcAverage(t)).ToArray();
+
+            var idx = Enumerable.Range(0, items.Length);
+            int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+
+            return Json(
+                new
+                {
+                    data = new object[]
+                    {
+                        new
+                        {
+                            label = "動作學習",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].ActionLearning
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "姿勢矯正",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].PostureRedress
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "訓練",
+                            data = idx.Select(g=>new object[]
+                            {
+                                g,
+                                items[g].Training
+                            }).ToArray()
+                        }
+                    },
+                    ticks = idx.Select(g => new object[]
+                        {
+                            g,
+                            g%section==0 ? (g+1).ToString() : ""
+                        }).ToArray()
+                }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult TrendGraphAverage(DateTime start, DateTime end)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new object[] { });
+            }
+
+            DateTime startDate = start < end ? new DateTime(start.Year,start.Month,1) : new DateTime(end.Year, end.Month, 1);
+            DateTime endDate = start >= end ? start : end;
+
+            var items = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= startDate && t.ClassTime < endDate.AddDays(1))
+                .Where(t => t.RegisterLesson.UID == profile.UID)
+                .Where(t => t.LessonAttendance != null).ToArray()
+                .Select(t=> calcAverage(t))
+                .GroupBy(t => new { Year = t.ClassTime.Value.Year, Month = t.ClassTime.Value.Month })
+                .Select(g => new
+                {
+                    Key = g.Key,
+                    ActonLearning = (g.Sum(v => v.ActionLearning) + g.Count() / 2) / g.Count(),
+                    PostureRedress = (g.Sum(v => v.PostureRedress) + g.Count() / 2) / g.Count(),
+                    Training = (g.Sum(v => v.Training) + g.Count() / 2) / g.Count()
+                });
+
+            return Json(
+                new
+                {
+                    data = new object[]
+                    {
+                        new
+                        {
+                            label = "動作學習",
+                            data = items.Select(g=>new object[]
+                            {
+                                (g.Key.Year-startDate.Year)*12+g.Key.Month-startDate.Month,
+                                g.ActonLearning
+                            }).ToArray() },
+                        new
+                        {
+                            label = "姿勢矯正",
+                            data = items.Select(g => new object[]
+                            {
+                                (g.Key.Year-startDate.Year)*12+g.Key.Month-startDate.Month,
+                                g.PostureRedress
+                            }).ToArray()
+                        },
+                        new
+                        {
+                            label = "訓練",
+                            data = items.Select(g => new object[]
+                            {
+                                (g.Key.Year-startDate.Year)*12+g.Key.Month-startDate.Month,
+                                g.Training
+                            }).ToArray()
+                        }
+                    },
+                    ticks = Enumerable.Range(0, (end.Year - start.Year) * 12 + end.Month - start.Month + 1)
+                        .Select(g => new object[]
+                        {
+                            g,
+                            String.Format("{0:00}",(start.Month-1+g)%12+1)
+                        }).ToArray()
+                }, JsonRequestBehavior.AllowGet);
+        }
+
 
         public ActionResult DailyBookingMembers(DateTime lessonDate, int? hour)
         {

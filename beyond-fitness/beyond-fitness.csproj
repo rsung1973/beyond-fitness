@@ -667,7 +667,12 @@
     <Content Include="Views\Account\LessonSummary.ascx" />
     <Content Include="Views\Lessons\DailyBookingQuery.ascx" />
     <Content Include="Views\Lessons\DailyFitnessPieView.ascx" />
+    <Content Include="Views\Lessons\FitnessGraphView.ascx" />
+    <Content Include="Views\Lessons\TrendGraphView.ascx" />
     <Content Include="Views\Lessons\DailyTrendPieView.ascx" />
+    <Content Include="Views\Lessons\VipDay.aspx" />
+    <Content Include="Views\Lessons\SelectVipDay.ascx" />
+    <Content Include="Views\Lessons\ToVipDay.ascx" />
     <Content Include="Views\Lessons\VipCalendar.ascx" />
     <Content Include="Views\Lessons\PreviewLesson.aspx" />
     <Content Include="Views\Account\CompleteEditMySelf.aspx" />
@@ -763,6 +768,7 @@
     <Content Include="Views\Sample\SampleWithDB.aspx" />
     <Content Include="Views\Shared\CommonModal.ascx" />
     <Content Include="Views\Shared\ConfirmationDialog.ascx" />
+    <Content Include="Views\Shared\GraphView.ascx" />
     <Content Include="Views\Shared\PieView.ascx" />
     <Content Include="Views\Shared\LinkButton.ascx" />
     <Content Include="Views\Shared\PageBanner.ascx" />

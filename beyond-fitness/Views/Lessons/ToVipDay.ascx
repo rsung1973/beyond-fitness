@@ -8,31 +8,24 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="row">
-    <div class="col-md-12">
-        <%
-            int? lessons = models.GetTable<RegisterLesson>().Where(l => l.UID == _model.UID)
-                .Sum(l => (int?)l.Lessons);
-            int? attendances = models.GetTable<RegisterLesson>().Where(l => l.UID == _model.UID)
-                .Sum(l => (int?)l.LessonTime.Where(t => t.LessonAttendance != null).Count());
-             %>
-        <p class="text-right">總上課次數/剩餘上課次數：<%= lessons %>/<%= lessons-attendances %> </p>
-    </div>
-</div>
+<script>
+    $(function () {
+        window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipDay/") + _model.LessonID %>';
+    });
+</script>
 
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    UserProfile _model;
+    LessonTime _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-
+        _model = (LessonTime)this.Model;
     }
 
 </script>

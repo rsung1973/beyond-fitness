@@ -50,16 +50,12 @@
                         <div class="col-md-6">
                             <h4 class="orange-text"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                            <div class="stack-container">
-                                <div id="placeholder1" class="stack-placeholder" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-                            </div>
+                            <% Html.RenderPartial("~/Views/Lessons/TrendGraphView.ascx"); %>
                         </div>
                         <div class="col-md-6">
                             <h4 class="orange-text"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                            <div class="stack-container">
-                                <div id="placeholder2" class="stack-placeholder" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
-                            </div>
+                            <% Html.RenderPartial("~/Views/Lessons/FitnessGraphView.ascx"); %>
                         </div>
                     </div>
 
@@ -69,7 +65,7 @@
         </div>
     </div>
     <!-- End content -->
-
+    <% Html.RenderPartial("~/Views/Shared/GraphView.ascx"); %>
     <script>
     $('#vip,#m_vip').addClass('active');
     </script>
@@ -88,7 +84,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (UserProfile)this.Model;
         _lessonDate = (DateTime?)ViewBag.LessonDate;
-        _endQueryDate = (DateTime?)ViewBag.EndQueryDate ?? _lessonDate;
+        _endQueryDate = (DateTime?)ViewBag.EndQueryDate;
     }
 
 </script>

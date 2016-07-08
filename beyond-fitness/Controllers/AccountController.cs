@@ -580,7 +580,20 @@ namespace WebHome.Controllers
 
         public ActionResult Vip(DateTime? lessonDate,DateTime? endQueryDate)
         {
-            return commonEntry(ref lessonDate, endQueryDate);
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+            if (!lessonDate.HasValue)
+                lessonDate = DateTime.Today.AddYears(-1);
+            if (!endQueryDate.HasValue)
+                endQueryDate = lessonDate.Value.AddYears(1);
+
+            ViewBag.LessonDate = lessonDate;
+            ViewBag.EndQueryDate = endQueryDate;
+
+            return View(item);
         }
 
         public ActionResult EditVip(int id,DateTime? lessonDate)
@@ -614,11 +627,6 @@ namespace WebHome.Controllers
 
         public ActionResult Coach(DateTime? lessonDate,DateTime? endQueryDate)
         {
-            return commonEntry(ref lessonDate, endQueryDate);
-        }
-
-        private ActionResult commonEntry(ref DateTime? lessonDate, DateTime? endQueryDate)
-        {
             UserProfile item = HttpContext.GetUser();
             if (item == null)
             {
@@ -632,6 +640,7 @@ namespace WebHome.Controllers
 
             return View(item);
         }
+
 
         [HttpGet]
         public ActionResult EditMySelf()

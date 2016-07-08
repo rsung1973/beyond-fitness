@@ -1,5 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewPage" %>
-
+<%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq.Expressions" %>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
+<%@ Import Namespace="WebHome.Helper" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
+<%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
 
     <script>
 
@@ -67,3 +74,12 @@
             });
         }
     </script>
+
+<script runat="server">
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        Context.ClearCache();
+    }
+</script>

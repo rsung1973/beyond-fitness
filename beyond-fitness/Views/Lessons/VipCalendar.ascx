@@ -28,29 +28,50 @@
                 left: 'prev,next today',
                 center: 'title'
             },
-            defaultDate: '<%= DateTime.Today.ToString("yyyy-MM-dd") %>',
+            <%--defaultDate: '<%= DateTime.Today.ToString("yyyy-MM-dd") %>',--%>
+            nowIndicator: true,
             editable: false,
             eventLimit: false, // allow "more" link when too many events
             events: '<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipEvents") %>',
             aspectRatio: 1,
-            eventClick: function (calEvent, jsEvent, view) {
-
-                pageParam.lessonDate = calEvent.start.format('YYYY-MM-DD');
-                $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
-                plotData(calEvent.start.format('YYYY-MM-DD'));
-                //$('#attendeeList').empty();
-                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
-
-                //alert('Event: ' + calEvent.title);
-                //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-                //alert('View: ' + view.name);
-
-                //// change the border color just for fun
-                //$(this).css('border-color', 'red');
+            eventColor: '#666',
+            eventRender: function (event, element, view) {
+                $(element).height(50)
+                    .prop('href', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipDay/") %>' + event.lessonID);
             }
-
+<%--            ,
+            eventClick: function (calEvent, jsEvent, view) {
+                var lessonDate = calEvent.start.format('YYYY-MM-DD');
+                var $this = $(this);
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipEvent") %>', { 'lessonDate': lessonDate }, function (data) {
+                    if (data) {
+                        if (data.result == false) {
+                            alert(data.message);
+                            return;
+                        } else {
+                            $(data).appendTo($('#calendar'));
+                        }
+                    }
+                });
+            },
+            dayClick: function (calEvent, jsEvent, view) {
+                //alert(calEvent);
+                var lessonDate = calEvent.format('YYYY-MM-DD');
+                var $this = $(this);
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipEvent") %>', { 'lessonDate': lessonDate }, function (data) {
+                    if (data) {
+                        if (data.result == false) {
+                            alert(data.message);
+                            return;
+                        } else {
+                            $(data).appendTo($('#calendar'));
+                        }
+                    }
+                });
+            }--%>
         });
     });
+
 </script>
 
 <script runat="server">

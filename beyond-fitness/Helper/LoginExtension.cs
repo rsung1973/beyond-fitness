@@ -31,6 +31,12 @@ namespace WebHome.Helper
             DataModelCache caching = new DataModelCache(context);
             caching.Clear();
         }
+        public static void ClearCache(this HttpContext context)
+        {
+            HttpContextDataModelCache caching = new HttpContextDataModelCache(context);
+            caching.Clear();
+        }
+
 
         public static void SetCacheValue(this HttpContextBase context, CachingKey keyName, Object value)
         {
@@ -54,6 +60,13 @@ namespace WebHome.Helper
             caching[keyName] = value;
         }
 
+        public static void SetCacheValue(this HttpContext context, String keyName, Object value)
+        {
+            HttpContextDataModelCache caching = new HttpContextDataModelCache(context);
+            caching[keyName] = value;
+        }
+
+
         public static Object GetCacheValue(this HttpContextBase context, String keyName)
         {
             DataModelCache caching = new DataModelCache(context);
@@ -75,27 +88,42 @@ namespace WebHome.Helper
         public static UserProfile GetUser(this HttpContextBase context)
         {
             UserProfile profile = (UserProfile)context.GetCacheValue("userProfile");
-            //if (profile == null)
-            //{
-            //    if(!context.Request.Url.AbsolutePath.EndsWith("Account/Login"))
-            //    {
-            //        FormsAuthentication.RedirectToLoginPage();
-            //    }
-            //}
+            if (profile == null)
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    profile = context.User.Identity.Name.getLoginUser();
+                    context.SetCacheValue("userProfile", profile);
+                }
+            }
             return profile;
+        }
+
+        private static UserProfile getLoginUser(this String pid)
+        {
+            using (ModelSource<UserProfile> Models = new ModelSource<UserProfile>())
+            {
+                UserProfile profile = Models.EntityList.Where(u => u.PID == pid).FirstOrDefault();
+                if (profile != null)
+                {
+                    var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
+                }
+                return profile;
+            }
         }
 
         public static UserProfile GetUser(this HttpContext context)
         {
             HttpContextDataModelCache caching = new HttpContextDataModelCache(context);
             UserProfile profile =  (UserProfile)caching["userProfile"];
-            //if (profile == null)
-            //{
-            //    if (!context.Request.Url.AbsolutePath.EndsWith("Account/Login"))
-            //    {
-            //        FormsAuthentication.RedirectToLoginPage();
-            //    }
-            //}
+            if (profile == null)
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    profile = context.User.Identity.Name.getLoginUser();
+                    context.SetCacheValue("userProfile", profile);
+                }
+            }
             return profile;
         }
     }

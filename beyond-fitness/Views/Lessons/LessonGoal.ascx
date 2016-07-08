@@ -8,13 +8,12 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<p><strong>日期：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd") %></strong></p>
-<p><strong>時間：<%= _model.ClassTime.Value.ToString("HH:mm") %> - <%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></strong></p>
+<h4>上課時間：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd") %> <%= _model.ClassTime.Value.ToString("HH:mm") %> - <%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></h4>
 <%  if (_assessment == true)
     { %>
         <div class="row">
             <div class="col-md-2">
-                <strong>教練：</strong>
+                <h4>上課教練：</h4>
             </div>
             <div class="col-md-4">
                 <% Html.RenderPartial("~/Views/Lessons/CoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.AttendingCoach }); %>
@@ -23,10 +22,10 @@
 <%  }
     else
     { %>
-        <p><strong>教練：<%= _model.AsAttendingCoach.UserProfile.RealName %></strong></p>
+        <h4>上課教練：<%= _model.AsAttendingCoach.UserProfile.RealName %></h4>
 <%  } %>
 
-<h4 class="classic-title"><span>適配結果</span></h4>
+<h4><span class="fa fa-tags"></span> 方案設計工具結果</h4>
 <div class="panel panel-default">
     <table class="table">
         <tr class="info">
@@ -41,12 +40,10 @@
         </tr>
     </table>
 </div>
-<h4 class="classic-title"><span>目前近況</span></h4>
+<h4>目前近況</h4>
 <%  if (ViewBag.Preview == true)
     { %>
-        <div class="call-action call-action-boxed call-action-style4 clearfix">
-            <p><%= String.IsNullOrEmpty(_model.RegisterLesson.UserProfile.RecentStatus) ? "目前尚無任何近況哦!!" : _model.RegisterLesson.UserProfile.RecentStatus %></p>
-        </div>
+        <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= String.IsNullOrEmpty(_model.RegisterLesson.UserProfile.RecentStatus) ? "目前尚無任何近況哦!!" : _model.RegisterLesson.UserProfile.RecentStatus %></pre>
 <%  }
     else
     { %>

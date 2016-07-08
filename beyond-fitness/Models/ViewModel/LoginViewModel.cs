@@ -290,7 +290,15 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "運動表現")]
         public int? SportsPerformance { get; set; }
+    }
 
+    public class FeedBackViewModel
+    {
+        [Display(Name = "迴響")]
+        public String[] ExecutionFeedBack { get; set; }
+
+        [Display(Name = "學員意見反饋")]
+        public String FeedBack { get; set; }
 
     }
 
