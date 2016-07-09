@@ -926,7 +926,9 @@ namespace WebHome.Controllers
                 Description = viewModel.Description,
                 GoalStrength = viewModel.GoalStrength,
                 GoalTurns = viewModel.GoalTurns,
-                TrainingID = viewModel.TrainingID.Value
+                TrainingID = viewModel.TrainingID.Value,
+                ActualStrength = viewModel.GoalStrength,
+                ActualTurns = viewModel.GoalTurns
             });
 
             models.SubmitChanges();
@@ -1039,8 +1041,8 @@ namespace WebHome.Controllers
             {
                 var item = execution.TrainingItem[i];
                 item.TrainingID = (viewModel.TrainingID[i]).Value;
-                item.GoalStrength = viewModel.GoalStrength[i];
-                item.GoalTurns = viewModel.GoalTurns[i];
+                item.ActualStrength = item.GoalStrength = viewModel.GoalStrength[i];
+                item.ActualTurns = item.GoalTurns = viewModel.GoalTurns[i];
                 item.Description = viewModel.Description[i];
             }
 

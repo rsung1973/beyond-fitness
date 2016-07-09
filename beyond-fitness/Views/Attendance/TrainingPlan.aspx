@@ -34,10 +34,12 @@
                         Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
 
                     <!-- Start Contact Form -->
-                    <div>
-                        <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+                    <div class="col-md-10">
+                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <% ViewBag.Inline = true; Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.LessonTime.AttendingCoach }); %></h4>
                     </div>
-                    <div class="hr1" style="margin-bottom: 10px;"></div>
+                    <div class="col-md-2 text-right">
+                        <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+                    </div>                    
                     <div class="panel panel-default">
                         <table class="table">
                             <tr class="info">
@@ -51,14 +53,18 @@
                         </table>
                         <table class="table">
                             <tr class="info">
-                                <th width="5%">排序</th>
-                                <th width="25%">肌力訓練</th>
-                                <th width="10%">實際次數<br />
-                                    目標次數</th>
-                                <th width="10%">實際強度<br />
-                                    目標強度</th>
-                                <th width="5%">組數</th>
-                                <th width="30%">評論</th>
+                                <th rowspan="2" class="col-xs-1 col-md-1"></th>
+                                <th rowspan="2" class="col-xs-3 col-md-3">肌力訓練</th>
+                                <th class="col-xs-2 col-md-2 text-center">實際次數</th>
+                                <th class="col-xs-2 col-md-2 text-center">實際強度</th>
+                                <th rowspan="2" class="col-xs-1 col-md-1 text-center">組數</th>
+                                <th rowspan="2" class="col-xs-2 col-md-3">
+                                    <li class="glyphicon glyphicon-info-sign"></li>
+                                    小提示：</th>
+                            </tr>
+                            <tr class="info">
+                                <th class="text-center">目標次數</th>
+                                <th class="text-center">目標強度</th>
                             </tr>
                             <%      if (_model.LessonTime.TrainingPlan.Count > 0)
                                     {
@@ -144,7 +150,7 @@
                     <div class="row">
 
                         <div class="col-md-6">
-                            <h4 class="orange-text"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
+                            <h4 ><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
 
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -175,7 +181,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <h4 class="orange-text"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
+                            <h4 ><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
 
                             <div class="panel panel-default">
                                 <div class="panel-body">

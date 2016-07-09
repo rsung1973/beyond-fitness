@@ -20,44 +20,69 @@
             <div class="user-bio">
                 <h2 class="text-primary"><%= _model.RealName %> </h2>
 
-                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                <%  if (ViewBag.Argument == null)
-                    { %>
-                        <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
-                        <p><strong>電話：</strong><%= _model.Phone %></p>
-                        <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
-                <%  } %>
-
-                <%  if (ViewBag.ShowPerson == true)
-                    {   %>
-                        <p class="fa fa-tags"><strong>方案設計工具結果</strong></p>
+                <div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><span class="fa fa-user"></span>個人詳細資訊：</h4>
                         <table class="table">
-                            <tr class="info">
-                                <th>目標</th>
-                                <th>風格</th>
-                                <th>訓練水準</th>
+                            <tr>
+                                <th class="warning" class="col-xs-1 col-md-1">會員編號</th>
+                                <td><%= _model.MemberCode %></td>
                             </tr>
                             <tr>
-                                <td>健身</td>
-                                <td>保守型</td>
-                                <td>初期</td>
+                                <th class="warning" class="col-xs-1 col-md-1">電話</th>
+                                <td><%= _model.Phone %></td>
+                            </tr>
+                            <tr>
+                                <th class="warning" class="col-xs-1 col-md-1">Email</th>
+                                <td><%= _model.PID.Contains("@") ? _model.PID : null %></td>
+                            </tr>
+                            <tr>
+                                <th class="warning" class="col-xs-1 col-md-1">年鹷</th>
+                                <td><%= _model.Birthday.HasValue ? (DateTime.Today.Year-_model.Birthday.Value.Year).ToString() : null %>歲</td>
                             </tr>
                         </table>
+                    </div>
+                <%  if (ViewBag.ShowPerson == true)
+                    {   %>
+                        <div class="col-md-6">
+                            <h4><span class="fa fa-tags"></span>方案設計工具結果：</h4>
+                            <table class="table">
+                                <tr class="info">
+                                    <th>目標</th>
+                                    <th>風格</th>
+                                    <th>訓練水準</th>
+                                </tr>
+                                <tr>
+                                    <td>減肥</td>
+                                    <td>保守型</td>
+                                    <td>初期</td>
+                                </tr>
+                            </table>
+                        </div>
+
                 <%  }
                     else if (ViewBag.EditMySelf == true)
                     { %>
-                        <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                        <p>您的修改已經完成。</p>
-                        <!-- Divider -->
-                        <div class="hr1" style="margin-bottom: 10px;"></div>
-                        <p><a href="<%= VirtualPathUtility.ToAbsolute(_model.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner ? "~/Account/Vip" : "~/Account/Coach") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                        <div class="col-md-12">
+                            <p>您的修改已經完成。</p>
+                            <!-- Divider -->
+                            <div class="hr1" style="margin-bottom: 10px;"></div>
+                            <p><a href="<%= VirtualPathUtility.ToAbsolute(_model.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner ? "~/Account/Vip" : "~/Account/Coach") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                        </div>
                 <%  }
-                    else if (ViewBag.Argument is ArgumentModel)
-                    {
-                        Html.RenderPartial(((ArgumentModel)ViewBag.Argument).PartialViewName, ((ArgumentModel)ViewBag.Argument).Model);
-                    } %>
+                    //else if (ViewBag.Argument is ArgumentModel)
+                    //{
+                    //    Html.RenderPartial(((ArgumentModel)ViewBag.Argument).PartialViewName, ((ArgumentModel)ViewBag.Argument).Model);
+                    //} 
+                %>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4><span class="fa fa-bell-o"></span>目前近況：</h4>
+                        <textarea class="form-control" name="recentStatus" rows="3"><%= _model.RecentStatus %></textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

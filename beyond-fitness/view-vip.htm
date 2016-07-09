@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="css/animate.css" media="screen">
 
   <!-- Color CSS Styles  -->
-  <link rel="stylesheet" type="text/css" href="css/colors/orange.css" title="orange" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/colors/primary.css" title="primary" media="screen" />
 
   <!-- lockScreen CSS Styles  -->
   <link rel="stylesheet" href="lockScreen/app.css" />
@@ -198,44 +198,69 @@
       <div class="container">
 
         <div class="row">
-
-          <div class="col-md-8">
-
+         <div class="col-md-10">
             <!-- Classic Heading -->
-            <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
-            <!-- Start Post -->
-            <div class="blog-post quote-post">
-              <!-- Post Content -->
-              <div class="user-info clearfix">
-                  <div class="author-image">
-					<div class="user-image">
-						<img alt="" src="images/noMember.jpg" />
-              		</div>
-					  <div class="user-bio">
-						<h2 class="text-primary">林志玲 </h2>
+            <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>          
+              <!--User Profile-->
+                 <div class="blog-post quote-post">
+                  <!-- Post Content -->
+                  <div class="user-info clearfix">
+                      <div class="author-image">
+                        <div class="user-image">
+                          <img alt="" src="images/noMember.jpg" />                    
+                        </div>
+                        <div class="user-bio">
+                        <h2 class="text-primary">林志玲 </h2>
+                        <div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>
+                       <div class="row">
+                       		<div class="col-md-6">
+                             <h4><span class="fa fa-user"></span> 個人詳細資訊：</h4>
+                             <table class="table">
+                              <tr>
+                                <th class="warning class="col-xs-1 col-md-1"">會員編號</th>
+                                <td>AB1234567</td>
+                              </tr>
+                               <tr>
+                                <th class="warning class="col-xs-1 col-md-1"">電話</th>
+                                <td>0922186668</td>
+                              </tr>   
+                               <tr>
+                                <th class="warning class="col-xs-1 col-md-1"">Email</th>
+                                <td>garfaild@gmail.com</td>
+                              </tr>                                                         
+                              </table>                   
+                          </div>
+                           <div class="col-md-6">
+                             <h4><span class="fa fa-tags"></span> 方案設計工具結果：</h4>
+                             <table class="table">
+                              <tr class="info">
+                                <th>目標</th>
+                                <th>風格</th>
+                                <th>訓練水準</th>
+                              </tr>
+                              <tr>
+                                <td>減肥</td>
+                                <td>保守型</td>    
+                                <td>初期</td>           
+                              </tr>
+                              </table>                   
+                          </div>                                                   
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                              <h4><span class="fa fa-bell-o"></span> 目前近況：</h4>
+                              <textarea class="form-control" rows="3"></textarea>
+                          </div>                                           
+                      </div>
+                    </div>
+                  </div>
+                </div>             
+          </div>
 
-						<div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>
 
-						<p><strong>會員編號：</strong>A122122</p>
-						<p><strong>電話：</strong>0922186668</p>
-						<p><strong>Email：</strong>xxxx@xxx.xxx</p>
-						<p class="fa fa-tags"><strong>方案設計工具結果</strong></p>
-						 <table class="table">
-							<tr class="info">
-							  <th>目標</th>
-							  <th>風格</th>
-							  <th>訓練水準</th>
-							</tr>
-							<tr>
-							  <td>健身</td>
-							  <td>保守型</td>
-							  <td>初期</td>
-							</tr>
-						  </table>	
-					  </div>
-					</div>
-               </div>
-            </div>
+ 
+        <div class="col-md-12">
+            
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-calendar-o"></i> 購買上課紀錄</a></li>
                 <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-pencil" aria-hidden="true"></i> 問卷調查</a></li>
@@ -458,6 +483,8 @@
               <div class="hr1" style="margin:5px 0px;"></div>
 			  <a href="member-manager.htm" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
 
+        </div>
+]        
         </div>
 
       </div>

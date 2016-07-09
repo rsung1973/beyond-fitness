@@ -10,10 +10,10 @@
 
 <table class="table">
     <tr class="info">
-        <th>日期</th>
-        <th>時段</th>
-        <th>人數</th>
-        <th>功能</th>
+        <th class="col-xs-1 col-md-2 text-center">日期</th>
+        <th class="col-xs-2 col-md-3 text-center">時段</th>
+        <th class="col-xs-2 col-md-2 text-center">人數</th>
+        <th class="col-xs-7 col-md-5">功能</th>
     </tr>
     <%  var items = _items.GroupBy(l => new { ClassDate = l.ClassDate, Hour = l.Hour });
         if (items != null && items.Count() > 0)
@@ -21,9 +21,9 @@
             foreach (var item in items)
             {%>
     <tr>
-        <td><%= item.Key.ClassDate.ToString("MM/dd") %></td>
-        <td><%= item.Key.Hour %>:00 - <%= item.Key.Hour + 1 %>:00</td>
-        <td><%= item.Count() %></td>
+        <td class="text-center"><%= item.Key.ClassDate.ToString("MM/dd") %></td>
+        <td class="text-center"><%= item.Key.Hour %>:00 - <%= item.Key.Hour + 1 %>:00</td>
+        <td class="text-center"><%= item.Count() %></td>
         <td>
             <a class="btn-system btn-small" onclick="showAttendee('<%= String.Format("{0:yyyy/MM/dd}", item.Key.ClassDate) %>',<%= item.Key.Hour %>);" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
         </td>
@@ -33,7 +33,7 @@
         else
         { %>
     <tr>
-        <td colspan="4">本日無學員上課!!</td>
+        <td class="text-center" colspan="4">本日無學員上課!!</td>
     </tr>
     <%  } %>
 </table>

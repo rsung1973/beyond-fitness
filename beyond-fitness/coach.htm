@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="css/animate.css" media="screen">
 
   <!-- Color CSS Styles  -->
-  <link rel="stylesheet" type="text/css" href="css/colors/orange.css" title="orange" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/colors/primary.css" title="primary" media="screen" />
   
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
@@ -45,7 +45,7 @@
   <link href="flot/custom.css" rel="stylesheet" type="text/css">
 
   <!-- 日曆設定-->
-    <link rel='stylesheet' href='fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css' />
+    <link rel='stylesheet' href='fullcalendar-2.8.0/lib/custom/jquery-ui.min.css' />
     <link href='fullcalendar-2.8.0/fullcalendar.css' rel='stylesheet' />
     <link href='fullcalendar-2.8.0/fullcalendar.print.css' rel='stylesheet' media='print' />  
   <!-- pie -->  
@@ -236,33 +236,65 @@
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
             
               <div class="panel panel-default">
-                	<!-- TABLE 1 -->
-                  <table class="table">
-                    <tr class="info">
-                      <th>日期</th>
-                      <th>時段</th>
-                      <th>人數</th>
-                      <th>功能</th>
-                    </tr>
-                    <tr>
-                      <td>05/13</td>
-                      <td>8:00 - 9:00</td>
-                      <td>5</td>
-                      <td>
-                      	<a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>05/13</td>
-                      <td>9:00 - 10:00</td>
-                      <td>10</td>
-                      <td>
-                      	<a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
-                      </td>
-                    </tr>
-                  </table>
-              </div>                      
-              
+
+                  <div class="panel-body">
+                    <table class="table">
+                      <tr class="info">
+                        <th class="col-xs-1 col-md-2 text-center">日期</th>
+                        <th class="col-xs-2 col-md-2 text-center">時段</th>
+                        <th class="col-xs-2 col-md-2 text-center">人數</th>
+                        <th class="col-xs-7 col-md-6">功能</th>
+                      </tr>
+                      <tr>
+                        <td class="text-center">05/13</td>
+                        <td class="text-center">8:00 - 9:00</td>
+                        <td class="text-center">5</td>
+                        <td>
+                          <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">05/13</td>
+                        <td class="text-center">9:00 - 10:00</td>
+                        <td class="text-center">10</td>
+                        <td>
+                          <a href="class-list.htm" class="btn-system btn-small">學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+                        </td>
+                      </tr>
+                    </table>                    
+                  </div>
+
+                  <div class="panel-body">
+                     <table class="table">
+                      <tr class="info">
+                        <th class="col-xs-1 col-md-2 text-center">時間</th>
+                        <th class="col-xs-9 col-md-2 text-center">學員</th>
+                        <th class="col-xs-2 col-md-8">功能</th>
+                      </tr>
+                      <tr>
+                        <td class="text-center">8:00 - 9:00</td>
+                        <td class="text-center">王大民</td>
+                        <td>
+                          <a href="before-class.htm" class="btn btn-system btn-small">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                          <a href="after-class.htm" class="btn btn-system btn-small">上課囉 <i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                          <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
+                          <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">8:00 - 9:00</td>
+                        <td class="text-center">林志玲</td>
+                        <td>
+                          <a href="before-class.htm" class="btn btn-system btn-small disabled" role="button">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                          <a href="after-class.htm" class="btn btn-system btn-small disabled" role="button">上課囉 <i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+                          <a href="#" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
+                          <a href="preview-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                        </td>
+                      </tr>
+                    </table>                   
+                  </div>
+
+              </div>                              
             <!-- End Contact Form -->
 
 
@@ -391,10 +423,10 @@
 	            lineWidth:0,
 	            order: 1,
 	            fillColor:  {
-	            	colors: ["#f8ba01", "#f36510"] 
+	            	colors: ["#337ab7", "#337ab7"] 
 	            }
 	        },
-	        color: "#f8ba01"
+	        color: "#337ab7"
 	    },
 	    {
 	        //label: "Product 2",
@@ -406,10 +438,10 @@
 	            lineWidth: 0,
 	            order: 2,
 	            fillColor:  {
-	            	colors: ["#94c523", "#0bb586"] 
+	            	colors: ["#00afd1", "#00afd1"] 
 	        	}
 	        },
-	        color: "#94c523"
+	        color: "#00afd1"
 	    },
 
 	];
@@ -451,7 +483,7 @@
 	        //axisLabelPadding: 5,
 	        tickSize: 5,
 	        tickFormatter: function (val, axis) {
-	                return val + "人";
+	                return val;
 	            },
 
 	    },

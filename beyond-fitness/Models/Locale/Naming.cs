@@ -58,5 +58,15 @@ namespace WebHome.Models.Locale
             課程結束 = 102
         }
 
+        public enum QuestionType
+        {
+            問答題 = 200,
+            單選題 = 201,
+            多重選 = 202,
+            是非題 = 203,
+            單選其他 = 204,
+            多重選其他 = 205
+        }
+
     }
 }

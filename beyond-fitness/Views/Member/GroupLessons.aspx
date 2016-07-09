@@ -25,7 +25,7 @@
 
             <div class="row">
 
-                <div class="col-md-8">
+                <div class="col-md-10">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-link"> 設定團體學員</span></h4>
@@ -57,7 +57,7 @@
                             <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>">
                                 <%  if (item.GroupingLesson == null || item.GroupingLesson.LessonTime.Count() == 0)
                                     {   %>
-                                <a onclick="addGroupingUser(<%= item.RegisterID %>);" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">設定<i class="fa fa-users" aria-hidden="true"></i></a>
+                                <a onclick="addGroupingUser(<%= item.RegisterID %>);" class="btn btn-system btn-small">設定<i class="fa fa-users" aria-hidden="true"></i></a>
                                 <%  } %>
                             </td>
                         </tr>

@@ -13,15 +13,15 @@
     {     %>
 <table class="table">
     <tr class="info">
-        <th>時間</th>
-        <th>學員</th>
-        <th>功能</th>
+        <th class="col-xs-1 col-md-3 text-center">時間</th>
+        <th class="col-xs-9 col-md-2 text-center">學員</th>
+        <th class="col-xs-2 col-md-7">功能</th>
     </tr>
     <%  foreach (var item in _items)
         { %>
     <tr>
-        <td><%= item.Hour %>:00 - <%= item.Hour + 1 %>:00</td>
-        <td><%= item.RegisterLesson.GroupingMemberCount > 1
+        <td class="text-center"><%= item.Hour %>:00 - <%= item.Hour + 1 %>:00</td>
+        <td class="text-center"><%= item.RegisterLesson.GroupingMemberCount > 1
                          ? String.Join("<br/>", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName))
                          : item.RegisterLesson.UserProfile.RealName %></td>
         <td>

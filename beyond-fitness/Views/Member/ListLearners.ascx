@@ -13,15 +13,15 @@
     { %>
 <table class="table">
     <tr class="info">
-        <th width="10%">姓名</th>
-        <th width="10%">學員編號</th>
-        <th>功能</th>
+        <th class="col-xs-3 col-md-1 text-center">姓名</th>
+        <th class="col-xs-3 col-md-1 text-center">學員編號</th>
+        <th class="col-xs-6 col-md-10 text-center">功能</th>
     </tr>
     <% foreach (var item in _items)
         { %>
     <tr>
         <td><%= item.RealName %></td>
-        <td><%= item.MemberCode %></td>
+        <td class="text-center"><%= item.MemberCode %></td>
         <td>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditLearner/") + item.UID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
             <%--<a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>">新增上課數 <i class="fa fa-plus-square" aria-hidden="true"></i></a>--%>
@@ -39,7 +39,7 @@
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessons/") + item.UID %>">設定團體學員 <i class="fa fa-link" aria-hidden="true"></i></a>
                     <%  } %>
             <%  }  %>
-            <a class="btn btn-system btn-small" href="modify-PDQ.htm">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + item.UID %>">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + item.UID %>" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
         </td>
     </tr>

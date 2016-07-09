@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="css/animate.css" media="screen">
 
   <!-- Color CSS Styles  -->
-  <link rel="stylesheet" type="text/css" href="css/colors/orange.css" title="orange" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/colors/primary.css" title="primary" media="screen" />
   
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
@@ -214,13 +214,13 @@
                 <!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th width="25%">姓名</th>
-                      <th width="30%">教練編號</th>
-                      <th>功能</th>
+                      <th class="col-xs-4 col-md-2 text-center">姓名</th>
+                      <th class="col-xs-1 col-md-2 text-center">教練編號</th>
+                      <th class="col-xs-7 col-md-8 text-center">功能</th>
                     </tr>
                     <tr>
                       <td>王大民</td>
-                      <td>AB12345</td>
+                      <td class="text-center">AB12345</td>
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -229,7 +229,7 @@
                     </tr>
                     <tr>
                       <td>林志玲</td>
-                      <td>AB12345</td>
+                      <td class="text-center">AB12345</td>
                       <td>
                         <a href="edit-coach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
                         <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
@@ -243,31 +243,40 @@
                   <!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th>姓名</th>
-                      <th>學員編號</th>
-                      <th>功能</th>
+                      <th class="col-xs-3 col-md-2 text-center">姓名</th>
+                      <th class="col-xs-3 col-md-1 text-center">學員編號</th>
+                      <th class="col-xs-6 col-md-9 text-center">功能</th>
                     </tr>
                     <tr>
                       <td>王建民</td>
-                      <td>AK1234</td>
+                      <td class="text-center">AK1234</td>
                       <td>
-                        <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-						<a href="add-class.htm" class="btn btn-system btn-small">新增/刪除上課堂數 <i class="fa fa-calendar-o" aria-hidden="true"></i></a>
-						<a href="add-vip-group.htm" class="btn btn-system btn-small">設定團體上課學員 <i class="fa fa-link" aria-hidden="true"></i></a>
-						<a href="add-PDQ.htm" class="btn btn-system btn-small">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                        <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                           <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
+
+                          <a href="#" class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+
+                          <a href="add-PDQ.htm" class="btn btn-system btn-small">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>   
+
+                          <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>                        
+
+                          <a href="add-class.htm" class="btn btn-system btn-small">新增/刪除上課堂數 <i class="fa fa-calendar-o" aria-hidden="true"></i></a>
+                          <a href="add-vip-group.htm" class="btn btn-system btn-small">設定團體上課學員 <i class="fa fa-link" aria-hidden="true"></i></a>
+                     
                       </td>
                     </tr>
                     <tr>
                       <td>黃大明</td>
-                      <td>AK1234</td>
+                      <td class="text-center">AK1234</td>
                       <td>
                         <a href="edit-vip-info-bycoach.htm" class="btn btn-system btn-small">修改資料 <i class="fa fa-edit" aria-hidden="true"></i></a>
-						<a href="#" class="btn btn-system btn-small">啟用 <i class="fa fa-check-square" aria-hidden="true"></i></a>
-						<a href="add-class.htm" class="btn btn-system btn-small disabled">新增/刪除上課堂數 <i class="fa fa-calendar-o" aria-hidden="true"></i></a>
-						<a href="add-PDQ.htm" class="btn btn-system btn-small">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                        <a href="add-PDQ.htm" class="btn btn-system btn-small">填寫問卷 <i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                        <a href="#" class="btn btn-system btn-small">啟用 <i class="fa fa-check-square" aria-hidden="true"></i></a>
+
                         <a href="view-vip.htm" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+
+                        <a href="add-class.htm" class="btn btn-system btn-small">新增/刪除上課堂數 <i class="fa fa-calendar-o" aria-hidden="true"></i></a>
                       </td>
                     </tr>
                   </table>
@@ -323,7 +332,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title orange-text" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 搜尋</h4>
+            <h4 class="modal-title" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 搜尋</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">

@@ -36,24 +36,23 @@
                     { %>
                 <li><a id="vip" href="<%= FormsAuthentication.LoginUrl %>">會員專區</a></li>
                 <%  }
+                    else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner)
+                    { %>
+                        <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
+                        <li><a id="logout" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>">登出</a></li>
+                <%  }
                     else
                     { %>
                         <li><a id="vip" href="#">會員專區</a>
                             <ul class="dropdown">
-                        <%--<li><a id="login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
-                                        </li>--%>
                         <%  if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent)
                             { %>
                                 <li><a id="coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                                 </li>
                                 <li><a id="member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                                 </li>
-                                <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>                        
+                                <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">專業知識管理</a>                        
                                 </li>
-                        <%  }
-                            else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner)
-                            { %>
-                                <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
                         <%  }
                             else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator)
                             {  %>
@@ -61,7 +60,7 @@
                                 </li>
                                 <li><a id="member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                                 </li>
-                                <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
+                                <li><a id="pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">專業知識管理</a>
                                 </li>
                                 <li><a id="vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
                         <%  } %>
@@ -87,32 +86,31 @@
                     { %>
         <li><a id="m_vip" href="<%= FormsAuthentication.LoginUrl %>">會員專區</a></li>
         <%  }
-                    else
-                    { %>
+            else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner)
+            { %>
+                <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
+                <li><a id="m_logout" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>">登出</a></li>
+        <%  }
+            else
+            { %>
         <li><a id="m_vip" href="#">會員專區</a>
             <ul class="dropdown">
-                <%--<li><a id="m_login" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>">登入</a>
-                                        </li>--%>
                 <%  if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent)
                             { %>
                 <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                 </li>
                 <li><a id="m_member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                 </li>
-                <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
+                <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">專業知識管理</a>
                 </li>
                 <%  }
-                            else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner)
-                            { %>
-                <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
-                <%  }
-                            else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator)
-                            {  %>
+                    else if (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator)
+                    {  %>
                 <li><a id="m_coach" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>">課程管理</a>
                 </li>
                 <li><a id="m_member" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">人員管理</a>
                 </li>
-                <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">知識上稿</a>
+                <li><a id="m_pub" href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>">專業知識管理</a>
                 </li>
                 <li><a id="m_vip" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>">會員專區</a></li>
                 <%  } %>

@@ -656,7 +656,8 @@ namespace WebHome.Controllers
                 EMail = item.PID.Contains("@") ? item.PID : null,
                 MemberCode = item.MemberCode,
                 PictureID = item.PictureID,
-                UserName = item.UserName
+                UserName = item.UserName,
+                Birthday = item.Birthday
             };
 
             return View(model);
@@ -705,6 +706,7 @@ namespace WebHome.Controllers
             }
 
             item.UserName = viewModel.UserName.GetEfficientString();
+            item.Birthday = viewModel.Birthday;
 
             if (!createPassword(viewModel))
                 return View(viewModel);

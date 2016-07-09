@@ -22,7 +22,7 @@
 
             <div class="row">
 
-                <div class="col-md-8">
+                <div class="col-md-10">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-calendar-o"> 新增/刪除上課數</span></h4>

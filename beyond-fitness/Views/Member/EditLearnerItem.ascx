@@ -21,6 +21,14 @@
     <% Html.RenderInput("電話：", "phone", "phone", "請輸入市話或手機號碼", _modelState, defaultValue: _model.Phone); %>
 </div>
 
+<div class="form-group has-feedback">
+    <label class="control-label" for="classno">生日：</label>
+    <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+        <input id="birthDay" name="birthDay" class="form-control" size="16" type="text" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' readonly>
+        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+    </div>
+</div>
+
 <%--<% Html.RenderPartial("~/Views/Member/LessonsItem.ascx", _model);  %>--%>
 
 <script>

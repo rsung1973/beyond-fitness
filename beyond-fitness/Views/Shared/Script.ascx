@@ -615,7 +615,7 @@
             var cookie = readCookie("style");
             var title = cookie ? cookie : getPreferredStyleSheet();
             //setActiveStyleSheet(title);
-            setActiveStyleSheet("orange");
+            setActiveStyleSheet("primary");
         }
 
         window.onunload = function (e) {
@@ -626,7 +626,7 @@
         var cookie = readCookie("style");
         var title = cookie ? cookie : getPreferredStyleSheet();
         //setActiveStyleSheet(title);
-        setActiveStyleSheet("orange");
+        setActiveStyleSheet("primary");
 
 
         $(document).ready(function () {

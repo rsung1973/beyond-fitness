@@ -3,8 +3,8 @@
     <label class="control-label" for="nickname">圖片：</label>
     <input type="file" class="form-control" name="photopic" id="photopic" aria-describedby="photopicStatus">
     <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-    <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
-    <span id="photopicStatus" class="sr-only">(success)</span>
+<%--    <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
+    <span id="photopicStatus" class="sr-only">(success)</span>--%>
 <%--    <label class="control-label" for="nickname">擷取圖片：</label>
     <input type="text" class="form-control" placeholder="請輸入來源(Url)" name="imgUrl" aria-describedby="coachnameStatus" />
     <a  id="getImg" class="btn btn-system btn-small">擷取 <i class="fa fa-eye" aria-hidden="true"></i></a>--%>

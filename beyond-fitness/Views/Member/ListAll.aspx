@@ -66,7 +66,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title orange-text" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>搜尋</h4>
+                    <h4 class="modal-title" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>搜尋</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -94,6 +94,8 @@
             </div>
         </div>
     </div>
+
+    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
 
     <script>
         $('#vip,#m_vip').addClass('active');

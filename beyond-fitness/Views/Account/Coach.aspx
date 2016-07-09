@@ -64,14 +64,16 @@
 
                     <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
 
-                    <div id="dailyBooking" class="panel panel-default">
+                    <div class="panel panel-default">
+                        <div id="dailyBooking" class="panel-body">
                         <!-- TABLE 1 -->
                         <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
+                        </div>
+                        <div id="attendeeList" class="panel-body">
+                        </div>
                     </div>
 
                     <!-- End Contact Form -->
-                    <div id="attendeeList" class="panel panel-default">
-                    </div>
 
                 </div>
             </div>

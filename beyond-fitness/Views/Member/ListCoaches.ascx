@@ -14,15 +14,15 @@
     { %>
 <table class="table">
     <tr class="info">
-        <th width="10%">姓名</th>
-        <th width="10%">員工編號</th>
-        <th>功能</th>
+        <th class="col-xs-4 col-md-2 text-center">姓名</th>
+        <th class="col-xs-1 col-md-2 text-center">員工編號</th>
+        <th class="col-xs-7 col-md-8 text-center">功能</th>
     </tr>
     <% foreach (var item in _items)
         { %>
     <tr>
         <td><%= item.RealName %></td>
-        <td><%= item.MemberCode %></td>
+        <td class="text-center"><%= item.MemberCode %></td>
         <td>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditCoach/") + item.UID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
             <% if (item.LevelID == (int)Naming.MemberStatusDefinition.Deleted)

@@ -26,16 +26,16 @@
 
             <div class="row">
 
-                <div class="col-md-9">
+                <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>知識上稿</span></h4>
+                    <h4 class="classic-title"><span>專業知識管理</span></h4>
 
                     <!-- Start Contact Form -->
                     <!-- Stat Search -->
                     <div class="navbar bg_gray" style="min-height: 30px;">
                         <div class="search-side">
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/CreateNew") %>" class="btn-system btn-small">新增體適能資訊 <span class="glyphicon glyphicon-calendar"></span></a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/CreateNew") %>" class="btn-system btn-small">新增文章 <span class="fa fa-edit"></span></a>
                         </div>
                     </div>
 
@@ -56,7 +56,7 @@
                                         <td><%# Item.Title %></td>
                                         <td>
                                             <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/EditBlog/"+Item.DocID) %>" class="btn btn-system btn-small">修改文章 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                            <a  onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
+                                            <a  onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                                             <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/Preview/"+Item.DocID) %>" class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -74,19 +74,20 @@
         </div>
     </div>
     <!-- End content -->
+    <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
 
     <script>
         $('#vip,#m_vip').addClass('active');
 
         function deleteArticle(docID) {
-            if (confirm('確定刪除此文件?')) {
+            confirmIt({ title: '刪除專業知識', message: '確定刪除此文章?' }, function (evt) {
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog")%>' , { 'docID': docID }, function (data) {
                     alert(data.message);
                     if (data.result) {
                         window.location.reload();
                     }
                 });
-            }
+            });
         }
     </script>
 

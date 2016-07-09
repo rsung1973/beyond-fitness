@@ -20,7 +20,7 @@
                     <h4 class="classic-title"><span>登入</span></h4>
 
                     <!-- Start Contact Form -->
-                    <p>若您已有<span class="orange-text">會員編號</span>，第一次登入請先註冊 <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>" class="btn-system btn-small"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>&nbsp;&nbsp;註冊</a></p>
+                    <p>若您已有<span class="text-primary">會員編號</span>，第一次登入請先註冊 <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>" class="btn-system btn-gray btn-small"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>&nbsp;&nbsp;註冊</a></p>
                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
                     <button type="button" id="btnFB" class="btn btn-primary btn-lg btn-block"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook 登入</button>

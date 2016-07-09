@@ -30,17 +30,13 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span><%= _item.Document.CurrentStep==(int)Naming.DocumentLevelDefinition.暫存 ? "知識上稿" : "編輯體適能知識" %></span></h4>
+                    <h4 class="classic-title"><span class="fa fa-edit"><%= _item.Document.CurrentStep==(int)Naming.DocumentLevelDefinition.暫存 ? " 新增文章" : " 修改文章" %></span></h4>
 
                     <!-- Start Contact Form -->
 
                     <div class="blog-post quote-post">
                         <div class="form-group has-feedback">
-                            <label class="control-label" for="title">標題：</label>
-                            <input type="text" class="form-control" placeholder="請輸入文章標題" value="<%= _item.Title %>" name="title" id="title" aria-describedby="coachnameStatus" />
-                            <span class="glyphicon glyphicon-ok form-control-feedback text-success" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
-                            <span id="coachnameStatus" class="sr-only">(success)</span>
+                            <% Html.RenderInput("標題：", "title", "title", "請輸入文章標題", _modelState, defaultValue: _item.Title); %>
                         </div>
 
                         <div class="form-group has-feedback">
@@ -89,12 +85,17 @@
 
     <script>
         $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
+        //$('#theForm').addClass('contact-form');
         $(function() {
             loadResource(<%= _item.DocID %>);
             CKEDITOR.config.height = 300;
             CKEDITOR.config.width = 'auto';
             CKEDITOR.replace( 'articleContent' );
+
+            $('#title').rules('add', {
+                'required': true
+            });
+
         });
 
         function updateArticle() {
@@ -151,14 +152,16 @@
 
     ModelSource<Article> models;
     Article _item;
-
+    ModelStateDictionary _modelState;
+    
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = ((SampleController<Article>)ViewContext.Controller).DataSource;
         _item = (Article)this.Model;
         uploadResource.DocID = _item.DocID;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
-   
+
 
 </script>

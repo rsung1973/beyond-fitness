@@ -10,10 +10,10 @@
 
 <table class="table" id="itemList">
     <tr class="info">
-        <th>肌力訓練</th>
-        <th>目標次數</th>
-        <th>目標強度</th>
-        <th>功能</th>
+        <th class="col-xs-4 col-md-5 text-center">肌力訓練</th>
+        <th class="col-xs-3 col-md-3 text-center">目標次數</th>
+        <th class="col-xs-3 col-md-3 text-center">目標強度</th>
+        <th class="col-xs-2 col-md-1 text-center">功能</th>
     </tr>
     <%  foreach (var item in _item.TrainingItem)
         {

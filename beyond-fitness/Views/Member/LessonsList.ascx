@@ -56,7 +56,7 @@
                             <td class="text-center"><%= g.UserProfile.RealName %>
                                 <%  if (g.GroupingLesson.LessonTime.Count() == 0)
                                                     { %>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>" class="btn btn-system btn-small">刪除<i class="fa fa-user-times" aria-hidden="true"></i></a>
+                                <%--<a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>" class="btn btn-system btn-small">刪除<i class="fa fa-user-times" aria-hidden="true"></i></a>--%>
                                 <%  } %>
                             </td>
                         </tr>

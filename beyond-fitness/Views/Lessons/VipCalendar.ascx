@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<link rel='stylesheet' href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css")  %>' />
+<link rel='stylesheet' href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lib/custom/jquery-ui.min.css")  %>' />
 <link href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/fullcalendar.css")  %>' rel='stylesheet' />
 <link href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/fullcalendar.print.css")  %>' rel='stylesheet' media='print' />
 

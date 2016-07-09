@@ -108,12 +108,11 @@ namespace WebHome.Controllers
         public ActionResult EditBlog(int id)
         {
 
-
-
             var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
-                return Redirect("~/Views/Shared/Error.aspx");
+                ViewBag.Message = "文章資料不存在!!";
+                return RedirectToAction("Publish");
             }
             return View(item);
         }
@@ -240,6 +239,10 @@ namespace WebHome.Controllers
         public ActionResult UpdateArticle(int docID, int docType, String title, String docDate, String content)
         {
 
+            if(String.IsNullOrEmpty(title))
+            {
+                return Json(new { result = false, message = "請輸入文標題!!" });
+            }
 
             var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)

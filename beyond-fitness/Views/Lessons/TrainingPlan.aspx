@@ -31,15 +31,16 @@
                     <h4 class="classic-title"><span class="fa fa-edit"> 預編課程</span></h4>
 
                     <!-- Start Contact Form -->
+                    
 
-                    <div class="blog-post quote-post">
-
-                        <%  ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
+                        <%  //ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
                             Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
-                        
-                        <div>
-                            <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
-                        </div>
+                    <div class="col-md-10">
+                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+                    </div>
                         <div class="hr1" style="margin-bottom: 10px;"></div>
                         <div class="panel panel-default">
                             <table class="table">
@@ -53,12 +54,12 @@
                             </table>
                             <table class="table">
                                 <tr class="info">
-                                    <th width="5%">排序</th>
-                                    <th width="40%">肌力訓練</th>
-                                    <th width="10%">目標次數</th>
-                                    <th width="10%">目標強度</th>
-                                    <th width="5%">組數</th>
-                                    <th>功能</th>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-xs-4 col-md-4">肌力訓練</th>
+                                    <th class="col-xs-2 col-md-2 text-center">目標次數</th>
+                                    <th class="col-xs-2 col-md-2 text-center">目標強度</th>
+                                    <th class="col-xs-2 col-md-1 text-center">組數</th>
+                                    <th class="col-xs-1 col-md-2">功能</th>
                                 </tr>
                                 <%      if (_model.LessonTime.TrainingPlan.Count > 0)
                                     {
@@ -76,10 +77,10 @@
                                                     if (i == 0)
                                                     {%>
                                 <tr>
-                                    <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %></td>
+                                    <td class="text-center" rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %></td>
                                     <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td><%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %></td>
-                                    <td><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
+                                    <td class="text-center"><%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %></td>
+                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
                                     <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
                                     <td rowspan="<%= training.Count() + 1 %>">
                                         <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
@@ -91,8 +92,8 @@
                                     {   %>
                                 <tr>
                                     <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td><%= tranItem.GoalTurns.HasValue ? tranItem.GoalTurns.ToString() : "--" %></td>
-                                    <td><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
+                                    <td class="text-center"><%= tranItem.GoalTurns.HasValue ? tranItem.GoalTurns.ToString() : "--" %></td>
+                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
                                 </tr>
                                 <%                  }
                                     }   %>
@@ -131,7 +132,7 @@
                         </div>
 
                         <div class="hr2" style="margin-bottom: 10px;"></div>
-                        <h4 class="orange-text classic-title"><span class="fa fa-commenting" aria-hidden="true">教練總評：</span></h4>
+                        <h4 class="classic-title"><span class="fa fa-commenting" aria-hidden="true">教練總評：</span></h4>
                         <textarea class="form-control" name="remark" rows="5"><%= _plan.Remark %></textarea>
 
                         <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CompletePlan") %>">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
@@ -141,10 +142,7 @@
 
                         <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
 
-
                         <!-- End Contact Form -->
-
-                    </div>
 
                 </div>
             </div>

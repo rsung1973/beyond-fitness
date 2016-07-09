@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="css/animate.css" media="screen">
 
   <!-- Color CSS Styles  -->
-  <link rel="stylesheet" type="text/css" href="css/colors/orange.css" title="orange" media="screen" />
+  <link rel="stylesheet" type="text/css" href="css/colors/primary.css" title="primary" media="screen" />
   
 	<!-- calendar slider -->
   <link href="calendar/responsive-calendar.css" rel="stylesheet">
@@ -235,10 +235,10 @@
                 	<!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th>肌力訓練</th>
-                      <th>目標次數</th>
-                      <th>目標強度</th>
-                      <th>功能</th>
+                      <th class="col-xs-4 col-md-8 text-center">肌力訓練</th>
+                      <th class="col-xs-2 col-md-2 text-center">目標次數</th>
+                      <th class="col-xs-2 col-md-2 text-center">目標強度</th>
+                      <th class="col-xs-1 col-md-2 text-center">功能</th>
                     </tr>
                     <tr>
                       <td>
@@ -330,11 +330,11 @@
         <div class="modal-content bg_gray">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title orange-text" id="confirmLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 新增項目</h4>
+            <h4 class="modal-title" id="confirmLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 新增項目</h4>
           </div>
           <div class="modal-body">
             <div class="form-group">
-				<label for="exampleInputFile" class="col-md-3 control-label">肌力訓練：</label>
+				<label for="exampleInputFile" class="col-md-3 control-label"><strong>肌力訓練：</strong></label>
 				<div class="col-md-9" >
 				  <select class="form-control" name="selitem" id="selitem">
 					<option>上肢</option>
@@ -350,7 +350,7 @@
 			</div>
 
           <div class="form-group">
-            <label for="exampleInputFile" class="col-md-3 control-label">目標次數：</label>
+            <label for="exampleInputFile" class="col-md-3 control-label"><strong>目標次數：</strong></label>
             <div class="col-md-9" >
               <select class="form-control">
                 <option>10</option>
@@ -359,7 +359,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="exampleInputFile" class="col-md-3 control-label">目標強度：</label>
+            <label for="exampleInputFile" class="col-md-3 control-label"><strong>目標強度：</strong></label>
             <div class="col-md-9" >
 			  <input type="text" class="form-control" value="20KG">
 			  <span>例：20KG或30秒</span>

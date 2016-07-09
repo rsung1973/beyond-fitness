@@ -64,11 +64,11 @@
     border-top: 1px solid rgba(255,255,255,0.1);
   }
   .slicknav_nav .slicknav_arrow {
-     background: #ededed;
+     background: #000;
     float: right;
     text-align: center;
     width: 35px;
-    color: #666;
+    color: #337ab7;
 		border-radius:5px;
   }
   .slicknav_nav .slicknav_item {
@@ -90,7 +90,7 @@
   box-sizing: border-box;
 }
 .slicknav_menu ul{
-  background: #626262;
+  background: #000000;
 }
   .slicknav_menu * {
     box-sizing: border-box; }

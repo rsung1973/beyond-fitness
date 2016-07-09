@@ -23,7 +23,7 @@
 
             <div class="row">
 
-                <div class="col-md-8">
+                <div class="col-md-10">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
@@ -43,7 +43,7 @@
                         </div>
                         <!-- Tab Content 2 -->
                         <div class="tab-pane fade" id="tab-2">
-                            <h4 class="orange-text"><span class="fa fa-hourglass-start">第一步：目標</span></h4>
+                            <h4 ><span class="fa fa-hourglass-start">第一步：目標</span></h4>
                             <table class="panel panel-default table">
                                 <tr class="info">
                                     <th>1.對於你我相處一小時，你有什麼期望？</th>
@@ -88,7 +88,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h4 class="orange-text"><span class="fa fa-hourglass-half">第二步：風格</span></h4>
+                            <h4 ><span class="fa fa-hourglass-half">第二步：風格</span></h4>
                             <table class="panel panel-default table">
                                 <tr class="info">
                                     <th>1.在訓練過程中，處在充滿挑戰性的環境，或是在比較有安全感的環境下，對你而言哪一個比較重要？</th>
@@ -114,7 +114,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h4 class="orange-text"><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
+                            <h4 ><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
                             <table class="panel panel-default table">
                                 <tr class="info">
                                     <th>1.你認為你的工作是？</th>
@@ -146,7 +146,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <h4 class="orange-text"><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
+                            <h4 ><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
                             <table class="panel panel-default table">
                                 <tr class="info">
                                     <th>1.這個目標為什麼對你來說是最重要的?</th>

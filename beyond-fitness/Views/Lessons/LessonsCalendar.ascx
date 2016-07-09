@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<link rel='stylesheet' href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lib/cupertino/jquery-ui.min.css")  %>' />
+<link rel='stylesheet' href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lib/custom/jquery-ui.min.css")  %>' />
 <link href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/fullcalendar.css")  %>' rel='stylesheet' />
 <link href='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/fullcalendar.print.css")  %>' rel='stylesheet' media='print' />
 
@@ -32,21 +32,22 @@
             editable: false,
             eventLimit: false, // allow "more" link when too many events
             events: '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingEvents") %>',
+            eventColor: '#666',
             aspectRatio: 1,
+            eventRender: function (event, element, view) {
+                $(element).height(20);
+            },
+            dayClick: function (calEvent, jsEvent, view) {
+                pageParam.lessonDate = calEvent.format('YYYY-MM-DD');
+                $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+                plotData(calEvent.format('YYYY-MM-DD'));
+                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+            },
             eventClick: function (calEvent, jsEvent, view) {
-
                 pageParam.lessonDate = calEvent.start.format('YYYY-MM-DD');
                 $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
                 plotData(calEvent.start.format('YYYY-MM-DD'));
-                //$('#attendeeList').empty();
                 $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
-
-                //alert('Event: ' + calEvent.title);
-                //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-                //alert('View: ' + view.name);
-
-                //// change the border color just for fun
-                //$(this).css('border-color', 'red');
             }
 
         });

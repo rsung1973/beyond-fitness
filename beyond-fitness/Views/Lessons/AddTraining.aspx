@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div>
-                                <a onclick="addTraining();" class="btn-system btn-small" data-toggle="modal" data-whatever="新增項目">新增項目 <i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
+                                <a onclick="addTraining();" class="btn-system btn-small">新增項目 <i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
                             </div>
 
                         </div>

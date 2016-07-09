@@ -12,7 +12,7 @@
     <div class="modal-content bg_gray">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title orange-text" id="confirmLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>新增項目</h4>
+            <h4 class="modal-title" id="confirmLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>新增項目</h4>
         </div>
         <div class="modal-body">
             <div class="form-group">

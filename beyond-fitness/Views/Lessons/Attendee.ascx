@@ -13,7 +13,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title orange-text" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>選擇上課學員</h4>
+            <h4 class="modal-title" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>選擇上課學員</h4>
         </div>
         <div class="modal-body">
             <!-- Stat Search -->
@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="col-md-12 modal-footer">
-                    <button id="btnAttending" type="button" class="btn btn-system btn-sm"><span class="fa fa-link" aria-hidden="true"></span>設定</button>
-                    <button type="button" id="btnDismiss" class="btn btn-default btn-sm" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span>取消</button>
+                    <button id="btnAttending" type="button" class="btn btn-system btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確定</button>
+                    <button type="button" id="btnDismiss" class="btn btn-default btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>關閉</button>
                 </div>
             </div>
         </div>

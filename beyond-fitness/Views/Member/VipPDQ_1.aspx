@@ -35,7 +35,7 @@
                     <div class="hr1" style="margin: 5px 0px;"></div>
                     <!-- Divider -->
                     <div class="col-md-12">
-                        <h4 class="orange-text"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>第一步：目標</h4>
+                        <h4 ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>第一步：目標</h4>
                         <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="q1">1.對於你我相處一小時，你有什麼期望？</label>

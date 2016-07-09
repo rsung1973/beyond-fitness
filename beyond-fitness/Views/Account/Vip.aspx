@@ -48,12 +48,12 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="orange-text"><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
+                            <h4><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
                             <% Html.RenderPartial("~/Views/Lessons/TrendGraphView.ascx"); %>
                         </div>
                         <div class="col-md-6">
-                            <h4 class="orange-text"><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
+                            <h4><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
                             <% Html.RenderPartial("~/Views/Lessons/FitnessGraphView.ascx"); %>
                         </div>

@@ -49,6 +49,10 @@ namespace WebHome.Models.ViewModel
 
         public int? PictureID { get; set; }
 
+        [Display(Name = "生日")]
+        public DateTime? Birthday { get; set; }
+
+
     }
 
     public class RegisterViewModel : PasswordViewModel
@@ -65,6 +69,10 @@ namespace WebHome.Models.ViewModel
         public string MemberCode { get; set; }
 
         public int? PictureID { get; set; }
+
+        [Display(Name = "生日")]
+        public DateTime? Birthday { get; set; }
+
 
     }
 
@@ -105,6 +113,9 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "會員編號")]
         public string MemberCode { get; set; }
+
+        [Display(Name = "生日")]
+        public DateTime? Birthday { get; set; }
 
     }
 
@@ -155,6 +166,9 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "會員編號")]
         public string MemberCode { get; set; }
+
+        [Display(Name = "生日")]
+        public DateTime? Birthday { get; set; }
 
     }
 

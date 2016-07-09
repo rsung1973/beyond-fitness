@@ -27,7 +27,7 @@
                                 <h2 class="animated2 white">
                                     <span>BEYOND FITNESS</span>
                                 </h2>
-                                <h3 class="animated3 orange-text">
+                                <h3 class="animated3">
                                     <strong>專業運動科學</strong>
                                 </h3>
                             </div>
@@ -42,7 +42,7 @@
                                 <h2 class="animated4 white">
                                     <span>BEYOND FITNESS</span>
                                 </h2>
-                                <h3 class="animated5 orange-text">
+                                <h3 class="animated5">
                                     <strong>高端專業訓練品質</strong>
                                 </h3>
                             </div>
@@ -57,7 +57,7 @@
                                 <h2 class="animated7 white">
                                     <span>BEYOND FITNESS</span>
                                 </h2>
-                                <h3 class="animated8 orange-text">
+                                <h3 class="animated8">
                                     <strong>專業量身訂做規劃</strong>
                                 </h3>
                             </div>

@@ -42,7 +42,7 @@
                                 <div id="attendee"></div>
                             </label>
                             <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
-                            <a onclick="addUser();" class="btn btn-system btn-small" data-toggle="modal" data-target="#addUserItem" data-whatever="搜尋">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
+                            <a onclick="addUser();" class="btn btn-system btn-small">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
                         </div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="classno">日期、時段：</label>

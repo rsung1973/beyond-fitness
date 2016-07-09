@@ -140,9 +140,15 @@ p strong {
     margin-bottom: 0px;
 		font-size:15px;
 }
+.table tr {
+  background-color: #999;
+  color: #333;
+}
 .table td{
-		vertical-align:middle !important;
-		background-color: #fff;
+	vertical-align:middle !important;
+	background-color: #F8F8FF;
+	color: #666;
+	font-weight: bold;
 }
 
 .accent-color-bg {
@@ -1485,6 +1491,12 @@ input[type="submit"] {
 
 
 /*************** Toggles & Accordion ***************/
+.panel {
+	margin-bottom: 1px;
+	font-size:15px;
+	font-weight: bold;
+	background-color: #DDD;
+}
 
 .panel-default > .panel-heading {
 	background-color: #fff;
@@ -1847,6 +1859,7 @@ input[type="submit"] {
 .btn-system {
 	font-size: 1em;
 	width: auto;
+    margin-bottom: 2px
 }
 
 .btn-system.border-btn {
@@ -5375,6 +5388,9 @@ ul.footer-nav li a:hover {
 .switcher-box .colors-list li a.beige {
 	background-color: #fdb655;
 }
+.switcher-box .colors-list li a.primary {
+	background-color: #337ab7;
+}
 .switcher-box .layout-style, .switcher-box .topbar-style {
 	width: 172px;
 	padding: 6px 9px;
@@ -5819,7 +5835,7 @@ blockquote{
 	padding:10px 20px;
 	margin:0 0 20px;
 	font-size:14px;
-	border-left:5px solid #F0AD4E;
+	border-left:5px solid #00afd1;
 }
 .navbar-header {
     float: none;

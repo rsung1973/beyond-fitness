@@ -30,10 +30,10 @@
                         barWidth: 0.6,
                         align: "center",
                         fillColor: {
-                            colors: ["#f8ba01", "#f36510"]
+                            colors: ["#337ab7", "#337ab7"]
                         }
                     },
-                    color: "#f8ba01"
+                    color: "#337ab7"
                 },
                 grid: {
                     hoverable: true,
@@ -81,7 +81,7 @@
                 var o = $p.pointOffset({x: el[0], y: el[1]});
                 if(el[1]>0) {
                     console.log(o);
-                    $('<div class="data-point-label">' + el[1] + '人</div>').css( {
+                    $('<div class="data-point-label">' + el[1] + '</div>').css( {
                         position: 'absolute',
                         left: o.left - 15,
                         top: o.top - 20,
