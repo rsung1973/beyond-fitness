@@ -40,7 +40,9 @@
 <script>
     function showAttendee(lessonDate, hour) {
         pageParam.hour = hour;
+        $('#loading').css('display', 'table');
         $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': lessonDate, 'hour': hour }, function () {
+            $('#loading').css('display', 'none');
         });
     }
 </script>

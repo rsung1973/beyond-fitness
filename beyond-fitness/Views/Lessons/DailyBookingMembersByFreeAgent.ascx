@@ -25,77 +25,35 @@
                          ? String.Join("<br/>", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName))
                          : item.RegisterLesson.UserProfile.RealName %></td>
         <td>
-        <%  if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
-            {
-                if (item.LessonTime.LessonAttendance == null )
+            <%
+                if (item.LessonTime.LessonAttendance == null && item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
                 { %>
                     <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
-            <%  }            
-            }
-            else
-            {
-                Html.RenderPartial("~/Views/Lessons/LessonTimeExpansionHandler.ascx", item);
-            }  %>
+            <%  } %>
         </td>
     </tr>
     <%  } %>
 </table>
 <%  } %>
 <script>
+
     function revokeBooking(lessonID) {
         confirmIt({ title: '取消預約', message: '確定取消預約此課程?' }, function (evt) {
             $('#loading').css('display', 'table');
-            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/RevokeBooking") %>', { lessonID: lessonID }, function (data) {
+            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/RevokeBookingByFreeAgent") %>', { lessonID: lessonID }, function (data) {
                 if (data.result) {
                     $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': pageParam.lessonDate }, function () { });
                     plotData(pageParam.lessonDate);
                     showAttendee(pageParam.lessonDate, pageParam.hour);
                     $('#calendar').fullCalendar('refetchEvents');
+                    $('#clockIn').load('<%= VirtualPathUtility.ToAbsolute("~/Account/FreeAgentClockIn") %>', { 'lessonDate': pageParam.lessonDate }, function () { });
+
                 } else {
                     alert(data.message);
                 }
                 $('#loading').css('display', 'none');
             });
         });
-    }
-
-    function makeLessonPlan(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
-
-    function attendLesson(arg)
-    {
-        startLoading();
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/TrainingPlan") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        $form.submit();
-    }
-
-    function previewLesson(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
     }
 
 </script>

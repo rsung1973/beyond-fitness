@@ -16,19 +16,6 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label for="exampleInputFile" class="col-md-2 control-label">依學員：</label>
-                <div class="col-md-10">
-                    <input name="userName" id="userName" class="form-control" type="text" value="" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputFile" class="col-md-2 control-label">依教練：</label>
-                <div class="col-md-10">
-                    <%  ViewBag.SelectAll = true;
-                        Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID" }); %>
-                </div>
-            </div>
-            <div class="form-group">
                 <label for="exampleInputFile" class="col-md-2 control-label">起月：</label>
                 <div class="col-md-10">
                     <div class="input-group date form_month" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
@@ -63,9 +50,7 @@
                 {
                     'dateFrom': $('#dateFrom').val(),
                     'dateTo': $('#dateTo').val(),
-                    'coachID': $('#coachID').val(),
-                    'monthInterval': $('#monthInterval').val(),
-                    'userName': $('#userName').val()
+                    'monthInterval': $('#monthInterval').val()
                 }, function () {
                     $('#queryModal').css('display', 'none');
                     $('#attendeeList').empty();
@@ -78,13 +63,6 @@
         $('#btnDismiss').on('click', function (evt) {
             $('#queryModal').css('display', 'none');
         });
-
-        $('#userName').on('change', function (evt) {
-            if ($('#userName').val() != '') {
-                $('#coachID').val('');
-            }
-        });
-
     });
 
 </script>

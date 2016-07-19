@@ -21,13 +21,13 @@
     <% Html.RenderInput("暱稱：", "userName", "userName", "請輸入暱稱", _modelState, defaultValue: _model.UserName); %>
 </div>
 
-<div class="form-group has-feedback">
+<%--<div class="form-group has-feedback">
     <label class="control-label" for="classno">生日：</label>
     <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
         <input id="birthDay" name="birthDay" class="form-control" size="16" type="text" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' readonly>
         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
     </div>
-</div>
+</div>--%>
 
 <div class="form-group has-feedback">
     <% Html.RenderInput("頭像：", "photopic", "photopic", "", _modelState, "file"); %>

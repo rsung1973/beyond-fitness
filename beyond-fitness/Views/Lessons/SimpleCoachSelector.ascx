@@ -16,7 +16,7 @@
     <%  } %>
     <% foreach (var item in _items)
         { %>
-    <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %></option>
+            <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %><%= item.UserProfile.IsFreeAgent() ? "(自由教練)" : null %></option>
     <%  } %>
 </select>
 <script runat="server">
@@ -30,5 +30,9 @@
         _model = (InputViewModel)this.Model;
         var models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _items = models.GetTable<ServingCoach>();
+        if (ViewBag.ByFreeAgent != null)
+        {
+            _items = _items.Where(c => c.CoachID == (int?)ViewBag.ByFreeAgent);
+        }
     }
 </script>

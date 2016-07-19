@@ -52,9 +52,12 @@
             .submit();--%>
     });
 
-    $('#btnQuery').on('click',function(evt) {
+    $('#btnQuery').on('click', function (evt) {
+        $('#loading').css('display', 'table');
         var userName = $('input[name="userName"]').val();
-        $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeSelector") %>',{'userName':userName},function(){});
+        $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeSelector") %>', { 'userName': userName }, function () {
+            $('#loading').css('display', 'none');
+        });
     });
 
 </script>

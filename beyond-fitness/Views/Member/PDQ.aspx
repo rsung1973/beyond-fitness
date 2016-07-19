@@ -22,14 +22,15 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-12">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-pencil">填寫問卷</span></h4>
 
                     <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
 
-                    <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
                         <h4><span class="fa fa-hourglass-start">第一步：目標</span></h4>
                         <table class="panel panel-default table">
                             <%  
@@ -39,9 +40,10 @@
                                     renderItem(idx);
                                 } %>
                         </table>
-                        <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-
-                        <h4><span class="fa fa-hourglass-half">第二步：風格</span></h4>
+                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
+                        </div>
+                        <div class="col-md-6">                        
+                            <h4><span class="fa fa-hourglass-half">第二步：風格</span></h4>
                         <table class="panel panel-default table">
                             <%                                  
                                 ViewBag.Offset = 7;
@@ -50,9 +52,12 @@
                                     renderItem(idx);
                                 } %>
                         </table>
-                        <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-
-                        <h4><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
+                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">                        
+                            <h4><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
                         <table class="panel panel-default table">
                             <%  
                                 ViewBag.Offset = 11;
@@ -61,8 +66,9 @@
                                     renderItem(idx);
                                 } %>
                         </table>
-                        <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-
+                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
+                        </div>
+                        <div class="col-md-6">
                         <h4><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
                         <table class="panel panel-default table">
                             <%                                  
@@ -72,8 +78,12 @@
                                     renderItem(idx);
                                 } %>
                         </table>
+                        <%--<a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>--%>
+                        </div>
+                    </div>
 
-                        <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
+                    <div class="col-md-8">
+
                         <h4 class="classic-title"><span class="fa fa-tags">方案設計工具結果，請在下面選擇每個方案分類的合適結果</span></h4>
 
                         <div class="panel panel-default">
@@ -85,32 +95,52 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <select class="form-control">
-                                            <option>減肥</option>
-                                            <option>健身</option>
-                                            <option>健美體態</option>
-                                            <option>運動表現</option>
+                                        <select name="goalID" class="form-control">
+                                            <%  foreach (var item in models.GetTable<GoalAboutPDQ>())
+                                                { %>
+                                                    <option value="<%= item.GoalID %>"><%= item.Goal %></option>
+                                            <%  } %>
                                         </select>
+                                        <%  if (_model.PDQUserAssessment != null)
+                                            { %>
+                                        <script>
+                                            $('select[name="goalID"]').val(<%= _model.PDQUserAssessment.GoalID %>)
+                                        </script>
+                                        <%  } %>
                                     </td>
                                     <td>
-                                        <select class="form-control">
-                                            <option>保守型</option>
-                                            <option>挑戰型</option>
-                                            <option>混合型</option>
+                                        <select name="styleID" class="form-control">
+                                            <%  foreach (var item in models.GetTable<StyleAboutPDQ>())
+                                                { %>
+                                                    <option value="<%= item.StyleID %>"><%= item.Style %></option>
+                                            <%  } %>
                                         </select>
+                                        <%  if (_model.PDQUserAssessment != null)
+                                            { %>
+                                        <script>
+                                            $('select[name="styleID"]').val(<%= _model.PDQUserAssessment.StyleID %>)
+                                        </script>
+                                        <%  } %>
                                     </td>
                                     <td>
-                                        <select class="form-control">
-                                            <option>初期</option>
-                                            <option>過渡期</option>
-                                            <option>進步期</option>
+                                        <select name="levelID" class="form-control">
+                                            <%  foreach (var item in models.GetTable<TrainingLevelAboutPDQ>())
+                                                { %>
+                                                    <option value="<%= item.LevelID %>"><%= item.TrainingLevel %></option>
+                                            <%  } %>
                                         </select>
+                                        <%  if (_model.PDQUserAssessment != null)
+                                            { %>
+                                        <script>
+                                            $('select[name="levelID"]').val(<%= _model.PDQUserAssessment.LevelID %>)
+                                        </script>
+                                        <%  } %>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-
-                        <a href="#" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
+                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
+                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
                     </div>
 
                     <!-- End Contact Form -->
@@ -131,11 +161,28 @@
         $('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons") %>')
               .submit();
 
         });
+
+        function saveAll() {
+            $('form').ajaxForm({
+                url: "<%= VirtualPathUtility.ToAbsolute("~/Member/UpdatePDQ/") + _model.UID %>",
+                beforeSubmit: function () {
+                },
+                success: function (data) {
+                    if (data.result) {
+                        alert("資料已儲存!!");
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function () {
+                }
+            }).submit();
+        }
 
         $('#grouping').on('click', function (evt) {
             if ($(this).is(':checked')) {
@@ -173,6 +220,7 @@
     void renderItem(int idx)
     {
         var item = _items[idx];
+        ViewBag.PDQTask = item.PDQTask.Where(p => p.UID == _model.UID).FirstOrDefault();
         if (_evalIndex.ContainsKey(item.QuestionID))
         {
             ViewBag.AdditionalTitle = _evalIndex[item.QuestionID];

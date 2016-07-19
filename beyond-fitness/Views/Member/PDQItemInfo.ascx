@@ -13,20 +13,31 @@
 </tr>
 <tr>
     <td>
-        <div class="form-group has-feedback">
-            <select class="form-control" name='<%= "_" + _model.QuestionID %>'>
-                <option value="1">是</option>
-                <option value="0">否</option>
-            </select>
-            <%  if (_task != null && _task.YesOrNo.HasValue)
-                { %>
-            <script>
-                $('select[name="<%= "_" + _model.QuestionID %>"]').val(<%= _task.YesOrNo==true ? 1 : 0%>);
-            </script>
-            <%  } %>
-        </div>
+        <%  if (_task != null)
+            {
+                switch ((Naming.QuestionType)_model.QuestionType)
+                {
+                    case Naming.QuestionType.問答題:
+                        Writer.Write(_task.PDQAnswer);
+                        break;
+                    case Naming.QuestionType.單選題:
+                    case Naming.QuestionType.單選其他:
+                        Writer.Write(_task.SuggestionID.HasValue ? _task.PDQSuggestion.Suggestion : _task.PDQAnswer);
+                        break;
+                    case Naming.QuestionType.多重選:
+                        break;
+                    case Naming.QuestionType.是非題:
+                        Writer.Write(_task.YesOrNo == true ? "是" : "否");
+                        break;
+                }
+            }
+            else
+            {
+                Writer.Write("N/A");
+            } %>
     </td>
 </tr>
+
 
 <script runat="server">
 

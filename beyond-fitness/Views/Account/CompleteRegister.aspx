@@ -47,7 +47,7 @@
                                 <p>您的註冊已經完成。歡迎加入BEYOND FITNESS。</p>
                                 <!-- Divider -->
                                 <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
                             </div>
                         </div>
                     </div>

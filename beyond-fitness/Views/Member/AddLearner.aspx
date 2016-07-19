@@ -56,10 +56,10 @@
 
     <script>
         $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
+        //$('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>')
               .submit();
 

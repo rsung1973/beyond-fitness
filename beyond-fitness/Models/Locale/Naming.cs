@@ -40,7 +40,8 @@ namespace WebHome.Models.Locale
         {
             ReadyToRegister = 1001,
             Deleted = 1002,
-            Checked = 1003 
+            Checked = 1003,
+            Anonymous = 1004 
         }
 
         public enum RoleID
@@ -48,7 +49,8 @@ namespace WebHome.Models.Locale
             Administrator = 1,
             Coach = 2,
             FreeAgent = 3,
-            Learner = 4
+            Learner = 4,
+            Guest = 5
         }
 
         public enum LessonStatus

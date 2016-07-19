@@ -445,11 +445,16 @@ namespace WebHome.Controllers
             {
                 case Naming.RoleID.Administrator:
                 case Naming.RoleID.Coach:
-                case Naming.RoleID.FreeAgent:
                     if (isJson)
                         return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/Coach") });
                     else
                         return RedirectToAction("Coach", "Account");
+
+                case Naming.RoleID.FreeAgent:
+                    if (isJson)
+                        return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/FreeAgent") });
+                    else
+                        return RedirectToAction("FreeAgent", "Account");
 
                 case Naming.RoleID.Learner:
                     if (isJson)
@@ -641,6 +646,23 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        public ActionResult FreeAgent(DateTime? lessonDate, DateTime? endQueryDate)
+        {
+            return Coach(lessonDate, endQueryDate);
+        }
+
+        public ActionResult FreeAgentClockIn()
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return new EmptyResult();
+            }
+
+            return View(item);
+        }
+
+
 
         [HttpGet]
         public ActionResult EditMySelf()
@@ -706,7 +728,8 @@ namespace WebHome.Controllers
             }
 
             item.UserName = viewModel.UserName.GetEfficientString();
-            item.Birthday = viewModel.Birthday;
+            if (viewModel.Birthday.HasValue)
+                item.Birthday = viewModel.Birthday;
 
             if (!createPassword(viewModel))
                 return View(viewModel);

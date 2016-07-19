@@ -27,10 +27,15 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <%  ViewBag.Preview = true;
-                        ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
-                        Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);  %>
-                    <!-- End Classic -->
+                    <%  if (_model.LessonTime.GroupID.HasValue)
+                        {
+                            Html.RenderPartial("~/Views/Member/GroupingLessonInfo.ascx", _model.LessonTime.GroupingLesson);
+                        }
+                        else
+                        {
+                            ViewBag.ShowPerson = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
+                            Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);
+                        }   %>                    <!-- End Classic -->
 
                     <!-- Start Contact Form -->
                     <!-- Categories Widget -->
@@ -48,20 +53,8 @@
                     <!-- Start Contact Form -->
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <h4 ><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
-                        </div>
-
-
-                        <div class="col-md-6">
-                            <h4 ><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
-                        </div>
-
-
                         <div class="col-md-12">
-                            <h4 ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>課程：</h4>
+                            <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -180,9 +173,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
+                        </div>
 
+
+                        <div class="col-md-6">
+                            <h4><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
+                        </div>
+
+                    </div>
                     <%  if (_model.LessonTime.LessonPlan != null)
                         { %>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="hr1" style="margin-top: 20px; margin-bottom: 5px;"></div>
                                 <h4 ><span class="fa fa-commenting" aria-hidden="true"></span> 教練總評：</h4>
@@ -191,7 +197,6 @@
                                 <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= String.IsNullOrEmpty(_model.LessonTime.LessonPlan.Remark) ? "目前尚無總評" : _model.LessonTime.LessonPlan.Remark %></pre>
                                 <!-- End Call Action -->
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 5px;"></div>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
                             </div>
 
                             <div class="col-md-6">
@@ -201,7 +206,9 @@
                                 <!-- Start Call Action -->
                                 <pre class="call-action call-action-boxed call-action-style4 clearfix"><%= String.IsNullOrEmpty(_model.LessonTime.LessonPlan.FeedBack) ? "目前尚無意見反饋" : _model.LessonTime.LessonPlan.FeedBack %></pre>
                                 <!-- End Call Action -->
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
                             </div>
+                        </div>
                     <%  } %>
                     
                 </div>

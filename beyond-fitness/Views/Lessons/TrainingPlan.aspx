@@ -31,10 +31,16 @@
                     <h4 class="classic-title"><span class="fa fa-edit"> 預編課程</span></h4>
 
                     <!-- Start Contact Form -->
-                    
 
-                        <%  //ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
-                            Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
+                    <%  if (_model.LessonTime.GroupID.HasValue)
+                        {
+                            Html.RenderPartial("~/Views/Member/GroupingLessonInfo.ascx", _model.LessonTime.GroupingLesson);
+                        }
+                        else
+                        {
+                            ViewBag.ShowPerson = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
+                            Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);
+                        }   %>
                     <div class="col-md-10">
                         <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
                     </div>
@@ -158,13 +164,14 @@
         //$('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>')
           .submit();
         });
 
         function deleteTraining(itemID) {
             confirmIt({ title: '刪除訓練組數', message: '確定刪除此訓練組數?' }, function (evt) {
+                startLoading();
                 $('<form method="post"/>').appendTo($('body'))
                     .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTraining/") %>' + itemID)
                     .submit();
@@ -173,6 +180,7 @@
 
         function deletePlan() {
             confirmIt({ title: '刪除課表', message: '確定刪除此課表?' }, function (evt) {
+                startLoading();
                 $('<form method="post"/>').appendTo($('body'))
                     .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeletePlan") %>')
                     .submit();
@@ -180,6 +188,7 @@
         }
 
         function addTraining() {
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTraining") %>')
                 .submit();
         }

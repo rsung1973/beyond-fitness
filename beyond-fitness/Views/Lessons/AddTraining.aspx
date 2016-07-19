@@ -132,6 +132,7 @@
 
 
         $('#nextStep').on('click', function (evt) {
+            $('#loading').css('display', 'table');
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/ValidateToCommitTraining") %>', $('form').serialize(), function (data) {
                 if (data.result) {
                     $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute(ViewBag.AssessLesson==true ? "~/Attendance/CommitTraining" : "~/Lessons/CommitTraining") %>')
@@ -139,6 +140,7 @@
                 } else {
                     alert(data.message);
                 }
+                $('#loading').css('display', 'none');
             });
         });
 

@@ -34,7 +34,11 @@
 
                     <div class="blog-post quote-post">
                         <div class="form-group has-feedback">
-                            <% 
+                            <label class="control-label" for="classno">教練：</label>
+                            <%  if(_model.IsFreeAgent())
+                                {
+                                    ViewBag.ByFreeAgent = _model.UID;
+                                }
                                 var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
                                 if (ViewBag.DefaultCoach != null)
                                     inputItem.DefaultValue = ViewBag.DefaultCoach;
@@ -42,11 +46,13 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="classno">學員：</label>
-                            <label class="control-label" for="classno">
-                                <div id="attendee"></div>
-                            </label>
-                            <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
-                            <a onclick="addUser();" class="btn btn-system btn-small">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
+                            <%  UserProfile guest = models.GetTable<UserProfile>().Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Anonymous).FirstOrDefault();
+                                if (guest != null)
+                                { %>
+                                    <label class="control-label" for="classno">
+                                        <input type="radio" name="uid" value="<%= guest.UID %>" checked /><%= guest.RealName %>
+                                    </label>
+                            <%  } %>
                         </div>
                         <div class="form-group has-feedback">
                             <label class="control-label" for="classno">日期、時段：</label>
@@ -55,18 +61,6 @@
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
-
-<%--                        <div class="form-group">
-                            <label for="exampleInputFile" class="control-label">上課時段：</label>
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input1">
-                                        <input id="classTime" name="classTime" class="form-control" size="16" type="text" value="<%= String.Format("{0:00}:{1:00}",_viewModel.ClassTime.Hours,_viewModel.ClassTime.Minutes) %>" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--%>
                         <div class="form-group">
                             <label for="exampleInputFile" class="control-label">課程時間：</label>
                             <select name="duration">
@@ -89,30 +83,22 @@
     <!-- End content -->
     <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
 
+    <%  if (!_model.IsFreeAgent())
+        { %>
+            <script>
+                $('#coachID').on('change', function (evt) {
+                    if ($('#coachID option:selected').text().indexOf('自由教練') < 0) {
+                        window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>' + '?coachID=' + $('#coachID').val();
+                    }
+                });
+            </script>
+    <%  } %>
+
     <script>
         $('#vip,#m_vip').addClass('active');
         //$('#theForm').addClass('contact-form');
 
-        $('#coachID').on('change', function (evt) {
-            if ($('#coachID option:selected').text().indexOf('自由教練') > 0) {
-                window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>' + '?coachID=' + $('#coachID').val();
-            }
-        });
-
         $(function () {
-
-            $formValidator.settings.submitHandler = function (form) {
-
-                var $items = $('input[name="registerID"]:checked');
-                if ($items.length <= 0) {
-                    $('#registerID-error').css('display', 'block');
-                    $('#registerID-error').text('請選擇上課學員!!');
-                    return;
-                }
-
-                //$(form).submit();
-                return true;
-            };
 
             $('#coachID').rules('add', {
                 'required': true
@@ -122,32 +108,15 @@
                 'required': true,
                 'date': true
             });
-
-            //$('#classTime').rules('add', {
-            //    'required': true
-            //});
         });
 
 
         $('#nextStep').on('click', function (evt) {
             startLoading();
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>')
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>')
           .submit();
         });
 
-        function addUser() {
-            $('form').find('#addUserItem').remove();
-            var $modal = $('<div class="form-horizontal modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
-            $modal.on('hidden.bs.modal', function (evt) {
-                $modal.remove();
-            });
-            $('#loading').css('display', 'table');
-            $modal.appendTo($('form'))
-                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
-                    $modal.modal('show');
-                    $('#loading').css('display', 'none');
-                });
-    }
     </script>
 
 </asp:Content>

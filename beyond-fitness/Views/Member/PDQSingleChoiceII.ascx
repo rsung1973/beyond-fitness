@@ -24,9 +24,15 @@
                 { %>
             <div class="radio">
                 <label>
-                    <input type="radio" name="questionID" value="<%= item.SuggestionID %>"><%= item.Suggestion %></label>
+                    <input type="radio" name='<%= "_" + _model.QuestionID %>' value="<%= item.SuggestionID %>"><%= item.Suggestion %></label>
             </div>
-            <%  } %>
+            <%  } 
+                if(_item!=null && _item.SuggestionID.HasValue)
+                {   %>
+                    <script>
+                        $('input[name="<%= "_" + _model.QuestionID %>"][value="<%= _item.SuggestionID %>"]').prop('checked', true);
+                    </script>
+        <%      }   %>
         </div>
     </td>
 </tr>
@@ -36,6 +42,7 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     PDQQuestion _model;
+    PDQTask _item;
 
     protected override void OnInit(EventArgs e)
     {
@@ -43,6 +50,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (PDQQuestion)this.Model;
+        _item = (PDQTask)ViewBag.PDQTask;
     }
 
 </script>

@@ -380,8 +380,6 @@ hr.fc-divider {
 
 .fc th,
 .fc td {
-	border-style: solid;
-	border-width: 1px;
 	padding: 0;
 	vertical-align: top;
 }
@@ -860,6 +858,10 @@ a.fc-more:hover {
 	   -moz-box-sizing: content-box;
 	        box-sizing: content-box;
 }
+.fc-view-container{
+	overflow:hidden;
+}
+
 
 .fc-view, /* scope positioning and z-index's for everything within the view */
 .fc-view > table { /* so dragged elements can be above the view's main element */
@@ -1258,4 +1260,57 @@ be a descendant of the grid when it is being dragged.
 	border-width: 5px 6px 5px 0;
 	border-top-color: transparent;
 	border-bottom-color: transparent;
+}
+
+
+/*custom set*/
+
+.ui-widget-header {
+    border-width: 0px !important;
+		border-bottom: 1px solid #707070 !important;
+    background: #FFF;
+    color: #333;
+    font-weight: bold;
+		text-align:left !important;
+}
+.fc-sun,.fc-mon,.fc-tue,.fc-wed,.fc-thu,.fc-fri,.fc-sat{
+		padding-top:5px !important;
+		padding-bottom:5px !important;
+		padding-left:5px !important;
+}
+
+.ui-widget-content {
+    border-width: 0px;
+    background: #FFF;
+    color: #362b36;
+}
+td.ui-widget-content:hover {
+    background: #e5e5e5;
+		border-radius: 10px;
+}
+
+.fc-basic-view td.fc-day-number {
+    padding-top: 5px !important;
+		padding-left:5px !important;
+    padding-bottom: 2px !important;
+		text-align:left !important;
+		font-weight:bold;
+}
+.fc-event{
+    padding: 4px !important;
+}
+
+.ui-state-highlight {
+    /*border: 1px solid #f9dd34;*/
+		border-width:0px !important;
+    background: #707070 !important;
+    color: #FFF !important;
+		border-radius: 10px;
+}
+/* 中螢幕設備（一般桌面，992px（含）以上） */
+@media (min-width:992px) { 
+	.fc-sun,.fc-mon,.fc-tue,.fc-wed,.fc-thu,.fc-fri,.fc-sat{
+			font-size:15px;
+	}
+
 }

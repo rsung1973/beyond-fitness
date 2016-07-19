@@ -27,7 +27,7 @@
         <td>全時段</td>
         <td><%= item.Count() %></td>
         <td>
-            <a class="btn-system btn-small" onclick="showAttendee('<%= String.Format("{0:yyyy/MM/dd}", item.Key) %>');" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
+            <a class="btn-system btn-small" onclick="showAttendeeByQuery('<%= String.Format("{0:yyyy/MM/dd}", item.Key) %>');" >學員清單 <i class="fa fa-list-alt" aria-hidden="true"></i></a>
         </td>
     </tr>
     <%      } %>
@@ -40,9 +40,11 @@
     <%  } %>
 </table>
 <script>
-    function showAttendee(lessonDate, hour) {
+    function showAttendeeByQuery(lessonDate, hour) {
         pageParam.hour = hour;
-        $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': lessonDate, 'hour': hour }, function () {
+        $('#loading').css('display', 'table');
+        $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembersByQuery") %>', { 'lessonDate': lessonDate, 'hour': hour }, function () {
+            $('#loading').css('display', 'none');
         });
     }
 </script>

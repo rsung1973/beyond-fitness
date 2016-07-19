@@ -31,7 +31,7 @@ namespace WebHome.Controllers
         }
 
         [HttpGet]
-        public ActionResult BookingByCoach()
+        public ActionResult BookingByCoach(int? coachID)
         {
             UserProfile item = HttpContext.GetUser();
             if (item == null)
@@ -40,9 +40,54 @@ namespace WebHome.Controllers
             }
 
             ViewBag.ViewModel = new LessonTimeViewModel();
+            if (coachID.HasValue)
+                ViewBag.DefaultCoach = coachID;
             return View(item);
 
         }
+
+        public ActionResult FreeAgentClockIn(int? coachID)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Json(new { result = false, message = "連線已中斷，請重新登入!!" });
+            }
+
+            if (item.IsFreeAgent() && item.UID != coachID)
+            {
+                return Json(new { result = false, message = "自由教練資料錯誤!!" });
+            }
+
+            var items = models.GetTable<LessonTime>()
+                .Where(l => l.ClassTime >= DateTime.Today && l.ClassTime < DateTime.Today.AddDays(1))
+                .Where(l => l.AttendingCoach == coachID)
+                .Where(l => l.LessonAttendance == null);
+
+            if (items.Count() <= 0)
+            {
+                return Json(new { result = false, message = "本日無自由教練課程!!" });
+            }
+
+            foreach (var lesson in items)
+            {
+                lesson.LessonAttendance = new LessonAttendance
+                {
+                    CompleteDate = DateTime.Now
+                };
+            }
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+
+        }
+
+        [HttpGet]
+        public ActionResult BookingByFreeAgent(int? coachID)
+        {
+            return BookingByCoach(coachID);
+        }
+
 
         [HttpPost]
         public ActionResult BookingByCoach(LessonTimeViewModel viewModel)
@@ -103,7 +148,7 @@ namespace WebHome.Controllers
             var timeExpansion = models.GetTable<LessonTimeExpansion>();
             if (timeItem.GroupID.HasValue)
             {
-                for (int i = 0; i <= (timeItem.DurationInMinutes - 1) / 60; i++)
+                for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
                 {
                     foreach (var regles in lesson.GroupingLesson.RegisterLesson)
                     {
@@ -119,7 +164,7 @@ namespace WebHome.Controllers
             }
             else
             {
-                for (int i = 0; i <= (timeItem.DurationInMinutes - 1) / 60; i++)
+                for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
                 {
                     timeExpansion.InsertOnSubmit(new LessonTimeExpansion
                     {
@@ -133,8 +178,63 @@ namespace WebHome.Controllers
 
             models.SubmitChanges();
 
-            return Redirect("~/Account/Coach");
+            return RedirectToAction("Coach", "Account");
         }
+
+        public ActionResult BookingByFreeAgent(LessonTimeViewModel viewModel)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            ViewBag.ViewModel = viewModel;
+
+            if (!this.ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View(item);
+            }
+
+            LessonTime timeItem = new LessonTime
+            {
+                InvitedCoach = viewModel.CoachID,
+                AttendingCoach = viewModel.CoachID,
+                ClassTime = viewModel.ClassDate,
+                DurationInMinutes = viewModel.Duration,
+                RegisterLesson = new RegisterLesson
+                {
+                    UID = viewModel.UID.Value,
+                    RegisterDate = DateTime.Now,
+                    GroupingMemberCount = 1,
+                    Lessons = 1
+                }
+            };
+
+            models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
+            models.SubmitChanges();
+
+            var timeExpansion = models.GetTable<LessonTimeExpansion>();
+
+            for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
+            {
+                timeExpansion.InsertOnSubmit(new LessonTimeExpansion
+                {
+                    ClassDate = timeItem.ClassTime.Value.Date,
+                    LessonID = timeItem.LessonID,
+                    Hour = timeItem.ClassTime.Value.Hour + i,
+                    RegisterID = timeItem.RegisterID
+                });
+            }
+
+            models.SubmitChanges();
+            if (item.IsFreeAgent())
+                return RedirectToAction("FreeAgent", "Account");
+            else
+                return RedirectToAction("Coach", "Account");
+        }
+
 
         private IEnumerable<UserProfile> checkOverlapedBooking(LessonTime timeItem, RegisterLesson lesson)
         {
@@ -196,16 +296,28 @@ namespace WebHome.Controllers
             //        title = g.Count(),
             //        start = g.Key.ToString("yyyy-MM-dd")
             //    }), JsonRequestBehavior.AllowGet);
-            return Json(models.GetTable<LessonTime>()
-                    .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
-                    .Select(t => t.ClassTime).ToList()
-                    .Select(t => t.Value.Date)
-                    .GroupBy(t => t)
-                    .Select(g => new
-                    {
-                        title = g.Count(),
-                        start = g.Key.ToString("yyyy-MM-dd")
-                    }), JsonRequestBehavior.AllowGet);
+            //return Json(models.GetTable<LessonTime>()
+            //        .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+            //        .Select(t => t.ClassTime).ToList()
+            //        .Select(t => t.Value.Date)
+            //        .GroupBy(t => t)
+            //        .Select(g => new
+            //        {
+            //            title = g.Count(),
+            //            start = g.Key.ToString("yyyy-MM-dd")
+            //        }), JsonRequestBehavior.AllowGet);
+            return Json(models.GetTable<LessonTimeExpansion>()
+                .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
+                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .GroupBy(t => t.ClassDate)
+                .Select(g => new
+                {
+                    title = g.Distinct().Count(),
+                    start = g.Key.ToString("yyyy-MM-dd"),
+                    color = "#5BC0DE",   // an option!
+                    textColor = "#FFFFFF" // an option!          
+                }), JsonRequestBehavior.AllowGet);
+
 
         }
 
@@ -219,13 +331,15 @@ namespace WebHome.Controllers
 
             return Json(models.GetTable<LessonTime>()
                     .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
-                    .Where(l => l.TrainingPlan != null)
-                    .Where(l => l.LessonPlan != null)
+                    //.Where(l => l.TrainingPlan != null)
+                    //.Where(l => l.LessonPlan != null)
                     .Where(t => t.RegisterLesson.UID == item.UID).ToArray()
                     .Select(g => new
                     {
-                        title = "與" + (!String.IsNullOrEmpty(g.AsAttendingCoach.UserProfile.UserName) ? g.AsAttendingCoach.UserProfile.UserName : g.AsAttendingCoach.UserProfile.RealName) + "上課嘍",
+                        title = "運動嘍",
                         start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                        color= "#5BC0DE",   // an option!
+                        textColor= "#FFFFFF", // an option!          
                         lessonID = g.LessonID
                     }), JsonRequestBehavior.AllowGet);
 
@@ -313,31 +427,45 @@ namespace WebHome.Controllers
             return View(lessonDate);
         }
 
-        public ActionResult DailyBookingQuery(DateTime? dateFrom, DateTime? dateTo,String userName,int? coachID,int? monthInterval)
+        public ActionResult DailyBookingQuery(DailyBookingQueryViewModel viewModel)
         {
-            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
-            if (dateFrom.HasValue)
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
             {
-                items = items.Where(l => l.ClassTime >= dateFrom.Value);
-                if (monthInterval.HasValue)
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+
+            HttpContext.SetCacheValue(CachingKey.DailyBookingQuery, viewModel);
+
+            if (viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(l => l.ClassTime >= viewModel.DateFrom.Value);
+                if (viewModel.MonthInterval.HasValue)
                 {
-                    items = items.Where(l => l.ClassTime < dateFrom.Value.AddMonths(monthInterval.Value));
+                    items = items.Where(l => l.ClassTime < viewModel.DateFrom.Value.AddMonths(viewModel.MonthInterval.Value));
                 }
             }
-            if(dateTo.HasValue)
-                items = items.Where(l => l.ClassTime < dateTo.Value.AddDays(1));
+            if(viewModel.DateTo.HasValue)
+                items = items.Where(l => l.ClassTime < viewModel.DateTo.Value.AddDays(1));
 
-            if (coachID.HasValue)
-                items = items.Where(l => l.AttendingCoach == coachID);
-            if(!string.IsNullOrEmpty(userName))
+            if (viewModel.CoachID.HasValue)
+                items = items.Where(l => l.AttendingCoach == viewModel.CoachID);
+
+            if(!string.IsNullOrEmpty(viewModel.UserName))
             {
-                items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(userName));
+                items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
+            }
+
+            if(item.IsFreeAgent())
+            {
+                items = items.Where(l => l.AttendingCoach == item.UID);
             }
 
             ViewBag.DataItems = items;
             return View(DateTime.Today);
         }
-
 
         public ActionResult DailyBookingSummary(DateTime lessonDate)
         {
@@ -502,7 +630,8 @@ namespace WebHome.Controllers
                     ticks = idx.Select(g => new object[]
                         {
                             g,
-                            g%section==0 ? (g+1).ToString() : ""
+                            //g%section==0 ? (g+1).ToString() : ""
+                            ""
                         }).ToArray()
                 }, JsonRequestBehavior.AllowGet);
         }
@@ -564,7 +693,8 @@ namespace WebHome.Controllers
                     ticks = idx.Select(g => new object[]
                         {
                             g,
-                            g%section==0 ? (g+1).ToString() : ""
+                            //g%section==0 ? (g+1).ToString() : ""
+                            ""
                         }).ToArray()
                 }, JsonRequestBehavior.AllowGet);
         }
@@ -648,6 +778,43 @@ namespace WebHome.Controllers
             return View(items.GroupBy(l => l.LessonID).Select(g => g.First()));
         }
 
+        public ActionResult DailyBookingMembersByFreeAgent(DateTime lessonDate, int? hour)
+        {
+            return DailyBookingMembers(lessonDate, hour);
+        }
+
+        public ActionResult DailyBookingMembersByQuery(DateTime lessonDate, int? hour)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            IQueryable<LessonTimeExpansion> items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate);
+            if (hour.HasValue)
+            {
+                items = items.Where(t => t.Hour == hour);
+            }
+
+            DailyBookingQueryViewModel viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue(CachingKey.DailyBookingQuery);
+            if(viewModel!=null)
+            {
+                if (viewModel.CoachID.HasValue)
+                    items = items.Where(l => l.LessonTime.AttendingCoach == viewModel.CoachID);
+                if (!string.IsNullOrEmpty(viewModel.UserName))
+                {
+                    items = items.Where(l => l.LessonTime.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
+                }
+                if(item.IsFreeAgent())
+                {
+                    items = items.Where(l => l.LessonTime.AttendingCoach == item.UID);
+                }
+            }
+
+            return View("DailyBookingMembers",items.GroupBy(l => l.LessonID).Select(g => g.First()));
+        }
+
         public ActionResult RevokeBooking(int lessonID)
         {
             UserProfile profile = HttpContext.GetUser();
@@ -659,14 +826,39 @@ namespace WebHome.Controllers
             LessonTime item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
             if (item == null)
             {
-                return Json(new { result = false ,message="課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { result = false, message = "課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
             }
-            else if (item.LessonPlan!=null || item.TrainingPlan.Count>0)
+            else if (item.LessonPlan != null || item.TrainingPlan.Count > 0)
             {
                 return Json(new { result = false, message = "請先刪除預編課程!!" }, JsonRequestBehavior.AllowGet);
             }
 
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
+            if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
+            {
+                models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
+            }
+
+            return Json(new { result = true });
+
+        }
+
+        public ActionResult RevokeBookingByFreeAgent(int lessonID)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            LessonTime item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
+            if (item == null)
+            {
+                return Json(new { result = false, message = "課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
+            models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
 
             return Json(new { result = true });
 
@@ -888,7 +1080,7 @@ namespace WebHome.Controllers
             models.SubmitChanges();
 
             HttpContext.RemoveCache(CachingKey.TrainingExecution);
-            return View(new TrainingExecution { });
+            return View("AddTraining",new TrainingExecution { });
         }
 
 

@@ -27,10 +27,12 @@
                 },
                 success: function (data) {
                     elmt.after(fileUpload);
-                    if (data.result) {
-                        loadResource(<%= DocID %>);
-                    } else {
-                        alert(data.message);
+                    if(data) {
+                        if (data.result) {
+                            loadResource(<%= DocID %>);
+                        } else {
+                            alert(data.message);
+                        }
                     }
                     //status.hide();
                     //console.log('提交成功');

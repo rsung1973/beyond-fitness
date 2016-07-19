@@ -105,8 +105,10 @@
         function addGroupingUser(lessonId) {
             $('form').find('#addUserItem').remove();
             var $modal = $('<div class="form-horizontal modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
             $modal.appendTo($('form'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessonUsers") %>', { 'lessonId': lessonId }, function () {
+                    $('#loading').css('display', 'none');
                     $modal.modal('show');
                 });
         }

@@ -48,6 +48,11 @@
             'required': true,
             'regex': /^[0-9]{6,20}$/
         });
+
+        $('#birthDay').rules('add', {
+            'required': true
+        });
+
     });
 
 </script>

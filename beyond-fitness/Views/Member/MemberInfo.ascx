@@ -37,10 +37,13 @@
                                 <th class="warning" class="col-xs-1 col-md-1">Email</th>
                                 <td><%= _model.PID.Contains("@") ? _model.PID : null %></td>
                             </tr>
+                            <%  if (_model.Birthday.HasValue)
+                                { %>
                             <tr>
                                 <th class="warning" class="col-xs-1 col-md-1">年鹷</th>
-                                <td><%= _model.Birthday.HasValue ? (DateTime.Today.Year-_model.Birthday.Value.Year).ToString() : null %>歲</td>
+                                <td><%= (DateTime.Today.Year - _model.Birthday.Value.Year).ToString() %>歲</td>
                             </tr>
+                            <%  } %>
                         </table>
                     </div>
                 <%  if (ViewBag.ShowPerson == true)
@@ -54,9 +57,9 @@
                                     <th>訓練水準</th>
                                 </tr>
                                 <tr>
-                                    <td>減肥</td>
-                                    <td>保守型</td>
-                                    <td>初期</td>
+                                    <td><%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.GoalAboutPDQ!=null ? _model.PDQUserAssessment.GoalAboutPDQ.Goal : null %></td>
+                                    <td><%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.StyleAboutPDQ!=null ? _model.PDQUserAssessment.StyleAboutPDQ.Style : null %></td>
+                                    <td><%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.TrainingLevelAboutPDQ!=null ? _model.PDQUserAssessment.TrainingLevelAboutPDQ.TrainingLevel : null %></td>
                                 </tr>
                             </table>
                         </div>
@@ -77,12 +80,15 @@
                     //} 
                 %>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <h4><span class="fa fa-bell-o"></span>目前近況：</h4>
-                        <textarea class="form-control" name="recentStatus" rows="3"><%= _model.RecentStatus %></textarea>
-                    </div>
-                </div>
+                <%  if (ViewBag.Argument is ArgumentModel)
+                    { %>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4><span class="fa fa-bell-o"></span>目前近況：</h4>
+                                <textarea class="form-control" name="recentStatus" rows="3"><%= _model.RecentStatus %></textarea>
+                            </div>
+                        </div>
+                <%  } %>
             </div>
         </div>
     </div>

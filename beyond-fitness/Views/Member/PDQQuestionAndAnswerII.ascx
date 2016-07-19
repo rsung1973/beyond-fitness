@@ -12,7 +12,7 @@
     <td>
         <span class="fa fa-commenting"><%= _model.Question %></span>
         <div class="form-group has-feedback">
-            <textarea class="form-control" name="questionID" rows="3"><%= _item!=null ? _item.PDQAnswer : null %></textarea>
+            <textarea class="form-control" name='<%= "_" + _model.QuestionID %>' rows="3"><%= _item!=null ? _item.PDQAnswer : null %></textarea>
         </div>
     </td>
 </tr>

@@ -76,7 +76,7 @@
         $('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons") %>')
               .submit();
 

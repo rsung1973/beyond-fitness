@@ -77,13 +77,17 @@
             alert('勾選的學員數超過本次團體課人數!!');
             return;
         }
+        startLoading();
         $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/ApplyGroupLessons") %>')
             .submit();
     });
 
     $('#btnQuery').on('click',function(evt) {
         var userName = $('input[name="userName"]').val();
-        $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessonUsersSelector") %>',{'lessonId':<%= _model.RegisterID %>,'userName':userName},function(){});
+        $('#loading').css('display', 'table');
+        $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessonUsersSelector") %>',{'lessonId':<%= _model.RegisterID %>,'userName':userName},function(){
+            $('#loading').css('display', 'none');
+        });
     });
 
 </script>

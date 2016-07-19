@@ -17,9 +17,13 @@
 <script type="text/javascript" src='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lang-all.js") %>'></script>
 
 <div id='calendar'></div>
-
 <script>
+    window.onpopstate = function (event) {
+        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    };
+
     $(document).ready(function () {
+        $('#loading').css('display', 'none');
 
         $('#calendar').fullCalendar({
             lang: 'zh-TW',
@@ -38,7 +42,16 @@
             eventRender: function (event, element, view) {
                 $(element).height(50)
                     .prop('href', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipDay/") %>' + event.lessonID);
+            },
+            eventClick: function (calEvent, jsEvent, view) {
+                startLoading();
+            },
+            dayClick: function (calEvent, jsEvent, view) {
+                if (calEvent.start) {
+                    startLoading();
+                }
             }
+
 <%--            ,
             eventClick: function (calEvent, jsEvent, view) {
                 var lessonDate = calEvent.start.format('YYYY-MM-DD');

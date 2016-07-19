@@ -30,7 +30,7 @@
                         barWidth: 0.6,
                         align: "center",
                         fillColor: {
-                            colors: ["#337ab7", "#337ab7"]
+                            colors: ["#5BC0DE", "#5BC0DE"]
                         }
                     },
                     color: "#337ab7"
@@ -83,7 +83,7 @@
                     console.log(o);
                     $('<div class="data-point-label">' + el[1] + '</div>').css( {
                         position: 'absolute',
-                        left: o.left - 15,
+                        left: o.left - 8,
                         top: o.top - 20,
                         display: 'none'
                     }).appendTo($p.getPlaceholder()).fadeIn('slow');

@@ -74,13 +74,12 @@
     </div>
     <!-- End content -->
 
-
     <script>
         $('#vip,#m_vip').addClass('active');
         $('#theForm').addClass('contact-form');
 
         $('#btnLogin').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= FormsAuthentication.LoginUrl %>')
               .submit();
 

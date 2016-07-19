@@ -22,7 +22,7 @@
 
             <div class="row">
 
-                <div class="col-md-5">
+                <div class="col-md-10">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-edit"> 修改個人資料完成</span></h4>

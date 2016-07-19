@@ -15,7 +15,7 @@
             <th class="text-center">建檔日期</th>
             <th>課程類別</th>
             <th class="text-center">團體課程</th>
-            <th class="text-center">堂數</th>
+            <th class="text-center">購買/剩餘堂數</th>
             <%  if (ViewBag.ShowOnly != true)
                 { %>
                     <th class="text-center">功能</th>
@@ -37,7 +37,7 @@
                             <td class="text-center">
                                 <i class="fa fa-check-circle" aria-hidden="true"></i><%= item.GroupingMemberCount %>人
                             </td>
-                            <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>"><%= item.Lessons %></td>
+                            <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>"><%= item.Lessons %>/<%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %></td>
                             <%  if (ViewBag.ShowOnly != true)
                                 { %>
                                     <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>">
@@ -69,7 +69,7 @@
                     <td><%= item.LessonPriceType.Description + " " + item.LessonPriceType.ListPrice %></td>
                     <td class="text-center">
                     </td>
-                    <td class="text-center"><%= item.Lessons %></td>
+                    <td class="text-center"><%= item.Lessons %>/<%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %></td>
                     <%  if (ViewBag.ShowOnly != true)
                         { %>
                             <td class="text-center">

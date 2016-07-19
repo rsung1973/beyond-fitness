@@ -127,8 +127,10 @@
         });
 
         $('#btnQuery').on('click', function (evt) {
+            $('#loading').css('display', 'table');
             $('#tab-2').load('<%= VirtualPathUtility.ToAbsolute("~/Member/ListLearners") %>', { 'byName': $('input[name="byName"]').val() }, function () {
                 $('#searchdil').modal('hide');
+                $('#loading').css('display', 'none');
             });
         });
 

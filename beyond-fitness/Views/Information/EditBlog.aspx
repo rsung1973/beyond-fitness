@@ -126,6 +126,7 @@
         }
 
         function loadResource(docID) {
+            $('#loading').css('display', 'table');
             $('#resource').load('<%= VirtualPathUtility.ToAbsolute("~/Information/Resource") %>' + '/' + docID, function () {
                 $('input[name="rbTitleImg"]:radio').on('change', function (evt) {
                     var $this = $(this);
@@ -135,6 +136,7 @@
                         });
                     }
                 });
+                $('#loading').css('display', 'none');
             });
         }
 

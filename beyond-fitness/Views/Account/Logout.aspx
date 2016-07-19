@@ -28,7 +28,6 @@
                 // they are logged into this app or not.
                 //document.getElementById('status').innerHTML = 'Please log ' +
                 //  'into Facebook.';
-                window.location.href = '<%= FormsAuthentication.LoginUrl %>';
             }
         }
 
@@ -54,6 +53,8 @@
                 statusChangeCallback(response);
             });
 
+            window.location.href = '<%= FormsAuthentication.LoginUrl %>';
+
         };
 
         // Load the SDK asynchronously
@@ -70,7 +71,6 @@
         function logoutFB() {
             FB.logout(function (response) {
                 console.log(response);
-                window.location.href = '<%= FormsAuthentication.LoginUrl %>';
             });
         }
     </script>

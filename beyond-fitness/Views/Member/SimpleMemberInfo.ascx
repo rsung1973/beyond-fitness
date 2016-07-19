@@ -19,7 +19,7 @@
                 <%  if (ViewBag.UserInfo == null)
                     { %> 
                         Hi <%= String.IsNullOrEmpty(_model.UserName) ? _model.RealName :_model.UserName %>
-                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>" class="pull-right" style="font-size: 13px; margin-bottom: 5px;"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
+                        <a onclick='startLoading();window.location.href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>";' class="pull-right" style="font-size: 13px; margin-bottom: 5px;"><i class="fa fa-cog" aria-hidden="true"></i>修改個人資料</a>
                 <%  }
                     else
                     { %>

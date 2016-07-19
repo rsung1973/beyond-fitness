@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Security;
 using CommonLib.Web;
 using WebHome.Models.DataEntity;
+using WebHome.Models.Locale;
 using WebHome.Models.Security;
 using WebHome.Properties;
 
@@ -125,6 +126,11 @@ namespace WebHome.Helper
                 }
             }
             return profile;
+        }
+
+        public static bool IsFreeAgent(this UserProfile profile)
+        {
+            return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent;
         }
     }
 }

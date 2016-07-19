@@ -15,6 +15,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web.Security;
+using System.Text.RegularExpressions;
 
 namespace WebHome.Controllers
 {
@@ -335,7 +336,9 @@ namespace WebHome.Controllers
 
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
-            item.Birthday = viewModel.Birthday;
+            if (viewModel.Birthday.HasValue)
+                item.Birthday = viewModel.Birthday;
+
             models.SubmitChanges();
             models.ExecuteCommand("update UserRole set RoleID = {0} where UID = {1}", viewModel.CoachRole, item.UID);
 
@@ -615,6 +618,109 @@ namespace WebHome.Controllers
 
             ViewBag.DataItems = models.GetTable<PDQQuestion>().ToArray();
             return View(item);
+        }
+
+        public ActionResult UpdatePDQ(int id,int? goalID, int? styleID, int? levelID)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new { result = false, message = "您的連線已中斷，請重新登入系統!!" });
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
+            if (item == null)
+            {
+                return Json(new { result = false, message = "學員資料不存在!!" });
+            }
+
+            models.ExecuteCommand("delete PDQTask where UID = {0}", item.UID);
+
+            foreach (var key in Request.Form.AllKeys.Where(k => Regex.IsMatch(k, "_\\d")))
+            {
+                savePDQ(item, key);
+            }
+
+            if (item.PDQUserAssessment == null)
+                item.PDQUserAssessment = new PDQUserAssessment { };
+            item.PDQUserAssessment.GoalID = goalID;
+            item.PDQUserAssessment.StyleID = styleID;
+            item.PDQUserAssessment.LevelID = levelID;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+        }
+
+        private void savePDQ(UserProfile item, string key)
+        {
+            int questionID = int.Parse(key.Substring(1));
+            var quest = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == questionID).FirstOrDefault();
+            if (quest == null)
+                return;
+
+            var values = Request.Form.GetValues(key);
+            if (values == null)
+                return;
+
+            switch ((Naming.QuestionType)quest.QuestionType)
+            {
+                case Naming.QuestionType.問答題:
+                    if (values.Length > 0)
+                    {
+                        models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
+                        {
+                            QuestionID = quest.QuestionID,
+                            UID = item.UID,
+                            PDQAnswer = values[0]
+                        });
+                        models.SubmitChanges();
+                    }
+                    break;
+
+                case Naming.QuestionType.單選題:
+                case Naming.QuestionType.單選其他:
+                    foreach (var v in values)
+                    {
+                        int suggestID;
+                        if (int.TryParse(v, out suggestID))
+                        {
+                            models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
+                            {
+                                QuestionID = quest.QuestionID,
+                                UID = item.UID,
+                                SuggestionID = suggestID
+                            });
+                        }
+                        else
+                        {
+                            models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
+                            {
+                                QuestionID = quest.QuestionID,
+                                UID = item.UID,
+                                PDQAnswer = v
+                            });
+                        }
+                        models.SubmitChanges();
+                    }
+                    break;
+
+                case Naming.QuestionType.多重選:
+                    break;
+
+                case Naming.QuestionType.是非題:
+                    if (values.Length > 0)
+                    {
+                        models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
+                        {
+                            QuestionID = quest.QuestionID,
+                            UID = item.UID,
+                            YesOrNo = values[0] == "1" ? true : false
+                        });
+                        models.SubmitChanges();
+                    }
+                    break;
+            }
         }
     }
 

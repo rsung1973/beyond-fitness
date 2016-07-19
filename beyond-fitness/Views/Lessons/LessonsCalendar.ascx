@@ -38,16 +38,24 @@
                 $(element).height(20);
             },
             dayClick: function (calEvent, jsEvent, view) {
-                pageParam.lessonDate = calEvent.format('YYYY-MM-DD');
-                $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
-                plotData(calEvent.format('YYYY-MM-DD'));
-                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+                if (calEvent.start) {
+                    pageParam.lessonDate = calEvent.format('YYYY-MM-DD');
+                    $('#loading').css('display', 'table');
+                    $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+                    plotData(calEvent.format('YYYY-MM-DD'));
+                    $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute(_model.IsFreeAgent() ? "~/Lessons/DailyBookingMembersByFreeAgent" : "~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () {
+                        $('#loading').css('display', 'none');
+                    });
+                }
             },
             eventClick: function (calEvent, jsEvent, view) {
                 pageParam.lessonDate = calEvent.start.format('YYYY-MM-DD');
+                $('#loading').css('display', 'table');
                 $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
                 plotData(calEvent.start.format('YYYY-MM-DD'));
-                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () { });
+                $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute(_model.IsFreeAgent() ? "~/Lessons/DailyBookingMembersByFreeAgent" : "~/Lessons/DailyBookingMembers") %>', { 'lessonDate': calEvent.start.format('YYYY-MM-DD') }, function () {
+                    $('#loading').css('display', 'none');
+                });
             }
 
         });
@@ -58,12 +66,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
+    UserProfile _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (UserProfile)this.Model;
     }
 
 </script>

@@ -30,8 +30,15 @@
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-heartbeat"> 上課囉</span></h4>
 
-                    <%  ViewBag.Assessment = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
-                        Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile); %>
+                    <%  if (_model.LessonTime.GroupID.HasValue)
+                        {
+                            Html.RenderPartial("~/Views/Member/GroupingLessonInfo.ascx", _model.LessonTime.GroupingLesson);
+                        }
+                        else
+                        {
+                            ViewBag.ShowPerson = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
+                            Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);
+                        }   %>
 
                     <!-- Start Contact Form -->
                     <div class="col-md-10">
@@ -265,13 +272,13 @@
         //$('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/CommitAssessment") %>')
           .submit();
         });
 
         $('#btnSave').on('click', function (evt) {
-
+            startLoading();
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/SaveAssessment") %>')
           .submit();
         });

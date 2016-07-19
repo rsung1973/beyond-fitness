@@ -46,6 +46,7 @@
         }
 
         $('#btnFB').on('click', function (evt) {
+            startLoading();
             fbSignOn();
         });
     </script>

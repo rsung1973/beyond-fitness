@@ -1143,9 +1143,9 @@ ul.breadcrumbs li a {
 }
 
 label {
-	font-size: 13px;
+	font-size: 15px;
 	color: #666;
-	font-weight: 300;
+	font-weight: bold;
 	cursor: pointer;
 }
 
@@ -3941,7 +3941,7 @@ ul.post-meta li, ul.post-meta li a {
 }
 
 .blog-post .author-info .author-image img {
-	width: 120px;
+	width: 180px;
 	height: 120px;
 	border-radius: 3px;
 	-webkit-border-radius: 3px;
@@ -3951,16 +3951,16 @@ ul.post-meta li, ul.post-meta li a {
 }
 .blog-post .author-info .author-date{
 	display:inline;
-	background-color:#F36510;
+	background-color:#959595;
 	color:#FFF;
 	padding:3px 8px;
 	position:absolute;
-	left:45px;
-	top:105px;
+	left:100px;
+	top:100px;
 }
 
 .blog-post .author-info .author-bio {
-	padding-left: 140px;
+	padding-left: 200px;
 }
 
 .blog-post .author-info h4 {

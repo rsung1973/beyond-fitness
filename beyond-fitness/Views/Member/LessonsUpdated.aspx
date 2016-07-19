@@ -30,7 +30,8 @@
                     <!-- Start Post -->
                     <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
                     <!-- TABLE 1 -->
-                    <% Html.RenderPartial("~/Views/Member/LessonsList.ascx", _items); %>
+                    <%  ViewBag.ShowOnly = true;
+                        Html.RenderPartial("~/Views/Member/LessonsList.ascx", _items); %>
                     <div class="hr1" style="margin-bottom: 10px;"></div>
 
                     <div class="tabs-section">

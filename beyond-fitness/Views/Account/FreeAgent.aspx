@@ -47,18 +47,20 @@
                 <div class="col-md-8">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-calendar"> 行事曆清單</span></h4>
+                    <h4 class="classic-title"><span class="fa fa-calendar">行事曆清單</span></h4>
 
                     <!-- Start Contact Form -->
                     <!-- Stat Search -->
                     <div class="navbar bg_gray" style="min-height: 30px;">
                         <div class="search-side">
-                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>">登記上課時間 <span class="fa fa-calendar-plus-o"></span></a>
-                            <% Html.RenderPartial("~/Views/Account/FreeAgentClockIn.ascx", _model); %>
+                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>">登記上課時間 <span class="fa fa-calendar-plus-o"></span></a>
+                            <span id="clockIn">
+                                <% Html.RenderPartial("~/Views/Account/FreeAgentClockIn.ascx", _model); %>
+                            </span>
                             <a class="btn btn-search" onclick="inquire();"><i class="fa fa-search"></i></a>
                         </div>
-                        <div class="form-horizontal" style="display:none;" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
-                            <% Html.RenderPartial("~/Views/Lessons/QueryModal.ascx"); %>
+                        <div class="form-horizontal" style="display: none;" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
+                            <% Html.RenderPartial("~/Views/Lessons/QueryModalByFreeAgent.ascx"); %>
                         </div>
                     </div>
 
@@ -66,8 +68,8 @@
 
                     <div class="panel panel-default">
                         <div id="dailyBooking" class="panel-body">
-                        <!-- TABLE 1 -->
-                        <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
+                            <!-- TABLE 1 -->
+                            <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
                         </div>
                         <div id="attendeeList" class="panel-body">
                         </div>
@@ -106,7 +108,7 @@
 
         $(function () {
             $('#loading').css('display', 'table');
-            $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>' }, function () {
+            $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembersByFreeAgent") %>', { 'lessonDate': '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>' }, function () {
                 $('#loading').css('display', 'none');
             });
         });

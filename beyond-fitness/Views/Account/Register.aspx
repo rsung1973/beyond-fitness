@@ -122,10 +122,9 @@
         });
 
         function registerByMail() {
-
-          $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Account/RegisterByMail") %>')
-            .submit();
-
+            $('#loading').css('display', 'table');
+            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Account/RegisterByMail") %>')
+              .submit();
         }
 
 
@@ -219,6 +218,7 @@
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
         function registerByFB() {
+            startLoading();
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me/picture', function (response) {
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Account/FetchPicture") %>', { 'imgUrl': response.data.url }, function (data) {

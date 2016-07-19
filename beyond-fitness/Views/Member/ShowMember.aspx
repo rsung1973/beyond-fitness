@@ -21,7 +21,7 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-10">
 
                     <!-- Classic Heading -->
                     <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>

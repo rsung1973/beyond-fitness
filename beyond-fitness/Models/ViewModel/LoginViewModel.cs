@@ -201,6 +201,8 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "上課時間")]
         public int Duration { get; set; }
 
+        public int? UID { get; set; }
+
     }
 
     public class LessonTimeExpansionViewModel
@@ -316,7 +318,14 @@ namespace WebHome.Models.ViewModel
 
     }
 
-
+    public class DailyBookingQueryViewModel
+    {
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public String UserName { get; set; }
+        public int? CoachID { get; set; }
+        public int? MonthInterval { get; set; }
+    }
 
 
     public class ArgumentModel
