@@ -31,7 +31,7 @@
             <%  }
                 else
                 { %>
-            <a  class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="教練資料">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            <a  class="btn btn-system btn-small" onclick='deleteCoach(<%= item.UID %>);'>刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
             <%  } %>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowMember/") + item.UID %>">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
         </td>

@@ -25,16 +25,35 @@ namespace WebHome.Controllers
         {
 
         }
-        // GET: Member
+
         public ActionResult ListAll()
         {
-            return View();
+            MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
+            if(viewModel==null)
+            {
+                viewModel = new MembersQueryViewModel
+                {
+                    RoleID = Naming.RoleID.Coach
+                };
+                HttpContext.SetCacheValue(CachingKey.MembersQuery, viewModel);
+            }
+            return View(viewModel);
         }
 
         public ActionResult ListLearners(String byName)
         {
 
+            MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
+            if (viewModel == null)
+            {
+                viewModel = new MembersQueryViewModel
+                {
+                };
+                HttpContext.SetCacheValue(CachingKey.MembersQuery, viewModel);
+            }
 
+            viewModel.RoleID = Naming.RoleID.Learner;
+            viewModel.ByName = byName;
 
             models.Items = models.EntityList    //.Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted)
                 .Join(models.GetTable<UserRole>()
@@ -177,7 +196,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             RegisterLesson lesson = item.RegisterLesson.Where(r => r.RegisterID == id).FirstOrDefault();
@@ -213,7 +232,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             item.LevelID = (int)Naming.MemberStatusDefinition.Deleted;
@@ -230,7 +249,7 @@ namespace WebHome.Controllers
 
             ViewBag.Message = "資料已刪除!!";
 
-            return View("ListAll");
+            return RedirectToAction("ListAll");
 
         }
 
@@ -244,7 +263,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             item.LevelID = (int)Naming.MemberStatusDefinition.Checked;
@@ -252,7 +271,7 @@ namespace WebHome.Controllers
 
             ViewBag.Message = "會員已啟用!!";
 
-            return View("ListAll");
+            return RedirectToAction("ListAll");
 
         }
 
@@ -264,7 +283,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             var model = new CoachViewModel
@@ -291,7 +310,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             return View(item);
@@ -319,7 +338,7 @@ namespace WebHome.Controllers
             {
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             viewModel.Email = viewModel.Email.GetEfficientString();
@@ -354,7 +373,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             var lesson = item.RegisterLesson.OrderByDescending(r => r.RegisterID).FirstOrDefault();
@@ -390,7 +409,7 @@ namespace WebHome.Controllers
             {
                 ViewBag.Message = "資料錯誤!!";
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             item.RealName = viewModel.RealName;
@@ -422,7 +441,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, item.UID);
@@ -493,7 +512,7 @@ namespace WebHome.Controllers
             if (lesson == null)
             {
                 ViewBag.Message = "課程資料不存在!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             if (lesson.RegisterGroupID.HasValue)
@@ -529,12 +548,28 @@ namespace WebHome.Controllers
                 || !lesson.GroupingLesson.RegisterLesson.Any(r => r.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)))
             {
                 ViewBag.Message = "課程資料不存在!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             models.ExecuteCommand("update RegisterLesson set RegisterGroupID = null where RegisterID = {0} ", lesson.RegisterID);
 
             return View("GroupLessons", item);
+        }
+
+        public ActionResult ChangeRoleList(Naming.RoleID? roleID)
+        {
+            if(roleID.HasValue)
+            {
+                MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
+                if(viewModel==null)
+                {
+                    viewModel = new MembersQueryViewModel { };
+                }
+                viewModel.RoleID = roleID;
+                HttpContext.SetCacheValue(CachingKey.MembersQuery, viewModel);
+            }
+
+            return Json(new { result = true });
         }
 
 
@@ -547,7 +582,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             var lesson = item.RegisterLesson.OrderByDescending(r => r.RegisterID).FirstOrDefault();
@@ -573,7 +608,7 @@ namespace WebHome.Controllers
             {
                 ViewBag.Message = "資料錯誤!!";
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             item.RegisterLesson.Add(new RegisterLesson
@@ -613,7 +648,7 @@ namespace WebHome.Controllers
             if(item==null)
             {
                 ViewBag.Message = "學員資料不存在!!";
-                return View("ListAll");
+                return RedirectToAction("ListAll");
             }
 
             ViewBag.DataItems = models.GetTable<PDQQuestion>().ToArray();

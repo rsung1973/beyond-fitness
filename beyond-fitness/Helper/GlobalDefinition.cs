@@ -15,6 +15,7 @@ namespace WebHome.Helper
         EditMemberUID = 10002,
         Training = 10003,
         TrainingExecution = 10004,
-        DailyBookingQuery = 10005
+        DailyBookingQuery = 10005,
+        MembersQuery = 10006
     }
 }

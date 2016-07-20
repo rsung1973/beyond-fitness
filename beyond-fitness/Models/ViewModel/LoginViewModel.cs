@@ -327,6 +327,12 @@ namespace WebHome.Models.ViewModel
         public int? MonthInterval { get; set; }
     }
 
+    public class MembersQueryViewModel
+    {
+        public String ByName { get; set; }
+        public Naming.RoleID? RoleID { get; set; }
+    }
+
 
     public class ArgumentModel
     {

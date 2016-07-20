@@ -32,7 +32,7 @@
             <%  }
                 else
                 { %>
-            <a class="btn btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="刪除" data-key="<%= item.UID %>" data-action="學員資料">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            <a class="btn btn-system btn-small" onclick='deleteLearner(<%= item.UID %>);'>刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
             <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>">新增/刪除上課數 <i class="fa fa-calendar-o" aria-hidden="true"></i></a>
                     <% if (item.RegisterLesson.Where(r => r.Attended == (int)Naming.LessonStatus.準備上課 && r.GroupingMemberCount > 1).Count() > 0)
                         { %>

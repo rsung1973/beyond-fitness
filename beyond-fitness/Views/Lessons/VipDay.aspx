@@ -27,7 +27,7 @@
                 <div class="col-md-12">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="glyphicon glyphicon-th-list" aria-hidden="true"> <%= _model.ClassTime.Value.ToString("yyyy/MM/dd") %>課程內容</span></h4>
+                    <h4 class="classic-title"><span class="glyphicon glyphicon-th-list" aria-hidden="true"> <%= _model.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= String.IsNullOrEmpty(_model.AsAttendingCoach.UserProfile.UserName) ? _model.AsAttendingCoach.UserProfile.RealName : _model.AsAttendingCoach.UserProfile.UserName %></h4>
                     <!-- End Classic -->
 
                     <!-- Start Contact Form -->

@@ -54,7 +54,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
+                            <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
                             <div class="panel panel-default">
                                 <div class="panel-body">
