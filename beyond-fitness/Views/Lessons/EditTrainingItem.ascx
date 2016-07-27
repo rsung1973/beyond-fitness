@@ -10,6 +10,7 @@
 
 
     <tr>
+        <td><a onclick="deleteItem(<%= _model.ItemID %>);" class="red-text fa fa-minus-circle fa-2x"></a></td>
         <td>
             <% Html.RenderPartial("~/Views/Lessons/BodyPartsSelector.ascx", _model.TrainingID); %>
             <input type="text" class="form-control" name="description" value="<%= _model.Description %>">
@@ -20,11 +21,11 @@
             <%--<% Html.RenderPartial("~/Views/Lessons/GoalTurnsSelector.ascx", _model.GoalTurns.HasValue ? _model.GoalTurns.Value : 0); %>--%>
         </td>
         <td>
-            <input type="text" class="form-control" name="goalStrength" value="<%= _model.GoalStrength %>">
+            <input type="text" class="form-control" name="goalStrength" value="<%= _model.GoalStrength %>" maxlength="100">
             <span>例：20KG或30秒</span>
         </td>
         <td>
-            <a onclick="deleteItem(<%= _model.ItemID %>);" class="btn btn-system btn-small">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            <input type="text" name="remark" class="form-control" value="<%= _model.Remark %>" placeholder="請輸入100個字內的備註"/>
         </td>
     </tr>
 

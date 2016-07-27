@@ -1120,7 +1120,8 @@ namespace WebHome.Controllers
                 GoalTurns = viewModel.GoalTurns,
                 TrainingID = viewModel.TrainingID.Value,
                 ActualStrength = viewModel.GoalStrength,
-                ActualTurns = viewModel.GoalTurns
+                ActualTurns = viewModel.GoalTurns,
+                Remark = viewModel.Remark
             });
 
             models.SubmitChanges();
@@ -1184,20 +1185,19 @@ namespace WebHome.Controllers
             TrainingExecution execution = prepareTrainingExecution(false);
             if (execution == null)
             {
-                ViewBag.Message = "修改項目不存在!!";
-                return View("AddTraining", new TrainingExecution { });
+                return Json(new { result = false, message = "修改項目不存在!!" }, JsonRequestBehavior.AllowGet);
             }
 
             var item = execution.TrainingItem.Where(i => i.ItemID == id).FirstOrDefault();
             if (item == null)
             {
-                ViewBag.Message = "課程項目不存在!!";
-                return View("AddTraining", execution);
+                return Json(new { result = false, message = "課程項目不存在!!" }, JsonRequestBehavior.AllowGet);
             }
 
             execution.TrainingItem.Remove(item);
             models.SubmitChanges();
-            return View("AddTraining", execution);
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ValidateToCommitTraining(TrainingExecutionViewModel viewModel)
@@ -1236,6 +1236,7 @@ namespace WebHome.Controllers
                 item.ActualStrength = item.GoalStrength = viewModel.GoalStrength[i];
                 item.ActualTurns = item.GoalTurns = viewModel.GoalTurns[i];
                 item.Description = viewModel.Description[i];
+                item.Remark = viewModel.Remark[i];
             }
 
             execution.TrainingPlan.PlanStatus = (int)Naming.DocumentLevelDefinition.正常;

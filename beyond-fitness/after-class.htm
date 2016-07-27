@@ -241,14 +241,10 @@
                 </div>    
 
 
-                <div class="col-md-10">
+                <div class="col-md-12">
                   <div class="hr1" style="margin-top:10px; margin-bottom:10px;"></div>    
                   <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 2016/7/8 14:00~15:00 課程內容 - 席維斯史特龍</h4>     
-                </div>         
-                <div class="col-md-2 text-right">
-                    <div class="hr1" style="margin-top:15px; margin-bottom:10px;"></div>    
-                    <a href="add_item.htm" class="btn-system btn-small">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>              
-                </div>              
+                </div>                     
 
                   <div class="col-md-12">
                       <div class="hr1" style="margin-bottom:10px;"></div>
@@ -272,57 +268,62 @@
                             <table class="table">
 
                               <tr class="info">
-                                  <th rowspan="2" class="col-xs-1 col-md-1"></th>
-                                  <th rowspan="2" class="col-xs-3 col-md-3">肌力訓練</th>
+                                  <th rowspan="2" width="25"></th>
+                                  <th rowspan="2" class="col-xs-3 col-md-2">肌力訓練</th>
                                   <th class="col-xs-2 col-md-2 text-center">實際次數</th>
                                   <th class="col-xs-2 col-md-2 text-center">實際強度</th>
+                                  <th rowspan="2" class="col-xs-2 col-md-2 text-center">備註</th>
                                   <th rowspan="2" class="col-xs-1 col-md-1 text-center">組數</th>
-                                  <th rowspan="2" class="col-xs-2 col-md-3"><li class="glyphicon glyphicon-info-sign"></li>小提示：</th>
+                                  <th rowspan="2" class="col-xs-2 col-md-3">
+                                    <li class="glyphicon glyphicon-info-sign"></li>小提示：
+                                  </th>
                                 </tr>
                               <tr class="info">
                                   <th class=" text-center">目標次數</th>
                                   <th class=" text-center">目標強度</th>
                                 </tr>                              
                               <tr>
-                                <td rowspan="2" class="text-center">1</td>
+                                <td rowspan="2" class="text-center">
+                                  1 <br/><a href="#" class="red-text fa fa-minus-circle fa-2x"></a> 
+                                </td>
                                 <td>RDL</td>
                                 <td>
-                                <select class="form-control">
-                                  <option>0</option>
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
-                                </select>
-                                10</td>
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" value="10-20">
+                                    <span class="input-group-addon">次</span>
+                                  </div>
+                                  10-20次</td>
                                 <td>
                                 <input class="form-control" size="5" value="">
                                 25KG</td>
+                                 <td> 
+                                    <textarea class="form-control" rows="3">加強上臂力量</textarea>
+                                </td>                               
                                 <td rowspan="2" class="text-center">4</td>
                                 <td rowspan="2">
-                                <textarea class="form-control" rows="3"></textarea>
+                                  <textarea class="form-control" rows="3"></textarea>
                                 </td>
                               </tr>
                               <tr>
-                                <td colspan="3">休息時間：90秒</td>
+                                <td colspan="4">休息時間：90秒</td>
                               </tr>
                               <tr>
-                                <td rowspan="3" class="text-center">2</td>
+                                <td rowspan="3" class="text-center">
+                                  2 <br/><a href="#" class="red-text fa fa-minus-circle fa-2x"></a> 
+                                </td>
                                 <td>TRX</td>
                                 <td>
-                                <select class="form-control">
-                      <option>0</option>
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
-                                </select>
-                                12</td>
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" value="12">
+                                    <span class="input-group-addon">次</span>
+                                  </div>
+                                  12次</td>
                                 <td>
                                 <input class="form-control" size="5" value="">
                                 --</td>
+                                 <td> 
+                                    <textarea class="form-control" rows="3">加強上臂力量</textarea>
+                                </td>                                 
                                 <td rowspan="3" class="text-center">4</td>
                                 <td rowspan="3">
                                 <textarea class="form-control" rows="3"></textarea>
@@ -331,22 +332,25 @@
                               <tr>
                                 <td>棒式</td>
                                 <td>
-                                <select class="form-control">
-                      <option>0</option>
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
-                                </select>
-                                10</td>
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" value="">
+                                    <span class="input-group-addon">次</span>
+                                  </div>
+                                  --次</td>
                                 <td>
                                 <input class="form-control" size="5"  value="">
                                 30秒</td>
+                                 <td> 
+                                    <textarea class="form-control" rows="3">加強上臂力量</textarea>
+                                </td>                                 
                               </tr>
                               <tr>
-                                <td colspan="3">休息時間：90秒</td>
+                                <td colspan="4">休息時間：90秒</td>
                               </tr>
+                              <tr>
+                                <td class="text-center"><a href="add_item.htm" class="green-text fa fa-plus-circle fa-2x"></a></td>
+                                <td colspan="6">請點選<span class="green-text fa fa-plus-circle"></span>可新增項目組</td>
+                               </tr>                              
                             </table>                           
                           </div>
                            <div class="panel-body">

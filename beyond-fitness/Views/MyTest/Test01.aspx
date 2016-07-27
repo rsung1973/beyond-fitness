@@ -62,6 +62,9 @@
         <a onclick="alert('...');">test</a>
     </div>
 
+    <%  ViewBag.Loading = true;    
+        Html.RenderPartial("~/Views/Shared/Loading.ascx"); %>
+
     <script>
         $('#vip,#m_vip').addClass('active');
 

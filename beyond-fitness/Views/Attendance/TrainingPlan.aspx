@@ -42,7 +42,7 @@
 
                     <!-- Start Contact Form -->
                     <div class="col-md-10">
-                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <% ViewBag.Inline = true; Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.LessonTime.AttendingCoach }); %></h4>
+                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <% ViewBag.Inline = true; Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.LessonTime.AttendingCoach }); %></h4>
                     </div>
                     <div class="col-md-2 text-right">
                         <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
@@ -60,19 +60,22 @@
                         </table>
                         <table class="table">
                             <tr class="info">
-                                <th rowspan="2" class="col-xs-1 col-md-1"></th>
-                                <th rowspan="2" class="col-xs-3 col-md-3">肌力訓練</th>
+                                <th rowspan="2" width="25"></th>
+                                <th rowspan="2" class="col-xs-3 col-md-2">肌力訓練</th>
                                 <th class="col-xs-2 col-md-2 text-center">實際次數</th>
                                 <th class="col-xs-2 col-md-2 text-center">實際強度</th>
+                                <th rowspan="2" class="col-xs-2 col-md-2 text-center">備註</th>
                                 <th rowspan="2" class="col-xs-1 col-md-1 text-center">組數</th>
                                 <th rowspan="2" class="col-xs-2 col-md-3">
                                     <li class="glyphicon glyphicon-info-sign"></li>
-                                    小提示：</th>
+                                    小提示：
+                                </th>
                             </tr>
                             <tr class="info">
-                                <th class="text-center">目標次數</th>
-                                <th class="text-center">目標強度</th>
+                                <th class=" text-center">目標次數</th>
+                                <th class=" text-center">目標強度</th>
                             </tr>
+                            <tr>
                             <%      if (_model.LessonTime.TrainingPlan.Count > 0)
                                     {
                                         int idx = 0;
@@ -89,15 +92,21 @@
                                                     if (i == 0)
                                                     {%>
                             <tr>
-                                <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %></td>
+                                <td rowspan="<%= training.Count() + 1 %>" class="text-center">
+                                    <%= idx %><br />
+                                    <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="red-text fa fa-minus-circle fa-2x"></a>
+                                </td>
                                 <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
                                 <td>
                                     <input type="text" class="form-control" name="actualTurns" value="<%= tranItem.ActualTurns %>">
-                                    <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>
+                                    <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="actualStrength" value="<%= tranItem.ActualStrength %>">
                                     <%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %>
+                                </td>
+                                <td>
+                                    <textarea class="form-control" name="remark" rows="3"><%= tranItem.Remark %></textarea>
                                 </td>
                                 <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
                                 <td rowspan="<%= training.Count() + 1 %>">
@@ -111,24 +120,27 @@
                                 <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
                                 <td>
                                     <input type="text" class="form-control" name="actualTurns" value="<%= tranItem.ActualTurns %>">
-                                    <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>
+                                    <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="actualStrength" value="<%= tranItem.ActualStrength %>">
                                     <%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %>
                                 </td>
+                                <td>
+                                    <textarea class="form-control" name="remark" rows="3"><%= tranItem.Remark %></textarea>
+                                </td>
                             </tr>
                             <%                  }
                                     }   %>
                             <tr class="active">
-                                <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
+                                <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                             </tr>
                             <%              }
                                     else
                                     {   %>
                             <tr>
                                 <td class="text-center"><%= idx %></td>
-                                <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
+                                <td colspan="5"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                 <td>
                                     <textarea class="form-control" rows="3" name="conclusion" value><%= execution.Conclusion %></textarea>
                                 </td>
@@ -139,7 +151,7 @@
                                     else
                                     {   %>
                             <tr>
-                                <td colspan="6">未建立任何項目</td>
+                                <td colspan="7">未建立任何項目</td>
                             </tr>
                             <%  }%>
                         </table>
@@ -286,6 +298,15 @@
         function addTraining() {
             $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/SaveThenAddTraining") %>')
                 .submit();
+        }
+
+        function deleteTraining(itemID) {
+            confirmIt({ title: '刪除訓練組數', message: '確定刪除此訓練組數?' }, function (evt) {
+                startLoading();
+                $('<form method="post"/>').appendTo($('body'))
+                    .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/DeleteTraining/") %>' + itemID)
+                    .submit();
+            });
         }
 
     </script>

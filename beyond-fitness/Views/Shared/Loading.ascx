@@ -14,7 +14,7 @@
         <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
-        Loading...
+        <i class='fa fa-refresh fa-spin'></i>Loading...
     </div>
 </div>
 <script>

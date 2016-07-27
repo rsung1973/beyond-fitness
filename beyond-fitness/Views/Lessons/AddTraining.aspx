@@ -72,15 +72,15 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="input-group">
-                                            <input class="form-control" name="breakInterval" size="16" type="number" value="<%= _item.BreakIntervalInSecond %>">
+                                            <input class="form-control" name="breakInterval" size="16" type="number" value="<%= _item.BreakIntervalInSecond %>"/>
                                             <span class="input-group-addon">秒</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div>
+<%--                            <div>
                                 <a onclick="addTraining();" class="btn-system btn-small">新增項目 <i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
-                            </div>
+                            </div>--%>
 
                         </div>
                         <div class="panel panel-default">
@@ -157,18 +157,23 @@
             $addTrainingModal.modal('show');--%>
             
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CreateTrainingItem") %>', { 'repeats': $('select[name="repeats"]').val(), 'breakInterval': $('input[name="breakInterval"]').val() }, function (data) {
-                $(data).appendTo($('#itemList'));
+                $(data).insertBefore($('#newItem'));
             });
 
         }
 
-    function deleteItem(itemID) {
-        confirmIt({ title: '刪除訓練項目', message: '確定刪除此訓練項目?' }, function (evt) {
-            $('<form method="post"/>').appendTo($('body'))
-                .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTrainingItem/") %>' + itemID)
-                .submit();
-        });
-    }
+        function deleteItem(itemID) {
+            var event = event || window.event;
+            confirmIt({ title: '刪除訓練項目', message: '確定刪除此訓練項目?' }, function (evt) {
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTrainingItem") %>', { 'id': itemID }, function (data) {
+                    if (data.result) {
+                        $(event.target).parent().parent().remove();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            });
+        }
     </script>
 
 </asp:Content>

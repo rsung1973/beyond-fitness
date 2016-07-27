@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <tr class="info">
-    <th><%=  _model.QuestionID - (int?)ViewBag.Offset %>.<%= _model.Question %></th>
+    <th><%=  _model.QuestionNo - (int?)ViewBag.Offset %>.<%= _model.Question %></th>
 </tr>
 <tr>
     <td>

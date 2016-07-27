@@ -185,7 +185,7 @@
 
         <div class="row">
 
-          <div class="col-md-9">
+          <div class="col-md-12">
 
             <!-- Classic Heading -->
             <h4 class="classic-title"><span class="fa fa-cart-plus"> 新增/修改項目組</span></h4>
@@ -220,14 +220,12 @@
                   </div>
                   <div class="col-md-3">
                     <div class="input-group">
-                    <input class="form-control" size="16" type="number" value="">
+                      <input type="text" class="form-control" value="30-90">
                     <span class="input-group-addon">秒</span>
                     </div>
+                    例：請輸入30-60或120
                   </div>
                 </div>
-              </div>
-              <div>
-                  <a href="#" class="btn-system btn-small" data-toggle="modal" data-target="#confirm" data-whatever="新增項目">新增項目 <i class="fa fa-plus-square-o" aria-hidden="true"></i></a>
               </div>
               
               </div> 
@@ -235,67 +233,76 @@
                 	<!-- TABLE 1 -->
                   <table class="table">
                     <tr class="info">
-                      <th class="col-xs-4 col-md-8 text-center">肌力訓練</th>
+                      <th class="text-center" width="25"></th>
+                      <th class="col-xs-3 col-md-3 text-center">肌力訓練</th>
                       <th class="col-xs-2 col-md-2 text-center">目標次數</th>
                       <th class="col-xs-2 col-md-2 text-center">目標強度</th>
-                      <th class="col-xs-1 col-md-2 text-center">功能</th>
+                      <th class="col-xs-5 col-md-5 text-center">備註</th>
                     </tr>
                     <tr>
+                      <td><a href="#" class="red-text fa fa-minus-circle fa-2x"></a> </td>
                       <td>
                       <select class="form-control">
-						<option>上肢</option>
-						<option>上肢</option>
-						<option>全身</option>
-						<option>特殊性動作</otpion>
+              						<option>上肢</option>
+              						<option>上肢</option>
+              						<option>全身</option>
+              						<option>特殊性動作</otpion>
                       </select>					  
-						<input type="text" class="form-control" value="RDL">
+                      <input type="text" class="form-control" value="RDL">
                       </td>
                       <td>
-                      <select class="form-control">
-                        <option>10</option>
-                        <option>20</option>
-                      </select>
+                        <div class="input-group">
+                          <input type="text" class="form-control" value="10-20">
+                          <span class="input-group-addon">次</span>
+                        </div>
+                        例：請輸入1、2、3或10-20
                       </td>
                       <td>
-						  <input type="text" class="form-control" value="20KG">
+                        <input type="text" class="form-control" value="20KG">
+                        例：請輸入20-30KG(磅)或30秒
                       </td>
                       <td>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                         <input type="text" class="form-control" value="請輸入100個字內的備註">
                       </td>
                     </tr>
                     <tr>
+                      <td><a href="#" class="red-text fa fa-minus-circle fa-2x"></a> </td>
                       <td>
                       <select class="form-control">
-						<option>上肢</option>
-						<option>上肢</option>
-						<option>全身</option>
-						<option>特殊性動作</otpion>
+            						<option>上肢</option>
+            						<option>上肢</option>
+            						<option>全身</option>
+            						<option>特殊性動作</otpion>
                       </select>						  
-						<input type="text" class="form-control" value="TRX">
+                      <input type="text" class="form-control" value="TRX">
                       </td>
                       <td>
-                      <select class="form-control">
-                        <option>10</option>
-                        <option>20</option>
-                      </select>
+                        <div class="input-group">
+                          <input type="text" class="form-control" value="10-20">
+                          <span class="input-group-addon">次</span>
+                        </div>
                       </td>
                       <td>
-						  <input type="text" class="form-control" value="20KG">
+                        <input type="text" class="form-control" value="20KG">
                       </td>
-                      <td>
-                      	<a href="#" class="btn btn-system btn-small">刪除 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                      <td> 
+                        <input type="text" class="form-control" value="請輸入100個字內的備註">
                       </td>
+                    </tr>
+                    <tr>
+                       <td><a href="#" class="green-text fa fa-plus-circle fa-2x"></a></td>
+                       <td colspan="4">請點選<span class="green-text fa fa-plus-circle"></span>可新增項目</td>
                     </tr>
                   </table>
               </div>
 			  
-             <a href="before-class.htm" class="btn-system btn-medium">回預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a href="before-class.htm" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
-
             </form>
             
             <div class="hr1" style="margin-top:5px;margin-bottom:10px;"></div>
-            
+                    <div class="col-md-12">
+                     <a href="before-class.htm" class="btn-system btn-medium">回預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
+                    <a href="before-class.htm" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>               
+                    </div>            
               
             <!-- End Contact Form -->
         	

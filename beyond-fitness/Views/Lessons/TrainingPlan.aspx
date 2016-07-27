@@ -42,7 +42,7 @@
                             Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);
                         }   %>
                     <div class="col-md-10">
-                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
+                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
                     </div>
                     <div class="col-md-2 text-right">
                         <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
@@ -60,12 +60,12 @@
                             </table>
                             <table class="table">
                                 <tr class="info">
-                                    <th class="col-md-1"></th>
-                                    <th class="col-xs-4 col-md-4">肌力訓練</th>
+                                    <th class="text-center" width="25"></th>
+                                    <th class="col-xs-4 col-md-3">肌力訓練</th>
                                     <th class="col-xs-2 col-md-2 text-center">目標次數</th>
                                     <th class="col-xs-2 col-md-2 text-center">目標強度</th>
-                                    <th class="col-xs-2 col-md-1 text-center">組數</th>
-                                    <th class="col-xs-1 col-md-2">功能</th>
+                                    <th class="col-xs-3 col-md-4">備註</th>
+                                    <th class="col-xs-1 col-md-1 text-center">組數</th>
                                 </tr>
                                 <%      if (_model.LessonTime.TrainingPlan.Count > 0)
                                     {
@@ -83,14 +83,17 @@
                                                     if (i == 0)
                                                     {%>
                                 <tr>
-                                    <td class="text-center" rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %></td>
+                                    <td class="text-center" rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %>
+                                        <br />
+                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="red-text fa fa-minus-circle fa-2x"></a>
+                                    </td>
                                     <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td class="text-center"><%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %></td>
+                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %></td>
                                     <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
-                                    <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
-                                    <td rowspan="<%= training.Count() + 1 %>">
+                                    <td><%= tranItem.Remark %></td>
+                                    <td rowspan="<%= training.Count() + 1 %>" class="text-center">
+                                        <%= item.TrainingExecution.Repeats %>
                                         <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <%                  }
@@ -98,23 +101,25 @@
                                     {   %>
                                 <tr>
                                     <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td class="text-center"><%= tranItem.GoalTurns.HasValue ? tranItem.GoalTurns.ToString() : "--" %></td>
+                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %></td>
                                     <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
+                                    <td><%= tranItem.Remark %></td>
                                 </tr>
                                 <%                  }
                                     }   %>
                                 <tr class="active">
-                                    <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
+                                    <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                 </tr>
                                 <%              }
                                     else
                                     {   %>
                                 <tr>
-                                    <td class="text-center"><%= idx %></td>
+                                    <td class="text-center"><%= idx %><br />
+                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="red-text fa fa-minus-circle fa-2x"></a>
+                                    </td>
                                     <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                     <td>
                                         <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="btn btn-system btn-small">刪除 <i class="fa fa-times" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <%              }

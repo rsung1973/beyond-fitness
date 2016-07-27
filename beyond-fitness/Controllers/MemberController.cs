@@ -651,7 +651,9 @@ namespace WebHome.Controllers
                 return RedirectToAction("ListAll");
             }
 
-            ViewBag.DataItems = models.GetTable<PDQQuestion>().ToArray();
+            ViewBag.DataItems = models.GetTable<PDQQuestion>()
+                .OrderBy(q => q.QuestionNo)
+                .ToArray();
             return View(item);
         }
 

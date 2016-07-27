@@ -81,8 +81,8 @@
                                             </td>
                                             <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
                                             <td>
-                                                <%= tranItem.ActualTurns.HasValue && tranItem.ActualTurns>0 ? tranItem.ActualTurns.ToString() : "--" %>/
-                                                <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>次
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualTurns) ? tranItem.ActualTurns : "--" %>/
+                                                <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>次
                                             </td>
                                             <td>
                                                 <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.GoalStrength : "--" %>/
@@ -96,8 +96,8 @@
                                         <tr>
                                             <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
                                             <td>
-                                                <%= tranItem.ActualTurns.HasValue && tranItem.ActualTurns>0 ? tranItem.ActualTurns.ToString() : "--" %>/
-                                                <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualTurns) ? tranItem.ActualTurns : "--" %>/
+                                                <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>
                                             </td>
                                             <td>
                                                 <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.ActualStrength : "--" %>/

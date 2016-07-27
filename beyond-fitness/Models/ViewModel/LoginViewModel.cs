@@ -228,10 +228,13 @@ namespace WebHome.Models.ViewModel
         public String[] Description { get; set; }
 
         [Display(Name = "目標次數")]
-        public int?[] GoalTurns { get; set; }
+        public String[] GoalTurns { get; set; }
 
         [Display(Name = "目標強度")]
         public String[] GoalStrength { get; set; }
+
+        [Display(Name = "備註")]
+        public String[] Remark { get; set; }
     }
 
     public class TrainingItemViewModel
@@ -244,10 +247,13 @@ namespace WebHome.Models.ViewModel
         public String Description { get; set; }
 
         [Display(Name = "目標次數")]
-        public int? GoalTurns { get; set; }
+        public String GoalTurns { get; set; }
 
         [Display(Name = "目標強度")]
         public String GoalStrength { get; set; }
+
+        [Display(Name = "備註")]
+        public String Remark { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -272,7 +278,7 @@ namespace WebHome.Models.ViewModel
         public int CoachID { get; set; }
 
         [Display(Name = "實際次數")]
-        public int?[] ActualTurns { get; set; }
+        public String[] ActualTurns { get; set; }
 
         [Display(Name = "實際強度")]
         public String[] ActualStrength { get; set; }

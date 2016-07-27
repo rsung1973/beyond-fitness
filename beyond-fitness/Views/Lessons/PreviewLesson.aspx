@@ -54,7 +54,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
+                            <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
                             <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -68,12 +68,18 @@
                                     </table>
                                     <table class="table">
                                         <tr class="info">
-                                            <th>排序</th>
-                                            <th>肌力訓練</th>
-                                            <th>實際/目標次數</th>
-                                            <th>實際/目標強度</th>
-                                            <th>組數</th>
+                                            <th rowspan="2" width="25"></th>
+                                            <th rowspan="2" class="col-xs-4 col-md-3">肌力訓練</th>
+                                            <th class="col-xs-2 col-md-2 text-center">實際次數</th>
+                                            <th class="col-xs-2 col-md-2 text-center">實際強度</th>
+                                            <th rowspan="2" class="col-xs-3 col-md-4">備註</th>
+                                            <th rowspan="2" class="col-xs-1 col-md-1 text-center">組數</th>
                                         </tr>
+                                        <tr class="info">
+                                            <th class="text-center">目標次數</th>
+                                            <th class="text-center">目標強度</th>
+                                        </tr>
+                                        <tr>
                                         <%      if (_model.LessonTime.TrainingPlan.Count > 0)
                                     {
                                         int idx = 0;
@@ -93,42 +99,44 @@
                                             <td rowspan="<%= training.Count() + 3 %>" class="text-center"><%= idx %>
                                             </td>
                                             <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                            <td>
-                                                <%= tranItem.ActualTurns.HasValue && tranItem.ActualTurns>0 ? tranItem.ActualTurns.ToString() : "--" %>/
-                                                <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>次
+                                            <td class="text-center">
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualTurns) ? tranItem.ActualTurns : "--" %>次<br />
+                                                <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>次
                                             </td>
-                                            <td>
-                                                <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.GoalStrength : "--" %>/
+                                            <td class="text-center">
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.GoalStrength : "--" %><br />
                                                 <%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %>
                                             </td>
-                                            <td rowspan="<%= training.Count() + 1 %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
+                                            <td><%= tranItem.Remark %></td>
+                                            <td rowspan="<%= training.Count() %>" class="text-center"><%= item.TrainingExecution.Repeats %></td>
                                         </tr>
                                         <%                  }
                                     else
                                     {   %>
                                         <tr>
                                             <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                            <td>
-                                                <%= tranItem.ActualTurns.HasValue && tranItem.ActualTurns>0 ? tranItem.ActualTurns.ToString() : "--" %>/
-                                                <%= tranItem.GoalTurns.HasValue && tranItem.GoalTurns>0 ? tranItem.GoalTurns.ToString() : "--" %>
+                                            <td class="text-center">
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualTurns) ? tranItem.ActualTurns : "--" %>次<br />
+                                                <%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %>次
                                             </td>
-                                            <td>
-                                                <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.ActualStrength : "--" %>/
+                                            <td class="text-center">
+                                                <%= !String.IsNullOrEmpty(tranItem.ActualStrength) ? tranItem.ActualStrength : "--" %><br />
                                                 <%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %>
                                             </td>
+                                            <td><%= tranItem.Remark %></td>
                                         </tr>
                                         <%                  }
                                     }   %>
                                         <tr>
-                                            <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
+                                            <td colspan="5"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                         </tr>
                                         <tr class="active">
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <li class="glyphicon glyphicon-info-sign"></li>
                                                 <strong>小提示：</strong><%= execution.Conclusion %></td>
                                         </tr>
                                         <tr class="active">
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <li class="fa fa-commenting-o"></li>
                                                 <strong>迴響：</strong><%= execution.ExecutionFeedBack %></td>
                                         </tr>                                        
@@ -136,18 +144,18 @@
                                     else
                                     {   %>
                                         <tr>
-                                            <td rowspan="2" class="text-center"><%= idx %></td>
+                                            <td rowspan="3" class="text-center"><%= idx %></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
+                                            <td colspan="5"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
                                         </tr>
                                         <tr class="active">
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <li class="glyphicon glyphicon-info-sign"></li>
                                                 <strong>小提示：</strong><%= execution.Conclusion %></td>
                                         </tr>
                                         <tr class="active">
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 <li class="fa fa-commenting-o"></li>
                                                 <strong>迴響：</strong><%= execution.ExecutionFeedBack %></td>
                                         </tr>
@@ -157,7 +165,7 @@
                                     else
                                     {   %>
                                         <tr>
-                                            <td colspan="5">未建立任何項目</td>
+                                            <td colspan="6">未建立任何項目</td>
                                         </tr>
                                         <%  }%>
                                     </table>

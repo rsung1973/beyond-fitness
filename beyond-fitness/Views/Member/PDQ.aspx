@@ -47,7 +47,7 @@
                         <table class="panel panel-default table">
                             <%                                  
                                 ViewBag.Offset = 7;
-                                for (int idx = 7; idx < 11; idx++)
+                                for (int idx = 7; idx < 13; idx++)
                                 {
                                     renderItem(idx);
                                 } %>
@@ -60,8 +60,8 @@
                             <h4><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
                         <table class="panel panel-default table">
                             <%  
-                                ViewBag.Offset = 11;
-                                for (int idx = 11; idx < 16; idx++)
+                                ViewBag.Offset = 13;
+                                for (int idx = 13; idx < 18; idx++)
                                 {
                                     renderItem(idx);
                                 } %>
@@ -72,8 +72,8 @@
                         <h4><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
                         <table class="panel panel-default table">
                             <%                                  
-                                ViewBag.Offset = 16;
-                                for (int idx = 16; idx < 28; idx++)
+                                ViewBag.Offset = 18;
+                                for (int idx = 18; idx < 30; idx++)
                                 {
                                     renderItem(idx);
                                 } %>

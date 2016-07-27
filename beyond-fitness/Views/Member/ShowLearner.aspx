@@ -43,7 +43,7 @@
                         </div>
                         <!-- Tab Content 2 -->
                         <div class="tab-pane fade" id="tab-2">
-                            <%  ViewBag.DataItems = models.GetTable<PDQQuestion>().ToArray();
+                            <%  ViewBag.DataItems = models.GetTable<PDQQuestion>().OrderBy(q => q.QuestionNo).ToArray();
                                 Html.RenderPartial("~/Views/Member/PDQInfoByLearner.ascx", _model); %>
                         </div>
                     </div>
