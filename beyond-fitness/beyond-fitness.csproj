@@ -817,7 +817,6 @@
     <Content Include="vip-single-day.htm" />
     <Content Include="vip-verify.htm" />
     <Content Include="vip.htm" />
-    <Content Include="wait.htm" />
     <Content Include="Web.config" />
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="_test\Test01.aspx" />
