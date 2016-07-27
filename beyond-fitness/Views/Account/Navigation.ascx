@@ -9,7 +9,40 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="navbar navbar-default navbar-top">
+<nav>
+    <ul>
+        <li>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>" title="關於我們"><i class="fa fa-lg fa-fw fa-graduation-cap"></i><span class="menu-item-parent">關於我們</span></a>
+        </li>
+        <li>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Professional") %>" title="專業體能訓練"><i class="fa fa-lg fa-fw fa-heartbeat"></i><span class="menu-item-parent">專業訓練</span></a>
+        </li>
+        <li>
+            <a href="blog.html" title="專業知識"><i class="fa fa-lg fa-fw fa-puzzle-piece"></i><span class="menu-item-parent">專業知識</span></a>
+        </li>
+        <li>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Rental") %>" title="場地租借"><i class="fa fa-lg fa-fw fa-at"></i><span class="menu-item-parent">場地租借</span></a>
+        </li>
+        <li>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Products") %>" title="相關商品"><i class="fa fa-lg fa-fw fa-product-hunt"></i><span class="menu-item-parent">相關商品</span></a>
+        </li>
+        <li>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>" title="相關合作"><i class="fa fa-lg fa-fw fa-link"></i><span class="menu-item-parent">相關合作</span></a>
+        </li>
+        <li>
+            <a href="contact.html" title="聯絡我們"><i class="fa fa-lg fa-fw fa fa-envelope"></i><span class="menu-item-parent">聯絡我們</span></a>
+        </li>
+        <li>
+            <a href="map.html" title="服務據點"><i class="fa fa-lg fa-fw fa-map-marker"></i><span class="menu-item-parent">服務據點</span></a>
+        </li>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/TimeLine.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Lessons.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Members.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Professional.ascx", _userProfile); %>
+    </ul>
+</nav>
+
+<%--<div class="navbar navbar-default navbar-top">
     <div class="container">
         <div class="navbar-header">
             <!-- Stat Toggle Nav Link For Mobiles -->
@@ -129,7 +162,7 @@
     </ul>
     <!-- Mobile Menu End -->
 
-</div>
+</div>--%>
 
 <% Html.RenderPartial("~/Views/Shared/Loading.ascx"); %>
 

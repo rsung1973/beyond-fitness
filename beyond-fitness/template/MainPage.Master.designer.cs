@@ -31,13 +31,22 @@ namespace WebHome.template {
         protected global::System.Web.UI.HtmlControls.HtmlForm theForm;
         
         /// <summary>
-        /// CommonScriptManager control.
+        /// ribbonContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UserControl CommonScriptManager;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder ribbonContent;
+        
+        /// <summary>
+        /// pageTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder pageTitle;
         
         /// <summary>
         /// mainContent control.
@@ -47,14 +56,5 @@ namespace WebHome.template {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder mainContent;
-        
-        /// <summary>
-        /// Script control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.Mvc.ViewUserControl Script;
     }
 }

@@ -14,7 +14,7 @@ using WebHome.Models.ViewModel;
 namespace WebHome.Controllers
 {
     [Authorize]
-    public class InformationController : SampleController<Article>
+    public class InformationController : SampleController<UserProfile>
     {
         public InformationController() : base() { }
         // GET: Information
@@ -24,12 +24,12 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
 
 
-            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
+            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
                 .OrderByDescending(a => a.Document.DocDate)
                 .Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 .Take(viewModel.PageSize);
 
-            return View(models.Items);
+            return View(items);
         }
 
         [AllowAnonymous]
@@ -38,7 +38,7 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 return Redirect("~/Views/Shared/Error.aspx");
@@ -56,7 +56,7 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Redirect("~/Views/Shared/Error.aspx");
@@ -74,12 +74,12 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
 
 
-            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
+            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
                 .OrderByDescending(a => a.Document.DocDate);
             //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
             //.Take(viewModel.PageSize);
 
-            return View(models.Items);
+            return View(items);
         }
 
         public ActionResult CreateNew()
@@ -87,7 +87,7 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.暫存).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.暫存).FirstOrDefault();
             if (item == null)
             {
                 item = new Article
@@ -99,7 +99,7 @@ namespace WebHome.Controllers
                         DocType = (int)Naming.DocumentTypeDefinition.Knowledge
                     }
                 };
-                models.EntityList.InsertOnSubmit(item);
+                models.GetTable<Article>().InsertOnSubmit(item);
                 models.SubmitChanges();
             }
             return View("EditBlog", item);
@@ -108,7 +108,7 @@ namespace WebHome.Controllers
         public ActionResult EditBlog(int id)
         {
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 ViewBag.Message = "文章資料不存在!!";
@@ -123,7 +123,7 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             return View(item);
         }
 
@@ -132,7 +132,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -169,7 +169,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -209,7 +209,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -244,7 +244,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "請輸入文標題!!" });
             }
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -274,7 +274,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
