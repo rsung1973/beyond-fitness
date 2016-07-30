@@ -3,41 +3,77 @@
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <!-- RIBBON -->
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-sign-in"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>登入</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+    <!-- END RIBBON -->
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-sign-in"></i>登入
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+    <div class="row">
 
-            <div class="row">
-
-                <div class="col-md-5">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>登入</span></h4>
-
-                    <!-- Start Contact Form -->
-                    <p>若您已有<span class="text-primary">會員編號</span>，第一次登入請先註冊 <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>" class="btn-system btn-gray btn-small"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>&nbsp;&nbsp;註冊</a></p>
-                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                    <button type="button" id="btnFB" class="btn btn-primary btn-lg btn-block"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook 登入</button>
-                    <label id="btnFB-error" class="error" for="btnFB" style="display: none;"></label>
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
-                    <button type="button" class="btn btn-warning btn-lg btn-block" onclick="location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/LoginByMail") %>';"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 登入</button>
-                    <!-- End Contact Form -->
-                </div>
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- well -->
+            <div class="well well-sm bg-color-darken txt-color-white">
+                <h3>若您已有會員編號，第一次登入請先 
+					<button type="button" name="submit" class="btn bg-color-blueDark" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>');">註冊 <i class="fa fa-user" aria-hidden="true" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>');"></i></button>
+                </h3>
+                <p>
+                    <button type="button" id="btnFB" name="fblogin" class="btn bg-color-blue btn-lg btn-block">
+                        使用 Facebook 登入 <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </button>
+                </p>
+                <p>
+                    <button type="button" name="fblogin" class="btn bg-color-yellow btn-lg btn-block" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/LoginByMail") %>');">
+                        使用 Email 登入 <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    </button>
+                </p>
 
             </div>
-        </div>
+            <!-- end well -->
+        </article>
+        <!-- END COL -->
+        <!-- NEW COL START -->
+        <% Html.RenderPartial("~/Views/Layout/QuickLink.ascx"); %>
+        <!-- END COL -->
+
     </div>
-    <!-- End content -->
+    <br />
+    <br />
 
     <script>
-        $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
 
         function fbSignOn() {
             FB.login(function (response) {

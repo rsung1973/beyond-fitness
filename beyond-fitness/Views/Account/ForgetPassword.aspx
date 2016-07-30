@@ -11,52 +11,154 @@
 
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-key"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>忘記密碼</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-key"></i>忘記密碼
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>填寫相關資訊 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-5">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>忘記密碼</span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
-                    <p>請輸入您的email，我們會協助您取回密碼。</p>
-                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                    <div class="form-group has-feedback">
-                        <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState); %>
-                        <% if (ViewBag.Success != null)
-                            {
-                                Writer.WriteLine(Html.Label((String)ViewBag.Success, new { @class = "text-success" }));
-                            } %>
                     </div>
+                    <!-- end widget edit box -->
 
-                    <!--<div class="hr1" style="margin:10px 0px;"></div>
-              
-              <div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-                    <div class="hr1" style="margin: 10px 0px;"></div>
-                    <button type="reset" id="button" class="btn-system btn-medium border-btn">清除</button>
-                    <button type="button" id="nextStep" class="btn-system btn-medium">送出 <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Account/ForgetPassword") %>" id="pageForm" method="post" class="smart-form">
 
-                    <!-- End Contact Form -->
+                            <fieldset>
+                                <div class="row">
+                                </div>
+                                <section>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-envelope-o"></i>
+                                        <input type="email" class="input-lg" name="email" id="email" placeholder="請輸入註冊時的E-mail"/>
+                                    </label>
+                                </section>
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+
+                            <% Html.RenderPartial("~/Views/Shared/Success.ascx"); %>
+                        </form>
+
+                    </div>
+                    <!-- end widget content -->
 
                 </div>
+                <!-- end widget div -->
 
             </div>
-        </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-envelope"></i>聯絡我們</h5>
+                <ul class="no-padding no-margin">
+                    <ul class="icons-list">
+                        <li>
+                            <a title="電話" href="tel:+886227152733"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x"></i></span>(02)2715-2733</a>
+                        </li>
+                        <li>
+                            <a title="地址"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-map-marker fa-stack-1x"></i></span>台北市松山區南京東路四段17號B1</a>
+                        </li>
+                        <li>
+                            <a title="Email" href="mailto:info@beyond-fitness.tw"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x"></i></span>info@beyond-fitness.tw</a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            <!-- /well -->
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <li>
+                                <a title="登入" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-in fa-stack-1x"></i></span>登入</a>
+                            </li>
+                            <li>
+                                <a title="註冊" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>會員註冊</a>
+                            </li>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+        </article>
+        <!-- END COL -->
     </div>
-    <!-- End content -->
+
 
 
     <script>
@@ -75,7 +177,11 @@
         $(function () {
             $('#email').rules('add', {
                 'required': true,
-                'email': true
+                'email': true,
+                messages: {
+                    'required': '請輸入您的 email address',
+                    'email': '請輸入合法的 email address'
+                }
             });
         });
 

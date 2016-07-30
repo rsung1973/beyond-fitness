@@ -41,52 +41,25 @@
         <!-- SuperBox -->
         <div class="superbox col-sm-12 bg-color-darken txt-color-white">
             <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_01.jpg" data-img="img/placebox/place_01.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_02.jpg" data-img="img/placebox/place_02.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_03.jpg" data-img="img/placebox/place_03.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_04.jpg" data-img="img/placebox/place_04.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_05.jpg" data-img="img/placebox/place_05.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_06.jpg" data-img="img/placebox/place_06.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_07.jpg" data-img="img/placebox/place_07.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_08.jpg" data-img="img/placebox/place_08.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_09.jpg" data-img="img/placebox/place_09.jpg" alt="" title="訓練場地" class="superbox-img">
-            </div>
-            <!--
-						-->
-            <div class="superbox-list">
-                <img runat="server" src="~/img/placebox/place_10.jpg" data-img="img/placebox/place_10.jpg" alt="" title="訓練場地" class="superbox-img">
+                <img runat="server" src="~/img/placebox/place_01.jpg" data-img="../img/placebox/place_01.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_02.jpg" data-img="../img/placebox/place_02.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_03.jpg" data-img="../img/placebox/place_03.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_04.jpg" data-img="../img/placebox/place_04.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_05.jpg" data-img="../img/placebox/place_05.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_06.jpg" data-img="../img/placebox/place_06.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_07.jpg" data-img="../img/placebox/place_07.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_08.jpg" data-img="../img/placebox/place_08.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_09.jpg" data-img="../img/placebox/place_09.jpg" alt="" title="訓練場地" class="superbox-img">
+            </div><div class="superbox-list">
+                <img runat="server" src="~/img/placebox/place_10.jpg" data-img="../img/placebox/place_10.jpg" alt="" title="訓練場地" class="superbox-img">
             </div>
             <div class="superbox-float"></div>
         </div>
@@ -95,4 +68,10 @@
         <div class="superbox-show" style="height: 300px; display: none"></div>
 
     </div>
+    <script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/superbox/superbox.min.js") %>"></script>
+    <script>
+        $(function () {
+            $('.superbox').SuperBox();
+        });
+    </script>
 </asp:Content>

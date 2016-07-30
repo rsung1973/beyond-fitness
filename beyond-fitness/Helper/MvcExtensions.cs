@@ -54,9 +54,9 @@ namespace WebHome.Helper
         public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, String tagId)
         {
             writer.WriteLine(
-                String.Concat("<img width=\"100\" id=\"", tagId,
-                "\" alt=\"\" src=\"",
-                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg"),
+                String.Concat("<img width=\"60\" height=\"60\" id=\"", tagId,
+                "\" src=\"",
+                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
                 "\" />"));
         }
 

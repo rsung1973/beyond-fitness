@@ -11,7 +11,7 @@
 <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
     <li class="">
         <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
-            <img src="img/avatars/male.png" alt="親愛的" class="online" />
+            <img runat="server" src="~/img/avatars/male.png" alt="親愛的" class="online" />
         </a>
         <ul class="dropdown-menu pull-right">
             <li>
@@ -23,7 +23,7 @@
             </li>
             <li class="divider"></li>
             <li>
-                <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout" data-logout-msg="為了安全起見，建議您登出後將網頁關閉！"><i class="fa fa-sign-out fa-lg"></i><strong><u>L</u>ogout</strong></a>
+                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout" data-logout-msg="為了安全起見，建議您登出後將網頁關閉！"><i class="fa fa-sign-out fa-lg"></i><strong><u>L</u>ogout</strong></a>
             </li>
         </ul>
     </li>
@@ -38,7 +38,7 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = (UserProfile)this.Model;
+        _userProfile = this.Model as UserProfile;
     }
 
 </script>

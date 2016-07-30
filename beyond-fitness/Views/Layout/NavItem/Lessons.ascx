@@ -38,7 +38,7 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = (UserProfile)this.Model;
+        _userProfile = this.Model as UserProfile;
     }
 
 </script>

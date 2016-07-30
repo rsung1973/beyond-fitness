@@ -82,6 +82,7 @@
   <Table Name="dbo.ServingCoach" Member="ServingCoach">
     <Type Name="ServingCoach">
       <Column Name="CoachID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="ServingCoach_LessonTime" Member="InvitingLesson" Storage="_LessonTime" ThisKey="CoachID" OtherKey="InvitedCoach" Type="LessonTime" />
       <Association Name="ServingCoach_LessonTime1" Member="TeachingLesson" Storage="_LessonTime1" ThisKey="CoachID" OtherKey="AttendingCoach" Type="LessonTime" />
       <Association Name="UserProfile_ServingCoach" Member="UserProfile" ThisKey="CoachID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />

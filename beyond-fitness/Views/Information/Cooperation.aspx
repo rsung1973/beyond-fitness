@@ -40,75 +40,65 @@
     <!-- row -->
     <div class="row">
 
-        <div class="col-sm-12">
-
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
             <div class="well well-sm bg-color-darken txt-color-white">
-
+                <p>
+                    <strong>BEYOND FITNESS</strong>提供您有關健康減重、運動、營養、體適能、健康生活及相關講座及演講邀約服務。若您有以上相關需求，歡迎您與我們聯繫，我們也提供以下諮詢服務：
+                </p>
+                <div class="alert alert-warning">
+                    <ul>
+                        <li>企業合作顧問服務</li>
+                        <li>相關產業管理及顧問服務</li>
+                        <li>產業人才培育</li>
+                    </ul>
+                </div>
+                <p class="text-center">
+                    <img class="img-thumbnail" src="../img/professional//COOPERATION-01.png" alt="相關合作" />
+                </p>
+            </div>
+        </article>
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-link"></i>合作夥伴:</h5>
                 <div class="row">
-
-                    <div class="col-xs-12 col-sm-6 col-md-9">
-                        <p>
-                            <strong>BEYOND FITNESS</strong>提供您有關健康減重、運動、營養、體適能、健康生活及相關講座及演講邀約服務。若您有以上相關需求，歡迎您與我們聯繫，我們也提供以下諮詢服務：
-                        </p>
-                        <div class="alert alert-warning">
-                            <ul>
-                                <li>企業合作顧問服務</li>
-                                <li>相關產業管理及顧問服務</li>
-                                <li>產業人才培育</li>
-                            </ul>
-                        </div>
-                        <p class="text-center">
-                            <img class="img-thumbnail" runat="server" src="~/img/professional//COOPERATION-01.png" alt="相關合作" />
-                        </p>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-3">
-                        <!-- /well -->
-                        <div class="well bg-color-darken txt-color-white padding-10">
-                            <h5 class="margin-top-0"><i class="fa fa-link"></i>合作夥伴:</h5>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <a href="https://www.facebook.com/BOOMFitPro" target="_blank" class="facebook"><i>
-                                                <img runat="server" src="~/img/partnerbox/partner-BOOM.png" alt="" /></i></a>
-                                        </li>
-                                        <li>
-                                            <a class="twitter" href="https://www.facebook.com/xrevolutionfitness" target="_blank"><i>
-                                                <img runat="server" src="~/img/partnerbox/partner-X-Revolution.png" alt="" /></i></a>
-                                        </li>
-                                        <li>
-                                            <a class="google" href="https://www.facebook.com/AkrofitnessTheGym" target="_blank"><i>
-                                                <img runat="server" src="~/img/partnerbox/partner-Akrofitness.png" alt="" /></i></a>
-                                        </li>
-                                        <li>
-                                            <a class="dribbble" href="https://www.facebook.com/LIGHTFITNESS" target="_blank"><i>
-                                                <img runat="server" src="~/img/partnerbox/partner-lightfitness.png" alt="" /></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /well -->
-                        <div class="well bg-color-darken txt-color-white padding-10">
-                            <h5 class="margin-top-0"><i class="fa fa-thumbs-o-up"></i>更多SNS</h5>
-                            <ul class="no-padding no-margin">
-                                <p class="no-margin">
-                                    <a title="Facebook" href="https://www.facebook.com/beyond.fitness.pro/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a>
-                                    <a title="Twitter" href="https://www.instagram.com/beyond_ft/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-instagram fa-stack-1x"></i></span></a>
-                                </p>
-                            </ul>
-                        </div>
-                        <!-- /well -->
-
+                    <div class="col-lg-12">
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="https://www.facebook.com/BOOMFitPro" target="_blank" class="facebook"><i>
+                                    <img src="../img/partnerbox/partner-BOOM.png" alt="" /></i></a>
+                            </li>
+                            <li>
+                                <a class="twitter" href="https://www.facebook.com/xrevolutionfitness" target="_blank"><i>
+                                    <img src="../img/partnerbox/partner-X-Revolution.png" alt="" /></i></a>
+                            </li>
+                            <li>
+                                <a class="google" href="https://www.facebook.com/AkrofitnessTheGym" target="_blank"><i>
+                                    <img src="../img/partnerbox/partner-Akrofitness.png" alt="" /></i></a>
+                            </li>
+                            <li>
+                                <a class="dribbble" href="https://www.facebook.com/LIGHTFITNESS" target="_blank"><i>
+                                    <img src="../img/partnerbox/partner-lightfitness.png" alt="" /></i></a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-
             </div>
-
-        </div>
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-cloud"></i>更多SNS</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <a title="Facebook" href="https://www.facebook.com/beyond.fitness.pro/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a>
+                        <a title="Twitter" href="https://www.instagram.com/beyond_ft/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-instagram fa-stack-1x"></i></span></a>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+        </article>
 
     </div>
+    <script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/superbox/superbox.min.js") %>"></script>
 
     <!-- end row -->
 </asp:Content>

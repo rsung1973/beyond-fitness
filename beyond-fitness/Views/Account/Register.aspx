@@ -8,53 +8,113 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <!-- RIBBON -->
+    <div id="ribbon">
 
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-user"></i>
+            </span>
+        </span>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>會員註冊</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+    <!-- END RIBBON -->
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-user"></i>會員註冊
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Step1.輸入會員編號 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-5">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="glyphicon glyphicon-user">註冊 - Step 1</span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
-                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-                        <div class="form-group has-feedback">
-                            <% Html.RenderInput( "會員編號：","memberCode","memberCode","會員編號",_modelState); %>
-                            <label id="memberCode-error" class="error" for="memberCode" style="display: none;"></label>
-                            <input type="hidden" name="userName" id="userName" />
-                            <input type="hidden" name="userID" id="userID" />
-                            <input type="hidden" name="email" id="email" />
-                            <input type="hidden" name="pictureID" id="pictureID" />
-                        </div>
+                    </div>
+                    <!-- end widget edit box -->
 
+                    <!-- widget content -->
+                    <div class="widget-body no-padding bg-color-darken txt-color-white">
 
-                        <button type="button" class="btn btn-primary btn-lg btn-block" id="btnFB"><i class="fa fa-facebook-square" aria-hidden="true"></i>&nbsp;&nbsp;使用 Facebook</button>
-                        <div class="tabs-section">
-
-                            <div class="hr1" style="margin: 5px 0px;"></div>
-                            <button type="button" id="btnMail" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;使用 Email 註冊</button>
-
-                        </div>
-                    <!-- End Contact Form -->
+                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Account/RegisterByMail") %>" id="regester-form" class="smart-form" method="post">
+                            <%=  Html.AntiForgeryToken() %>
+                            <fieldset>
+                                <section>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-tag"></i>
+                                        <input type="text" name="memberCode" id="memberCode" class="input-lg" maxlength="20" placeholder="請輸入會員編號" value="<%: this.Model %>" />
+                                    </label>
+                                </section>
+                            </fieldset>
+                            <footer>
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+                        </form>
+                    </div>
+                    <!-- end widget content -->
 
                 </div>
+                <!-- end widget div -->
 
             </div>
-        </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+
+        <!-- NEW COL START -->
+        <%  Html.RenderPartial("~/Views/Layout/QuickLink.ascx"); %>
+        <!-- END COL -->
     </div>
-    <!-- End content -->
     <script>
         $('#vip,#m_vip').addClass('active');
         $('#theForm').addClass('contact-form');
@@ -123,7 +183,7 @@
 
         function registerByMail() {
             $('#loading').css('display', 'table');
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Account/RegisterByMail") %>')
+            $('#theForm').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Account/RegisterByMail") %>')
               .submit();
         }
 

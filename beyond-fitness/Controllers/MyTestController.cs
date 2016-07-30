@@ -39,5 +39,13 @@ namespace WebHome.Controllers
             return View(view, null);
         }
 
+        public ActionResult TestError()
+        {
+            this.ModelState.AddModelError("memberCode", "Error Member Code!!");
+            ViewBag.ModelState = ModelState;
+            return View("Test01", null);
+        }
+
+
     }
 }

@@ -3,249 +3,216 @@
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+<div id="ribbon">
+
+    <span class="ribbon-button-alignment">
+        <span id="refresh" class="btn btn-ribbon">
+            <i class="fa fa-envelope"></i>
+        </span>
+    </span>
+
+    <!-- breadcrumb -->
+    <ol class="breadcrumb">
+        <li>聯絡我們</li>
+    </ol>
+</div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-envelope"></i>聯絡我們
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
 
-    <uc1:PageBanner runat="server" ID="pageBanner" Title="聯絡我們" TitleInEng="Contact Us" />
+    <div class="row">
 
-    <!-- Start Map -->
-    <div id="map" data-position-latitude="25.0519269" data-position-longitude="121.55007599999999"></div>
-    <script>
-      (function($) {
-        $.fn.CustomMap = function(options) {
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>填寫相關資訊 </h2>
 
-          var posLatitude = $('#map').data('position-latitude'),
-            posLongitude = $('#map').data('position-longitude');
+                </header>
 
-          var settings = $.extend({
-            home: {
-              latitude: posLatitude,
-              longitude: posLongitude
-            },
-            text: '<div class="map-popup"><h4>BEYOND FITNESS</h4><p>台北市松山區南京東路四段17號B1</p></div>',
-            icon_url: $('#map').data('marker-img'),
-            zoom: 16
-          }, options);
+                <!-- widget div-->
+                <div>
 
-          var coords = new google.maps.LatLng(settings.home.latitude, settings.home.longitude);
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-          return this.each(function() {
-            var element = $(this);
+                    </div>
+                    <!-- end widget edit box -->
 
-            var options = {
-              zoom: settings.zoom,
-              center: coords,
-              mapTypeId: google.maps.MapTypeId.ROADMAP,
-              mapTypeControl: false,
-              scaleControl: false,
-              streetViewControl: false,
-              panControl: true,
-              disableDefaultUI: true,
-              zoomControlOptions: {
-                style: google.maps.ZoomControlStyle.DEFAULT
-              },
-              overviewMapControl: true,
-            };
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-            var map = new google.maps.Map(element[0], options);
+                        <form id="comment-form" action="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>" class="smart-form" method="post">
 
-            var icon = {
-              url: settings.icon_url,
-              origin: new google.maps.Point(0, 0)
-            };
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-append fa fa-user"></i>
+                                            <input type="text" name="userName" class="input-lg" id="userName" placeholder="請輸入您的姓名" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-append fa fa-envelope-o"></i>
+                                            <input type="email" class="input-lg" name="email" id="email" placeholder="請輸入E-mail"/>
+                                        </label>
+                                    </section>
+                                </div>
+                                <section>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-tag"></i>
+                                        <input type="text" name="subject" id="subject" class="input-lg" placeholder="請輸入信件主旨"/>
+                                    </label>
+                                </section>
+                                <section>
+                                    <label class="textarea">
+                                        <i class="icon-append fa fa-comment"></i>
+                                        <textarea rows="4" name="comment" id="comment" placeholder="請輸入詢問內容"></textarea>
+                                    </label>
+                                </section>
+                            </fieldset>
 
-            var marker = new google.maps.Marker({
-              position: coords,
-              map: map,
-              icon: icon,
-              draggable: false
-            });
+                            <footer>
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
 
-            var info = new google.maps.InfoWindow({
-              content: settings.text
-            });
+                            <% Html.RenderPartial("~/Views/Shared/Success.ascx"); %>
+                        </form>
 
-            google.maps.event.addListener(marker, 'click', function() {
-              info.open(map, marker);
-            });
-
-            var styles = [{
-              "featureType": "landscape",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "lightness": 65
-              }, {
-                "visibility": "on"
-              }]
-            }, {
-              "featureType": "poi",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "lightness": 51
-              }, {
-                "visibility": "simplified"
-              }]
-            }, {
-              "featureType": "road.highway",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "visibility": "simplified"
-              }]
-            }, {
-              "featureType": "road.arterial",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "lightness": 30
-              }, {
-                "visibility": "on"
-              }]
-            }, {
-              "featureType": "road.local",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "lightness": 40
-              }, {
-                "visibility": "on"
-              }]
-            }, {
-              "featureType": "transit",
-              "stylers": [{
-                "saturation": -100
-              }, {
-                "visibility": "simplified"
-              }]
-            }, {
-              "featureType": "administrative.province",
-              "stylers": [{
-                "visibility": "on"
-              }]
-            }, {
-              "featureType": "water",
-              "elementType": "labels",
-              "stylers": [{
-                "visibility": "on"
-              }, {
-                "lightness": -25
-              }, {
-                "saturation": -100
-              }]
-            }, {
-              "featureType": "water",
-              "elementType": "geometry",
-              "stylers": [{
-                "hue": "#ffff00"
-              }, {
-                "lightness": -25
-              }, {
-                "saturation": -97
-              }]
-            }];
-
-            map.setOptions({
-              styles: styles
-            });
-          });
-
-        };
-      }(jQuery));
-
-      jQuery(document).ready(function() {
-        jQuery('#map').CustomMap();
-      });
-    </script>
-    <!-- End Map -->
-
-<%--    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3614.472973471831!2d121.55001928836059!3d25.051953560977104!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abe83c187613%3A0x896b13dfd50e7a7b!2zMTA15Y-w5YyX5biC5p2-5bGx5Y2A5Y2X5Lqs5p2x6Lev5Zub5q61MTfomZ8!5e0!3m2!1szh-TW!2stw!4v1422857105442" width="1000" height="450" frameborder="0" style="border: 0"></iframe>--%>
-
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-md-8">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>聯絡我們</span></h4>
-
-                    <!-- Start Contact Form -->
-                        <div class="form-group">
-                            <div class="controls">
-                                <input type="text" placeholder="姓名" name="SendName">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="controls">
-                                <input type="email" class="email" placeholder="Email" name="email">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="controls">
-                                <input type="text" class="requiredField" placeholder="問題主旨" name="Title">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-
-                            <div class="controls">
-                                <textarea rows="7" placeholder="您的信件內容" name="content"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" id="submit" class="btn-system btn-large">送出 <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                        <div id="success" style="color: #34495e;"></div>
-                    
-                    <!-- End Contact Form -->
+                    </div>
+                    <!-- end widget content -->
 
                 </div>
-
-                <div class="col-md-4">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>相關訊息</span></h4>
-
-                    <!-- Some Info -->
-                    <p>若您有體適能運動相關問題，歡迎您與 Beyond Fitness 聯繫。能為您服務是我們的榮幸。</p>
-
-                    <!-- Divider -->
-                    <div class="hr1" style="margin-bottom: 10px;"></div>
-
-                    <!-- Info - Icons List -->
-                    <ul class="icons-list">
-                        <li><i class="fa fa-phone"></i><strong>電 話：</strong> <u><a href="tel:+886227152733">02-2715 2733</a></u></li>
-                        <li><i class="fa fa-map-marker"></i><strong>地 址：</strong> 台北市松山區南京東路四段17號B1</li>
-                        <li><i class="fa fa-envelope-o"></i><strong>Email：</strong> <a href="mailto:info@beyond-fitness.tw"><u>info@beyond-fitness.tw</u></a></li>
-                    </ul>
-
-                    <!-- Divider -->
-                    <div class="hr1" style="margin-bottom: 15px;"></div>
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span>營業時間</span></h4>
-
-                    <!-- Info - List -->
-                    <ul class="list-unstyled">
-                        <li><strong>週一 - 週五</strong> - 9am to 9pm</li>
-                        <li><strong>週末</strong> - 7am to 10pm</li>
-                    </ul>
-
-                </div>
+                <!-- end widget div -->
 
             </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
 
-        </div>
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <!-- /well -->
+            <div class="well well-sm bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-envelope"></i>聯絡我們</h5>
+                <ul class="no-padding no-margin">
+                    <ul class="icons-list">
+                        <li>
+                            <a title="電話" href="tel:+886227152733"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x"></i></span>(02)2715-2733</a>
+                        </li>
+                        <li>
+                            <a title="地址"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-map-marker fa-stack-1x"></i></span>台北市松山區南京東路四段17號B1</a>
+                        </li>
+                        <li>
+                            <a title="Email" href="mailto:info@beyond-fitness.tw"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x"></i></span>info@beyond-fitness.tw</a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            <!-- /well -->
+            <!-- /well -->
+            <div class="well well-sm bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-cloud"></i>更多SNS</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <a title="Facebook" href="#"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a>
+                        <a title="Twitter" href="#"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-instagram fa-stack-1x"></i></span></a>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+
+        </article>
+        <!-- END COL -->
+
     </div>
-    <!-- End content -->
 
     <script>
-        $('#contactUs,#m_contactUs').addClass('active');
-        $('#theForm').addClass('contact-form');
+
+        $(document).ready(function () {
+
+            var $commentForm = $("#comment-form").validate({
+                // Rules for form validation
+                rules: {
+                    userName: {
+                        required: true
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    subject: {
+                        required: true
+                    },
+                    comment: {
+                        required: true
+                    }
+                },
+
+                // Messages for form validation
+                messages: {
+                    userName: {
+                        required: '請輸入您的姓名',
+                    },
+                    email: {
+                        required: '請輸入您的 email address',
+                        email: '請輸入合法的 email address'
+                    },
+                    subject: {
+                        required: '請輸入您的信件主旨',
+                    },
+                    comment: {
+                        required: '請輸入您的詢問內容'
+                    }
+                },
+
+                // Ajax form submition
+                submitHandler: function (form) {
+                    //$("#comment-form").addClass('submited');
+                    var data = $(form).serializeObject();
+                    data.comment = $('<div>').text(data.comment).html();
+                    $.post($(form).prop('action'), data, function (data) {
+                            if (data) {
+                                $('#successMsg').remove();
+                                $(form).append($(data));
+                            } 
+                    });
+                },
+
+                // Do not change code below
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                }
+            });
+
+        })
+
+
     </script>
 </asp:Content>

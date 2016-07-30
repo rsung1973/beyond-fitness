@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Utility;
@@ -10,6 +12,7 @@ using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
+using WebHome.Properties;
 
 namespace WebHome.Controllers
 {
@@ -347,9 +350,49 @@ namespace WebHome.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Location()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult ContactUs()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ContactUs(String email,String userName,String subject,String comment)
+        {
+            ThreadPool.QueueUserWorkItem(t => {
+
+                try
+                {
+
+                    StringBuilder body = new StringBuilder();
+                    System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                    message.ReplyToList.Add(Settings.Default.WebMaster);
+                    message.From = new System.Net.Mail.MailAddress(email,userName);
+                    message.To.Add(Settings.Default.WebMaster);
+                    message.Subject = subject;
+                    message.IsBodyHtml = true;
+
+                    message.Body = HttpUtility.HtmlDecode(comment);
+
+                    System.Net.Mail.SmtpClient smtpclient = new System.Net.Mail.SmtpClient(Settings.Default.SmtpServer);
+                    //smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
+                    smtpclient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+
+            ViewBag.Success = "Your comment was successfully added!";
+            return View("Success");
         }
 
         public ActionResult Vip()

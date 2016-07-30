@@ -3,34 +3,36 @@
 
 <% if (RecordCount > 0 && item != null)
     { %>
-<div id="pagination">
-    <span class="all-pages">Page <%= item.CurrentIndex+1 %> of <%= pagingCount %></span>
+<div id="pagination" class="text-center">
+    <ul class="pagination">
     <% if (startPaging > 0)
         { %>
-    <%: Html.ActionLink("First", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=0, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %>
+        <li><%: Html.ActionLink("First", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=0, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %></li>
     <% } %>
     <% if (prevPaging)
         { %>
-    <%: Html.ActionLink("Prev", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=startPaging-item.PagingSize, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %>
+    <li><%: Html.ActionLink("Prev", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=startPaging-item.PagingSize, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %></li>
     <% } %>
     <% for (int i = startPaging; i < Math.Min(pagingCount, startPaging + item.PagingSize); i++)
         {
             if (i == item.CurrentIndex)
             { %>
-    <span class="current page-num"><%= i+1 %></span>
+                <li class="active"><a href="javascript:void(0);"><%= i+1 %></a></li>
     <%      }
-        else { %>
-    <%: Html.ActionLink((i+1).ToString(), ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=i, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="page-num" }) %>
+            else
+            { %>
+                <li><%: Html.ActionLink((i+1).ToString(), ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=i, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="page-num" }) %></li>
     <%      }%>
-    <%       } %>
-    <% if (nextPaging)
+    <%  } %>
+    <%  if (nextPaging)
         { %>
-    <%: Html.ActionLink("Next", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=startPaging+item.PagingSize, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %>
-    <% } %>
-    <% if (startPaging + item.PagingSize < pagingCount)
+            <li><%: Html.ActionLink("Next", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=startPaging+item.PagingSize, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %></li>
+    <%  } %>
+    <%  if (startPaging + item.PagingSize < pagingCount)
         { %>
-    <%: Html.ActionLink("Last", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=pagingCount-1, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %>
-    <% } %>
+            <li><%: Html.ActionLink("Last", ActionName,ControllerName,new PagingIndexViewModel { CurrentIndex=pagingCount-1, PageSize = item.PageSize,PagingSize = item.PagingSize },new { @class="next-page" }) %></li>
+    <%  } %>
+    </ul>
 </div>
 <% } %>
 <script runat="server">

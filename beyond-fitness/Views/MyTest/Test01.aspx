@@ -16,7 +16,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
-<asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
+<asp:Content ID="mainContent" ContentPlaceHolderID="formContent" runat="server">
 
     <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
 
@@ -62,11 +62,30 @@
         <a onclick="alert('...');">test</a>
     </div>
 
-    <%  ViewBag.Loading = true;    
-        Html.RenderPartial("~/Views/Shared/Loading.ascx"); %>
+    <fieldset>
+        <section>
+            <label class="input">
+                <i class="icon-append fa fa-tag"></i>
+                <input type="text" name="memberCode" id="memberCode" class="input-lg" maxlength="20" placeholder="請輸入會員編號" />
+            </label>
+        </section>
+    </fieldset>
+    <button type="button" id="btnSend" name="submit" class="btn btn-primary">
+        送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+    </button>
+
+    <%  ViewBag.Loading = false;    
+        Html.RenderPartial("~/Views/Shared/Loading.ascx");
+         %>
 
     <script>
         $('#vip,#m_vip').addClass('active');
+
+        $('#btnSend').on('click', function (evt) {
+            $('#theForm')
+                .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/MyTest/TestError") %>')
+                .submit();
+        });
 
         $(function () {
             //$('#testDate').datetimepicker({

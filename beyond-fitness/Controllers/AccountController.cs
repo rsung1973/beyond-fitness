@@ -55,7 +55,7 @@ namespace WebHome.Controllers
         
         public ActionResult Register()
         {
-            return View();
+            return View("Register");
         }
 
 
@@ -91,7 +91,6 @@ namespace WebHome.Controllers
             
         }
 
-        
         public ActionResult UpdateMemberPicture(String memberCode, String imgUrl)
         {
             try
@@ -228,29 +227,29 @@ namespace WebHome.Controllers
         }
 
 
-        [ValidateAntiForgeryToken]
+        
         public ActionResult RegisterByMail(String memberCode)
         {
-            
-            
 
             UserProfile item = models.EntityList.Where(u => u.MemberCode == memberCode).FirstOrDefault();
 
             if (item == null)
             {
-                ViewBag.Message = "學員編號錯誤!!";
-                return View("Register");
+                ModelState.AddModelError("memberCode", "學員編號錯誤!!");
+                ViewBag.ModelState = ModelState;
+                return View("Register", model: memberCode);
             }
 
             if (item.LevelID != (int)Naming.MemberStatusDefinition.ReadyToRegister)
             {
-                ViewBag.Message = "學員編號已註冊!!";
-                return View("Register");
+                ModelState.AddModelError("memberCode", "學員編號已註冊!!");
+                ViewBag.ModelState = ModelState;
+                return View("Register", model: memberCode);
             }
 
             HttpContext.SetCacheValue(CachingKey.UID, item.UID);
 
-            return View(item);
+            return View("RegisterByMail", item);
         }
 
         
@@ -261,14 +260,13 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = ModelState;
                 return View("RegisterByMail");
             }
-
-            
             
             UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.UID)).FirstOrDefault();
 
             if (item == null)
             {
-                ViewBag.Message = "會員編號錯誤!!";
+                this.ModelState.AddModelError("pid", "會員編號錯誤!!");
+                ViewBag.ModelState = ModelState;
                 HttpContext.SetCacheValue(CachingKey.UID, null);
                 return View("Register");
             }
@@ -278,14 +276,17 @@ namespace WebHome.Controllers
             {
                 this.ModelState.AddModelError("email", "請輸入Email");
                 ViewBag.ModelState = ModelState;
-                return View("RegisterByMail");
+                ViewBag.ViewModel = viewModel;
+                return View("RegisterByMail", item);
             }
 
             if (models.EntityList.Any(u => u.PID == viewModel.EMail))
             {
-                ViewBag.Message = "您的Email已經是註冊使用者!!請直接登入系統!!";
                 HttpContext.SetCacheValue(CachingKey.UID, null);
-                return View("Register");
+                ModelState.AddModelError("email", "您的Email已經是註冊使用者!!請直接登入系統!!");
+                ViewBag.ModelState = ModelState;
+                ViewBag.ViewModel = viewModel;
+                return View("RegisterByMail", item);
             }
 
             item.PID = viewModel.EMail;
@@ -411,20 +412,20 @@ namespace WebHome.Controllers
             //}
 
             
-
-            
             UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
                 && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
 
             if (item == null)
             {
-                ViewBag.Message = "登入資料錯誤!!";
+                ModelState.AddModelError("pid", "登入資料錯誤!!");
+                ViewBag.ModelState = ModelState;
                 return View("LoginByMail");
             }
 
             if (item.Password != (viewModel.Password).MakePassword())
             {
-                ViewBag.Message = "登入資料錯誤!!";
+                ModelState.AddModelError("pid", "登入資料錯誤!!");
+                ViewBag.ModelState = ModelState;
                 return View("LoginByMail");
             }
 
@@ -472,14 +473,21 @@ namespace WebHome.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public ActionResult ForgetPassword(String email)
         {
             if(String.IsNullOrEmpty(email))
             {
+                ModelState.AddModelError("email", "請輸入您的 email address");
+                ViewBag.ModelState = this.ModelState;
                 return View();
             }
-
-            
 
             
             UserProfile item = models.EntityList.Where(u => u.PID == email.Trim()

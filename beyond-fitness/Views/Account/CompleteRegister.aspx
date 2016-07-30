@@ -11,57 +11,142 @@
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-user"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>我的簡介</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-user"></i>我的簡介
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <div id="content">
-        <div class="container">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <!--Start Profile-->
+            <div class="well well-sm bg-color-darken txt-color-white no-margin no-padding">
 
-            <div class="row">
+                <div class="row">
 
-                <div class="col-md-5">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="<%= _item.ExternalID==null ? "fa fa-envelope-o" : "fa fa-facebook-square" %>">註冊 - Step 3</span></h4>
-
-                    <!-- Start Post -->
-                    <div class="blog-post quote-post">
-                        <!-- Post Content -->
-                        <div class="user-info clearfix">
-                            <div class="user-image">
-                                <img alt="" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" />
-                            </div>
-                            <div class="user-bio">
-                                <h2 class="text-primary"><%= _item.UserName %> <span class="subtext">您好</span></h2>
-
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p><strong>會員編號：</strong><%= _item.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _item.PID %></p>
-
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p>您的註冊已經完成。歡迎加入BEYOND FITNESS。</p>
-                                <!-- Divider -->
-                                <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                    <div class="col-sm-12">
+                        <div id="myCarousel" class="carousel fade profile-carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+                                <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <!-- Slide 1 -->
+                                <div class="item active">
+                                    <img src="../img/slider/bg1.jpg" alt="demo user"/>
+                                </div>
+                                <!-- Slide 2 -->
+                                <div class="item">
+                                    <img src="../img/slider/bg2.jpg" alt="demo user">
+                                </div>
+                                <!-- Slide 3 -->
+                                <div class="item">
+                                    <img src="../img/slider/bg3.jpg" alt="demo user">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- End Post -->
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+
+                            <div class="col-sm-3 profile-pic">
+                                <% _item.PictureID.RenderUserPicture(this.Writer, "authorImg"); %>
+                                <div class="padding-10">
+                                    <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _item.YearsOld() %>歲</span>
+                                    <br/>
+                                    <% Html.RenderPartial("~/Views/Member/MemberLessonsInfo.ascx", _item); %>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <h1><span class="semi-bold"><%= String.IsNullOrEmpty(_item.UserName) ? _item.RealName :_item.UserName %></span>
+                                    <br/>
+                                    <small></small></h1>
+
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <p class="text-muted">
+                                            <i class="fa fa-phone"></i>&nbsp;&nbsp;(<span class="txt-color-darken">886) <%= _item.Phone %></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="text-muted">
+                                            <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:<%= _item.PID %>"><%= _item.PID %></a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
+
+            <!--End Profile-->
+
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-thumbs-o-up"></i>快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <li>
+                                <a title="我的足印" href="timeline.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-paw fa-stack-1x"></i></span>我的足印</a>
+                            </li>
+                            <li>
+                                <a title="我的總覽" href="vipdashboard.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-tachometer fa-stack-1x"></i></span>我的總覽</a>
+                            </li>
+                            <li>
+                                <a title="修改資料" href="setting.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-cog fa-stack-1x"></i></span>修改資料</a>
+                            </li>
+                            <li>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>" title="登出"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-out fa-stack-1x"></i></span>登出</a>
+                            </li>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
         </div>
     </div>
-
-    <script>
-    $('#vip,#m_vip').addClass('active');
-    </script>
 
 </asp:Content>
 <script runat="server">

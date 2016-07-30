@@ -18,7 +18,7 @@
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Professional") %>" title="專業體能訓練"><i class="fa fa-lg fa-fw fa-heartbeat"></i><span class="menu-item-parent">專業訓練</span></a>
         </li>
         <li>
-            <a href="blog.html" title="專業知識"><i class="fa fa-lg fa-fw fa-puzzle-piece"></i><span class="menu-item-parent">專業知識</span></a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Blog") %>" title="專業知識"><i class="fa fa-lg fa-fw fa-puzzle-piece"></i><span class="menu-item-parent">專業知識</span></a>
         </li>
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Rental") %>" title="場地租借"><i class="fa fa-lg fa-fw fa-at"></i><span class="menu-item-parent">場地租借</span></a>
@@ -30,10 +30,10 @@
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Cooperation") %>" title="相關合作"><i class="fa fa-lg fa-fw fa-link"></i><span class="menu-item-parent">相關合作</span></a>
         </li>
         <li>
-            <a href="contact.html" title="聯絡我們"><i class="fa fa-lg fa-fw fa fa-envelope"></i><span class="menu-item-parent">聯絡我們</span></a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>" title="聯絡我們"><i class="fa fa-lg fa-fw fa fa-envelope"></i><span class="menu-item-parent">聯絡我們</span></a>
         </li>
         <li>
-            <a href="map.html" title="服務據點"><i class="fa fa-lg fa-fw fa-map-marker"></i><span class="menu-item-parent">服務據點</span></a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Location") %>" title="服務據點"><i class="fa fa-lg fa-fw fa-map-marker"></i><span class="menu-item-parent">服務據點</span></a>
         </li>
         <% Html.RenderPartial("~/Views/Layout/NavItem/TimeLine.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Lessons.ascx", _userProfile); %>

@@ -2053,6 +2053,8 @@ namespace WebHome.Models.DataEntity
 		
 		private int _CoachID;
 		
+		private string _Description;
+		
 		private EntitySet<LessonTime> _LessonTime;
 		
 		private EntitySet<LessonTime> _LessonTime1;
@@ -2065,6 +2067,8 @@ namespace WebHome.Models.DataEntity
     partial void OnCreated();
     partial void OnCoachIDChanging(int value);
     partial void OnCoachIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
     #endregion
 		
 		public ServingCoach()
@@ -2095,6 +2099,26 @@ namespace WebHome.Models.DataEntity
 					this._CoachID = value;
 					this.SendPropertyChanged("CoachID");
 					this.OnCoachIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
 				}
 			}
 		}

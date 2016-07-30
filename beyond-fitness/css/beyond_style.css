@@ -1,0 +1,37 @@
+/* CSS Document */
+
+/*
+	Theme Name: Margo
+	Description: Margo - Responsive Template
+	Version: 1.0
+	Author: iThemesLab
+	Website: http://ithemeslab.com
+*/
+#logo img {
+    width: 200px;
+    height: auto;
+    padding-left: 3px;
+}
+#header>:first-child, aside {
+    width: 250px;
+}
+
+#logo {
+    display: inline-block;
+    width: 210px;
+    margin-top: 13px;
+    margin-left: 9px;
+}
+
+.error {
+    border-color: #ff7676!important;
+    color: #ff7676;
+}
+
+table.has-columns-hidden>tbody>tr.row-detail>td {
+    background: rgba(0,0,0,.13);
+}
+
+.smart-form .message i {
+    text-align: center;
+}

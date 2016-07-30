@@ -7,6 +7,10 @@ namespace WebHome.Models.DataEntity
 {
     public static class DataEntityExtendsions
     {
+        public static String YearsOld(this UserProfile item)
+        {
+            return item.Birthday.HasValue ? (DateTime.Today.Year - item.Birthday.Value.Year).ToString()  : "--";
+        }
     }
 
     public partial class UserProfile

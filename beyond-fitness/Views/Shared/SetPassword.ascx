@@ -9,40 +9,48 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="tabs-section">
-    <!-- Nav Tabs -->
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-share-alt"></i>設定圖形密碼</a></li>
-        <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-pencil" aria-hidden="true"></i>設定文字密碼</a></li>
-    </ul>
 
-    <!-- Tab panels -->
-    <div class="tab-content">
-        <!-- Tab Content 1 -->
-        <div class="tab-pane fade in active" id="tab-1">
-            <uc1:LockScreen runat="server" ID="lockScreen" />
-        </div>
-        <input type="text" name="lockPattern" id="lockPattern" style="display: none" />
+<ul id="myTab1" class="nav nav-tabs bordered">
+    <li class="active">
+        <a href="#pw1" data-toggle="tab"><i class="fa fa-picture-o  fa-lg fa-gear"></i>圖形密碼</a>
+    </li>
+    <li>
+        <a href="#pw2" data-toggle="tab"><i class="fa fa-keyboard-o  fa-lg fa-gear"></i>文字密碼</a>
+    </li>
+</ul>
+<div id="setPwdTabContent" class="tab-content padding-10">
+    <div class="tab-pane fade in active" id="pw1">
+        <uc1:LockScreen runat="server" ID="lockScreen" />
         <label id="lockPattern-error" class="error" for="lockPattern" style="display: none;"></label>
-        <div class="tab-pane fade" id="tab-2">
-            <div class="form-group has-feedback">
-                <% Html.RenderPassword("密碼：", "password", "password", "請輸入密碼", _modelState); %>
-            </div>
-            <div class="form-group has-feedback">
-                <% Html.RenderPassword("請再輸入一次密碼：", "password2", "password2", "再輸入一次密碼", _modelState); %>
-            </div>
-        </div>
     </div>
-    <!-- Tab Content 2 -->
+    <input type="text" name="lockPattern" id="lockPattern" style="display: none" />
+    <div class="tab-pane fade" id="pw2">
+        <fieldset>
+            <section>
+                <label class="input">
+                    <i class="icon-append fa fa-lock "></i>
+                    <input class="form-control input-lg" maxlength="10" placeholder="請輸入密碼" type="password" name="password" id="password" />
+                </label>
+            </section>
+        </fieldset>
+        <fieldset>
+            <section>
+                <label class="input">
+                    <i class="icon-append fa fa-lock "></i>
+                    <input class="form-control input-lg" maxlength="10" placeholder="請再次密碼" type="password" name="password2" id="password2" />
+                </label>
+            </section>
+        </fieldset>
+    </div>
 </div>
 
 <script>
 
     $(function () {
 
-        $formValidator.settings.submitHandler = function (form) {
+        $pageFormValidator.settings.submitHandler = function (form) {
 
-            if ($('#tab-1').css('display') == 'block') {
+            if ($('#pw1').css('display') == 'block') {
                 var userPath = $appLock.getUserPath();
                 if (userPath == null) {
                     $('#lockPattern-error').css('display', 'block');
@@ -72,7 +80,10 @@
                     return $('input[name="lockPattern"]').val() == '';
                 }
             },
-            'maxlength': 20
+            'maxlength': 20,
+            'messages': {
+                required: '請輸入您的文字密碼'
+            }
         });
 
         $('#password2').rules('add', {

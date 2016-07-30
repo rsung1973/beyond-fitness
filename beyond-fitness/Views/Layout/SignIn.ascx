@@ -15,7 +15,7 @@
         </a>
         <ul class="dropdown-menu pull-right">
             <li>
-                <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5"><i class="fa fa-sign-in fa-lg"></i><strong><u>L</u>ogin</strong></a>
+                <a href="<%= FormsAuthentication.LoginUrl %>" class="padding-10 padding-top-5 padding-bottom-5"><i class="fa fa-sign-in fa-lg"></i><strong><u>L</u>ogin</strong></a>
             </li>
         </ul>
     </li>
@@ -31,7 +31,7 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = (UserProfile)this.Model;
+        _userProfile = this.Model as UserProfile;
     }
 
 </script>

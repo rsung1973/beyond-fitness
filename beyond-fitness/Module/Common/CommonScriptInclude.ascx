@@ -14,119 +14,16 @@
 <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
 <script src="<%= basePath + "Scripts/jquery-2.1.4.min.js" %>"></script>
 <script src="<%= basePath + "Scripts/jquery-ui-1.10.3.min.js" %>"></script>
-
-
-<!-- IMPORTANT: APP CONFIG -->
-<script src="<%= basePath + "js/app.config.js" %>"></script>
-
-<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
-<script src="<%= basePath + "js/plugin/jquery-touch/jquery.ui.touch-punch.min.js" %>"></script>
-
-<!-- BOOTSTRAP JS -->
-<script src="<%= basePath + "js/bootstrap/bootstrap.min.js" %>"></script>
-
-<!-- CUSTOM NOTIFICATION -->
-<script src="<%= basePath + "js/notification/SmartNotification.min.js" %>"></script>
-
-<!-- JARVIS WIDGETS -->
-<script src="<%= basePath + "js/smartwidgets/jarvis.widget.min.js" %>"></script>
-
-<!-- EASY PIE CHARTS -->
-<script src="<%= basePath + "js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js" %>"></script>
-
-<!-- SPARKLINES -->
-<script src="<%= basePath + "js/plugin/sparkline/jquery.sparkline.min.js" %>"></script>
-
 <!-- JQUERY VALIDATE -->
 <script src="<%= basePath + "js/plugin/jquery-validate/jquery.validate.min.js" %>"></script>
-
-<!-- JQUERY MASKED INPUT -->
-<script src="<%= basePath + "js/plugin/masked-input/jquery.maskedinput.min.js" %>"></script>
-
-<!-- JQUERY SELECT2 INPUT -->
-<script src="<%= basePath + "js/plugin/select2/select2.min.js" %>"></script>
-
-<!-- JQUERY UI + Bootstrap Slider -->
-<script src="<%= basePath + "js/plugin/bootstrap-slider/bootstrap-slider.min.js" %>"></script>
-
-<!-- browser msie issue fix -->
-<script src="<%= basePath + "js/plugin/msie-fix/jquery.mb.browser.min.js" %>"></script>
-
-<!-- FastClick: For mobile devices -->
-<script src="<%= basePath + "js/plugin/fastclick/fastclick.min.js" %>"></script>
-
-<!--[if IE 8]>
-
-		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
-
-		<![endif]-->
-
-<!-- MAIN APP JS FILE -->
-<script src="<%= basePath + "js/app.min.js" %>"></script>
-
-<!-- ENHANCEMENT PLUGINS : NOT A REQUIREMENT -->
-<!-- Voice command : plugin -->
-<script src="<%= basePath + "js/speech/voicecommand.min.js" %>"></script>
-
-<!-- SmartChat UI : plugin -->
-<script src="<%= basePath + "js/smart-chat-ui/smart.chat.ui.min.js" %>"></script>
-<script src="<%= basePath + "js/smart-chat-ui/smart.chat.manager.min.js" %>"></script>
-
-<!-- PAGE RELATED PLUGIN(S) 
-		<script src="..."></script>-->
-
-<script type="text/javascript">
-
-    // DO NOT REMOVE : GLOBAL FUNCTIONS!
-
-    $(document).ready(function () {
-
-        pageSetUp();
-
-        /*
-         * Autostart Carousel
-         */
-        $('.carousel.slide').carousel({
-            interval: 2000,
-            cycle: true
-        });
-        $('.carousel.fade').carousel({
-            interval: 2000,
-            cycle: true
-        });
-
-        // Fill all progress bars with animation
-
-        $('.progress-bar').progressbar({
-            display_text: 'fill'
-        });
-
-    })
-
-</script>
-
-<!-- Your GOOGLE ANALYTICS CODE Below -->
-<script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
-    _gaq.push(['_trackPageview']);
-
-    (function () {
-        var ga = document.createElement('script');
-        ga.type = 'text/javascript';
-        ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ga, s);
-    })();
-
-</script>
+<script src="<%= basePath + "js/jquery.form.js" %>"></script>
 <script>
     var $formValidator;
+    var $pageFormValidator;
 
     $(function () {
 
-        $formValidator = $("form").validate({
+        $formValidator = $("#theForm").validate({
             //debug: true,
             //errorClass: "label label-danger",
 
@@ -144,8 +41,32 @@
             }
         });
 
+        $pageFormValidator = $("#pageForm").validate({
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
         $.validator.addMethod("regex", function (value, element, regexpr) {
             return regexpr.test(value);
         }, "資料格式錯誤!!");
     });
+
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 </script>
