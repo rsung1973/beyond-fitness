@@ -87,7 +87,7 @@
         </div>
     </div>
     <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
 
     <script>
         $('#vip,#m_vip').addClass('active');

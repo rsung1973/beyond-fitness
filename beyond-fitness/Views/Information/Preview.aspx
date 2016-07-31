@@ -55,13 +55,13 @@
 </asp:Content>
 <script runat="server">
 
-    ModelSource<Article> models;
+    ModelSource<UserProfile> models;
     Article _item;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = ((SampleController<Article>)ViewContext.Controller).DataSource;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (Article)this.Model;
     }
 

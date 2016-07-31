@@ -25,7 +25,7 @@
         <td colspan="4">請點選<span class="green-text fa fa-plus-circle"></span>可新增項目</td>
     </tr>
 </table>
-<% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+
 
 
 <script runat="server">

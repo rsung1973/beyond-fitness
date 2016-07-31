@@ -17,6 +17,13 @@
 <!-- JQUERY VALIDATE -->
 <script src="<%= basePath + "js/plugin/jquery-validate/jquery.validate.min.js" %>"></script>
 <script src="<%= basePath + "js/jquery.form.js" %>"></script>
+<script src="<%= basePath + "js/bootstrap-datetimepicker.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/jquery.dataTables.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.colVis.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.tableTools.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.bootstrap.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatable-responsive/datatables.responsive.min.js" %>"></script>
+
 <script>
     var $formValidator;
     var $pageFormValidator;

@@ -14,6 +14,10 @@
         { %>
             <option value="">全部</option>
     <%  } %>
+    <%  if (ViewBag.SelectIndication != null)
+        {
+            Writer.WriteLine(ViewBag.SelectIndication);
+        } %>
     <% foreach (var item in _items)
         { %>
             <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %><%= item.UserProfile.IsFreeAgent() ? "(自由教練)" : null %></option>

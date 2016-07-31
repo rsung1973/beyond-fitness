@@ -81,7 +81,7 @@
         </div>
     </div>
     <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
 
     <%  if (!_model.IsFreeAgent())
         { %>

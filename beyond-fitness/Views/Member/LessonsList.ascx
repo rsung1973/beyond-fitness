@@ -9,90 +9,92 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<table class="panel panel-default table">
-    <tbody>
-        <tr class="info">
-            <th class="text-center">建檔日期</th>
-            <th>課程類別</th>
-            <th class="text-center">團體課程</th>
-            <th class="text-center">購買/剩餘堂數</th>
+<table id="dt_basic" class="table table-forum" width="100%">
+    <thead>
+        <tr>
+            <th data-hide="phone" style="width: 40px"><i class="fa fa-fw fa-calendar-plus-o text-muted hidden-md hidden-sm hidden-xs"></i>時間</th>
+            <th data-class="expand">課程類型</th>
+            <th data-hide="phone">是否為團體課程</th>
+            <th style="width: 120px"><i class="fa fa-fw fa-credit-card text-muted hidden-md hidden-sm hidden-xs"></i>購買/剩餘</th>
             <%  if (ViewBag.ShowOnly != true)
                 { %>
-                    <th class="text-center">功能</th>
+            <th class="text-center">功能</th>
             <%  } %>
         </tr>
+    </thead>
+    <tbody>
         <% if (_items != null && _items.Count() > 0)
         {
             foreach (var item in _items)
             { %>
-        <%      if (item.GroupingMemberCount > 1)
-                {      
-                    var currentGroups = models.GetTable<GroupingLesson>().Where(g => g.GroupID == item.RegisterGroupID)
-                        .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != item.RegisterID), g => g.GroupID,
-                            r => r.RegisterGroupID, (g, r) => r);   %>
-
-                    <tr>
-                            <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>"><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
-                            <td rowspan="<%= currentGroups.Count()+1 %>"><%= item.LessonPriceType.Description + " " + item.LessonPriceType.ListPrice %></td>
-                            <td class="text-center">
-                                <i class="fa fa-check-circle" aria-hidden="true"></i><%= item.GroupingMemberCount %>人
-                            </td>
-                            <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>"><%= item.Lessons %>/<%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %></td>
-                            <%  if (ViewBag.ShowOnly != true)
-                                { %>
-                                    <td class="text-center" rowspan="<%= currentGroups.Count()+1 %>">
-                                <%  if (item.Attended == (int)Naming.LessonStatus.準備上課
-                                        && ((!item.RegisterGroupID.HasValue && item.LessonTime.Count() == 0) || (item.RegisterGroupID.HasValue && item.GroupingLesson.LessonTime.Count() == 0)))
-                                    { %>
-                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/DeleteLessons/") + item.RegisterID %>"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
-                                <%  } %>
-                                    </td>
-                            <%  } %>
-                        </tr>
-<%                  foreach (var g in currentGroups)
-                    {
-                                %>
-                        <tr>
-                            <td class="text-center"><%= g.UserProfile.RealName %>
-                                <%  if (g.GroupingLesson.LessonTime.Count() == 0)
-                                                    { %>
-                                <%--<a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>" class="btn btn-system btn-small">刪除<i class="fa fa-user-times" aria-hidden="true"></i></a>--%>
-                                <%  } %>
-                            </td>
-                        </tr>
-        <%          } %>
-        <%      }
-                else
-                { %>
-                        <tr>            
-                    <td class="text-center"><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
+                <tr>
+                    <td><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
                     <td><%= item.LessonPriceType.Description + " " + item.LessonPriceType.ListPrice %></td>
-                    <td class="text-center">
+                    <td>
+                        <%  if (item.GroupingMemberCount > 1)
+                            {   
+                                var currentGroups = models.GetTable<GroupingLesson>().Where(g => g.GroupID == item.RegisterGroupID)
+                                    .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != item.RegisterID), g => g.GroupID,
+                                        r => r.RegisterGroupID, (g, r) => r);   
+                                %>
+                                <ul class="list-inline friends-list">
+                                    <%  foreach (var g in currentGroups)
+                                        { %>
+                                            <li>
+                                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + g.UID %>">
+                                                    <% g.UserProfile.RenderUserPicture(Writer, "_" + g.UID ); %><%= g.UserProfile.RealName %></a>
+                                            </li>
+                                    <%  } %>
+                                </ul>
+                        <%  }
+                            else
+                            {   %>
+                                否
+                        <%  } %>
                     </td>
-                    <td class="text-center"><%= item.Lessons %>/<%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %></td>
-                    <%  if (ViewBag.ShowOnly != true)
-                        { %>
-                            <td class="text-center">
-                                <%  if (item.Attended == (int)Naming.LessonStatus.準備上課
-                                        && ((!item.RegisterGroupID.HasValue && item.LessonTime.Count() == 0) || (item.RegisterGroupID.HasValue && item.GroupingLesson.LessonTime.Count() == 0)))
-                                    { %>
-                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/DeleteLessons/") + item.RegisterID %>"><i class="fa fa-trash-o fa-2x" aria-hidden="true"></i></a>
-                                <%  } %>
-                            </td>
-                    <%  } %>
+                    <td><%= item.Lessons %> / <%= item.Lessons-item.LessonTime.Count(l=>l.AttendingCoach!= null) %></td>
                 </tr>
-        <%      } %>
         <%  }
-        }
-        else
-        {   %>
-            <tr>
-                <td colspan="<%= ViewBag.ShowOnly!=true ? 5 : 4 %>">未購買任何課程</td>
-            </tr>
-        <%  }   %>
+        } %>
     </tbody>
 </table>
+<script>
+    $(function () {
 
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+        $('#dt_basic').dataTable({
+            "sDom": "",
+            "autoWidth": true,
+            "oLanguage": {
+                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+            },
+            "preDrawCallback": function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback": function (oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+
+        /* END BASIC */
+    });
+</script>
 <script runat="server">
 
     IEnumerable<RegisterLesson> _items;

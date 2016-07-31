@@ -276,7 +276,7 @@
     </div>
 
     <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
 
     <script>

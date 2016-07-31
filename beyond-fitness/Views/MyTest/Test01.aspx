@@ -41,7 +41,7 @@
             </div>
 
             <div class="input-group date form_month" id="testDate" data-date-format="yyyy/mm" data-link-field="dtp_input1">
-                <input class="form-control" size="16" type="text" value="" id="dateFrom" name="dateFrom" readonly />
+                <input class="form-control" size="16" type="text" value="" id="dateTo" name="dateFrom" readonly />
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
         </div>

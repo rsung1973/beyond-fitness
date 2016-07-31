@@ -239,7 +239,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult UpdateArticle(int docID, int docType, String title, String docDate, String content)
+        public ActionResult UpdateArticle(int docID, int docType, String title, String docDate, String content,int? authorID)
         {
 
             if(String.IsNullOrEmpty(title))
@@ -259,6 +259,7 @@ namespace WebHome.Controllers
                 item.Document.DocDate = DateTime.ParseExact(docDate, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture);
                 item.Document.CurrentStep = (int)Naming.DocumentLevelDefinition.正常;
                 item.Title = title;
+                item.AuthorID = authorID;
                 item.ArticleContent = HttpUtility.HtmlDecode(content);
 
                 models.SubmitChanges();

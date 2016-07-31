@@ -13,10 +13,10 @@
         || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach))
     { %>
 <li>
-    <a href="bloglist.html" title="上稿管理"><i class="fa fa-lg fa-fw fa-edit"></i><span class="menu-item-parent">上稿管理</span></a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>" title="上稿管理"><i class="fa fa-lg fa-fw fa-edit"></i><span class="menu-item-parent">上稿管理</span></a>
     <ul>
         <li>
-            <a href="bloglist.html"><i class="fa fa-fw fa-puzzle-piece"></i>專業知識</a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>"><i class="fa fa-fw fa-puzzle-piece"></i>專業知識</a>
         </li>
         <li>
             <a href="qalist.html"><i class="fa fa-fw fa-question"></i>問與答</a>

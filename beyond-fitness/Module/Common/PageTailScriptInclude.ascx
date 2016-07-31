@@ -119,4 +119,52 @@
     })();
 
 </script>
+<script>
+            //-----月曆模組------//
+        $('.form_datetime').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+        $('.form_date').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('.form_time').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            todayBtn: 0,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 0,
+            maxView: 2,
+            forceParse: 0,
+            minuteStep: 30,
+            startDate: '<%= DateTime.Today.AddHours(8).ToString("yyyy-MM-dd HH:mm") %>',
+            showMeridian: false
+        });
+
+        $('.form_month').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            //todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 3,
+            minView: 3,
+            forceParse: 0
+        });
+</script>
 

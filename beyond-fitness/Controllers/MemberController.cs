@@ -26,7 +26,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult ListAll()
+        public ActionResult ListCoaches()
         {
             MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
             if(viewModel==null)
@@ -37,7 +37,8 @@ namespace WebHome.Controllers
                 };
                 HttpContext.SetCacheValue(CachingKey.MembersQuery, viewModel);
             }
-            return View(viewModel);
+
+            return View("ListCoaches",viewModel);
         }
 
         public ActionResult ListLearners(String byName)
@@ -65,7 +66,7 @@ namespace WebHome.Controllers
                 models.Items = models.Items.Where(u => u.UserName.Contains(byName) || u.RealName.Contains(byName));
             }
 
-            return View(models.Items);
+            return View("ListLearners", models.Items);
         }
 
 
@@ -121,7 +122,7 @@ namespace WebHome.Controllers
             models.EntityList.InsertOnSubmit(item);
             models.SubmitChanges();
 
-            return View("LearnerCreated", item);
+            return ListLearners(null);
         }
 
         private String createMemberCode()
@@ -232,7 +233,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             item.LevelID = (int)Naming.MemberStatusDefinition.Deleted;
@@ -249,7 +250,35 @@ namespace WebHome.Controllers
 
             ViewBag.Message = "資料已刪除!!";
 
-            return RedirectToAction("ListAll");
+            return ListLearners(null);
+
+        }
+        public ActionResult DeleteCoach(int uid)
+        {
+
+            UserProfile item = models.EntityList.Where(u => u.UID == uid).FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.Message = "資料錯誤!!";
+                return ListCoaches();
+            }
+
+            item.LevelID = (int)Naming.MemberStatusDefinition.Deleted;
+            models.SubmitChanges();
+
+            try
+            {
+                models.DeleteAny<UserProfile>(u => u.UID == item.UID);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("無法刪除使用者，因其他關聯性資料...\r\n" + ex);
+            }
+
+            ViewBag.Message = "資料已刪除!!";
+
+            return ListCoaches();
 
         }
 
@@ -263,7 +292,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             item.LevelID = (int)Naming.MemberStatusDefinition.Checked;
@@ -271,9 +300,30 @@ namespace WebHome.Controllers
 
             ViewBag.Message = "會員已啟用!!";
 
-            return RedirectToAction("ListAll");
+            return ListLearners(null);
 
         }
+
+        public ActionResult EnableCoach(int id)
+        {
+
+            UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.Message = "資料錯誤!!";
+                return ListCoaches();
+            }
+
+            item.LevelID = (int)Naming.MemberStatusDefinition.Checked;
+            models.SubmitChanges();
+
+            ViewBag.Message = "會員已啟用!!";
+
+            return ListCoaches();
+
+        }
+
 
         public ActionResult EditCoach(int id)
         {
@@ -283,7 +333,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return RedirectToAction("ListCoaches");
             }
 
             var model = new CoachViewModel
@@ -310,7 +360,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             return View(item);
@@ -338,7 +388,7 @@ namespace WebHome.Controllers
             {
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return ListCoaches();
             }
 
             viewModel.Email = viewModel.Email.GetEfficientString();
@@ -373,7 +423,7 @@ namespace WebHome.Controllers
             if (item == null)
             {
                 ViewBag.Message = "資料錯誤!!";
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             var lesson = item.RegisterLesson.OrderByDescending(r => r.RegisterID).FirstOrDefault();
@@ -384,7 +434,8 @@ namespace WebHome.Controllers
                 Phone = item.Phone,
                 RealName = item.RealName,
                 Birthday = item.Birthday,
-                Email = item.PID.IndexOf('@') >= 0 ? item.PID : null
+                Email = item.PID.IndexOf('@') >= 0 ? item.PID : null,
+                MemberStatus = (Naming.MemberStatusDefinition?)item.LevelID
             };
 
 
@@ -409,7 +460,7 @@ namespace WebHome.Controllers
             {
                 ViewBag.Message = "資料錯誤!!";
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             item.RealName = viewModel.RealName;
@@ -431,7 +482,7 @@ namespace WebHome.Controllers
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
 
-            return View("LearnerUpdated", item);
+            return ListLearners(null);
         }
 
         public ActionResult GroupLessons(int id)
@@ -648,7 +699,7 @@ namespace WebHome.Controllers
             if(item==null)
             {
                 ViewBag.Message = "學員資料不存在!!";
-                return RedirectToAction("ListAll");
+                return ListLearners(null);
             }
 
             ViewBag.DataItems = models.GetTable<PDQQuestion>()

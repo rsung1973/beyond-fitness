@@ -117,6 +117,8 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
+        public Naming.MemberStatusDefinition? MemberStatus { get; set; }
+
     }
 
     public class LessonViewModel
