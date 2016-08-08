@@ -9,39 +9,35 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<table class="table">
     <% if (_items != null && _items.Count() > 0)
         {
             foreach (var item in _items)
             { %>
-    <tr class="info">
-        <td width="25">
-            <div>
+                <label class="radio">
                 <input type="radio" name="registerID" value="<%= item.RegisterID %>" />
-                <%= item.UserProfile.RealName %> <%= item.Lessons %>堂課(<%= item.LessonPriceType.Description %>) 
+                <i></i><div><%= item.UserProfile.RealName %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
                 <%  if( item.GroupingMemberCount>1)
                     {   %>
-                    團體[<%= String.Join("、", models.GetTable<GroupingLesson>().Where(g => g.GroupID == item.RegisterGroupID)
-                                     .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != item.RegisterID),
-                                         g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
-                                      .Select(r => r.UserProfile.RealName)) %>]
+                        <li class="fa fa-group"></li>
+                        團體《<%= String.Join("·", models.GetTable<GroupingLesson>().Where(g => g.GroupID == item.RegisterGroupID)
+                                                .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != item.RegisterID),
+                                                    g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
+                                                .Select(r => r.UserProfile.RealName)) %>》
                 <%  }
                     else
                     {   %>
-                    個人
+                        <li class="fa fa-child"></li>
+                        個人
                 <%  } %>
-            </div>
-        </td>
-    </tr>
+                    </div>
+                </label>
+
     <%      }
         }
         else
         { %>
-    <tr>
-        <td>查無相符條件的上課資料!!</td>
-    </tr>
+            查無相符條件的上課資料!!
     <%  } %>
-</table>
 
 
 <script runat="server">

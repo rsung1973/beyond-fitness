@@ -8,41 +8,91 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="form-group has-feedback">
-    <% Html.RenderInput("教練姓名：", "realName", "realName", "請輸入姓名", _modelState, defaultValue: _model.RealName); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState, defaultValue: _model.Email); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("電話：", "phone", "phone", "請輸入市話或手機號碼", _modelState, defaultValue: _model.Phone); %>
-</div>
-
-<div class="form-group has-feedback">
-    <label class="control-label" for="nickname">是否為自由教練：</label>
-    <select name="coachRole" class="form-control" id="coachRole">
-        <option value="3">是</option>
-        <option value="2">否</option>
-    </select>
-</div>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-user"></i>
+                <input type="text" name="realName" id="realName" class="input-lg" placeholder="請輸入員工姓名" value="<%= _model.RealName %>" />
+            </label>
+        </section>
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-prepend fa fa-phone"></i>
+                <input type="tel" name="phone" id="phone" class="input-lg" placeholder="請輸入手機號碼或市話" data-mask="0999999999" value="<%= _model.Phone %>" />
+            </label>
+        </section>
+    </div>
+</fieldset>
+<%  if (ViewBag.CreateNew == null)
+    { %>
+<fieldset>
+    <section>
+        <label class="input">
+            <i class="icon-append fa fa-envelope-o"></i>
+            <input type="email" name="email" id="email" class="input-lg" placeholder="E-mail" value="<%= _model.Email %>" />
+        </label>
+    </section>
+</fieldset>
+<%  } %>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="label">是否為自由教練</label>
+            <div class="inline-group">
+                <label class="radio">
+                    <input type="radio" name="coachRole" value="3" />
+                    <i></i>是</label>
+                <label class="radio">
+                    <input type="radio" name="coachRole" value="2" />
+                    <i></i>否</label>
+                <script>
+                    $(function () {
+                        $('input:radio[name="coachRole"][value="<%= _model.CoachRole %>"]').prop('checked', true);
+                });
+                </script>
+            </div>
+        </section>
+        <%  if (_userProfile.IsSysAdmin())
+            { %>
+        <section class="col col-6">
+            <label class="label">職級</label>
+            <label class="select">
+                <%  Html.RenderPartial("~/Views/Lessons/ProfessionalLevelSelector.ascx", new InputViewModel { Id = "LevelID", Name = "LevelID", DefaultValue = _model.LevelID }); %>
+                <i class="icon-append fa fa-file-word-o"></i>
+            </label>
+        </section>
+        <%  } %>
+    </div>
+</fieldset>
+<fieldset>
+    <section>
+        <label class="label">證照資格</label>
+        <label class="textarea">
+            <i class="icon-append fa fa-certificate"></i>
+            <textarea rows="10" id="description" name="Description"><%= _model.Description %></textarea>
+        </label>
+    </section>
+</fieldset>
 
 <script>
 
     $(function () {
-        $('#realName').val('<%= _model.RealName %>');
-        $('#phone').val('<%= _model.Phone %>');
-        $('#coachRole').val('<%= _model.CoachRole %>');
 
         $('#realName').rules('add', {
             'required': true,
-            'maxlength': 20
+            'maxlength': 20,
+            'messages': {
+                'required': '請輸入員工姓名'
+            }
         });
 
         $('#phone').rules('add', {
             'required': true,
-            'regex': /^[0-9]{6,20}$/
+            'regex': /^[0-9]{6,20}$/,
+            'messages': {
+                'required': '請輸入市話或手機號碼'
+            }
         });
     });
 
@@ -53,11 +103,13 @@
 
     ModelStateDictionary _modelState;
     CoachViewModel _model;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = this.Model as CoachViewModel;
+        _userProfile = Context.GetUser();
     }
 </script>

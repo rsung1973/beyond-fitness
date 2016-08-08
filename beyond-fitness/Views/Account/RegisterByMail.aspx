@@ -192,7 +192,7 @@
                         if (data.result) {
                             $('#authorImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
                         } else {
-                            alert(data.message);
+                            smartAlert(data.message);
                         }
                         //status.hide();
                         //console.log('提交成功');

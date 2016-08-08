@@ -28,7 +28,7 @@
                         if (data.result) {
                             loadResource(<%= DocID %>);
                         } else {
-                            alert(data.message);
+                            smartAlert(data.message);
                         }
                     }
                     //status.hide();
@@ -50,7 +50,7 @@
                     if(data.result) {
                         loadResource(<%= DocID %>);
                     }
-                    alert(data.message);
+                    smartAlert(data.message);
                 });
             }
         });

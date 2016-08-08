@@ -12,74 +12,87 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>新增團體上課學員</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">設定團體上課學員</h4>
         </div>
-        <div class="modal-body">
-            <!-- Stat Search -->
-            <div class="form-group">
-                <label for="exampleInputFile" class="col-md-2 control-label">依姓名：</label>
-                <div class="col-md-6">
-                    <input name="userName" class="form-control" type="text" value="" />
-                </div>
-                <div class="col-md-4">
-                    <a id="btnQuery" class="btn btn-search"><i class="fa fa-search"></i></a>
-                </div>
-
-                <div class="col-md-12" id="userList">
-                    <table class="table">
+        <div class="modal-body bg-color-darken txt-color-white">
+            <form action="<%= VirtualPathUtility.ToAbsolute("~/Member/ApplyGroupLessons") %>" id="add-form" class="smart-form" method="post">
+                <input type="hidden" name="lessonId" value="<%= _model.RegisterID %>" />
+                <fieldset>
+                    <div class="row">
+                        <section class="col col-8">
+                            <label class="input">
+                                <i class="icon-append fa fa-search"></i>
+                                <input type="text" name="userName" maxlength="20" placeholder="請輸入VIP姓名" />
+                            </label>
+                        </section>
+                        <section class="col col-4">
+                            <button id="btnQuery" class="btn bg-color-blue btn-sm" type="button">查詢</button>
+                        </section>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="inline-group" id="userList">
                         <% if (_items.Length > 0)
                             {
-
                                 for (int i = 0; i < (_items.Length + 2) / 3; i++)
                                 { %>
-                        <tr class="info">
-                                <%  for (int j = 0; j < 3; j++)
+                        <%          for (int j = 0; j < 3; j++)
                                     {
                                         if ((i * 3 + j) < _items.Length)
-                                        { %>                              
-                            <td width="25">
-                                <input type="checkbox" name="registerID" value="<%= _items[i * 3 + j].RegisterID %>" <%= _items[i * 3 + j].RegisterGroupID==_model.RegisterGroupID ? "checked" : null %> /></td>
-                            <td><%= _items[i * 3 + j].UserProfile.RealName %></td>
-                                <%      }
-                                        else
                                         { %>
-                            <td width="25"></td><td width="25"></td>
-                                     <% }
+                                            <label class="checkbox">
+                                                <input type="checkbox" name="registerID" value="<%= _items[i * 3 + j].RegisterID %>" <%= _items[i * 3 + j].RegisterGroupID==_model.RegisterGroupID ? "checked" : null %> />
+                                                <i></i><%= _items[i * 3 + j].UserProfile.RealName %></label>
+                        <%              }
                                     } %>
-                        </tr>
-                            <%  }
+                        <%      }
                             }
                             else
                             { %>
-                        <tr><td colspan="3">查無相符條件的上課資料!!</td></tr>
-                           <% } %>
-                    </table>
-                </div>
+                                查無相符條件的上課資料!!
+                        <%  } %>
+                    </div>
+                </fieldset>
 
-                <div class="col-md-12 modal-footer">
-                    <button id="btnGrouping" type="button" class="btn btn-system btn-sm"><span class="fa fa-link" aria-hidden="true"></span>設定</button>
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><span class="fa fa-times" aria-hidden="true"></span>取消</button>
-                </div>
-            </div>
+                <footer>
+                    <button type="button" id="btnGrouping" class="btn btn-primary">
+                        送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                </footer>
+            </form>
         </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>
-<input type="hidden" name="lessonId" value="<%= _model.RegisterID %>" />
+
 <script>
     $('#btnGrouping').on('click', function (evt) {
         var $items = $('input:checkbox[name="registerID"]:checked');
         var memberCount = <%= _model.GroupingMemberCount-1 %>;
         if ($items.length <= 0) {
-            alert('請勾選本次團體課學員!!');
+            $.SmartMessageBox({
+                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 作業訊息",
+                content: "請勾選本次團體課學員!!",
+                buttons: '[關閉]'
+            });
             return;
         } else if($items.length > memberCount) {
-            alert('勾選的學員數超過本次團體課人數!!');
+            $.SmartMessageBox({
+                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 作業訊息",
+                content: "勾選的學員數超過本次團體課人數!!",
+                buttons: '[關閉]'
+            });
             return;
         }
         startLoading();
-        $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/ApplyGroupLessons") %>')
-            .submit();
+        $('#add-form').submit();
     });
 
     $('#btnQuery').on('click',function(evt) {
@@ -106,8 +119,8 @@
         _model = (RegisterLesson)this.Model;
         var models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _items = models.GetTable<RegisterLesson>().Where(l => l.Attended == (int)Naming.LessonStatus.準備上課 && l.ClassLevel == _model.ClassLevel
-            && l.Lessons == _model.Lessons 
-            && l.RegisterID != _model.RegisterID 
+            && l.Lessons == _model.Lessons
+            && l.RegisterID != _model.RegisterID
             && l.GroupingMemberCount == _model.GroupingMemberCount).ToArray();
     }
 

@@ -105,6 +105,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="1favicon.ico" />
     <Content Include="add-blog.htm" />
     <Content Include="add-class-verify.htm" />
     <Content Include="add-class.htm" />
@@ -446,6 +447,8 @@
     <Content Include="equipment-rental.htm" />
     <Content Include="error404.html" />
     <Content Include="error500.html" />
+    <Content Include="favicon.ico" />
+    <Content Include="favicon.png" />
     <Content Include="flot\background.png" />
     <Content Include="flot\custom.css" />
     <Content Include="flot\jquery.colorhelpers.js" />
@@ -637,62 +640,17 @@
     <Content Include="img\colorblind-friendly\pt2.png" />
     <Content Include="img\colorblind-friendly\pt3.png" />
     <Content Include="img\cover.png" />
-    <Content Include="img\demo\64x64.png" />
-    <Content Include="img\demo\basic.png" />
-    <Content Include="img\demo\chat.png" />
-    <Content Include="img\demo\copyright.txt" />
-    <Content Include="img\demo\demo-smartbig-alert.png" />
-    <Content Include="img\demo\demo-smartmedium-alert.png" />
-    <Content Include="img\demo\demo-smartsmall-alert.png" />
-    <Content Include="img\demo\e-comm\1.png" />
-    <Content Include="img\demo\e-comm\2.png" />
-    <Content Include="img\demo\e-comm\3.png" />
-    <Content Include="img\demo\e-comm\4.png" />
-    <Content Include="img\demo\e-comm\5.png" />
-    <Content Include="img\demo\e-comm\6.png" />
-    <Content Include="img\demo\e-comm\7.png" />
-    <Content Include="img\demo\e-comm\8.png" />
-    <Content Include="img\demo\e-comm\9.png" />
-    <Content Include="img\demo\e-comm\detail-1.png" />
-    <Content Include="img\demo\e-comm\detail-2.png" />
-    <Content Include="img\demo\e-comm\detail-3.png" />
-    <Content Include="img\demo\hero.png" />
-    <Content Include="img\demo\image-placeholder-64x64.png" />
-    <Content Include="img\demo\iphoneview.png" />
-    <Content Include="img\demo\layout-skins\layout-collapse-minified.png" />
-    <Content Include="img\demo\layout-skins\layout-collapse.png" />
-    <Content Include="img\demo\layout-skins\layout-hidden.png" />
-    <Content Include="img\demo\layout-skins\layout-menutop.png" />
-    <Content Include="img\demo\layout-skins\layout-rtl-menutop.png" />
-    <Content Include="img\demo\layout-skins\layout-rtl.png" />
-    <Content Include="img\demo\layout-skins\skin-dark.png" />
-    <Content Include="img\demo\layout-skins\skin-default.png" />
-    <Content Include="img\demo\layout-skins\skin-glass.png" />
-    <Content Include="img\demo\layout-skins\skin-google.png" />
-    <Content Include="img\demo\layout-skins\skin-material.png" />
-    <Content Include="img\demo\layout-skins\skin-pixel.png" />
-    <Content Include="img\demo\layout-skins\skin-ultralight.png" />
-    <Content Include="img\demo\m1.jpg" />
-    <Content Include="img\demo\m2.jpg" />
-    <Content Include="img\demo\m3.jpg" />
-    <Content Include="img\demo\newsletter.png" />
-    <Content Include="img\demo\responseimg.png" />
-    <Content Include="img\demo\s1.jpg" />
-    <Content Include="img\demo\s2.jpg" />
-    <Content Include="img\demo\s3.jpg" />
-    <Content Include="img\demo\sa-demo.png" />
-    <Content Include="img\demo\sample.jpg" />
-    <Content Include="img\demo\sidebar.png" />
-    <Content Include="img\demo\sidebarhero.png" />
-    <Content Include="img\demo\site-1.jpg" />
-    <Content Include="img\demo\site-2.jpg" />
-    <Content Include="img\demo\video.png" />
-    <Content Include="img\demo\widget-colorpicker.png" />
     <Content Include="img\dropzone\spritemap%402x.png" />
     <Content Include="img\dropzone\spritemap.png" />
     <Content Include="img\favicon\1favicon.ico" />
+    <Content Include="img\favicon\apple-touch-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="img\favicon\apple-touch-icon.ico" />
     <Content Include="img\favicon\favicon.ico" />
-    <Content Include="img\favicon\favicon.png" />
+    <None Include="img\favicon\favicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="img\flags\de.png" />
     <Content Include="img\flags\es.png" />
     <Content Include="img\flags\flags.png" />
@@ -727,12 +685,12 @@
     <Content Include="img\jqueryui\ui-icons_f0ad4e_256x240.png" />
     <Content Include="img\jqueryui\ui-icons_f6cf3b_256x240.png" />
     <Content Include="img\jqueryui\ui-icons_ffffff_256x240.png" />
+    <Content Include="img\line\linebutton_20x20_zh-hant.png" />
+    <Content Include="img\line\linebutton_30x30_zh-hant.png" />
+    <Content Include="img\line\linebutton_36x60_zh-hant.png" />
+    <Content Include="img\line\linebutton_40x40_zh-hant.png" />
+    <Content Include="img\line\linebutton_84x20_zh-hant.png" />
     <Content Include="img\loading.gif" />
-    <Content Include="img\logo-blacknwhite.png" />
-    <Content Include="img\logo-blue.png" />
-    <Content Include="img\logo-o.png" />
-    <Content Include="img\logo-pale.png" />
-    <Content Include="img\logo-white.png" />
     <Content Include="img\logo.png" />
     <Content Include="img\mappin-default.png" />
     <Content Include="img\minus.png" />
@@ -784,8 +742,6 @@
     <Content Include="img\realestate\5.png" />
     <Content Include="img\realestate\6.png" />
     <Content Include="img\ribbon.png" />
-    <Content Include="img\sa-dark.png" />
-    <Content Include="img\sa-default.png" />
     <Content Include="img\saturation.png" />
     <Content Include="img\select2-spinner.gif" />
     <Content Include="img\slider\bg1.jpg" />
@@ -1437,6 +1393,11 @@
     <Content Include="maillogin.html" />
     <Content Include="map.html" />
     <Content Include="member-manager.htm" />
+    <Content Include="Models\DataEntity\BF.dbml">
+      <SubType>Designer</SubType>
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>BF.designer.cs</LastGenOutput>
+    </Content>
     <Content Include="Module\Common\CommonScriptInclude.ascx" />
     <Content Include="Module\Common\PageTailScriptInclude.ascx" />
     <Content Include="Module\Common\CommonScriptManager.ascx" />
@@ -1471,7 +1432,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fullcalendar-2.8.0\lib\custom\package.json" />
     <Content Include="ajax\demowidget.php" />
-    <Content Include="img\.DS_Store" />
     <Content Include="img\avatars\.DS_Store" />
     <Content Include="img\blogbox\.DS_Store" />
     <Content Include="img\superbox\.DS_Store" />
@@ -1490,6 +1450,9 @@
     <Content Include="js\plugin\ckeditor\skins\moono\readme.md" />
     <Content Include="js\plugin\fullcalendar\.DS_Store" />
     <Content Include="js\plugin\lockscreen\.DS_Store" />
+    <None Include="Models\DataEntity\BF.dbml.layout">
+      <DependentUpon>BF.dbml</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-3.0.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
@@ -1514,6 +1477,8 @@
     <Content Include="updatevip.html" />
     <Content Include="view-coach.htm" />
     <Content Include="view-vip.htm" />
+    <Content Include="Views\Lessons\QueryVip.aspx" />
+    <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\CompleteRegister.aspx" />
     <Content Include="Views\Account\CompleteResetPass.aspx" />
     <Content Include="Views\Account\ForgetPassword.aspx" />
@@ -1560,12 +1525,15 @@
     <Content Include="Views\Layout\Statistics.ascx" />
     <Content Include="Views\Layout\SignOut.ascx" />
     <Content Include="Views\Lessons\BookingByFreeAgent.aspx" />
+    <Content Include="Views\Lessons\DailyBarGraph.ascx" />
+    <Content Include="Views\Lessons\DailyTodoList.ascx" />
     <Content Include="Views\Lessons\DailyBookingMembersByFreeAgent.ascx" />
     <Content Include="Views\Lessons\DailyBookingQuery.ascx" />
     <Content Include="Views\Lessons\DailyFitnessPieView.ascx" />
     <Content Include="Views\Lessons\FitnessGraphView.ascx" />
     <Content Include="Views\Lessons\QueryModalByFreeAgent.ascx" />
     <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
+    <Content Include="Views\Lessons\ProfessionalLevelSelector.ascx" />
     <Content Include="Views\Lessons\TrendGraphView.ascx" />
     <Content Include="Views\Lessons\DailyTrendPieView.ascx" />
     <Content Include="Views\Lessons\VipDay.aspx" />
@@ -1578,7 +1546,6 @@
     <Content Include="Views\Account\LoginTest.aspx" />
     <Content Include="Views\Account\RegisterItem.ascx" />
     <Content Include="Views\Account\RegisterByFB.aspx" />
-    <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\Navigation.ascx" />
     <Content Include="Views\Account\Sample.aspx" />
     <Content Include="Views\Attendance\AddTraining.ascx" />
@@ -1602,50 +1569,54 @@
     <Content Include="Views\Lessons\DailyBookingList.ascx" />
     <Content Include="Views\Lessons\LessonsCalendar.ascx" />
     <Content Include="Views\Account\EditMySelf.aspx" />
+    <Content Include="Views\Account\Vip.aspx" />
+    <Content Include="Views\Member\AddCoach.aspx" />
     <Content Include="Views\Member\AddLearner.aspx" />
-    <Content Include="Views\Member\EditLearner.aspx" />
-    <Content Include="Views\Member\EditLearnerItem.ascx" />
-    <Content Include="Views\Member\LearnerItem.ascx" />
-    <Content Include="Views\Member\LessonsList.ascx" />
-    <Content Include="Views\Member\ListCoaches.aspx" />
-    <Content Include="Views\Member\MemberInfo.ascx" />
-    <Content Include="Views\Member\MemberLessonsInfo.ascx" />
-    <Content Include="Views\Member\PDQInfoByLearner.ascx" />
-    <Content Include="Views\Member\PDQ.aspx" />
-    <Content Include="Views\Member\LearnerCreated.aspx" />
-    <Content Include="Views\Member\GroupLessonUsersSelector.ascx" />
-    <Content Include="Views\Member\LessonsItem.ascx" />
-    <Content Include="Views\Member\GroupLessons.aspx" />
-    <Content Include="Views\Member\GroupLessonUsers.ascx" />
-    <Content Include="Views\Member\PDQItemII.ascx" />
-    <Content Include="Views\Member\PDQItemInfoII.ascx" />
-    <Content Include="Views\Member\PDQQuestionAndAnswerII.ascx" />
-    <Content Include="Views\Member\PDQSingleChoiceII.ascx" />
-    <Content Include="Views\Member\PDQSingleChoice.ascx" />
-    <Content Include="Views\Member\PDQItemInfo.ascx" />
-    <Content Include="Views\Member\PDQYesOrNo.ascx" />
-    <Content Include="Views\Member\PDQQuestionAndAnswer.ascx" />
-    <Content Include="Views\Member\PDQItem.ascx" />
-    <Content Include="Views\Member\GroupingLessonInfo.ascx" />
-    <Content Include="Views\Member\ShowLearner.aspx" />
-    <Content Include="Views\Member\SimpleMemberInfo.ascx" />
-    <Content Include="Views\Member\ShowMember.aspx" />
-    <Content Include="Views\Member\LessonsUpdated.aspx" />
     <Content Include="Views\Member\AddLessons.aspx" />
-    <Content Include="Views\Member\LearnerClassLevel.ascx" />
-    <Content Include="Views\Member\LearnerUpdated.aspx" />
+    <Content Include="Views\Member\CoachCreated.aspx" />
+    <Content Include="Views\Member\CoachInfo.ascx" />
+    <Content Include="Views\Member\CoachItem.ascx" />
+    <Content Include="Views\Member\CoachList.ascx" />
     <Content Include="Views\Member\CoachUpdated.aspx" />
     <Content Include="Views\Member\EditCoach.aspx" />
-    <Content Include="Views\Member\CoachCreated.aspx" />
-    <Content Include="Views\Account\Vip.aspx" />
-    <Content Include="Views\Member\ListLearners.aspx" />
+    <Content Include="Views\Member\EditLearner.aspx" />
+    <Content Include="Views\Member\EditLearnerItem.ascx" />
+    <Content Include="Views\Member\GroupingLessonInfo.ascx" />
+    <Content Include="Views\Member\GroupLessons.aspx" />
+    <Content Include="Views\Member\GroupLessonUsers.ascx" />
+    <Content Include="Views\Member\GroupLessonUsersSelector.ascx" />
+    <Content Include="Views\Member\LearnerArticle.ascx" />
+    <Content Include="Views\Member\LearnerClassLevel.ascx" />
+    <Content Include="Views\Member\LearnerCreated.aspx" />
+    <Content Include="Views\Member\LearnerInfo.ascx" />
+    <Content Include="Views\Member\LearnerItem.ascx" />
     <Content Include="Views\Member\LearnerList.ascx" />
-    <Content Include="Views\Member\CoachList.ascx" />
-    <Content Include="Views\Member\AddCoach.aspx" />
-    <Content Include="Views\Member\CoachItem.ascx" />
-    <Content Include="Views\Member\VipPDQ_1.aspx" />
+    <Content Include="Views\Member\LearnerUpdated.aspx" />
+    <Content Include="Views\Member\LessonsItem.ascx" />
+    <Content Include="Views\Member\LessonsList.ascx" />
+    <Content Include="Views\Member\LessonsUpdated.aspx" />
+    <Content Include="Views\Member\ListCoaches.aspx" />
+    <Content Include="Views\Member\ListLearners.aspx" />
+    <Content Include="Views\Member\MemberLessonsInfo.ascx" />
+    <Content Include="Views\Member\PDQ.aspx" />
+    <Content Include="Views\Member\PDQInfoByLearner.ascx" />
+    <Content Include="Views\Member\PDQItem.ascx" />
+    <Content Include="Views\Member\PDQItemII.ascx" />
+    <Content Include="Views\Member\PDQItemInfo.ascx" />
+    <Content Include="Views\Member\PDQItemInfoII.ascx" />
+    <Content Include="Views\Member\PDQQuestionAndAnswer.ascx" />
+    <Content Include="Views\Member\PDQQuestionAndAnswerII.ascx" />
+    <Content Include="Views\Member\PDQSingleChoice.ascx" />
+    <Content Include="Views\Member\PDQSingleChoiceII.ascx" />
+    <Content Include="Views\Member\PDQYesOrNo.ascx" />
+    <Content Include="Views\Member\RegisterLessonForm.ascx" />
+    <Content Include="Views\Member\ShowLearner.aspx" />
+    <Content Include="Views\Member\ShowMember.aspx" />
+    <Content Include="Views\Member\SimpleMemberInfo.ascx" />
     <Content Include="Views\Member\Test.aspx" />
+    <Content Include="Views\Member\VipPDQ_1.aspx" />
     <Content Include="Views\MyTest\Index.aspx" />
+    <Content Include="Views\MyTest\TestPopup.aspx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />
     <Content Include="Views\Shared\CommonModal.ascx" />
@@ -1704,9 +1675,9 @@
     <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>BF.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\DataEntity\DataEntityExtendsions.cs" />
     <Compile Include="Models\DataEntity\ModelSource.cs" />
@@ -1744,11 +1715,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="template\MainPage.Master" />
-    <Content Include="Models\DataEntity\BF.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>BF.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="CKEditor\skins\moono\readme.md" />
     <Content Include="flot\.DS_Store" />
     <Content Include="js\.DS_Store" />
@@ -1789,11 +1755,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\DataEntity\BF.dbml.layout">
-      <DependentUpon>BF.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

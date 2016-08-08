@@ -217,12 +217,16 @@
                 buttons: '[刪除][取消]'
             }, function (ButtonPressed) {
                 if (ButtonPressed == "刪除") {
-                    $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog")%>', { 'docID': docID }, function (data) {
-                        alert(data.message);
+                    $('<form method="post"/>').appendTo($('body'))
+                        .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog") %>' + '?docID=' + docID)
+                        .submit();
+
+<%--                    $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog")%>', { 'docID': docID }, function (data) {
+                        smartAlert(data.message);
                         if (data.result) {
                             window.location.reload();
                         }
-                    });
+                    });--%>
                 }
             });
         }

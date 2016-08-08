@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<select name="<%= _model.Name ?? "coach" %>" id="<%= _model.Id ?? "coach" %>" class='<%= ViewBag.Inline==true ? "" : "form-control" %>'>
+<select name="<%= _model.Name ?? "coach" %>" id="<%= _model.Id ?? "coach" %>" class='<%= ViewBag.Inline==true ? "" : "input-lg" %>'>
     <%  if (ViewBag.SelectAll == true)
         { %>
             <option value="">全部</option>

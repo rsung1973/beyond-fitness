@@ -15,7 +15,7 @@
     </h1>
     <p class="font-md">關於<%= _model.UserName ?? _model.RealName %>...</p>
     <p>
-        <%= _model.RecentStatus!=null ? _model.RecentStatus.Replace("\r\n","<br/>") : null %>
+        <%= _model.RecentStatus.HtmlBreakLine() %>
     </p>
 </div>
 <div class="col-xs-12 col-sm-3">
@@ -24,11 +24,12 @@
         <li>
             <p class="text-muted">
                 <i class="fa fa-phone"></i>
-                (886) <%= _model.Phone %> </li>
-        </p>
+                (886) <%= _model.Phone %> 
+            </p>
+        </li>
         <li>
             <p class="text-muted">
-                <i class="fa fa-envelope"></i><a href="mailto:<%= _model.PID %>"><%= _model.PID %></a>
+                <i class="fa fa-envelope"></i><a href="mailto:<%= _model.PID.Contains("@") ? _model.PID : null %>"><%= _model.PID.Contains("@") ? _model.PID : null %></a>
             </p>
         </li>
         <li>

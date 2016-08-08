@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
-<div class="form-horizontal modal fade" id="confirmDialog" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
+<%--<div class="form-horizontal modal fade" id="confirmDialog" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,12 +18,12 @@
             </div>
         </div>
     </div>
-</div>
+</div>--%>
 
 <script>
     function confirmIt(message, onConfirm) {
 
-        if (message.title)
+<%--        if (message.title)
             $('#confirmTitle').text(message.title);
         $('#confirmMsg').text(message.message);
         $('#btnConfirmIt').off('click').on('click', function (evt) {
@@ -32,5 +32,15 @@
         });
 
         $('#confirmDialog').modal('show');
+--%>
+            $.SmartMessageBox({
+                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> " + message.title,
+                content: message.message,
+                buttons: '[確定][取消]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed == "確定") {
+                    onConfirm();
+                }
+            });
     }
 </script>

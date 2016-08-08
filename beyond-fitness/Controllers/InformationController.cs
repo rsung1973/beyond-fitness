@@ -62,13 +62,15 @@ namespace WebHome.Controllers
             var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
-                return Redirect("~/Views/Shared/Error.aspx");
+                ViewBag.Message = "資料錯誤!!";
+                return Publish(null);
             }
 
             item.Document.CurrentStep = (int)Naming.DocumentLevelDefinition.已刪除;
             models.SubmitChanges();
 
-            return Json(new { result = true, message = "文件已刪除!!" });
+            ViewBag.Message = "文件已刪除!!";
+            return Publish(null);
 
         }
 
@@ -82,7 +84,7 @@ namespace WebHome.Controllers
             //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
             //.Take(viewModel.PageSize);
 
-            return View(items);
+            return View("Publish",items);
         }
 
         public ActionResult CreateNew()

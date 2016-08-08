@@ -46,6 +46,17 @@ namespace WebHome.Controllers
             return View("Test01", null);
         }
 
+        public ActionResult TestPopup(String message)
+        {
+            if (!String.IsNullOrEmpty(message))
+            {
+                ViewBag.Message = message;
+            }
+            return View("TestPopup", model: message);
+        }
+
+
+
 
     }
 }

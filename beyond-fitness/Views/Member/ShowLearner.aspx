@@ -54,85 +54,7 @@
     <div class="row">
 
 
-        <article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-            <div class="well well-sm bg-color-darken txt-color-white">
-                <div class="row">
-
-                    <div class="col-sm-12">
-                        <div id="myCarousel" class="carousel fade profile-carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
-                                <li data-target="#myCarousel" data-slide-to="2" class=""></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <!-- Slide 1 -->
-                                <div class="item active">
-                                    <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg8.jpg") %>">
-                                </div>
-                                <!-- Slide 2 -->
-                                <div class="item">
-                                    <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg5.jpg") %>">
-                                </div>
-                                <!-- Slide 3 -->
-                                <div class="item">
-                                    <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg6.jpg") %>">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12">
-
-                        <div class="row">
-
-                            <div class="col-xs-4 col-sm-3 profile-pic">
-                                <% _model.RenderUserPicture(Writer, "authorImg"); %>
-                                <div class="padding-10">
-                                    <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> 28歲</span>
-                                    <br />
-                                    <h4 class="font-md"><strong><%= _currentLessons.Sum(c=>c.Lessons) - _currentLessons.Sum(c=>c.LessonTime.Count(l=>l.LessonAttendance!= null)) %> / <%= _currentLessons.Sum(c=>c.Lessons) %></strong>
-                                        <br>
-                                        <small>剩餘/全部 上課數</small></h4>
-                                </div>
-                            </div>
-                            <%  Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <hr />
-                </div>
-                <div class="row no-padding">
-                    <div class="col-sm-12">
-                        <ul class="nav nav-tabs tabs-pull-right">
-                            <li>
-                                <a data-toggle="tab" href="#s2"><i class="fa fa-street-view"></i><span>問卷調查表</span></a>
-                            </li>
-                            <li class="active">
-                                <a data-toggle="tab" href="#s1"><i class="fa fa-credit-card"></i><span>購買上課記錄</span></a>
-                            </li>
-                        </ul>
-                        <div class="tab-content padding-top-10">
-                            <div class="tab-pane fade in active" id="s1">
-                                <div class="row ">
-                                    <div class="col-xs-12 col-sm-12">
-                                        <% Html.RenderPartial("~/Views/Member/LessonsList.ascx", _items); %>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade in" id="s2">
-                                <div class="row">
-                                    <%  ViewBag.DataItems = models.GetTable<PDQQuestion>().OrderBy(q => q.QuestionNo).ToArray();
-                                        Html.RenderPartial("~/Views/Member/PDQInfoByLearner.ascx", _model); %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </article>
+        <%  Html.RenderPartial("~/Views/Member/LearnerArticle.ascx", _model); %>
 
         <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
             <!-- /well -->
@@ -154,18 +76,14 @@
             </div>
         </article>
     </div>
+    
 
-    <script>
-
-    </script>
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
-    IEnumerable<RegisterLesson> _items;
-    IEnumerable<RegisterLesson> _currentLessons;
 
     protected override void OnInit(EventArgs e)
     {
@@ -174,9 +92,6 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
 
-        _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
-            .OrderByDescending(r => r.RegisterID);
-        _currentLessons = _items.Where(i => i.Lessons != i.LessonTime.Count(s => s.LessonAttendance != null));
         ViewBag.ShowOnly = true;
     }
 

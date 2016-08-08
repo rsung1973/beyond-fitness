@@ -19,7 +19,7 @@
 <div id='calendar'></div>
 <script>
     window.onpopstate = function (event) {
-        alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+        smartAlert("location: " + document.location + ", state: " + JSON.stringify(event.state));
     };
 
     $(document).ready(function () {
@@ -59,7 +59,7 @@
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipEvent") %>', { 'lessonDate': lessonDate }, function (data) {
                     if (data) {
                         if (data.result == false) {
-                            alert(data.message);
+                            smartAlert(data.message);
                             return;
                         } else {
                             $(data).appendTo($('#calendar'));
@@ -68,13 +68,13 @@
                 });
             },
             dayClick: function (calEvent, jsEvent, view) {
-                //alert(calEvent);
+                //smartAlert(calEvent);
                 var lessonDate = calEvent.format('YYYY-MM-DD');
                 var $this = $(this);
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipEvent") %>', { 'lessonDate': lessonDate }, function (data) {
                     if (data) {
                         if (data.result == false) {
-                            alert(data.message);
+                            smartAlert(data.message);
                             return;
                         } else {
                             $(data).appendTo($('#calendar'));

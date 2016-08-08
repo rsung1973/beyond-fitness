@@ -54,7 +54,7 @@ namespace WebHome.Helper
         public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, String tagId)
         {
             writer.WriteLine(
-                String.Concat("<img width=\"60\" id=\"", tagId,
+                String.Concat("<img class=\"user-image\" id=\"", tagId,
                 "\" src=\"",
                 pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
                 "\" />"));
@@ -64,6 +64,15 @@ namespace WebHome.Helper
         {
             return String.Join("、", modelState.Keys.Where(k => modelState[k].Errors.Count > 0)
                     .Select(k => /*k + " : " +*/ String.Join("/", modelState[k].Errors.Select(r => r.ErrorMessage))));
+        }
+
+        public static String HtmlBreakLine(this String strVal)
+        {
+            if(strVal != null)
+            {
+                return strVal.Replace("\r\n", "<br/>");
+            }
+            return null;
         }
 
     }

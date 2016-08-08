@@ -49,7 +49,7 @@
                     $('#clockIn').load('<%= VirtualPathUtility.ToAbsolute("~/Account/FreeAgentClockIn") %>', { 'lessonDate': pageParam.lessonDate }, function () { });
 
                 } else {
-                    alert(data.message);
+                    smartAlert(data.message);
                 }
                 $('#loading').css('display', 'none');
             });

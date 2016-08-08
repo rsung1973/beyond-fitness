@@ -174,9 +174,9 @@
                 },
                 success: function (data) {
                     if (data.result) {
-                        alert("資料已儲存!!");
+                        smartAlert("資料已儲存!!");
                     } else {
-                        alert(data.message);
+                        smartAlert(data.message);
                     }
                 },
                 error: function () {

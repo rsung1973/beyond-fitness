@@ -78,7 +78,7 @@
             <div class="well well-sm bg-color-darken txt-color-white padding-10">
                 <h5 class="margin-top-0"><i class="fa fa-tags"></i>熱門關鍵字:</h5>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-lg-6">
                         <ul class="list-unstyled">
                             <li>
                                 <a href=""><span class="badge badge-info">啞鈴訓練</span></a>
@@ -97,7 +97,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-lg-6">
                         <ul class="list-unstyled">
                             <li>
                                 <a href=""><span class="badge badge-info">增強式訓練</span></a>

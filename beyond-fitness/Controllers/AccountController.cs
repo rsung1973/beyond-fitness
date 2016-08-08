@@ -638,7 +638,7 @@ namespace WebHome.Controllers
 
 
 
-        public ActionResult Coach(DateTime? lessonDate,DateTime? endQueryDate)
+        public ActionResult Coach(DateTime? lessonDate,DateTime? endQueryDate,String message = null)
         {
             UserProfile item = HttpContext.GetUser();
             if (item == null)
@@ -650,8 +650,9 @@ namespace WebHome.Controllers
 
             ViewBag.LessonDate = lessonDate;
             ViewBag.EndQueryDate = endQueryDate;
+            ViewBag.Message = message;
 
-            return View(item);
+            return View("Coach",item);
         }
 
         public ActionResult FreeAgent(DateTime? lessonDate, DateTime? endQueryDate)

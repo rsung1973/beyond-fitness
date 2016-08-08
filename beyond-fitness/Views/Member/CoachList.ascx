@@ -33,7 +33,7 @@
                             <td><%= idx %></td>
                             <td><%= item.RealName %></td>
                             <td><%= item.Phone %></td>
-                            <td><%= item.PID %></td>
+                            <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>
                             <td><%= item.MemberCode %></td>
                             <td><%= item.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent ? "是" : "否" %></td>
                             <td>

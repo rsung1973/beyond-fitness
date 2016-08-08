@@ -137,9 +137,17 @@ namespace WebHome.Models.ViewModel
 
         public string Grouping { get; set; }
 
-        [Display(Name = "會員編號")]
         public int MemberCount { get; set; }
 
+        public String Payment { get; set; }
+
+        public int? FeeShared { get; set; }
+
+        public string Installments { get; set; }
+
+        public int? ByInstallments { get; set; }
+
+        public int? AdvisorID { get; set; }
     }
 
 
@@ -171,6 +179,10 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
+
+        public String Description { get; set; }
+
+        public int? LevelID { get; set; }
 
     }
 
@@ -204,6 +216,8 @@ namespace WebHome.Models.ViewModel
         public int Duration { get; set; }
 
         public int? UID { get; set; }
+
+        public int? TrainingBySelf { get; set; }
 
     }
 

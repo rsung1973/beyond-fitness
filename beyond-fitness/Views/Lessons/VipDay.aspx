@@ -237,9 +237,9 @@
         function saveAll() {
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Feedback/") + _model.LessonID %>', $('form').serialize(), function (data) {
                 if (data.result) {
-                    alert("資已更新!!");
+                    smartAlert("資已更新!!");
                 } else {
-                    alert(data.message);
+                    smartAlert(data.message);
                 }
             });
         }

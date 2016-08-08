@@ -59,7 +59,7 @@
     <a tabindex="0" id="test1" data-placement="bottom" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
     <a tabindex="0" id="test2" data-placement="bottom" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
     <div id="test3" style="display:none;">
-        <a onclick="alert('...');">test</a>
+        <a onclick="smartAlert('...');">test</a>
     </div>
 
     <fieldset>

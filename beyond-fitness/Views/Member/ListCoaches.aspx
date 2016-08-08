@@ -67,7 +67,7 @@
                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                            <h2>員工列表</h2>
                            <div class="widget-toolbar">
-                              <a href="addcoach.html" class="btn btn-primary"><i class="fa fa-fw fa-user-plus"></i> 新增員工</a>
+                              <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>"><i class="fa fa-fw fa-user-plus"></i> 新增員工</a>
                            </div>
                         </header>
                         <!-- widget div-->

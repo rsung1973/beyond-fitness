@@ -34,9 +34,9 @@
             if (data.result) {
                 $('#clockIn').load('<%= VirtualPathUtility.ToAbsolute("~/Account/FreeAgentClockIn") %>', { 'coachID': coachID }, function () { });
                 showAttendee(pageParam.lessonDate, pageParam.hour);
-                alert('自由教練打卡完成!!');
+                smartAlert('自由教練打卡完成!!');
             } else {
-                alert(data.message);
+                smartAlert(data.message);
             }
             $('#loading').css('display', 'none');
         });

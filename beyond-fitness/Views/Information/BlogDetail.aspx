@@ -63,7 +63,7 @@
                                 </p>
                                 <em>- <%: _item.AuthorID.HasValue ? _item.UserProfile.UserName : ""  %>
 											<br/>
-                                    <%= _item.AuthorID.HasValue && _item.UserProfile.ServingCoach!=null ? _item.UserProfile.ServingCoach.Description : null %>
+                                    <%= _item.AuthorID.HasValue && _item.UserProfile.ServingCoach!=null ? _item.UserProfile.ServingCoach.Description.HtmlBreakLine() : null %>
                                     </em>
                             </td>
                         </tr>

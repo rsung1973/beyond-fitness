@@ -35,3 +35,42 @@ table.has-columns-hidden>tbody>tr.row-detail>td {
 .smart-form .message i {
     text-align: center;
 }
+
+.user-image {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.smart-form .errormessage {
+    display: none;
+    color: #ff7676;
+}
+
+.smart-form .errormessage i {
+    display: block;
+    margin: 0 auto 20px;
+    width: 81px;
+    height: 81px;
+    border: 1px solid #ff7676;
+    border-radius: 50%;
+    font-size: 30px;
+    line-height: 81px;
+    text-align: center;
+    color: #ff7676;
+}
+
+
+.user-image {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

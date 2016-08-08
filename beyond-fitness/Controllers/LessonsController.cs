@@ -126,7 +126,8 @@ namespace WebHome.Controllers
                 AttendingCoach = viewModel.CoachID,
                 //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
                 ClassTime = viewModel.ClassDate,
-                DurationInMinutes = viewModel.Duration
+                DurationInMinutes = viewModel.Duration,
+                TrainingBySelf = viewModel.TrainingBySelf
             };
 
             var users = checkOverlapedBooking(timeItem, lesson);
@@ -178,7 +179,7 @@ namespace WebHome.Controllers
 
             models.SubmitChanges();
 
-            return RedirectToAction("Coach", "Account");
+            return RedirectToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
         }
 
         public ActionResult BookingByFreeAgent(LessonTimeViewModel viewModel)
@@ -306,19 +307,56 @@ namespace WebHome.Controllers
             //            title = g.Count(),
             //            start = g.Key.ToString("yyyy-MM-dd")
             //        }), JsonRequestBehavior.AllowGet);
-            return Json(models.GetTable<LessonTimeExpansion>()
+
+            var today = DateTime.Today;
+
+            var items = models.GetTable<LessonTimeExpansion>()
                 .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
+                .Where(t=>!t.LessonTime.TrainingBySelf.HasValue || t.LessonTime.TrainingBySelf==0)
                 .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
                 .GroupBy(t => t.ClassDate)
-                .Select(g => new
+                .Select(g => new _calendarEvent
                 {
-                    title = g.Distinct().Count(),
+                    id = "course",
+                    title = g.Distinct().Count().ToString(),
                     start = g.Key.ToString("yyyy-MM-dd"),
-                    color = "#5BC0DE",   // an option!
-                    textColor = "#FFFFFF" // an option!          
-                }), JsonRequestBehavior.AllowGet);
+                    description = "課程訓練",
+                    allDay = true,
+                    className = g.Key < today ? new string[] {"event","bg-color-greenLight"} : new string[] { "event", "bg-color-blue" },
+                    icon = g.Key<today ? "fa-check" : "fa-clock-o"
+                });
+
+            items = items.Concat(models.GetTable<LessonTimeExpansion>()
+                .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
+                .Where(t => t.LessonTime.TrainingBySelf == 1)
+                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .GroupBy(t => t.ClassDate)
+                .Select(g => new _calendarEvent
+                {
+                    id = "self",
+                    title = g.Distinct().Count().ToString(),
+                    start = g.Key.ToString("yyyy-MM-dd"),
+                    description = "自主訓練",
+                    allDay = true,
+                    className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
+                    icon = g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                }));
 
 
+            return Json(items, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        class _calendarEvent
+        {
+            public String id { get; set; }
+            public String title { get; set; }
+            public String start { get; set; }
+            public String description { get; set; }
+            public bool allDay { get; set; }
+            public String[] className { get; set; }
+            public String icon { get; set; }
         }
 
         public ActionResult VipEvents(DateTime start, DateTime end)
@@ -421,10 +459,168 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult DailyBookingList(DateTime lessonDate,DateTime? endQueryDate)
+        public ActionResult DailyBookingListJson(DateTime lessonDate,DateTime? endQueryDate)
+        {
+            Expression<Func<LessonTimeExpansion, bool>> queryExpr = l => true;
+
+            if(endQueryDate.HasValue)
+            {
+                queryExpr = queryExpr.And(l => l.ClassDate >= lessonDate && l.ClassDate < endQueryDate.Value.AddDays(1));
+            }
+            else
+            {
+                queryExpr = l => l.ClassDate == lessonDate;
+            }
+
+            var items = models.GetTable<LessonTimeExpansion>().Where(queryExpr)
+                .GroupBy(l => new { ClassDate = l.ClassDate, Hour = l.Hour });
+
+            return Json(new { data = items
+                .Select(g=>new
+                {
+                    timezone = String.Format("{0:00}:00 - {1:00}:00",g.Key.Hour,g.Key.Hour+1),
+                    count = g.Count(),
+                    booktime = "--",
+                    hour = g.Key.Hour,
+                    function = ""
+                })
+                .ToArray() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DailyBookingList(DateTime lessonDate, DateTime? endQueryDate)
         {
             ViewBag.EndQueryDate = endQueryDate;
             return View(lessonDate);
+        }
+
+
+        public ActionResult DailyTodoList(DateTime lessonDate, DateTime? endQueryDate)
+        {
+            ViewBag.EndQueryDate = endQueryDate;
+            return View(lessonDate);
+        }
+
+        [HttpGet]
+        public ActionResult QueryVip()
+        {
+            ViewBag.ViewModel = new DailyBookingQueryViewModel
+            {
+                DateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                MonthInterval = 1
+            };
+            return View();
+        }
+
+
+        public ActionResult QueryVip(DailyBookingQueryViewModel viewModel)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+
+            HttpContext.SetCacheValue(CachingKey.DailyBookingQuery, viewModel);
+
+            if (viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(l => l.ClassTime >= viewModel.DateFrom.Value);
+                if (viewModel.MonthInterval.HasValue)
+                {
+                    items = items.Where(l => l.ClassTime < viewModel.DateFrom.Value.AddMonths(viewModel.MonthInterval.Value));
+                }
+            }
+            if (viewModel.DateTo.HasValue)
+                items = items.Where(l => l.ClassTime < viewModel.DateTo.Value.AddDays(1));
+
+            if (viewModel.CoachID.HasValue)
+                items = items.Where(l => l.AttendingCoach == viewModel.CoachID);
+
+            if (!string.IsNullOrEmpty(viewModel.UserName))
+            {
+                items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
+            }
+
+            if (item.IsFreeAgent())
+            {
+                items = items.Where(l => l.AttendingCoach == item.UID);
+            }
+
+            return View();
+        }
+
+        public ActionResult QueryBookingList()
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            IQueryable<LessonTime> items = queryBookingLessons(item);
+
+            ViewBag.DataItems = items.Join(models.GetTable<LessonTimeExpansion>(),
+                t => t.LessonID, l => l.LessonID, (t, l) => l);
+
+            return View("DailyBookingList");
+        }
+
+        private IQueryable<LessonTime> queryBookingLessons(UserProfile item)
+        {
+            DailyBookingQueryViewModel viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue(CachingKey.DailyBookingQuery);
+
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+
+            if (viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(l => l.ClassTime >= viewModel.DateFrom.Value);
+                if (viewModel.MonthInterval.HasValue)
+                {
+                    items = items.Where(l => l.ClassTime < viewModel.DateFrom.Value.AddMonths(viewModel.MonthInterval.Value));
+                }
+            }
+            if (viewModel.DateTo.HasValue)
+                items = items.Where(l => l.ClassTime < viewModel.DateTo.Value.AddDays(1));
+
+            if (viewModel.CoachID.HasValue)
+                items = items.Where(l => l.AttendingCoach == viewModel.CoachID);
+
+            if (!string.IsNullOrEmpty(viewModel.UserName))
+            {
+                items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
+            }
+
+            if (item.IsFreeAgent())
+            {
+                items = items.Where(l => l.AttendingCoach == item.UID);
+            }
+
+            return items;
+        }
+
+        public ActionResult QueryBookingPlot()
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            IQueryable<LessonTime> lessons = queryBookingLessons(item);
+
+            var items = lessons.Join(models.GetTable<LessonTimeExpansion>(),
+                t => t.LessonID, l => l.LessonID, (t, l) => l)
+                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .GroupBy(t => t.ClassDate);
+
+            return Json(items.Select(g => new
+            {
+                x = g.Key.ToString("MM/dd"),
+                y = g.Distinct().Count()
+            }).ToArray(), JsonRequestBehavior.AllowGet);
+
         }
 
         public ActionResult DailyBookingQuery(DailyBookingQueryViewModel viewModel)
@@ -487,6 +683,32 @@ namespace WebHome.Controllers
 
             return Json(index.Select(i => new object[] { i.Key, i.Value }).ToArray(), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DailyBookingPlot(DateTime lessonDate)
+        {
+            Dictionary<int, int> index = new Dictionary<int, int>();
+            foreach (int idx in Enumerable.Range(8, 15))
+            {
+                index[idx] = 0;
+            }
+
+            var items = models.GetTable<LessonTimeExpansion>()
+                .Where(t => t.ClassDate == lessonDate)
+                .Select(t => t.Hour).ToList()
+                .GroupBy(t => t);
+
+            foreach (var item in items)
+            {
+                index[item.Key] = item.Count();
+            }
+
+            return Json(index.Select(i => new
+            {
+                x = i.Key,
+                y = i.Value
+            }).ToArray(), JsonRequestBehavior.AllowGet);
+        }
+
 
         class GraphDataItem
         {
@@ -826,12 +1048,14 @@ namespace WebHome.Controllers
             LessonTime item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
             if (item == null)
             {
-                return Json(new { result = false, message = "課程資料不存在!!" }, JsonRequestBehavior.AllowGet);
+                ViewBag.Message = "課程資料不存在!!";
+                return RedirectToAction("Coach", "Account", new { message = "課程資料不存在!!" });
             }
-            else if (item.LessonPlan != null || item.TrainingPlan.Count > 0)
-            {
-                return Json(new { result = false, message = "請先刪除預編課程!!" }, JsonRequestBehavior.AllowGet);
-            }
+            //else if (item.LessonPlan != null || item.TrainingPlan.Count > 0)
+            //{
+            //    ViewBag.Message = "請先刪除預編課程!!";
+            //    return RedirectToAction("Coach", "Account", new { lessonDate = lessonDate, message= "請先刪除預編課程!!" });
+            //}
 
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
             if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
@@ -839,7 +1063,8 @@ namespace WebHome.Controllers
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }
 
-            return Json(new { result = true });
+            ViewBag.Message = "課程預約已取消!!";
+            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassTime.Value.Date ,message = "課程預約已取消!!" });
 
         }
 

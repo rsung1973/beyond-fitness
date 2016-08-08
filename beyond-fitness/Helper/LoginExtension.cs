@@ -132,5 +132,11 @@ namespace WebHome.Helper
         {
             return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent;
         }
+
+        public static bool IsSysAdmin(this UserProfile profile)
+        {
+            return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
+        }
+
     }
 }

@@ -12,13 +12,15 @@
 <table id="dt_basic" class="table table-forum" width="100%">
     <thead>
         <tr>
-            <th data-hide="phone" style="width: 40px"><i class="fa fa-fw fa-calendar-plus-o text-muted hidden-md hidden-sm hidden-xs"></i>時間</th>
+            <th data-hide="phone" style="width: 40px"><i class="fa fa-fw fa-calendar-plus-o text-muted hidden-md hidden-sm hidden-xs"></i>日期</th>
             <th data-class="expand">課程類型</th>
-            <th data-hide="phone">是否為團體課程</th>
-            <th style="width: 120px"><i class="fa fa-fw fa-credit-card text-muted hidden-md hidden-sm hidden-xs"></i>購買/剩餘</th>
+            <th style="width: 80px" data-hide="phone">團體課程</th>
+            <th style="width: 80px">剩餘/購買</th>
+            <th style="width: 80px" data-hide="phone">付款方式</th>
+            <th style="width: 50px" data-hide="phone">分期</th>
             <%  if (ViewBag.ShowOnly != true)
                 { %>
-            <th class="text-center">功能</th>
+            <th style="width: 120px" data-hide="phone">功能</th>
             <%  } %>
         </tr>
     </thead>
@@ -32,27 +34,69 @@
                     <td><%= item.LessonPriceType.Description + " " + item.LessonPriceType.ListPrice %></td>
                     <td>
                         <%  if (item.GroupingMemberCount > 1)
-                            {   
+                            {
                                 var currentGroups = models.GetTable<GroupingLesson>().Where(g => g.GroupID == item.RegisterGroupID)
                                     .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != item.RegisterID), g => g.GroupID,
-                                        r => r.RegisterGroupID, (g, r) => r);   
+                                        r => r.RegisterGroupID, (g, r) => r);
+                                if(currentGroups.Count()>0)
+                                { 
                                 %>
-                                <ul class="list-inline friends-list">
-                                    <%  foreach (var g in currentGroups)
-                                        { %>
-                                            <li>
-                                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + g.UID %>">
-                                                    <% g.UserProfile.RenderUserPicture(Writer, "_" + g.UID ); %><%= g.UserProfile.RealName %></a>
-                                            </li>
-                                    <%  } %>
-                                </ul>
-                        <%  }
+                                    <ul class="list-inline friends-list">
+                                        <%  foreach (var g in currentGroups)
+                                            { %>
+                                                <li>
+                                                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + g.UID %>">
+                                                        <% g.UserProfile.RenderUserPicture(Writer, "_" + g.UID ); %><%= g.UserProfile.RealName %></a>
+                                                </li>
+                                        <%  } %>
+                                    </ul>
+                         <%     }
+                                else
+                                { %>
+                                    尚未設定團體成員
+                        <%      }
+                            }
                             else
                             {   %>
                                 否
                         <%  } %>
                     </td>
-                    <td><%= item.Lessons %> / <%= item.Lessons-item.LessonTime.Count(l=>l.AttendingCoach!= null) %></td>
+                    <td><%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %>/<%= item.Lessons %></td>
+                    <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.Payment=="Cash" ? "現金" : "信用卡" %></td>
+                    <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.ByInstallments > 1 ? item.IntuitionCharge.ByInstallments + "期" : "無" %></td>
+                    <%  if (ViewBag.ShowOnly != true)
+                        { %>
+                            <td>
+                                <%  bool grouping = item.GroupingMemberCount > 1;
+                                    bool newRegistering = item.LessonTime.Count == 0;
+                                    if (grouping || newRegistering)
+                                    {  %>
+                                        <div class="btn-group dropup">
+                                            <button class="btn bg-color-blueLight" data-toggle="dropdown">
+                                                請選擇功能
+                                            </button>
+                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <%  if (grouping)
+                                                    { %>
+                                                        <li>
+                                                            <a onclick="javascript:addGroupingUser(<%= item.RegisterID %>);"><i class="fa fa-fw fa fa-link" aria-hidden="true"></i> 設定團體上課學員</a>
+                                                        </li>
+                                                        <li class="divider"></li>
+                                                <%  }
+                                                    if (newRegistering)
+                                                    { %>
+                                                        <li>
+                                                            <a onclick="javascript:deleteLesson(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                                        </li>
+                                                <%  } %>
+                                            </ul>
+                                        </div>
+                                <%  } %>
+                            </td>
+                    <%  } %>
                 </tr>
         <%  }
         } %>
@@ -94,6 +138,31 @@
 
         /* END BASIC */
     });
+
+    function deleteLesson(lessonID) {
+        $.SmartMessageBox({
+            title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除課程",
+            content: "確定刪除此課程資料?",
+            buttons: '[刪除][取消]'
+        }, function (ButtonPressed) {
+            if (ButtonPressed == "刪除") {
+                $('<form method="post"/>').appendTo($('body'))
+                .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/DeleteLessons") %>' + '?id=' + lessonID)
+                .submit();
+            }
+        });
+    }
+
+    function addGroupingUser(lessonId) {
+        $('#linkgroup').remove();
+        var $modal = $('<div class="modal fade" id="linkgroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+        $('#loading').css('display', 'table');
+        $modal.appendTo($('#content'))
+            .load('<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessonUsers") %>', { 'lessonId': lessonId }, function () {
+                $('#loading').css('display', 'none');
+                $modal.modal('show');
+            });
+    }
 </script>
 <script runat="server">
 

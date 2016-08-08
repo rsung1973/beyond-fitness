@@ -683,7 +683,7 @@
                     var bg = $(this).css("backgroundImage");
                     $("body").css("backgroundImage", bg);
                 } else {
-                    alert('Please select boxed layout');
+                    smartAlert('Please select boxed layout');
                 }
             });
 
