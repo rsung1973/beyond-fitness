@@ -226,6 +226,7 @@
       <Association Name="UserProfile_PDQUserAssessment" Member="PDQUserAssessment" ThisKey="UID" OtherKey="UID" Type="PDQUserAssessment" Cardinality="One" />
       <Association Name="UserProfile_RegisterLesson" Member="RegisterLesson" ThisKey="UID" OtherKey="UID" Type="RegisterLesson" />
       <Association Name="UserProfile_ServingCoach" Member="ServingCoach" ThisKey="UID" OtherKey="CoachID" Type="ServingCoach" Cardinality="One" />
+      <Association Name="UserProfile_UserProfileExtension" Member="UserProfileExtension" ThisKey="UID" OtherKey="UID" Type="UserProfileExtension" Cardinality="One" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -372,6 +373,14 @@
       <Column Name="LevelName" Type="System.String" DbType="NVarChar(16) NOT NULL" CanBeNull="false" />
       <Column Name="GradeIndex" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
       <Association Name="ProfessionalLevel_ServingCoach" Member="ServingCoach" ThisKey="LevelID" OtherKey="LevelID" Type="ServingCoach" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserProfileExtension" Member="UserProfileExtension">
+    <Type Name="UserProfileExtension">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
+      <Column Name="AthleticLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="UserProfile_UserProfileExtension" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

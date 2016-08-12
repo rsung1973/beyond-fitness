@@ -117,6 +117,9 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
+        public String Gender { get; set; }
+        public int? AthleticLevel { get; set; }
+
         public Naming.MemberStatusDefinition? MemberStatus { get; set; }
 
     }
@@ -347,6 +350,7 @@ namespace WebHome.Models.ViewModel
         public String UserName { get; set; }
         public int? CoachID { get; set; }
         public int? MonthInterval { get; set; }
+        public bool? HasQuery { get; set; }
     }
 
     public class MembersQueryViewModel

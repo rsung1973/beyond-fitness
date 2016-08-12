@@ -125,7 +125,7 @@
 
         _items = models.EntityList  //.Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted)
             .Join(models.GetTable<UserRole>()
-                .Where(r => r.RoleID == (int)Naming.RoleID.Coach || r.RoleID == (int)Naming.RoleID.FreeAgent),
+                .Where(r => r.RoleID == (int)Naming.RoleID.Coach || r.RoleID == (int)Naming.RoleID.FreeAgent || r.RoleID == (int)Naming.RoleID.Administrator),
             u => u.UID, r => r.UID, (u, r) => u);
     }
 

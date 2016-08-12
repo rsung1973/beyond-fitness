@@ -54,10 +54,26 @@ namespace WebHome.Helper
         public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, String tagId)
         {
             writer.WriteLine(
-                String.Concat("<img class=\"user-image\" id=\"", tagId,
+                String.Concat("<img id=\"", tagId,
                 "\" src=\"",
                 pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
                 "\" />"));
+        }
+
+        public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, Object htmlAttributes)
+        {
+            if (htmlAttributes != null)
+            {
+                foreach (var item in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))
+                {
+                    writer.AddAttribute(item.Key, (String)item.Value);
+                }
+            }
+
+            writer.AddAttribute("src", pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"));
+            writer.RenderBeginTag(HtmlTextWriterTag.Img);
+            writer.RenderEndTag();
+
         }
 
         public static String ErrorMessage(this ModelStateDictionary modelState)

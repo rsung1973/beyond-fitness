@@ -34,7 +34,8 @@
         </li>
         <li>
             <p class="text-muted">
-                <a href="javascript:void(0);" class="btn bg-color-blueLight btn-xs"><i class="fa fa-envelope-o"></i>Send Message</a>
+                <a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F">
+                    <img alt="用LINE傳送" height="60" src="<%= VirtualPathUtility.ToAbsolute("~/img/line/linebutton_36x60_zh-hant.png") %>" width="36" /></a>
             </p>
         </li>
     </ul>

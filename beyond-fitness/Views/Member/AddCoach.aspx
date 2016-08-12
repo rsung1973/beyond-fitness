@@ -119,15 +119,9 @@
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">
-                            <li>
-                                <a title="員工列表" href="coachlist.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-user-secret fa-stack-1x"></i></span>員工列表</a>
-                            </li>
-                            <li>
-                                <a title="VIP列表" href="viplist.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>VIP列表</a>
-                            </li>
-                            <li>
-                                <a title="我的課程總覽" href="coachdashboard.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-dashboard fa-stack-1x"></i></span>我的課程總覽</a>
-                            </li>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
                         </ul>
                     </p>
                 </ul>

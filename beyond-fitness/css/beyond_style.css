@@ -60,14 +60,21 @@ table.has-columns-hidden>tbody>tr.row-detail>td {
 }
 
 
-.user-image {
+#authorImg {
     width: 30px !important;
     height: 30px !important;
 }
 
+#profileImg {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+
 body.modal-open {
     overflow: hidden;
     position: fixed;
+    width:100%;
 }
 
 .modal-body {

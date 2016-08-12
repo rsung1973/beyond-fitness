@@ -55,7 +55,7 @@
                             <div class="col-md-8 padding-left-0">
                                 <h3 class="margin-top-0"><a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+ Item.DocID.ToString())  %>">《<%# Item.Title %>》 </a>
                                     <br>
-                                    <small class="font-xs"><i>撰文者： <a href="javascript:void(0);"><%# Item.AuthorID.HasValue ? Item.UserProfile.RealName : null %></a></i></small></h3>
+                                    <small class="font-xs"><i>撰文者： <a href="<%# VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + Item.AuthorID %>"><%# Item.AuthorID.HasValue ? Item.UserProfile.RealName : null %></a></i></small></h3>
                                 <p>
                                     <%# getBrief(Item.ArticleContent) %>
                                 </p>

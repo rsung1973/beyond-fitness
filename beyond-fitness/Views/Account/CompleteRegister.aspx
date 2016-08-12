@@ -55,36 +55,14 @@
 
                 <div class="row">
 
-                    <div class="col-sm-12">
-                        <div id="myCarousel" class="carousel fade profile-carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#myCarousel" data-slide-to="1" class=""></li>
-                                <li data-target="#myCarousel" data-slide-to="2" class=""></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <!-- Slide 1 -->
-                                <div class="item active">
-                                    <img src="../img/slider/bg1.jpg" alt="demo user"/>
-                                </div>
-                                <!-- Slide 2 -->
-                                <div class="item">
-                                    <img src="../img/slider/bg2.jpg" alt="demo user">
-                                </div>
-                                <!-- Slide 3 -->
-                                <div class="item">
-                                    <img src="../img/slider/bg3.jpg" alt="demo user">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>
 
                     <div class="col-sm-12">
 
                         <div class="row">
 
                             <div class="col-sm-3 profile-pic">
-                                <% _item.PictureID.RenderUserPicture(this.Writer, "authorImg"); %>
+                                <% _item.PictureID.RenderUserPicture(this.Writer, "profileImg"); %>
                                 <div class="padding-10">
                                     <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _item.YearsOld() %>歲</span>
                                     <br/>
@@ -128,18 +106,11 @@
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">
-                            <li>
-                                <a title="我的足印" href="timeline.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-paw fa-stack-1x"></i></span>我的足印</a>
-                            </li>
-                            <li>
-                                <a title="我的總覽" href="vipdashboard.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-tachometer fa-stack-1x"></i></span>我的總覽</a>
-                            </li>
-                            <li>
-                                <a title="修改資料" href="setting.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-cog fa-stack-1x"></i></span>修改資料</a>
-                            </li>
-                            <li>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>" title="登出"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-out fa-stack-1x"></i></span>登出</a>
-                            </li>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/TimeLine.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditProfile.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Logout.ascx"); %>
                         </ul>
                     </p>
                 </ul>

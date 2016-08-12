@@ -72,13 +72,13 @@
 
         <!-- #MOBILE -->
         <!-- Top menu profile link : this shows only when top menu is active -->
-        <%  if (_model == null)
+        <%  if (_userProfile == null || _userProfile.LevelID == (int)Naming.MemberStatusDefinition.ReadyToRegister)
             {
                 Html.RenderPartial("~/Views/Layout/SignIn.ascx");
             }
             else
             {
-                Html.RenderPartial("~/Views/Layout/SignOut.ascx",_model);
+                Html.RenderPartial("~/Views/Layout/SignOut.ascx",_userProfile);
             }   %>
 
         <!-- logout button -->
@@ -119,14 +119,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    UserProfile _model;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = this.Model as UserProfile;
+        _userProfile = Context.GetUser();
     }
 
 </script>

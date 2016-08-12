@@ -15,15 +15,13 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-eye"></i>
+                <i class="fa fa-user"></i>
             </span>
         </span>
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>人員管理></li>
-            <li>VIP管理</li>
-            <li>檢視VIP</li>
+            <li><%= _userProfile!=null && _userProfile.UID==_model.UID ? "我的" : "教練" %>簡介</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -43,43 +41,59 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-eye"></i>VIP管理
-        <span>>  
-            檢視VIP
-        </span>
+        <i class="fa-fw fa fa-user"></i><%= _userProfile!=null && _userProfile.UID==_model.UID ? "我的" : "教練" %>簡介
     </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
     <div class="row">
 
+        <%  Html.RenderPartial("~/Views/Member/CoachArticle.ascx", _model); %>
 
-        <%  Html.RenderPartial("~/Views/Member/LearnerArticle.ascx", _model); %>
-
-        <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
                 <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
-                <ul class="no-padding no-margin">
-                    <ul class="icons-list">
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_model); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx"); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
-                    </ul>
+                <ul class="no-padding no-margin ">
+                    <p class="no-margin ">
+                        <ul class="icons-list ">
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/TimeLine.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditProfile.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Logout.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Login.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Register.ascx"); %>
+                        </ul>
+                    </p>
                 </ul>
             </div>
+            <!-- /well -->
         </article>
-    </div>
-    
 
+
+    </div>
+
+
+    <script>
+        $(function () {
+            $('.carousel.slide').carousel({
+                interval: 3000,
+                cycle: true
+            });
+            $('.carousel.fade').carousel({
+                interval: 3000,
+                cycle: true
+            });
+        });
+    </script>
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -87,8 +101,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
-
-        ViewBag.ShowOnly = true;
+        _userProfile = Context.GetUser();
     }
 
 

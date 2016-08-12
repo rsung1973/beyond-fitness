@@ -15,11 +15,11 @@
         </a>
         <ul class="dropdown-menu pull-right">
             <li>
-                <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i>Setting</a>
+                <a class="padding-10 padding-top-0 padding-bottom-0" href="<%= VirtualPathUtility.ToAbsolute("~/Account/EditMySelf") %>"><i class="fa fa-cog"></i>Setting</a>
             </li>
             <li class="divider"></li>
             <li>
-                <a href="profile.html" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-user"></i><u>P</u>rofile</a>
+                <a class="padding-10 padding-top-0 padding-bottom-0" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile") %>"><i class="fa fa-user"></i><u>P</u>rofile</a>
             </li>
             <li class="divider"></li>
             <li>

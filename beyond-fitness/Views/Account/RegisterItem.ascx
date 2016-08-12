@@ -9,48 +9,61 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<p><strong>會員編號：</strong><span class="text-primary"><%= _model.MemberCode %></span></p>
-<!-- Divider -->
-<div class="hr5" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState, defaultValue: _model.EMail); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("暱稱：", "userName", "userName", "請輸入暱稱", _modelState, defaultValue: _model.UserName); %>
-</div>
-
-<%--<div class="form-group has-feedback">
-    <label class="control-label" for="classno">生日：</label>
-    <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-        <input id="birthDay" name="birthDay" class="form-control" size="16" type="text" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' readonly>
-        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-envelope-o "></i>
+                <input class="form-control input-lg" maxlength="30" placeholder="請輸入註冊時的E-mail" type="email" name="EMail" id="EMail" value="<%= _model.EMail %>" />
+            </label>
+        </section>
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-user "></i>
+                <input class="form-control input-lg" maxlength="20" placeholder="請輸入暱稱" type="text" name="userName" id="userName" value="<%= _model.UserName %>" />
+            </label>
+        </section>
     </div>
-</div>--%>
+</fieldset>
+<fieldset>
+    <div class="row">
+        <div class="col col-12">
+            <% _model.PictureID.RenderUserPicture(Writer, "profileImg"); %>
+            <div class="input input-file">
+                <span class="button">
+                    <input type="file" id="photopic" name="photopic" onchange="this.parentNode.nextSibling.value = this.value" />瀏覽
+                </span>
+                <input type="text" placeholder="請選擇圖片" readonly="" />
+            </div>
+        </div>
+    </div>
+</fieldset>
 
-<div class="form-group has-feedback">
-    <% Html.RenderInput("頭像：", "photopic", "photopic", "", _modelState, "file"); %>
-</div>
-<div class="author-image">
-    <% _model.PictureID.RenderUserPicture(this.Writer, "authorImg"); %>
-</div>
-
-<% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
-<!-- End Tab Panels -->
+<fieldset>
+    <% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
+</fieldset>
 
 <script>
 
     $(function () {
-        $('#email').rules('add', {
+
+        $('#EMail').rules('add', {
             'required': true,
             'email': true
         });
+
+        $('#userName').rules('add', {
+            'required': true,
+            messages: {
+                'required': '請輸入您的暱稱'
+            }
+        });
+
     });
 
 
     var fileUpload = $('#photopic');
-    var elmt = fileUpload.prev();
+    var elmt = fileUpload.parent();
 
     fileUpload.off('click').on('change', function () {
 
@@ -64,9 +77,9 @@
                     //console.log('提交時');
                 },
                 success: function (data) {
-                    elmt.after(fileUpload);
+                    elmt.append(fileUpload);
                     if (data.result) {
-                        $('#authorImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
+                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
                     } else {
                         smartAlert(data.message);
                     }

@@ -99,7 +99,7 @@
                                                 <section class="col col-6">
                                                     <label class="input input-group">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        <input type="text" name="dateFrom" id="dateFrom" class="form-control input-lg date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起月" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) %>" />
+                                                        <input type="text" name="dateFrom" id="dateFrom" class="form-control input-lg date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起月" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) : null %>" />
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
@@ -171,7 +171,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <% Html.RenderPartial("~/Views/Lessons/LessonsCalendar.ascx", _model); %>
+                                    <%  ViewBag.ByQuery = true;
+                                        Html.RenderPartial("~/Views/Lessons/LessonsCalendar.ascx",
+                                            _viewModel.HasQuery==true 
+                                            ? _lessonDate.HasValue 
+                                                ? _lessonDate.Value 
+                                                : _viewModel.DateFrom 
+                                            : DateTime.Today); %>
 
                                     <!-- end content -->
                                 </div>
@@ -203,7 +209,11 @@
 								-->
                             <header>
                                 <span class="widget-icon"><i class="fa fa-rss text-success"></i></span>
-                                <h2>2016/07/01 - 2016/08/01 </h2>
+                                <h2><%= _viewModel.HasQuery==true 
+                                            ? _lessonDate.HasValue 
+                                                ? _lessonDate.Value.ToString("yyyy/MM/dd") 
+                                                :  String.Format("{0:yyyy/MM/dd} - {1:yyyy/MM/dd}",_viewModel.DateFrom,_viewModel.DateFrom.Value.AddMonths(_viewModel.MonthInterval.Value)) 
+                                            : null %></h2>
 
                                 <ul class="nav nav-tabs pull-right in" id="myTab">
                                     <li class="active">
@@ -245,7 +255,14 @@
                                     <script>
                                         $('a[data-toggle="tab"]').on('shown.bs.tab', function (evt) {
                                             if ($('#s2').css('display') == 'block') {
+                                                <%  if(_lessonDate.HasValue)
+                                                    {             %>
                                                 plotData('<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>');
+                                                <%  }
+                                                    else
+                                                    {   %>
+                                                plotQueryData();
+                                                <%  }   %>
                                             }
                                         });
                                     </script>
@@ -266,27 +283,15 @@
     <!-- End content -->
 
     <script>
-        $('#vip,#m_vip').addClass('active');
-        //$('#theForm').addClass('contact-form');
-
-        function inquire() {
-            <%--        var $modal = $('<div class="form-horizontal modal fade" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
-        $modal.on('hidden.bs.modal', function (evt) {
-            $modal.remove();
-        });
-        $modal.appendTo($('body'))
-            .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryModal") %>', pageParam, function () {
-                    $modal.modal('show');
-                });--%>
-            $('#queryModal').css('display', 'block');
-        }
-
-<%--        $(function () {
-            $('#loading').css('display', 'table');
-            $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembers") %>', { 'lessonDate': '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>' }, function () {
-                $('#loading').css('display', 'none');
+        $(function () {
+            $('#dateFrom').rules('add', {
+                'required': true,
+                'date': true,
+                'messages': {
+                    'required': "請輸入查詢起月"
+                }
             });
-        });--%>
+        });
 
     </script>
 
@@ -348,17 +353,15 @@
 <script runat="server">
 
     ModelSource<UserProfile> models;
-    UserProfile _model;
     DailyBookingQueryViewModel _viewModel;
-    IEnumerable<LessonTime> _items;
+    DateTime? _lessonDate;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
         _viewModel = (DailyBookingQueryViewModel)ViewBag.ViewModel;
-        _items = (IEnumerable<LessonTime>)this.Model;
+        _lessonDate = (DateTime?)ViewBag.LessonDate;
     }
 
 </script>

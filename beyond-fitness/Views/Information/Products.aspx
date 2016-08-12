@@ -91,6 +91,8 @@
                 <img src="../img/superbox/product_24.jpg" data-img="../img/superbox/product_24.jpg" alt="售價：850元/個" title="按摩花生球(大)" class="superbox-img">
             </div><div class="superbox-list">
                 <img src="../img/superbox/product_25.jpg" data-img="../img/superbox/product_25.jpg" alt="售價：30000元/個" title="滑板（3公尺可調式滑板，附一對鞋套）" class="superbox-img">
+            </div><div class="superbox-list">
+                <img src="../img/superbox/product_26.jpg" data-img="../img/superbox/product_26.jpg" alt="售價：1000元/個" title="大型按摩球" class="superbox-img">
             </div>
             <div class="superbox-float"></div>
         </div>

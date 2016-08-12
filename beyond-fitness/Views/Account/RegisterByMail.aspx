@@ -108,7 +108,7 @@
                             <fieldset>
                                 <div class="row">
                                     <div class="col col-12">
-                                        <img src="<%= VirtualPathUtility.ToAbsolute("~/img/avatars/male.png") %>" alt="親愛的" class="online" id="authorImg" width="50" height="50" />
+                                        <img src="<%= VirtualPathUtility.ToAbsolute("~/img/avatars/male.png") %>" alt="親愛的" class="online" id="profileImg" />
                                         <div class="input input-file">
                                             <span class="button">
                                                 <input type="file" id="photopic" name="photopic" onchange="this.parentNode.nextSibling.value = this.value" />瀏覽
@@ -174,9 +174,9 @@
 
 
             var fileUpload = $('#photopic');
-            var elmt = fileUpload.prev();
+            var elmt = fileUpload.parent();
 
-            fileUpload.off('click').on('change', function () {
+            fileUpload.on('change', function () {
 
                 $('<form method="post" id="myForm" enctype="multipart/form-data"></form>')
                 .append(fileUpload).ajaxForm({
@@ -188,9 +188,9 @@
                         //console.log('提交時');
                     },
                     success: function (data) {
-                        elmt.after(fileUpload);
+                        elmt.append(fileUpload);
                         if (data.result) {
-                            $('#authorImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
+                            $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
                         } else {
                             smartAlert(data.message);
                         }

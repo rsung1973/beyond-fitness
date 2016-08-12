@@ -108,7 +108,12 @@ namespace WebHome.Controllers
                 LevelID = (int)Naming.MemberStatusDefinition.ReadyToRegister,
                 RealName = viewModel.RealName,
                 Phone = viewModel.Phone,
-                Birthday = viewModel.Birthday
+                Birthday = viewModel.Birthday,
+                UserProfileExtension = new UserProfileExtension
+                {
+                    Gender = viewModel.Gender,
+                    AthleticLevel = viewModel.AthleticLevel
+                }
             };
 
             item.UserRole.Add(new UserRole
@@ -446,7 +451,8 @@ namespace WebHome.Controllers
                 return ListLearners(null);
             }
 
-            var lesson = item.RegisterLesson.OrderByDescending(r => r.RegisterID).FirstOrDefault();
+            if (item.UserProfileExtension == null)
+                item.UserProfileExtension = new UserProfileExtension { };
 
             var model = new LearnerViewModel
             {
@@ -455,7 +461,9 @@ namespace WebHome.Controllers
                 RealName = item.RealName,
                 Birthday = item.Birthday,
                 Email = item.PID.IndexOf('@') >= 0 ? item.PID : null,
-                MemberStatus = (Naming.MemberStatusDefinition?)item.LevelID
+                MemberStatus = (Naming.MemberStatusDefinition?)item.LevelID,
+                Gender = item.UserProfileExtension.Gender,
+                AthleticLevel = item.UserProfileExtension.AthleticLevel
             };
 
 
@@ -483,6 +491,8 @@ namespace WebHome.Controllers
                 return ListLearners(null);
             }
 
+
+
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
             item.Birthday = viewModel.Birthday;
@@ -497,6 +507,11 @@ namespace WebHome.Controllers
                 }
                 item.PID = viewModel.Email;
             }
+
+            if (item.UserProfileExtension == null)
+                item.UserProfileExtension = new UserProfileExtension { };
+            item.UserProfileExtension.Gender = viewModel.Gender;
+            item.UserProfileExtension.AthleticLevel = viewModel.AthleticLevel;
 
             models.SubmitChanges();
 

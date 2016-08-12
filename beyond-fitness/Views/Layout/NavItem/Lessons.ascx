@@ -14,16 +14,13 @@
         || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent))
     { %>
 <li>
-    <a href="classlist.html" title="課程管理"><i class="fa fa-lg fa-fw fa-calendar"></i><span class="menu-item-parent">課程管理</span></a>
+    <a href="#" title="課程管理"><i class="fa fa-lg fa-fw fa-calendar"></i><span class="menu-item-parent">課程管理</span></a>
     <ul>
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>"><i class="fa fa-fw fa-dashboard"></i>我的課程總覽</a>
         </li>
         <li>
-            <a href="searchvip.html"><i class="fa fa-fw fa-search"></i>我的VIP</a>
-        </li>
-        <li>
-            <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>"><i class="fa fa-fw fa-bookmark"></i>登記上課時間</a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") %>"><i class="fa fa-fw fa-search"></i>我的VIP</a>
         </li>
     </ul>
 </li>

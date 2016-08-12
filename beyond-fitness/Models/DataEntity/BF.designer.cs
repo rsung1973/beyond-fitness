@@ -129,6 +129,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertProfessionalLevel(ProfessionalLevel instance);
     partial void UpdateProfessionalLevel(ProfessionalLevel instance);
     partial void DeleteProfessionalLevel(ProfessionalLevel instance);
+    partial void InsertUserProfileExtension(UserProfileExtension instance);
+    partial void UpdateUserProfileExtension(UserProfileExtension instance);
+    partial void DeleteUserProfileExtension(UserProfileExtension instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -422,6 +425,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<ProfessionalLevel>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserProfileExtension> UserProfileExtension
+		{
+			get
+			{
+				return this.GetTable<UserProfileExtension>();
 			}
 		}
 	}
@@ -4627,6 +4638,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<ServingCoach> _ServingCoach;
 		
+		private EntityRef<UserProfileExtension> _UserProfileExtension;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -4688,6 +4701,7 @@ namespace WebHome.Models.DataEntity
 			this._PDQUserAssessment = default(EntityRef<PDQUserAssessment>);
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
 			this._ServingCoach = default(EntityRef<ServingCoach>);
+			this._UserProfileExtension = default(EntityRef<UserProfileExtension>);
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -5216,6 +5230,35 @@ namespace WebHome.Models.DataEntity
 						value.UserProfile = this;
 					}
 					this.SendPropertyChanged("ServingCoach");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfileExtension", Storage="_UserProfileExtension", ThisKey="UID", OtherKey="UID", IsUnique=true, IsForeignKey=false)]
+		public UserProfileExtension UserProfileExtension
+		{
+			get
+			{
+				return this._UserProfileExtension.Entity;
+			}
+			set
+			{
+				UserProfileExtension previousValue = this._UserProfileExtension.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfileExtension.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfileExtension.Entity = null;
+						previousValue.UserProfile = null;
+					}
+					this._UserProfileExtension.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfile = this;
+					}
+					this.SendPropertyChanged("UserProfileExtension");
 				}
 			}
 		}
@@ -8533,6 +8576,157 @@ namespace WebHome.Models.DataEntity
 		{
 			this.SendPropertyChanging();
 			entity.ProfessionalLevel = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserProfileExtension")]
+	public partial class UserProfileExtension : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _UID;
+		
+		private string _Gender;
+		
+		private System.Nullable<int> _AthleticLevel;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    partial void OnGenderChanging(string value);
+    partial void OnGenderChanged();
+    partial void OnAthleticLevelChanging(System.Nullable<int> value);
+    partial void OnAthleticLevelChanged();
+    #endregion
+		
+		public UserProfileExtension()
+		{
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(8)")]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this.OnGenderChanging(value);
+					this.SendPropertyChanging();
+					this._Gender = value;
+					this.SendPropertyChanged("Gender");
+					this.OnGenderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AthleticLevel", DbType="Int")]
+		public System.Nullable<int> AthleticLevel
+		{
+			get
+			{
+				return this._AthleticLevel;
+			}
+			set
+			{
+				if ((this._AthleticLevel != value))
+				{
+					this.OnAthleticLevelChanging(value);
+					this.SendPropertyChanging();
+					this._AthleticLevel = value;
+					this.SendPropertyChanged("AthleticLevel");
+					this.OnAthleticLevelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserProfileExtension", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.UserProfileExtension = null;
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.UserProfileExtension = this;
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

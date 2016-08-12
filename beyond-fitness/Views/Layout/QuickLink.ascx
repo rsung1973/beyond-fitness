@@ -39,12 +39,7 @@
                     <li>
                         <a title="註冊" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-user fa-stack-1x"></i></span>會員註冊</a>
                     </li>
-                    <%  if (_userProfile == null && !Request.Path.Contains("Account/Login"))
-                        { %>
-                    <li>
-                        <a title="登入" href="<%= FormsAuthentication.LoginUrl %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-in fa-stack-1x"></i></span>登入</a>
-                    </li>
-                    <%  } %>
+                    <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Login.ascx"); %>
                 </ul>
             </p>
         </ul>

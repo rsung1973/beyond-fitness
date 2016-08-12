@@ -252,7 +252,26 @@ namespace WebHome.Controllers
             return View("RegisterByMail", item);
         }
 
-        
+        public ActionResult ViewProfile(int? id)
+        {
+            UserProfile item = HttpContext.GetUser();
+
+            var profile = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
+            if (profile == null)
+                profile = models.GetTable<UserProfile>().Where(u => u.UID == item.UID).First();
+
+            if (profile == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            if (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner)
+                return View("ViewLearner", profile);
+            else
+                return View("ViewCoach", profile);
+        }
+
+
         public ActionResult CompleteRegister(RegisterViewModel viewModel)
         {
             if(!ModelState.IsValid)
@@ -748,7 +767,7 @@ namespace WebHome.Controllers
 
             this.HttpContext.SignOn(item);
 
-            return View("CompleteEditMySelf", item);
+            return View("CompleteRegister", item);
         }
 
 

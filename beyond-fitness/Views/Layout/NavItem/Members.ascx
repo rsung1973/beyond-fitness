@@ -13,7 +13,7 @@
         || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach))
     { %>
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListLearners") %>" title="人員管理"><i class="fa fa-lg fa-fw fa-group"></i><span class="menu-item-parent">人員管理</span></a>
+    <a href="#" title="人員管理"><i class="fa fa-lg fa-fw fa-group"></i><span class="menu-item-parent">人員管理</span></a>
     <ul>
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListLearners") %>"><i class="fa fa-fw fa-user"></i>VIP管理</a>

@@ -15,36 +15,14 @@
     <div class="well well-sm bg-color-darken txt-color-white">
         <div class="row">
 
-            <div class="col-sm-12">
-                <div id="myCarousel" class="carousel fade profile-carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1" class=""></li>
-                        <li data-target="#myCarousel" data-slide-to="2" class=""></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <!-- Slide 1 -->
-                        <div class="item active">
-                            <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg8.jpg") %>">
-                        </div>
-                        <!-- Slide 2 -->
-                        <div class="item">
-                            <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg5.jpg") %>">
-                        </div>
-                        <!-- Slide 3 -->
-                        <div class="item">
-                            <img alt="demo user" src="<%= VirtualPathUtility.ToAbsolute("~/img/slider/bg6.jpg") %>">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>
 
             <div class="col-sm-12">
 
                 <div class="row">
 
                     <div class="col-xs-4 col-sm-3 profile-pic">
-                        <% _model.RenderUserPicture(Writer, "authorImg"); %>
+                        <% _model.RenderUserPicture(Writer, "profileImg"); %>
                         <div class="padding-10">
                             <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>
                             <br />
@@ -129,7 +107,6 @@
     });
 </script>
 
-</asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;

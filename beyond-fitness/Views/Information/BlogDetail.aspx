@@ -51,9 +51,9 @@
                         <tr>
                             <td class="text-center" style="width: 12%;">
                                 <div class="push-bit">
-                                    <a href="profile.html">
-                                        <%  if(_item.AuthorID.HasValue)
-                                                _item.UserProfile.RenderUserPicture(this.Writer, "userImg"); %>
+                                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _item.AuthorID %>">
+                                        <%  if (_item.AuthorID.HasValue)
+                                                _item.UserProfile.PictureID.RenderUserPicture(this.Writer, new { id = "profileImg", @class = "online" }); %>
                                     </a>
                                 </div>
                                 <small><%: _item.AuthorID.HasValue ? _item.UserProfile.UserName : ""  %></small></td>

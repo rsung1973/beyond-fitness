@@ -8,25 +8,53 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-
-<section class="col col-4">
-    <label class="input">
-        <i class="icon-append fa fa-user"></i>
-        <input type="text" name="realName" id="realName" maxlength="20" class="input-lg" placeholder="請輸入VIP姓名" value="<%= _model.RealName %>"/>
-    </label>
-</section>
-<section class="col col-4">
-    <label class="input">
-        <i class="icon-append fa fa-phone"></i>
-        <input type="tel" name="phone" id="phone" maxlength="20" class="input-lg" placeholder="請輸入手機號碼或市話" data-mask="0999999999" value="<%= _model.Phone %>" />
-    </label>
-</section>
-<section class="col col-4">
-    <label class="input input-group" data-link-field="dtp_input1">
-        <i class="icon-append fa fa-calendar"></i>
-        <input type="text" name="birthDay" id="birthDay" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
-    </label>
-</section>
+<fieldset>
+    <div class="row">
+        <section class="col col-4">
+            <label class="input">
+                <i class="icon-append fa fa-user"></i>
+                <input type="text" name="realName" id="realName" maxlength="20" class="input-lg" placeholder="請輸入VIP姓名" value="<%= _model.RealName %>" />
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input">
+                <i class="icon-append fa fa-phone"></i>
+                <input type="tel" name="phone" id="phone" maxlength="20" class="input-lg" placeholder="請輸入手機號碼或市話" data-mask="0999999999" value="<%= _model.Phone %>" />
+            </label>
+        </section>
+        <section class="col col-4">
+            <label class="input input-group" data-link-field="dtp_input1">
+                <i class="icon-append fa fa-calendar"></i>
+                <input type="text" name="birthDay" id="birthDay" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
+            </label>
+        </section>
+    </div>
+</fieldset>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="label">性別</label>
+            <label class="select">
+                <select class="input-lg" name="Gender" id="Gender">
+                    <option value="M">男</option>
+                    <option value="F">女</option>
+                </select>
+                <i class="icon-append fa fa-file-word-o"></i>
+            </label>
+        </section>
+        <section class="col col-6">
+            <label class="label">是否為運動員</label>
+            <div class="inline-group">
+                <label class="radio">
+                    <input type="radio" name="AthleticLevel" value="1" />
+                    <i></i>是</label>
+                <label class="radio">
+                    <input type="radio" name="AthleticLevel" value="0" checked="checked" />
+                    <i></i>否</label>
+            </div>
+        </section>
+    </div>
+</fieldset>
 
 <%--<% Html.RenderPartial("~/Views/Member/LessonsItem.ascx", _model);  %>--%>
 

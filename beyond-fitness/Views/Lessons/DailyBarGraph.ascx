@@ -49,7 +49,7 @@
 
     function plotQueryData() {
 
-        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingPlot") %>', { }, function (data) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryBookingPlot") %>', { }, function (data) {
 
             if ($('#bar-graph').length) {
 
