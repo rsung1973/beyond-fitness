@@ -785,7 +785,7 @@ namespace WebHome.Controllers
             return View();
         }
 
-        public ActionResult PDQ(int id)
+        public ActionResult PDQ(int id, int? groupID)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
@@ -794,19 +794,38 @@ namespace WebHome.Controllers
             }
 
             var item = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
-            if(item==null)
+            if (item == null)
             {
                 ViewBag.Message = "學員資料不存在!!";
                 return ListLearners(null);
             }
 
-            ViewBag.DataItems = models.GetTable<PDQQuestion>()
-                .OrderBy(q => q.QuestionNo)
-                .ToArray();
-            return View(item);
+            ViewBag.GroupID = groupID;
+            switch(groupID)
+            {
+                case 1:
+                    ViewBag.Percent = "20%";
+                    return View(item);
+                case 2:
+                    ViewBag.Percent = "40%";
+                    return View("PDQ_All", item);
+                case 3:
+                    ViewBag.Percent = "60%";
+                    return View("PDQ_All", item);
+                case 4:
+                    ViewBag.Percent = "80%";
+                    return View("PDQ_All", item);
+                case 5:
+                    ViewBag.Percent = "95%";
+                    return View("PDQ_All", item);
+                case 6:
+                    return View("PDQ_Final", item);
+                default:
+                    return View(item);
+            }
         }
 
-        public ActionResult UpdatePDQ(int id,int? goalID, int? styleID, int? levelID)
+        public ActionResult UpdatePDQ(int id,int groupID,int? goalID, int? styleID, int? levelID)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
@@ -820,7 +839,11 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "學員資料不存在!!" });
             }
 
-            models.ExecuteCommand("delete PDQTask where UID = {0}", item.UID);
+            models.ExecuteCommand(@"
+                DELETE FROM PDQTask
+                FROM     PDQTask INNER JOIN
+                                PDQQuestion ON PDQTask.QuestionID = PDQQuestion.QuestionID
+                WHERE   (PDQTask.UID = {0}) AND (PDQQuestion.GroupID = {1})", item.UID, groupID);
 
             foreach (var key in Request.Form.AllKeys.Where(k => Regex.IsMatch(k, "_\\d")))
             {

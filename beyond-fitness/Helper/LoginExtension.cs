@@ -25,6 +25,7 @@ namespace WebHome.Helper
             /// process sign-on user profile
             /// 
             var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
+            var auth = profile.UserRoleAuthorization.Select(r => r.UserRoleDefinition).ToArray();
         }
 
         public static void ClearCache(this HttpContextBase context)
@@ -96,6 +97,10 @@ namespace WebHome.Helper
                     profile = context.User.Identity.Name.getLoginUser();
                     context.SetCacheValue("userProfile", profile);
                 }
+                //else
+                //{
+                //    FormsAuthentication.RedirectToLoginPage();
+                //}
             }
             return profile;
         }
@@ -108,6 +113,7 @@ namespace WebHome.Helper
                 if (profile != null)
                 {
                     var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
+                    var auth = profile.UserRoleAuthorization.Select(r => r.UserRoleDefinition).ToArray();
                 }
                 return profile;
             }
@@ -124,6 +130,10 @@ namespace WebHome.Helper
                     profile = context.User.Identity.Name.getLoginUser();
                     context.SetCacheValue("userProfile", profile);
                 }
+                //else
+                //{
+                //    FormsAuthentication.RedirectToLoginPage();
+                //}
             }
             return profile;
         }
@@ -137,6 +147,12 @@ namespace WebHome.Helper
         {
             return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
         }
+
+        public static bool IsAuthorizedSysAdmin(this UserProfile profile)
+        {
+            return profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Administrator);
+        }
+
 
     }
 }

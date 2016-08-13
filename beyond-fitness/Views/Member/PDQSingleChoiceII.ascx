@@ -8,34 +8,15 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<tr class="warning">
-    <td>
-        <%  if (ViewBag.AdditionalTitle == null)
-            { %>
-                <span class="fa fa-commenting"><%= _model.Question %></span>
-        <%  }
-            else
-            { %>
-                <span class="fa fa-commenting"><%= ViewBag.AdditionalTitle %></span>
-                <p><%= _model.Question %></p>
-        <%  } %>
-        <div class="form-group has-feedback">
-            <%  foreach (var item in _model.PDQSuggestion)
-                { %>
-            <div class="radio">
-                <label>
-                    <input type="radio" name='<%= "_" + _model.QuestionID %>' value="<%= item.SuggestionID %>"><%= item.Suggestion %></label>
+    <section class="bg-color-pinkDark">
+        <label class="label font-md"><%= _model.Question %></label>
+        <div class="row">
+            <div class="col col-12">
+                <%  Html.RenderPartial("~/Views/Member/PDQSingleChoiceItem.ascx", _model); %>
             </div>
-            <%  } 
-                if(_item!=null && _item.SuggestionID.HasValue)
-                {   %>
-                    <script>
-                        $('input[name="<%= "_" + _model.QuestionID %>"][value="<%= _item.SuggestionID %>"]').prop('checked', true);
-                    </script>
-        <%      }   %>
         </div>
-    </td>
-</tr>
+    </section>
+
 
 <script runat="server">
 

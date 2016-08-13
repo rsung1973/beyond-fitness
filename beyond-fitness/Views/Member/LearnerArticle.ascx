@@ -15,7 +15,7 @@
     <div class="well well-sm bg-color-darken txt-color-white">
         <div class="row">
 
-            <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>
+<%--            <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
 
             <div class="col-sm-12">
 
@@ -48,10 +48,13 @@
                                     <i class="fa fa-calendar-plus-o"></i>
                                 </span>新增課數
                             </button>
-                    <%  } %>
+                    <%  }
+                        if (ViewBag.ShowPDQ != false)
+                        { %>
                     <li>
                         <a data-toggle="tab" href="#s2"><i class="fa fa-street-view"></i><span>問卷調查表</span></a>
                     </li>
+                    <%  } %>
                     <li class="active">
                         <a data-toggle="tab" href="#s1"><i class="fa fa-credit-card"></i><span>購買上課記錄</span></a>
                     </li>
@@ -64,12 +67,14 @@
                             </div>
                         </div>
                     </div>
+                    <%  if (ViewBag.ShowPDQ != false)
+                        { %>
                     <div class="tab-pane fade in" id="s2">
                         <div class="row">
-                            <%  ViewBag.DataItems = models.GetTable<PDQQuestion>().OrderBy(q => q.QuestionNo).ToArray();
-                                Html.RenderPartial("~/Views/Member/PDQInfoByLearner.ascx", _model); %>
+                            <%  Html.RenderPartial("~/Views/Member/PDQInfoByLearner.ascx", _model); %>
                         </div>
                     </div>
+                    <%  } %>
                 </div>
             </div>
         </div>

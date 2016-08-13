@@ -6,6 +6,7 @@
       <Column Name="SiteMenu" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="Role" Type="System.String" DbType="NVarChar(16) NOT NULL" CanBeNull="false" />
       <Association Name="UserRoleDefinition_UserRole" Member="UserRole" ThisKey="RoleID" OtherKey="RoleID" Type="UserRole" />
+      <Association Name="UserRoleDefinition_UserRoleAuthorization" Member="UserRoleAuthorization" ThisKey="RoleID" OtherKey="RoleID" Type="UserRoleAuthorization" />
     </Type>
   </Table>
   <Table Name="dbo.Document" Member="Documents">
@@ -37,9 +38,9 @@
       <Association Name="LevelExpression_LessonPriceType" Member="LessonPriceType" ThisKey="LevelID" OtherKey="Status" Type="LessonPriceType" />
       <Association Name="LevelExpression_TrainingPlan" Member="TrainingPlan" ThisKey="LevelID" OtherKey="PlanStatus" Type="TrainingPlan" />
       <Association Name="LevelExpression_UserProfile" Member="UserProfile" ThisKey="LevelID" OtherKey="LevelID" Type="UserProfile" />
-      <Association Name="LevelExpression_PDQQuestion" Member="PDQQuestion" ThisKey="LevelID" OtherKey="QuestionType" Type="PDQQuestion" />
       <Association Name="LevelExpression_PDQType" Member="PDQType" ThisKey="LevelID" OtherKey="TypeID" Type="PDQType" />
       <Association Name="LevelExpression_RegisterLesson" Member="RegisterLesson" ThisKey="LevelID" OtherKey="Attended" Type="RegisterLesson" />
+      <Association Name="LevelExpression_PDQQuestion" Member="PDQQuestion" ThisKey="LevelID" OtherKey="QuestionType" Type="PDQQuestion" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -227,6 +228,7 @@
       <Association Name="UserProfile_RegisterLesson" Member="RegisterLesson" ThisKey="UID" OtherKey="UID" Type="RegisterLesson" />
       <Association Name="UserProfile_ServingCoach" Member="ServingCoach" ThisKey="UID" OtherKey="CoachID" Type="ServingCoach" Cardinality="One" />
       <Association Name="UserProfile_UserProfileExtension" Member="UserProfileExtension" ThisKey="UID" OtherKey="UID" Type="UserProfileExtension" Cardinality="One" />
+      <Association Name="UserProfile_UserRoleAuthorization" Member="UserRoleAuthorization" ThisKey="UID" OtherKey="UID" Type="UserRoleAuthorization" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -238,19 +240,6 @@
       <Column Name="GoalID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Goal" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Association Name="GoalAboutPDQ_PDQUserAssessment" Member="PDQUserAssessment" ThisKey="GoalID" OtherKey="GoalID" Type="PDQUserAssessment" />
-    </Type>
-  </Table>
-  <Table Name="dbo.PDQQuestion" Member="PDQQuestion">
-    <Type Name="PDQQuestion">
-      <Column Name="QuestionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Question" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
-      <Column Name="QuestionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RightAnswer" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="QuestionNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="PDQQuestion_PDQSuggestion" Member="PDQSuggestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQSuggestion" />
-      <Association Name="PDQQuestion_PDQTask" Member="PDQTask" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQTask" />
-      <Association Name="PDQQuestion_PDQType" Member="PDQType" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQType" Cardinality="One" />
-      <Association Name="LevelExpression_PDQQuestion" Member="LevelExpression" ThisKey="QuestionType" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PDQSuggestion" Member="PDQSuggestion">
@@ -271,9 +260,9 @@
       <Column Name="QuestionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="PDQAnswer" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="YesOrNo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="PDQQuestion_PDQTask" Member="PDQQuestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQQuestion" IsForeignKey="true" />
       <Association Name="PDQSuggestion_PDQTask" Member="PDQSuggestion" ThisKey="SuggestionID" OtherKey="SuggestionID" Type="PDQSuggestion" IsForeignKey="true" />
       <Association Name="UserProfile_PDQTask" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+      <Association Name="PDQQuestion_PDQTask" Member="PDQQuestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQQuestion" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PDQType" Member="PDQType">
@@ -381,6 +370,39 @@
       <Column Name="Gender" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
       <Column Name="AthleticLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="UserProfile_UserProfileExtension" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PDQQuestion" Member="PDQQuestion">
+    <Type Name="PDQQuestion">
+      <Column Name="QuestionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Question" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
+      <Column Name="QuestionType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RightAnswer" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="QuestionNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GroupID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="PDQQuestion_PDQSuggestion" Member="PDQSuggestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQSuggestion" />
+      <Association Name="PDQQuestion_PDQTask" Member="PDQTask" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQTask" />
+      <Association Name="PDQQuestion_PDQType" Member="PDQType" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQType" Cardinality="One" />
+      <Association Name="PDQQuestion_PDQGroup" Member="PDQGroup1" ThisKey="QuestionID" OtherKey="ConclusionID" Type="PDQGroup" />
+      <Association Name="LevelExpression_PDQQuestion" Member="LevelExpression" ThisKey="QuestionType" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="PDQGroup_PDQQuestion" Member="PDQGroup" ThisKey="GroupID" OtherKey="GroupID" Type="PDQGroup" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PDQGroup" Member="PDQGroup">
+    <Type Name="PDQGroup">
+      <Column Name="GroupID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="ConclusionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="PDQGroup_PDQQuestion" Member="PDQQuestion" ThisKey="GroupID" OtherKey="GroupID" Type="PDQQuestion" />
+      <Association Name="PDQQuestion_PDQGroup" Member="PDQQuestion1" ThisKey="ConclusionID" OtherKey="QuestionID" Type="PDQQuestion" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRoleAuthorization" Member="UserRoleAuthorization">
+    <Type Name="UserRoleAuthorization">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="UserProfile_UserRoleAuthorization" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="UserRoleDefinition_UserRoleAuthorization" Member="UserRoleDefinition" ThisKey="RoleID" OtherKey="RoleID" Type="UserRoleDefinition" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

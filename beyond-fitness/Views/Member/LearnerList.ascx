@@ -48,13 +48,20 @@
                         <% if (item.LevelID == (int)Naming.MemberStatusDefinition.Deleted)
                             {   %>
                         <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EnableUser/") + item.UID %>"><i class="fa fa-fw fa fa-calendar-o" aria-hidden="true"></i>啟用</a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EnableUser/") + item.UID %>"><i class="fa fa-fw fa fa-check-square" aria-hidden="true"></i>啟用</a>
                         </li>
+                        <li class="divider"></li>
                         <%  }
                             else
-                            { %>
+                            {
+                                if (_userProfile.IsAuthorizedSysAdmin())
+                                { %>
+                                    <li>
+                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>"><i class="fa fa-fw fa fa-calendar-o" aria-hidden="true"></i>維護上課數</a>
+                                    </li>
+                        <%      } %>
                         <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>"><i class="fa fa-fw fa fa-calendar-o" aria-hidden="true"></i>維護上課數</a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + item.UID %>"><i class="fa fa-fw fa fa-pencil" aria-hidden="true"></i>填寫問卷</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -63,9 +70,6 @@
                         <%  } %>
                         <li>
                             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EditLearner/") + item.UID %>"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
-                        </li>
-                        <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + item.UID %>"><i class="fa fa-fw fa fa-pencil" aria-hidden="true"></i>填寫問卷</a>
                         </li>
                         <li>
                             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + item.UID %>"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>
@@ -89,12 +93,14 @@
 
     ModelSource<UserProfile> models;
     IEnumerable<UserProfile> _items;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _items = (IEnumerable<UserProfile>)this.Model;
+        _userProfile = Context.GetUser();
     }
 
 

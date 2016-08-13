@@ -8,16 +8,13 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<tr class="info">
-    <th><%=  _model.QuestionNo - (int?)ViewBag.Offset %>.<%= _model.Question %></th>
-</tr>
-<tr>
-    <td>
-        <div class="form-group has-feedback">
-            <textarea class="form-control" name='<%= "_" + _model.QuestionID %>' rows="3"><%= _item!=null ? _item.PDQAnswer : null %></textarea>
-        </div>
-    </td>
-</tr>
+<section>
+    <label class="label font-md"><%=  _model.QuestionNo %>.<%= _model.Question %></label>
+    <label class="input">
+        <i class="icon-append fa fa-comment-o"></i>
+        <input type="text" name="<%= "_" + _model.QuestionID %>" class="input-lg" placeholder="最多僅輸入50個中英文字" maxlength="50" value="<%= _item!=null ? _item.PDQAnswer : null %>" />
+    </label>
+</section>
 
 
 <script runat="server">

@@ -1495,6 +1495,7 @@
     <Content Include="Views\Layout\QuickLinkItem\EditProfile.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Logout.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Overview.ascx" />
+    <Content Include="Views\Lessons\BookingByCoach.aspx" />
     <Content Include="Views\Lessons\QueryBookingList.ascx" />
     <Content Include="Views\Lessons\QueryVip.aspx" />
     <Content Include="Views\Account\Coach.aspx" />
@@ -1577,7 +1578,6 @@
     <Content Include="Views\Lessons\AddTrainingItem.ascx" />
     <Content Include="Views\Lessons\EditTrainingItemList.ascx" />
     <Content Include="Views\Lessons\TrainingPlan.aspx" />
-    <Content Include="Views\Lessons\BookingByCoach.aspx" />
     <Content Include="Views\Lessons\CoachSelector.ascx" />
     <Content Include="Views\Lessons\Attendee.ascx" />
     <Content Include="Views\Lessons\AttendeeSelector.ascx" />
@@ -1589,6 +1589,7 @@
     <Content Include="Views\Member\AddCoach.aspx" />
     <Content Include="Views\Member\AddLearner.aspx" />
     <Content Include="Views\Member\AddLessons.aspx" />
+    <Content Include="Views\Member\CoachArticle.ascx" />
     <Content Include="Views\Member\CoachCreated.aspx" />
     <Content Include="Views\Member\CoachInfo.ascx" />
     <Content Include="Views\Member\CoachItem.ascx" />
@@ -1614,8 +1615,9 @@
     <Content Include="Views\Member\ListCoaches.aspx" />
     <Content Include="Views\Member\ListLearners.aspx" />
     <Content Include="Views\Member\MemberLessonsInfo.ascx" />
-    <Content Include="Views\Member\PDQ.aspx" />
     <Content Include="Views\Member\PDQInfoByLearner.ascx" />
+    <Content Include="Views\Member\PDQ_All.aspx" />
+    <Content Include="Views\Member\PDQ.aspx" />
     <Content Include="Views\Member\PDQItem.ascx" />
     <Content Include="Views\Member\PDQItemII.ascx" />
     <Content Include="Views\Member\PDQItemInfo.ascx" />
@@ -1624,10 +1626,11 @@
     <Content Include="Views\Member\PDQQuestionAndAnswerII.ascx" />
     <Content Include="Views\Member\PDQSingleChoice.ascx" />
     <Content Include="Views\Member\PDQSingleChoiceII.ascx" />
+    <Content Include="Views\Member\PDQSingleChoiceItem.ascx" />
+    <Content Include="Views\Member\PDQ_Final.aspx" />
     <Content Include="Views\Member\SimpleMemberInfo.ascx" />
     <Content Include="Views\Member\PDQYesOrNo.ascx" />
     <Content Include="Views\Member\RegisterLessonForm.ascx" />
-    <Content Include="Views\Member\CoachArticle.ascx" />
     <Content Include="Views\Member\ShowLearner.aspx" />
     <Content Include="Views\Account\ViewCoach.aspx" />
     <Content Include="Views\Member\ShowMember.aspx" />

@@ -54,7 +54,8 @@
     <div class="row">
 
 
-        <%  Html.RenderPartial("~/Views/Member/LearnerArticle.ascx", _model); %>
+        <%  ViewBag.ShowPDQ = false;
+            Html.RenderPartial("~/Views/Member/LearnerArticle.ascx", _model); %>
 
         <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
             <!-- /well -->
@@ -64,7 +65,7 @@
                     <ul class="icons-list">
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_model); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
                     </ul>
                 </ul>

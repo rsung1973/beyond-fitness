@@ -25,7 +25,7 @@
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = this.Model as UserProfile;
+        _userProfile = Context.GetUser();
     }
 
 </script>

@@ -18,7 +18,18 @@
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="formContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+            <span class="sr-only">40% Complete (success)</span>
+        </div>
+    </div>
+    <div class="widget-toolbar">
+
+        <div class="progress progress-striped active" rel="tooltip" data-original-title="20%" data-placement="bottom">
+            <div class="progress-bar progress-bar-success" role="progressbar" style="width: 20%">20%</div>
+        </div>
+
+    </div>
 
     <uc1:LockScreen runat="server" ID="LockScreen" />
 
