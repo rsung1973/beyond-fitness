@@ -10,9 +10,7 @@
 <%@ Import Namespace="Newtonsoft.Json" %>
 
 
-<div class="pie-container">
-    <div id="fitnessholder" class="pie-placeholder"></div>
-</div>
+    <div id="fitnessholder" class="chart-large has-legend-unique"></div>
 
 <script>
 

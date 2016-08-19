@@ -50,11 +50,11 @@
                 <h3>若您已有會員編號，第一次登入請先 
 					<button type="button" name="submit" class="btn bg-color-blueDark" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>');">註冊 <i class="fa fa-user" aria-hidden="true" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>');"></i></button>
                 </h3>
-                <p>
+                <%--<p>
                     <button type="button" id="btnFB" name="fblogin" class="btn bg-color-blue btn-lg btn-block">
                         使用 Facebook 登入 <i class="fa fa-facebook" aria-hidden="true"></i>
                     </button>
-                </p>
+                </p>--%>
                 <p>
                     <button type="button" name="fblogin" class="btn bg-color-yellow btn-lg btn-block" onclick="javascript:(window.location.href='<%= VirtualPathUtility.ToAbsolute("~/Account/LoginByMail") %>');">
                         使用 Email 登入 <i class="fa fa-envelope-o" aria-hidden="true"></i>
@@ -140,9 +140,9 @@
             //
             // These three cases are handled in the callback function.
 
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
+            //FB.getLoginStatus(function (response) {
+            //    statusChangeCallback(response);
+            //});
 
         };
 

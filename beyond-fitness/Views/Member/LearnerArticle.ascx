@@ -21,16 +21,7 @@
 
                 <div class="row">
 
-                    <div class="col-xs-4 col-sm-3 profile-pic">
-                        <% _model.RenderUserPicture(Writer, "profileImg"); %>
-                        <div class="padding-10">
-                            <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>
-                            <br />
-                            <h4 class="font-md"><strong><%= _currentLessons.Sum(c=>c.Lessons) - _currentLessons.Sum(c=>c.LessonTime.Count(l=>l.LessonAttendance!= null)) %> / <%= _currentLessons.Sum(c=>c.Lessons) %></strong>
-                                <br/>
-                                <small>剩餘/全部 上課數</small></h4>
-                        </div>
-                    </div>
+                    <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model); %>
                     <%  Html.RenderPartial("~/Views/Member/LearnerInfo.ascx", _model); %>
                 </div>
             </div>
@@ -130,7 +121,9 @@
         _model = (UserProfile)this.Model;
         _viewModel = (LessonViewModel)ViewBag.ViewModel;
 
-        _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
+        _items = models.GetTable<RegisterLesson>()
+            .Where(r=>r.ClassLevel.HasValue)
+            .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
         _currentLessons = _items.Where(i => i.Lessons != i.LessonTime.Count(s => s.LessonAttendance != null));
     }

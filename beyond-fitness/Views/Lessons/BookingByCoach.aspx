@@ -13,80 +13,183 @@
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-bookmark"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>課程管理></li>
+            <li>登記上課時間</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-bookmark"></i>課程管理
+							<span>>  
+								登記上課時間
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>填寫登記資訊 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-5">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-calendar-plus-o"> 登記上課時間</span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
-
-                    <div class="blog-post quote-post">
-                        <div class="form-group has-feedback">
-                            <% 
-                                var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
-                                if (ViewBag.DefaultCoach != null)
-                                    inputItem.DefaultValue = ViewBag.DefaultCoach;
-                                Html.RenderPartial("~/Views/Lessons/CoachSelector.ascx", inputItem); %>
-                        </div>
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="classno">學員：</label>
-                            <label class="control-label" for="classno">
-                                <div id="attendee"></div>
-                            </label>
-                            <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
-                            <a onclick="addUser();" class="btn btn-system btn-small">查詢 <i class="fa fa-search-plus" aria-hidden="true"></i></a>
-                        </div>
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="classno">日期、時段：</label>
-                            <div class="input-group date form_time" data-date="" data-date-format="yyyy/mm/dd hh:ii" data-link-field="dtp_input1">
-                                <input id="classDate" name="classDate" class="form-control" size="16" type="text" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd") %>" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                            </div>
-                        </div>
-
-<%--                        <div class="form-group">
-                            <label for="exampleInputFile" class="control-label">上課時段：</label>
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="input-group date form_time" data-date="" data-date-format="hh:ii" data-link-field="dtp_input1">
-                                        <input id="classTime" name="classTime" class="form-control" size="16" type="text" value="<%= String.Format("{0:00}:{1:00}",_viewModel.ClassTime.Hours,_viewModel.ClassTime.Minutes) %>" readonly>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--%>
-                        <div class="form-group">
-                            <label for="exampleInputFile" class="control-label">課程時間：</label>
-                            <select name="duration">
-                                <option value="60" <%= _viewModel.Duration==60 ? "checked": null %>>1 小時</option>
-                                <option value="90" <%= _viewModel.Duration==90 ? "checked": null %>>1.5 小時</option>
-                            </select>
-                        </div>
                     </div>
+                    <!-- end widget edit box -->
 
-                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
-                    <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-                    <!-- End Contact Form -->
+                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>" id="pageForm" class="smart-form" method="post">
+                            <fieldset>
+                                <section>
+                                    <label>是否為自主訓練</label>
+                                    <label class="select">
+                                        <select class="input-lg" name="trainingBySelf">
+                                            <option value="0">否</option>
+                                            <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
+                                        </select>
+                                        <i class="icon-append fa fa-file-word-o"></i>
+                                    </label>
+                                </section>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="select">
+                                            <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
+                                                if (ViewBag.DefaultCoach != null)
+                                                    inputItem.DefaultValue = ViewBag.DefaultCoach;
+                                                Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input">
+                                            <i class="icon-append fa fa-user"></i>
+                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" />
+                                            <div id="attendee"></div>
+                                        </label>
+                                        <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="row" class="col col-6">
+                                    <section class="col col-6">
+                                        <label>請選擇上課時段</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="classDate" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label>請選擇上課小時數</label>
+                                        <label class="select">
+                                            <select name="duration" class="input-lg">
+                                                <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>1 小時</option>
+                                                <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>1.5 小時</option>
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                </div>
+
+                            </fieldset>
+                            
+
+                            <footer>
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+                        </form>
+
+                    </div>
+                    <!-- end widget content -->
 
                 </div>
+                <!-- end widget div -->
 
             </div>
-        </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+
+
+        </article>
+        <!-- END COL -->
+
     </div>
-    <!-- End content -->
     
 
     <script>
@@ -104,7 +207,7 @@
             $formValidator.settings.submitHandler = function (form) {
 
                 var $items = $('input[name="registerID"]:checked');
-                if ($items.length <= 0) {
+                if ($items.length <= 0 && $('input[name="UID"]:checked').length<=0) {
                     $('#registerID-error').css('display', 'block');
                     $('#registerID-error').text('請選擇上課學員!!');
                     return;
@@ -135,19 +238,27 @@
           .submit();
         });
 
-        function addUser() {
-            $('form').find('#addUserItem').remove();
-            var $modal = $('<div class="form-horizontal modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
+        function addUser(bySelf) {
+            $('#content').find('#addUserItem').remove();
+            var $modal = $('<div class="modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
             $modal.on('hidden.bs.modal', function (evt) {
                 $modal.remove();
             });
             $('#loading').css('display', 'table');
-            $modal.appendTo($('form'))
-                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
-                    $modal.modal('show');
-                    $('#loading').css('display', 'none');
-                });
-    }
+            if (bySelf == '1') {
+                $modal.appendTo($('#content'))
+                    .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeByVip") %>', null, function () {
+                        $modal.modal('show');
+                        $('#loading').css('display', 'none');
+                    });
+            } else {
+                $modal.appendTo($('#content'))
+                    .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
+                        $modal.modal('show');
+                        $('#loading').css('display', 'none');
+                    });
+            }
+        }
     </script>
 
 </asp:Content>

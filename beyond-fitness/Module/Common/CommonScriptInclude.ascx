@@ -8,8 +8,6 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%  String basePath = VirtualPathUtility.ToAbsolute("~/"); %>
-<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
-<script data-pace-options='{ "restartOnRequestAfter": true }' src="<%= basePath + "js/plugin/pace/pace.min.js" %>"></script>
 
 <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
 <script src="<%= basePath + "Scripts/jquery-2.1.4.min.js" %>"></script>
@@ -23,6 +21,8 @@
 <script src="<%= basePath + "js/plugin/datatables/dataTables.tableTools.min.js" %>"></script>
 <script src="<%= basePath + "js/plugin/datatables/dataTables.bootstrap.min.js" %>"></script>
 <script src="<%= basePath + "js/plugin/datatable-responsive/datatables.responsive.min.js" %>"></script>
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+<script data-pace-options='{ "restartOnRequestAfter": true }' src="<%= basePath + "js/plugin/pace/pace.min.js" %>"></script>
 
 <script>
     var $formValidator;

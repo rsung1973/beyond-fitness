@@ -194,14 +194,14 @@
                                 <div class="widget-body">
                                     <!-- content -->
                                     <div id="myTabContent" class="tab-content">
-                                        <div class="tab-pane fade active widget-body in no-padding-bottom" id="s1">
-                                            <div class="well bg-color-blueDark no-padding">
+                                        <div class="tab-pane fade active in" id="s1">
+                                            <div class="well bg-color-darken">
                                                 <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
                                             </div>
                                         </div>
                                         <!-- end s1 tab pane -->
                                         <div class="tab-pane fade" id="s2">
-                                            <div class="well bg-color-blueDark no-padding">
+                                            <div class="well bg-color-darken">
                                                 <% Html.RenderPartial("~/Views/Lessons/DailyBarGraph.ascx", _lessonDate); %>
                                             </div>
                                             

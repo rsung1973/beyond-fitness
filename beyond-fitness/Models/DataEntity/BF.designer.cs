@@ -69,9 +69,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertTrainingType(TrainingType instance);
     partial void UpdateTrainingType(TrainingType instance);
     partial void DeleteTrainingType(TrainingType instance);
-    partial void InsertLessonPlan(LessonPlan instance);
-    partial void UpdateLessonPlan(LessonPlan instance);
-    partial void DeleteLessonPlan(LessonPlan instance);
     partial void InsertTrainingPlan(TrainingPlan instance);
     partial void UpdateTrainingPlan(TrainingPlan instance);
     partial void DeleteTrainingPlan(TrainingPlan instance);
@@ -81,9 +78,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertLessonTrend(LessonTrend instance);
     partial void UpdateLessonTrend(LessonTrend instance);
     partial void DeleteLessonTrend(LessonTrend instance);
-    partial void InsertTrainingExecution(TrainingExecution instance);
-    partial void UpdateTrainingExecution(TrainingExecution instance);
-    partial void DeleteTrainingExecution(TrainingExecution instance);
     partial void InsertLessonAttendance(LessonAttendance instance);
     partial void UpdateLessonAttendance(LessonAttendance instance);
     partial void DeleteLessonAttendance(LessonAttendance instance);
@@ -111,9 +105,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertTrainingLevelAboutPDQ(TrainingLevelAboutPDQ instance);
     partial void UpdateTrainingLevelAboutPDQ(TrainingLevelAboutPDQ instance);
     partial void DeleteTrainingLevelAboutPDQ(TrainingLevelAboutPDQ instance);
-    partial void InsertTrainingItem(TrainingItem instance);
-    partial void UpdateTrainingItem(TrainingItem instance);
-    partial void DeleteTrainingItem(TrainingItem instance);
     partial void InsertRegisterLesson(RegisterLesson instance);
     partial void UpdateRegisterLesson(RegisterLesson instance);
     partial void DeleteRegisterLesson(RegisterLesson instance);
@@ -138,6 +129,15 @@ namespace WebHome.Models.DataEntity
     partial void InsertUserRoleAuthorization(UserRoleAuthorization instance);
     partial void UpdateUserRoleAuthorization(UserRoleAuthorization instance);
     partial void DeleteUserRoleAuthorization(UserRoleAuthorization instance);
+    partial void InsertLessonPlan(LessonPlan instance);
+    partial void UpdateLessonPlan(LessonPlan instance);
+    partial void DeleteLessonPlan(LessonPlan instance);
+    partial void InsertTrainingExecution(TrainingExecution instance);
+    partial void UpdateTrainingExecution(TrainingExecution instance);
+    partial void DeleteTrainingExecution(TrainingExecution instance);
+    partial void InsertTrainingItem(TrainingItem instance);
+    partial void UpdateTrainingItem(TrainingItem instance);
+    partial void DeleteTrainingItem(TrainingItem instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -274,14 +274,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<LessonPlan> LessonPlan
-		{
-			get
-			{
-				return this.GetTable<LessonPlan>();
-			}
-		}
-		
 		public System.Data.Linq.Table<TrainingPlan> TrainingPlan
 		{
 			get
@@ -303,14 +295,6 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<LessonTrend>();
-			}
-		}
-		
-		public System.Data.Linq.Table<TrainingExecution> TrainingExecution
-		{
-			get
-			{
-				return this.GetTable<TrainingExecution>();
 			}
 		}
 		
@@ -386,14 +370,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<TrainingItem> TrainingItem
-		{
-			get
-			{
-				return this.GetTable<TrainingItem>();
-			}
-		}
-		
 		public System.Data.Linq.Table<RegisterLesson> RegisterLesson
 		{
 			get
@@ -455,6 +431,30 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<UserRoleAuthorization>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonPlan> LessonPlan
+		{
+			get
+			{
+				return this.GetTable<LessonPlan>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TrainingExecution> TrainingExecution
+		{
+			get
+			{
+				return this.GetTable<TrainingExecution>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TrainingItem> TrainingItem
+		{
+			get
+			{
+				return this.GetTable<TrainingItem>();
 			}
 		}
 	}
@@ -2473,8 +2473,6 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<LessonTimeExpansion> _LessonTimeExpansion;
 		
-		private EntityRef<LessonPlan> _LessonPlan;
-		
 		private EntitySet<TrainingPlan> _TrainingPlan;
 		
 		private EntityRef<FitnessAssessment> _FitnessAssessment;
@@ -2482,6 +2480,8 @@ namespace WebHome.Models.DataEntity
 		private EntityRef<LessonTrend> _LessonTrend;
 		
 		private EntityRef<LessonAttendance> _LessonAttendance;
+		
+		private EntityRef<LessonPlan> _LessonPlan;
 		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
@@ -2516,11 +2516,11 @@ namespace WebHome.Models.DataEntity
 		public LessonTime()
 		{
 			this._LessonTimeExpansion = new EntitySet<LessonTimeExpansion>(new Action<LessonTimeExpansion>(this.attach_LessonTimeExpansion), new Action<LessonTimeExpansion>(this.detach_LessonTimeExpansion));
-			this._LessonPlan = default(EntityRef<LessonPlan>);
 			this._TrainingPlan = new EntitySet<TrainingPlan>(new Action<TrainingPlan>(this.attach_TrainingPlan), new Action<TrainingPlan>(this.detach_TrainingPlan));
 			this._FitnessAssessment = default(EntityRef<FitnessAssessment>);
 			this._LessonTrend = default(EntityRef<LessonTrend>);
 			this._LessonAttendance = default(EntityRef<LessonAttendance>);
+			this._LessonPlan = default(EntityRef<LessonPlan>);
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
 			this._ServingCoach1 = default(EntityRef<ServingCoach>);
@@ -2717,35 +2717,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonPlan", Storage="_LessonPlan", ThisKey="LessonID", OtherKey="LessonID", IsUnique=true, IsForeignKey=false)]
-		public LessonPlan LessonPlan
-		{
-			get
-			{
-				return this._LessonPlan.Entity;
-			}
-			set
-			{
-				LessonPlan previousValue = this._LessonPlan.Entity;
-				if (((previousValue != value) 
-							|| (this._LessonPlan.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LessonPlan.Entity = null;
-						previousValue.LessonTime = null;
-					}
-					this._LessonPlan.Entity = value;
-					if ((value != null))
-					{
-						value.LessonTime = this;
-					}
-					this.SendPropertyChanged("LessonPlan");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_TrainingPlan", Storage="_TrainingPlan", ThisKey="LessonID", OtherKey="LessonID")]
 		public EntitySet<TrainingPlan> TrainingPlan
 		{
@@ -2842,6 +2813,35 @@ namespace WebHome.Models.DataEntity
 						value.LessonTime = this;
 					}
 					this.SendPropertyChanged("LessonAttendance");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonPlan", Storage="_LessonPlan", ThisKey="LessonID", OtherKey="LessonID", IsUnique=true, IsForeignKey=false)]
+		public LessonPlan LessonPlan
+		{
+			get
+			{
+				return this._LessonPlan.Entity;
+			}
+			set
+			{
+				LessonPlan previousValue = this._LessonPlan.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonPlan.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonPlan.Entity = null;
+						previousValue.LessonTime = null;
+					}
+					this._LessonPlan.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTime = this;
+					}
+					this.SendPropertyChanged("LessonPlan");
 				}
 			}
 		}
@@ -3357,229 +3357,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonPlan")]
-	public partial class LessonPlan : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _LessonID;
-		
-		private string _Remark;
-		
-		private string _Warming;
-		
-		private string _RecentStatus;
-		
-		private string _EndingOperation;
-		
-		private string _FeedBack;
-		
-		private EntityRef<LessonTime> _LessonTime;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnLessonIDChanging(int value);
-    partial void OnLessonIDChanged();
-    partial void OnRemarkChanging(string value);
-    partial void OnRemarkChanged();
-    partial void OnWarmingChanging(string value);
-    partial void OnWarmingChanged();
-    partial void OnRecentStatusChanging(string value);
-    partial void OnRecentStatusChanged();
-    partial void OnEndingOperationChanging(string value);
-    partial void OnEndingOperationChanged();
-    partial void OnFeedBackChanging(string value);
-    partial void OnFeedBackChanged();
-    #endregion
-		
-		public LessonPlan()
-		{
-			this._LessonTime = default(EntityRef<LessonTime>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int LessonID
-		{
-			get
-			{
-				return this._LessonID;
-			}
-			set
-			{
-				if ((this._LessonID != value))
-				{
-					if (this._LessonTime.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnLessonIDChanging(value);
-					this.SendPropertyChanging();
-					this._LessonID = value;
-					this.SendPropertyChanged("LessonID");
-					this.OnLessonIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(MAX)")]
-		public string Remark
-		{
-			get
-			{
-				return this._Remark;
-			}
-			set
-			{
-				if ((this._Remark != value))
-				{
-					this.OnRemarkChanging(value);
-					this.SendPropertyChanging();
-					this._Remark = value;
-					this.SendPropertyChanged("Remark");
-					this.OnRemarkChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Warming", DbType="NVarChar(MAX)")]
-		public string Warming
-		{
-			get
-			{
-				return this._Warming;
-			}
-			set
-			{
-				if ((this._Warming != value))
-				{
-					this.OnWarmingChanging(value);
-					this.SendPropertyChanging();
-					this._Warming = value;
-					this.SendPropertyChanged("Warming");
-					this.OnWarmingChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecentStatus", DbType="NVarChar(MAX)")]
-		public string RecentStatus
-		{
-			get
-			{
-				return this._RecentStatus;
-			}
-			set
-			{
-				if ((this._RecentStatus != value))
-				{
-					this.OnRecentStatusChanging(value);
-					this.SendPropertyChanging();
-					this._RecentStatus = value;
-					this.SendPropertyChanged("RecentStatus");
-					this.OnRecentStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndingOperation", DbType="NVarChar(MAX)")]
-		public string EndingOperation
-		{
-			get
-			{
-				return this._EndingOperation;
-			}
-			set
-			{
-				if ((this._EndingOperation != value))
-				{
-					this.OnEndingOperationChanging(value);
-					this.SendPropertyChanging();
-					this._EndingOperation = value;
-					this.SendPropertyChanged("EndingOperation");
-					this.OnEndingOperationChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBack", DbType="NVarChar(MAX)")]
-		public string FeedBack
-		{
-			get
-			{
-				return this._FeedBack;
-			}
-			set
-			{
-				if ((this._FeedBack != value))
-				{
-					this.OnFeedBackChanging(value);
-					this.SendPropertyChanging();
-					this._FeedBack = value;
-					this.SendPropertyChanged("FeedBack");
-					this.OnFeedBackChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonPlan", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true)]
-		public LessonTime LessonTime
-		{
-			get
-			{
-				return this._LessonTime.Entity;
-			}
-			set
-			{
-				LessonTime previousValue = this._LessonTime.Entity;
-				if (((previousValue != value) 
-							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LessonTime.Entity = null;
-						previousValue.LessonPlan = null;
-					}
-					this._LessonTime.Entity = value;
-					if ((value != null))
-					{
-						value.LessonPlan = this;
-						this._LessonID = value.LessonID;
-					}
-					else
-					{
-						this._LessonID = default(int);
-					}
-					this.SendPropertyChanged("LessonTime");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrainingPlan")]
 	public partial class TrainingPlan : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -4065,6 +3842,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _Training;
 		
+		private System.Nullable<int> _Counseling;
+		
 		private EntityRef<LessonTime> _LessonTime;
 		
     #region Extensibility Method Definitions
@@ -4079,6 +3858,8 @@ namespace WebHome.Models.DataEntity
     partial void OnPostureRedressChanged();
     partial void OnTrainingChanging(System.Nullable<int> value);
     partial void OnTrainingChanged();
+    partial void OnCounselingChanging(System.Nullable<int> value);
+    partial void OnCounselingChanged();
     #endregion
 		
 		public LessonTrend()
@@ -4171,6 +3952,26 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Counseling", DbType="Int")]
+		public System.Nullable<int> Counseling
+		{
+			get
+			{
+				return this._Counseling;
+			}
+			set
+			{
+				if ((this._Counseling != value))
+				{
+					this.OnCounselingChanging(value);
+					this.SendPropertyChanging();
+					this._Counseling = value;
+					this.SendPropertyChanged("Counseling");
+					this.OnCounselingChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonTrend", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true)]
 		public LessonTime LessonTime
 		{
@@ -4223,281 +4024,6 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrainingExecution")]
-	public partial class TrainingExecution : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ExecutionID;
-		
-		private System.Nullable<int> _BreakIntervalInSecond;
-		
-		private System.Nullable<int> _Repeats;
-		
-		private System.Nullable<int> _ActualBreakIntervalInSecond;
-		
-		private System.Nullable<int> _ActualRepeats;
-		
-		private string _Conclusion;
-		
-		private string _ExecutionFeedBack;
-		
-		private EntitySet<TrainingItem> _TrainingItem;
-		
-		private EntityRef<TrainingPlan> _TrainingPlan;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnExecutionIDChanging(int value);
-    partial void OnExecutionIDChanged();
-    partial void OnBreakIntervalInSecondChanging(System.Nullable<int> value);
-    partial void OnBreakIntervalInSecondChanged();
-    partial void OnRepeatsChanging(System.Nullable<int> value);
-    partial void OnRepeatsChanged();
-    partial void OnActualBreakIntervalInSecondChanging(System.Nullable<int> value);
-    partial void OnActualBreakIntervalInSecondChanged();
-    partial void OnActualRepeatsChanging(System.Nullable<int> value);
-    partial void OnActualRepeatsChanged();
-    partial void OnConclusionChanging(string value);
-    partial void OnConclusionChanged();
-    partial void OnExecutionFeedBackChanging(string value);
-    partial void OnExecutionFeedBackChanged();
-    #endregion
-		
-		public TrainingExecution()
-		{
-			this._TrainingItem = new EntitySet<TrainingItem>(new Action<TrainingItem>(this.attach_TrainingItem), new Action<TrainingItem>(this.detach_TrainingItem));
-			this._TrainingPlan = default(EntityRef<TrainingPlan>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ExecutionID
-		{
-			get
-			{
-				return this._ExecutionID;
-			}
-			set
-			{
-				if ((this._ExecutionID != value))
-				{
-					if (this._TrainingPlan.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnExecutionIDChanging(value);
-					this.SendPropertyChanging();
-					this._ExecutionID = value;
-					this.SendPropertyChanged("ExecutionID");
-					this.OnExecutionIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BreakIntervalInSecond", DbType="Int")]
-		public System.Nullable<int> BreakIntervalInSecond
-		{
-			get
-			{
-				return this._BreakIntervalInSecond;
-			}
-			set
-			{
-				if ((this._BreakIntervalInSecond != value))
-				{
-					this.OnBreakIntervalInSecondChanging(value);
-					this.SendPropertyChanging();
-					this._BreakIntervalInSecond = value;
-					this.SendPropertyChanged("BreakIntervalInSecond");
-					this.OnBreakIntervalInSecondChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Repeats", DbType="Int")]
-		public System.Nullable<int> Repeats
-		{
-			get
-			{
-				return this._Repeats;
-			}
-			set
-			{
-				if ((this._Repeats != value))
-				{
-					this.OnRepeatsChanging(value);
-					this.SendPropertyChanging();
-					this._Repeats = value;
-					this.SendPropertyChanged("Repeats");
-					this.OnRepeatsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualBreakIntervalInSecond", DbType="Int")]
-		public System.Nullable<int> ActualBreakIntervalInSecond
-		{
-			get
-			{
-				return this._ActualBreakIntervalInSecond;
-			}
-			set
-			{
-				if ((this._ActualBreakIntervalInSecond != value))
-				{
-					this.OnActualBreakIntervalInSecondChanging(value);
-					this.SendPropertyChanging();
-					this._ActualBreakIntervalInSecond = value;
-					this.SendPropertyChanged("ActualBreakIntervalInSecond");
-					this.OnActualBreakIntervalInSecondChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualRepeats", DbType="Int")]
-		public System.Nullable<int> ActualRepeats
-		{
-			get
-			{
-				return this._ActualRepeats;
-			}
-			set
-			{
-				if ((this._ActualRepeats != value))
-				{
-					this.OnActualRepeatsChanging(value);
-					this.SendPropertyChanging();
-					this._ActualRepeats = value;
-					this.SendPropertyChanged("ActualRepeats");
-					this.OnActualRepeatsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Conclusion", DbType="NVarChar(MAX)")]
-		public string Conclusion
-		{
-			get
-			{
-				return this._Conclusion;
-			}
-			set
-			{
-				if ((this._Conclusion != value))
-				{
-					this.OnConclusionChanging(value);
-					this.SendPropertyChanging();
-					this._Conclusion = value;
-					this.SendPropertyChanged("Conclusion");
-					this.OnConclusionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBack", DbType="NVarChar(MAX)")]
-		public string ExecutionFeedBack
-		{
-			get
-			{
-				return this._ExecutionFeedBack;
-			}
-			set
-			{
-				if ((this._ExecutionFeedBack != value))
-				{
-					this.OnExecutionFeedBackChanging(value);
-					this.SendPropertyChanging();
-					this._ExecutionFeedBack = value;
-					this.SendPropertyChanged("ExecutionFeedBack");
-					this.OnExecutionFeedBackChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingExecution_TrainingItem", Storage="_TrainingItem", ThisKey="ExecutionID", OtherKey="ExecutionID")]
-		public EntitySet<TrainingItem> TrainingItem
-		{
-			get
-			{
-				return this._TrainingItem;
-			}
-			set
-			{
-				this._TrainingItem.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingPlan_TrainingExecution", Storage="_TrainingPlan", ThisKey="ExecutionID", OtherKey="ExecutionID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public TrainingPlan TrainingPlan
-		{
-			get
-			{
-				return this._TrainingPlan.Entity;
-			}
-			set
-			{
-				TrainingPlan previousValue = this._TrainingPlan.Entity;
-				if (((previousValue != value) 
-							|| (this._TrainingPlan.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._TrainingPlan.Entity = null;
-						previousValue.TrainingExecution = null;
-					}
-					this._TrainingPlan.Entity = value;
-					if ((value != null))
-					{
-						value.TrainingExecution = this;
-						this._ExecutionID = value.ExecutionID;
-					}
-					else
-					{
-						this._ExecutionID = default(int);
-					}
-					this.SendPropertyChanged("TrainingPlan");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_TrainingItem(TrainingItem entity)
-		{
-			this.SendPropertyChanging();
-			entity.TrainingExecution = this;
-		}
-		
-		private void detach_TrainingItem(TrainingItem entity)
-		{
-			this.SendPropertyChanging();
-			entity.TrainingExecution = null;
 		}
 	}
 	
@@ -6898,342 +6424,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrainingItem")]
-	public partial class TrainingItem : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ItemID;
-		
-		private int _TrainingID;
-		
-		private string _GoalTurns;
-		
-		private string _GoalStrength;
-		
-		private int _ExecutionID;
-		
-		private string _Description;
-		
-		private string _ActualStrength;
-		
-		private string _ActualTurns;
-		
-		private string _Remark;
-		
-		private EntityRef<TrainingExecution> _TrainingExecution;
-		
-		private EntityRef<TrainingType> _TrainingType;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnItemIDChanging(int value);
-    partial void OnItemIDChanged();
-    partial void OnTrainingIDChanging(int value);
-    partial void OnTrainingIDChanged();
-    partial void OnGoalTurnsChanging(string value);
-    partial void OnGoalTurnsChanged();
-    partial void OnGoalStrengthChanging(string value);
-    partial void OnGoalStrengthChanged();
-    partial void OnExecutionIDChanging(int value);
-    partial void OnExecutionIDChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnActualStrengthChanging(string value);
-    partial void OnActualStrengthChanged();
-    partial void OnActualTurnsChanging(string value);
-    partial void OnActualTurnsChanged();
-    partial void OnRemarkChanging(string value);
-    partial void OnRemarkChanged();
-    #endregion
-		
-		public TrainingItem()
-		{
-			this._TrainingExecution = default(EntityRef<TrainingExecution>);
-			this._TrainingType = default(EntityRef<TrainingType>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ItemID
-		{
-			get
-			{
-				return this._ItemID;
-			}
-			set
-			{
-				if ((this._ItemID != value))
-				{
-					this.OnItemIDChanging(value);
-					this.SendPropertyChanging();
-					this._ItemID = value;
-					this.SendPropertyChanged("ItemID");
-					this.OnItemIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrainingID", DbType="Int NOT NULL")]
-		public int TrainingID
-		{
-			get
-			{
-				return this._TrainingID;
-			}
-			set
-			{
-				if ((this._TrainingID != value))
-				{
-					if (this._TrainingType.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTrainingIDChanging(value);
-					this.SendPropertyChanging();
-					this._TrainingID = value;
-					this.SendPropertyChanged("TrainingID");
-					this.OnTrainingIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GoalTurns", DbType="NVarChar(512)")]
-		public string GoalTurns
-		{
-			get
-			{
-				return this._GoalTurns;
-			}
-			set
-			{
-				if ((this._GoalTurns != value))
-				{
-					this.OnGoalTurnsChanging(value);
-					this.SendPropertyChanging();
-					this._GoalTurns = value;
-					this.SendPropertyChanged("GoalTurns");
-					this.OnGoalTurnsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GoalStrength", DbType="NVarChar(512)")]
-		public string GoalStrength
-		{
-			get
-			{
-				return this._GoalStrength;
-			}
-			set
-			{
-				if ((this._GoalStrength != value))
-				{
-					this.OnGoalStrengthChanging(value);
-					this.SendPropertyChanging();
-					this._GoalStrength = value;
-					this.SendPropertyChanged("GoalStrength");
-					this.OnGoalStrengthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionID", DbType="Int NOT NULL")]
-		public int ExecutionID
-		{
-			get
-			{
-				return this._ExecutionID;
-			}
-			set
-			{
-				if ((this._ExecutionID != value))
-				{
-					if (this._TrainingExecution.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnExecutionIDChanging(value);
-					this.SendPropertyChanging();
-					this._ExecutionID = value;
-					this.SendPropertyChanged("ExecutionID");
-					this.OnExecutionIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(512)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualStrength", DbType="NVarChar(512)")]
-		public string ActualStrength
-		{
-			get
-			{
-				return this._ActualStrength;
-			}
-			set
-			{
-				if ((this._ActualStrength != value))
-				{
-					this.OnActualStrengthChanging(value);
-					this.SendPropertyChanging();
-					this._ActualStrength = value;
-					this.SendPropertyChanged("ActualStrength");
-					this.OnActualStrengthChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualTurns", DbType="NVarChar(512)")]
-		public string ActualTurns
-		{
-			get
-			{
-				return this._ActualTurns;
-			}
-			set
-			{
-				if ((this._ActualTurns != value))
-				{
-					this.OnActualTurnsChanging(value);
-					this.SendPropertyChanging();
-					this._ActualTurns = value;
-					this.SendPropertyChanged("ActualTurns");
-					this.OnActualTurnsChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(512)")]
-		public string Remark
-		{
-			get
-			{
-				return this._Remark;
-			}
-			set
-			{
-				if ((this._Remark != value))
-				{
-					this.OnRemarkChanging(value);
-					this.SendPropertyChanging();
-					this._Remark = value;
-					this.SendPropertyChanged("Remark");
-					this.OnRemarkChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingExecution_TrainingItem", Storage="_TrainingExecution", ThisKey="ExecutionID", OtherKey="ExecutionID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public TrainingExecution TrainingExecution
-		{
-			get
-			{
-				return this._TrainingExecution.Entity;
-			}
-			set
-			{
-				TrainingExecution previousValue = this._TrainingExecution.Entity;
-				if (((previousValue != value) 
-							|| (this._TrainingExecution.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._TrainingExecution.Entity = null;
-						previousValue.TrainingItem.Remove(this);
-					}
-					this._TrainingExecution.Entity = value;
-					if ((value != null))
-					{
-						value.TrainingItem.Add(this);
-						this._ExecutionID = value.ExecutionID;
-					}
-					else
-					{
-						this._ExecutionID = default(int);
-					}
-					this.SendPropertyChanged("TrainingExecution");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingType_TrainingItem", Storage="_TrainingType", ThisKey="TrainingID", OtherKey="TrainingID", IsForeignKey=true)]
-		public TrainingType TrainingType
-		{
-			get
-			{
-				return this._TrainingType.Entity;
-			}
-			set
-			{
-				TrainingType previousValue = this._TrainingType.Entity;
-				if (((previousValue != value) 
-							|| (this._TrainingType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._TrainingType.Entity = null;
-						previousValue.TrainingItem.Remove(this);
-					}
-					this._TrainingType.Entity = value;
-					if ((value != null))
-					{
-						value.TrainingItem.Add(this);
-						this._TrainingID = value.TrainingID;
-					}
-					else
-					{
-						this._TrainingID = default(int);
-					}
-					this.SendPropertyChanged("TrainingType");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RegisterLesson")]
 	public partial class RegisterLesson : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -9223,6 +8413,936 @@ namespace WebHome.Models.DataEntity
 						this._RoleID = default(int);
 					}
 					this.SendPropertyChanged("UserRoleDefinition");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonPlan")]
+	public partial class LessonPlan : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LessonID;
+		
+		private string _Remark;
+		
+		private string _Warming;
+		
+		private string _RecentStatus;
+		
+		private string _EndingOperation;
+		
+		private string _FeedBack;
+		
+		private System.Nullable<System.DateTime> _FeedBackDate;
+		
+		private EntityRef<LessonTime> _LessonTime;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLessonIDChanging(int value);
+    partial void OnLessonIDChanged();
+    partial void OnRemarkChanging(string value);
+    partial void OnRemarkChanged();
+    partial void OnWarmingChanging(string value);
+    partial void OnWarmingChanged();
+    partial void OnRecentStatusChanging(string value);
+    partial void OnRecentStatusChanged();
+    partial void OnEndingOperationChanging(string value);
+    partial void OnEndingOperationChanged();
+    partial void OnFeedBackChanging(string value);
+    partial void OnFeedBackChanged();
+    partial void OnFeedBackDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnFeedBackDateChanged();
+    #endregion
+		
+		public LessonPlan()
+		{
+			this._LessonTime = default(EntityRef<LessonTime>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int LessonID
+		{
+			get
+			{
+				return this._LessonID;
+			}
+			set
+			{
+				if ((this._LessonID != value))
+				{
+					if (this._LessonTime.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLessonIDChanging(value);
+					this.SendPropertyChanging();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(MAX)")]
+		public string Remark
+		{
+			get
+			{
+				return this._Remark;
+			}
+			set
+			{
+				if ((this._Remark != value))
+				{
+					this.OnRemarkChanging(value);
+					this.SendPropertyChanging();
+					this._Remark = value;
+					this.SendPropertyChanged("Remark");
+					this.OnRemarkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Warming", DbType="NVarChar(MAX)")]
+		public string Warming
+		{
+			get
+			{
+				return this._Warming;
+			}
+			set
+			{
+				if ((this._Warming != value))
+				{
+					this.OnWarmingChanging(value);
+					this.SendPropertyChanging();
+					this._Warming = value;
+					this.SendPropertyChanged("Warming");
+					this.OnWarmingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RecentStatus", DbType="NVarChar(MAX)")]
+		public string RecentStatus
+		{
+			get
+			{
+				return this._RecentStatus;
+			}
+			set
+			{
+				if ((this._RecentStatus != value))
+				{
+					this.OnRecentStatusChanging(value);
+					this.SendPropertyChanging();
+					this._RecentStatus = value;
+					this.SendPropertyChanged("RecentStatus");
+					this.OnRecentStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndingOperation", DbType="NVarChar(MAX)")]
+		public string EndingOperation
+		{
+			get
+			{
+				return this._EndingOperation;
+			}
+			set
+			{
+				if ((this._EndingOperation != value))
+				{
+					this.OnEndingOperationChanging(value);
+					this.SendPropertyChanging();
+					this._EndingOperation = value;
+					this.SendPropertyChanged("EndingOperation");
+					this.OnEndingOperationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBack", DbType="NVarChar(MAX)")]
+		public string FeedBack
+		{
+			get
+			{
+				return this._FeedBack;
+			}
+			set
+			{
+				if ((this._FeedBack != value))
+				{
+					this.OnFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._FeedBack = value;
+					this.SendPropertyChanged("FeedBack");
+					this.OnFeedBackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBackDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> FeedBackDate
+		{
+			get
+			{
+				return this._FeedBackDate;
+			}
+			set
+			{
+				if ((this._FeedBackDate != value))
+				{
+					this.OnFeedBackDateChanging(value);
+					this.SendPropertyChanging();
+					this._FeedBackDate = value;
+					this.SendPropertyChanged("FeedBackDate");
+					this.OnFeedBackDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonPlan", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true)]
+		public LessonTime LessonTime
+		{
+			get
+			{
+				return this._LessonTime.Entity;
+			}
+			set
+			{
+				LessonTime previousValue = this._LessonTime.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTime.Entity = null;
+						previousValue.LessonPlan = null;
+					}
+					this._LessonTime.Entity = value;
+					if ((value != null))
+					{
+						value.LessonPlan = this;
+						this._LessonID = value.LessonID;
+					}
+					else
+					{
+						this._LessonID = default(int);
+					}
+					this.SendPropertyChanged("LessonTime");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrainingExecution")]
+	public partial class TrainingExecution : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ExecutionID;
+		
+		private string _BreakIntervalInSecond;
+		
+		private string _Repeats;
+		
+		private System.Nullable<int> _ActualBreakIntervalInSecond;
+		
+		private System.Nullable<int> _ActualRepeats;
+		
+		private string _Conclusion;
+		
+		private string _ExecutionFeedBack;
+		
+		private System.Nullable<System.DateTime> _ExecutionFeedBackDate;
+		
+		private EntitySet<TrainingItem> _TrainingItem;
+		
+		private EntityRef<TrainingPlan> _TrainingPlan;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnExecutionIDChanging(int value);
+    partial void OnExecutionIDChanged();
+    partial void OnBreakIntervalInSecondChanging(string value);
+    partial void OnBreakIntervalInSecondChanged();
+    partial void OnRepeatsChanging(string value);
+    partial void OnRepeatsChanged();
+    partial void OnActualBreakIntervalInSecondChanging(System.Nullable<int> value);
+    partial void OnActualBreakIntervalInSecondChanged();
+    partial void OnActualRepeatsChanging(System.Nullable<int> value);
+    partial void OnActualRepeatsChanged();
+    partial void OnConclusionChanging(string value);
+    partial void OnConclusionChanged();
+    partial void OnExecutionFeedBackChanging(string value);
+    partial void OnExecutionFeedBackChanged();
+    partial void OnExecutionFeedBackDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnExecutionFeedBackDateChanged();
+    #endregion
+		
+		public TrainingExecution()
+		{
+			this._TrainingItem = new EntitySet<TrainingItem>(new Action<TrainingItem>(this.attach_TrainingItem), new Action<TrainingItem>(this.detach_TrainingItem));
+			this._TrainingPlan = default(EntityRef<TrainingPlan>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ExecutionID
+		{
+			get
+			{
+				return this._ExecutionID;
+			}
+			set
+			{
+				if ((this._ExecutionID != value))
+				{
+					if (this._TrainingPlan.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnExecutionIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionID = value;
+					this.SendPropertyChanged("ExecutionID");
+					this.OnExecutionIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BreakIntervalInSecond", DbType="NVarChar(32)")]
+		public string BreakIntervalInSecond
+		{
+			get
+			{
+				return this._BreakIntervalInSecond;
+			}
+			set
+			{
+				if ((this._BreakIntervalInSecond != value))
+				{
+					this.OnBreakIntervalInSecondChanging(value);
+					this.SendPropertyChanging();
+					this._BreakIntervalInSecond = value;
+					this.SendPropertyChanged("BreakIntervalInSecond");
+					this.OnBreakIntervalInSecondChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Repeats", DbType="NVarChar(32)")]
+		public string Repeats
+		{
+			get
+			{
+				return this._Repeats;
+			}
+			set
+			{
+				if ((this._Repeats != value))
+				{
+					this.OnRepeatsChanging(value);
+					this.SendPropertyChanging();
+					this._Repeats = value;
+					this.SendPropertyChanged("Repeats");
+					this.OnRepeatsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualBreakIntervalInSecond", DbType="Int")]
+		public System.Nullable<int> ActualBreakIntervalInSecond
+		{
+			get
+			{
+				return this._ActualBreakIntervalInSecond;
+			}
+			set
+			{
+				if ((this._ActualBreakIntervalInSecond != value))
+				{
+					this.OnActualBreakIntervalInSecondChanging(value);
+					this.SendPropertyChanging();
+					this._ActualBreakIntervalInSecond = value;
+					this.SendPropertyChanged("ActualBreakIntervalInSecond");
+					this.OnActualBreakIntervalInSecondChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualRepeats", DbType="Int")]
+		public System.Nullable<int> ActualRepeats
+		{
+			get
+			{
+				return this._ActualRepeats;
+			}
+			set
+			{
+				if ((this._ActualRepeats != value))
+				{
+					this.OnActualRepeatsChanging(value);
+					this.SendPropertyChanging();
+					this._ActualRepeats = value;
+					this.SendPropertyChanged("ActualRepeats");
+					this.OnActualRepeatsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Conclusion", DbType="NVarChar(MAX)")]
+		public string Conclusion
+		{
+			get
+			{
+				return this._Conclusion;
+			}
+			set
+			{
+				if ((this._Conclusion != value))
+				{
+					this.OnConclusionChanging(value);
+					this.SendPropertyChanging();
+					this._Conclusion = value;
+					this.SendPropertyChanged("Conclusion");
+					this.OnConclusionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBack", DbType="NVarChar(MAX)")]
+		public string ExecutionFeedBack
+		{
+			get
+			{
+				return this._ExecutionFeedBack;
+			}
+			set
+			{
+				if ((this._ExecutionFeedBack != value))
+				{
+					this.OnExecutionFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionFeedBack = value;
+					this.SendPropertyChanged("ExecutionFeedBack");
+					this.OnExecutionFeedBackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBackDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ExecutionFeedBackDate
+		{
+			get
+			{
+				return this._ExecutionFeedBackDate;
+			}
+			set
+			{
+				if ((this._ExecutionFeedBackDate != value))
+				{
+					this.OnExecutionFeedBackDateChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionFeedBackDate = value;
+					this.SendPropertyChanged("ExecutionFeedBackDate");
+					this.OnExecutionFeedBackDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingExecution_TrainingItem", Storage="_TrainingItem", ThisKey="ExecutionID", OtherKey="ExecutionID")]
+		public EntitySet<TrainingItem> TrainingItem
+		{
+			get
+			{
+				return this._TrainingItem;
+			}
+			set
+			{
+				this._TrainingItem.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingPlan_TrainingExecution", Storage="_TrainingPlan", ThisKey="ExecutionID", OtherKey="ExecutionID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public TrainingPlan TrainingPlan
+		{
+			get
+			{
+				return this._TrainingPlan.Entity;
+			}
+			set
+			{
+				TrainingPlan previousValue = this._TrainingPlan.Entity;
+				if (((previousValue != value) 
+							|| (this._TrainingPlan.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TrainingPlan.Entity = null;
+						previousValue.TrainingExecution = null;
+					}
+					this._TrainingPlan.Entity = value;
+					if ((value != null))
+					{
+						value.TrainingExecution = this;
+						this._ExecutionID = value.ExecutionID;
+					}
+					else
+					{
+						this._ExecutionID = default(int);
+					}
+					this.SendPropertyChanged("TrainingPlan");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_TrainingItem(TrainingItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrainingExecution = this;
+		}
+		
+		private void detach_TrainingItem(TrainingItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.TrainingExecution = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrainingItem")]
+	public partial class TrainingItem : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ItemID;
+		
+		private System.Nullable<int> _TrainingID;
+		
+		private string _GoalTurns;
+		
+		private string _GoalStrength;
+		
+		private int _ExecutionID;
+		
+		private string _Description;
+		
+		private string _ActualStrength;
+		
+		private string _ActualTurns;
+		
+		private string _Remark;
+		
+		private string _BreakIntervalInSecond;
+		
+		private string _Repeats;
+		
+		private EntityRef<TrainingExecution> _TrainingExecution;
+		
+		private EntityRef<TrainingType> _TrainingType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnItemIDChanging(int value);
+    partial void OnItemIDChanged();
+    partial void OnTrainingIDChanging(System.Nullable<int> value);
+    partial void OnTrainingIDChanged();
+    partial void OnGoalTurnsChanging(string value);
+    partial void OnGoalTurnsChanged();
+    partial void OnGoalStrengthChanging(string value);
+    partial void OnGoalStrengthChanged();
+    partial void OnExecutionIDChanging(int value);
+    partial void OnExecutionIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnActualStrengthChanging(string value);
+    partial void OnActualStrengthChanged();
+    partial void OnActualTurnsChanging(string value);
+    partial void OnActualTurnsChanged();
+    partial void OnRemarkChanging(string value);
+    partial void OnRemarkChanged();
+    partial void OnBreakIntervalInSecondChanging(string value);
+    partial void OnBreakIntervalInSecondChanged();
+    partial void OnRepeatsChanging(string value);
+    partial void OnRepeatsChanged();
+    #endregion
+		
+		public TrainingItem()
+		{
+			this._TrainingExecution = default(EntityRef<TrainingExecution>);
+			this._TrainingType = default(EntityRef<TrainingType>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ItemID
+		{
+			get
+			{
+				return this._ItemID;
+			}
+			set
+			{
+				if ((this._ItemID != value))
+				{
+					this.OnItemIDChanging(value);
+					this.SendPropertyChanging();
+					this._ItemID = value;
+					this.SendPropertyChanged("ItemID");
+					this.OnItemIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrainingID", DbType="Int")]
+		public System.Nullable<int> TrainingID
+		{
+			get
+			{
+				return this._TrainingID;
+			}
+			set
+			{
+				if ((this._TrainingID != value))
+				{
+					if (this._TrainingType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTrainingIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrainingID = value;
+					this.SendPropertyChanged("TrainingID");
+					this.OnTrainingIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GoalTurns", DbType="NVarChar(512)")]
+		public string GoalTurns
+		{
+			get
+			{
+				return this._GoalTurns;
+			}
+			set
+			{
+				if ((this._GoalTurns != value))
+				{
+					this.OnGoalTurnsChanging(value);
+					this.SendPropertyChanging();
+					this._GoalTurns = value;
+					this.SendPropertyChanged("GoalTurns");
+					this.OnGoalTurnsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GoalStrength", DbType="NVarChar(512)")]
+		public string GoalStrength
+		{
+			get
+			{
+				return this._GoalStrength;
+			}
+			set
+			{
+				if ((this._GoalStrength != value))
+				{
+					this.OnGoalStrengthChanging(value);
+					this.SendPropertyChanging();
+					this._GoalStrength = value;
+					this.SendPropertyChanged("GoalStrength");
+					this.OnGoalStrengthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionID", DbType="Int NOT NULL")]
+		public int ExecutionID
+		{
+			get
+			{
+				return this._ExecutionID;
+			}
+			set
+			{
+				if ((this._ExecutionID != value))
+				{
+					if (this._TrainingExecution.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnExecutionIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionID = value;
+					this.SendPropertyChanged("ExecutionID");
+					this.OnExecutionIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(512)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualStrength", DbType="NVarChar(512)")]
+		public string ActualStrength
+		{
+			get
+			{
+				return this._ActualStrength;
+			}
+			set
+			{
+				if ((this._ActualStrength != value))
+				{
+					this.OnActualStrengthChanging(value);
+					this.SendPropertyChanging();
+					this._ActualStrength = value;
+					this.SendPropertyChanged("ActualStrength");
+					this.OnActualStrengthChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActualTurns", DbType="NVarChar(512)")]
+		public string ActualTurns
+		{
+			get
+			{
+				return this._ActualTurns;
+			}
+			set
+			{
+				if ((this._ActualTurns != value))
+				{
+					this.OnActualTurnsChanging(value);
+					this.SendPropertyChanging();
+					this._ActualTurns = value;
+					this.SendPropertyChanged("ActualTurns");
+					this.OnActualTurnsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(512)")]
+		public string Remark
+		{
+			get
+			{
+				return this._Remark;
+			}
+			set
+			{
+				if ((this._Remark != value))
+				{
+					this.OnRemarkChanging(value);
+					this.SendPropertyChanging();
+					this._Remark = value;
+					this.SendPropertyChanged("Remark");
+					this.OnRemarkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BreakIntervalInSecond", DbType="NVarChar(32)")]
+		public string BreakIntervalInSecond
+		{
+			get
+			{
+				return this._BreakIntervalInSecond;
+			}
+			set
+			{
+				if ((this._BreakIntervalInSecond != value))
+				{
+					this.OnBreakIntervalInSecondChanging(value);
+					this.SendPropertyChanging();
+					this._BreakIntervalInSecond = value;
+					this.SendPropertyChanged("BreakIntervalInSecond");
+					this.OnBreakIntervalInSecondChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Repeats", DbType="NVarChar(32)")]
+		public string Repeats
+		{
+			get
+			{
+				return this._Repeats;
+			}
+			set
+			{
+				if ((this._Repeats != value))
+				{
+					this.OnRepeatsChanging(value);
+					this.SendPropertyChanging();
+					this._Repeats = value;
+					this.SendPropertyChanged("Repeats");
+					this.OnRepeatsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingExecution_TrainingItem", Storage="_TrainingExecution", ThisKey="ExecutionID", OtherKey="ExecutionID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public TrainingExecution TrainingExecution
+		{
+			get
+			{
+				return this._TrainingExecution.Entity;
+			}
+			set
+			{
+				TrainingExecution previousValue = this._TrainingExecution.Entity;
+				if (((previousValue != value) 
+							|| (this._TrainingExecution.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TrainingExecution.Entity = null;
+						previousValue.TrainingItem.Remove(this);
+					}
+					this._TrainingExecution.Entity = value;
+					if ((value != null))
+					{
+						value.TrainingItem.Add(this);
+						this._ExecutionID = value.ExecutionID;
+					}
+					else
+					{
+						this._ExecutionID = default(int);
+					}
+					this.SendPropertyChanged("TrainingExecution");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingType_TrainingItem", Storage="_TrainingType", ThisKey="TrainingID", OtherKey="TrainingID", IsForeignKey=true)]
+		public TrainingType TrainingType
+		{
+			get
+			{
+				return this._TrainingType.Entity;
+			}
+			set
+			{
+				TrainingType previousValue = this._TrainingType.Entity;
+				if (((previousValue != value) 
+							|| (this._TrainingType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._TrainingType.Entity = null;
+						previousValue.TrainingItem.Remove(this);
+					}
+					this._TrainingType.Entity = value;
+					if ((value != null))
+					{
+						value.TrainingItem.Add(this);
+						this._TrainingID = value.TrainingID;
+					}
+					else
+					{
+						this._TrainingID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("TrainingType");
 				}
 			}
 		}

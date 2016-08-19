@@ -29,7 +29,7 @@
                                 </label>
                             </section>
                             <section class="col col-6">
-                                <label>購買數量</label>
+                                <label>購買堂數</label>
                                 <label class="input">
                                     <i class="icon-append fa fa-shopping-cart"></i>
                                     <input type="text" name="Lessons" id="Lessons" maxlength="3" placeholder="請輸入購買數量" value="<%= _model.Lessons %>" />

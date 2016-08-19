@@ -10,176 +10,216 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-edit"></i>
+            </span>
+        </span>
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>課程管理></li>
+            <li>編輯上課內容</li>
+        </ol>
+        <!-- end breadcrumb -->
+        <!-- You can also add more buttons to the
+            ribbon for further usability
 
+            Example below:
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+            <span class="ribbon-button-alignment pull-right">
+            <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+            <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+            <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+            </span> -->
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-edit"></i>編輯上課內容
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="well well-sm bg-color-darken txt-color-white">
+                <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+                    <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
 
-            <div class="row">
+                    <div class="col-sm-12">
 
-                <div class="col-md-12">
+                        <div class="row">
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-edit"> 預編課程</span></h4>
-
-                    <!-- Start Contact Form -->
-
-                    <%  if (_model.LessonTime.GroupID.HasValue)
-                        {
-                            Html.RenderPartial("~/Views/Member/GroupingLessonInfo.ascx", _model.LessonTime.GroupingLesson);
-                        }
-                        else
-                        {
-                            ViewBag.ShowPerson = true; ViewBag.Argument = new ArgumentModel { Model = _model.LessonTime, PartialViewName = "~/Views/Lessons/LessonGoal.ascx" };
-                            Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model.LessonTime.RegisterLesson.UserProfile);
-                        }   %>
-                    <div class="col-md-10">
-                        <h4><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><%= _model.LessonTime.ClassTime.Value.ToString("yyyy/M/d HH:mm") %>~<%= _model.LessonTime.ClassTime.Value.AddMinutes(_model.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %> 課程內容 - <%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></h4>
-                    </div>
-                    <div class="col-md-2 text-right">
-                        <a class="btn-system btn-small" onclick="addTraining();">新增項目組 <i class="fa fa-cart-plus" aria-hidden="true"></i></a>
-                    </div>
-                        <div class="hr1" style="margin-bottom: 10px;"></div>
-                        <div class="panel panel-default">
-                            <table class="table">
-                                <tr class="info">
-                                    <th>暖身</th>
-                                </tr>
-                                <tr>
-                                    <td><textarea name="warming" class="form-control" rows="5"><%= _plan.Warming %></textarea>
-                                        </td>
-                                </tr>
-                            </table>
-                            <table class="table">
-                                <tr class="info">
-                                    <th class="text-center" width="25"></th>
-                                    <th class="col-xs-4 col-md-3">肌力訓練</th>
-                                    <th class="col-xs-2 col-md-2 text-center">目標次數</th>
-                                    <th class="col-xs-2 col-md-2 text-center">目標強度</th>
-                                    <th class="col-xs-3 col-md-4">備註</th>
-                                    <th class="col-xs-1 col-md-1 text-center">組數</th>
-                                </tr>
-                                <%      if (_model.LessonTime.TrainingPlan.Count > 0)
-                                    {
-                                        int idx = 0;
-                                        foreach (var item in _model.LessonTime.TrainingPlan)
-                                        {
-                                            idx++;
-                                            var execution = item.TrainingExecution;
-                                            var training = execution.TrainingItem;
-                                            if (training.Count > 0)
-                                            {
-                                                for (int i = 0; i < training.Count; i++)
-                                                {
-                                                    var tranItem = training[i];
-                                                    if (i == 0)
-                                                    {%>
-                                <tr>
-                                    <td class="text-center" rowspan="<%= training.Count() + 1 %>" class="text-center"><%= idx %>
-                                        <br />
-                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="red-text fa fa-minus-circle fa-2x"></a>
-                                    </td>
-                                    <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %></td>
-                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
-                                    <td><%= tranItem.Remark %></td>
-                                    <td rowspan="<%= training.Count() + 1 %>" class="text-center">
-                                        <%= item.TrainingExecution.Repeats %>
-                                        <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                                <%                  }
-                                    else
-                                    {   %>
-                                <tr>
-                                    <td><%= tranItem.TrainingType.BodyParts %>・<%= tranItem.Description %></td>
-                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalTurns) ? tranItem.GoalTurns : "--" %></td>
-                                    <td class="text-center"><%= !String.IsNullOrEmpty(tranItem.GoalStrength) ? tranItem.GoalStrength : "--" %></td>
-                                    <td><%= tranItem.Remark %></td>
-                                </tr>
-                                <%                  }
-                                    }   %>
-                                <tr class="active">
-                                    <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
-                                </tr>
-                                <%              }
-                                    else
-                                    {   %>
-                                <tr>
-                                    <td class="text-center"><%= idx %><br />
-                                        <a onclick="deleteTraining(<%= execution.ExecutionID %>);" class="red-text fa fa-minus-circle fa-2x"></a>
-                                    </td>
-                                    <td colspan="4"><strong>休息時間：</strong><%= execution.BreakIntervalInSecond %>秒</td>
-                                    <td>
-                                        <a class="btn btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTraining/") + execution.ExecutionID %>">修改 <i class="fa fa-edit" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                                <%              }
-                                        }
-                                    }
-                                    else
-                                    {   %>
-                                <tr>
-                                    <td colspan="6">未建立任何項目</td>
-                                </tr>
-                                <%  }%>
-                            </table>
-                            <table class="table">
-                                <tr class="info">
-                                    <th>收操</th>
-                                </tr>
-                                <tr>
-                                    <td><textarea class="form-control" name="endingOperation" rows="5"><%= _plan.EndingOperation %></textarea></td>
-                                </tr>
-                            </table>
+                            <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.RegisterLesson.UserProfile); %>
+                            <div class="col-xs-8 col-sm-6">
+                                <h1>
+                                    <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.RegisterLesson.UID %>"><%= _model.RegisterLesson.UserProfile.RealName %> <%= _model.RegisterLesson.UserProfile.UserName %></a></span>
+                                </h1>
+                                <p class="font-md">關於<%= _model.RegisterLesson.UserProfile.RealName %>...</p>
+                                <p>
+                                    <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
+                                        <fieldset>
+                                            <section>
+                                                <label class="textarea">
+                                                    <textarea rows="3" id="recentStatus" name="recentStatus" class="custom-scroll"><%= _model.RegisterLesson.UserProfile.RecentStatus %></textarea>
+                                                </label>
+                                                <div class="note">
+                                                    <strong>Note:</strong> 最多輸入250個中英文字
+                                                </div>
+                                            </section>
+                                        </fieldset>
+                                        <p class="text-right">
+                                            <button type="button" name="submit" class="btn btn-primary btn-sm" id="btnUpdateStatus" onclick="commitPlan();">
+                                                <i class="fa fa-reply"></i>更新
+                                            </button>
+                                        </p>
+                                    </form>
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.RegisterLesson.UserProfile); %>
+                                <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model.RegisterLesson.UserProfile); %>
+                            </div>
                         </div>
 
-                        <div class="hr2" style="margin-bottom: 10px;"></div>
-                        <h4 class="classic-title"><span class="fa fa-commenting" aria-hidden="true">教練總評：</span></h4>
-                        <textarea class="form-control" name="remark" rows="5"><%= _plan.Remark %></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr>
+                </div>
+                <div class="row no-padding">
+                    <div class="col-sm-12">
+                        <label><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00-<%= String.Format("{0:00}",_model.Hour+1) %>:00 上課內容</label>
+                        <ul class="nav nav-tabs tabs-pull-right">
+                            <li>
+                                <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#s4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#s3"><i class="fa fa-child"></i><span>收操</span></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#s2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
+                            </li>
+                            <li class="active">
+                                <a data-toggle="tab" href="#s1"><i class="fa fa-child "></i><span>暖身</span></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content padding-top-10">
+                            <div class="tab-pane fade in active" id="s1">
+                                <div class="chat-body no-padding profile-message">
+                                    <ul>
+                                        <li class="message">
+                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                            <span class="message-text">
+                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <%= _plan.Warming %>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <div class="input-group wall-comment-reply">
+                                                <input id="warming" type="text" name="warming" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.Warming %>" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" id="btnUpdateWarming" onclick="commitPlan();">
+                                                        <i class="fa fa-reply"></i>更新
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </ul>
 
-                        <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CompletePlan") %>">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
-                        <a id="nextStep" class="btn-system btn-medium">更新課表 <i class="fa fa-refresh" aria-hidden="true"></i></a>
-                        <a onclick="deletePlan();" class="btn-system btn-medium">刪除課表 <i class="fa fa-trash-o" aria-hidden="true"></i></a>
-
-
-                        <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-
-                        <!-- End Contact Form -->
-
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="s2">
+                                <% Html.RenderPartial("~/Views/Lessons/TrainingExecutionPlan.ascx", _model); %>
+                            </div>
+                            <div class="tab-pane fade" id="s3">
+                                <div class="chat-body no-padding profile-message">
+                                    <ul>
+                                        <li class="message">
+                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                            <span class="message-text">
+                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <%= _plan.EndingOperation %>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <div class="input-group wall-comment-reply">
+                                                <input id="endingOperation" name="endingOperation" type="text" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.EndingOperation %>" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" onclick="commitPlan();">
+                                                        <i class="fa fa-reply"></i>更新
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="s4">
+                                <% Html.RenderPartial("~/Views/Lessons/LessonTrendItem.ascx", _model); %>
+                            </div>
+                            <div class="tab-pane fade" id="s5">
+                                <div class="chat-body no-padding profile-message">
+                                    <ul>
+                                        <li class="message">
+                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                            <span class="message-text">
+                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <%= _plan.Remark %>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <div class="input-group wall-comment-reply">
+                                                <input id="remark" name="remark" type="text" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.Remark %>" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" onclick="commitPlan();">
+                                                        <i class="fa fa-reply"></i>更新
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </article>
     </div>
-
-    <!-- End content -->
-    
-    <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
-
+    <%  Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
     <script>
-        $('#vip,#m_vip').addClass('active');
-        //$('#theForm').addClass('contact-form');
 
-        $('#nextStep').on('click', function (evt) {
-            startLoading();
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>')
-          .submit();
-        });
+        function commitPlan() {
+            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>',
+                {
+                    'recentStatus': $('#recentStatus').val(),
+                    'warming': $('#warming').val(),
+                    'endingOperation': $('#endingOperation').val(),
+                    'remark': $('#remark').val()
+                }, function (data) {
+                if (data.result) {
+                    smartAlert('資料已更新!!');
+                } else {
+                    smartAlert(data.message);
+                }
+            });
+        }
 
         function deleteTraining(itemID) {
             confirmIt({ title: '刪除訓練組數', message: '確定刪除此訓練組數?' }, function (evt) {
                 startLoading();
-                $('<form method="post"/>').appendTo($('body'))
-                    .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTraining/") %>' + itemID)
-                    .submit();
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTraining/") %>' + itemID, {}, function (data) {
+                    $('#s2').empty().append($(data));
+                    finishLoading();
+                });
             });
         }
 
@@ -194,9 +234,117 @@
 
         function addTraining() {
             startLoading();
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTraining") %>')
-                .submit();
+            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTraining") %>', {}, function (data) {
+                if (data) {
+                    $('#trainingPlan').before($(data));
+                }
+            });
         }
+
+
+        var $modal;
+        function addTrainingItem(executionID) {
+            $('#addItem').remove();
+            $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTrainingItem") %>' + '?id=' + executionID , {}, function () {
+                    $('#loading').css('display', 'none');
+                    $modal.modal('show');
+                });
+        }
+
+        function deleteItem(executionID,itemID) {
+            var event = event || window.event;
+            confirmIt({ title: '刪除訓練項目', message: '確定刪除此訓練項目?' }, function (evt) {
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTrainingItem") %>', { 'itemID': itemID,'executionID':executionID }, function (data) {
+                    if (data.result) {
+                        $(event.target).parent().parent().remove();
+                    } else {
+                        smartAlert(data.message);
+                    }
+                });
+            });
+        }
+
+        function commitTrainingItem() {
+            $('#addItem').find('form').ajaxForm({
+                url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTrainingItem") %>",
+                beforeSubmit: function () {
+                },
+                success: function (data) {
+                    if (data.result) {
+                        smartAlert("資料已儲存!!", function (message) {
+                            $modal.modal('hide');
+                            //$('#addItem').remove();
+                            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingExecutionPlan") %>',{},function(data){
+                                $('#s2').html(data);
+                            });
+                        });
+                    } else {
+                        smartAlert(data.message, function () {
+                            $modal.modal('hide');
+                            //$('#addItem').remove();
+                        });
+                    }
+                },
+                error: function () {
+                }
+            }).submit();
+        }
+
+        function commitTraining() {
+
+            var event = event || window.event;
+            $(event.target).parents('form').ajaxForm({
+                url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTraining") %>",
+                beforeSubmit: function () {
+                },
+                success: function (data) {
+                    if (data.result) {
+                        smartAlert("資料已儲存!!", function (message) {
+                        });
+                    } else {
+                        smartAlert(data.message, function () {
+                        });
+                    }
+                },
+                error: function () {
+                }
+            }).submit();
+        }
+
+        function commitAssessment() {
+            $('#assessment').ajaxForm({
+                url: "<%= VirtualPathUtility.ToAbsolute("~/Attendance/CommitAssessment") %>",
+                beforeSubmit: function () {
+                },
+                success: function (data) {
+                    if (data.result) {
+                        smartAlert("資料已儲存!!", function (message) {
+                        });
+                    } else {
+                        smartAlert(data.message, function () {
+                        });
+                    }
+                },
+                error: function () {
+                }
+            }).submit();
+        }
+
+    function previewLesson(arg)
+    {
+        var $form = $('<form method="post"/>')
+            .appendTo($('body'))
+            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
+        for (var key in arg) {
+            $('<input type="hidden"/>')
+            .prop('name', key).prop('value', arg[key]).appendTo($form);
+        }
+        startLoading();
+        $form.submit();
+    }
 
     </script>
 

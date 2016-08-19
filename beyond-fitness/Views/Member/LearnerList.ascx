@@ -21,6 +21,7 @@
             <th data-hide="phone"><i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i>Email Address</th>
             <th data-hide="phone">編號</th>
             <th data-hide="phone">年齡</th>
+            <th data-hide="phone">性別</th>
             <th>功能</th>
         </tr>
     </thead>
@@ -36,6 +37,7 @@
             <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>
             <td><%= item.MemberCode %></td>
             <td><%= item.YearsOld() %></td>
+            <td><%= item.UserProfileExtension!=null ? item.UserProfileExtension.Gender=="M" ? "男" : "女" : null %></td>
             <td>
                 <div class="btn-group dropup">
                     <button class="btn bg-color-blueLight" data-toggle="dropdown">

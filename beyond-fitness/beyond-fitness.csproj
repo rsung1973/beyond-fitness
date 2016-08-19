@@ -1495,7 +1495,16 @@
     <Content Include="Views\Layout\QuickLinkItem\EditProfile.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Logout.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Overview.ascx" />
+    <Content Include="Views\Lessons\AttendeeByVip.ascx" />
+    <Content Include="Views\Lessons\VipSelector.ascx" />
+    <Content Include="Views\Lessons\RebookingByCoach.aspx" />
     <Content Include="Views\Lessons\BookingByCoach.aspx" />
+    <Content Include="Views\Lessons\ViewTrainingItem.ascx" />
+    <Content Include="Views\Lessons\ViewTrainingExecutionItem.ascx" />
+    <Content Include="Views\Lessons\TrainingExecutionItem.ascx" />
+    <Content Include="Views\Lessons\LessonTrendItem.ascx" />
+    <Content Include="Views\Lessons\ViewTrainingExecutionPlan.ascx" />
+    <Content Include="Views\Lessons\TrainingExecutionPlan.ascx" />
     <Content Include="Views\Lessons\QueryBookingList.ascx" />
     <Content Include="Views\Lessons\QueryVip.aspx" />
     <Content Include="Views\Account\Coach.aspx" />
@@ -1552,6 +1561,9 @@
     <Content Include="Views\Lessons\QueryModalByFreeAgent.ascx" />
     <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
     <Content Include="Views\Lessons\ProfessionalLevelSelector.ascx" />
+    <Content Include="Views\Lessons\TrainingPlan.aspx" />
+    <Content Include="Views\Member\UserAssessmentInfo.ascx" />
+    <Content Include="Views\Member\LessonCount.ascx" />
     <Content Include="Views\Lessons\TrendGraphView.ascx" />
     <Content Include="Views\Lessons\DailyTrendPieView.ascx" />
     <Content Include="Views\Lessons\VipDay.aspx" />
@@ -1577,7 +1589,6 @@
     <Content Include="Views\Lessons\BodyPartsSelector.ascx" />
     <Content Include="Views\Lessons\AddTrainingItem.ascx" />
     <Content Include="Views\Lessons\EditTrainingItemList.ascx" />
-    <Content Include="Views\Lessons\TrainingPlan.aspx" />
     <Content Include="Views\Lessons\CoachSelector.ascx" />
     <Content Include="Views\Lessons\Attendee.ascx" />
     <Content Include="Views\Lessons\AttendeeSelector.ascx" />
@@ -1628,6 +1639,7 @@
     <Content Include="Views\Member\PDQSingleChoiceII.ascx" />
     <Content Include="Views\Member\PDQSingleChoiceItem.ascx" />
     <Content Include="Views\Member\PDQ_Final.aspx" />
+    <Content Include="Views\Member\ContactInfo.ascx" />
     <Content Include="Views\Member\SimpleMemberInfo.ascx" />
     <Content Include="Views\Member\PDQYesOrNo.ascx" />
     <Content Include="Views\Member\RegisterLessonForm.ascx" />
@@ -1644,6 +1656,7 @@
     <Content Include="Views\Shared\ConfirmationDialog.ascx" />
     <Content Include="Views\Shared\GraphView.ascx" />
     <Content Include="Views\Shared\HtmlInput.ascx" />
+    <Content Include="Views\Shared\EasyPieView.ascx" />
     <Content Include="Views\Shared\Success.ascx" />
     <Content Include="Views\Shared\PieView.ascx" />
     <Content Include="Views\Shared\LinkButton.ascx" />

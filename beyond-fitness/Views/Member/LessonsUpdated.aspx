@@ -73,7 +73,9 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
 
-        _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
+        _items = models.GetTable<RegisterLesson>()
+            .Where(r=>r.ClassLevel.HasValue)
+            .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
     }
 

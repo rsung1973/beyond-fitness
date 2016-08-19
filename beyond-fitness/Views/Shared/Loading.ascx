@@ -22,6 +22,9 @@
         $('#loading').css('display', 'table');
         setTimeout(function () { $('#loading').css('display', 'none'); }, 1000);
     }
+    function finishLoading() {
+        $('#loading').css('display', 'none');
+    }
 </script>
 
 <script runat="server">

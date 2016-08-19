@@ -60,12 +60,12 @@ table.has-columns-hidden>tbody>tr.row-detail>td {
 }
 
 
-#authorImg {
+#authorImg, .authorImg {
     width: 30px !important;
     height: 30px !important;
 }
 
-#profileImg {
+#profileImg, .profileImg, .userImg {
     width: 60px !important;
     height: 60px !important;
 }
@@ -80,4 +80,128 @@ body.modal-open {
 .modal-body {
     max-height: calc(100vh - 210px);
     overflow-y: auto;
+}
+
+.progress {
+	overflow: hidden;
+	height: 18px;
+	margin-bottom: 18px;
+	background-color: #f5f5f5;
+	border-radius: 2px;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+	box-shadow: inset 0px 1px 2px rgba(0,0,0,0.1);
+}
+.progress {
+	position: relative;
+	margin-bottom: 20px;
+	overflow: hidden;
+	height: 22px;
+	background: #eee;
+	box-shadow: 0px 1px 0px transparent, inset 0px 0px 0px 1px #e3e3e3;
+	-webkit-box-shadow: 0 1px 0 transparent, 0 0 0 1px #e3e3e3 inset;
+	-moz-box-shadow: 0 1px 0 transparent, 0 0 0 1px #e3e3e3 inset;
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+}
+.widget-toolbar > :first-child {
+	text-align: left;
+}
+.widget-toolbar .progress {
+	width: 130px;
+	margin: 7px 0 0;
+	height: 18px !important;
+	font-size: 12px;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0), inset 0px 0px 0px 1px #d1d1d1;
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0), 0 0 0 1px #d1d1d1 inset;
+	-moz-box-shadow: 0 1px 0 transparent, 0 0 0 1px #D1D1D1 inset;
+}
+.smart-style-5 .progress {
+	background: rgba(0,0,0,.13);
+	-webkit-box-shadow: 0 0 0 1px rgba(255, 255, 225, .15)inset;
+	-moz-box-shadow: 0 0 0 1px rgba(255, 255, 225, .15)inset;
+	box-shadow: inset 0px 0px 0px 1px rgba(255,255,225,0.15);
+}
+.progress-bar {
+	float: left;
+	width: 0px;
+	height: 100%;
+	font-size: 12px;
+	line-height: 18px;
+	color: #fff;
+	text-align: center;
+	background-color: #3276b1;
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+	box-shadow: inset 0px -1px 0px rgba(0,0,0,0.15);
+	-webkit-transition: width .6s ease;
+	-o-transition: width .6s ease;
+	transition: width .6s ease;
+}
+.progress-bar-success {
+	background-color: #739e73;
+}
+.progress-bar {
+	float: left;
+	width: 0px;
+	height: 100%;
+	font-size: 11px;
+	color: #fff;
+	text-align: center;
+	background-color: #57889c;
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+	box-shadow: inset 0px -1px 0px rgba(0,0,0,0.15);
+	font-weight: 700;
+	text-shadow: 0px -1px 0px rgba(0,0,0,0.25);
+	background-image: url(../img/pattern/overlay-pattern.png);
+}
+.progress-bar-success {
+	background-color: #739e73 !important;
+}
+.progress-bar-striped, .progress-striped .progress-bar {
+	background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-size: 40px 40px;
+}
+.progress-striped .progress-bar-success {
+	background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: -o-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+}
+.widget-toolbar .progress-bar {
+	font-size: 12px;
+}
+.progress .progress-bar {
+	position: absolute;
+	overflow: hidden;
+	line-height: 20px;
+}
+.progress-striped .progress-bar {
+	background-image: -webkit-gradient(linear,0 100%,100% 0,color-stop(0.25,rgba(255,255,255,.15)),color-stop(0.25,transparent),color-stop(0.5,transparent),color-stop(0.5,rgba(255,255,255,.15)),color-stop(0.75,rgba(255,255,255,.15)),color-stop(0.75,transparent),to(transparent));
+	background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: -moz-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-size: 40px 40px;
+}
+.progress-striped .progress-bar-success {
+	background-image: -webkit-gradient(linear,0 100%,100% 0,color-stop(0.25,rgba(255,255,255,.15)),color-stop(0.25,transparent),color-stop(0.5,transparent),color-stop(0.5,rgba(255,255,255,.15)),color-stop(0.75,rgba(255,255,255,.15)),color-stop(0.75,transparent),to(transparent));
+	background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: -moz-linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+	background-image: linear-gradient(45deg,rgba(255,255,255,.15)25%,transparent 25%,transparent 50%,rgba(255,255,255,.15)50%,rgba(255,255,255,.15)75%,transparent 75%,transparent);
+}
+.active.progress-bar, .active.progress .progress-bar {
+	-webkit-animation: progress-bar-stripes 2s linear infinite;
+	-o-animation: progress-bar-stripes 2s linear infinite;
+	animation: progress-bar-stripes 2s linear infinite;
+}
+.active.progress .progress-bar {
+	-webkit-animation: progress-bar-stripes 2s linear infinite;
+	-moz-animation: progress-bar-stripes 2s linear infinite;
+	-ms-animation: progress-bar-stripes 2s linear infinite;
+	-o-animation: progress-bar-stripes 2s linear infinite;
+	animation: progress-bar-stripes 2s linear infinite;
+}
+
+.fc table, html .fc {
+    font-size: 14px;
 }

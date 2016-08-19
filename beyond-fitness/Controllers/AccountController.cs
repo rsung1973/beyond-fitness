@@ -664,10 +664,14 @@ namespace WebHome.Controllers
             {
                 return Redirect(FormsAuthentication.LoginUrl);
             }
-            if (!lessonDate.HasValue)
-                lessonDate = DateTime.Today;
 
-            ViewBag.LessonDate = lessonDate;
+            if (ViewBag.LessonDate == null)
+            {
+                if (!lessonDate.HasValue)
+                    lessonDate = DateTime.Today;
+
+                ViewBag.LessonDate = lessonDate;
+            }
             ViewBag.EndQueryDate = endQueryDate;
             ViewBag.Message = message;
 

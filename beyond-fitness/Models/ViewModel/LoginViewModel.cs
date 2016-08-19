@@ -198,9 +198,8 @@ namespace WebHome.Models.ViewModel
             Duration = 60;
         }
 
-        [Required]
         [Display(Name = "學員姓名")]
-        public int RegisterID { get; set; }
+        public int? RegisterID { get; set; }
 
         [Required]
         [Display(Name = "教練姓名")]
@@ -236,10 +235,10 @@ namespace WebHome.Models.ViewModel
     {
 
         [Display(Name = "組數")]
-        public int? Repeats { get; set; }
+        public String Repeats { get; set; }
 
         [Display(Name = "休息秒數")]
-        public int? BreakInterval { get; set; }
+        public String BreakInterval { get; set; }
 
         [Display(Name = "肌力訓練")]
         public int?[] TrainingID { get; set; }
@@ -254,6 +253,17 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "備註")]
         public String[] Remark { get; set; }
+
+        [Display(Name = "實際次數")]
+        public String[] ActualTurns { get; set; }
+
+        [Display(Name = "實際強度")]
+        public String[] ActualStrength { get; set; }
+
+        [Display(Name = "評論")]
+        public String Conclusion { get; set; }
+
+        public int ExecutionID { get; set; }
     }
 
     public class TrainingItemViewModel
@@ -273,6 +283,7 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "備註")]
         public String Remark { get; set; }
+        public int ExecutionID { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -314,6 +325,9 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "訓練")]
         public int? Training { get; set; }
 
+        [Display(Name = "心理輔導")]
+        public int? Counseling { get; set; }
+
         [Display(Name = "柔軟度")]
         public int? Flexibility { get; set; }
 
@@ -340,6 +354,9 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "學員意見反饋")]
         public String FeedBack { get; set; }
+
+        public String[] Conclusion { get; set; }
+
 
     }
 

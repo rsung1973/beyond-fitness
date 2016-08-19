@@ -60,6 +60,12 @@ namespace WebHome.Helper
                 "\" />"));
         }
 
+        public static void RenderUserPicture(this UserProfile profile, HtmlTextWriter writer, Object htmlAttributes)
+        {
+            profile.PictureID.RenderUserPicture(writer, htmlAttributes);
+        }
+
+
         public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, Object htmlAttributes)
         {
             if (htmlAttributes != null)
@@ -74,6 +80,11 @@ namespace WebHome.Helper
             writer.RenderBeginTag(HtmlTextWriterTag.Img);
             writer.RenderEndTag();
 
+        }
+
+        public static String GetVipName(this UserProfile profile)
+        {
+            return profile.UserName ?? profile.RealName;
         }
 
         public static String ErrorMessage(this ModelStateDictionary modelState)

@@ -9,10 +9,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
-
-<div class="pie-container">
-    <div id="placeholder" class="pie-placeholder"></div>
-</div>
+    <div id="placeholder" class="chart-large has-legend-unique"></div>
 
 <script>
 

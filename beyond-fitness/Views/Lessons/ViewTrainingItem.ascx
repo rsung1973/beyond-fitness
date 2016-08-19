@@ -8,27 +8,26 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<select class="form-control" name="trainingID">
-    <%  foreach (var item in _items)
-        { %>
-            <option value='<%= item.TrainingID %>' <%= item.TrainingID==_trainingID ? "selected" : null %>><%= item.BodyParts %></option>
-    <%  } %>
-</select>
+<tr>
+    <td><%= _model.TrainingType.BodyParts %> <%= String.IsNullOrEmpty(_model.Description) ? null : "【" + _model.Description + "】" %></td>
+    <td><%= !String.IsNullOrEmpty(_model.ActualTurns) ? _model.ActualTurns : "--" %> / <%= !String.IsNullOrEmpty(_model.GoalTurns) ? _model.GoalTurns : "--" %></td>
+    <td><%= !String.IsNullOrEmpty(_model.ActualStrength) ? _model.ActualStrength : "--" %> / <%= !String.IsNullOrEmpty(_model.GoalStrength) ? _model.GoalStrength : "--" %></td>
+    <td><%= _model.Remark %></td>
+</tr>
 
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    IEnumerable<TrainingType> _items;
-    int? _trainingID;
+    TrainingItem _model;
+
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _items = models.GetTable<TrainingType>();
-        _trainingID = this.Model as int?;
+        _model = (TrainingItem)this.Model;
     }
 
 </script>
