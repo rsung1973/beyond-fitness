@@ -65,7 +65,7 @@ namespace WebHome.Controllers
 
             if (model == null)
             {
-                result = Json(new { result = false, message = "未登記此上課時間!!" });
+                result = Json(new { result = false, message = "未登記此上課時間!!", forceLogout = true });
                 return null;
             }
 

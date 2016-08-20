@@ -15,48 +15,67 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 &times;
             </button>
-            <h4 class="modal-title" id="myModalLabel">新增動作</h4>
+            <h4 class="modal-title" id="myModalLabel"><%= ViewBag.Edit == true ? "修改" : "新增" %>動作</h4>
         </div>
-        <%  if (_model != null)
-            { %>
         <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTrainingItem") %>" method="post">
             <input type="hidden" name="executionID" value="<%= _model.ExecutionID %>" />
+            <input type="hidden" name="itemID" value="<%= _viewModel.ItemID %>" />
             <div class="modal-body bg-color-darken txt-color-white">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="icon-addon addon-lg">
-                                <% Html.RenderPartial("~/Views/Lessons/BodyPartsSelector.ascx"); %>
+                                <% Html.RenderPartial("~/Views/Lessons/BodyPartsSelector.ascx",_viewModel.TrainingID); %>
                             </div>
                             <p class="note"><strong>Note:</strong> 輸入15或10-12</p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-addon">目標</span>
-                                <div class="icon-addon addon-lg">
-                                    <input type="text" placeholder="" class="form-control" name="goalTurns" />
-                                </div>
-                                <span class="input-group-addon">次數</span>
-                            </div>
-                            <p class="note"><strong>Note:</strong> 輸入15或10-12</p>
+                            <input class="form-control input-lg" placeholder="請輸入動作內容" type="text" maxlength="15" name="description" value="<%= _viewModel.Description %>" />
+                            <p class="note"><strong>Note:</strong> 最多僅能輸入15個中英文字</p>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input class="form-control input-lg" placeholder="請輸入動作內容" type="text" maxlength="15" name="description" />
-                            <p class="note"><strong>Note:</strong> 最多僅能輸入15個中英文字</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
+                            <%  if (ViewBag.Edit == true)
+                                { %>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon">實際</span>
+                                        <div class="icon-addon addon-lg">
+                                            <input type="text" placeholder="" class="form-control" name="actualTurns" value="<%= _viewModel.ActualTurns %>" />
+                                        </div>
+                                        <span class="input-group-addon">次數</span>
+                                    </div>
+                            <%  } %>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-addon">目標</span>
                                 <div class="icon-addon addon-lg">
-                                    <input type="text" placeholder="" class="form-control" name="goalStrength" />
+                                    <input type="text" placeholder="" class="form-control" name="goalTurns" value="<%= _viewModel.GoalTurns %>" />
+                                </div>
+                                <span class="input-group-addon">次數</span>
+                            </div>
+                            <p class="note"><strong>Note:</strong> 輸入15或10-12</p>
+                        </div>
+                    </div>                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <%  if (ViewBag.Edit == true)
+                                { %>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-addon">實際</span>
+                                        <div class="icon-addon addon-lg">
+                                            <input type="text" placeholder="" class="form-control" name="actualStrength" value="<%= _viewModel.ActualStrength %>" />
+                                        </div>
+                                        <span class="input-group-addon">強度</span>
+                                    </div>
+                            <%  } %>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">目標</span>
+                                <div class="icon-addon addon-lg">
+                                    <input type="text" placeholder="" class="form-control" name="goalStrength" value="<%= _viewModel.GoalStrength %>" />
                                 </div>
                                 <span class="input-group-addon">強度</span>
                             </div>
@@ -68,7 +87,7 @@
                 <fieldset>
 
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="請輸入加強說明" name="remark" rows="3"></textarea>
+                        <textarea class="form-control" placeholder="請輸入加強說明" name="remark" rows="3"><%= _viewModel.Remark %></textarea>
                         <p class="note"><strong>Note:</strong> 最多輸入250個中英文字</p>
                     </div>
 
@@ -83,20 +102,12 @@
                 </button>
             </div>
         </form>
-        <%  }
-            else
-            { %>
-                預編課程資料錯誤!!
-        <%  } %>
     </div>
     <!-- /.modal-content -->
 </div>
 
 <script>
-    $('#btnAddTraining').on('click', function (evt) {
-        //$addTrainingModal.find('form').submit();
-        $addTrainingModal.modal('hide');
-    });
+
 </script>
 
 <script runat="server">
@@ -104,6 +115,7 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     TrainingExecution _model;
+    TrainingItemViewModel _viewModel;
 
     protected override void OnInit(EventArgs e)
     {
@@ -111,6 +123,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (TrainingExecution)this.Model;
+        _viewModel = (TrainingItemViewModel)ViewBag.ViewModel;
     }
 
 </script>

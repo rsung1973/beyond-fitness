@@ -1478,6 +1478,7 @@
     <Content Include="view-coach.htm" />
     <Content Include="view-vip.htm" />
     <Content Include="Views\Account\EditMySelf.aspx" />
+    <Content Include="Views\Account\AlertTimeout.aspx" />
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Information\EditBlog.aspx" />
     <Content Include="Views\Information\Resource.ascx" />
@@ -1495,7 +1496,12 @@
     <Content Include="Views\Layout\QuickLinkItem\EditProfile.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Logout.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Overview.ascx" />
+    <Content Include="Views\Lessons\EditSingleTrainingItem.ascx" />
+    <Content Include="Views\Lessons\AddTrainingItem.ascx" />
     <Content Include="Views\Lessons\AttendeeByVip.ascx" />
+    <Content Include="Views\Lessons\EditTrainingItem.ascx" />
+    <Content Include="Views\Lessons\SingleTrainingItem.ascx" />
+    <Content Include="Views\Lessons\SingleTrainingExecutionPlan.ascx" />
     <Content Include="Views\Lessons\VipSelector.ascx" />
     <Content Include="Views\Lessons\RebookingByCoach.aspx" />
     <Content Include="Views\Lessons\BookingByCoach.aspx" />
@@ -1582,12 +1588,10 @@
     <Content Include="Views\Attendance\TrainingPlan.aspx" />
     <Content Include="Views\Lessons\QueryModal.ascx" />
     <Content Include="Views\Lessons\SimpleCoachSelector.ascx" />
-    <Content Include="Views\Lessons\EditTrainingItem.ascx" />
     <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
     <Content Include="Views\Lessons\LessonGoal.ascx" />
     <Content Include="Views\Lessons\AddTraining.aspx" />
     <Content Include="Views\Lessons\BodyPartsSelector.ascx" />
-    <Content Include="Views\Lessons\AddTrainingItem.ascx" />
     <Content Include="Views\Lessons\EditTrainingItemList.ascx" />
     <Content Include="Views\Lessons\CoachSelector.ascx" />
     <Content Include="Views\Lessons\Attendee.ascx" />

@@ -137,7 +137,9 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="s2">
-                                <% Html.RenderPartial("~/Views/Lessons/TrainingExecutionPlan.ascx", _model); %>
+                                <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/UpdateTrainingItemSequence/") + _model.LessonID %>" method="post" id="updateSeq">
+                                    <% Html.RenderAction("SingleTrainingExecutionPlan","Lessons", new { LessonID = _model.LessonID }); %>
+                                </form>
                             </div>
                             <div class="tab-pane fade" id="s3">
                                 <div class="chat-body no-padding profile-message">
@@ -254,18 +256,48 @@
                 });
         }
 
+        function editTrainingItem(executionID, itemID) {
+            $('#addItem').remove();
+            $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTrainingItem") %>', { 'executionID': executionID, 'itemID': itemID }, function () {
+                    $('#loading').css('display', 'none');
+                    $modal.modal('show');
+                });
+        }
+
+
         function deleteItem(executionID,itemID) {
             var event = event || window.event;
             confirmIt({ title: '刪除訓練項目', message: '確定刪除此訓練項目?' }, function (evt) {
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTrainingItem") %>', { 'itemID': itemID,'executionID':executionID }, function (data) {
                     if (data.result) {
-                        $(event.target).parent().parent().remove();
+                        $(event.target).parent().parent().parent().remove();
                     } else {
                         smartAlert(data.message);
                     }
                 });
             });
         }
+
+        function moveItem(direction) {
+            var $tr = $(event.target).parent().parent().parent();
+            if (direction == 'up') {
+                var $target = $tr.prev();
+                $target.before($tr);
+            } else if (direction == 'down') {
+                var $target = $tr.next();
+                $target.after($tr);
+            }
+            $('.fa-arrow-circle-o-up').removeClass('disabled');
+            $('.fa-arrow-circle-o-down').removeClass('disabled');
+            $('.fa-arrow-circle-o-up').first().addClass('disabled');
+            $('.fa-arrow-circle-o-down').last().addClass('disabled');
+
+        }
+
+
 
         function commitTrainingItem() {
             $('#addItem').find('form').ajaxForm({
@@ -277,9 +309,11 @@
                         smartAlert("資料已儲存!!", function (message) {
                             $modal.modal('hide');
                             //$('#addItem').remove();
-                            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingExecutionPlan") %>',{},function(data){
-                                $('#s2').html(data);
-                            });
+                            $('#updateSeq').ajaxForm({
+                                success: function (data) {
+                                    $('#updateSeq').html(data);
+                                }
+                            }).submit();
                         });
                     } else {
                         smartAlert(data.message, function () {
@@ -324,8 +358,12 @@
                         smartAlert("資料已儲存!!", function (message) {
                         });
                     } else {
-                        smartAlert(data.message, function () {
-                        });
+                        if (data.forceLogout) {
+                            window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Account/AlertTimeout") %>';
+                        } else {
+                            smartAlert(data.message, function () {
+                            });
+                        }
                     }
                 },
                 error: function () {

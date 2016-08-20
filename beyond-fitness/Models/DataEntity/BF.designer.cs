@@ -9012,6 +9012,8 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Repeats;
 		
+		private System.Nullable<int> _Sequence;
+		
 		private EntityRef<TrainingExecution> _TrainingExecution;
 		
 		private EntityRef<TrainingType> _TrainingType;
@@ -9042,6 +9044,8 @@ namespace WebHome.Models.DataEntity
     partial void OnBreakIntervalInSecondChanged();
     partial void OnRepeatsChanging(string value);
     partial void OnRepeatsChanged();
+    partial void OnSequenceChanging(System.Nullable<int> value);
+    partial void OnSequenceChanged();
     #endregion
 		
 		public TrainingItem()
@@ -9275,6 +9279,26 @@ namespace WebHome.Models.DataEntity
 					this._Repeats = value;
 					this.SendPropertyChanged("Repeats");
 					this.OnRepeatsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sequence", DbType="Int")]
+		public System.Nullable<int> Sequence
+		{
+			get
+			{
+				return this._Sequence;
+			}
+			set
+			{
+				if ((this._Sequence != value))
+				{
+					this.OnSequenceChanging(value);
+					this.SendPropertyChanging();
+					this._Sequence = value;
+					this.SendPropertyChanged("Sequence");
+					this.OnSequenceChanged();
 				}
 			}
 		}

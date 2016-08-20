@@ -406,6 +406,7 @@
       <Column Name="Remark" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
       <Column Name="BreakIntervalInSecond" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
       <Column Name="Repeats" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Sequence" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="TrainingExecution_TrainingItem" Member="TrainingExecution" ThisKey="ExecutionID" OtherKey="ExecutionID" Type="TrainingExecution" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="TrainingType_TrainingItem" Member="TrainingType" ThisKey="TrainingID" OtherKey="TrainingID" Type="TrainingType" IsForeignKey="true" />
     </Type>

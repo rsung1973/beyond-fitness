@@ -19,45 +19,8 @@
     </p>
 </div>
 <div class="col-xs-12 col-sm-3">
-    <h1><small>聯絡方式</small></h1>
-    <ul class="list-unstyled">
-        <li>
-            <p class="text-muted">
-                <i class="fa fa-phone"></i>
-                (886) <%= _model.Phone %> 
-            </p>
-        </li>
-        <li>
-            <p class="text-muted">
-                <i class="fa fa-envelope"></i><a href="mailto:<%= _model.PID.Contains("@") ? _model.PID : null %>"><%= _model.PID.Contains("@") ? _model.PID : null %></a>
-            </p>
-        </li>
-        <li>
-            <p class="text-muted">
-                <a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F">
-                    <img alt="用LINE傳送" height="20" src="<%= VirtualPathUtility.ToAbsolute("~/img/line/linebutton_84x20_zh-hant.png") %>" width="84" />
-                </a>
-            </p>
-        </li>
-    </ul>
-    <h1><small>方案設計工具結果</small></h1>
-    <ul class="list-unstyled">
-        <li>
-            <p class="text-muted">
-                目標 - <%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.GoalAboutPDQ!=null ? _model.PDQUserAssessment.GoalAboutPDQ.Goal : null %>
-            </p>
-        </li>
-        <li>
-            <p class="text-muted">
-                風格 - <%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.StyleAboutPDQ!=null ? _model.PDQUserAssessment.StyleAboutPDQ.Style : null %>
-            </p>
-        </li>
-        <li>
-            <p class="text-muted">
-                訓練水準 - <%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.TrainingLevelAboutPDQ!=null ? _model.PDQUserAssessment.TrainingLevelAboutPDQ.TrainingLevel : null %>
-            </p>
-        </li>
-    </ul>
+    <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model); %>
+    <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model); %>
 </div>
 
 <script runat="server">

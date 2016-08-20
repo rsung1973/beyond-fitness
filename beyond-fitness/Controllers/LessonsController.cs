@@ -1474,6 +1474,28 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        public ActionResult SingleTrainingExecutionPlan(int lessonID)
+        {
+
+            var item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).First();
+
+            var plan = item.TrainingPlan.FirstOrDefault();
+            if (plan == null)
+            {
+                plan = new Models.DataEntity.TrainingPlan
+                {
+                    TrainingExecution = new TrainingExecution
+                    {
+                    }
+                };
+
+                item.TrainingPlan.Add(plan);
+                models.SubmitChanges();
+            }
+
+            return View("SingleTrainingExecutionPlan", plan.TrainingExecution);
+        }
+
         public ActionResult DeletePlan()
         {
             LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
@@ -1610,8 +1632,37 @@ namespace WebHome.Controllers
 
         public ActionResult AddTrainingItem(int id)
         {
-            TrainingExecution item = models.GetTable<TrainingExecution>().Where(x => x.ExecutionID == id).FirstOrDefault();
-            return View(item);
+            TrainingExecution item = models.GetTable<TrainingExecution>().Where(x => x.ExecutionID == id).First();
+            ViewBag.ViewModel = new TrainingItemViewModel
+            {
+                ExecutionID = item.ExecutionID
+            };
+
+            return View("EditSingleTrainingItem", item);
+        }
+
+        public ActionResult EditTrainingItem(int executionID,int itemID)
+        {
+            TrainingItem item = models.GetTable<TrainingItem>().Where(x => x.ExecutionID == executionID && x.ItemID == itemID).First();
+
+            ViewBag.ViewModel = new TrainingItemViewModel
+            {
+                ExecutionID = item.ExecutionID,
+                ActualStrength = item.ActualStrength,
+                ActualTurns = item.ActualTurns,
+                BreakInterval = item.BreakIntervalInSecond,
+                Description = item.Description,
+                GoalStrength = item.GoalStrength,
+                GoalTurns = item.GoalTurns,
+                Remark = item.Remark,
+                Repeats = item.Repeats,
+                TrainingID = item.TrainingID,
+                ItemID = item.ItemID
+            };
+
+            ViewBag.Edit = true;
+
+            return View("EditSingleTrainingItem", item.TrainingExecution);
         }
 
         public ActionResult EditTraining(int id)
@@ -1625,6 +1676,21 @@ namespace WebHome.Controllers
             }
             HttpContext.SetCacheValue(CachingKey.TrainingExecution, execution.ExecutionID);
             return View("AddTraining", execution);
+        }
+
+        public ActionResult UpdateTrainingItemSequence(int id,int[] itemID)
+        {
+            if (itemID != null && itemID.Length > 0)
+            {
+                for (int i = 0; i < itemID.Length; i++)
+                {
+                    var item = models.GetTable<TrainingItem>().Where(t => t.ItemID == itemID[i]).FirstOrDefault();
+                    if (item != null)
+                        item.Sequence = i;
+                }
+                models.SubmitChanges();
+            }
+            return SingleTrainingExecutionPlan(id);
         }
 
 
@@ -1641,16 +1707,32 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "預編課程項目不存在!!" });
             }
 
-            execution.TrainingItem.Add(new TrainingItem
+            TrainingItem item;
+            if (viewModel.ItemID.HasValue)
             {
-                Description = viewModel.Description,
-                GoalStrength = viewModel.GoalStrength,
-                GoalTurns = viewModel.GoalTurns,
-                TrainingID = viewModel.TrainingID.Value,
-                //ActualStrength = viewModel.GoalStrength,
-                //ActualTurns = viewModel.GoalTurns,
-                Remark = viewModel.Remark
-            });
+                item = execution.TrainingItem.Where(i => i.ItemID == viewModel.ItemID).FirstOrDefault();
+                if(item==null)
+                {
+                    return Json(new { result = false, message = "修改動作項目不存在!!" });
+                }
+                item.ActualStrength = viewModel.ActualStrength;
+                item.ActualTurns = viewModel.ActualTurns;
+            }
+            else
+            {
+                item = new TrainingItem
+                {
+                    ActualTurns = viewModel.GoalTurns,
+                    ActualStrength = viewModel.GoalStrength
+                };
+                execution.TrainingItem.Add(item);
+            }
+
+            item.Description = viewModel.Description;
+            item.GoalStrength = viewModel.GoalStrength;
+            item.GoalTurns = viewModel.GoalTurns;
+            item.TrainingID = viewModel.TrainingID;
+            item.Remark = viewModel.Remark;
 
             models.SubmitChanges();
             return Json(new { result = true, message = "" });

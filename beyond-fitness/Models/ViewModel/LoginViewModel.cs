@@ -270,7 +270,6 @@ namespace WebHome.Models.ViewModel
     {
 
         [Display(Name = "肌力訓練")]
-        [Required]
         public int? TrainingID { get; set; }
 
         public String Description { get; set; }
@@ -284,6 +283,20 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "備註")]
         public String Remark { get; set; }
         public int ExecutionID { get; set; }
+
+        [Display(Name = "實際次數")]
+        public String ActualTurns { get; set; }
+
+        [Display(Name = "實際強度")]
+        public String ActualStrength { get; set; }
+
+        [Display(Name = "組數")]
+        public String Repeats { get; set; }
+
+        [Display(Name = "休息秒數")]
+        public String BreakInterval { get; set; }
+
+        public int? ItemID { get; set; }
     }
 
     public class TrainingPlanViewModel

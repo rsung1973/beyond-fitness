@@ -489,8 +489,15 @@ namespace WebHome.Controllers
         public ActionResult Logout()
         {
             this.HttpContext.Logout();
+            Session.Abandon();
             return View();
         }
+
+        public ActionResult AlertTimeout()
+        {
+            return Logout();
+        }
+
 
         [HttpGet]
         public ActionResult ForgetPassword()
