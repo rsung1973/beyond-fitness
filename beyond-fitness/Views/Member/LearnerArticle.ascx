@@ -34,10 +34,10 @@
                 <ul class="nav nav-tabs tabs-pull-right">
                     <%  if(ViewBag.ShowOnly!=true)
                         { %>
-                            <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" onclick="addLessons();">
+                            <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" onclick="registerLessons();">
                                 <span class="btn-label">
                                     <i class="fa fa-calendar-plus-o"></i>
-                                </span>新增課數
+                                </span>新增課堂數
                             </button>
                     <%  }
                         if (ViewBag.ShowPDQ != false)
@@ -72,9 +72,11 @@
 
         <%  if (ViewBag.ShowOnly != true)
             {
-                Html.RenderPartial("~/Views/Member/RegisterLessonForm.ascx", _viewModel);
                 if (_modelState!=null && !_modelState.IsValid)
                 { %>
+                    <div class="modal fade" id="registerLesson" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <% Html.RenderPartial("~/Views/Member/RegisterLessonForm.ascx", _viewModel); %>
+                    </div>
                     <script>
                             $(function () {
                                 $('#registerLesson').modal('toggle');
@@ -101,6 +103,20 @@
             $(this).find('select').first().focus();
         });
     });
+
+    function registerLessons(registerID) {
+        $('#registerLesson').remove();
+        var $modal = $('<div class="modal fade" id="registerLesson" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+        $('#loading').css('display', 'table');
+        $modal.appendTo($('#content'))
+            .load('<%= VirtualPathUtility.ToAbsolute("~/Member/RegisterLessonForm") %>', { 'registerID': registerID }, function () {
+                $('#loading').css('display', 'none');
+                $modal.on('hidden.bs.modal', function (evt) {
+                    $('body').scrollTop(screen.height);
+                });
+                $modal.modal('show');
+            });
+    }
 </script>
 
 <script runat="server">

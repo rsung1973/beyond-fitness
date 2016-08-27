@@ -31,6 +31,9 @@
 
     </div>
 
+    <%  ViewBag.DataTableId = "my_table";
+        Html.RenderPartial("~/Views/Sample/DataTable.ascx"); %>
+
     <uc1:LockScreen runat="server" ID="LockScreen" />
 
     <% Html.RenderPartial("~/Views/Shared/HtmlInput.ascx",
@@ -114,3 +117,15 @@
     </script>
 
 </asp:Content>
+<script runat="server">
+
+
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+    }
+
+
+</script>

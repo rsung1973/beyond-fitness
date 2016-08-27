@@ -36,14 +36,15 @@ namespace WebHome.Controllers
             return View();
         }
 
-        
+        [AllowAnonymous]
         public ActionResult Login()
         {
-            UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
-                return View();
-            else
-                return processLogin(profile);
+            //UserProfile profile = HttpContext.GetUser();
+            //if (profile == null)
+            //    return View();
+            //else
+            //    return processLogin(profile);
+            return View();
         }
 
         
@@ -464,11 +465,12 @@ namespace WebHome.Controllers
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
             {
                 case Naming.RoleID.Administrator:
+                    return RedirectToAction("Coach", "Account");
                 case Naming.RoleID.Coach:
                     if (isJson)
                         return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/Coach") });
                     else
-                        return RedirectToAction("Coach", "Account");
+                        return RedirectToAction("QueryVip", "Lessons");
 
                 case Naming.RoleID.FreeAgent:
                     if (isJson)

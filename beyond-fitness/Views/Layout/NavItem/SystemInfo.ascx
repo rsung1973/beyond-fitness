@@ -8,14 +8,13 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<ul id="sparks">
-    <li class="sparks-info">
-        <h5>今日上課人數 <span class="txt-color-blue"><% Html.RenderAction("DailyLearnerCount", "Lessons", new { date = DateTime.Today }); %>人</span></h5>
-        <div class="sparkline txt-color-blue">
-            <% Html.RenderAction("DailyBookingHourlyList", "Lessons", new { lessonDate = DateTime.Today }); %>
-        </div>
-    </li>
-</ul>
+<%  if (_userProfile != null
+    && (_userProfile.IsAuthorizedSysAdmin()))
+    { %>
+<li>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/ConfigureAll") %>" title="基本資料"><i class="fa fa-lg fa-fw fa-database"></i><span class="menu-item-parent">基本資料</span></a>
+</li>
+<%  } %>
 
 <script runat="server">
 

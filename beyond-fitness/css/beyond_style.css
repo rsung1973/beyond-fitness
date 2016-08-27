@@ -205,3 +205,8 @@ body.modal-open {
 .fc table, html .fc {
     font-size: 14px;
 }
+
+.line_btm {
+    border-bottom:2px solid #dedede;
+    border-color: rgba(140,210,236,.43)!important;
+}

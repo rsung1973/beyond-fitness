@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitness" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitness;Integrated Security=True" SettingsObjectName="WebHome.Properties.Settings" SettingsPropertyName="BFDbConnection" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitnessProd" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=True" SettingsObjectName="WebHome.Properties.Settings" SettingsPropertyName="BFDbConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.UserRoleDefinition" Member="UserRoleDefinitions">
     <Type Name="UserRoleDefinition">
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -35,12 +35,12 @@
       <Column Name="Expression" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="LevelExpression_Document" Member="Documents" ThisKey="LevelID" OtherKey="CurrentStep" Type="Document" />
-      <Association Name="LevelExpression_LessonPriceType" Member="LessonPriceType" ThisKey="LevelID" OtherKey="Status" Type="LessonPriceType" />
       <Association Name="LevelExpression_TrainingPlan" Member="TrainingPlan" ThisKey="LevelID" OtherKey="PlanStatus" Type="TrainingPlan" />
       <Association Name="LevelExpression_UserProfile" Member="UserProfile" ThisKey="LevelID" OtherKey="LevelID" Type="UserProfile" />
       <Association Name="LevelExpression_PDQType" Member="PDQType" ThisKey="LevelID" OtherKey="TypeID" Type="PDQType" />
       <Association Name="LevelExpression_RegisterLesson" Member="RegisterLesson" ThisKey="LevelID" OtherKey="Attended" Type="RegisterLesson" />
       <Association Name="LevelExpression_PDQQuestion" Member="PDQQuestion" ThisKey="LevelID" OtherKey="QuestionType" Type="PDQQuestion" />
+      <Association Name="LevelExpression_LessonPriceType" Member="LessonPriceType" ThisKey="LevelID" OtherKey="Status" Type="LessonPriceType" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -78,16 +78,6 @@
       <Column Name="ResetID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="UserProfile_ResetPassword" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.LessonPriceType" Member="LessonPriceType">
-    <Type Name="LessonPriceType">
-      <Column Name="PriceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="ListPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="LessonPriceType_RegisterLesson" Member="RegisterLesson" ThisKey="PriceID" OtherKey="ClassLevel" Type="RegisterLesson" />
-      <Association Name="LevelExpression_LessonPriceType" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.GroupingLesson" Member="GroupingLesson">
@@ -291,10 +281,10 @@
       <Association Name="RegisterLesson_LessonTimeExpansion" Member="LessonTimeExpansion" ThisKey="RegisterID" OtherKey="RegisterID" Type="LessonTimeExpansion" />
       <Association Name="RegisterLesson_IntuitionCharge" Member="IntuitionCharge" ThisKey="RegisterID" OtherKey="RegisterID" Type="IntuitionCharge" Cardinality="One" />
       <Association Name="GroupingLesson_RegisterLesson" Member="GroupingLesson" ThisKey="RegisterGroupID" OtherKey="GroupID" Type="GroupingLesson" IsForeignKey="true" DeleteRule="SET NULL" />
-      <Association Name="LessonPriceType_RegisterLesson" Member="LessonPriceType" ThisKey="ClassLevel" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
       <Association Name="LevelExpression_RegisterLesson" Member="LevelExpression" ThisKey="Attended" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_RegisterLesson" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="ServingCoach_RegisterLesson" Member="ServingCoach" ThisKey="AdvisorID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
+      <Association Name="LessonPriceType_RegisterLesson" Member="LessonPriceType" ThisKey="ClassLevel" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.IntuitionCharge" Member="IntuitionCharge">
@@ -303,6 +293,7 @@
       <Column Name="Payment" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
       <Column Name="FeeShared" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ByInstallments" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="IntuitionCharge_TuitionInstallment" Member="TuitionInstallment" ThisKey="RegisterID" OtherKey="RegisterID" Type="TuitionInstallment" />
       <Association Name="RegisterLesson_IntuitionCharge" Member="RegisterLesson" ThisKey="RegisterID" OtherKey="RegisterID" Type="RegisterLesson" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -407,8 +398,32 @@
       <Column Name="BreakIntervalInSecond" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
       <Column Name="Repeats" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
       <Column Name="Sequence" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExecutionFeedBack" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExecutionFeedBackDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="TrainingExecution_TrainingItem" Member="TrainingExecution" ThisKey="ExecutionID" OtherKey="ExecutionID" Type="TrainingExecution" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="TrainingType_TrainingItem" Member="TrainingType" ThisKey="TrainingID" OtherKey="TrainingID" Type="TrainingType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LessonPriceType" Member="LessonPriceType">
+    <Type Name="LessonPriceType">
+      <Column Name="PriceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="ListPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UsageType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CoachPayoff" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CoachPayoffCreditCard" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="LessonPriceType_RegisterLesson" Member="RegisterLesson" ThisKey="PriceID" OtherKey="ClassLevel" Type="RegisterLesson" />
+      <Association Name="LevelExpression_LessonPriceType" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TuitionInstallment" Member="TuitionInstallment">
+    <Type Name="TuitionInstallment">
+      <Column Name="InstallmentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RegisterID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayoffAmount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PayoffDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="IntuitionCharge_TuitionInstallment" Member="IntuitionCharge" ThisKey="RegisterID" OtherKey="RegisterID" Type="IntuitionCharge" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

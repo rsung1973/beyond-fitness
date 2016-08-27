@@ -22,11 +22,15 @@
             <th data-hide="phone">編號</th>
             <th data-hide="phone">年齡</th>
             <th data-hide="phone">性別</th>
+            <th data-hide="phone">購買堂數</th>
+            <th data-hide="phone">剩餘堂數</th>
             <th>功能</th>
         </tr>
     </thead>
     <tbody>
         <%  int idx = 0;
+            int? totalLessons;
+            int? attended;
             foreach (var item in _items)
             {
                 idx++;%>
@@ -38,6 +42,10 @@
             <td><%= item.MemberCode %></td>
             <td><%= item.YearsOld() %></td>
             <td><%= item.UserProfileExtension!=null ? item.UserProfileExtension.Gender=="M" ? "男" : "女" : null %></td>
+            <td><%  totalLessons = item.RegisterLesson.Sum(l => l.Lessons);
+                    Writer.Write(totalLessons); %></td>
+            <td><%  attended = item.RegisterLesson.Sum(l => l.LessonTime.Count(t => t.LessonAttendance != null));
+                    Writer.Write(totalLessons - attended); %></td>
             <td>
                 <div class="btn-group dropup">
                     <button class="btn bg-color-blueLight" data-toggle="dropdown">

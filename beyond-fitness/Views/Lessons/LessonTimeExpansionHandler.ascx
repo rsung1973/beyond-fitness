@@ -8,46 +8,39 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
-
+<div class="btn-group dropup" data-toggle="dropdown">
+    <button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button>
+    <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    <ul class="dropdown-menu">
 <%  
     LessonTimeExpansion item = _model;
-    if (item.LessonTime.LessonAttendance == null)
-    { %>
-        <a onclick='makeLessonPlan(<%= JsonConvert.SerializeObject(new
+    %>
+        <li><a onclick='makeLessonPlan(<%= JsonConvert.SerializeObject(new
                                 {
                                     classDate = item.ClassDate.ToString("yyyy-MM-dd"),
                                     hour = item.Hour,
                                     registerID = item.RegisterID,
                                     lessonID = item.LessonID
-                                }) %>);'
-            class="btn btn-system btn-small">預編課程 <i class="fa fa-edit" aria-hidden="true"></i></a>
-<%  } 
-    if (item.LessonTime.LessonAttendance == null && item.LessonTime.TrainingPlan.Count>0 )
+                                }) %>);'><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>編輯上課內容</a></li>
+        <li class="divider"></li>
+        <li><a onclick="window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/RebookingByCoach/") + _model.LessonID %>';"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i>修改上課時間</a></li>
+<%  if (item.LessonTime.LessonAttendance == null)
     { %>
-        <a onclick='attendLesson(<%= JsonConvert.SerializeObject(new
-                                {
-                                    classDate = item.ClassDate.ToString("yyyy-MM-dd"),
-                                    hour = item.Hour,
-                                    registerID = item.RegisterID,
-                                    lessonID = item.LessonID
-                                }) %>);'
-            class="btn btn-system btn-small">上課囉 <i class="fa fa-heartbeat" aria-hidden="true"></i></a>
+        <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>取消上課</a></li>
 <%  }
-    if (item.LessonTime.LessonAttendance == null )
-    { %>
-        <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
-<%  } %>
-<%  if (item.LessonTime.LessonPlan != null)
-    { %>
-        <a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
+    if(item.LessonTime.TrainingPlan.Count>0)
+    {  %>
+        <li class="divider"></li>
+        <li><a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
                     {
                         classDate = item.ClassDate.ToString("yyyy-MM-dd"),
                         hour = item.Hour,
                         registerID = item.RegisterID,
                         lessonID = item.LessonID
-                    }) %>);'
-        class="btn btn-system btn-small">檢視 <i class="fa fa-eye" aria-hidden="true"></i></a>
+                    }) %>);'><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視上課內容</a></li>
 <%  } %>
+    </ul>
+</div>
 
 <script runat="server">
 

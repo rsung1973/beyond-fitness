@@ -551,6 +551,93 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        public ActionResult PayInstallment(int registerID)
+        {
+            RegisterLesson item = models.GetTable<RegisterLesson>()
+                .Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)
+                    && u.RegisterID == registerID).FirstOrDefault();
+
+            if (item == null)
+            {
+                //ViewBag.Message = "課程資料不存在!!";
+                return ListLearners(null);
+            }
+
+            if (item.IntuitionCharge == null)
+            {
+                item.IntuitionCharge = new IntuitionCharge
+                {
+                    ByInstallments = 1,
+                    Payment = "Cash",
+                    FeeShared = 0
+                };
+                models.SubmitChanges();
+            }
+
+            var viewModel = new InstallmentViewModel
+            {
+                RegisterID = item.RegisterID
+            };
+
+            if(item.IntuitionCharge.TuitionInstallment.Count>0)
+            {
+                viewModel.PayoffAmount = item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffAmount).ToArray();
+                viewModel.PayoffDate = item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffDate).ToArray();
+            }
+            else
+            {
+                if (!item.IntuitionCharge.ByInstallments.HasValue || item.IntuitionCharge.ByInstallments < 2)
+                {
+                    viewModel.PayoffAmount = new int?[1];
+                    viewModel.PayoffDate = new DateTime?[1];
+                }
+                else
+                {
+                    viewModel.PayoffAmount = new int?[item.IntuitionCharge.ByInstallments.Value];
+                    viewModel.PayoffDate = new DateTime?[item.IntuitionCharge.ByInstallments.Value];
+                }
+            }
+
+            ViewBag.ViewModel = viewModel;
+            return View(item);
+        }
+
+        public ActionResult CommitPayment(int registerID,InstallmentViewModel viewModel)
+        {
+
+
+            RegisterLesson item = models.GetTable<RegisterLesson>()
+                .Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)
+                    && u.RegisterID == registerID).FirstOrDefault();
+
+            if (item == null)
+            {
+                //ViewBag.Message = "課程資料不存在!!";
+                return ListLearners(null);
+            }
+
+            if (item.IntuitionCharge.TuitionInstallment.Count == 0)
+            {
+                for (int i = 0; i < item.IntuitionCharge.ByInstallments; i++)
+                {
+                    item.IntuitionCharge.TuitionInstallment.Add(new TuitionInstallment { });
+                }
+            }
+
+            for (int i = 0; i < item.IntuitionCharge.ByInstallments; i++)
+            {
+                var installment = item.IntuitionCharge.TuitionInstallment[i];
+                installment.PayoffAmount = viewModel.PayoffAmount[i];
+                installment.PayoffDate = installment.PayoffAmount.HasValue ? viewModel.PayoffDate[i] : null;
+            }
+
+            models.SubmitChanges();
+            ViewBag.Message = "資料已儲存!!";
+
+            return AddLessons((int)HttpContext.GetCacheValue(CachingKey.EditMemberUID));
+
+        }
+
         public ActionResult GroupLessonUsersSelector(int lessonId, String userName)
         {
 
@@ -670,7 +757,37 @@ namespace WebHome.Controllers
             return Json(new { result = true });
         }
 
+        public ActionResult RegisterLessonForm(int? registerID)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Content("連線已逾時，請重新登入系統!!");
+            }
 
+            var viewModel = new LessonViewModel
+            {
+                AdvisorID = profile.UID
+            };
+
+            var item = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == registerID).FirstOrDefault();
+            if (item != null)
+            {
+                viewModel.RegisterID = item.RegisterID;
+                viewModel.Lessons = item.Lessons;
+                viewModel.ClassLevel = item.ClassLevel.Value;
+                viewModel.Grouping = item.GroupingMemberCount > 1 ? "Y" : "N";
+                viewModel.MemberCount = item.GroupingMemberCount;
+                viewModel.AdvisorID = item.AdvisorID;
+                viewModel.ByInstallments = item.IntuitionCharge.ByInstallments;
+                viewModel.FeeShared = item.IntuitionCharge.FeeShared;
+                viewModel.Installments = item.IntuitionCharge.ByInstallments.HasValue && item.IntuitionCharge.ByInstallments > 1 ? "Y" : "N";
+                viewModel.Payment = item.IntuitionCharge.Payment;
+            }
+
+            return View(viewModel);
+
+        }
 
 
         public ActionResult AddLessons(int id)
@@ -683,7 +800,7 @@ namespace WebHome.Controllers
                 return ListLearners(null);
             }
 
-                        UserProfile profile = HttpContext.GetUser();
+            UserProfile profile = HttpContext.GetUser();
             if (profile == null)
             {
                 return Redirect(FormsAuthentication.LoginUrl);
@@ -699,24 +816,24 @@ namespace WebHome.Controllers
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, item.UID);
             ViewBag.ViewModel = model;
 
-            return View(item);
+            return View("AddLessons", item);
         }
 
         [HttpPost]
-        public ActionResult AddLessons(LessonViewModel viewModel)
+        public ActionResult CommitLessons(LessonViewModel viewModel)
         {
 
-            UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID.ToString())).FirstOrDefault();
+            UserProfile learner = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID.ToString())).FirstOrDefault();
 
-            if (item == null)
+            if (learner == null)
             {
                 ViewBag.Message = "資料錯誤!!";
                 HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
                 return ListLearners(null);
             }
 
-            UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
+            UserProfile coach = HttpContext.GetUser();
+            if (coach == null)
             {
                 return Redirect(FormsAuthentication.LoginUrl);
             }
@@ -746,34 +863,55 @@ namespace WebHome.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
-                return View(item);
+                return View("AddLessons", learner);
             }
 
-            item.RegisterLesson.Add(new RegisterLesson
+            var item = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
+
+            if (item == null)
             {
-                ClassLevel = viewModel.ClassLevel,
-                RegisterDate = DateTime.Now,
-                Lessons = viewModel.Lessons,
-                Attended = (int)Naming.LessonStatus.準備上課,
-                GroupingMemberCount = viewModel.Grouping=="Y" ? viewModel.MemberCount : 1,
-                IntuitionCharge = new IntuitionCharge
+
+                learner.RegisterLesson.Add(new RegisterLesson
                 {
-                    Payment = viewModel.Payment,
-                    FeeShared = viewModel.Payment=="CreditCard" ? viewModel.FeeShared : 0,
-                    ByInstallments = viewModel.Installments=="Y" ? viewModel.ByInstallments : (int?)null
-                },
-                AdvisorID = viewModel.AdvisorID
-            });
+                    ClassLevel = viewModel.ClassLevel,
+                    RegisterDate = DateTime.Now,
+                    Lessons = viewModel.Lessons,
+                    Attended = (int)Naming.LessonStatus.準備上課,
+                    GroupingMemberCount = viewModel.Grouping == "Y" ? viewModel.MemberCount : 1,
+                    IntuitionCharge = new IntuitionCharge
+                    {
+                        Payment = viewModel.Payment,
+                        FeeShared = viewModel.Payment == "CreditCard" ? viewModel.FeeShared : 0,
+                        ByInstallments = viewModel.Installments == "Y" ? viewModel.ByInstallments : 1
+                    },
+                    AdvisorID = viewModel.AdvisorID
+                });
+            }
+            else
+            {
+                item.Lessons = viewModel.Lessons;
+                item.ClassLevel = viewModel.ClassLevel;
+                item.GroupingMemberCount = viewModel.Grouping == "Y" ? viewModel.MemberCount : 1;
+                if (item.GroupingMemberCount != 1 && item.RegisterGroupID.HasValue)
+                {
+                    item.RegisterGroupID = null;
+                }
+                item.AdvisorID = viewModel.AdvisorID;
+                item.IntuitionCharge.Payment = viewModel.Payment;
+                item.IntuitionCharge.FeeShared = viewModel.Payment == "CreditCard" ? viewModel.FeeShared : 0;
+                item.IntuitionCharge.ByInstallments = viewModel.Installments == "Y" ? viewModel.ByInstallments : 1;
+                models.DeleteAllOnSubmit<TuitionInstallment>(t => t.RegisterID == item.RegisterID);
+            }
 
             models.SubmitChanges();
             ViewBag.ViewModel = new LessonViewModel
             {
-                AdvisorID = profile.UID
+                AdvisorID = coach.UID
             };
-            ViewBag.Message = "新增課堂數完成!!";
+            ViewBag.Message = "資料已儲存!!";
             //HttpContext.SetCacheValue(CachingKey.EditMemberUID, null);
 
-            return View(item);
+            return View("AddLessons", learner);
         }
 
 

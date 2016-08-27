@@ -39,6 +39,7 @@
         <% Html.RenderPartial("~/Views/Layout/NavItem/Lessons.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Members.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Professional.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/SystemInfo.ascx", _userProfile); %>
     </ul>
 </nav>
 

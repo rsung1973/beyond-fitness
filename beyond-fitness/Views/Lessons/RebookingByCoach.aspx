@@ -72,10 +72,12 @@
 									data-widget-sortable="false"
 									
 								-->
-                <header>
+
+                <header role="heading">
+                    <div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand"></i></a></div>
                     <span class="widget-icon"><i class="fa fa-edit"></i></span>
                     <h2>填寫登記資訊 </h2>
-
+                    <span class="jarviswidget-loader" style="display: none;"><i class="fa fa-refresh fa-spin"></i></span>
                 </header>
 
                 <!-- widget div-->
@@ -91,37 +93,41 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>" id="pageForm" class="smart-form" method="post">
-                            <fieldset>
-                                <section>
-                                    <label>是否為自主訓練</label>
-                                    <label class="select">
-                                        <select class="input-lg" name="trainingBySelf">
-                                            <option value="0">否</option>
-                                            <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
-                                        </select>
-                                        <i class="icon-append fa fa-file-word-o"></i>
-                                    </label>
-                                </section>
-                            </fieldset>
+                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/RebookingByCoach/") + _model.LessonID %>" id="pageForm" class="smart-form" method="post">
+
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-6">
+                                        <span class="font-lg">
+                                            <%  if( _model.RegisterLesson.GroupingMemberCount>1)
+                                                {   %>
+                                            <li class="fa fa-group"></li>
+                                            團體《<%= String.Join("·", models.GetTable<GroupingLesson>().Where(g => g.GroupID == _model.RegisterLesson.RegisterGroupID)
+                                                    .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterID != _model.RegisterLesson.RegisterID),
+                                                        g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
+                                                    .Select(r => r.UserProfile.RealName)) %>》
+                                            <%  }
+                                                else
+                                                {   %>
+                                                    <li class="fa fa-child"></li>
+                                                    <%= _model.RegisterLesson.UserProfile.RealName %>
+                                                <%  if (_model.TrainingBySelf == 1)
+                                                    {   %>
+                                                            (自主訓練)
+                                                <%  }
+                                                    else
+                                                    { %>
+                                                        「<%= _model.RegisterLesson.Lessons %>堂-<%= _model.RegisterLesson.LessonPriceType.Description %>」
+                                                <%  }
+                                                } %>
+                                        </span>
+                                    </section>
+                                    <section class="col col-6">
                                         <label class="select">
-                                            <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
-                                                if (ViewBag.DefaultCoach != null)
-                                                    inputItem.DefaultValue = ViewBag.DefaultCoach;
+                                            <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _viewModel.CoachID };
                                                 Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <label class="input">
-                                            <i class="icon-append fa fa-user"></i>
-                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" />
-                                            <div id="attendee"></div>
-                                        </label>
-                                        <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
                                     </section>
                                 </div>
                             </fieldset>
@@ -131,7 +137,7 @@
                                         <label>請選擇上課時段</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="classDate" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
+                                            <input type="text" name="classDate" readonly="readonly" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -147,7 +153,18 @@
                                 </div>
 
                             </fieldset>
-                            
+                            <%--<fieldset>
+                                <section>
+                                    <label>是否為自主訓練</label>
+                                    <label class="select">
+                                        <select class="input-lg" name="trainingBySelf">
+                                            <option value="0">否</option>
+                                            <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
+                                        </select>
+                                        <i class="icon-append fa fa-file-word-o"></i>
+                                    </label>
+                                </section>
+                            </fieldset>--%>
 
                             <footer>
                                 <button type="submit" name="submit" class="btn btn-primary">
@@ -207,7 +224,7 @@
             $pageFormValidator.settings.submitHandler = function (form) {
 
                 var $items = $('input[name="registerID"]:checked');
-                if ($items.length <= 0 && $('input[name="UID"]:checked').length<=0) {
+                if ($items.length <= 0) {
                     $('#registerID-error').css('display', 'block');
                     $('#registerID-error').text('請選擇上課學員!!');
                     return;
@@ -238,26 +255,18 @@
           .submit();
         });
 
-        function addUser(bySelf) {
+        function addUser() {
             $('#content').find('#addUserItem').remove();
             var $modal = $('<div class="modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
             $modal.on('hidden.bs.modal', function (evt) {
                 $modal.remove();
             });
             $('#loading').css('display', 'table');
-            if (bySelf == '1') {
-                $modal.appendTo($('#content'))
-                    .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeByVip") %>', null, function () {
-                        $modal.modal('show');
-                        $('#loading').css('display', 'none');
-                    });
-            } else {
-                $modal.appendTo($('#content'))
-                    .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
-                        $modal.modal('show');
-                        $('#loading').css('display', 'none');
-                    });
-            }
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
+                    $modal.modal('show');
+                    $('#loading').css('display', 'none');
+                });
         }
     </script>
 
@@ -266,7 +275,7 @@
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
-    UserProfile _model;
+    LessonTime _model;
     LessonTimeViewModel _viewModel;
 
     protected override void OnInit(EventArgs e)
@@ -274,7 +283,7 @@
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (UserProfile)this.Model;
+        _model = (LessonTime)this.Model;
         _viewModel = (LessonTimeViewModel)ViewBag.ViewModel;
     }
 

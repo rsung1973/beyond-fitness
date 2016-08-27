@@ -25,7 +25,7 @@
         <section class="col col-4">
             <label class="input input-group" data-link-field="dtp_input1">
                 <i class="icon-append fa fa-calendar"></i>
-                <input type="text" name="birthDay" id="birthDay" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
+                <input type="text" name="birthDay" id="birthDay" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
             </label>
         </section>
     </div>

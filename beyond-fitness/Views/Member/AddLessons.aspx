@@ -83,6 +83,8 @@
 
         });
 
+        $('body').scrollTop(screen.height);
+
     </script>
 </asp:Content>
 <script runat="server">

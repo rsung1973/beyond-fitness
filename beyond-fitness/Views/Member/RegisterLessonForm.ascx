@@ -8,17 +8,17 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="modal fade" id="registerLesson" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel">新增課程購買數</h4>
+                <h4 class="modal-title" id="myModalLabel"><%= _model.RegisterID.HasValue ? "修改" : "新增" %>課程購買數</h4>
             </div>
             <div class="modal-body bg-color-darken txt-color-white">
-                <form action="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons") %>" id="pageForm01" class="smart-form" method="post">
+                <form action="<%= VirtualPathUtility.ToAbsolute("~/Member/CommitLessons") %>" id="pageForm" class="smart-form" method="post">
+                    <input type="hidden" name="registerID" value="<%= _model.RegisterID %>" />
                     <fieldset>
                         <div class="row">
                             <section class="col col-6">
@@ -114,7 +114,7 @@
                                     </select>
                                     <i></i>
                                 </label>
-                                <%  if (_model.FeeShared > 0)
+                                <%  if (_model.FeeShared.HasValue)
                                     { %>
                                         <script>
                                             $(function () {
@@ -132,17 +132,17 @@
                                 <label class="select">
                                     <select name="installments" id="installments">
                                         <option value="N">否</option>
-                                        <option value="Y">是</option>
+                                        <option value="Y" <%= _model.Installments=="Y" ? "selected" : null %>>是</option>
                                     </select>
                                     <i></i>
-                                    <%  if (_model.ByInstallments > 0)
+<%--                                    <%  if (_model.ByInstallments > 0)
                                         { %>
                                     <script>
                                         $(function () {
                                             $('#installments').val('Y');
                                         });
                                     </script>
-                                    <%  } %>
+                                    <%  } %>--%>
                                 </label>
                             </section>
                             <section class="col col-6" id="selectIntallments" style="display: <%= _model.Installments=="Y" ? "display" : "none" %>;">
@@ -168,16 +168,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
-    <!-- END MAIN CONTENT -->
-
-</div>
-
 <script>
-
-    function addLessons() {
-        $('#registerLesson').modal('show');
-    }
 
     $('#grouping').on('change', function (evt) {
         if ($(this).val()=='Y') {

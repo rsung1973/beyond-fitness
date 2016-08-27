@@ -14,10 +14,11 @@
         <tr>
             <th data-hide="phone" style="width: 40px"><i class="fa fa-fw fa-calendar-plus-o text-muted hidden-md hidden-sm hidden-xs"></i>日期</th>
             <th data-class="expand">課程類型</th>
-            <th style="width: 80px" data-hide="phone">團體課程</th>
+            <th data-hide="phone">團體課程</th>
             <th style="width: 80px">剩餘/購買</th>
-            <th style="width: 80px" data-hide="phone">付款方式</th>
-            <th style="width: 50px" data-hide="phone">分期</th>
+            <th data-hide="phone, tablet" style="width: 80px" data-hide="phone">付款方式</th>
+            <th data-hide="phone, tablet" style="width: 50px" data-hide="phone">分期</th>
+            <th data-hide="phone">是否付款</th>
             <%  if (ViewBag.ShowOnly != true)
                 { %>
             <th style="width: 120px" data-hide="phone">功能</th>
@@ -64,37 +65,54 @@
                     <td><%= item.Lessons-item.LessonTime.Count(l=>l.LessonAttendance!= null) %>/<%= item.Lessons %></td>
                     <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.Payment=="Cash" ? "現金" : "信用卡" %></td>
                     <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.ByInstallments > 1 ? item.IntuitionCharge.ByInstallments + "期" : "無" %></td>
+                    <td>
+                        <%  if(item.IntuitionCharge!=null && item.IntuitionCharge.TuitionInstallment.Count>0 )
+                            { 
+                                foreach (var t in item.IntuitionCharge.TuitionInstallment)
+                                { %>
+                                    <%= t.PayoffDate.HasValue ? String.Format("{0:yyyy/MM/dd}",t.PayoffDate) : "尚未付款" %><%= t.PayoffAmount.HasValue ? "《"+ String.Format("{0:##,###,###,###}",t.PayoffAmount)+ "》" : null %><br />
+                            <%  }
+                                }
+                                else
+                                {   %>
+                                    尚未付款
+                            <%  } %>
+                    </td>
                     <%  if (ViewBag.ShowOnly != true)
                         { %>
                             <td>
                                 <%  bool grouping = item.GroupingMemberCount > 1;
                                     bool newRegistering = item.LessonTime.Count == 0;
-                                    if (grouping || newRegistering)
-                                    {  %>
-                                        <div class="btn-group dropup">
-                                            <button class="btn bg-color-blueLight" data-toggle="dropdown">
-                                                請選擇功能
-                                            </button>
-                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <%  if (grouping)
-                                                    { %>
-                                                        <li>
-                                                            <a onclick="javascript:addGroupingUser(<%= item.RegisterID %>);"><i class="fa fa-fw fa fa-link" aria-hidden="true"></i> 設定團體上課學員</a>
-                                                        </li>
-                                                        <li class="divider"></li>
-                                                <%  }
-                                                    if (newRegistering)
-                                                    { %>
-                                                        <li>
-                                                            <a onclick="javascript:deleteLesson(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
-                                                        </li>
-                                                <%  } %>
-                                            </ul>
-                                        </div>
-                                <%  } %>
+                                      %>
+                                    <div class="btn-group dropup">
+                                        <button class="btn bg-color-blueLight" data-toggle="dropdown">
+                                            請選擇功能
+                                        </button>
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <%  if (grouping)
+                                                { %>
+                                                    <li>
+                                                        <a onclick="javascript:addGroupingUser(<%= item.RegisterID %>);"><i class="fa fa-fw fa fa-link" aria-hidden="true"></i> 設定團體上課學員</a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                            <%  } %>
+                                                <li>
+                                                    <a onclick="javascript:registerLessons(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i> 修改課堂數</a>
+                                                </li>
+                                                <li>
+                                                    <a onclick="javascript:payInstallment(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-usd" aria-hidden="true"></i> 維護付款紀錄</a>
+                                                </li>
+                                            <%  if (newRegistering)
+                                                { %>
+                                                    <li>
+                                                        <a onclick="javascript:deleteLesson(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 刪除資料</a>
+                                                    </li>
+                                            <%  } %>
+                                        </ul>
+                                    </div>
                             </td>
                     <%  } %>
                 </tr>
@@ -117,6 +135,7 @@
         };
 
         $('#dt_basic').dataTable({
+            "bpaginate": false,
             "sDom": "",
             "autoWidth": true,
             "oLanguage": {
@@ -160,6 +179,24 @@
         $modal.appendTo($('#content'))
             .load('<%= VirtualPathUtility.ToAbsolute("~/Member/GroupLessonUsers") %>', { 'lessonId': lessonId }, function () {
                 $('#loading').css('display', 'none');
+                $modal.on('hidden.bs.modal', function (evt) {
+                    $('body').scrollTop(screen.height);
+                });
+                $modal.modal('show');
+            });
+    }
+
+    function payInstallment(registerID) {
+        $('#linkgroup').remove();
+        var $modal = $('<div class="modal fade" id="linkgroup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+        $('#loading').css('display', 'table');
+        $modal.appendTo($('#content'))
+            .load('<%= VirtualPathUtility.ToAbsolute("~/Member/PayInstallment") %>', { 'registerID': registerID }, function () {
+                $('#loading').css('display', 'none');
+                $modal.on('hidden.bs.modal', function (evt) {
+                    $('body').scrollTop(screen.height);
+                });
+
                 $modal.modal('show');
             });
     }

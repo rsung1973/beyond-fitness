@@ -106,23 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1favicon.ico" />
-    <Content Include="add-blog.htm" />
-    <Content Include="add-class-verify.htm" />
-    <Content Include="add-class.htm" />
-    <Content Include="add-coach.htm" />
-    <Content Include="add-PDQ.htm" />
-    <Content Include="add-student.htm" />
-    <Content Include="add-vip-group-verify.htm" />
-    <Content Include="add-vip-group.htm" />
-    <Content Include="add-vip.htm" />
-    <Content Include="addblog.html" />
-    <Content Include="addcoach.html" />
-    <Content Include="addcoach_result.html" />
-    <Content Include="addpdq.html" />
-    <Content Include="addvip.html" />
-    <Content Include="addvip_result.html" />
-    <Content Include="add_item.htm" />
-    <Content Include="after-class.htm" />
     <Content Include="ajax\email-compose.html" />
     <Content Include="ajax\email-opened.html" />
     <Content Include="ajax\email-reply.html" />
@@ -135,14 +118,6 @@
     <Content Include="ajax\website-template.html" />
     <Content Include="asset\css\bootstrap.min.css" />
     <Content Include="asset\js\bootstrap.min.js" />
-    <Content Include="before-class.htm" />
-    <Content Include="blank_.html" />
-    <Content Include="blog-content.htm" />
-    <Content Include="blog-manager.htm" />
-    <Content Include="blog.htm" />
-    <Content Include="blog.html" />
-    <Content Include="bloglist.html" />
-    <Content Include="blog_detail.html" />
     <Content Include="calendar\responsive-calendar.css" />
     <Content Include="calendar\responsive-calendar.js" />
     <Content Include="calendar\responsive-calendar.min.js" />
@@ -389,14 +364,6 @@
     <Content Include="CKEditor\skins\moono\images\refresh.png" />
     <Content Include="CKEditor\skins\moono\images\spinner.gif" />
     <Content Include="CKEditor\styles.js" />
-    <Content Include="class-list.htm" />
-    <Content Include="classlist.html" />
-    <Content Include="coach-edit-verify.htm" />
-    <Content Include="coach-verify.htm" />
-    <Content Include="coach.htm" />
-    <Content Include="coachlist.html" />
-    <Content Include="contact-us.htm" />
-    <Content Include="contact.html" />
     <Content Include="Content\bootstrap-datetimepicker.css" />
     <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -405,8 +372,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="cooperation.htm" />
-    <Content Include="cooperation.html" />
     <Content Include="css\animate.css" />
     <Content Include="css\app.css" />
     <Content Include="css\beyond_style.css" />
@@ -437,14 +402,6 @@
     <Content Include="css\smartadmin-skins.min.css" />
     <Content Include="css\style.css" />
     <Content Include="Default.aspx" />
-    <Content Include="edit-blog.htm" />
-    <Content Include="edit-coach.htm" />
-    <Content Include="edit-vip-info-bycoach.htm" />
-    <Content Include="edit-vip-info-verify-bycoach.htm" />
-    <Content Include="edit-vip-info-verify.htm" />
-    <Content Include="edit-vip-info.htm" />
-    <Content Include="equipment-rental-test.htm" />
-    <Content Include="equipment-rental.htm" />
     <Content Include="error404.html" />
     <Content Include="error500.html" />
     <Content Include="favicon.ico" />
@@ -471,9 +428,6 @@
     <Content Include="flot\jquery.flot.time.js" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="footer.htm" />
-    <Content Include="forgetpasswd.html" />
-    <Content Include="forgetpw.htm" />
     <Content Include="fullcalendar-2.8.0\fullcalendar.css" />
     <Content Include="fullcalendar-2.8.0\fullcalendar.js" />
     <Content Include="fullcalendar-2.8.0\fullcalendar.min.css" />
@@ -801,8 +755,6 @@
     <Content Include="img\violate.jpg" />
     <Content Include="img\voicecommand\active-btn.gif" />
     <Content Include="img\vt-menu.png" />
-    <Content Include="index.htm" />
-    <Content Include="index.html" />
     <Content Include="jQuerySelect\chosen-sprite%402x.png" />
     <Content Include="jQuerySelect\chosen-sprite.png" />
     <Content Include="jQuerySelect\chosen.css" />
@@ -1388,12 +1340,6 @@
     <Content Include="lockScreen\html5-android-pattern-lockScreen.js" />
     <Content Include="lockScreen\html5-android-pattern-lockScreen.min.js" />
     <Content Include="lockScreen\kinetic-v4.6.js" />
-    <Content Include="login-email.htm" />
-    <Content Include="login.htm" />
-    <Content Include="login.html" />
-    <Content Include="maillogin.html" />
-    <Content Include="map.html" />
-    <Content Include="member-manager.htm" />
     <Content Include="Models\DataEntity\BF.dbml">
       <SubType>Designer</SubType>
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -1402,31 +1348,6 @@
     <Content Include="Module\Common\CommonScriptInclude.ascx" />
     <Content Include="Module\Common\PageTailScriptInclude.ascx" />
     <Content Include="Module\Common\CommonScriptManager.ascx" />
-    <Content Include="preview-blog.htm" />
-    <Content Include="preview-vip.htm" />
-    <Content Include="products.htm" />
-    <Content Include="products.html" />
-    <Content Include="professional-fitness-content.htm" />
-    <Content Include="professional-fitness-content01.htm" />
-    <Content Include="professional-fitness-content02.htm" />
-    <Content Include="professional-fitness-content03.htm" />
-    <Content Include="professional-fitness-content04.htm" />
-    <Content Include="professional-fitness-content05.htm" />
-    <Content Include="professional-fitness-content06.htm" />
-    <Content Include="professional-fitness-content07.htm" />
-    <Content Include="professional-fitness-content08.htm" />
-    <Content Include="professional-fitness.htm" />
-    <Content Include="professional.html" />
-    <Content Include="profile.html" />
-    <Content Include="regester.html" />
-    <Content Include="regester_info.html" />
-    <Content Include="register-1.htm" />
-    <Content Include="register-2.htm" />
-    <Content Include="register-3.htm" />
-    <Content Include="register-FB.htm" />
-    <Content Include="register-result.htm" />
-    <Content Include="register.htm" />
-    <Content Include="rental.html" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1448,7 +1369,6 @@
     <Content Include="js\plugin\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\outputforflash.fla" />
     <Content Include="js\plugin\ckeditor\samples\sample_posteddata.php" />
     <Content Include="js\plugin\ckeditor\skins\moono\readme.md" />
-    <Content Include="js\plugin\fullcalendar\.DS_Store" />
     <Content Include="js\plugin\lockscreen\.DS_Store" />
     <None Include="Models\DataEntity\BF.dbml.layout">
       <DependentUpon>BF.dbml</DependentUpon>
@@ -1463,7 +1383,6 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\npm.js" />
-    <Content Include="searchvip.html" />
     <Content Include="sound\bigbox.mp3" />
     <Content Include="sound\license.txt" />
     <Content Include="sound\messagebox.mp3" />
@@ -1471,18 +1390,13 @@
     <Content Include="sound\voice_alert.mp3" />
     <Content Include="sound\voice_off.mp3" />
     <Content Include="sound\voice_on.mp3" />
-    <Content Include="timeline.html" />
-    <Content Include="updatecoach.html" />
-    <Content Include="updatepasswd.html" />
-    <Content Include="updatevip.html" />
-    <Content Include="view-coach.htm" />
-    <Content Include="view-vip.htm" />
-    <Content Include="Views\Account\EditMySelf.aspx" />
     <Content Include="Views\Account\AlertTimeout.aspx" />
+    <Content Include="Views\Account\EditMySelf.aspx" />
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Information\EditBlog.aspx" />
     <Content Include="Views\Information\Resource.ascx" />
     <Content Include="Views\Layout\Carousel.ascx" />
+    <Content Include="Views\Layout\NavItem\SystemInfo.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\ViewProfile.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\ListCoaches.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\ListLearners.ascx" />
@@ -1496,22 +1410,31 @@
     <Content Include="Views\Layout\QuickLinkItem\EditProfile.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Logout.ascx" />
     <Content Include="Views\Layout\QuickLinkItem\Overview.ascx" />
+    <Content Include="Views\Lessons\QueryLessonTimeList.ascx" />
+    <Content Include="Views\Lessons\QueryLessonTime.ascx" />
+    <Content Include="Views\Lessons\LessonsInfo.ascx" />
+    <Content Include="Views\Lessons\EditBreakInterval.ascx" />
     <Content Include="Views\Lessons\EditSingleTrainingItem.ascx" />
     <Content Include="Views\Lessons\AddTrainingItem.ascx" />
     <Content Include="Views\Lessons\AttendeeByVip.ascx" />
     <Content Include="Views\Lessons\EditTrainingItem.ascx" />
+    <Content Include="Views\Lessons\LessonsCalendar.ascx" />
+    <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
+    <Content Include="Views\Lessons\LessonTrendItem.ascx" />
+    <Content Include="Views\Lessons\PreviewLesson.aspx" />
+    <Content Include="Views\Lessons\ProfessionalLevelSelector.ascx" />
+    <Content Include="Views\Lessons\QueryBookingList.ascx" />
+    <Content Include="Views\Lessons\RebookingByCoach.aspx" />
+    <Content Include="Views\Lessons\LearnerLessonPlan.ascx" />
     <Content Include="Views\Lessons\SingleTrainingItem.ascx" />
     <Content Include="Views\Lessons\SingleTrainingExecutionPlan.ascx" />
     <Content Include="Views\Lessons\VipSelector.ascx" />
-    <Content Include="Views\Lessons\RebookingByCoach.aspx" />
     <Content Include="Views\Lessons\BookingByCoach.aspx" />
     <Content Include="Views\Lessons\ViewTrainingItem.ascx" />
     <Content Include="Views\Lessons\ViewTrainingExecutionItem.ascx" />
     <Content Include="Views\Lessons\TrainingExecutionItem.ascx" />
-    <Content Include="Views\Lessons\LessonTrendItem.ascx" />
     <Content Include="Views\Lessons\ViewTrainingExecutionPlan.ascx" />
     <Content Include="Views\Lessons\TrainingExecutionPlan.ascx" />
-    <Content Include="Views\Lessons\QueryBookingList.ascx" />
     <Content Include="Views\Lessons\QueryVip.aspx" />
     <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\CompleteRegister.aspx" />
@@ -1565,9 +1488,8 @@
     <Content Include="Views\Lessons\DailyFitnessPieView.ascx" />
     <Content Include="Views\Lessons\FitnessGraphView.ascx" />
     <Content Include="Views\Lessons\QueryModalByFreeAgent.ascx" />
-    <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
-    <Content Include="Views\Lessons\ProfessionalLevelSelector.ascx" />
     <Content Include="Views\Lessons\TrainingPlan.aspx" />
+    <Content Include="Views\Member\PayInstallment.ascx" />
     <Content Include="Views\Member\UserAssessmentInfo.ascx" />
     <Content Include="Views\Member\LessonCount.ascx" />
     <Content Include="Views\Lessons\TrendGraphView.ascx" />
@@ -1576,7 +1498,6 @@
     <Content Include="Views\Lessons\SelectVipDay.ascx" />
     <Content Include="Views\Lessons\ToVipDay.ascx" />
     <Content Include="Views\Lessons\VipCalendar.ascx" />
-    <Content Include="Views\Lessons\PreviewLesson.aspx" />
     <Content Include="Views\Account\CompleteEditMySelf.aspx" />
     <Content Include="Views\Account\Logout.aspx" />
     <Content Include="Views\Account\LoginTest.aspx" />
@@ -1599,7 +1520,6 @@
     <Content Include="Views\Lessons\DailyBookingMembers.ascx" />
     <Content Include="Views\Lessons\DailyStackView.ascx" />
     <Content Include="Views\Lessons\DailyBookingList.ascx" />
-    <Content Include="Views\Lessons\LessonsCalendar.ascx" />
     <Content Include="Views\Account\Vip.aspx" />
     <Content Include="Views\Member\AddCoach.aspx" />
     <Content Include="Views\Member\AddLearner.aspx" />
@@ -1654,6 +1574,7 @@
     <Content Include="Views\Member\VipPDQ_1.aspx" />
     <Content Include="Views\MyTest\Index.aspx" />
     <Content Include="Views\MyTest\TestPopup.aspx" />
+    <Content Include="Views\Sample\DataTable.ascx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />
     <Content Include="Views\Shared\CommonModal.ascx" />
@@ -1675,19 +1596,9 @@
     <Content Include="Views\Sample\Sample.ascx" />
     <Content Include="Views\Shared\PagingControl.ascx" />
     <Content Include="Views\Shared\Script.ascx" />
-    <Content Include="viewvip.html" />
-    <Content Include="vip-pdq-1.htm" />
-    <Content Include="vip-pdq-2.htm" />
-    <Content Include="vip-pdq-3.htm" />
-    <Content Include="vip-pdq-4.htm" />
-    <Content Include="vip-single-day.htm" />
-    <Content Include="vip-verify.htm" />
-    <Content Include="vip.htm" />
-    <Content Include="vipdashboard.html" />
-    <Content Include="vipdiary.html" />
-    <Content Include="vipdiarypreview.html" />
-    <Content Include="viplist.html" />
-    <Content Include="wait.htm" />
+    <Content Include="Views\SystemInfo\ConfigureAll.aspx" />
+    <Content Include="Views\SystemInfo\LessonPriceTypeList.ascx" />
+    <Content Include="Views\SystemInfo\EditLessonPrice.aspx" />
     <Content Include="Web.config" />
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="_test\Test01.aspx" />
@@ -1705,6 +1616,7 @@
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MyTestController.cs" />
     <Compile Include="Controllers\SampleController.cs" />
+    <Compile Include="Controllers\SystemInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1741,7 +1653,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <Content Include="packages.config" />
     <Content Include="README.md" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />

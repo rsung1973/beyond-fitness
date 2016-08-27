@@ -99,7 +99,7 @@
                                                 <section class="col col-6">
                                                     <label class="input input-group">
                                                         <i class="icon-append fa fa-calendar"></i>
-                                                        <input type="text" name="dateFrom" id="dateFrom" class="form-control input-lg date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起月" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) : null %>" />
+                                                        <input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起月" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) : null %>" />
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
@@ -238,17 +238,11 @@
                                     <!-- content -->
                                     <div id="myTabContent" class="tab-content">
                                         <div class="tab-pane fade active widget-body in no-padding-bottom" id="s1">
-                                            <div class="well bg-color-blueDark no-padding">
                                                 <% Html.RenderAction("QueryBookingList"); %>
-                                            </div>
                                         </div>
                                         <!-- end s1 tab pane -->
                                         <div class="tab-pane fade" id="s2">
-                                            <div class="well bg-color-blueDark no-padding">
                                                 <% Html.RenderPartial("~/Views/Lessons/DailyBarGraph.ascx", _lessonDate); %>
-                                            </div>
-
-
                                         </div>
                                         <!-- end s3 tab pane -->
                                     </div>

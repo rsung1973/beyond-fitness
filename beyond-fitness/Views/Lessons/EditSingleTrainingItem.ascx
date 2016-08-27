@@ -79,7 +79,7 @@
                                 </div>
                                 <span class="input-group-addon">強度</span>
                             </div>
-                            <p class="note"><strong>Note:</strong> 輸入15磅 或10-12 KG 或30秒</p>
+                            <p class="note"><strong>Note:</strong> EX : 15磅/70% , 30秒/85％ 等</p>
                         </div>
                     </div>
                 </div>

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using WebHome.Models.DataEntity;
-using WebHome.Models.ViewModel;
-using WebHome.Helper;
-using System.Threading;
-using System.Text;
-using WebHome.Models.Locale;
-using Utility;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
 using System.Web.Security;
+using CommonLib.MvcExtension;
+using Utility;
+using WebHome.Helper;
+using WebHome.Models.DataEntity;
+using WebHome.Models.Locale;
+using WebHome.Models.ViewModel;
 
 namespace WebHome.Controllers
 {
@@ -29,9 +30,25 @@ namespace WebHome.Controllers
         {
             return Redirect(url);
         }
+
+        public ActionResult RenderAll()
+        {
+            return Content("Hello...");
+        }
+
         public ActionResult GetJson()
         {
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                TempData["msg"] = "Hello...";
+                ViewBag.Message = "TEST~~";
+            //StringBuilder sb = new StringBuilder();
+            //using (StringWriter sw = new StringWriter(sb))
+            //{
+            //    //Server.Execute("~/Lessons/DailyBookingMembers?lessonDate=2016-08-20&hour=8", sw);
+               
+            //    Server.Execute("~/MyTest/RenderAll", sw);
+            //    sw.Flush();
+            //}
+            return Json(new { result = true, details = this.RenderViewToString("Test01", null) }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Test(String view)

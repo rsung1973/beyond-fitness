@@ -195,16 +195,11 @@
                                     <!-- content -->
                                     <div id="myTabContent" class="tab-content">
                                         <div class="tab-pane fade active in" id="s1">
-                                            <div class="well bg-color-darken">
                                                 <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
-                                            </div>
                                         </div>
                                         <!-- end s1 tab pane -->
                                         <div class="tab-pane fade" id="s2">
-                                            <div class="well bg-color-darken">
                                                 <% Html.RenderPartial("~/Views/Lessons/DailyBarGraph.ascx", _lessonDate); %>
-                                            </div>
-                                            
 
                                         </div>
                                         <!-- end s3 tab pane -->

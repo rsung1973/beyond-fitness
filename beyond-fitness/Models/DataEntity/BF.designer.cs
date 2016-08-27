@@ -22,7 +22,7 @@ namespace WebHome.Models.DataEntity
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitness")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitnessProd")]
 	public partial class BFDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -54,9 +54,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertResetPassword(ResetPassword instance);
     partial void UpdateResetPassword(ResetPassword instance);
     partial void DeleteResetPassword(ResetPassword instance);
-    partial void InsertLessonPriceType(LessonPriceType instance);
-    partial void UpdateLessonPriceType(LessonPriceType instance);
-    partial void DeleteLessonPriceType(LessonPriceType instance);
     partial void InsertGroupingLesson(GroupingLesson instance);
     partial void UpdateGroupingLesson(GroupingLesson instance);
     partial void DeleteGroupingLesson(GroupingLesson instance);
@@ -138,6 +135,12 @@ namespace WebHome.Models.DataEntity
     partial void InsertTrainingItem(TrainingItem instance);
     partial void UpdateTrainingItem(TrainingItem instance);
     partial void DeleteTrainingItem(TrainingItem instance);
+    partial void InsertLessonPriceType(LessonPriceType instance);
+    partial void UpdateLessonPriceType(LessonPriceType instance);
+    partial void DeleteLessonPriceType(LessonPriceType instance);
+    partial void InsertTuitionInstallment(TuitionInstallment instance);
+    partial void UpdateTuitionInstallment(TuitionInstallment instance);
+    partial void DeleteTuitionInstallment(TuitionInstallment instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -231,14 +234,6 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<ResetPassword>();
-			}
-		}
-		
-		public System.Data.Linq.Table<LessonPriceType> LessonPriceType
-		{
-			get
-			{
-				return this.GetTable<LessonPriceType>();
 			}
 		}
 		
@@ -455,6 +450,22 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<TrainingItem>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonPriceType> LessonPriceType
+		{
+			get
+			{
+				return this.GetTable<LessonPriceType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TuitionInstallment> TuitionInstallment
+		{
+			get
+			{
+				return this.GetTable<TuitionInstallment>();
 			}
 		}
 	}
@@ -1053,8 +1064,6 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<Document> _Documents;
 		
-		private EntitySet<LessonPriceType> _LessonPriceType;
-		
 		private EntitySet<TrainingPlan> _TrainingPlan;
 		
 		private EntitySet<UserProfile> _UserProfile;
@@ -1064,6 +1073,8 @@ namespace WebHome.Models.DataEntity
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
 		private EntitySet<PDQQuestion> _PDQQuestion;
+		
+		private EntitySet<LessonPriceType> _LessonPriceType;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1080,12 +1091,12 @@ namespace WebHome.Models.DataEntity
 		public LevelExpression()
 		{
 			this._Documents = new EntitySet<Document>(new Action<Document>(this.attach_Documents), new Action<Document>(this.detach_Documents));
-			this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
 			this._TrainingPlan = new EntitySet<TrainingPlan>(new Action<TrainingPlan>(this.attach_TrainingPlan), new Action<TrainingPlan>(this.detach_TrainingPlan));
 			this._UserProfile = new EntitySet<UserProfile>(new Action<UserProfile>(this.attach_UserProfile), new Action<UserProfile>(this.detach_UserProfile));
 			this._PDQType = new EntitySet<PDQType>(new Action<PDQType>(this.attach_PDQType), new Action<PDQType>(this.detach_PDQType));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
 			this._PDQQuestion = new EntitySet<PDQQuestion>(new Action<PDQQuestion>(this.attach_PDQQuestion), new Action<PDQQuestion>(this.detach_PDQQuestion));
+			this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
 			OnCreated();
 		}
 		
@@ -1162,19 +1173,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LessonPriceType", ThisKey="LevelID", OtherKey="Status")]
-		public EntitySet<LessonPriceType> LessonPriceType
-		{
-			get
-			{
-				return this._LessonPriceType;
-			}
-			set
-			{
-				this._LessonPriceType.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_TrainingPlan", Storage="_TrainingPlan", ThisKey="LevelID", OtherKey="PlanStatus")]
 		public EntitySet<TrainingPlan> TrainingPlan
 		{
@@ -1240,6 +1238,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LessonPriceType", ThisKey="LevelID", OtherKey="Status")]
+		public EntitySet<LessonPriceType> LessonPriceType
+		{
+			get
+			{
+				return this._LessonPriceType;
+			}
+			set
+			{
+				this._LessonPriceType.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -1267,18 +1278,6 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_Documents(Document entity)
-		{
-			this.SendPropertyChanging();
-			entity.LevelExpression = null;
-		}
-		
-		private void attach_LessonPriceType(LessonPriceType entity)
-		{
-			this.SendPropertyChanging();
-			entity.LevelExpression = this;
-		}
-		
-		private void detach_LessonPriceType(LessonPriceType entity)
 		{
 			this.SendPropertyChanging();
 			entity.LevelExpression = null;
@@ -1339,6 +1338,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_PDQQuestion(PDQQuestion entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = null;
+		}
+		
+		private void attach_LessonPriceType(LessonPriceType entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = this;
+		}
+		
+		private void detach_LessonPriceType(LessonPriceType entity)
 		{
 			this.SendPropertyChanging();
 			entity.LevelExpression = null;
@@ -2125,209 +2136,6 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonPriceType")]
-	public partial class LessonPriceType : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _PriceID;
-		
-		private string _Description;
-		
-		private System.Nullable<int> _ListPrice;
-		
-		private System.Nullable<int> _Status;
-		
-		private EntitySet<RegisterLesson> _RegisterLesson;
-		
-		private EntityRef<LevelExpression> _LevelExpression;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnPriceIDChanging(int value);
-    partial void OnPriceIDChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnListPriceChanging(System.Nullable<int> value);
-    partial void OnListPriceChanged();
-    partial void OnStatusChanging(System.Nullable<int> value);
-    partial void OnStatusChanged();
-    #endregion
-		
-		public LessonPriceType()
-		{
-			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
-			this._LevelExpression = default(EntityRef<LevelExpression>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int PriceID
-		{
-			get
-			{
-				return this._PriceID;
-			}
-			set
-			{
-				if ((this._PriceID != value))
-				{
-					this.OnPriceIDChanging(value);
-					this.SendPropertyChanging();
-					this._PriceID = value;
-					this.SendPropertyChanged("PriceID");
-					this.OnPriceIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(64)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ListPrice", DbType="Int")]
-		public System.Nullable<int> ListPrice
-		{
-			get
-			{
-				return this._ListPrice;
-			}
-			set
-			{
-				if ((this._ListPrice != value))
-				{
-					this.OnListPriceChanging(value);
-					this.SendPropertyChanging();
-					this._ListPrice = value;
-					this.SendPropertyChanged("ListPrice");
-					this.OnListPriceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
-		public System.Nullable<int> Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					if (this._LevelExpression.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_RegisterLesson", ThisKey="PriceID", OtherKey="ClassLevel")]
-		public EntitySet<RegisterLesson> RegisterLesson
-		{
-			get
-			{
-				return this._RegisterLesson;
-			}
-			set
-			{
-				this._RegisterLesson.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LevelExpression", ThisKey="Status", OtherKey="LevelID", IsForeignKey=true)]
-		public LevelExpression LevelExpression
-		{
-			get
-			{
-				return this._LevelExpression.Entity;
-			}
-			set
-			{
-				LevelExpression previousValue = this._LevelExpression.Entity;
-				if (((previousValue != value) 
-							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LevelExpression.Entity = null;
-						previousValue.LessonPriceType.Remove(this);
-					}
-					this._LevelExpression.Entity = value;
-					if ((value != null))
-					{
-						value.LessonPriceType.Add(this);
-						this._Status = value.LevelID;
-					}
-					else
-					{
-						this._Status = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("LevelExpression");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_RegisterLesson(RegisterLesson entity)
-		{
-			this.SendPropertyChanging();
-			entity.LessonPriceType = this;
-		}
-		
-		private void detach_RegisterLesson(RegisterLesson entity)
-		{
-			this.SendPropertyChanging();
-			entity.LessonPriceType = null;
 		}
 	}
 	
@@ -6456,13 +6264,13 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
-		private EntityRef<LessonPriceType> _LessonPriceType;
-		
 		private EntityRef<LevelExpression> _LevelExpression;
 		
 		private EntityRef<UserProfile> _UserProfile;
 		
 		private EntityRef<ServingCoach> _ServingCoach;
+		
+		private EntityRef<LessonPriceType> _LessonPriceType;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6494,10 +6302,10 @@ namespace WebHome.Models.DataEntity
 			this._LessonTimeExpansion = new EntitySet<LessonTimeExpansion>(new Action<LessonTimeExpansion>(this.attach_LessonTimeExpansion), new Action<LessonTimeExpansion>(this.detach_LessonTimeExpansion));
 			this._IntuitionCharge = default(EntityRef<IntuitionCharge>);
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
-			this._LessonPriceType = default(EntityRef<LessonPriceType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
+			this._LessonPriceType = default(EntityRef<LessonPriceType>);
 			OnCreated();
 		}
 		
@@ -6790,40 +6598,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_LessonPriceType", ThisKey="ClassLevel", OtherKey="PriceID", IsForeignKey=true)]
-		public LessonPriceType LessonPriceType
-		{
-			get
-			{
-				return this._LessonPriceType.Entity;
-			}
-			set
-			{
-				LessonPriceType previousValue = this._LessonPriceType.Entity;
-				if (((previousValue != value) 
-							|| (this._LessonPriceType.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LessonPriceType.Entity = null;
-						previousValue.RegisterLesson.Remove(this);
-					}
-					this._LessonPriceType.Entity = value;
-					if ((value != null))
-					{
-						value.RegisterLesson.Add(this);
-						this._ClassLevel = value.PriceID;
-					}
-					else
-					{
-						this._ClassLevel = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("LessonPriceType");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_RegisterLesson", Storage="_LevelExpression", ThisKey="Attended", OtherKey="LevelID", IsForeignKey=true)]
 		public LevelExpression LevelExpression
 		{
@@ -6926,6 +6700,40 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_LessonPriceType", ThisKey="ClassLevel", OtherKey="PriceID", IsForeignKey=true)]
+		public LessonPriceType LessonPriceType
+		{
+			get
+			{
+				return this._LessonPriceType.Entity;
+			}
+			set
+			{
+				LessonPriceType previousValue = this._LessonPriceType.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonPriceType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonPriceType.Entity = null;
+						previousValue.RegisterLesson.Remove(this);
+					}
+					this._LessonPriceType.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLesson.Add(this);
+						this._ClassLevel = value.PriceID;
+					}
+					else
+					{
+						this._ClassLevel = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LessonPriceType");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -6985,6 +6793,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _ByInstallments;
 		
+		private EntitySet<TuitionInstallment> _TuitionInstallment;
+		
 		private EntityRef<RegisterLesson> _RegisterLesson;
 		
     #region Extensibility Method Definitions
@@ -7003,6 +6813,7 @@ namespace WebHome.Models.DataEntity
 		
 		public IntuitionCharge()
 		{
+			this._TuitionInstallment = new EntitySet<TuitionInstallment>(new Action<TuitionInstallment>(this.attach_TuitionInstallment), new Action<TuitionInstallment>(this.detach_TuitionInstallment));
 			this._RegisterLesson = default(EntityRef<RegisterLesson>);
 			OnCreated();
 		}
@@ -7091,6 +6902,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IntuitionCharge_TuitionInstallment", Storage="_TuitionInstallment", ThisKey="RegisterID", OtherKey="RegisterID")]
+		public EntitySet<TuitionInstallment> TuitionInstallment
+		{
+			get
+			{
+				return this._TuitionInstallment;
+			}
+			set
+			{
+				this._TuitionInstallment.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_IntuitionCharge", Storage="_RegisterLesson", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public RegisterLesson RegisterLesson
 		{
@@ -7143,6 +6967,18 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_TuitionInstallment(TuitionInstallment entity)
+		{
+			this.SendPropertyChanging();
+			entity.IntuitionCharge = this;
+		}
+		
+		private void detach_TuitionInstallment(TuitionInstallment entity)
+		{
+			this.SendPropertyChanging();
+			entity.IntuitionCharge = null;
 		}
 	}
 	
@@ -9014,6 +8850,10 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _Sequence;
 		
+		private string _ExecutionFeedBack;
+		
+		private System.Nullable<System.DateTime> _ExecutionFeedBackDate;
+		
 		private EntityRef<TrainingExecution> _TrainingExecution;
 		
 		private EntityRef<TrainingType> _TrainingType;
@@ -9046,6 +8886,10 @@ namespace WebHome.Models.DataEntity
     partial void OnRepeatsChanged();
     partial void OnSequenceChanging(System.Nullable<int> value);
     partial void OnSequenceChanged();
+    partial void OnExecutionFeedBackChanging(string value);
+    partial void OnExecutionFeedBackChanged();
+    partial void OnExecutionFeedBackDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnExecutionFeedBackDateChanged();
     #endregion
 		
 		public TrainingItem()
@@ -9303,6 +9147,46 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBack", DbType="NVarChar(MAX)")]
+		public string ExecutionFeedBack
+		{
+			get
+			{
+				return this._ExecutionFeedBack;
+			}
+			set
+			{
+				if ((this._ExecutionFeedBack != value))
+				{
+					this.OnExecutionFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionFeedBack = value;
+					this.SendPropertyChanged("ExecutionFeedBack");
+					this.OnExecutionFeedBackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutionFeedBackDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ExecutionFeedBackDate
+		{
+			get
+			{
+				return this._ExecutionFeedBackDate;
+			}
+			set
+			{
+				if ((this._ExecutionFeedBackDate != value))
+				{
+					this.OnExecutionFeedBackDateChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutionFeedBackDate = value;
+					this.SendPropertyChanged("ExecutionFeedBackDate");
+					this.OnExecutionFeedBackDateChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrainingExecution_TrainingItem", Storage="_TrainingExecution", ThisKey="ExecutionID", OtherKey="ExecutionID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public TrainingExecution TrainingExecution
 		{
@@ -9367,6 +9251,456 @@ namespace WebHome.Models.DataEntity
 						this._TrainingID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TrainingType");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonPriceType")]
+	public partial class LessonPriceType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PriceID;
+		
+		private string _Description;
+		
+		private System.Nullable<int> _ListPrice;
+		
+		private System.Nullable<int> _Status;
+		
+		private System.Nullable<int> _UsageType;
+		
+		private System.Nullable<int> _CoachPayoff;
+		
+		private System.Nullable<int> _CoachPayoffCreditCard;
+		
+		private EntitySet<RegisterLesson> _RegisterLesson;
+		
+		private EntityRef<LevelExpression> _LevelExpression;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPriceIDChanging(int value);
+    partial void OnPriceIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnListPriceChanging(System.Nullable<int> value);
+    partial void OnListPriceChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
+    partial void OnUsageTypeChanging(System.Nullable<int> value);
+    partial void OnUsageTypeChanged();
+    partial void OnCoachPayoffChanging(System.Nullable<int> value);
+    partial void OnCoachPayoffChanged();
+    partial void OnCoachPayoffCreditCardChanging(System.Nullable<int> value);
+    partial void OnCoachPayoffCreditCardChanged();
+    #endregion
+		
+		public LessonPriceType()
+		{
+			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			this._LevelExpression = default(EntityRef<LevelExpression>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int PriceID
+		{
+			get
+			{
+				return this._PriceID;
+			}
+			set
+			{
+				if ((this._PriceID != value))
+				{
+					this.OnPriceIDChanging(value);
+					this.SendPropertyChanging();
+					this._PriceID = value;
+					this.SendPropertyChanged("PriceID");
+					this.OnPriceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(64)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ListPrice", DbType="Int")]
+		public System.Nullable<int> ListPrice
+		{
+			get
+			{
+				return this._ListPrice;
+			}
+			set
+			{
+				if ((this._ListPrice != value))
+				{
+					this.OnListPriceChanging(value);
+					this.SendPropertyChanging();
+					this._ListPrice = value;
+					this.SendPropertyChanged("ListPrice");
+					this.OnListPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UsageType", DbType="Int")]
+		public System.Nullable<int> UsageType
+		{
+			get
+			{
+				return this._UsageType;
+			}
+			set
+			{
+				if ((this._UsageType != value))
+				{
+					this.OnUsageTypeChanging(value);
+					this.SendPropertyChanging();
+					this._UsageType = value;
+					this.SendPropertyChanged("UsageType");
+					this.OnUsageTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoachPayoff", DbType="Int")]
+		public System.Nullable<int> CoachPayoff
+		{
+			get
+			{
+				return this._CoachPayoff;
+			}
+			set
+			{
+				if ((this._CoachPayoff != value))
+				{
+					this.OnCoachPayoffChanging(value);
+					this.SendPropertyChanging();
+					this._CoachPayoff = value;
+					this.SendPropertyChanged("CoachPayoff");
+					this.OnCoachPayoffChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoachPayoffCreditCard", DbType="Int")]
+		public System.Nullable<int> CoachPayoffCreditCard
+		{
+			get
+			{
+				return this._CoachPayoffCreditCard;
+			}
+			set
+			{
+				if ((this._CoachPayoffCreditCard != value))
+				{
+					this.OnCoachPayoffCreditCardChanging(value);
+					this.SendPropertyChanging();
+					this._CoachPayoffCreditCard = value;
+					this.SendPropertyChanged("CoachPayoffCreditCard");
+					this.OnCoachPayoffCreditCardChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_RegisterLesson", Storage="_RegisterLesson", ThisKey="PriceID", OtherKey="ClassLevel")]
+		public EntitySet<RegisterLesson> RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson;
+			}
+			set
+			{
+				this._RegisterLesson.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_LessonPriceType", Storage="_LevelExpression", ThisKey="Status", OtherKey="LevelID", IsForeignKey=true)]
+		public LevelExpression LevelExpression
+		{
+			get
+			{
+				return this._LevelExpression.Entity;
+			}
+			set
+			{
+				LevelExpression previousValue = this._LevelExpression.Entity;
+				if (((previousValue != value) 
+							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LevelExpression.Entity = null;
+						previousValue.LessonPriceType.Remove(this);
+					}
+					this._LevelExpression.Entity = value;
+					if ((value != null))
+					{
+						value.LessonPriceType.Add(this);
+						this._Status = value.LevelID;
+					}
+					else
+					{
+						this._Status = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LevelExpression");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonPriceType = this;
+		}
+		
+		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonPriceType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TuitionInstallment")]
+	public partial class TuitionInstallment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _InstallmentID;
+		
+		private int _RegisterID;
+		
+		private System.Nullable<int> _PayoffAmount;
+		
+		private System.Nullable<System.DateTime> _PayoffDate;
+		
+		private EntityRef<IntuitionCharge> _IntuitionCharge;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnInstallmentIDChanging(int value);
+    partial void OnInstallmentIDChanged();
+    partial void OnRegisterIDChanging(int value);
+    partial void OnRegisterIDChanged();
+    partial void OnPayoffAmountChanging(System.Nullable<int> value);
+    partial void OnPayoffAmountChanged();
+    partial void OnPayoffDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnPayoffDateChanged();
+    #endregion
+		
+		public TuitionInstallment()
+		{
+			this._IntuitionCharge = default(EntityRef<IntuitionCharge>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InstallmentID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int InstallmentID
+		{
+			get
+			{
+				return this._InstallmentID;
+			}
+			set
+			{
+				if ((this._InstallmentID != value))
+				{
+					this.OnInstallmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._InstallmentID = value;
+					this.SendPropertyChanged("InstallmentID");
+					this.OnInstallmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterID", DbType="Int NOT NULL")]
+		public int RegisterID
+		{
+			get
+			{
+				return this._RegisterID;
+			}
+			set
+			{
+				if ((this._RegisterID != value))
+				{
+					if (this._IntuitionCharge.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegisterIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterID = value;
+					this.SendPropertyChanged("RegisterID");
+					this.OnRegisterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PayoffAmount", DbType="Int")]
+		public System.Nullable<int> PayoffAmount
+		{
+			get
+			{
+				return this._PayoffAmount;
+			}
+			set
+			{
+				if ((this._PayoffAmount != value))
+				{
+					this.OnPayoffAmountChanging(value);
+					this.SendPropertyChanging();
+					this._PayoffAmount = value;
+					this.SendPropertyChanged("PayoffAmount");
+					this.OnPayoffAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PayoffDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> PayoffDate
+		{
+			get
+			{
+				return this._PayoffDate;
+			}
+			set
+			{
+				if ((this._PayoffDate != value))
+				{
+					this.OnPayoffDateChanging(value);
+					this.SendPropertyChanging();
+					this._PayoffDate = value;
+					this.SendPropertyChanged("PayoffDate");
+					this.OnPayoffDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IntuitionCharge_TuitionInstallment", Storage="_IntuitionCharge", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public IntuitionCharge IntuitionCharge
+		{
+			get
+			{
+				return this._IntuitionCharge.Entity;
+			}
+			set
+			{
+				IntuitionCharge previousValue = this._IntuitionCharge.Entity;
+				if (((previousValue != value) 
+							|| (this._IntuitionCharge.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._IntuitionCharge.Entity = null;
+						previousValue.TuitionInstallment.Remove(this);
+					}
+					this._IntuitionCharge.Entity = value;
+					if ((value != null))
+					{
+						value.TuitionInstallment.Add(this);
+						this._RegisterID = value.RegisterID;
+					}
+					else
+					{
+						this._RegisterID = default(int);
+					}
+					this.SendPropertyChanged("IntuitionCharge");
 				}
 			}
 		}

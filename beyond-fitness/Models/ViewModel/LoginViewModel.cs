@@ -151,6 +151,8 @@ namespace WebHome.Models.ViewModel
         public int? ByInstallments { get; set; }
 
         public int? AdvisorID { get; set; }
+
+        public int? RegisterID { get; set; }
     }
 
 
@@ -338,7 +340,7 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "訓練")]
         public int? Training { get; set; }
 
-        [Display(Name = "心理輔導")]
+        [Display(Name = "狀態溝通")]
         public int? Counseling { get; set; }
 
         [Display(Name = "柔軟度")]
@@ -381,6 +383,19 @@ namespace WebHome.Models.ViewModel
         public int? CoachID { get; set; }
         public int? MonthInterval { get; set; }
         public bool? HasQuery { get; set; }
+        public int? TrainingBySelf { get; set; }
+        public int? LessonID { get; set; }
+    }
+
+    public class LessonPriceViewModel
+    {
+        public int? PriceID { get; set; }
+        public String Description { get; set; }
+        public int? ListPrice { get; set; }
+        public int? Status { get; set; }
+        public int? UsageType { get; set; }
+        public int? CoachPayoff { get; set; }
+        public int? CoachPayoffCreditCard { get; set; }
     }
 
     public class MembersQueryViewModel
@@ -389,10 +404,18 @@ namespace WebHome.Models.ViewModel
         public Naming.RoleID? RoleID { get; set; }
     }
 
+    public class InstallmentViewModel
+    {
+        public int RegisterID { get; set; }
+        public int?[] PayoffAmount { get; set; }
+        public DateTime?[] PayoffDate { get; set; }
+    }
+
 
     public class ArgumentModel
     {
         public String PartialViewName { get; set; }
         public object Model { get; set; }
     }
+
 }

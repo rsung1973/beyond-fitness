@@ -102,7 +102,7 @@
                                     <section class="col col-6">
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" class="form-control input-lg date form_date" data-date="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" data-date-format="yyyy/mm/dd" placeholder="請輸入發佈時間" value="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" name="docDate" id="docDate" />
+                                            <input type="text" class="form-control input-lg date form_date" data-date="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請輸入發佈時間" value="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" name="docDate" id="docDate" />
                                         </label>
                                     </section>
                                     <section class="col col-6">
