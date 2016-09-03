@@ -411,6 +411,14 @@ namespace WebHome.Models.ViewModel
         public DateTime?[] PayoffDate { get; set; }
     }
 
+    public class LearnerPaymentViewModel
+    {
+        public int? CoachID { get; set; }
+        public bool? Payoff { get; set; }
+        public String UserName { get; set; }
+        public bool? HasQuery { get; set; }
+    }
+
 
     public class ArgumentModel
     {

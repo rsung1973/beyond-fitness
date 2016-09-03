@@ -45,7 +45,45 @@
     <!-- end widget div -->
 </div>
 
+<script>
+    function flipflop() {
+        var event = event || window.event;
+        var $this = $(event.target);
+        if ($this.hasClass('openureye')) {
+            var $p = $this.parent().parent().next();
+            $p.hide().next().show().next().show();
+            $this.removeClass('fa-eye openureye');
+            $this.addClass('fa-eye-slash closeureye');
+        } else {
+            var $p = $this.parent().parent().next();
+            $p.show().next().hide().next().hide();
+            $this.removeClass('fa-eye-slash closeureye');
+            $this.addClass('fa-eye openureye');
+        }
+    }
 
+    function editRecentStatus(uid) {
+        var event = event || window.event;
+        $p_status = $(event.target).parent().prev();
+        $.post('<%= Url.Action("EditRecentStatus","Lessons") %>', { 'uid': uid }, function (data) {
+            $(data).appendTo($('#content'));
+        });
+    }
+
+
+    var $p_status;
+    function commitRecentStatus(uid, recentStatus) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitRecentStatus") %>', { 'uid': uid, 'recentStatus': recentStatus }, function (data) {
+            if (data) {
+                if (data.result) {
+                    $p_status.html(recentStatus.replace(/\n/g, '<br/>'));
+                }
+                smartAlert(data.message);
+            }
+        });
+    }
+
+</script>
 
 <script runat="server">
 

@@ -20,12 +20,22 @@
     </div>
 </div>
 <script>
+
     $(function () {
         var $modal = $('#<%= ViewBag.ModalId ?? "theModal" %>');
         $modal.appendTo($('body'));
         $modal.on('hidden.bs.modal', function (evt) {
             $modal.remove();
         });
+
+        //$modal.on('shown.bs.modal', function () {
+        //    $(this).find('.modal-dialog').css({
+        //        width: 'auto',
+        //        height: 'auto',
+        //        'max-height': '100%'
+        //    });
+        //});
+
         $modal.modal('show');
     });
 </script>

@@ -13,11 +13,15 @@
     <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.UserProfile); %>
     <div class="col-xs-8 col-sm-6">
         <h1>
-            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
+            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
         </h1>
-        <p class="font-md">關於<%= _model.UserProfile.UserName ?? _model.UserProfile.RealName %>...</p>
+        <p class="font-md"><a onclick="flipflop();" ><i class="fa fa-eye-slash fa-2x closeureye"></i></a> 關於<%= _model.UserProfile.UserName ?? _model.UserProfile.RealName %>...</p>
+        <p style="display:none;">
+            <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
+        </p>
         <p>
-            <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
+            <%= _model.UserProfile.RecentStatus!=null ? _model.UserProfile.RecentStatus.Replace("\n","<br/>") : null %>
+            <%--<form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
                 <fieldset>
                     <section>
                         <label class="textarea">
@@ -33,7 +37,12 @@
                         <i class="fa fa-reply"></i>更新
                     </button>
                 </p>
-            </form>
+            </form>--%>
+        </p>
+        <p class="text-right">
+            <button type="button" name="editStatus" onclick="editRecentStatus(<%= _model.UID %>);" class="btn btn-primary btn-sm">
+                <i class="fa fa-reply"></i>更新
+            </button>
         </p>
     </div>
     <div class="col-xs-12 col-sm-3">

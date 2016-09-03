@@ -11,6 +11,8 @@
 <%  if (_model.TrainingID.HasValue)
     { %>
         <tr>
+            <%  if (ViewBag.ShowOnly != true)
+                { %>
             <td>
                 <a onclick="editTrainingItem(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
                     <i class="fa fa-pencil-square-o fa-2x text-warning btn btn-xs bg-color-orange"></i>
@@ -26,6 +28,7 @@
                 </a>
                 <input type="hidden" name="ItemID" value="<%= _model.ItemID %>" />
             </td>
+            <%  } %>
             <td><%= _model.TrainingType.BodyParts %><%= String.IsNullOrEmpty(_model.Description) ? null : "【" + _model.Description + "】" %></td>
             <td><%= String.IsNullOrEmpty(_model.ActualTurns) ? "--" : _model.ActualTurns %>/<%= String.IsNullOrEmpty(_model.GoalTurns) ? "--" : _model.GoalTurns %></td>
             <td><%= String.IsNullOrEmpty(_model.ActualStrength) ? "--" : _model.ActualStrength %>/<%= String.IsNullOrEmpty(_model.GoalStrength) ? "--" : _model.GoalStrength %></td>
@@ -35,6 +38,8 @@
     else
     { %>
         <tr class="line_btm">
+            <%  if (ViewBag.ShowOnly != true)
+                { %>
             <td>
                 <a onclick="editBreakInterval(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
                     <i class="fa fa-pencil-square-o fa-2x text-warning btn btn-xs bg-color-orange"></i>
@@ -50,6 +55,7 @@
                 </a>
                 <input type="hidden" name="ItemID" value="<%= _model.ItemID %>" />
             </td>
+            <%  } %>
             <td><%= String.IsNullOrEmpty(_model.BreakIntervalInSecond) ? null : "休息時間 " + _model.BreakIntervalInSecond + "秒" %></td>
             <td>以上項目重複<%= _model.Repeats %>組</td>
             <td></td>

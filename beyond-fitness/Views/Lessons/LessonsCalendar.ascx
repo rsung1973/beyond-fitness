@@ -18,9 +18,9 @@
 <script type="text/javascript" src='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/fullcalendar.min.js") %>'></script>
 <script type="text/javascript" src='<%= VirtualPathUtility.ToAbsolute("~/fullcalendar-2.8.0/lang-all.js") %>'></script>--%>
 
-<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/moment/moment.min.js") %>"></script>
+<%--<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/moment/moment.min.js") %>"></script>
 <script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/fullcalendar/jquery.fullcalendar.min.js") %>"></script>
-<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/fullcalendar/lang-all.js") %>"></script>
+<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/fullcalendar/lang-all.js") %>"></script>--%>
 
 
 <div id='calendar'></div>

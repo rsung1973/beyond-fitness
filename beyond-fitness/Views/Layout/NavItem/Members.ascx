@@ -21,6 +21,7 @@
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListCoaches") %>"><i class="fa fa-fw fa-user-secret"></i>員工管理</a>
         </li>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile); %>
     </ul>
 </li>
 <%  } %>

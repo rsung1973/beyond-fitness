@@ -223,12 +223,13 @@
 
             $pageFormValidator.settings.submitHandler = function (form) {
 
-                var $items = $('input[name="registerID"]:checked');
-                if ($items.length <= 0) {
-                    $('#registerID-error').css('display', 'block');
-                    $('#registerID-error').text('請選擇上課學員!!');
-                    return;
-                }
+                //var $items = $('input[name="registerID"]');
+                //if ($items.length <= 0) {
+                //    $('#registerID-error').css('display', 'block');
+                //    $('#registerID-error').text('請選擇上課學員!!');
+                //    return;
+                //}
+
 
                 //$(form).submit();
                 return true;

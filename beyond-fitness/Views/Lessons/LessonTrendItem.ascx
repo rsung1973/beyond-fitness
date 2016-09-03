@@ -105,6 +105,131 @@
         </footer>
     </form>
 
+<script>
+    $(function () {
+        var $formValidator = $("#assessment").validate({
+            // Rules for form validation
+            rules: {
+                actionLearning: {
+                    required: true,
+                    min: 0,
+                    max:10
+                },
+                postureRedress: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                training: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                counseling: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                flexibility: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                cardiopulmonary: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                strength: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                endurance: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                explosiveForce: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                },
+                sportsPerformance: {
+                    required: true,
+                    min: 0,
+                    max: 10
+                }
+            },
+
+            // Messages for form validation
+            messages: {
+                actionLearning: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                postureRedress: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                training: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                counseling: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                flexibility: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                cardiopulmonary: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                strength: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                endurance: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                explosiveForce: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                },
+                sportsPerformance: {
+                    required: '請輸入分數0~10',
+                    min: '請輸入分數0~10',
+                    max: '請輸入分數0~10'
+                }
+            },
+
+            // Ajax form submition
+            //submitHandler: function (form) {
+
+            //},
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+
+    });
+</script>
+
 <script runat="server">
 
     ModelSource<UserProfile> models;

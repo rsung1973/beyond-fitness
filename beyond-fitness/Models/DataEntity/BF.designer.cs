@@ -141,6 +141,12 @@ namespace WebHome.Models.DataEntity
     partial void InsertTuitionInstallment(TuitionInstallment instance);
     partial void UpdateTuitionInstallment(TuitionInstallment instance);
     partial void DeleteTuitionInstallment(TuitionInstallment instance);
+    partial void InsertGroupingLessonDiscount(GroupingLessonDiscount instance);
+    partial void UpdateGroupingLessonDiscount(GroupingLessonDiscount instance);
+    partial void DeleteGroupingLessonDiscount(GroupingLessonDiscount instance);
+    partial void InsertLessonFeedBack(LessonFeedBack instance);
+    partial void UpdateLessonFeedBack(LessonFeedBack instance);
+    partial void DeleteLessonFeedBack(LessonFeedBack instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -466,6 +472,22 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<TuitionInstallment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GroupingLessonDiscount> GroupingLessonDiscount
+		{
+			get
+			{
+				return this.GetTable<GroupingLessonDiscount>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonFeedBack> LessonFeedBack
+		{
+			get
+			{
+				return this.GetTable<LessonFeedBack>();
 			}
 		}
 	}
@@ -2291,6 +2313,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<LessonPlan> _LessonPlan;
 		
+		private EntitySet<LessonFeedBack> _LessonFeedBack;
+		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
 		private EntityRef<ServingCoach> _ServingCoach;
@@ -2329,6 +2353,7 @@ namespace WebHome.Models.DataEntity
 			this._LessonTrend = default(EntityRef<LessonTrend>);
 			this._LessonAttendance = default(EntityRef<LessonAttendance>);
 			this._LessonPlan = default(EntityRef<LessonPlan>);
+			this._LessonFeedBack = new EntitySet<LessonFeedBack>(new Action<LessonFeedBack>(this.attach_LessonFeedBack), new Action<LessonFeedBack>(this.detach_LessonFeedBack));
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
 			this._ServingCoach1 = default(EntityRef<ServingCoach>);
@@ -2654,6 +2679,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonFeedBack", Storage="_LessonFeedBack", ThisKey="LessonID", OtherKey="LessonID")]
+		public EntitySet<LessonFeedBack> LessonFeedBack
+		{
+			get
+			{
+				return this._LessonFeedBack;
+			}
+			set
+			{
+				this._LessonFeedBack.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_LessonTime", Storage="_GroupingLesson", ThisKey="GroupID", OtherKey="GroupID", IsForeignKey=true)]
 		public GroupingLesson GroupingLesson
 		{
@@ -2829,6 +2867,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_TrainingPlan(TrainingPlan entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = null;
+		}
+		
+		private void attach_LessonFeedBack(LessonFeedBack entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = this;
+		}
+		
+		private void detach_LessonFeedBack(LessonFeedBack entity)
 		{
 			this.SendPropertyChanging();
 			entity.LessonTime = null;
@@ -6256,11 +6306,15 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _AdvisorID;
 		
+		private System.Nullable<int> _AttendedLessons;
+		
 		private EntitySet<LessonTime> _LessonTime;
 		
 		private EntitySet<LessonTimeExpansion> _LessonTimeExpansion;
 		
 		private EntityRef<IntuitionCharge> _IntuitionCharge;
+		
+		private EntitySet<LessonFeedBack> _LessonFeedBack;
 		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
@@ -6271,6 +6325,8 @@ namespace WebHome.Models.DataEntity
 		private EntityRef<ServingCoach> _ServingCoach;
 		
 		private EntityRef<LessonPriceType> _LessonPriceType;
+		
+		private EntityRef<GroupingLessonDiscount> _GroupingLessonDiscount;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6294,6 +6350,8 @@ namespace WebHome.Models.DataEntity
     partial void OnGroupingMemberCountChanged();
     partial void OnAdvisorIDChanging(System.Nullable<int> value);
     partial void OnAdvisorIDChanged();
+    partial void OnAttendedLessonsChanging(System.Nullable<int> value);
+    partial void OnAttendedLessonsChanged();
     #endregion
 		
 		public RegisterLesson()
@@ -6301,11 +6359,13 @@ namespace WebHome.Models.DataEntity
 			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
 			this._LessonTimeExpansion = new EntitySet<LessonTimeExpansion>(new Action<LessonTimeExpansion>(this.attach_LessonTimeExpansion), new Action<LessonTimeExpansion>(this.detach_LessonTimeExpansion));
 			this._IntuitionCharge = default(EntityRef<IntuitionCharge>);
+			this._LessonFeedBack = new EntitySet<LessonFeedBack>(new Action<LessonFeedBack>(this.attach_LessonFeedBack), new Action<LessonFeedBack>(this.detach_LessonFeedBack));
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
 			this._LessonPriceType = default(EntityRef<LessonPriceType>);
+			this._GroupingLessonDiscount = default(EntityRef<GroupingLessonDiscount>);
 			OnCreated();
 		}
 		
@@ -6476,6 +6536,10 @@ namespace WebHome.Models.DataEntity
 			{
 				if ((this._GroupingMemberCount != value))
 				{
+					if (this._GroupingLessonDiscount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnGroupingMemberCountChanging(value);
 					this.SendPropertyChanging();
 					this._GroupingMemberCount = value;
@@ -6505,6 +6569,26 @@ namespace WebHome.Models.DataEntity
 					this._AdvisorID = value;
 					this.SendPropertyChanged("AdvisorID");
 					this.OnAdvisorIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AttendedLessons", DbType="Int")]
+		public System.Nullable<int> AttendedLessons
+		{
+			get
+			{
+				return this._AttendedLessons;
+			}
+			set
+			{
+				if ((this._AttendedLessons != value))
+				{
+					this.OnAttendedLessonsChanging(value);
+					this.SendPropertyChanging();
+					this._AttendedLessons = value;
+					this.SendPropertyChanged("AttendedLessons");
+					this.OnAttendedLessonsChanged();
 				}
 			}
 		}
@@ -6561,6 +6645,19 @@ namespace WebHome.Models.DataEntity
 					}
 					this.SendPropertyChanged("IntuitionCharge");
 				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonFeedBack", Storage="_LessonFeedBack", ThisKey="RegisterID", OtherKey="RegisterID")]
+		public EntitySet<LessonFeedBack> LessonFeedBack
+		{
+			get
+			{
+				return this._LessonFeedBack;
+			}
+			set
+			{
+				this._LessonFeedBack.Assign(value);
 			}
 		}
 		
@@ -6734,6 +6831,40 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLessonDiscount_RegisterLesson", Storage="_GroupingLessonDiscount", ThisKey="GroupingMemberCount", OtherKey="GroupingMemberCount", IsForeignKey=true)]
+		public GroupingLessonDiscount GroupingLessonDiscount
+		{
+			get
+			{
+				return this._GroupingLessonDiscount.Entity;
+			}
+			set
+			{
+				GroupingLessonDiscount previousValue = this._GroupingLessonDiscount.Entity;
+				if (((previousValue != value) 
+							|| (this._GroupingLessonDiscount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._GroupingLessonDiscount.Entity = null;
+						previousValue.RegisterLesson.Remove(this);
+					}
+					this._GroupingLessonDiscount.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLesson.Add(this);
+						this._GroupingMemberCount = value.GroupingMemberCount;
+					}
+					else
+					{
+						this._GroupingMemberCount = default(int);
+					}
+					this.SendPropertyChanged("GroupingLessonDiscount");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -6773,6 +6904,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_LessonTimeExpansion(LessonTimeExpansion entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = null;
+		}
+		
+		private void attach_LessonFeedBack(LessonFeedBack entity)
+		{
+			this.SendPropertyChanging();
+			entity.RegisterLesson = this;
+		}
+		
+		private void detach_LessonFeedBack(LessonFeedBack entity)
 		{
 			this.SendPropertyChanging();
 			entity.RegisterLesson = null;
@@ -9701,6 +9844,336 @@ namespace WebHome.Models.DataEntity
 						this._RegisterID = default(int);
 					}
 					this.SendPropertyChanged("IntuitionCharge");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GroupingLessonDiscount")]
+	public partial class GroupingLessonDiscount : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _GroupingMemberCount;
+		
+		private System.Nullable<int> _PercentageOfDiscount;
+		
+		private EntitySet<RegisterLesson> _RegisterLesson;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnGroupingMemberCountChanging(int value);
+    partial void OnGroupingMemberCountChanged();
+    partial void OnPercentageOfDiscountChanging(System.Nullable<int> value);
+    partial void OnPercentageOfDiscountChanged();
+    #endregion
+		
+		public GroupingLessonDiscount()
+		{
+			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupingMemberCount", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int GroupingMemberCount
+		{
+			get
+			{
+				return this._GroupingMemberCount;
+			}
+			set
+			{
+				if ((this._GroupingMemberCount != value))
+				{
+					this.OnGroupingMemberCountChanging(value);
+					this.SendPropertyChanging();
+					this._GroupingMemberCount = value;
+					this.SendPropertyChanged("GroupingMemberCount");
+					this.OnGroupingMemberCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PercentageOfDiscount", DbType="Int")]
+		public System.Nullable<int> PercentageOfDiscount
+		{
+			get
+			{
+				return this._PercentageOfDiscount;
+			}
+			set
+			{
+				if ((this._PercentageOfDiscount != value))
+				{
+					this.OnPercentageOfDiscountChanging(value);
+					this.SendPropertyChanging();
+					this._PercentageOfDiscount = value;
+					this.SendPropertyChanged("PercentageOfDiscount");
+					this.OnPercentageOfDiscountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLessonDiscount_RegisterLesson", Storage="_RegisterLesson", ThisKey="GroupingMemberCount", OtherKey="GroupingMemberCount")]
+		public EntitySet<RegisterLesson> RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson;
+			}
+			set
+			{
+				this._RegisterLesson.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLessonDiscount = this;
+		}
+		
+		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLessonDiscount = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonFeedBack")]
+	public partial class LessonFeedBack : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LessonID;
+		
+		private int _RegisterID;
+		
+		private string _FeedBack;
+		
+		private System.Nullable<System.DateTime> _FeedBackDate;
+		
+		private EntityRef<LessonTime> _LessonTime;
+		
+		private EntityRef<RegisterLesson> _RegisterLesson;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLessonIDChanging(int value);
+    partial void OnLessonIDChanged();
+    partial void OnRegisterIDChanging(int value);
+    partial void OnRegisterIDChanged();
+    partial void OnFeedBackChanging(string value);
+    partial void OnFeedBackChanged();
+    partial void OnFeedBackDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnFeedBackDateChanged();
+    #endregion
+		
+		public LessonFeedBack()
+		{
+			this._LessonTime = default(EntityRef<LessonTime>);
+			this._RegisterLesson = default(EntityRef<RegisterLesson>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int LessonID
+		{
+			get
+			{
+				return this._LessonID;
+			}
+			set
+			{
+				if ((this._LessonID != value))
+				{
+					if (this._LessonTime.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLessonIDChanging(value);
+					this.SendPropertyChanging();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RegisterID
+		{
+			get
+			{
+				return this._RegisterID;
+			}
+			set
+			{
+				if ((this._RegisterID != value))
+				{
+					if (this._RegisterLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegisterIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterID = value;
+					this.SendPropertyChanged("RegisterID");
+					this.OnRegisterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBack", DbType="NVarChar(MAX)")]
+		public string FeedBack
+		{
+			get
+			{
+				return this._FeedBack;
+			}
+			set
+			{
+				if ((this._FeedBack != value))
+				{
+					this.OnFeedBackChanging(value);
+					this.SendPropertyChanging();
+					this._FeedBack = value;
+					this.SendPropertyChanged("FeedBack");
+					this.OnFeedBackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FeedBackDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> FeedBackDate
+		{
+			get
+			{
+				return this._FeedBackDate;
+			}
+			set
+			{
+				if ((this._FeedBackDate != value))
+				{
+					this.OnFeedBackDateChanging(value);
+					this.SendPropertyChanging();
+					this._FeedBackDate = value;
+					this.SendPropertyChanged("FeedBackDate");
+					this.OnFeedBackDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonFeedBack", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LessonTime LessonTime
+		{
+			get
+			{
+				return this._LessonTime.Entity;
+			}
+			set
+			{
+				LessonTime previousValue = this._LessonTime.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTime.Entity = null;
+						previousValue.LessonFeedBack.Remove(this);
+					}
+					this._LessonTime.Entity = value;
+					if ((value != null))
+					{
+						value.LessonFeedBack.Add(this);
+						this._LessonID = value.LessonID;
+					}
+					else
+					{
+						this._LessonID = default(int);
+					}
+					this.SendPropertyChanged("LessonTime");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_LessonFeedBack", Storage="_RegisterLesson", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true)]
+		public RegisterLesson RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson.Entity;
+			}
+			set
+			{
+				RegisterLesson previousValue = this._RegisterLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RegisterLesson.Entity = null;
+						previousValue.LessonFeedBack.Remove(this);
+					}
+					this._RegisterLesson.Entity = value;
+					if ((value != null))
+					{
+						value.LessonFeedBack.Add(this);
+						this._RegisterID = value.RegisterID;
+					}
+					else
+					{
+						this._RegisterID = default(int);
+					}
+					this.SendPropertyChanged("RegisterLesson");
 				}
 			}
 		}

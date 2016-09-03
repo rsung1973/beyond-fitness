@@ -9,6 +9,7 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 
 <asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
     <div id="ribbon">
@@ -45,81 +46,65 @@
 
     <div class="row">
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div class="well well-sm bg-color-darken txt-color-white">
-                <div class="row">
+            <%  Html.RenderPartial("~/Views/Lessons/LessonsInfo.ascx", _model.LessonTime); %>
+        </article>
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-                    <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
-
-                    <div class="col-sm-12">
-
-                        <div class="row">
-
-                            <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.RegisterLesson.UserProfile); %>
-                            <div class="col-xs-8 col-sm-6">
-                                <h1>
-                                    <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.RegisterLesson.UID %>"><%= _model.RegisterLesson.UserProfile.RealName %> <%= _model.RegisterLesson.UserProfile.UserName %></a></span>
-                                </h1>
-                                <p class="font-md">關於<%= _model.RegisterLesson.UserProfile.RealName %>...</p>
-                                <p>
-                                    <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
-                                        <fieldset>
-                                            <section>
-                                                <label class="textarea">
-                                                    <textarea rows="3" id="recentStatus" name="recentStatus" class="custom-scroll"><%= _model.RegisterLesson.UserProfile.RecentStatus %></textarea>
-                                                </label>
-                                                <div class="note">
-                                                    <strong>Note:</strong> 最多輸入250個中英文字
-                                                </div>
-                                            </section>
-                                        </fieldset>
-                                        <p class="text-right">
-                                            <button type="button" name="submit" class="btn btn-primary btn-sm" id="btnUpdateStatus" onclick="commitPlan();">
-                                                <i class="fa fa-reply"></i>更新
-                                            </button>
-                                        </p>
-                                    </form>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.RegisterLesson.UserProfile); %>
-                                <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model.RegisterLesson.UserProfile); %>
-                            </div>
-                        </div>
-
+                <header>
+                    <span class="widget-icon"><i class="fa fa-rss text-success"></i></span>
+                    <h2><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00-<%= String.Format("{0:00}",_model.Hour+1) %>:00 課表</h2>
+                    <div class="widget-toolbar">
+                        <%  if (_model.LessonTime.TrainingBySelf == 1 && _model.LessonTime.LessonAttendance == null)
+                            { %>
+                        <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>打卡</a>
+                        <%  } %>
+                        <a onclick="cloneLesson(<%= _model.LessonID %>);" class="btn btn-primary"><i class="fa fa-fw fa-files-o"></i> 複製課表</a>
+                        <a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
+                            {
+                                classDate = _model.ClassDate.ToString("yyyy-MM-dd"),
+                                hour = _model.Hour,
+                                registerID = _model.RegisterID,
+                                lessonID = _model.LessonID
+                            }) %>);'
+                            class="btn btn-primary"><i class="fa fa-fw fa-eye"></i> 檢視課表</a>
                     </div>
-                </div>
-                <div class="row">
-                    <hr>
-                </div>
-                <div class="row no-padding">
-                    <div class="col-sm-12">
-                        <label><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00-<%= String.Format("{0:00}",_model.Hour+1) %>:00 上課內容</label>
-                        <ul class="nav nav-tabs tabs-pull-right">
-                            <li>
-                                <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s3"><i class="fa fa-child"></i><span>收操</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
-                            </li>
-                            <li class="active">
-                                <a data-toggle="tab" href="#s1"><i class="fa fa-child "></i><span>暖身</span></a>
-                            </li>
-                        </ul>
-                        <div class="tab-content padding-top-10">
-                            <div class="tab-pane fade in active" id="s1">
+                    <ul id="widget-tab-1" class="nav nav-tabs pull-right">
+
+                        <li>
+                            <a data-toggle="tab" href="#s1"><i class="fa fa-child"></i><span>暖身</span></a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" href="#s2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#s3"><i class="fa fa-child"></i><span>收操</span></a>
+                        </li>
+                        <%  if (_model.LessonTime.TrainingBySelf != 1)
+                            { %>
+                        <li>
+                            <a data-toggle="tab" href="#s4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+                        </li>
+                        <%  } %>
+                        <li>
+                            <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
+                        </li>
+                    </ul>
+
+                </header>
+                <!-- widget div-->
+                <div class="no-padding">
+                    <div class="widget-body no-padding">
+                        <!-- content -->
+                        <div id="myTabContent" class="tab-content padding-10">
+                            <div class="tab-pane fade" id="s1">
                                 <div class="chat-body no-padding profile-message">
                                     <ul>
                                         <li class="message">
                                             <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                                             <span class="message-text">
                                                 <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <%= _plan.Warming %>
+                                                <div id="msgWarming"><%= _plan.Warming %></div>
                                             </span>
                                         </li>
                                         <li>
@@ -133,22 +118,24 @@
                                             </div>
                                         </li>
                                     </ul>
-
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="s2">
+                            <!-- end s1 tab pane -->
+                            <div class="tab-pane fade active widget-body in no-padding-bottom" id="s2">
                                 <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/UpdateTrainingItemSequence/") + _model.LessonID %>" method="post" id="updateSeq">
                                     <% Html.RenderAction("SingleTrainingExecutionPlan","Lessons", new { LessonID = _model.LessonID }); %>
                                 </form>
                             </div>
-                            <div class="tab-pane fade" id="s3">
+                            <!-- end s2 tab pane -->
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s3">
                                 <div class="chat-body no-padding profile-message">
                                     <ul>
                                         <li class="message">
                                             <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                                             <span class="message-text">
                                                 <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <%= _plan.EndingOperation %>
+                                                <div id="msgEndingOperation">
+                                                    <%= _plan.EndingOperation %></div>
                                             </span>
                                         </li>
                                         <li>
@@ -163,18 +150,25 @@
                                         </li>
                                     </ul>
                                 </div>
+
                             </div>
-                            <div class="tab-pane fade" id="s4">
+                            <!-- end s3 tab pane -->
+                            <%  if (_model.LessonTime.TrainingBySelf != 1)
+                                { %>
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s4">
                                 <% Html.RenderPartial("~/Views/Lessons/LessonTrendItem.ascx", _model); %>
                             </div>
-                            <div class="tab-pane fade" id="s5">
+                            <%  } %>
+                            <!-- end s4 tab pane -->
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s5">
                                 <div class="chat-body no-padding profile-message">
                                     <ul>
                                         <li class="message">
                                             <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                                             <span class="message-text">
                                                 <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <%= _plan.Remark %>
+                                                <div id="msg">
+                                                    <%= _plan.Remark %></div>
                                             </span>
                                         </li>
                                         <li>
@@ -190,14 +184,53 @@
                                     </ul>
                                 </div>
                             </div>
+                            <!-- end s5 tab pane -->
                         </div>
+
+                        <!-- end content -->
                     </div>
+
                 </div>
+                <!-- end widget div -->
             </div>
         </article>
     </div>
     <%  Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
     <script>
+
+        $(function(){
+            $global.cloneLesson = function(sourceID) {
+                $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CloneTrainingPlan") %>',{'sourceID': sourceID,'lessonID':<%= _model.LessonID %>},function(data){
+                    if(data.result) {
+                        smartAlert("資料已複製!!", function (message) {
+                            makeLessonPlan(<%= JsonConvert.SerializeObject(new
+                                {
+                                    classDate = _model.ClassDate.ToString("yyyy-MM-dd"),
+                                    hour = _model.Hour,
+                                    registerID = _model.RegisterID,
+                                    lessonID = _model.LessonID
+                                }) %>);
+                        });
+                    } else {
+                        smartAlert(data.message);
+                    }
+                });
+            };
+        });
+
+        function attendLesson(lessonID) {
+            var event = event || window.event;
+            $.post('<%= Url.Action("AttendLesson","Attendance") %>', { 'lessonID': lessonID }, function (data) {
+                if (data) {
+                    if(data.result) {
+                        smartAlert(data.message);
+                        $(event.target).remove();
+                    } else {
+                        smartAlert(data.message);
+                    }
+                }
+            });
+        }
 
         function commitPlan() {
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>',
@@ -209,6 +242,9 @@
                 }, function (data) {
                 if (data.result) {
                     smartAlert('資料已更新!!');
+                    $('#msgWarming').text($('#warming').val());
+                    $('#msgEndingOperation').text($('#endingOperation').val());
+                    $('#msgRemark').text($('#remark').val());
                 } else {
                     smartAlert(data.message);
                 }
@@ -252,8 +288,111 @@
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTrainingItem") %>' + '?id=' + executionID , {}, function () {
                     $('#loading').css('display', 'none');
+                    $modal.on('hidden.bs.modal', function (evt) {
+                        $('body').scrollTop(screen.height);
+                    });
                     $modal.modal('show');
                 });
+        }
+
+        function addBreakInterval(executionID) {
+            $('#addItem').remove();
+            $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTrainingBreakInterval") %>' + '?id=' + executionID, {}, function () {
+                    $('#loading').css('display', 'none');
+                    $modal.on('hidden.bs.modal', function (evt) {
+                        $('body').scrollTop(screen.height);
+                    });
+                    $modal.modal('show');
+                });
+        }
+
+        function cloneLesson(lessonID) {
+            $('#addItem').remove();
+            $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryLessonTime") %>', 
+                    {
+                        'lessonID':lessonID,
+                        <%--'coachID':<%= _model.LessonTime.AttendingCoach %>,--%>
+                        'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.RealName %>',
+                        'classDate': '<%= _model.ClassDate.ToString("yyyy-MM-dd") %>',
+                        'hour': <%= _model.Hour %>,
+                        'registerID': <%= _model.RegisterID %>
+                    } , function () {
+                    $('#loading').css('display', 'none');
+                    $modal.on('hidden.bs.modal', function (evt) {
+                        $('body').scrollTop(screen.height);
+                    });
+                    $modal.modal('show');
+                });
+        }
+
+        function commitCloneLesson() {
+            if($('#addItem form input:radio').is(':checked')) {
+                var hasItem = <%= _model.LessonTime.TrainingPlan.Sum(p=>p.TrainingExecution.TrainingItem.Count)>0 ? "true" : "false" %>;
+                if(hasItem) {
+                    confirmIt({ title: '複製課表', message: '確定複製課表項目取代現有項目?' }, function (evt) {
+                        doCloneLesson();
+                    });
+                } else {
+                    doCloneLesson();
+                }
+            } else {
+                smartAlert('請選擇欲複製的課程!!');
+            }
+        }
+
+        function doCloneLesson() {
+            $('#addItem').find('form').ajaxForm({
+                beforeSubmit: function () {
+                },
+                success: function (data) {
+                    if (data.result) {
+                        smartAlert("資料已複製!!", function (message) {
+                            $modal.modal('hide');
+                            //$('#addItem').remove();
+                            //$('#updateSeq').ajaxForm({
+                            //    success: function (data) {
+                            //        $('#updateSeq').html(data);
+                            //        $('body').scrollTop(screen.height);
+                            //    }
+                            //}).submit();
+                            makeLessonPlan(<%= JsonConvert.SerializeObject(new
+                                {
+                                    classDate = _model.ClassDate.ToString("yyyy-MM-dd"),
+                                    hour = _model.Hour,
+                                    registerID = _model.RegisterID,
+                                    lessonID = _model.LessonID
+                                }) %>);
+                        });
+                    } else {
+                        smartAlert(data.message, function () {
+                            $modal.modal('hide');
+                            //$('#addItem').remove();
+                        });
+                    }
+                },
+                error: function () {
+                }
+            }).submit();
+
+        }
+
+        function makeLessonPlan(arg)
+        {
+            var $form = $('<form method="post"/>')
+                .appendTo($('body'))
+                .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
+            for (var key in arg) {
+                $('<input type="hidden"/>')
+                .prop('name', key).prop('value', arg[key]).appendTo($form);
+            }
+            startLoading();
+            $form.submit();
         }
 
         function editTrainingItem(executionID, itemID) {
@@ -263,6 +402,23 @@
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTrainingItem") %>', { 'executionID': executionID, 'itemID': itemID }, function () {
                     $('#loading').css('display', 'none');
+                    $modal.on('hidden.bs.modal', function (evt) {
+                        $('body').scrollTop(screen.height);
+                    });
+                    $modal.modal('show');
+                });
+        }
+
+        function editBreakInterval(executionID, itemID) {
+            $('#addItem').remove();
+            $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
+            $('#loading').css('display', 'table');
+            $modal.appendTo($('#content'))
+                .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTrainingBreakInterval") %>', { 'executionID': executionID, 'itemID': itemID }, function () {
+                    $('#loading').css('display', 'none');
+                    $modal.on('hidden.bs.modal', function (evt) {
+                        $('body').scrollTop(screen.height);
+                    });
                     $modal.modal('show');
                 });
         }
@@ -297,11 +453,18 @@
 
         }
 
-
+        function updateSequence() {
+            $('#updateSeq').ajaxForm({
+                success: function (data) {
+                    $('#updateSeq').html(data);
+                    smartAlert("資料已儲存!!");
+                }
+            }).submit();
+        }
 
         function commitTrainingItem() {
             $('#addItem').find('form').ajaxForm({
-                url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTrainingItem") %>",
+                <%--url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTrainingItem") %>",--%>
                 beforeSubmit: function () {
                 },
                 success: function (data) {
@@ -312,6 +475,7 @@
                             $('#updateSeq').ajaxForm({
                                 success: function (data) {
                                     $('#updateSeq').html(data);
+                                    $('body').scrollTop(screen.height);
                                 }
                             }).submit();
                         });
@@ -393,6 +557,7 @@
     ModelStateDictionary _modelState;
     LessonTimeExpansion _model;
     LessonPlan _plan;
+    List<RegisterLesson> _groups;
 
     protected override void OnInit(EventArgs e)
     {
@@ -401,6 +566,16 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (LessonTimeExpansion)this.Model;
         _plan = _model.LessonTime.LessonPlan ?? new LessonPlan { };
+        if(_model.RegisterLesson.GroupingMemberCount>1)
+        {
+            _groups = _model.RegisterLesson.GroupingLesson.RegisterLesson.ToList();
+        }
+        else
+        {
+            _groups = new List<RegisterLesson>();
+            _groups.Add(_model.RegisterLesson);
+        }
+        ViewBag.CloneLesson = true;
     }
 
 

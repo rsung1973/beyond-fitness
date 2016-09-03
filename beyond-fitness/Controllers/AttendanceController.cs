@@ -125,6 +125,46 @@ namespace WebHome.Controllers
         }
 
 
+        public ActionResult AttendLesson(int lessonID)
+        {
+            LessonTime item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
+
+            if (item == null)
+                return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
+
+            LessonAttendance attendance = item.LessonAttendance;
+            if (attendance == null)
+                attendance = item.LessonAttendance = new LessonAttendance { };
+            attendance.CompleteDate = DateTime.Now;
+
+            models.SubmitChanges();
+
+            if(item.GroupID.HasValue)
+            {
+                var group = item.GroupingLesson;
+                var lesson = group.RegisterLesson.First();
+                if (lesson.Lessons <= group.LessonTime.Count(t => t.LessonAttendance != null))
+                {
+                    foreach (var r in group.RegisterLesson)
+                    {
+                        r.Attended = (int)Naming.LessonStatus.課程結束;
+                    }
+                    models.SubmitChanges();
+                }
+            }
+            else
+            {
+                var lesson = item.RegisterLesson;
+                if (lesson.Lessons <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+                {
+                    lesson.Attended = (int)Naming.LessonStatus.課程結束;
+                    models.SubmitChanges();
+                }
+            }
+
+            return Json(new { result = true, message = "資料存檔完成!!" });
+
+        }
 
         public ActionResult CommitAssessment(TrainingAssessmentViewModel viewModel)
         {
@@ -140,6 +180,31 @@ namespace WebHome.Controllers
             attendance.CompleteDate = DateTime.Now;
 
             models.SubmitChanges();
+
+            var timeItem = model.LessonTime;
+            if (timeItem.GroupID.HasValue)
+            {
+                var group = timeItem.GroupingLesson;
+                var lesson = group.RegisterLesson.First();
+                if (lesson.Lessons <= group.LessonTime.Count(t => t.LessonAttendance != null))
+                {
+                    foreach (var r in group.RegisterLesson)
+                    {
+                        r.Attended = (int)Naming.LessonStatus.課程結束;
+                    }
+                    models.SubmitChanges();
+                }
+            }
+            else
+            {
+                var lesson = timeItem.RegisterLesson;
+                if (lesson.Lessons <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+                {
+                    lesson.Attended = (int)Naming.LessonStatus.課程結束;
+                    models.SubmitChanges();
+                }
+            }
+
             return Json(new { result = true, message = "資料存檔完成!!" });
 
         }

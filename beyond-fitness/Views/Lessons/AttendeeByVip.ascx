@@ -57,7 +57,7 @@
         $('#attendee').empty();
         $('#queryAttendee').val($items.parent().text().replace(/./g,function(x) { return x.charCodeAt(0)==32 ? '' : x; }));
         $items.prop('type', 'hidden')
-            .detach().appendTo($('#attendee'));
+            .appendTo($('#attendee'));
         $('#btnDismiss').trigger('click');
 
 <%--        $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/ApplyGroupLessons") %>')

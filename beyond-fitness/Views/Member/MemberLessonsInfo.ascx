@@ -10,7 +10,11 @@
 
 <%  if (_item != null)
     { %>
-<h4 class="font-md"><strong><%= _item.Lessons %> / <%= _item.Lessons-_item.LessonTime.Count(l=>l.LessonAttendance!= null) %></strong>
+<h4 class="font-md"><strong><%= _item.Lessons %> / <%= _item.Lessons
+                                                        -_item.LessonTime.Count(l=>l.LessonAttendance!= null)
+                                                        -(_item.RegisterGroupID.HasValue 
+                                                            ? _item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=_item.RegisterID && l.LessonAttendance!=null)
+                                                            : 0)%></strong>
     <br />
     <small>剩餘/購買上課次數</small></h4>
 <%  } %>

@@ -118,7 +118,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-append fa fa-user"></i>
-                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" />
+                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" readonly="readonly" />
                                             <div id="attendee"></div>
                                         </label>
                                         <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
@@ -206,12 +206,21 @@
 
             $pageFormValidator.settings.submitHandler = function (form) {
 
-                var $items = $('input[name="registerID"]:checked');
+                <%--                var $items = $('input[name="registerID"]:checked');
                 if ($items.length <= 0 && $('input[name="UID"]:checked').length<=0) {
                     $('#registerID-error').css('display', 'block');
                     $('#registerID-error').text('請選擇上課學員!!');
                     return;
                 }
+--%>
+
+                if ($('input[name="registerID"]').length <= 0
+                    && $('input[name="UID"]').length<=0) {
+                    $('#registerID-error').css('display', 'block');
+                    $('#registerID-error').text('請選擇上課學員!!');
+                    return;
+                }
+
 
                 //$(form).submit();
                 return true;
@@ -231,12 +240,6 @@
             //});
         });
 
-
-        $('#nextStep').on('click', function (evt) {
-            startLoading();
-            $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>')
-          .submit();
-        });
 
         function addUser(bySelf) {
             $('#content').find('#addUserItem').remove();

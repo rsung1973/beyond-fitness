@@ -61,12 +61,6 @@
         </div>
     </div>
 
-    <% Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx",new LessonTimeExpansion {
-           ClassDate = new DateTime(2016,7,7),
-           Hour = 14,
-           RegisterID = 57,
-           LessonID = 31
-        }); %>
     <% Html.RenderPartial("~/Views/Shared/PieView.ascx"); %>
     <h3>Popover Example</h3>
     <a data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>

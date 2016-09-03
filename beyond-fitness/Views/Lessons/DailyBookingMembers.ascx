@@ -11,94 +11,46 @@
 
 <%  if (_items != null && _items.Count() > 0)
     {     %>
-<table class="table">
-    <tr class="info">
-        <th class="col-xs-1 col-md-3 text-center">時間</th>
-        <th class="col-xs-9 col-md-2 text-center">學員</th>
-        <th class="col-xs-2 col-md-7">功能</th>
-    </tr>
-    <%  foreach (var item in _items)
-        { %>
-    <tr>
-        <td class="text-center"><%= item.Hour %>:00 - <%= item.Hour + 1 %>:00</td>
-        <td class="text-center"><%= item.RegisterLesson.GroupingMemberCount > 1
-                         ? String.Join("<br/>", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName))
-                         : item.RegisterLesson.UserProfile.RealName %></td>
-        <td>
-        <%  if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
-            {
-                if (item.LessonTime.LessonAttendance == null )
-                { %>
-                    <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
-            <%  }            
-            }
-            else
-            {
-                Html.RenderPartial("~/Views/Lessons/LessonTimeExpansionHandler.ascx", item);
-            }  %>
-        </td>
-    </tr>
-    <%  } %>
-</table>
+        <table cellpadding="5" cellspacing="0" border="0" class="table table-hover table-condensed"> 
+            <tbody>
+                <%  foreach (var item in _items)
+                    { %>
+                    <tr> 
+                        <td style="width: 50px;"></td> 
+                        <td class="col-xs-2 col-sm-2"><%= item.LessonTime.ClassTime.Value.ToString("HH:mm") %> - <%= item.LessonTime.ClassTime.Value.AddMinutes(item.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %><%= item.LessonTime.TrainingBySelf==1 ? "(自主訓練)" : null %></td> 
+                        <td class="col-xs-3 col-sm-3"><%  if (item.RegisterLesson.GroupingMemberCount > 1)
+                                { %>
+                                    <i class="fa fa-group fa-2x text-danger"></i> <%= String.Join("/", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName)) %>
+                            <%  }
+                                else
+                                { %>
+                                    <i class="fa fa-child fa-2x text-danger"></i><%= item.RegisterLesson.UserProfile.RealName %>
+                            <%  } %>
+                        </td>
+                        <td class="col-xs-1 col-sm-1"><%= item.LessonTime.AsAttendingCoach.UserProfile.RealName %></td> 
+                        <td><%= item.LessonTime.TrainingPlan.Count==0 
+                                    ? "待編輯課程內容"
+                                    : item.LessonTime.LessonAttendance!=null 
+                                        ? "已完成課程"
+                                        : "編輯課程內容中" %></td>
+                        <td class="text-center">
+                            <%  if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
+                                {
+                                    if (item.LessonTime.LessonAttendance == null )
+                                    { %>
+                                        <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
+                                <%  }            
+                                }
+                                else
+                                {
+                                    Html.RenderPartial("~/Views/Lessons/LessonTimeExpansionHandler.ascx", item);
+                                }  %>
+                        </td> 
+                    </tr> 
+    <%          } %>
+            </tbody> 
+        </table>
 <%  } %>
-<script>
-    function revokeBooking(lessonID) {
-        confirmIt({ title: '取消預約', message: '確定取消預約此課程?' }, function (evt) {
-            $('#loading').css('display', 'table');
-            $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/RevokeBooking") %>', { lessonID: lessonID }, function (data) {
-                if (data.result) {
-                    $('#dailyBooking').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingList") %>', { 'lessonDate': pageParam.lessonDate }, function () { });
-                    plotData(pageParam.lessonDate);
-                    showAttendee(pageParam.lessonDate, pageParam.hour);
-                    $('#calendar').fullCalendar('refetchEvents');
-                } else {
-                    alert(data.message);
-                }
-                $('#loading').css('display', 'none');
-            });
-        });
-    }
-
-    function makeLessonPlan(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
-
-    function attendLesson(arg)
-    {
-        startLoading();
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Attendance/TrainingPlan") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        $form.submit();
-    }
-
-    function previewLesson(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
-
-</script>
 
 <script runat="server">
 

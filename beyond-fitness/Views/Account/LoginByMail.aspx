@@ -87,7 +87,7 @@
                                 <section>
                                     <label class="input">
                                         <i class="icon-append fa fa-envelope-o "></i>
-                                        <input class="form-control input-lg" maxlength="30" placeholder="請輸入註冊時的E-mail" type="email" name="PID" id="PID"/>
+                                        <input class="form-control input-lg" maxlength="30" placeholder="請輸入註冊時的E-mail" type="email" name="PID" id="PID" value="<%= _defaultPID %>" />
                                         <input type="hidden" name="returnUrl" value="<%= Request["returnUrl"] %>" />
                                     </label>
                                 </section>
@@ -209,3 +209,22 @@
 
 
 </asp:Content>
+<script runat="server">
+
+    String _defaultPID;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+
+        HttpCookie cookie = Context.Request.Cookies["userID"];
+        if (cookie != null)
+        {
+            _defaultPID = cookie.Value; // "**********";
+        }
+
+    }
+
+
+
+</script>

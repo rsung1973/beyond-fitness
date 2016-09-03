@@ -54,144 +54,10 @@
 
 
         <article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-            <div class="well well-sm bg-color-darken txt-color-white">
-                <div class="row">
-
-                    <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
-
-                    <div class="col-sm-12">
-
-                        <div class="row">
-
-                            <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.RegisterLesson.UserProfile); %>
-
-                            <div class="col-xs-8 col-sm-6">
-                                <h1>
-                                    <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.RegisterLesson.UID %>"><%= _model.RegisterLesson.UserProfile.RealName %> <%= _model.RegisterLesson.UserProfile.UserName %></a></span>
-                                </h1>
-                                <p class="font-md">關於<%= _model.RegisterLesson.UserProfile.RealName %>...</p>
-                                <p>
-                                    <%= _model.RegisterLesson.UserProfile.RecentStatus %>
-                                </p>
-                            </div>
-                            <div class="col-xs-12 col-sm-3">
-                                <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.RegisterLesson.UserProfile); %>
-                                <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model.RegisterLesson.UserProfile); %>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <hr />
-                </div>
-                <div class="row no-padding">
-                    <div class="col-sm-12">
-                        <ul class="nav nav-tabs tabs-pull-right">
-                            <li>
-                                <a data-toggle="tab" href="#s5"><i class="fa fa-pie-chart"></i><span>分析圖</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s4"><i class="fa fa-child"></i><span>收操</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s3"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#s2"><i class="fa fa-child "></i><span>暖身</span></a>
-                            </li>
-                            <li class="active">
-                                <a data-toggle="tab" href="#s1"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
-                            </li>
-                            <li class="pull-left">
-                                <span class="margin-top-10 display-inline"><i class="fa fa-rss text-success"></i><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00~<%= String.Format("{0:00}",_model.Hour+1) %>:00</span>
-                            </li>
-                        </ul>
-                        <div class="tab-content padding-top-10">
-                            <div class="tab-pane fade in active" id="s1">
-                                <div class="row">
-                                    <div class="chat-body no-padding profile-message">
-                                        <ul>
-                                            <li class="message">
-                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
-                                                <span class="message-text">
-                                                    <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                    <%= _model.LessonTime.LessonPlan.Remark %>
-                                                </span>
-                                            </li>
-
-                                            <li class="message message-reply">
-                                                <% _model.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "authorImg online" }); %>
-                                                <span class="message-text">
-                                                    <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.RegisterLesson.UID %>"><%= _model.RegisterLesson.UserProfile.UserName ?? _model.RegisterLesson.UserProfile.RealName %></a>
-                                                    <%= _model.LessonTime.LessonPlan.FeedBack %>
-                                                </span>
-
-                                                <ul class="list-inline font-xs">
-                                                    <li>
-                                                        <a href="javascript:void(0);" class="text-muted"><%= String.Format("{0:yyyy/MM/dd HH:mm}",_model.LessonTime.LessonPlan.FeedBackDate) %></a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <div class="input-group wall-comment-reply">
-                                                    <input id="remark" name="remark" type="text" class="form-control" placeholder="Type your message here..." value="" />
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary" onclick="updateRemark(<%= _model.LessonTime.LessonID %>);">
-                                                            <i class="fa fa-reply"></i>回覆
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade in" id="s2">
-                                <div class="row">
-                                    <div class="col-xs-2 col-sm-1">
-                                        <i class="fa fa-child fa-3x"></i>
-                                    </div>
-                                    <div class="col-xs-10 col-sm-11">
-                                        <p><%= _model.LessonTime.LessonPlan.Warming %></p>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <hr>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane fade in" id="s3">
-                                <% Html.RenderPartial("~/Views/Lessons/ViewTrainingExecutionPlan.ascx", _model); %>
-                            </div>
-                            <div class="tab-pane fade in" id="s4">
-                                <div class="row">
-                                    <div class="col-xs-2 col-sm-1">
-                                        <i class="fa fa-child fa-3x"></i>
-                                    </div>
-                                    <div class="col-xs-10 col-sm-11">
-                                        <p><%= _model.LessonTime.LessonPlan.EndingOperation %></p>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <hr/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade in" id="s5">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <%  Html.RenderPartial("~/Views/Lessons/LessonsInfo.ascx", _model.LessonTime); %>
+            <div class="jarviswidget" id="wid-id-list" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                <%  Html.RenderAction("LessonContent", "Report", new { lessonID = _model.LessonID, edit = true }); %>
             </div>
-
         </article>
 
         <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -203,6 +69,7 @@
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model.RegisterLesson.UserProfile); %>
                     </ul>
                 </ul>
             </div>

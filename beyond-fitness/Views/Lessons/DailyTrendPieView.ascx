@@ -14,15 +14,8 @@
 <script>
 
     $(function () {
-        var lessonDate = <%= JsonConvert.SerializeObject(new
-                    {
-                        classDate = _model.ClassDate.ToString("yyyy-MM-dd"),
-                        hour = _model.Hour,
-                        registerID = _model.RegisterID,
-                        lessonID = _model.LessonID
-                    }) %>;
 
-        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyTrendPie") %>', lessonDate, function (data) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyTrendPie") %>', { 'lessonID': <%= _model.LessonID %> }, function (data) {
             drawPie($("#placeholder"),data);
         });
     });
@@ -34,14 +27,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    LessonTimeExpansion _model;
+    LessonTime _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (LessonTimeExpansion)this.Model;
+        _model = (LessonTime)this.Model;
     }
 
 </script>

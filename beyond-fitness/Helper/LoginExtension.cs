@@ -22,9 +22,22 @@ namespace WebHome.Helper
             context.ClearCache();
             context.SetCacheValue("userProfile",profile);
 
+            switch ((Naming.RoleID)profile.CurrentUserRole.RoleID)
+            {
+                case Naming.RoleID.Administrator:
+                case Naming.RoleID.Coach:
+                case Naming.RoleID.FreeAgent:
+                    HttpCookie cookie = new HttpCookie("userID", profile.PID);
+                    cookie.Expires = DateTime.Now.AddHours(24);
+                    context.Response.SetCookie(cookie);
+                    break;
+            }
+
+
             /// process sign-on user profile
             /// 
             var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
+            var roleAuth = profile.UserRoleAuthorization.ToArray();
             var auth = profile.UserRoleAuthorization.Select(r => r.UserRoleDefinition).ToArray();
         }
 
@@ -113,6 +126,7 @@ namespace WebHome.Helper
                 if (profile != null)
                 {
                     var roles = profile.UserRole.Select(r => r.UserRoleDefinition).ToArray();
+                    var roleAuth = profile.UserRoleAuthorization.ToArray();
                     var auth = profile.UserRoleAuthorization.Select(r => r.UserRoleDefinition).ToArray();
                 }
                 return profile;

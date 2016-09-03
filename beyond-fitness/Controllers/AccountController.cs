@@ -431,6 +431,10 @@ namespace WebHome.Controllers
             //    });
             //}
 
+            //if(viewModel.PID=="**********" && Request.Cookies["userID"]!=null)
+            //{
+            //    viewModel.PID = Request.Cookies["userID"].Value;
+            //}
             
             UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
                 && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();

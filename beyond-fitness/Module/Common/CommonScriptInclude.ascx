@@ -22,6 +22,10 @@
 <script src="<%= basePath + "js/plugin/datatables/dataTables.tableTools.min.js" %>"></script>
 <script src="<%= basePath + "js/plugin/datatables/dataTables.bootstrap.min.js" %>"></script>
 <script src="<%= basePath + "js/plugin/datatable-responsive/datatables.responsive.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/moment/moment.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/fullcalendar/jquery.fullcalendar.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/fullcalendar/lang-all.js" %>"></script>
+
 <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
 <script data-pace-options='{ "restartOnRequestAfter": true }' src="<%= basePath + "js/plugin/pace/pace.min.js" %>"></script>
 
