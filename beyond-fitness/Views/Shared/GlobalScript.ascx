@@ -13,8 +13,10 @@
     var $global = {};
 
     function showRecentLessons(uid, lessonID) {
+        showLoading();
         $.post('<%= Url.Action("LearnerRecentLessons","Report") %>', { 'uid': uid, 'lessonID': lessonID,'cloneLesson': <%= ViewBag.CloneLesson==true ? "true" : "false"  %> }, function (data) {
             $(data).appendTo($('#content'));
+            hideLoading();
         });
     }
 
@@ -27,6 +29,64 @@
         startLoading();
         $form.submit();
     }
+
+    function makeLessonPlan(arg)
+    {
+        var $form = $('<form method="post"/>')
+            .appendTo($('body'))
+            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
+        for (var key in arg) {
+            $('<input type="hidden"/>')
+            .prop('name', key).prop('value', arg[key]).appendTo($form);
+        }
+        showLoading(true,function(){
+            $form.submit();
+        });
+    }
+
+    function previewLesson(arg)
+    {
+        var $form = $('<form method="post"/>')
+            .appendTo($('body'))
+            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
+        for (var key in arg) {
+            $('<input type="hidden"/>')
+            .prop('name', key).prop('value', arg[key]).appendTo($form);
+        }
+        showLoading(true, function () {
+            $form.submit();
+        });
+    }
+
+    function showLoading(autoHide,onBlock) {
+        $.blockUI({
+            message:  '<img src="<%= VirtualPathUtility.ToAbsolute("~/img/loading.gif") %>" /><h1>Loading</h1>', 
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            },
+            // 背景圖層
+            overlayCSS:  { 
+                backgroundColor: '#3276B1', 
+                opacity:         0.6, 
+                cursor:          'wait' 
+            },
+            onBlock: onBlock
+        });
+
+        if(autoHide)
+            setTimeout($.unblockUI, 5000);
+    }
+
+    function hideLoading() {
+        $.unblockUI();
+    }
+
 
 </script>
 

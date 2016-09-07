@@ -188,13 +188,17 @@
                         }
                     }
                     //$(form).submit();
+
+                    showLoading(false, function () {
+                        //$(form).ajaxSubmit({
+                        //    success: function () {
+                        //        //$("#login-form").addClass('submited');
+                        //    }
+                        //});
+                    });
+
                     return true;
 
-                    //$(form).ajaxSubmit({
-                    //    success: function () {
-                    //        $("#login-form").addClass('submited');
-                    //    }
-                    //});
                 },
 
                 // Do not change code below

@@ -301,19 +301,6 @@
         });
     }
 
-    function makeLessonPlan(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
-
     function attendLesson(arg)
     {
         startLoading();
@@ -327,19 +314,9 @@
         $form.submit();
     }
 
-    function previewLesson(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
-
+        $(function () {
+            showLoading(true);
+        });
     </script>
 
 

@@ -42,10 +42,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-eye"></i>VIP管理
-                            <span>>  
-                                檢視VIP
-                            </span>
+        <i class="fa-fw fa fa-eye"></i>檢視上課內容
     </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">

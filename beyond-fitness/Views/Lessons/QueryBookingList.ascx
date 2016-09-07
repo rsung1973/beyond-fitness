@@ -59,6 +59,9 @@
         // clears the variable if left blank
         var table = $('#dt_basic').DataTable({
             "order": [[1, "desc"]],
+            "fnDrawCallback": function (oSettings) {
+                hideLoading();
+            },
             "bPaginate": false,
             "sDom": "",
             "ajax": "<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryBookingListJson") %>",

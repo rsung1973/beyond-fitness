@@ -1295,6 +1295,7 @@
     <Content Include="js\plugin\jcrop\jquery.Jcrop.min.js" />
     <Content Include="js\plugin\jqgrid\grid.locale-en.min.js" />
     <Content Include="js\plugin\jqgrid\jquery.jqGrid.min.js" />
+    <Content Include="js\plugin\jquery-blockui\jquery.blockUI.js" />
     <Content Include="js\plugin\jquery-form\jquery-form.min.js" />
     <Content Include="js\plugin\jquery-nestable\jquery.nestable.min.js" />
     <Content Include="js\plugin\jquery-touch\jquery.ui.touch-punch.min.js" />
@@ -1374,7 +1375,12 @@
     <None Include="Models\DataEntity\BF.dbml.layout">
       <DependentUpon>BF.dbml</DependentUpon>
     </None>
+    <Content Include="Scripts\jquery-2.1.4.min.map" />
+    <Content Include="Scripts\jquery.min.map" />
     <None Include="Scripts\jquery-3.0.0.intellisense.js" />
+    <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.4.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-3.0.0.js" />
     <Content Include="Scripts\jquery-3.0.0.min.js" />
     <Content Include="Scripts\jquery-3.0.0.slim.js" />
@@ -1416,6 +1422,7 @@
     <Content Include="Views\Account\ViewCoach.aspx" />
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Account\Vip.aspx" />
+    <Content Include="Views\Activity\TimeLine.aspx" />
     <Content Include="Views\Attendance\AddTraining.ascx" />
     <Content Include="Views\Attendance\TrainingPlan.aspx" />
     <Content Include="Views\Information\Blog.aspx" />
@@ -1622,6 +1629,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\LessonsController.cs" />
@@ -1647,6 +1655,7 @@
     <Compile Include="Models\Locale\Naming.cs" />
     <Compile Include="Models\Resource\SiteMenuItem.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />
+    <Compile Include="Models\Timeline\TimelineEvent.cs" />
     <Compile Include="Models\ViewModel\InputViewModel.cs" />
     <Compile Include="Models\ViewModel\LoginViewModel.cs" />
     <Compile Include="Models\ViewModel\PagingIndexViewModel.cs" />

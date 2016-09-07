@@ -8,25 +8,24 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%  if (_userProfile != null && _userProfile.IsAuthorizedSysAdmin())
-    { %>
-<li>
-    <a title="維護上課數" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + _model.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-calendar-o fa-stack-1x"></i></span>維護上課數</a>
-</li>
-<%  } %>
+<script>
+    $(function () {
+        window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipDay/") + _model.LessonID %>';
+    });
+</script>
 
 <script runat="server">
 
     ModelStateDictionary _modelState;
-    UserProfile _userProfile;
-    UserProfile _model;
+    ModelSource<UserProfile> models;
+    LessonTime _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = Context.GetUser();
-        _model = (UserProfile)this.Model;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (LessonTime)this.Model;
     }
 
 </script>

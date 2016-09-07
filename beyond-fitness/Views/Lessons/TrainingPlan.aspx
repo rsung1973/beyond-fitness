@@ -200,7 +200,9 @@
 
         $(function(){
             $global.cloneLesson = function(sourceID) {
+                showLoading();
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CloneTrainingPlan") %>',{'sourceID': sourceID,'lessonID':<%= _model.LessonID %>},function(data){
+                    hideLoading();
                     if(data.result) {
                         smartAlert("資料已複製!!", function (message) {
                             makeLessonPlan(<%= JsonConvert.SerializeObject(new
@@ -220,10 +222,12 @@
 
         function attendLesson(lessonID) {
             var event = event || window.event;
+            showLoading();
             $.post('<%= Url.Action("AttendLesson","Attendance") %>', { 'lessonID': lessonID }, function (data) {
+                hideLoading();
                 if (data) {
                     if(data.result) {
-                        smartAlert(data.message);
+                        smartAlert("已完成打卡!!");
                         $(event.target).remove();
                     } else {
                         smartAlert(data.message);
@@ -233,6 +237,7 @@
         }
 
         function commitPlan() {
+            showLoading(true);
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>',
                 {
                     'recentStatus': $('#recentStatus').val(),
@@ -240,30 +245,31 @@
                     'endingOperation': $('#endingOperation').val(),
                     'remark': $('#remark').val()
                 }, function (data) {
-                if (data.result) {
-                    smartAlert('資料已更新!!');
-                    $('#msgWarming').text($('#warming').val());
-                    $('#msgEndingOperation').text($('#endingOperation').val());
-                    $('#msgRemark').text($('#remark').val());
-                } else {
-                    smartAlert(data.message);
-                }
+                    hideLoading();
+                    if (data.result) {
+                        smartAlert('資料已更新!!');
+                        $('#msgWarming').text($('#warming').val());
+                        $('#msgEndingOperation').text($('#endingOperation').val());
+                        $('#msgRemark').text($('#remark').val());
+                    } else {
+                        smartAlert(data.message);
+                    }
             });
         }
 
         function deleteTraining(itemID) {
             confirmIt({ title: '刪除訓練組數', message: '確定刪除此訓練組數?' }, function (evt) {
-                startLoading();
+                showLoading()
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTraining/") %>' + itemID, {}, function (data) {
                     $('#s2').empty().append($(data));
-                    finishLoading();
+                    hideLoading();
                 });
             });
         }
 
         function deletePlan() {
             confirmIt({ title: '刪除課表', message: '確定刪除此課表?' }, function (evt) {
-                startLoading();
+                showLoading();
                 $('<form method="post"/>').appendTo($('body'))
                     .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeletePlan") %>')
                     .submit();
@@ -271,9 +277,10 @@
         }
 
         function addTraining() {
-            startLoading();
+            showLoading();
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTraining") %>', {}, function (data) {
                 if (data) {
+                    hideLoading();
                     $('#trainingPlan').before($(data));
                 }
             });
@@ -284,10 +291,10 @@
         function addTrainingItem(executionID) {
             $('#addItem').remove();
             $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
-            $('#loading').css('display', 'table');
+            showLoading();
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTrainingItem") %>' + '?id=' + executionID , {}, function () {
-                    $('#loading').css('display', 'none');
+                    hideLoading();
                     $modal.on('hidden.bs.modal', function (evt) {
                         $('body').scrollTop(screen.height);
                     });
@@ -298,10 +305,11 @@
         function addBreakInterval(executionID) {
             $('#addItem').remove();
             $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
-            $('#loading').css('display', 'table');
+            //$('#loading').css('display', 'table');
+            showLoading();
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AddTrainingBreakInterval") %>' + '?id=' + executionID, {}, function () {
-                    $('#loading').css('display', 'none');
+                    hideLoading();
                     $modal.on('hidden.bs.modal', function (evt) {
                         $('body').scrollTop(screen.height);
                     });
@@ -312,7 +320,7 @@
         function cloneLesson(lessonID) {
             $('#addItem').remove();
             $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
-            $('#loading').css('display', 'table');
+            showLoading();
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryLessonTime") %>', 
                     {
@@ -323,11 +331,11 @@
                         'hour': <%= _model.Hour %>,
                         'registerID': <%= _model.RegisterID %>
                     } , function () {
-                    $('#loading').css('display', 'none');
-                    $modal.on('hidden.bs.modal', function (evt) {
-                        $('body').scrollTop(screen.height);
-                    });
-                    $modal.modal('show');
+                        hideLoading();
+                        $modal.on('hidden.bs.modal', function (evt) {
+                            $('body').scrollTop(screen.height);
+                        });
+                        $modal.modal('show');
                 });
         }
 
@@ -347,10 +355,12 @@
         }
 
         function doCloneLesson() {
+            showLoading();
             $('#addItem').find('form').ajaxForm({
                 beforeSubmit: function () {
                 },
                 success: function (data) {
+                    hideLoading();
                     if (data.result) {
                         smartAlert("資料已複製!!", function (message) {
                             $modal.modal('hide');
@@ -382,26 +392,13 @@
 
         }
 
-        function makeLessonPlan(arg)
-        {
-            var $form = $('<form method="post"/>')
-                .appendTo($('body'))
-                .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrainingPlan") %>');
-            for (var key in arg) {
-                $('<input type="hidden"/>')
-                .prop('name', key).prop('value', arg[key]).appendTo($form);
-            }
-            startLoading();
-            $form.submit();
-        }
-
         function editTrainingItem(executionID, itemID) {
             $('#addItem').remove();
             $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
-            $('#loading').css('display', 'table');
+            showLoading();
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTrainingItem") %>', { 'executionID': executionID, 'itemID': itemID }, function () {
-                    $('#loading').css('display', 'none');
+                    hideLoading();
                     $modal.on('hidden.bs.modal', function (evt) {
                         $('body').scrollTop(screen.height);
                     });
@@ -412,10 +409,10 @@
         function editBreakInterval(executionID, itemID) {
             $('#addItem').remove();
             $modal = $('<div class="modal fade" id="addItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
-            $('#loading').css('display', 'table');
+            showLoading();
             $modal.appendTo($('#content'))
                 .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/EditTrainingBreakInterval") %>', { 'executionID': executionID, 'itemID': itemID }, function () {
-                    $('#loading').css('display', 'none');
+                    hideLoading();
                     $modal.on('hidden.bs.modal', function (evt) {
                         $('body').scrollTop(screen.height);
                     });
@@ -427,7 +424,9 @@
         function deleteItem(executionID,itemID) {
             var event = event || window.event;
             confirmIt({ title: '刪除訓練項目', message: '確定刪除此訓練項目?' }, function (evt) {
+                showLoading();
                 $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DeleteTrainingItem") %>', { 'itemID': itemID,'executionID':executionID }, function (data) {
+                    hideLoading();
                     if (data.result) {
                         $(event.target).parent().parent().parent().remove();
                     } else {
@@ -454,20 +453,24 @@
         }
 
         function updateSequence() {
+            showLoading();
             $('#updateSeq').ajaxForm({
                 success: function (data) {
                     $('#updateSeq').html(data);
+                    hideLoading();
                     smartAlert("資料已儲存!!");
                 }
             }).submit();
         }
 
         function commitTrainingItem() {
+            showLoading();
             $('#addItem').find('form').ajaxForm({
                 <%--url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTrainingItem") %>",--%>
                 beforeSubmit: function () {
                 },
                 success: function (data) {
+                    hideLoading();
                     if (data.result) {
                         smartAlert("資料已儲存!!", function (message) {
                             $modal.modal('hide');
@@ -494,11 +497,13 @@
         function commitTraining() {
 
             var event = event || window.event;
+            showLoading();
             $(event.target).parents('form').ajaxForm({
                 url: "<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitTraining") %>",
                 beforeSubmit: function () {
                 },
                 success: function (data) {
+                    hideLoading();
                     if (data.result) {
                         smartAlert("資料已儲存!!", function (message) {
                         });
@@ -516,8 +521,10 @@
             $('#assessment').ajaxForm({
                 url: "<%= VirtualPathUtility.ToAbsolute("~/Attendance/CommitAssessment") %>",
                 beforeSubmit: function () {
+                    showLoading(true);
                 },
                 success: function (data) {
+                    hideLoading();
                     if (data.result) {
                         smartAlert("資料已儲存!!", function (message) {
                         });
@@ -534,19 +541,6 @@
                 }
             }).submit();
         }
-
-    function previewLesson(arg)
-    {
-        var $form = $('<form method="post"/>')
-            .appendTo($('body'))
-            .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Lessons/PreviewLesson") %>');
-        for (var key in arg) {
-            $('<input type="hidden"/>')
-            .prop('name', key).prop('value', arg[key]).appendTo($form);
-        }
-        startLoading();
-        $form.submit();
-    }
 
     </script>
 
