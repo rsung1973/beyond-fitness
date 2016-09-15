@@ -60,7 +60,9 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
-        _pdqGroups = models.GetTable<PDQGroup>().OrderBy(g => g.GroupID).ToArray();
+        _pdqGroups = models.GetTable<PDQGroup>()
+            .Where(g => g.GroupID < 6)
+            .OrderBy(g => g.GroupID).ToArray();
 
     }
 

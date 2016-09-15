@@ -12,7 +12,7 @@
     && (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner))
     { %>
 <li>
-    <a href="timeline.html" title="我的足印"><i class="fa fa-lg fa-fw fa-paw"></i><span class="menu-item-parent">我的足印</span></a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Activity/TimeLine") + "?uid=" + _userProfile.UID %>" title="我的足印"><i class="fa fa-lg fa-fw fa-paw"></i><span class="menu-item-parent">我的足印</span></a>
 </li>
 <%  } %>
 

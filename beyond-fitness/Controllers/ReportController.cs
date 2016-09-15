@@ -118,7 +118,7 @@ namespace WebHome.Controllers
             return View("~/Views/Lessons/LessonContent.ascx",item);
         }
 
-        public ActionResult LessonContent(int lessonID,bool? edit)
+        public ActionResult LessonContent(int lessonID,bool? edit,bool? learner,int? tabIndex)
         {
             var item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
 
@@ -130,8 +130,50 @@ namespace WebHome.Controllers
             ViewBag.LessonDate = item.ClassTime;
             if (edit == true)
                 ViewBag.Edit = true;
+            if (learner == true)
+                ViewBag.Learner = true;
+            ViewBag.TabIndex = tabIndex;
             return View("~/Views/Lessons/LessonContent.ascx", item);
         }
+
+        public ActionResult ListLessonPriceType()
+        {
+            var items = models.GetTable<LessonPriceType>();
+            return View(items);
+        }
+
+        public ActionResult StaffAchievement()
+        {
+            return View();
+        }
+
+        public ActionResult ListLessonAttendance(int? coachID,DateTime? dateFrom,DateTime? dateTo)
+        {
+            var items = models.GetTable<LessonTime>().Where(t => t.LessonAttendance != null)
+                .Where(t => t.LessonPlan.CommitAttendance.HasValue);
+
+            if(coachID.HasValue)
+            {
+                items = items.Where(t => t.AttendingCoach == coachID);
+            }
+
+            if(dateFrom.HasValue)
+            {
+                items = items.Where(t => t.ClassTime >= dateFrom);
+            }
+
+            if (dateTo.HasValue)
+            {
+                items = items.Where(t => t.ClassTime < dateTo.Value.AddDays(1));
+            }
+
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+
+            return View(items);
+
+        }
+
 
     }
 }

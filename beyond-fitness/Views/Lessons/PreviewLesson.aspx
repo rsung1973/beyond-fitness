@@ -53,7 +53,7 @@
         <article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
             <%  Html.RenderPartial("~/Views/Lessons/LessonsInfo.ascx", _model.LessonTime); %>
             <div class="jarviswidget" id="wid-id-list" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                <%  Html.RenderAction("LessonContent", "Report", new { lessonID = _model.LessonID, edit = true }); %>
+                <%  Html.RenderAction("LessonContent", "Report", new { lessonID = _model.LessonID, edit = true, tabIndex = 0 }); %>
             </div>
         </article>
 

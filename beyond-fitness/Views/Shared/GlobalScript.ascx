@@ -20,6 +20,31 @@
         });
     }
 
+    function showLearnerLesson(lessonID,attendance) {
+        var event = event || window.event;
+        showLoading(true);
+        $.post('<%= Url.Action("LearnerLesson","Activity") %>', { 'lessonID': lessonID,'attendance': attendance }, function (data) {
+            $(data).appendTo($('#content'));
+            hideLoading();
+        });
+    }
+
+    function learnerAttendLesson(lessonID) {
+        var event = event || window.event;
+        showLoading();
+        $.post('<%= Url.Action("LearnerAttendLesson","Attendance") %>', { 'lessonID': lessonID }, function (data) {
+            hideLoading();
+            if (data) {
+                if(data.result) {
+                    smartAlert("已完成打卡!!");
+                    $(event.target).remove();
+                } else {
+                    smartAlert(data.message);
+                }
+            }
+        });
+    }
+    
     function makeTrainingPlan(lessonID) {
         var $form = $('<form method="post"/>')
             .appendTo($('body'))
@@ -42,6 +67,23 @@
         showLoading(true,function(){
             $form.submit();
         });
+    }
+
+    function updateLessonFeedBack(lessonID) {
+        showLoading(true);
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Activity/UpdateLessonFeedBack") %>',
+            {
+                'lessonID': lessonID,
+                'feedBack': $('#lessonFeedBack').val()
+            }, function (data) {
+                hideLoading();
+                if (data) {
+                    $('#msgLessonFeedBack').html(data);
+                    smartAlert('資料已更新!!');
+                } else {
+                    smartAlert(data.message);
+                }
+            });
     }
 
     function previewLesson(arg)

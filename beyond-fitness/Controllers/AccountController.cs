@@ -486,7 +486,7 @@ namespace WebHome.Controllers
                     if (isJson)
                         return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/Vip") });
                     else
-                        return RedirectToAction("Vip", "Account");
+                        return RedirectToAction("TimeLine", "Activity", new { uid = item.UID });
             }
 
             return View();

@@ -11,7 +11,7 @@
 
 
 <div class="stack-container">
-    <div id="fitnessholder" class="stack-placeholder"></div>
+    <div id="fitnessGraph" class="stack-placeholder"></div>
 </div>
 
 <script>
@@ -24,7 +24,8 @@
                     }) %>;
 
         $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/FitnessGraph") %>', lessonDate, function (data) {
-            drawGraph($("#fitnessholder"),data.data,data.ticks);
+            //drawGraph($("#fitnessholder"),data.data,data.ticks);
+            drawFitnessGraph('fitnessGraph',data);
         });
     });
 

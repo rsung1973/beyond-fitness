@@ -486,7 +486,7 @@ namespace WebHome.Controllers
                     description = "自主訓練",
                     allDay = true,
                     className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
-                    icon = g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = "fa-child" // g.Key < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
 
@@ -519,7 +519,7 @@ namespace WebHome.Controllers
             public int? lessonID { get; set; }
         }
 
-        public ActionResult VipEvents(int? id,DateTime start, DateTime end)
+        public ActionResult VipEvents(int? id,DateTime start, DateTime end,bool? learner)
         {
             UserProfile item = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
             if (item == null)
@@ -547,7 +547,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
-                    icon = g.ClassTime < today ? "fa-check" : "fa-clock-o"
+                    icon = g.ClassTime < today ? learner == true ? "fa-anchor" : "fa-check" : "fa-clock-o"
                 });
 
             items = items.Concat(dataItems
@@ -561,7 +561,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
-                    icon = g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = "fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
             return Json(items, JsonRequestBehavior.AllowGet);
@@ -636,10 +636,13 @@ namespace WebHome.Controllers
 
             item.LessonPlan.FeedBack = viewModel.FeedBack;
             item.LessonPlan.FeedBackDate = DateTime.Now;
-            for(int i=0;i<item.TrainingPlan.Count && i<viewModel.ExecutionFeedBack.Length;i++)
+            if (viewModel.ExecutionFeedBack != null)
             {
-                item.TrainingPlan[i].TrainingExecution.ExecutionFeedBack = viewModel.ExecutionFeedBack[i];
-                item.TrainingPlan[i].TrainingExecution.ExecutionFeedBackDate = DateTime.Now;
+                for (int i = 0; i < item.TrainingPlan.Count && i < viewModel.ExecutionFeedBack.Length; i++)
+                {
+                    item.TrainingPlan[i].TrainingExecution.ExecutionFeedBack = viewModel.ExecutionFeedBack[i];
+                    item.TrainingPlan[i].TrainingExecution.ExecutionFeedBackDate = DateTime.Now;
+                }
             }
             models.SubmitChanges();
 
@@ -986,7 +989,7 @@ namespace WebHome.Controllers
                     description = "自主訓練",
                     allDay = true,
                     className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
-                    icon = g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = "fa-child"   //g.Key < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
             return Json(items, JsonRequestBehavior.AllowGet);
@@ -1077,7 +1080,7 @@ namespace WebHome.Controllers
         private Dictionary<int, int> dailyBookingHourlyCount(DateTime lessonDate)
         {
             Dictionary<int, int> index = new Dictionary<int, int>();
-            foreach (int idx in Enumerable.Range(7, 15))
+            foreach (int idx in Enumerable.Range(7, 16))
             {
                 index[idx] = 0;
             }
@@ -1107,48 +1110,62 @@ namespace WebHome.Controllers
             public int Flexibility { get; set; }
             public int SportsPerformance { get; set; }
             public int Strength { get; set; }
+            public String ClassDate { get; set; }
         }
 
         GraphDataItem calcAverage(LessonTime item)
         {
             var trend = item.LessonTrend;
-            decimal total = trend.ActionLearning.Value + trend.PostureRedress.Value + trend.Training.Value;
+            decimal total = 30m;// trend.ActionLearning.Value + trend.PostureRedress.Value + trend.Training.Value;
             var r = new GraphDataItem
             {
                 ClassTime = item.ClassTime.Value,
+                ClassDate = String.Format("{0:yyyy-MM-dd}",item.ClassTime),
                 ActionLearning = (int)Math.Round(trend.ActionLearning.Value * 100m / total),
-                PostureRedress = (int)Math.Round(trend.PostureRedress.Value * 100m / total)
+                PostureRedress = (int)Math.Round(trend.PostureRedress.Value * 100m / total),
+                Training = (int)Math.Round(trend.Training.Value * 100m / total)
             };
-            r.Training = 100 - r.ActionLearning - r.PostureRedress;
+            //r.Training = 100 - r.ActionLearning - r.PostureRedress;
             return r;
         }
 
         GraphDataItem fitnessAverage(LessonTime item)
         {
             var fitness = item.FitnessAssessment;
-            decimal total = fitness.Cardiopulmonary.Value 
-                + fitness.Endurance.Value 
-                + fitness.ExplosiveForce.Value
-                + fitness.Flexibility.Value
-                + fitness.SportsPerformance.Value 
-                + fitness.Strength.Value;
+            decimal total = 60m;
+            //decimal total = (fitness.Cardiopulmonary ?? 0)
+            //    + (fitness.Endurance ?? 0)
+            //    + (fitness.ExplosiveForce ?? 0)
+            //    + (fitness.Flexibility ?? 0)
+            //    + (fitness.SportsPerformance ?? 0)
+            //    + (fitness.Strength ?? 0);
+
+            if (total == 0)
+            {
+                return new GraphDataItem
+                {
+
+                };
+            }
 
             var r = new GraphDataItem
             {
                 ClassTime = item.ClassTime.Value,
-                Cardiopulmonary = (int)Math.Round(fitness.Cardiopulmonary.Value * 100m / total),
-                Endurance = (int)Math.Round(fitness.Endurance.Value * 100m / total),
-                ExplosiveForce = (int)Math.Round(fitness.ExplosiveForce.Value * 100m / total),
-                Flexibility = (int)Math.Round(fitness.Flexibility.Value * 100m / total),
-                SportsPerformance = (int)Math.Round(fitness.SportsPerformance.Value * 100m / total)
+                ClassDate = String.Format("{0:yyyy-MM-dd}", item.ClassTime),
+                Cardiopulmonary = (int)Math.Round((fitness.Cardiopulmonary ?? 0) * 100m / total),
+                Endurance = (int)Math.Round((fitness.Endurance ?? 0 ) * 100m / total),
+                ExplosiveForce = (int)Math.Round((fitness.ExplosiveForce ?? 0 ) * 100m / total),
+                Flexibility = (int)Math.Round((fitness.Flexibility ?? 0 ) * 100m / total),
+                SportsPerformance = (int)Math.Round((fitness.SportsPerformance ?? 0 ) * 100m / total),
+                Strength = (int)Math.Round((fitness.Strength ?? 0) * 100m / total)
             };
 
-            r.Strength = 100
-                - r.Cardiopulmonary
-                - r.Endurance
-                - r.ExplosiveForce
-                - r.Flexibility
-                - r.SportsPerformance;
+            //r.Strength = 100
+            //    - r.Cardiopulmonary
+            //    - r.Endurance
+            //    - r.ExplosiveForce
+            //    - r.Flexibility
+            //    - r.SportsPerformance;
 
             return r;
         }
@@ -1171,76 +1188,78 @@ namespace WebHome.Controllers
                 .Where(t => t.LessonAttendance != null).ToArray()
                 .Select(t => fitnessAverage(t)).ToArray();
 
-            var idx = Enumerable.Range(0, items.Length);
-            int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+            return Json(items, JsonRequestBehavior.AllowGet);
 
-            return Json(
-                new
-                {
-                    data = new object[]
-                    {
-                        new
-                        {
-                            label = "柔軟度",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].Flexibility
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "心肺",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].Cardiopulmonary
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "肌力",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].Strength
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "肌耐力",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].Endurance
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "爆發力",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].ExplosiveForce
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "運動表現",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].SportsPerformance
-                            }).ToArray()
-                        }
-                    },
-                    ticks = idx.Select(g => new object[]
-                        {
-                            g,
-                            //g%section==0 ? (g+1).ToString() : ""
-                            ""
-                        }).ToArray()
-                }, JsonRequestBehavior.AllowGet);
+            //var idx = Enumerable.Range(0, items.Length);
+            //int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+
+            //return Json(
+            //    new
+            //    {
+            //        data = new object[]
+            //        {
+            //            new
+            //            {
+            //                label = "柔軟度",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].Flexibility
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "心肺",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].Cardiopulmonary
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "肌力",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].Strength
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "肌耐力",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].Endurance
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "爆發力",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].ExplosiveForce
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "運動表現",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].SportsPerformance
+            //                }).ToArray()
+            //            }
+            //        },
+            //        ticks = idx.Select(g => new object[]
+            //            {
+            //                g,
+            //                //g%section==0 ? (g+1).ToString() : ""
+            //                ""
+            //            }).ToArray()
+            //    }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1261,49 +1280,51 @@ namespace WebHome.Controllers
                 .Where(t => t.LessonAttendance != null).ToArray()
                 .Select(t => calcAverage(t)).ToArray();
 
-            var idx = Enumerable.Range(0, items.Length);
-            int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+            return Json(items, JsonRequestBehavior.AllowGet);
 
-            return Json(
-                new
-                {
-                    data = new object[]
-                    {
-                        new
-                        {
-                            label = "動作學習",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].ActionLearning
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "姿勢矯正",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].PostureRedress
-                            }).ToArray()
-                        },
-                        new
-                        {
-                            label = "訓練",
-                            data = idx.Select(g=>new object[]
-                            {
-                                g,
-                                items[g].Training
-                            }).ToArray()
-                        }
-                    },
-                    ticks = idx.Select(g => new object[]
-                        {
-                            g,
-                            //g%section==0 ? (g+1).ToString() : ""
-                            ""
-                        }).ToArray()
-                }, JsonRequestBehavior.AllowGet);
+            //var idx = Enumerable.Range(0, items.Length);
+            //int section = items.Length >= 12 ? (items.Length + 11) / 12 : 1;
+
+            //return Json(
+            //    new
+            //    {
+            //        data = new object[]
+            //        {
+            //            new
+            //            {
+            //                label = "動作學習",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].ActionLearning
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "姿勢矯正",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].PostureRedress
+            //                }).ToArray()
+            //            },
+            //            new
+            //            {
+            //                label = "訓練",
+            //                data = idx.Select(g=>new object[]
+            //                {
+            //                    g,
+            //                    items[g].Training
+            //                }).ToArray()
+            //            }
+            //        },
+            //        ticks = idx.Select(g => new object[]
+            //            {
+            //                g,
+            //                //g%section==0 ? (g+1).ToString() : ""
+            //                ""
+            //            }).ToArray()
+            //    }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1503,33 +1524,53 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult DailyTrendPie(int lessonID)
+        public ActionResult DailyTrendPie(int lessonID, bool? isLearner)
         {
-            var item = models.GetTable<LessonTime>().Where(l => l.LessonID==lessonID).FirstOrDefault();
+            var item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
 
             if (item == null || item.LessonTrend == null)
                 return Json(new object[] { }, JsonRequestBehavior.AllowGet);
 
             var trend = item.LessonTrend;
 
-            return Json(new object[] {
-                new {
-                    label = "動作學習",
-                    data = trend.ActionLearning
-                },
-                new {
-                    label = "姿勢矯正",
-                    data = trend.PostureRedress
-                },
-                new {
-                    label = "訓練",
-                    data = trend.Training
-                },
-                new {
-                    label = "狀態溝通",
-                    data = trend.Counseling
-                }
-            }, JsonRequestBehavior.AllowGet);
+            if (isLearner == true)
+            {
+                return Json(new object[] {
+                    new {
+                        label = "動作學習",
+                        data = trend.ActionLearning
+                    },
+                    new {
+                        label = "姿勢矯正",
+                        data = trend.PostureRedress
+                    },
+                    new {
+                        label = "訓練",
+                        data = trend.Training
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new object[] {
+                    new {
+                        label = "動作學習",
+                        data = trend.ActionLearning
+                    },
+                    new {
+                        label = "姿勢矯正",
+                        data = trend.PostureRedress
+                    },
+                    new {
+                        label = "訓練",
+                        data = trend.Training
+                    },
+                    new {
+                        label = "狀態溝通",
+                        data = trend.Counseling
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
 
         }
 

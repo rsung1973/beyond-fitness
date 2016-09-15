@@ -18,9 +18,9 @@
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>"><i class="fa fa-fw fa-puzzle-piece"></i>專業知識</a>
         </li>
-        <%--<li>
-            <a href="qalist.html"><i class="fa fa-fw fa-question"></i>問與答</a>
-        </li>--%>
+        <li>
+            <a href="<%= Url.Action("ListDailyQuestion","Activity") %>"><i class="fa fa-fw fa-question"></i>問與答</a>
+        </li>
     </ul>
 </li>
 <%  } %>

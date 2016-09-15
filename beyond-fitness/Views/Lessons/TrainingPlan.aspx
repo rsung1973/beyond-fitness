@@ -97,6 +97,17 @@
                     <div class="widget-body no-padding">
                         <!-- content -->
                         <div id="myTabContent" class="tab-content padding-10">
+                            <%  var feedBackItems = _model.RegisterLesson.LessonTime.OrderByDescending(l => l.LessonID)
+                                    .Select(l => l.LessonPlan).Where(p => !String.IsNullOrEmpty(p.FeedBack)).Take(3);
+                                if(feedBackItems.Count()>0)
+                                { %>
+                                    <p class="alert alert-success"><strong>
+                                        <%  foreach(var f in feedBackItems )
+                                        { %>
+                                            <i class="fa fa-commenting-o"></i><%= f.LessonTime.RegisterLesson.UserProfile.RealName %>已於<%= String.Format("{0:yyyy/MM/dd HH:mm}",f.FeedBackDate) %> 針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.FeedBack %><br />
+                                    <%  } %>
+                                    </strong></p>
+                            <%  } %>
                             <div class="tab-pane fade" id="s1">
                                 <div class="chat-body no-padding profile-message">
                                     <ul>
@@ -167,7 +178,7 @@
                                             <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                                             <span class="message-text">
                                                 <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <div id="msg">
+                                                <div id="msgRemark">
                                                     <%= _plan.Remark %></div>
                                             </span>
                                         </li>

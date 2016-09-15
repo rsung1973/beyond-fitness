@@ -8,6 +8,8 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
+<%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID != (int)Naming.RoleID.Learner)
+    { %>
 <ul id="sparks">
     <li class="sparks-info">
         <h5>今日上課人數 <span class="txt-color-blue"><% Html.RenderAction("DailyLearnerCount", "Lessons", new { date = DateTime.Today }); %>人</span></h5>
@@ -16,6 +18,7 @@
         </div>
     </li>
 </ul>
+<%  } %>
 
 <script runat="server">
 

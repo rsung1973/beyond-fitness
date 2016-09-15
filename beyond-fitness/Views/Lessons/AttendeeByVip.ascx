@@ -65,10 +65,12 @@
     });
 
     $('#btnQuery').on('click', function (evt) {
-        $('#loading').css('display', 'table');
+        //$('#loading').css('display', 'table');
+        showLoading(true);
         var userName = $('input[name="userName"]').val();
         $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/VipSelector") %>', { 'userName': userName }, function () {
-            $('#loading').css('display', 'none');
+            //$('#loading').css('display', 'none');
+            hideLoading();
         });
     });
 

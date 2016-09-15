@@ -419,6 +419,27 @@ namespace WebHome.Models.ViewModel
         public bool? HasQuery { get; set; }
     }
 
+    public class PDQQuestionViewModel
+    {
+        public PDQQuestionViewModel()
+        {
+            QuestionType = (int)Naming.QuestionType.單選題;
+            GroupID = 6;
+            BonusPoint = 1;
+        }
+
+        public int? QuestionID { get; set; }
+        public String Question { get; set; }
+        public int? QuestionType { get; set; }
+        public int QuestionNo { get; set; }
+        public int? GroupID { get; set; }
+        public int? AskerID { get; set; }
+
+        public String[] Suggestion { get; set; }
+        public int? RightAnswerIndex { get; set; }
+        public int? BonusPoint { get; set; }
+    }
+
 
     public class ArgumentModel
     {

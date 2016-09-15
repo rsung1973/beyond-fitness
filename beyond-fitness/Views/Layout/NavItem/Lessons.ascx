@@ -22,6 +22,12 @@
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") %>"><i class="fa fa-fw fa-search"></i>我的VIP</a>
         </li>
+        <%  if (_userProfile.IsAuthorizedSysAdmin())
+            { %>
+                <li>
+                    <a href="<%= Url.Action("StaffAchievement","Report") %>"><i class="fa fa-fw fa-calculator"></i>業績統計表</a>
+                </li>
+        <%  } %>
     </ul>
 </li>
 <%  } %>

@@ -166,6 +166,22 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult LearnerAttendLesson(int lessonID)
+        {
+            LessonTime item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
+
+            if (item == null)
+                return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
+
+            item.LessonPlan.CommitAttendance = DateTime.Now;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = "資料存檔完成!!" });
+
+        }
+
+
         public ActionResult CommitAssessment(TrainingAssessmentViewModel viewModel)
         {
             ActionResult result;

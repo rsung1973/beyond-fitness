@@ -23,7 +23,10 @@
                         .Where(l=>l.RegisterID!=c.RegisterID)
                         .Count(l=>l.LessonAttendance!= null)) %> / <%= totalLessons %></strong>
             <br />
-            <small>剩餘/全部 上課數</small></h4>
+            <small>剩餘/全部 上課數</small>
+            <br />
+            <small><i class="fa fa-gift"></i>每日小提問答題已得<%= _model.BonusPoint() ?? 0 %>點</small>
+        </h4>
         <br />
         <a class="btn bg-color-blueLight btn-sm" onclick="showRecentLessons(<%= _model.UID %>);"><i class="fa fa-fw fa-eye"></i>檢視上課記錄</a>
     </div>

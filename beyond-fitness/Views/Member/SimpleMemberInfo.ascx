@@ -22,7 +22,7 @@
                     <div class="col-sm-3 profile-pic">
                         <% _model.RenderUserPicture(Writer, "profileImg"); %>
                         <div class="padding-10">
-                            <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> 28歲</span>
+                            <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>
                             <br />
                             <h4 class="font-md"><strong><% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
                                 <%= totalLessons
@@ -33,7 +33,8 @@
                                             .Where(l=>l.RegisterID!=c.RegisterID)
                                             .Count(l=>l.LessonAttendance!= null)) %> / <%= totalLessons %></strong>
                                 <br/>
-                                <small>剩餘/購買上課次數</small></h4>
+                                <small>剩餘/購買上課次數</small>
+                            </h4>
                         </div>
                     </div>
                     <div class="col-sm-9">
@@ -50,6 +51,11 @@
                             <li>
                                 <p class="text-muted">
                                     <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:<%= _model.PID.Contains("@") ? _model.PID : null %>"><%= _model.PID.Contains("@") ? _model.PID : null %></a>
+                                </p>
+                            </li>
+                            <li>
+                                <p class="text-muted">
+                                    <i class="fa fa-gift"></i>&nbsp;&nbsp;每日小提問答題已得<%= _model.BonusPoint() ?? 0 %>點
                                 </p>
                             </li>
                         </ul>

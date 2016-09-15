@@ -11,7 +11,7 @@
 <%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID==(int)Naming.RoleID.Learner)
     { %>
 <li>
-    <a title="我的足印" href="timeline.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-paw fa-stack-1x"></i></span>我的足印</a>
+    <a title="我的足印" href="<%= VirtualPathUtility.ToAbsolute("~/Activity/TimeLine") + "?uid=" + _userProfile.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-paw fa-stack-1x"></i></span>我的足印</a>
 </li>
 <%  } %>
 

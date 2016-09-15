@@ -101,6 +101,16 @@
                                             <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
                                         </select>
                                         <i class="icon-append fa fa-file-word-o"></i>
+                                        <script>
+                                            $(function () {
+                                                $('select[name="trainingBySelf"]').on('change', function (evt) {
+                                                    if ($(this).val() == '1') {
+                                                        $('#queryAttendee').val('');
+                                                        $('#attendee').empty();
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                     </label>
                                 </section>
                             </fieldset>
@@ -119,14 +129,14 @@
                                         <label class="input">
                                             <i class="icon-append fa fa-user"></i>
                                             <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" readonly="readonly" />
-                                            <div id="attendee"></div>
                                         </label>
+                                        <div id="attendee"></div>
                                         <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
                                     </section>
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <div class="row" class="col col-6">
+                                <div class="row">
                                     <section class="col col-6">
                                         <label>請選擇上課時段</label>
                                         <label class="input">
@@ -242,23 +252,23 @@
 
 
         function addUser(bySelf) {
+            showLoading(true);
             $('#content').find('#addUserItem').remove();
             var $modal = $('<div class="modal fade" id="addUserItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" />');
             $modal.on('hidden.bs.modal', function (evt) {
                 $modal.remove();
             });
-            $('#loading').css('display', 'table');
             if (bySelf == '1') {
                 $modal.appendTo($('#content'))
                     .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeByVip") %>', null, function () {
                         $modal.modal('show');
-                        $('#loading').css('display', 'none');
+                        hideLoading();
                     });
             } else {
                 $modal.appendTo($('#content'))
                     .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Attendee") %>', null, function () {
                         $modal.modal('show');
-                        $('#loading').css('display', 'none');
+                        hideLoading();
                     });
             }
         }

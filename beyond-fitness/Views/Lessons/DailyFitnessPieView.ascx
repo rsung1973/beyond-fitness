@@ -15,12 +15,10 @@
 <script>
 
     $(function () {
-
         $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyFitnessPie") %>', { 'lessonID': <%= _model.LessonID %> }, function (data) {
             drawPie($("#fitnessholder"),data);
         });
     });
-
 
 </script>
 

@@ -15,7 +15,7 @@
 
     $(function () {
 
-        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyTrendPie") %>', { 'lessonID': <%= _model.LessonID %> }, function (data) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyTrendPie") %>', { 'lessonID': <%= _model.LessonID %>,'isLearner': <%= ViewBag.Learner==true ? "true" : "false" %> }, function (data) {
             drawPie($("#placeholder"),data);
         });
     });

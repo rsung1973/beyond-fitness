@@ -1422,6 +1422,18 @@
     <Content Include="Views\Account\ViewCoach.aspx" />
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Account\Vip.aspx" />
+    <Content Include="Views\Activity\AttendedLessonEvent.ascx" />
+    <Content Include="Views\Activity\BirthdayEvent.ascx" />
+    <Content Include="Views\Activity\EditDailyQuestion.aspx" />
+    <Content Include="Views\Activity\LearnerDailyQuestion.ascx" />
+    <Content Include="Views\Activity\LearnerLesson.ascx" />
+    <Content Include="Views\Activity\LearnerMonthlyReviewEvent.ascx" />
+    <Content Include="Views\Activity\LessonFeedback.ascx" />
+    <Content Include="Views\Activity\LessonFeedBackItem.ascx" />
+    <Content Include="Views\Activity\ListDailyQuestion.aspx" />
+    <Content Include="Views\Activity\ListReservedLessons.ascx" />
+    <Content Include="Views\Activity\QuestionList.ascx" />
+    <Content Include="Views\Activity\ReservedLessonEvent.ascx" />
     <Content Include="Views\Activity\TimeLine.aspx" />
     <Content Include="Views\Attendance\AddTraining.ascx" />
     <Content Include="Views\Attendance\TrainingPlan.aspx" />
@@ -1586,10 +1598,16 @@
     <Content Include="Views\MyTest\Index.aspx" />
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="Views\MyTest\TestPopup.aspx" />
+    <Content Include="Views\Report\DataTable - Copy.ascx" />
+    <Content Include="Views\Report\LessonAttendanceAchievement.ascx" />
+    <Content Include="Views\Report\LessonAttendanceTypeGroup.ascx" />
+    <Content Include="Views\Report\ListLessonAttendance.ascx" />
+    <Content Include="Views\Report\ListLessonPriceType.ascx" />
     <Content Include="Views\Report\LearnerPayment.aspx" />
     <Content Include="Views\Report\LearnerRecentLessons.ascx" />
     <Content Include="Views\Report\PaymentList.ascx" />
     <Content Include="Views\Report\RecentLessonsCalendar.ascx" />
+    <Content Include="Views\Report\StaffAchievement.aspx" />
     <Content Include="Views\Sample\DataTable.ascx" />
     <Content Include="Views\Sample\Sample.ascx" />
     <Content Include="Views\Sample\Sample.aspx" />
@@ -1607,6 +1625,7 @@
     <Content Include="Views\Shared\Loading.ascx" />
     <Content Include="Views\Shared\LockScreen.ascx" />
     <Content Include="Views\Shared\MessageModal.ascx" />
+    <Content Include="Views\Shared\MorrisGraphView.ascx" />
     <Content Include="Views\Shared\PageBanner.ascx" />
     <Content Include="Views\Shared\PagingControl.ascx" />
     <Content Include="Views\Shared\PieView.ascx" />
@@ -1620,10 +1639,14 @@
     <Content Include="Views\SystemInfo\LessonPriceTypeList.ascx" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
+    <Content Include="_test\CommonCode.txt" />
+    <Content Include="_test\PageToken.ascx" />
+    <Content Include="_test\Test02.aspx" />
     <Content Include="_test\Test01.aspx" />
     <Content Include="_test\TestBarChart.html" />
     <Content Include="_test\TestFB.htm" />
     <Content Include="_test\TestFB01.htm" />
+    <Content Include="_test\CheckToken.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />

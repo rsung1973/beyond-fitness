@@ -22,12 +22,18 @@ namespace WebHome.Helper
             context.ClearCache();
             context.SetCacheValue("userProfile",profile);
 
+            HttpCookie cookie;
             switch ((Naming.RoleID)profile.CurrentUserRole.RoleID)
             {
                 case Naming.RoleID.Administrator:
                 case Naming.RoleID.Coach:
                 case Naming.RoleID.FreeAgent:
-                    HttpCookie cookie = new HttpCookie("userID", profile.PID);
+                    cookie = new HttpCookie("userID", profile.PID);
+                    cookie.Expires = DateTime.Now.AddHours(24);
+                    context.Response.SetCookie(cookie);
+                    break;
+                case Naming.RoleID.Learner:
+                    cookie = new HttpCookie("userID", "");
                     cookie.Expires = DateTime.Now.AddHours(24);
                     context.Response.SetCookie(cookie);
                     break;

@@ -1,0 +1,129 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MainPage.master.cs" Inherits="WebHome.template.MainPage" %>
+
+<%@ Register Src="~/Module/Common/CommonScriptManager.ascx" TagPrefix="uc1" TagName="CommonScriptManager" %>
+<%@ Register Src="~/Views/Shared/Script.ascx" TagPrefix="uc1" TagName="Script" %>
+<%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq.Expressions" %>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
+<%@ Import Namespace="WebHome.Helper" %>
+<%@ Import Namespace="WebHome.Models" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
+<%@ Import Namespace="WebHome.Models.DataEntity" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>BEYOND FITNESS</title>
+
+    <!-- Define Charset -->
+    <meta charset="utf-8" />
+
+    <!-- Responsive Metatag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!-- Page Description and Author -->
+    <meta name="description" content="BEYOND FITNESS" />
+
+    <!-- Bootstrap CSS  -->
+    <link rel="stylesheet" href="~/asset/css/bootstrap.min.css" type="text/css" media="screen" />
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css" media="screen" />
+
+    <!-- Slicknav -->
+    <link rel="stylesheet" type="text/css" href="~/css/slicknav.css" media="screen" />
+
+    <!-- Margo CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" media="screen" />
+
+    <!-- Responsive CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/responsive.css" media="screen" />
+
+    <!-- Css3 Transitions Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/animate.css" media="screen" />
+
+    <!-- Color CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="~/css/colors/primary.css" title="primary" media="screen" />
+    <!-- calendar slider -->
+    <link href="~/calendar/responsive-calendar.css" rel="stylesheet">
+
+    <!-- 日曆設定-->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-datetimepicker.min.css">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="theForm" runat="server">
+        <uc1:CommonScriptManager runat="server" ID="CommonScriptManager" />
+        <%= Html!=null ? Html.AntiForgeryToken() : null %>
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.6";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+        <!-- Container -->
+        <div id="container">
+
+            <!-- Start Header -->
+            <div class="hidden-header"></div>
+            <header class="clearfix">
+
+                <!-- Start Top Bar -->
+<%--                <div class="top-bar">
+                    <div class="container">
+                        <div class="row">
+                            <!-- .col-md-6 -->
+                            <div class="col-md-12">
+                                <!-- Start Social Links -->
+                                <ul class="social-list">
+                                    <li>
+                                        <a href="https://www.facebook.com/beyond.fitness.pro/" title="Facebook" target="_blank" class="facebook itl-tooltip" data-placement="bottom"><i class="fa fa-facebook"></i></a>
+                                    </li>
+                                </ul>
+                                <!-- End Social Links -->
+                            </div>
+                            <!-- .col-md-6 -->
+                        </div>
+                        <!-- .row -->
+                    </div>
+                    <!-- .container -->
+                </div>--%>
+                <!-- .top-bar -->
+                <!-- End Top Bar -->
+
+                <!-- Start Header ( Logo & Naviagtion ) -->
+                <% Html.RenderPartial("~/Views/Account/Navigation.ascx", _userProfile); %>
+                <!-- End Header ( Logo & Naviagtion ) -->
+
+            </header>
+            <!-- End Header -->
+
+            <asp:ContentPlaceHolder ID="mainContent" runat="server">
+            </asp:ContentPlaceHolder>
+
+            <!-- Start Footer -->
+            <div id="footer">
+            </div>
+            <!-- End Footer -->
+
+        </div>
+        <!-- End Container -->
+
+        <!-- Go To Top Link -->
+        <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+        <uc1:Script runat="server" ID="Script" />
+    </form>
+</body>
+</html>
+<script runat="server">
+    UserProfile _userProfile;
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _userProfile = this.Context.GetUser();
+    }
+</script>

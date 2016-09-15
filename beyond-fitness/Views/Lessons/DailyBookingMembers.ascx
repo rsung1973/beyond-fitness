@@ -32,7 +32,12 @@
                                     ? "待編輯課程內容"
                                     : item.LessonTime.LessonAttendance!=null 
                                         ? "已完成課程"
-                                        : "編輯課程內容中" %></td>
+                                        : "編輯課程內容中" %>
+                            <%  if (item.LessonTime.LessonPlan.CommitAttendance.HasValue)
+                                { %>
+                                    <br /> (學員已打卡）
+                            <%  } %>
+                        </td>
                         <td class="text-center">
                             <%  if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
                                 {
