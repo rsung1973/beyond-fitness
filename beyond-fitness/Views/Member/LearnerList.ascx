@@ -42,9 +42,10 @@
             <td><%= item.MemberCode %></td>
             <td><%= item.YearsOld() %></td>
             <td><%= item.UserProfileExtension!=null ? item.UserProfileExtension.Gender=="M" ? "男" : "女" : null %></td>
-            <td><%  totalLessons = item.RegisterLesson.Sum(l => l.Lessons);
+            <td><%  totalLessons = item.RegisterLesson.Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練).Sum(l => l.Lessons);
                     Writer.Write(totalLessons); %></td>
-            <td><%  attended = item.RegisterLesson.Sum(l => l.LessonTime.Count(t => t.LessonAttendance != null));
+            <td><%  attended = item.RegisterLesson
+                        .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練).Sum(l => l.LessonTime.Count(t => t.LessonAttendance != null));
                     Writer.Write(totalLessons - attended); %></td>
             <td>
                 <div class="btn-group dropup">
@@ -71,7 +72,10 @@
                                     </li>
                         <%      } %>
                         <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + item.UID %>"><i class="fa fa-fw fa fa-pencil" aria-hidden="true"></i>填寫問卷</a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + item.UID %>"><i class="fa fa-fw fa fa-street-view" aria-hidden="true"></i>問卷調查表</a>
+                        </li>
+                        <li>
+                            <a href="<%= Url.Action("LearnerFitness","Activity",new { uid = item.UID }) %>"><i class="fa fa-fw fa fa-heart" aria-hidden="true"></i>檢測體能</a>
                         </li>
                         <li class="divider"></li>
                         <li>

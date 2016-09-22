@@ -29,7 +29,9 @@
         <tr>
             <td><%= idx %></td>
             <td><%= item.Description %></td>
-            <td><%= item.Status==(int)Naming.DocumentLevelDefinition.正常 ? "開課中" : "已停用" %></td>
+            <td><%= item.Status==(int)Naming.DocumentLevelDefinition.正常 ? "開課中"
+                        : item.Status==(int)Naming.DocumentLevelDefinition.自主訓練 ? "自主訓練"
+                        : "已停用" %></td>
             <td><%= item.ListPrice %></td>
             <td><%= item.CoachPayoff %></td>
             <td><%= item.CoachPayoffCreditCard %></td>
@@ -52,18 +54,21 @@
                             <a onclick="deletePrice(<%= item.PriceID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
                         </li>
                         <%  } %>
-                        <% if (item.Status == (int)Naming.DocumentLevelDefinition.已刪除)
-                            { %>
-                        <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/UpdateLessonPrice")+"?status=1&priceID="+item.PriceID %>"><i class="fa fa-fw fa fa-check-square" aria-hidden="true"></i>啟用資料</a>
-                        </li>
-                        <%  }
-                            else
-                            { %>
-                        <li>
-                            <a onclick="disablePrice(<%= item.PriceID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>停用資料</a>
-                        </li>
-                        <%  } %>
+                        <%  if(item.Status!=(int)Naming.DocumentLevelDefinition.自主訓練)
+                            { 
+                                if (item.Status == (int)Naming.DocumentLevelDefinition.已刪除)
+                                { %>
+                            <li>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/UpdateLessonPrice")+"?status=1&priceID="+item.PriceID %>"><i class="fa fa-fw fa fa-check-square" aria-hidden="true"></i>啟用資料</a>
+                            </li>
+                            <%  }
+                                else
+                                { %>
+                            <li>
+                                <a onclick="disablePrice(<%= item.PriceID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>停用資料</a>
+                            </li>
+                            <%  }
+                            } %>
                     </ul>
                 </div>
             </td>

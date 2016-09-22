@@ -205,12 +205,21 @@ namespace WebHome.Controllers
                     return View(item);
                 }
 
+                var priceType = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.自主訓練).FirstOrDefault();
+
                 lesson = new RegisterLesson
                 {
                     UID = viewModel.UID.Value,
                     RegisterDate = DateTime.Now,
                     GroupingMemberCount = 1,
-                    Lessons = 1
+                    Lessons = 1,
+                    ClassLevel = priceType != null ? priceType.PriceID : (int?)null,
+                    IntuitionCharge = new IntuitionCharge
+                    {
+                        ByInstallments = 1,
+                        Payment = "Cash",
+                        FeeShared = 0
+                    }
                 };
                 models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
                 models.SubmitChanges();
@@ -398,7 +407,7 @@ namespace WebHome.Controllers
             else
             {
                 items = models.GetTable<RegisterLesson>()
-                    .Where(l => l.ClassLevel.HasValue)
+                    .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                     .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
                         && l.UserProfile.RealName.Contains(userName))
                     .Where(l => l.Lessons > l.LessonTime.Count)
@@ -1472,7 +1481,7 @@ namespace WebHome.Controllers
 
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
             if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
-                || !item.RegisterLesson.ClassLevel.HasValue  /*自主訓練*/ )
+                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/ )
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }

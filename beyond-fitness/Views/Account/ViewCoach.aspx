@@ -53,7 +53,7 @@
         <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin ">
                     <p class="no-margin ">
                         <ul class="icons-list ">

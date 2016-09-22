@@ -19,7 +19,7 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>課程管理></li>
-            <li>我的VIP</li>
+            <li>我的學員</li>
         </ol>
         <!-- end breadcrumb -->
         <!-- You can also add more buttons to the
@@ -39,7 +39,7 @@
         <!-- PAGE HEADER -->
         <i class="fa-fw fa fa-search"></i>課程管理
                      <span>>  
-                     我的VIP
+                     我的學員
                      </span>
     </h1>
 </asp:Content>
@@ -84,7 +84,7 @@
                                             <div class="row">
                                                 <section class="col col-6">
                                                     <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                        <input type="text" class="input-lg" name="userName" id="userName" placeholder="請輸入VIP姓名" value="<%= _viewModel.UserName %>" />
+                                                        <input type="text" class="input-lg" name="userName" id="userName" placeholder="請輸入學員姓名" value="<%= _viewModel.UserName %>" />
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">

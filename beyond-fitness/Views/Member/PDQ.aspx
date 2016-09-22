@@ -14,7 +14,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-user-plus"></i>
+                <i class="fa fa-street-view"></i>
             </span>
         </span>
 
@@ -22,7 +22,7 @@
         <ol class="breadcrumb">
             <li>人員管理></li>
             <li>員工管理</li>
-            <li>填寫問卷</li>
+            <li>問卷調查表</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -42,16 +42,16 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-user"></i> VIP管理
+        <i class="fa-fw fa fa-street-view"></i> 學員管理
                             <span>>  
-                                填寫問卷
+                                問卷調查表
                             </span>
     </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
     <div class="row">
-        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-6" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false">
                 <!-- widget options:
@@ -93,7 +93,7 @@
                             <fieldset>
                                 <div class="row">
                                 <%  
-                                    for (int idx = 0; idx < 13; idx++)
+                                    for (int idx = 0; idx < 9; idx++)
                                     {   %>
                                     <section class="col col-6">
                                         <% renderItem(idx); %>
@@ -102,7 +102,7 @@
                                 </div>
                             </fieldset>
                             <%  
-                                    for (int idx = 13; idx < _items.Length; idx++)
+                                    for (int idx = 9; idx < _items.Length; idx++)
                                     {   %>
                                         <fieldset>
                                         <% renderItem(idx); %>
@@ -128,19 +128,20 @@
         </article>
 
         <!-- NEW COL START -->
-        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">
                             <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
-                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
                             <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_model); %>
-<%--                            <li>
-                                <a title="檢測體能" href="addtesting.html"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x"></i></span>檢測體能</a>
-                            </li>--%>
+                            <%--<%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_model); %>--%>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/LearnerFitness.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ShowLearner.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditLearner.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
                             <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
                         </ul>
                     </p>

@@ -11,7 +11,7 @@
 <%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID!=(int)Naming.RoleID.Learner)
     { %>
 <li>
-    <a title="填寫問卷" href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + _model.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-pencil fa-stack-1x"></i></span>填寫問卷</a>
+    <a title="問卷調查表" href="<%= VirtualPathUtility.ToAbsolute("~/member/PDQ/") + _model.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-street-view fa-stack-1x"></i></span> 問卷調查表</a>
 </li>
 <%  } %>
 

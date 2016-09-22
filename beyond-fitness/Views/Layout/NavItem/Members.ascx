@@ -16,12 +16,11 @@
     <a href="#" title="人員管理"><i class="fa fa-lg fa-fw fa-group"></i><span class="menu-item-parent">人員管理</span></a>
     <ul>
         <li>
-            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListLearners") %>"><i class="fa fa-fw fa-user"></i>VIP管理</a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListLearners") %>"><i class="fa fa-fw fa-user"></i>學員管理</a>
         </li>
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListCoaches") %>"><i class="fa fa-fw fa-user-secret"></i>員工管理</a>
         </li>
-        <% Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile); %>
     </ul>
 </li>
 <%  } %>

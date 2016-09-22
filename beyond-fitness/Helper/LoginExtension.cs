@@ -160,17 +160,25 @@ namespace WebHome.Helper
 
         public static bool IsFreeAgent(this UserProfile profile)
         {
-            return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent;
+            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent;
         }
 
         public static bool IsSysAdmin(this UserProfile profile)
         {
-            return profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
+            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
+        }
+        public static bool IsCoach(this UserProfile profile)
+        {
+            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach;
+        }
+        public static bool IsLearner(this UserProfile profile)
+        {
+            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner;
         }
 
         public static bool IsAuthorizedSysAdmin(this UserProfile profile)
         {
-            return profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Administrator);
+            return profile!=null && profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Administrator);
         }
 
 

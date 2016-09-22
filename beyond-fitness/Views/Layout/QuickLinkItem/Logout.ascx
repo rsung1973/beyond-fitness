@@ -11,7 +11,7 @@
 <%  if (_userProfile != null)
     { %>
 <li>
-    <a title="登出" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>"><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-sign-out fa-stack-1x "></i></span>登出</a>
+    <a title="登出" href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>"><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-sign-out fa-stack-1x "></i></span> 登出</a>
 </li>
 <%  } %>
 

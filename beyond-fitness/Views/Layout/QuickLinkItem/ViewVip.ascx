@@ -11,7 +11,7 @@
 <%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID!=(int)Naming.RoleID.Learner)
     { %>
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") + "?userName=" + _model.RealName %>" title="我的VIP"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-search fa-stack-1x"></i></span>我的VIP</a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") + "?userName=" + _model.RealName %>" title="我的學員"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-search fa-stack-1x"></i></span> 我的學員</a>
 </li>
 <%  } %>
 

@@ -25,7 +25,7 @@
                         <section class="col col-8">
                             <label class="input">
                                 <i class="icon-append fa fa-search"></i>
-                                <input type="text" name="userName" maxlength="20" placeholder="請輸入VIP姓名" />
+                                <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" />
                             </label>
                         </section>
                         <section class="col col-4">

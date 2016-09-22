@@ -25,7 +25,13 @@
                 <tr>
                     <td><%= coach.RealName %></td>
                     <td><%= priceType.Description %></td>
-                    <td><%= item.Count() %>【<%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="Cash").Count() %> / <%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="CreditCard").Count() %>】</td>
+                    <td><%= item.Count() %>【<%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="Cash").Count() %> / <%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="CreditCard").Count() %>
+                        <%  var feeShared = item.Where(l => l.RegisterLesson.IntuitionCharge.FeeShared == 1).Count();
+                            if (feeShared > 0)
+                            { %>
+                                (<%= feeShared %>人教練自行吸收)
+                        <%  } %>
+                        】</td>
                 </tr>
         <%  } %>
     </tbody>
@@ -45,10 +51,10 @@
         };
 
         $('#<%= _tableId %>').dataTable({
-            "bPaginate": false,
-            //"pageLength": 30,
-            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-            "ordering": false,
+            //"bPaginate": false,
+            "pageLength": 10,
+            "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "全部"]],
+            //"ordering": false,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",

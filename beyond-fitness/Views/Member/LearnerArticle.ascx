@@ -138,7 +138,7 @@
         _viewModel = (LessonViewModel)ViewBag.ViewModel;
 
         _items = models.GetTable<RegisterLesson>()
-            .Where(r=>r.ClassLevel.HasValue)
+            .Where(r=>r.ClassLevel.HasValue && r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
             .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
         _currentLessons = _items.Where(i => i.Lessons != i.LessonTime.Count(s => s.LessonAttendance != null));

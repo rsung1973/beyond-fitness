@@ -30,7 +30,7 @@
             </p>
             <p>
                 <button class="btn btn-xs btn-default" onclick="showLearnerLesson(<%= _model.Lesson.LessonID %>);"><i class="fa fa-gift"></i> 預先確認上課內容</button>
-                <%  if (!_model.Lesson.LessonPlan.CommitAttendance.HasValue)
+                <%  if (!_model.Lesson.LessonPlan.CommitAttendance.HasValue && _model.Lesson.ClassTime<DateTime.Today.AddDays(1))
                     { %>
                 <button class="btn btn-xs btn-success" onclick="learnerAttendLesson(<%= _model.Lesson.LessonID %>);"><i class="fa fa-check"></i> 上課打卡</button>
                 <%  } %>

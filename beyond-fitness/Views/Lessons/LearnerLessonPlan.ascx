@@ -19,7 +19,20 @@
         <p style="display:none;">
             <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
         </p>
-        <p>
+        <p class="alert alert-danger secret-info">
+            <strong>
+                <%  foreach (var pdq in _pdqConclusion)
+                { %>
+                <i class="fa fa-info-circle"></i><%= pdq.Question %>
+                <%  var pTask = pdq.PDQTask.Where(q => q.UID == _model.UID).FirstOrDefault();
+                        if (pTask != null)
+                        {
+                            Writer.Write(pTask.SuggestionID.HasValue ? pTask.PDQSuggestion.Suggestion : pTask.PDQAnswer);
+                        } %><br />
+                <%  } %>
+            </strong>
+        </p>
+        <p class="secret-info">
             <%= _model.UserProfile.RecentStatus!=null ? _model.UserProfile.RecentStatus.Replace("\n","<br/>") : null %>
             <%--<form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
                 <fieldset>
@@ -57,6 +70,7 @@
     ModelStateDictionary _modelState;
     RegisterLesson _model;
     LessonTime _item;
+    IEnumerable<PDQQuestion> _pdqConclusion;
 
     protected override void OnInit(EventArgs e)
     {
@@ -65,6 +79,8 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (RegisterLesson)this.Model;
         _item = (LessonTime)ViewBag.LessonTime;
+        _pdqConclusion = models.GetTable<PDQGroup>().Where(g => g.ConclusionID.HasValue)
+            .Select(g => g.PDQConclusion);
 
     }
 

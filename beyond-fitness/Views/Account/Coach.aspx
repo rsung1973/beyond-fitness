@@ -21,7 +21,7 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>課程管理></li>
-            <li>我的課程總覽</li>
+            <li>課程總覽</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -43,7 +43,7 @@
         <!-- PAGE HEADER -->
         <i class="fa-fw fa fa-dashboard"></i>課程管理
 							<span>>  
-								我的課程總覽
+								課程總覽
                             </span>
     </h1>
 </asp:Content>

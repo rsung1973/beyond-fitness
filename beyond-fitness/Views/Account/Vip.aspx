@@ -19,7 +19,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>我的課程總覽</li>
+            <li>課程總覽</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -39,7 +39,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-dashboard"></i>我的課程總覽
+        <i class="fa-fw fa fa-dashboard"></i>課程總覽
     </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">

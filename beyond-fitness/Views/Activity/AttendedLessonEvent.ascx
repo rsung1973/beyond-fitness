@@ -20,7 +20,7 @@
             <p>恭喜您已於<strong> <%= _model.Lesson.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= _model.Lesson.ClassTime.Value.AddMinutes(_model.Lesson.DurationInMinutes.Value).ToString("HH:mm") %> </strong>往目標邁向一大步！</p>
             <p>
                 <button class="btn btn-xs btn-default" onclick="showLearnerLesson(<%= _model.Lesson.LessonID %>);"><i class="fa fa-anchor"></i> 檢視成果</button>
-                <%  if (!_model.Lesson.LessonPlan.CommitAttendance.HasValue)
+                <%  if (!_model.Lesson.LessonPlan.CommitAttendance.HasValue && _model.Lesson.ClassTime<DateTime.Today.AddDays(1))
                     { %>
                 <button class="btn btn-xs btn-success" onclick="learnerAttendLesson(<%= _model.Lesson.LessonID %>);"><i class="fa fa-check"></i> 上課打卡</button>
                 <%  } %>

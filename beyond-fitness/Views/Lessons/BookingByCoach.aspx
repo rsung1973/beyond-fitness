@@ -128,7 +128,7 @@
                                     <section class="col col-6">
                                         <label class="input">
                                             <i class="icon-append fa fa-user"></i>
-                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇VIP" readonly="readonly" />
+                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇學員" readonly="readonly" />
                                         </label>
                                         <div id="attendee"></div>
                                         <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
@@ -181,7 +181,7 @@
         <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">

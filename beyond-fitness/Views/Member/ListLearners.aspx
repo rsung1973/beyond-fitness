@@ -20,8 +20,8 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>人員管理></li>
-            <li>VIP管理</li>
-            <li>VIP列表</li>
+            <li>學員管理</li>
+            <li>學員列表</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -41,9 +41,9 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-user"></i>VIP管理
+        <i class="fa-fw fa fa-user"></i>學員管理
                             <span>>  
-                                VIP列表
+                                學員列表
                             </span>
     </h1>
 </asp:Content>
@@ -71,9 +71,9 @@
                                 -->
                 <header>
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
-                    <h2>VIP列表</h2>
+                    <h2>學員列表</h2>
                     <div class="widget-toolbar">
-                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>" class="btn btn-primary"><i class="fa fa-fw fa-user-plus"></i>新增VIP</a>
+                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLearner") %>" class="btn btn-primary"><i class="fa fa-fw fa-user-plus"></i>新增學員</a>
                     </div>
                 </header>
 

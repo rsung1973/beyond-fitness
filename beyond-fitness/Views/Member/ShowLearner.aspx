@@ -22,7 +22,7 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>人員管理></li>
-            <li>VIP管理</li>
+            <li>學員管理</li>
             <li>檢視VIP</li>
         </ol>
         <!-- end breadcrumb -->
@@ -43,7 +43,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-eye"></i>VIP管理
+        <i class="fa-fw fa fa-eye"></i>學員管理
         <span>>  
             檢視VIP
         </span>
@@ -59,14 +59,17 @@
         <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin">
                     <ul class="icons-list">
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
-                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_model); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/LearnerFitness.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditLearner.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
                         <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
+                        <%--<%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>--%>
                     </ul>
                 </ul>
             </div>

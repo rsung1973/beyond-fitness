@@ -11,7 +11,8 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th><i class="fa fa-user"></i>姓名</th>
+            <th>教練姓名</th>
+            <th>學員姓名</th>
             <th data-class="expand"><i class="fa fa-fw fa-calendar-plus-o text-muted hidden-md hidden-sm hidden-xs"></i>購買日期</th>
             <th data-hide="phone">課程類型</th>
             <th data-hide="phone">團體課程</th>
@@ -28,6 +29,7 @@
         <%  foreach (var item in _model)
             { %>
                 <tr>
+                    <td><%= item.ServingCoach.UserProfile.RealName %></td>
                     <td><%= item.UserProfile.RealName %></td>
                     <td><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
                     <td><%= item.LessonPriceType.Description %></td>

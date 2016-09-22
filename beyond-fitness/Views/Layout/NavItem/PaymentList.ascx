@@ -12,7 +12,7 @@
     && (_userProfile.IsAuthorizedSysAdmin()))
     { %>
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Report/LearnerPayment") %>" title="VIP付款紀錄查詢"><i class="fa fa-fw fa-usd"></i>VIP付款紀錄查詢</a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Report/LearnerPayment") %>" title="付款紀錄查詢"><i class="fa fa-fw fa-usd"></i>付款紀錄表</a>
 </li>
 <%  } %>
 

@@ -74,7 +74,7 @@
         _model = (UserProfile)this.Model;
 
         _items = models.GetTable<RegisterLesson>()
-            .Where(r=>r.ClassLevel.HasValue)
+            .Where(r=>r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
             .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
     }

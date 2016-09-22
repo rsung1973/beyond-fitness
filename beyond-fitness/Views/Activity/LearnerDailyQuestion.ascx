@@ -24,8 +24,8 @@
                         <div class="panel-body status smart-form vote">
                             <div class="who clearfix">
                                 <% _model.UserProfile.RenderUserPicture(Writer, new { @class = "busy" }); %>
-                                <span class="name font-lg"><b><%= _model.UserProfile.RealName %></b></span>
-                                <span class="from font-md"><b>Hi, <%= _userProfile.RealName %></b> 請試試回答以下問的答案，答對會有意想不到的驚喜喔！</span>
+                                <span class="name font-lg"><b><%= _model.UserProfile.UserName ?? _model.UserProfile.RealName %></b></span>
+                                <span class="from font-md"><b>Hi, <%= _userProfile.UserName ?? _userProfile.RealName %></b> 請試試回答以下問的答案，答對會有意想不到的驚喜喔！</span>
                             </div>
                             <div class="image font-md">
                                 <strong><%= _model.Question %></strong>

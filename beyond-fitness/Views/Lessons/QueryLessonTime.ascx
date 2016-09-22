@@ -37,7 +37,7 @@
                         <section class="col col-5">
                             <label class="input">
                                 <i class="icon-append fa fa-search"></i>
-                                <input type="text" name="userName" maxlength="20" placeholder="請輸入VIP姓名" value="<%= _viewModel.UserName %>" />
+                                <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" value="<%= _viewModel.UserName %>" />
                             </label>
                         </section>
                         <section class="col col-2">

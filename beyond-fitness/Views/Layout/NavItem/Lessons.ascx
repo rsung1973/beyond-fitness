@@ -17,17 +17,11 @@
     <a href="#" title="課程管理"><i class="fa fa-lg fa-fw fa-calendar"></i><span class="menu-item-parent">課程管理</span></a>
     <ul>
         <li>
-            <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>"><i class="fa fa-fw fa-dashboard"></i>我的課程總覽</a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>"><i class="fa fa-fw fa-dashboard"></i>課程總覽</a>
         </li>
         <li>
-            <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") %>"><i class="fa fa-fw fa-search"></i>我的VIP</a>
+            <a href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryVip") %>"><i class="fa fa-fw fa-search"></i>我的學員</a>
         </li>
-        <%  if (_userProfile.IsAuthorizedSysAdmin())
-            { %>
-                <li>
-                    <a href="<%= Url.Action("StaffAchievement","Report") %>"><i class="fa fa-fw fa-calculator"></i>業績統計表</a>
-                </li>
-        <%  } %>
     </ul>
 </li>
 <%  } %>

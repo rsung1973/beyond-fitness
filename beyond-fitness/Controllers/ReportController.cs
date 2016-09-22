@@ -15,6 +15,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Web.Security;
+using System.Linq.Expressions;
 
 namespace WebHome.Controllers
 {
@@ -28,7 +29,8 @@ namespace WebHome.Controllers
 
             if (viewModel.HasQuery == true)
             {
-                items = models.GetTable<RegisterLesson>().Where(r => r.Lessons != r.IntuitionCharge.TuitionInstallment.Count(t => t.PayoffDate.HasValue));
+                items = models.GetTable<RegisterLesson>()
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
 
                 if (viewModel.Payoff == true)
                 {
@@ -150,6 +152,7 @@ namespace WebHome.Controllers
         public ActionResult ListLessonAttendance(int? coachID,DateTime? dateFrom,DateTime? dateTo)
         {
             var items = models.GetTable<LessonTime>().Where(t => t.LessonAttendance != null)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.LessonPlan.CommitAttendance.HasValue);
 
             if(coachID.HasValue)
@@ -171,6 +174,36 @@ namespace WebHome.Controllers
             ViewBag.DateTo = dateTo;
 
             return View(items);
+
+        }
+
+        public ActionResult ListRegisterLesson(int? coachID, DateTime? dateFrom, DateTime? dateTo)
+        {
+            IQueryable<RegisterLesson> items = models.GetTable<RegisterLesson>()
+                .Where(r => r.AdvisorID.HasValue);
+
+            if (coachID.HasValue)
+            {
+                items = items.Where(t => t.AdvisorID == coachID);
+            }
+
+            IQueryable<TuitionInstallment> installment = models.GetTable<TuitionInstallment>();
+
+            if (dateFrom.HasValue)
+            {
+                installment = installment.Where(i => i.PayoffDate >= dateFrom);
+            }
+            if (dateTo.HasValue)
+            {
+                installment = installment.Where(i => i.PayoffDate < dateTo.Value.AddDays(1));
+            }
+
+            installment = items.Join(installment, t => t.RegisterID, i => i.RegisterID, (t, i) => i);
+
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+
+            return View(installment);
 
         }
 

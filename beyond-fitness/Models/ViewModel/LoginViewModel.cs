@@ -440,6 +440,12 @@ namespace WebHome.Models.ViewModel
         public int? BonusPoint { get; set; }
     }
 
+    public class FitnessAssessmentViewModel
+    {
+        public int? ItemID { get; set; }
+        public decimal? Assessment { get; set; }
+    }
+
 
     public class ArgumentModel
     {

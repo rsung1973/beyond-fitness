@@ -13,7 +13,7 @@
         <section class="col col-4">
             <label class="input">
                 <i class="icon-append fa fa-user"></i>
-                <input type="text" name="realName" id="realName" maxlength="20" class="input-lg" placeholder="請輸入VIP姓名" value="<%= _model.RealName %>" />
+                <input type="text" name="realName" id="realName" maxlength="20" class="input-lg" placeholder="請輸入學員姓名" value="<%= _model.RealName %>" />
             </label>
         </section>
         <section class="col col-4">

@@ -11,7 +11,7 @@
 <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
     <li class="">
         <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
-            <img src="~/img/avatars/male.png" alt="親愛的" class="online" runat="server" />
+            <img src="~/img/avatars/male.png" class="online" runat="server" />
         </a>
         <ul class="dropdown-menu pull-right">
             <li>

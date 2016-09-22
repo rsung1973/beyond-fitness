@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 
 namespace WebHome.Controllers
 {
+    [Authorize]
     public class MemberController : SampleController<UserProfile>
     {
         public MemberController() : base()
@@ -41,7 +42,7 @@ namespace WebHome.Controllers
             return View("ListCoaches",viewModel);
         }
 
-        public ActionResult ListLearners(String byName)
+        public ActionResult ListLearners(String byName, String message = null)
         {
 
             MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
@@ -67,6 +68,7 @@ namespace WebHome.Controllers
                 models.Items = models.Items.Where(u => u.UserName.Contains(byName) || u.RealName.Contains(byName));
             }
 
+            ViewBag.Message = message;
             return View("ListLearners", models.Items);
         }
 
@@ -367,6 +369,7 @@ namespace WebHome.Controllers
             };
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, item.UID);
+            ViewBag.Profile = item;
 
             return View(model);
 
@@ -469,6 +472,7 @@ namespace WebHome.Controllers
 
             HttpContext.SetCacheValue(CachingKey.EditMemberUID, item.UID);
             ViewBag.DataItem = item;
+            ViewBag.Profile = item;
 
             return View(model);
         }
@@ -995,6 +999,16 @@ namespace WebHome.Controllers
             item.PDQUserAssessment.LevelID = levelID;
 
             models.SubmitChanges();
+
+            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>().Where(q => q.GroupID == groupID);
+            var voidAns = questItems
+                .Where(q => !q.PDQTask.Any(t => t.UID == id)
+                    || q.PDQTask.Count(t => t.UID == id && !t.SuggestionID.HasValue && t.PDQAnswer == "") == 1)
+                .OrderBy(q => q.QuestionNo);
+            if(voidAns.Count()>0)
+            {
+                return Json(new { result = false, message = "請填選第" + String.Join("、", voidAns.Select(q => q.QuestionNo)) + "題答案!!" });
+            }
 
             return Json(new { result = true });
         }

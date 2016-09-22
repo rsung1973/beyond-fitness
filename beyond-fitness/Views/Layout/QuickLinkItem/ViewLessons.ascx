@@ -11,7 +11,7 @@
 <%  if (_userProfile != null && _userProfile.IsAuthorizedSysAdmin())
     { %>
 <li>
-    <a title="維護上課數" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + _model.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-calendar-o fa-stack-1x"></i></span>維護上課數</a>
+    <a title="維護上課數" href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + _model.UID %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-calendar-o fa-stack-1x"></i></span> 維護上課數</a>
 </li>
 <%  } %>
 

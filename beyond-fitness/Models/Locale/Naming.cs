@@ -33,7 +33,8 @@ namespace WebHome.Models.Locale
         {
             已刪除 = 0,
             正常 = 1,
-            暫存 = 2
+            暫存 = 2,
+            自主訓練 = 103
         }
 
         public enum MemberStatusDefinition

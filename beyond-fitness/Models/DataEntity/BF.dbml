@@ -198,6 +198,7 @@
       <Association Name="UserProfile_UserRoleAuthorization" Member="UserRoleAuthorization" ThisKey="UID" OtherKey="UID" Type="UserRoleAuthorization" />
       <Association Name="UserProfile_PDQQuestion" Member="PDQQuestion" ThisKey="UID" OtherKey="AskerID" Type="PDQQuestion" />
       <Association Name="UserProfile_PDQTask" Member="PDQTask" ThisKey="UID" OtherKey="UID" Type="PDQTask" />
+      <Association Name="UserProfile_LearnerFitnessAssessment" Member="LearnerFitnessAssessment" ThisKey="UID" OtherKey="UID" Type="LearnerFitnessAssessment" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -458,6 +459,46 @@
       <Association Name="PDQQuestion_PDQTask" Member="PDQQuestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQQuestion" IsForeignKey="true" />
       <Association Name="PDQSuggestion_PDQTask" Member="PDQSuggestion" ThisKey="SuggestionID" OtherKey="SuggestionID" Type="PDQSuggestion" IsForeignKey="true" />
       <Association Name="UserProfile_PDQTask" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LearnerFitnessAssessment" Member="LearnerFitnessAssessment">
+    <Type Name="LearnerFitnessAssessment">
+      <Column Name="AssessmentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AssessmentDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="LearnerFitnessAssessment_LearnerFitnessAssessmentResult" Member="LearnerFitnessAssessmentResult" ThisKey="AssessmentID" OtherKey="AssessmentID" Type="LearnerFitnessAssessmentResult" />
+      <Association Name="UserProfile_LearnerFitnessAssessment" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LearnerFitnessAssessmentResult" Member="LearnerFitnessAssessmentResult">
+    <Type Name="LearnerFitnessAssessmentResult">
+      <Column Name="AssessmentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Assessment" Type="System.Decimal" DbType="Decimal(12,2) NOT NULL" CanBeNull="false" />
+      <Association Name="LearnerFitnessAssessment_LearnerFitnessAssessmentResult" Member="LearnerFitnessAssessment" ThisKey="AssessmentID" OtherKey="AssessmentID" Type="LearnerFitnessAssessment" IsForeignKey="true" />
+      <Association Name="FitnessAssessmentItem_LearnerFitnessAssessmentResult" Member="FitnessAssessmentItem" ThisKey="ItemID" OtherKey="ItemID" Type="FitnessAssessmentItem" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FitnessAssessmentItem" Member="FitnessAssessmentItem">
+    <Type Name="FitnessAssessmentItem">
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemName" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Association Name="FitnessAssessmentItem_LearnerFitnessAssessmentResult" Member="LearnerFitnessAssessmentResult" ThisKey="ItemID" OtherKey="ItemID" Type="LearnerFitnessAssessmentResult" />
+    </Type>
+  </Table>
+  <Table Name="dbo.V_LearnerFitenessAssessment" Member="V_LearnerFitenessAssessment">
+    <Type Name="V_LearnerFitenessAssessment">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Gender" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
+      <Column Name="AthleticLevel" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Birthday" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="AssessmentDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ItemName" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="Assessment" Type="System.Decimal" DbType="Decimal(12,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Years" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

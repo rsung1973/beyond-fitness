@@ -11,7 +11,7 @@
 <%  if (_userProfile != null)
     { %>
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile") %>" title="我的簡介 "><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-user fa-stack-1x "></i></span>我的簡介</a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile") %>" title="我的簡介 "><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-user fa-stack-1x "></i></span> 我的簡介</a>
 </li>
 <%  } %>
 

@@ -19,20 +19,19 @@
         </tr>
     </thead>
     <tbody>
-        <%  var items = _model.GroupBy(t => new { CoachID = t.AttendingCoach, ClassLevel = t.RegisterLesson.ClassLevel });
+        <%  var items = _model.GroupBy(t => new { CoachID = t.AttendingCoach });
             foreach(var item in items)
             {
-                ServingCoach coach = models.GetTable<ServingCoach>().Where(u => u.CoachID == item.Key.CoachID).First();
-                LessonPriceType priceType = models.GetTable<LessonPriceType>().Where(p => p.PriceID == item.Key.ClassLevel).First();   %>
+                ServingCoach coach = models.GetTable<ServingCoach>().Where(u => u.CoachID == item.Key.CoachID).First(); %>
                 <tr>
                     <td><%= coach.UserProfile.RealName %></td>
                     <td><%= item.Count() %></td>
-                    <td><%  var achievement = item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "Cash").Count() * priceType.CoachPayoff
-                                  + item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "CreditCard").Count() * priceType.CoachPayoffCreditCard;
+                    <td><%  var achievement = item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "Cash").Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoff)
+                                  + item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "CreditCard").Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard);
                             Writer.Write(achievement); %>
                     </td>
                     <td><%= coach.ProfessionalLevel.LevelName %></td>
-                    <td><%= achievement * coach.ProfessionalLevel.GradeIndex / 100 %></td>
+                    <td><%=(int)(achievement * coach.ProfessionalLevel.GradeIndex / 100) %></td>
                 </tr>
         <%  } %>
     </tbody>
@@ -55,13 +54,11 @@
             "bPaginate": false,
             //"pageLength": 30,
             //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-            "ordering": false,
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            //"ordering": false,
+            "sDom": "",
             "autoWidth": true,
             "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                "sSearch": ''
             },
             "preDrawCallback": function () {
                 // Initialize the responsive datatables helper once.

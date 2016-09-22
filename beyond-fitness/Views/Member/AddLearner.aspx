@@ -20,8 +20,8 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>人員管理></li>
-            <li>VIP管理</li>
-            <li>新增VIP</li>
+            <li>學員管理</li>
+            <li>新增學員</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -41,9 +41,9 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-user-plus"></i>VIP管理
+        <i class="fa-fw fa fa-user-plus"></i>學員管理
 							<span>>  
-								新增VIP
+								新增學員
                             </span>
     </h1>
 </asp:Content>
@@ -112,7 +112,7 @@
         <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">

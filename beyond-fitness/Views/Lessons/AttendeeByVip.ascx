@@ -15,7 +15,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                 &times;
             </button>
-            <h4 class="modal-title" id="myModalLabel">查詢VIP</h4>
+            <h4 class="modal-title" id="myModalLabel">查詢學員</h4>
         </div>
         <div class="modal-body bg-color-darken txt-color-white">
             <form class="smart-form">
@@ -24,7 +24,7 @@
                         <section class="col col-8">
                             <label class="input">
                                 <i class="icon-append fa fa-search"></i>
-                                <input type="text" name="userName" maxlength="20" placeholder="請輸入VIP姓名"/>
+                                <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" />
                             </label>
                         </section>
                         <section class="col col-4">

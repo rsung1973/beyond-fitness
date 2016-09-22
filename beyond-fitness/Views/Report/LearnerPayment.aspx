@@ -20,7 +20,7 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>人員管理></li>
-            <li>VIP付款紀錄查詢</li>
+            <li>學員付款紀錄查詢</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -40,9 +40,9 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-usd"></i>VIP管理
+        <i class="fa-fw fa fa-usd"></i>報表管理
                             <span>>  
-                                VIP付款紀錄查詢
+                                付款紀錄表
                             </span>
     </h1>
 </asp:Content>
@@ -87,7 +87,7 @@
                                     <section class="col col-4">
                                         <label class="input">
                                             <i class="icon-append fa fa-user"></i>
-                                            <input type="text" name="userName" class="input-lg" value="<%= _viewModel.UserName %>" placeholder="請輸入VIP姓名"/>
+                                            <input type="text" name="userName" class="input-lg" value="<%= _viewModel.UserName %>" placeholder="請輸入學員姓名"/>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -154,7 +154,7 @@
                                 -->
                 <header>
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
-                    <h2>VIP付款紀錄列表</h2>
+                    <h2>學員付款紀錄列表</h2>
                 </header>
 
                 <!-- widget div-->

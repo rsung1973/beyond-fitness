@@ -20,8 +20,8 @@
     <!-- breadcrumb -->
     <ol class="breadcrumb">
         <li>人員管理></li>
-        <li>VIP管理</li>
-        <li>修改VIP</li>
+        <li>學員管理</li>
+        <li>修改學員資料</li>
     </ol>
     <!-- end breadcrumb -->
 
@@ -41,9 +41,9 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-edit"></i>VIP管理
+        <i class="fa-fw fa fa-edit"></i>學員管理
 							<span>>  
-								修改VIP
+								修改學員資料
                             </span>
     </h1>
 </asp:Content>
@@ -113,13 +113,18 @@
         <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">
                             <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
-                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_profile); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_profile); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/LearnerFitness.ascx",_profile); %>
+                            <%--<%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditLearner.ascx",_profile); %>--%>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ShowLearner.ascx",_profile); %>
                             <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_profile); %>
                         </ul>
                     </p>
                 </ul>
@@ -149,11 +154,13 @@
 
     ModelStateDictionary _modelState;
     LearnerViewModel _model;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (LearnerViewModel)this.Model;
+        _profile = (UserProfile)ViewBag.Profile;
     }
 </script>

@@ -16,7 +16,7 @@
         { %>
         <a onclick="makeTrainingPlan(<%= _model.LessonID %>);" class="btn btn-primary"><i class="fa fa-fw fa-files-o"></i>編輯課表</a>
     <%  }
-        if (ViewBag.LearnerAttendance == true && !_model.LessonPlan.CommitAttendance.HasValue)
+        if (ViewBag.LearnerAttendance == true && !_model.LessonPlan.CommitAttendance.HasValue && _model.ClassTime<DateTime.Today.AddDays(1))
         { %>
         <button class="btn btn-xs btn-success" onclick="learnerAttendLesson(<%= _model.LessonID %>);"><i class="fa fa-check"></i>上課打卡</button>
     <%  } %>
@@ -130,7 +130,9 @@
                         Html.RenderPartial("~/Views/Lessons/SingleTrainingExecutionPlan.ascx", _model.TrainingPlan.First().TrainingExecution);
                     }
                     if (ViewBag.Learner == true)
-                        Html.RenderPartial("~/Views/Activity/LessonFeedBack.ascx", _model); %>
+                        Html.RenderPartial("~/Views/Activity/LessonFeedBack.ascx", _model);
+                    else 
+                        Html.RenderPartial("~/Views/Activity/ShowLessonFeedBack.ascx", _model); %>
             </div>
             <!-- end s3 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os4_<%= _ticks %>">

@@ -11,7 +11,7 @@
 <%  if (_userProfile == null && !Request.Path.Contains("Account/Login"))
     { %>
 <li>
-    <a title="登入" href="<%= FormsAuthentication.LoginUrl %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-in fa-stack-1x"></i></span>登入</a>
+    <a title="登入" href="<%= FormsAuthentication.LoginUrl %>"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-sign-in fa-stack-1x"></i></span> 登入</a>
 </li>
 <%  } %>
 

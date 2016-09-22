@@ -122,15 +122,7 @@
                 </div>
             </div>
             <!-- /well -->
-            <div class="well well-sm bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-cloud"></i>更多SNS</h5>
-                <ul class="no-padding no-margin">
-                    <p class="no-margin">
-                        <a title="Facebook" href="https://www.facebook.com/beyond.fitness.pro/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x"></i></span></a>
-                        <a title="Twitter" href="https://www.instagram.com/beyond_ft/" target="_blank"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-instagram fa-stack-1x"></i></span></a>
-                    </p>
-                </ul>
-            </div>
+            <%  Html.RenderPartial("~/Views/Layout/SNS.ascx"); %>
             <!-- /well -->
 
             <!-- /well -->
