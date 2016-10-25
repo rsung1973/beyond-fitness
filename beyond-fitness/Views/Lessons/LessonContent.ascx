@@ -22,24 +22,30 @@
     <%  } %>
     </div>
     <ul id="introduction_<%= _ticks %>" class="nav nav-tabs pull-right">
-        <li>
-            <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
-        </li>
-        <li>
-            <a data-toggle="tab" href="#os2_<%= _ticks %>"><i class="fa fa-child "></i><span>暖身</span></a>
-        </li>
         <li class="active">
+            <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>課前叮嚀</span></a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#os2_<%= _ticks %>"><i class="fa fa-child"></i><span>暖身</span></a>
+        </li>
+        <li>
             <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
         </li>
         <li>
-            <a data-toggle="tab" href="#os4_<%= _ticks %>"><i class="fa fa-child"></i><span>收操</span></a>
+            <a data-toggle="tab" href="#os4_<%= _ticks %>"><i class="fa fa-comments-o"></i><span>課後提醒</span></a>
         </li>
-        <%  if (_model.TrainingBySelf != 1 && _model.LessonAttendance!=null)
+        <%  if (_model.TrainingBySelf != 1)
             { %>
         <li>
-            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>分析圖</span></a>
+            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
         </li>
-        <%  } %>
+        <%      if (ViewBag.ByCalendar != true && ViewBag.LearnerAttendance != true)
+                {%>
+                    <li>
+                        <a data-toggle="tab" href="#os6_<%= _ticks %>"><i class="fa fa-line-chart"></i><span>體能分析表</span></a>
+                    </li>
+            <%  }
+            } %>
     </ul>
 
 </header>
@@ -48,24 +54,12 @@
     <div class="widget-body no-padding">
         <!-- content -->
         <div id="tabContent_<%= _ticks %>" class="tab-content padding-10">
-            <%  if (ViewBag.Edit == true)
-                { 
-                    var feedBackItems = _model.RegisterLesson.LessonTime.OrderByDescending(l => l.LessonID)
-                                        .Select(l => l.LessonPlan).Where(p => !String.IsNullOrEmpty(p.FeedBack)).Take(3);
-                    if(feedBackItems.Count()>0)
-                    { %>
-                        <p class="alert alert-success">
-                            <strong>
-                            <%  foreach(var f in feedBackItems )
-                                { %>
-                            <i class="fa fa-commenting-o"></i><%= f.LessonTime.RegisterLesson.UserProfile.RealName %>已於<%= String.Format("{0:yyyy/MM/dd HH:mm}",f.FeedBackDate) %> 針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.FeedBack %><br />
-                            <%  } %>
-                            </strong>
-                        </p>
-                <%  }
-                } %>
-            <div class="tab-pane fade widget-body no-padding-bottom" id="os1_<%= _ticks %>">
+            <div class="tab-pane fade widget-body no-padding-bottom active in" id="os1_<%= _ticks %>">
                 <div class="chat-body no-padding profile-message">
+                    <%  if (ViewBag.Edit == true)
+                        {
+                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                        }%>
                     <ul>
                         <li class="message">
                             <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
@@ -75,27 +69,23 @@
                             </span>
                         </li>
 
-                        <li class="message message-reply">
-                            <% _model.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "authorImg online" }); %>
-                            <span class="message-text">
-                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.RegisterLesson.UID %>"><%= _model.RegisterLesson.UserProfile.UserName ?? _model.RegisterLesson.UserProfile.RealName %></a>
-                                <div id="msgFeedBack"><%= _model.LessonPlan!=null ? _model.LessonPlan.FeedBack : null %></div>
-                            </span>
-
-                            <ul class="list-inline font-xs">
-                                <li>
-                                    <a href="javascript:void(0);" class="text-muted"><%= String.Format("{0:yyyy/MM/dd HH:mm}",_model.LessonPlan.FeedBackDate) %></a>
-                                </li>
-                            </ul>
-                        </li>
+                        <%  Html.RenderPartial("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", _model); %>
+                       
                         <%  if (ViewBag.Learner == true)
                             { %>
                         <li>
-                            <div class="input-group wall-comment-reply">
-                                <input type="text" class="form-control" id="feedBack" name="feedBack" placeholder="請輸入50個中英文字" value="<%= _model.LessonPlan.FeedBack %>" />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" onclick="feedback();">
-                                        <i class="fa fa-reply"></i>回覆
+                            <div class="chat-footer">
+                                <!-- CHAT TEXTAREA -->
+                                <div class="textarea-div">
+                                    <div class="typearea">
+                                        <textarea id="feedBack" name="feedBack" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _model.LessonPlan.FeedBack %></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- CHAT REPLY/SEND -->
+                                <span class="textarea-controls">
+                                    <button onclick="feedback();" class="btn btn-sm btn-primary pull-right">
+                                        更新
                                     </button>
                                 </span>
                             </div>
@@ -108,6 +98,10 @@
             <!-- end s1 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os2_<%= _ticks %>">
                 <div class="chat-body no-padding profile-message">
+                    <%  if (ViewBag.Edit == true)
+                        {
+                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                        }%>
                     <ul>
                         <li class="message">
                             <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
@@ -122,7 +116,11 @@
                 </div>
             </div>
             <!-- end s2 tab pane -->
-            <div class="tab-pane fade widget-body no-padding-bottom active in" id="os3_<%= _ticks %>">
+            <div class="tab-pane fade widget-body no-padding-bottom" id="os3_<%= _ticks %>">
+                <%  if (ViewBag.Edit == true)
+                        {
+                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                        }%>
                 <%  if (_model.TrainingPlan.Count > 0)
                     {
                         ViewBag.ShowOnly = true;
@@ -137,6 +135,10 @@
             <!-- end s3 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os4_<%= _ticks %>">
                 <div class="chat-body no-padding profile-message">
+                    <%  if (ViewBag.Edit == true)
+                        {
+                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                        }%>
                     <ul>
                         <li class="message">
                             <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
@@ -151,19 +153,28 @@
                 </div>
             </div>
             <!-- end s4 tab pane -->
-            <%  if (_model.TrainingBySelf != 1 && _model.LessonAttendance!=null)
+            <%  if (_model.TrainingBySelf != 1)
                 { %>
-            <div class="tab-pane fade widget-body no-padding-bottom" id="os5_<%= _ticks %>">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
+                    <div class="tab-pane fade widget-body no-padding-bottom" id="os5_<%= _ticks %>">
+                        <%--<div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _model); %>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
+                            </div>
+                        </div>--%>
+                        <%  ViewBag.ShowOnly = true;
+                            ViewBag.Index = DateTime.Now.Ticks;
+                            Html.RenderPartial("~/Views/Lessons/LessonAssessment.ascx", _model); %>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
-                    </div>
-                </div>
-            </div>
-            <%  } %>
+                <%  if (ViewBag.ByCalendar != true)
+                    { %>
+                        <div class="tab-pane fade widget-body no-padding-bottom" id="os6_<%= _ticks %>">
+                            <% Html.RenderPartial("~/Views/Lessons/LessonAssessmentReport.ascx", _model); %>
+                        </div>
+                <%  }
+                } %>
         </div>
         <!-- end s5 tab pane -->
     </div>
@@ -178,16 +189,15 @@
     <script>
         function feedback() {
             showLoading(true);
-            $.post('<%= Url.Action("FeedBack","Lessons",new { id = _model.LessonID }) %>',
+            $.post('<%= Url.Action("LearnerLessonRemark","Lessons",new { id = _model.LessonID }) %>',
                 {
                     'feedBack': $('#feedBack').val()
                 }, function (data) {
                     hideLoading();
-                    if (data.result) {
-                        smartAlert('資料已更新!!');
-                        $('#msgFeedBack').text($('#feedBack').val());
-                    } else {
-                        smartAlert(data.message);
+                    smartAlert('資料已更新!!');
+                    $('#os1_<%= _ticks %> .message-reply').remove();
+                    if (data) {
+                        $('#os1_<%= _ticks %> .message').after($(data));
                     }
                 });
         }

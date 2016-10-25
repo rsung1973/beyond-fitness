@@ -55,11 +55,11 @@
                     <span class="widget-icon"><i class="fa fa-rss text-success"></i></span>
                     <h2><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00-<%= String.Format("{0:00}",_model.Hour+1) %>:00 課表</h2>
                     <div class="widget-toolbar">
-                        <%  if (_model.LessonTime.TrainingBySelf == 1 && _model.LessonTime.LessonAttendance == null)
+                        <%  if ((_model.LessonTime.TrainingBySelf==1 || _model.LessonTime.CouldMarkToAttendLesson()) && _model.LessonTime.LessonAttendance == null)
                             { %>
-                        <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>打卡</a>
+                        <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>完成上課</a>
                         <%  } %>
-                        <a onclick="cloneLesson(<%= _model.LessonID %>);" class="btn btn-primary"><i class="fa fa-fw fa-files-o"></i> 複製課表</a>
+                        <a onclick="cloneLesson(<%= _model.LessonID %>);" class="btn bg-color-orange"><i class="fa fa-fw fa-files-o"></i> 複製課表</a>
                         <a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
                             {
                                 classDate = _model.ClassDate.ToString("yyyy-MM-dd"),
@@ -67,28 +67,30 @@
                                 registerID = _model.RegisterID,
                                 lessonID = _model.LessonID
                             }) %>);'
-                            class="btn btn-primary"><i class="fa fa-fw fa-eye"></i> 檢視課表</a>
+                            class="btn bg-color-orange"><i class="fa fa-fw fa-eye"></i> 檢視課表</a>
                     </div>
                     <ul id="widget-tab-1" class="nav nav-tabs pull-right">
-
+                        <li class="active">
+                            <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>課前叮嚀</span></a>
+                        </li>
                         <li>
                             <a data-toggle="tab" href="#s1"><i class="fa fa-child"></i><span>暖身</span></a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a data-toggle="tab" href="#s2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
                         </li>
                         <li>
-                            <a data-toggle="tab" href="#s3"><i class="fa fa-child"></i><span>收操</span></a>
+                            <a data-toggle="tab" href="#s3"><i class="fa fa-comments-o"></i><span>課後提醒</span></a>
                         </li>
                         <%  if (_model.LessonTime.TrainingBySelf != 1)
                             { %>
                         <li>
                             <a data-toggle="tab" href="#s4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
                         </li>
-                        <%  } %>
                         <li>
-                            <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>有話想說</span></a>
+                            <a data-toggle="tab" href="#s6"><i class="fa fa-line-chart"></i><span>體能分析表</span></a>
                         </li>
+                        <%  } %>
                     </ul>
 
                 </header>
@@ -97,102 +99,120 @@
                     <div class="widget-body no-padding">
                         <!-- content -->
                         <div id="myTabContent" class="tab-content padding-10">
-                            <%  var feedBackItems = _model.RegisterLesson.LessonTime.OrderByDescending(l => l.LessonID)
-                                    .Select(l => l.LessonPlan).Where(p => !String.IsNullOrEmpty(p.FeedBack)).Take(3);
-                                if(feedBackItems.Count()>0)
-                                { %>
-                                    <p class="alert alert-success"><strong>
-                                        <%  foreach(var f in feedBackItems )
-                                        { %>
-                                            <i class="fa fa-commenting-o"></i><%= f.LessonTime.RegisterLesson.UserProfile.RealName %>已於<%= String.Format("{0:yyyy/MM/dd HH:mm}",f.FeedBackDate) %> 針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.FeedBack %><br />
-                                    <%  } %>
-                                    </strong></p>
-                            <%  } %>
                             <div class="tab-pane fade" id="s1">
-                                <div class="chat-body no-padding profile-message">
-                                    <ul>
-                                        <li class="message">
-                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                                            <span class="message-text">
-                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <div id="msgWarming"><%= _plan.Warming %></div>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <div class="input-group wall-comment-reply">
-                                                <input id="warming" type="text" name="warming" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.Warming %>" />
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary" id="btnUpdateWarming" onclick="commitPlan();">
-                                                        <i class="fa fa-reply"></i>更新
-                                                    </button>
-                                                </span>
+                                <div class="panel-body status">
+                                    <div class="chat-body custom-scroll">
+                                        <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
+                                        <ul>
+                                            <li class="message">
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <div class="message-text">
+                                                    <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> <div id="msgWarming"><%= _plan.Warming %></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="chat-footer">
+                                        <!-- CHAT TEXTAREA -->
+                                        <div class="textarea-div">
+                                            <div class="typearea">
+                                                <textarea id="warming" name="warming" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.Warming %></textarea>
                                             </div>
-                                        </li>
-                                    </ul>
+                                        </div>
+
+                                        <!-- CHAT REPLY/SEND -->
+                                        <span class="textarea-controls">
+                                            <button id="btnUpdateWarming" onclick="commitPlan();" class="btn btn-sm btn-primary pull-right">
+                                                更新
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- end s1 tab pane -->
-                            <div class="tab-pane fade active widget-body in no-padding-bottom" id="s2">
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s2">
+                                <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
                                 <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/UpdateTrainingItemSequence/") + _model.LessonID %>" method="post" id="updateSeq">
                                     <% Html.RenderAction("SingleTrainingExecutionPlan","Lessons", new { LessonID = _model.LessonID }); %>
                                 </form>
                             </div>
                             <!-- end s2 tab pane -->
                             <div class="tab-pane fade widget-body no-padding-bottom" id="s3">
-                                <div class="chat-body no-padding profile-message">
-                                    <ul>
-                                        <li class="message">
-                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                                            <span class="message-text">
-                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <div id="msgEndingOperation">
-                                                    <%= _plan.EndingOperation %></div>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <div class="input-group wall-comment-reply">
-                                                <input id="endingOperation" name="endingOperation" type="text" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.EndingOperation %>" />
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary" onclick="commitPlan();">
-                                                        <i class="fa fa-reply"></i>更新
-                                                    </button>
-                                                </span>
+                                <div class="panel-body status">
+                                    <div class="chat-body custom-scroll">
+                                        <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
+                                        <ul>
+                                            <li class="message">
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <div class="message-text">
+                                                    <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                                                    <div id="msgEndingOperation">
+                                                        <%= _plan.EndingOperation %>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="chat-footer">
+                                        <!-- CHAT TEXTAREA -->
+                                        <div class="textarea-div">
+                                            <div class="typearea">
+                                                <textarea id="endingOperation" name="endingOperation" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.EndingOperation %></textarea>
                                             </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                        </div>
 
+                                        <!-- CHAT REPLY/SEND -->
+                                        <span class="textarea-controls">
+                                            <button onclick="commitPlan();" class="btn btn-sm btn-primary pull-right">
+                                                更新
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                             <!-- end s3 tab pane -->
                             <%  if (_model.LessonTime.TrainingBySelf != 1)
                                 { %>
                             <div class="tab-pane fade widget-body no-padding-bottom" id="s4">
-                                <% Html.RenderPartial("~/Views/Lessons/LessonTrendItem.ascx", _model); %>
+                                <% Html.RenderPartial("~/Views/Lessons/LessonAssessment.ascx", _model.LessonTime); %>
+                            </div>
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s6">
+                                <% Html.RenderPartial("~/Views/Lessons/LessonAssessmentReport.ascx", _model.LessonTime); %>
                             </div>
                             <%  } %>
                             <!-- end s4 tab pane -->
-                            <div class="tab-pane fade widget-body no-padding-bottom" id="s5">
-                                <div class="chat-body no-padding profile-message">
-                                    <ul>
-                                        <li class="message">
-                                            <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                                            <span class="message-text">
-                                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.LessonTime.AttendingCoach %>"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
-                                                <div id="msgRemark">
-                                                    <%= _plan.Remark %></div>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <div class="input-group wall-comment-reply">
-                                                <input id="remark" name="remark" type="text" class="form-control" placeholder="請輸入50個中英文字" value="<%= _plan.Remark %>" />
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary" onclick="commitPlan();">
-                                                        <i class="fa fa-reply"></i>更新
-                                                    </button>
-                                                </span>
+                            <div class="tab-pane fade active widget-body in no-padding-bottom" id="s5">
+                                <div class="panel-body status">
+                                    <div class="chat-body custom-scroll">
+                                        <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
+                                        <ul>
+                                            <li class="message">
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <div class="message-text">
+                                                    <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> 
+                                                    <div id="msgRemark"><%= _plan.Remark %></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="chat-footer">
+                                        <!-- CHAT TEXTAREA -->
+                                        <div class="textarea-div">
+                                            <div class="typearea">
+                                                <textarea id="remark" name="remark"  placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.Remark %></textarea>
                                             </div>
-                                        </li>
-                                    </ul>
+                                        </div>
+
+                                        <!-- CHAT REPLY/SEND -->
+                                        <span class="textarea-controls">
+                                            <button onclick="commitPlan();" class="btn btn-sm btn-primary pull-right">
+                                                更新
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- end s5 tab pane -->

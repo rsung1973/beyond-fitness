@@ -54,13 +54,20 @@
             }
         });
 
-        $pageFormValidator = $("#pageForm").validate({
-
-            // Do not change code below
-            errorPlacement: function (error, element) {
-                error.insertAfter(element.parent());
-            }
-        });
+        $pageFormValidator = $("#pageForm")
+            //.submit(function (e) {
+            //    e.preventDefault();
+            //    showLoading();
+            //})
+            .validate({
+                //invalidHandler: function () {
+                //    hideLoading();
+                //},
+                // Do not change code below
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                }
+            });
 
         $.validator.addMethod("regex", function (value, element, regexpr) {
             return regexpr.test(value);

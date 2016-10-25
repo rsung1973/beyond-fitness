@@ -19,7 +19,7 @@
                     <li>
                         <span class="handle"><i class="fa fa-birthday-cake fa-2x text-warning"></i>&nbsp;&nbsp;</span>
                         <p>
-                            <strong><%= item.RealName %>今天長尾巴喔！</strong> - <%= item.YearsOld() %>歲
+                            <strong><%= item.RealName %>今天長尾巴喔！</strong> 
                                                             <a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F">
                                                                 <img src="../img/line/linebutton_36x60_zh-hant.png" width="36" height="60" alt="用LINE傳送" /></a>
                         </p>

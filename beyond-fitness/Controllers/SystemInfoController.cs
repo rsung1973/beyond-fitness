@@ -105,6 +105,7 @@ namespace WebHome.Controllers
             {
                 item = new LessonPriceType
                 {
+                    PriceID = models.GetTable<LessonPriceType>().Select(p => p.PriceID).Max() + 1,
                     Status = (int)Naming.DocumentLevelDefinition.正常
                 };
                 models.GetTable<LessonPriceType>().InsertOnSubmit(item);

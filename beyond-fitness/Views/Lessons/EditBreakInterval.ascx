@@ -40,7 +40,7 @@
                                 <div class="icon-addon addon-lg">
                                     <input type="text" placeholder="" class="form-control" name="repeats" value="<%= _viewModel.Repeats %>">
                                 </div>
-                                <span class="input-group-addon">總數</span>
+                                <span class="input-group-addon">組數</span>
                             </div>
                             <p class="note"><strong>Note:</strong> 輸入15或10-12</p>
                         </div>

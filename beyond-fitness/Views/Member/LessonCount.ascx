@@ -16,6 +16,7 @@
         <h4 class="font-md"><strong>
             <% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
             <%= totalLessons
+                    - _currentLessons.Sum(c=>c.AttendedLessons)
                     - _currentLessons.Sum(c=>c.LessonTime.Count(l=>l.LessonAttendance!= null))
                     - _currentLessons
                     .Where(c=>c.RegisterGroupID.HasValue)

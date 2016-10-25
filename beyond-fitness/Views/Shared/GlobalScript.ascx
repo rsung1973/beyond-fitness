@@ -129,6 +129,59 @@
         $.unblockUI();
     }
 
+    function validateForm(formElement) {
+        var isValid = true;
+        $(formElement).find('label.error').remove();
+        $(formElement).find('.error').removeClass('error');
+        $(formElement.elements).each(function(idx,elmt) {
+            var $elmt = $(elmt);
+            elmt.setCustomValidity('');
+            if(!$elmt.is(':hidden') && $elmt.parents().filter(':hidden').length==0 && !elmt.checkValidity()) {
+                isValid=false;
+                $elmt.addClass('error');
+                if($elmt.prop('placeholder')) {
+                    //elmt.setCustomValidity($elmt.prop('placeholder'));
+                    $('<label class="error"></label>').text($elmt.prop('placeholder'))
+                        .insertAfter($elmt);
+                }
+            }
+        });
+        return isValid;
+    }
+
+    function drawTrendPie(assessmentID,idx) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Activity/FitnessAssessmentTrendPieData") %>', { 'assessmentID': assessmentID }, function (data) {
+            if (idx) {
+                drawPie($("#trend-pie" + assessmentID + idx), data);
+            } else {
+                drawPie($("#trend-pie" + assessmentID), data);
+            }
+        });
+    }
+
+    function drawStrengthPie(assessmentID,idx) {
+        $.post('<%= VirtualPathUtility.ToAbsolute("~/Activity/FitnessAssessmentStrengthPieData") %>', { 'assessmentID': assessmentID }, function (data) {
+            if (idx) {
+                drawPie($("#strength-pie" + assessmentID + idx), data);
+            } else {
+                drawPie($("#strength-pie" + assessmentID), data);
+            }
+        });
+    }
+
+    function drawGroupPie(item) {
+        var $pie;
+        if (item.index) {
+            $pie = $("#group-pie" + item.assessmentID + "-" + item.itemID + item.index);
+        } else {
+            $pie = $("#group-pie" + item.assessmentID + "-" + item.itemID);
+        }
+        if ($pie) {
+            $.post('<%= VirtualPathUtility.ToAbsolute("~/Activity/FitnessAssessmentGroupPieData") %>', item, function (data) {
+                drawPie($pie, data);
+            });
+        }
+    }
 
 </script>
 

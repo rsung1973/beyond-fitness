@@ -160,11 +160,11 @@
 								data-widget-sortable="false"
 
 								-->
-                <header>
+<%--                <header>
                     <span class="widget-icon"><i class="fa fa-line-chart text-success"></i></span>
                     <h2><%= _lessonDate.Value.ToString("yyyy/MM/dd") %>~<%= _endQueryDate.Value.ToString("yyyy/MM/dd") %> 分析表 </h2>
 
-                </header>
+                </header>--%>
 
                 <!-- widget div-->
                 <div class="no-padding">
@@ -176,11 +176,14 @@
                     <div class="widget-body">
                         <!-- content -->
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+<%--                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <% Html.RenderPartial("~/Views/Lessons/TrendGraphView.ascx"); %>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <% Html.RenderPartial("~/Views/Lessons/FitnessGraphView.ascx"); %>
+                            </div>--%>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <% Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessmentReportByUserProfile.ascx", _model); %>
                             </div>
                         </div>
                         <!-- end content -->

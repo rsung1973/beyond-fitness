@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -144,6 +145,7 @@ namespace WebHome.Controllers
             }
 
             ViewBag.LearnerAttendance = attendance;
+            ViewBag.Profile = item.RegisterLesson.UserProfile;
             return View(item);
         }
 
@@ -178,12 +180,23 @@ namespace WebHome.Controllers
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
             {
-                return Redirect(FormsAuthentication.LoginUrl);
+                return new EmptyResult();
             }
 
             if (models.GetTable<PDQTask>().Any(t => t.UID == profile.UID
                  && t.TaskDate >= DateTime.Today && t.TaskDate < DateTime.Today.AddDays(1)
                  && t.PDQQuestion.GroupID == 6))
+            {
+                return new EmptyResult();
+            }
+
+            if (models.GetTable<PDQTask>().Count(t => t.UID == profile.UID && t.PDQQuestion.GroupID == 6) >=
+                (models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID && !r.RegisterGroupID.HasValue)
+                    .Join(models.GetTable<LessonTime>(), r => r.RegisterID, l => l.RegisterID, (r, l) => l)
+                    .Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)
+                + models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID)
+                    .Join(models.GetTable<LessonTime>(), r => r.RegisterGroupID, l => l.GroupID, (r, l) => l)
+                    .Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
             {
                 return new EmptyResult();
             }
@@ -353,7 +366,9 @@ namespace WebHome.Controllers
             ViewBag.Profile = profile;
 
             var items = models.GetTable<LearnerFitnessAssessment>().Where(f => f.UID == uid);
-            ViewBag.FitnessItems = models.GetTable<FitnessAssessmentItem>().ToArray();
+            ViewBag.FitnessItems = models.GetTable<FitnessAssessmentItem>()
+                .Where(f => f.GroupID == (int)Naming.FitnessAssessmentGroup.檢測體能)
+                .ToArray();
 
             return View(items);
         }
@@ -371,7 +386,7 @@ namespace WebHome.Controllers
                 return this.TransferToAction("ListLearners", "Member", new { Message = "學員資料不存在!!" });
             }
             ViewBag.Profile = profile;
-            return View(models.GetTable<FitnessAssessmentItem>());
+            return View(models.GetTable<FitnessAssessmentItem>().Where(f => f.GroupID == (int)Naming.FitnessAssessmentGroup.檢測體能));
         }
 
         public ActionResult EditFitnessAssessment(int assessmentID)
@@ -381,6 +396,20 @@ namespace WebHome.Controllers
                 return new EmptyResult();
 
             return View(item);
+        }
+
+        public ActionResult EditAssessmentItem(int assessmentID)
+        {
+            var item = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
+            if (item == null)
+                return new EmptyResult();
+
+            return View(item);
+        }
+
+        public ActionResult FitnessAssessmentTrendList(int assessmentID)
+        {
+            return EditAssessmentItem(assessmentID);
         }
 
         public ActionResult DeleteFitnessAssessment(int assessmentID,int?[] itemID)
@@ -464,13 +493,302 @@ namespace WebHome.Controllers
                     && v.AthleticLevel == extension.AthleticLevel);
             }
 
-            ViewBag.FitnessItems = models.GetTable<FitnessAssessmentItem>().ToArray();
+            ViewBag.FitnessItems = models.GetTable<FitnessAssessmentItem>()
+                .Where(f => f.GroupID == (int)Naming.FitnessAssessmentGroup.檢測體能)
+                .ToArray();
             return View(items);
         }
 
         public ActionResult AverageFitness()
         {
             return View();
+        }
+
+        public ActionResult UpdateLessonFitnessAssessment(int assessmentID,int groupID)
+        {
+            var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
+            if (fitnessAssessment == null)
+            {
+                return new EmptyResult();
+            }
+
+            foreach (var key in Request.Form.AllKeys.Where(k => Regex.IsMatch(k, "_\\d")))
+            {
+                saveAssessment(fitnessAssessment, key);
+            }
+
+            fitnessAssessment.AssessmentDate = DateTime.Now;
+
+            models.SubmitChanges();
+
+            if (fitnessAssessment.LessonTime.CouldMarkToAttendLesson())
+            {
+                models.AttendLesson(fitnessAssessment.LessonTime);
+            }
+            else
+            {
+                if(fitnessAssessment.LessonTime.LessonAttendance!=null)
+                {
+                    models.ExecuteCommand("delete LessonAttendance where LessonID={0}", fitnessAssessment.LessonID);
+                }
+            }
+
+            return View("CardioPower",fitnessAssessment);
+
+        }
+
+        private void saveAssessment(LessonFitnessAssessment fitnessAssessment, string key)
+        {
+            int itemID = int.Parse(key.Substring(1));
+
+            var values = Request.Form.GetValues(key);
+            if (values == null)
+                return;
+
+            var isNew = false;
+            var item = models.GetTable<LessonFitnessAssessmentReport>()
+                .Where(r => r.AssessmentID == fitnessAssessment.AssessmentID && r.ItemID == itemID).FirstOrDefault();
+
+            if (item == null)
+            {
+                item = new LessonFitnessAssessmentReport
+                {
+                    AssessmentID = fitnessAssessment.AssessmentID,
+                    ItemID = itemID
+                };
+
+                isNew = true;
+            }
+
+            decimal decVal;
+            int intVal;
+            if (values.Length > 1 && decimal.TryParse(values[0], out decVal) && int.TryParse(values[1], out intVal))
+            {
+                item.SingleAssessment = decVal;
+                item.ByTimes = intVal;
+                fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
+            }
+            else if (values.Length > 0 && decimal.TryParse(values[0], out decVal))
+            {
+                item.TotalAssessment = decVal;
+                fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
+            }
+            else
+            {
+                if(!isNew)
+                {
+                    models.GetTable<LessonFitnessAssessmentReport>().DeleteOnSubmit(item);
+                }
+            }
+
+        }
+
+        public ActionResult UpdateAssessmentReport(FitnessAssessmentReportViewModel viewModel)
+        {
+            var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == viewModel.AssessmentID).FirstOrDefault();
+            if (fitnessAssessment == null)
+            {
+                return Json(new { result = false });
+            }
+
+            var item = fitnessAssessment.LessonFitnessAssessmentReport.Where(r => r.ItemID == viewModel.TrendItem).FirstOrDefault();
+            if (item == null)
+            {
+                item = new LessonFitnessAssessmentReport
+                {
+                    ItemID = viewModel.TrendItem
+                };
+                fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
+            }
+
+            item.TotalAssessment = viewModel.TrendAssessment;
+
+            if (viewModel.ItemID.HasValue)
+            {
+                item = fitnessAssessment.LessonFitnessAssessmentReport.Where(r => r.ItemID == viewModel.ItemID).FirstOrDefault();
+                if (item == null)
+                {
+                    item = new LessonFitnessAssessmentReport
+                    {
+                        ItemID = viewModel.ItemID.Value
+                    };
+                    fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
+                }
+
+                if(viewModel.Calc=="total")
+                {
+                    item.TotalAssessment = viewModel.TotalAssessment;
+                }
+                else
+                {
+                    item.TotalAssessment = null;
+                    item.SingleAssessment = viewModel.SingleAssessment;
+                    item.ByTimes = viewModel.ByTimes;
+                }
+            }
+
+            models.SubmitChanges();
+
+            if (fitnessAssessment.LessonTime.CouldMarkToAttendLesson())
+                models.AttendLesson(fitnessAssessment.LessonTime);
+
+
+            return Json(new { result = true });
+
+        }
+
+        public ActionResult FitnessAssessmentTrendPieData(int assessmentID)
+        {
+            var item = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
+            if (item == null || item.LessonFitnessAssessmentReport.Count == 0)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(item.LessonFitnessAssessmentReport.Where(r => r.FitnessAssessmentItem.GroupID == 3)
+                .Select(r => new
+                {
+                    label = r.FitnessAssessmentItem.ItemName + " " + (int)r.TotalAssessment + "分鐘",
+                    data = r.TotalAssessment
+                }).ToArray(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult FitnessAssessmentStrengthPieData(int assessmentID)
+        {
+            var item = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
+            if (item == null || item.LessonFitnessAssessmentReport.Count == 0)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            var items = models.GetTable<LessonFitnessAssessmentReport>().Where(r => r.AssessmentID == assessmentID
+                && (r.FitnessAssessmentItem.GroupID == 4 || r.FitnessAssessmentItem.GroupID == 5));
+            if (items.Count() == 0)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(items.GroupBy(r=>r.FitnessAssessmentItem.GroupID)
+                .Select(r => new
+                {
+                    label = r.First().FitnessAssessmentItem.FitnessAssessmentGroup.GroupName + " " + (int)r.Sum(t => (t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0)) + "KG",
+                    data = r.Sum(t => (t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0))
+                }).ToArray(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult FitnessAssessmentGroupPieData(int assessmentID,int itemID)
+        {
+            var item = models.GetTable<LessonFitnessAssessmentReport>().Where(f => f.AssessmentID == assessmentID && f.ItemID == itemID).FirstOrDefault();
+            if (item == null)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            var items = models.GetTable<LessonFitnessAssessmentReport>().Where(r => r.AssessmentID == item.AssessmentID
+                && r.FitnessAssessmentItem.FitnessAssessmentGroup.MajorID == item.ItemID);
+            if (items.Count() == 0)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(items
+                .Select(r => new
+                {
+                    label = r.FitnessAssessmentItem.ItemName,
+                    data = r.TotalAssessment.HasValue ? r.TotalAssessment.Value : r.SingleAssessment * r.ByTimes
+                }).ToArray(), JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult EditAssessmentTrendItem(int assessmentID,int itemID)
+        {
+            var item = models.GetTable<LessonFitnessAssessmentReport>().Where(f => f.AssessmentID == assessmentID
+                && f.ItemID==itemID).FirstOrDefault();
+            if (item == null)
+                return new EmptyResult();
+
+            return View(item);
+        }
+
+        public ActionResult EditAssessmentGroupItem(int assessmentID, int itemID)
+        {
+            return EditAssessmentTrendItem(assessmentID, itemID);
+        }
+
+        public ActionResult CommitAssessmentTrendItem(int assessmentID, int itemID,decimal? totalAssessment,decimal? singleAssessment,int? byTimes,String calc)
+        {
+            var item = models.GetTable<LessonFitnessAssessmentReport>().Where(f => f.AssessmentID == assessmentID
+                && f.ItemID == itemID).FirstOrDefault();
+            if (item == null)
+                return Json(new { result = false });
+
+            if (String.IsNullOrEmpty(calc) || calc == "total")
+            {
+                item.TotalAssessment = totalAssessment;
+                item.SingleAssessment = null;
+                item.ByTimes = null;
+            }
+            else
+            {
+                item.TotalAssessment = null;
+                item.SingleAssessment = singleAssessment;
+                item.ByTimes = byTimes;
+            }
+
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+        }
+
+        public ActionResult DeleteFitnessAssessmentReport(int assessmentID, int itemID)
+        {
+            var item = models.DeleteAny<LessonFitnessAssessmentReport>(r => r.AssessmentID == assessmentID && r.ItemID == itemID);
+
+            if (item != null)
+            {
+                models.ExecuteCommand(@"DELETE FROM LessonFitnessAssessmentReport
+                                        FROM     LessonFitnessAssessmentReport INNER JOIN
+                                                       FitnessAssessmentItem ON LessonFitnessAssessmentReport.ItemID = FitnessAssessmentItem.ItemID INNER JOIN
+                                                       FitnessAssessmentGroup ON FitnessAssessmentItem.GroupID = FitnessAssessmentGroup.GroupID
+                                        WHERE   (LessonFitnessAssessmentReport.AssessmentID = {0}) AND (FitnessAssessmentGroup.MajorID = {1})", assessmentID, itemID);
+
+                var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).First();
+                if (!fitnessAssessment.LessonTime.CouldMarkToAttendLesson() && fitnessAssessment.LessonTime.LessonAttendance != null)
+                {
+                    models.ExecuteCommand("delete LessonAttendance where LessonID={0}", fitnessAssessment.LessonID);
+                }
+                
+                return Json(new { result = true });
+            }
+            else
+            {
+                return Json(new { result = false });
+            }
+
+        }
+
+        public ActionResult FitnessAssessmentGroup(int assessmentID, int itemID,long? viewIndex,bool? learnerAttendance,bool? showOnly)
+        {
+            var item = models.GetTable<LessonFitnessAssessmentReport>().Where(f => f.AssessmentID == assessmentID && f.ItemID == itemID).FirstOrDefault();
+            if (item == null)
+            {
+                return new EmptyResult();
+            }
+
+            var items = models.GetTable<LessonFitnessAssessmentReport>().Where(r => r.AssessmentID == item.AssessmentID
+                && r.FitnessAssessmentItem.FitnessAssessmentGroup.MajorID == item.ItemID);
+            if (items.Count() == 0)
+            {
+                return new EmptyResult();
+            }
+
+            ViewBag.Index = viewIndex;
+            ViewBag.LearnerAttendance = learnerAttendance;
+            ViewBag.ShowOnly = showOnly;
+            return View(item);
+
         }
 
 

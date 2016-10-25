@@ -19,6 +19,7 @@ using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
+using System.Data.Linq;
 
 namespace WebHome.Controllers
 {
@@ -72,6 +73,21 @@ namespace WebHome.Controllers
                 if(!ModelState.IsValid)
                 {
                     ViewBag.ModelState = ModelState;
+                    return View(item);
+                }
+
+                LessonTime timeItem = new LessonTime
+                {
+                    InvitedCoach = viewModel.CoachID,
+                    AttendingCoach = viewModel.CoachID,
+                    ClassTime = viewModel.ClassDate,
+                    DurationInMinutes = viewModel.Duration
+                };
+
+                var users = checkOverlapedBooking(timeItem, item.RegisterLesson);
+                if (users.Count() > 0)
+                {
+                    ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
                     return View(item);
                 }
 
@@ -238,6 +254,12 @@ namespace WebHome.Controllers
                     ViewBag.Message = "學員課程已結束!!";
                     return View(item);
                 }
+
+                if (lesson.LessonTime.Count + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+                {
+                    ViewBag.Message = "學員上課堂數已滿!!";
+                    return View(item);
+                }
             }
 
 
@@ -267,11 +289,24 @@ namespace WebHome.Controllers
                 if (lesson.RegisterGroupID.HasValue && lesson.GroupingMemberCount > 1)
                 {
                     timeItem.GroupID = lesson.RegisterGroupID;
+                    timeItem.LessonFitnessAssessment.AddRange(
+                        lesson.GroupingLesson.RegisterLesson.Select(
+                            r => new LessonFitnessAssessment
+                            {
+                                UID = r.UID
+                            }));
+                }
+                else
+                {
+                    timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
+                    {
+                        UID = lesson.UID
+                    });
                 }
             }
 
             models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
-            models.SubmitChanges();
+            //models.SubmitChanges();
 
             var timeExpansion = models.GetTable<LessonTimeExpansion>();
             if (timeItem.GroupID.HasValue)
@@ -283,7 +318,8 @@ namespace WebHome.Controllers
                         timeExpansion.InsertOnSubmit(new LessonTimeExpansion
                         {
                             ClassDate = timeItem.ClassTime.Value.Date,
-                            LessonID = timeItem.LessonID,
+                            //LessonID = timeItem.LessonID,
+                            LessonTime = timeItem,
                             Hour = timeItem.ClassTime.Value.Hour + i,
                             RegisterID = regles.RegisterID
                         });
@@ -297,14 +333,24 @@ namespace WebHome.Controllers
                     timeExpansion.InsertOnSubmit(new LessonTimeExpansion
                     {
                         ClassDate = timeItem.ClassTime.Value.Date,
-                        LessonID = timeItem.LessonID,
+                        //LessonID = timeItem.LessonID,
+                        LessonTime = timeItem,
                         Hour = timeItem.ClassTime.Value.Hour + i,
                         RegisterID = lesson.RegisterID
                     });
                 }
             }
 
-            models.SubmitChanges();
+            try
+            {
+                models.SubmitChanges();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex);
+                ViewBag.Message = "預約未完成，請重新預約!!";
+                return View(item);
+            }
 
             return RedirectToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
         }
@@ -545,19 +591,50 @@ namespace WebHome.Controllers
                 .Where(t => t.RegisterLesson.UID == item.UID
                     || t.GroupingLesson.RegisterLesson.Any(r => r.UID == item.UID)).ToList();
 
+            //var items = dataItems
+            //    .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
+            //    .Select(g => new _calendarEvent
+            //    {
+            //        id = "course",
+            //        title = "",
+            //        start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+            //        description = "課程訓練",
+            //        lessonID = g.LessonID,
+            //        allDay = true,
+            //        className = g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
+            //        icon = g.ClassTime < today ? learner == true ? "fa-anchor" : "fa-check" : "fa-clock-o"
+            //    });
+
             var items = dataItems
                 .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
+                .Where(t => !t.GroupID.HasValue)
                 .Select(g => new _calendarEvent
                 {
                     id = "course",
                     title = "",
                     start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
-                    description = "課程訓練",
+                    description = "1 對 1",
                     lessonID = g.LessonID,
                     allDay = true,
-                    className = g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
-                    icon = g.ClassTime < today ? learner == true ? "fa-anchor" : "fa-check" : "fa-clock-o"
+                    className = new string[] { "event", "bg-color-blue" },
+                    icon = "fa-user"
                 });
+
+            items = items.Concat(dataItems
+                .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
+                .Where(t => t.GroupID.HasValue)
+                .Select(g => new _calendarEvent
+                {
+                    id = "course",
+                    title = "",
+                    start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                    description = "1 對 " + g.RegisterLesson.GroupingMemberCount,
+                    lessonID = g.LessonID,
+                    allDay = true,
+                    className = new string[] { "event", "bg-color-pinkDark" },
+                    icon = "fa-users"
+                }));
+
 
             items = items.Concat(dataItems
                 .Where(t => t.TrainingBySelf == 1)
@@ -627,12 +704,60 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult LearnerLessonRemark(int id, FeedBackViewModel viewModel)
+        {
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return  Content("連線逾時，請重新登入!!");
+            }
+
+            LessonTime lesson = models.GetTable<LessonTime>().Where(l => l.LessonID == id).FirstOrDefault();
+            if (lesson == null)
+                return Content("課程資料不存在!!");
+
+            LessonFeedBack item = lesson.LessonFeedBack.Where(f => f.RegisterLesson.UID == profile.UID).FirstOrDefault();
+            if (item == null)
+            {
+                if (lesson.GroupID.HasValue)
+                {
+                    RegisterLesson regItem = lesson.GroupingLesson.RegisterLesson.Where(r => r.UID == profile.UID).FirstOrDefault();
+                    if (regItem == null)
+                        return Content("團體課程資料不存在!!");
+
+                    item = new LessonFeedBack
+                    {
+                        LessonID = id,
+                        RegisterID = regItem.RegisterID
+                    };
+                }
+                else
+                {
+                    item = new LessonFeedBack
+                    {
+                        LessonID = id,
+                        RegisterID = lesson.RegisterID
+                    };
+                }
+
+                lesson.LessonFeedBack.Add(item);
+            }
+
+            item.Remark = viewModel.FeedBack;
+            item.FeedBackDate = DateTime.Now;
+            models.SubmitChanges();
+
+            return View("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", lesson);
+
+        }
+
+
         public ActionResult Feedback(int id,FeedBackViewModel viewModel)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
             {
-                return Redirect(FormsAuthentication.LoginUrl);
+                return Json(new { result = false, message = "連線逾時，請重新登入!!" });
             }
 
             var item = models.GetTable<LessonTime>().Where(t => t.LessonID == id
@@ -787,6 +912,12 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = ModelState;
                 return View();
             }
+            if(!viewModel.DateFrom.HasValue)
+            {
+                viewModel.DateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            }
+            if (!viewModel.MonthInterval.HasValue)
+                viewModel.MonthInterval = 1;
             viewModel.HasQuery = true;
             HttpContext.SetCacheValue(CachingKey.DailyBookingQuery, viewModel);
             return View();
@@ -871,7 +1002,7 @@ namespace WebHome.Controllers
                     booktime = "--",
                     hour = g.Key.Hour,
                     function = "",
-                    details = getDailyBookingMembers(items, g.Key, g.Key.Hour)
+                    details = ""//getDailyBookingMembers(items, g.Key, g.Key.Hour)
                 })
                 .ToArray()
             }, JsonRequestBehavior.AllowGet);
@@ -902,7 +1033,13 @@ namespace WebHome.Controllers
             {
                 return models.GetTable<LessonTime>().Where(l => false);
             }
-
+            DataLoadOptions ops = new DataLoadOptions();
+            ops.LoadWith<LessonTime>(i => i.LessonTimeExpansion);
+            ops.LoadWith<LessonTime>(i => i.LessonPlan);
+            ops.LoadWith<LessonTime>(i => i.RegisterLesson);
+            ops.LoadWith<RegisterLesson>(i => i.UserProfile);
+            ops.LoadWith<LessonTimeExpansion>(i => i.RegisterLesson);
+            models.GetDataContext().LoadOptions = ops;
             IQueryable<LessonTime> items = models.GetTable<LessonTime>();
 
             if (viewModel.DateFrom.HasValue)
@@ -922,6 +1059,25 @@ namespace WebHome.Controllers
             if (!string.IsNullOrEmpty(viewModel.UserName))
             {
                 items = items.Where(l => l.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
+            }
+
+            if(viewModel.LessonStatus.HasValue)
+            {
+                switch(viewModel.LessonStatus)
+                {
+                    case 1:
+                        items = items.Where(l => l.LessonAttendance == null);
+                        break;
+                    case 2:
+                        items = items.Where(l => l.LessonAttendance != null);
+                        break;
+                    case 3:
+                        items = items.Where(l => !l.LessonPlan.CommitAttendance.HasValue);
+                        break;
+                    case 4:
+                        items = items.Where(l => l.TrainingBySelf == 1);
+                        break;
+                }
             }
 
             if (item.IsFreeAgent())
@@ -972,7 +1128,7 @@ namespace WebHome.Controllers
             var items = lessons.Where(n => !n.TrainingBySelf.HasValue || n.TrainingBySelf == 0)
                 .Join(models.GetTable<LessonTimeExpansion>(),n=>n.LessonID,t=>t.LessonID,(n,t)=> t)
                 .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
-                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .Select(t => new { t.ClassDate, t.LessonID }).ToList()
                 .GroupBy(t => t.ClassDate)
                 .Select(g => new _calendarEvent
                 {
@@ -988,7 +1144,7 @@ namespace WebHome.Controllers
             items = items.Concat(lessons.Where(n => n.TrainingBySelf == 1)
                 .Join(models.GetTable<LessonTimeExpansion>(), n => n.LessonID, t => t.LessonID, (n, t) => t)
                 .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
-                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .Select(t => new { t.ClassDate, t.LessonID }).ToList()
                 .GroupBy(t => t.ClassDate)
                 .Select(g => new _calendarEvent
                 {
@@ -1715,8 +1871,8 @@ namespace WebHome.Controllers
                 return result;
 
             plan.Warming = viewModel.Warming;
-            plan.RecentStatus = viewModel.RecentStatus;
-            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
+            //plan.RecentStatus = viewModel.RecentStatus;
+            //model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
             plan.EndingOperation = viewModel.EndingOperation;
             plan.Remark = viewModel.Remark;
 
@@ -1822,8 +1978,8 @@ namespace WebHome.Controllers
                 return result;
 
             plan.Warming = viewModel.Warming;
-            plan.RecentStatus = viewModel.RecentStatus;
-            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
+            //plan.RecentStatus = viewModel.RecentStatus;
+            //model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
             plan.EndingOperation = viewModel.EndingOperation;
             plan.Remark = viewModel.Remark;
 

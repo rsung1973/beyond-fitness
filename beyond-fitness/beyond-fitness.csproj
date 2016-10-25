@@ -589,6 +589,7 @@
     <Content Include="img\blogbox\Photo_20160501-01.jpg" />
     <Content Include="img\blogbox\Photo_20160711-01.jpg" />
     <Content Include="img\blogbox\Photo_20160711-02.jpg" />
+    <Content Include="img\border.png" />
     <Content Include="img\clear.png" />
     <Content Include="img\colorblind-friendly\pt1.png" />
     <Content Include="img\colorblind-friendly\pt2.png" />
@@ -1420,20 +1421,33 @@
     <Content Include="Views\Account\RegisterByMail.aspx" />
     <Content Include="Views\Account\RegisterItem.ascx" />
     <Content Include="Views\Account\ResetPass.aspx" />
+    <Content Include="Views\Account\NotifyResetPassword.aspx" />
     <Content Include="Views\Account\Sample.aspx" />
     <Content Include="Views\Account\ViewCoach.aspx" />
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Account\Vip.aspx" />
     <Content Include="Views\Activity\AttendedLessonEvent.ascx" />
     <Content Include="Views\Activity\BirthdayEvent.ascx" />
+    <Content Include="Views\Activity\EditAssessmentGroupItem.ascx" />
+    <Content Include="Views\Activity\EditAssessmentTrendItem.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentGroup.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentGroupList.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentTrendList.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentGroupPie.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentStrengthPie.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentTrendPie.ascx" />
     <Content Include="Views\Activity\EditDailyQuestion.aspx" />
     <Content Include="Views\Activity\DeleteFitnessAssessment.ascx" />
+    <Content Include="Views\Activity\EditAssessmentItem.ascx" />
     <Content Include="Views\Activity\EditFitnessAssessment.ascx" />
     <Content Include="Views\Activity\AverageFitness.aspx" />
     <Content Include="Views\Activity\LearnerFitnessItem.ascx" />
     <Content Include="Views\Activity\LearnerDailyQuestion.ascx" />
     <Content Include="Views\Activity\LearnerLesson.ascx" />
     <Content Include="Views\Activity\LearnerMonthlyReviewEvent.ascx" />
+    <Content Include="Views\Activity\BasicFitnessAssessmentGroup.ascx" />
+    <Content Include="Views\Activity\CardioPower.ascx" />
+    <Content Include="Views\Activity\FitnessAssessmentTrend.ascx" />
     <Content Include="Views\Activity\ShowLessonFeedback.ascx" />
     <Content Include="Views\Activity\LessonFeedback.ascx" />
     <Content Include="Views\Activity\LessonFeedBackItem.ascx" />
@@ -1449,6 +1463,8 @@
     <Content Include="Views\Attendance\TrainingPlan.aspx" />
     <Content Include="Views\Error\Http404.aspx" />
     <Content Include="Views\Error\Http500.aspx" />
+    <Content Include="Views\Fitness\BodyEnergyAssessment.ascx" />
+    <Content Include="Views\Fitness\PersonalStrengthAssessment.ascx" />
     <Content Include="Views\Information\Blog.aspx" />
     <Content Include="Views\Information\BlogDetail.aspx" />
     <Content Include="Views\Information\ContactUs.aspx" />
@@ -1528,11 +1544,17 @@
     <Content Include="Views\Lessons\EditSingleTrainingItem.ascx" />
     <Content Include="Views\Lessons\EditTrainingItem.ascx" />
     <Content Include="Views\Lessons\EditTrainingItemList.ascx" />
+    <Content Include="Views\Lessons\Feedback\CommonFeedback.ascx" />
+    <Content Include="Views\Lessons\Feedback\LearnerLessonRemarkItem.ascx" />
     <Content Include="Views\Lessons\FitnessGraphView.ascx" />
     <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
     <Content Include="Views\Lessons\LearnerLessonPlan.ascx" />
+    <Content Include="Views\Lessons\LessonAssessmentReport.ascx" />
+    <Content Include="Views\Lessons\LessonAssessment.ascx" />
     <Content Include="Views\Lessons\LessonContent.ascx" />
     <Content Include="Views\Lessons\LessonGoal.ascx" />
+    <Content Include="Views\Lessons\LessonLearnerAssessmentReportByUserProfile.ascx" />
+    <Content Include="Views\Lessons\LessonLearnerAssessmentReport.ascx" />
     <Content Include="Views\Lessons\LessonsCalendar.ascx" />
     <Content Include="Views\Lessons\LessonsInfo.ascx" />
     <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
@@ -1546,6 +1568,7 @@
     <Content Include="Views\Lessons\QueryModalByFreeAgent.ascx" />
     <Content Include="Views\Lessons\QueryVip.aspx" />
     <Content Include="Views\Lessons\RebookingByCoach.aspx" />
+    <Content Include="Views\Lessons\LessonLearnerAssessment.ascx" />
     <Content Include="Views\Lessons\SelectVipDay.ascx" />
     <Content Include="Views\Lessons\SimpleCoachSelector.ascx" />
     <Content Include="Views\Lessons\SingleTrainingExecutionPlan.ascx" />
@@ -1676,6 +1699,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FitnessController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
@@ -1686,6 +1710,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\BusinessExtensionMethods.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\GlobalDefinition.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
@@ -1735,7 +1760,7 @@
     <Content Include="js\.DS_Store" />
     <None Include="Properties\PublishProfiles\beyond-fitness.pubxml" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Resource\AllMenu.json" />

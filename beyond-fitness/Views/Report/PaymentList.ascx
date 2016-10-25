@@ -46,8 +46,12 @@
                     <td><% var payoffAmt = item.IntuitionCharge.TuitionInstallment.Where(t => t.PayoffDate.HasValue).Sum(t => t.PayoffAmount);
                             Writer.Write(String.Format("{0:##,###,###,###}", payoffAmt));  %></td>
                     <td><%  Writer.Write(String.Format("{0:##,###,###,###}", subtotal-payoffAmt)); %></td>
-                    <td><%  if(item.IntuitionCharge!=null && item.IntuitionCharge.TuitionInstallment.Count>0 )
-                            { 
+                    <td><%  if(item.IntuitionCharge!=null)
+                            {
+                                if (item.IntuitionCharge.ByInstallments > 1)
+                                {
+                                    Writer.WriteLine("已付期數:" + item.IntuitionCharge.TuitionInstallment.Count);
+                                }
                                 foreach (var t in item.IntuitionCharge.TuitionInstallment)
                                 { %>
                                     <%= t.PayoffDate.HasValue ? String.Format("{0:yyyy/MM/dd}",t.PayoffDate) : "尚未付款" %><%= t.PayoffAmount.HasValue ? "《"+ String.Format("{0:##,###,###,###}",t.PayoffAmount)+ "》" : null %><br />

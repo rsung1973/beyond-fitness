@@ -86,13 +86,33 @@
                                                     <label class="input"> <i class="icon-append fa fa-user"></i>
                                                         <input type="text" class="input-lg" name="userName" id="userName" placeholder="請輸入學員姓名" value="<%= _viewModel.UserName %>" />
                                                     </label>
+                                                    <%--<script>
+                                                        $('#userName').on('change', function (evt) {
+                                                            if ($('#userName').val()!='') {
+                                                                $('select[name="lessonStatus"] option:eq(0)').prop('disabled', false);
+                                                                $('select[name="lessonStatus"] option:eq(1)').prop('disabled', false);
+                                                            }
+                                                        });
+                                                    </script>--%>
                                                 </section>
                                                 <section class="col col-6">
                                                     <label class="select">
-                                                        <%  ViewBag.SelectAll = true;
+                                                        <%  ViewBag.SelectIndication = "<option value=''>全部教練</option>";
                                                             Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID",DefaultValue = _viewModel.CoachID }); %>
                                                         <i class="icon-append fa fa-file-word-o"></i>
                                                     </label>
+                                                    <%--<script>
+                                                        $('#coachID').on('change', function (evt) {
+                                                            if ($(this).val() == '' && $('#userName').val()=='') {
+                                                                $('select[name="lessonStatus"] option:eq(0)').prop('disabled', true);
+                                                                $('select[name="lessonStatus"] option:eq(1)').prop('disabled', true);
+                                                                $('select[name="lessonStatus"]').val('1');
+                                                            } else {
+                                                                $('select[name="lessonStatus"] option:eq(0)').prop('disabled', false);
+                                                                $('select[name="lessonStatus"] option:eq(1)').prop('disabled', false);
+                                                            }
+                                                        });
+                                                    </script>--%>
                                                 </section>
                                             </div>
                                             <div class="row">
@@ -103,12 +123,25 @@
                                                     </label>
                                                 </section>
                                                 <section class="col col-6">
-                                                    <label class="select">
+                                                    <%--<label class="select">
                                                         <select class="input-lg" name="monthInterval" id="monthInterval">
                                                             <option value="1">查詢區間1個月</option>
                                                             <option value="2">查詢區間2個月</option>
                                                         </select>
                                                         <i></i>
+                                                    </label>--%>
+                                                    <label class="select">
+                                                        <select name="lessonStatus" class="input-lg">
+<%--                                                            <option value="0" <%= !_viewModel.CoachID.HasValue && String.IsNullOrEmpty(_viewModel.UserName) ? "disabled" : null %>>全部狀態</option>
+                                                            <option value="2" <%= !_viewModel.CoachID.HasValue && String.IsNullOrEmpty(_viewModel.UserName) ? "disabled" : null %>>教練已完成上課</option>
+                                                            <option value="1" <%= !_viewModel.CoachID.HasValue && String.IsNullOrEmpty(_viewModel.UserName) ? "selected" : null %>>教練未完成上課</option>--%>
+                                                            <option value="0">全部狀態</option>
+                                                            <option value="2">教練已完成上課</option>
+                                                            <option value="1">教練未完成上課</option>
+                                                            <option value="3">學員尚未打卡</option>
+                                                            <option value="4">自主訓練</option>
+                                                        </select>
+                                                        <i class="icon-append fa fa-file-word-o"></i>
                                                     </label>
                                                 </section>
                                             </div>
@@ -315,7 +348,7 @@
     }
 
         $(function () {
-            showLoading(true);
+            showLoading();
         });
     </script>
 

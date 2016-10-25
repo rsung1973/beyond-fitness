@@ -17,7 +17,7 @@
                 foreach (var item in _groups)
                 {
                     idx++;%>
-            <li class='<%= idx==1 ? "active" : null %>'><a id='<%= "toggleTab-" + idx %>' href='<%= "#tab-" + idx %>' role="tab" data-toggle="tab"><i class="<%= item.UserProfile.UserProfileExtension.Gender=="F" ? "fa fa-female" : "fa fa-male" %>"></i> <span><%= item.UserProfile.RealName %></span></a></li>
+            <li class='<%= idx==1 ? "active" : null %>'><a id='<%= "toggleTab-" + idx %>' href='<%= "#tab-" + idx %>' role="tab" data-toggle="tab"><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender=="F" ? "fa fa-female" : "fa fa-male" %>"></i></span><%= item.UserProfile.RealName %></a></li>
             <%  } %>
         </ul>
 

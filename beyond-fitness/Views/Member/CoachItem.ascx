@@ -53,7 +53,7 @@
                 </script>
             </div>
         </section>
-        <%  if (_userProfile.IsSysAdmin())
+        <%  if (_userProfile.IsOfficer())
             { %>
         <section class="col col-6">
             <label class="label">職級</label>

@@ -22,7 +22,7 @@
                     <div class="col-xs-4 col-sm-2 profile-pic">
                         <% _model.RenderUserPicture(Writer, "profileImg"); %>
                         <div class="padding-10">
-                            <h4 class="font-md"><small><%= _model.IsFreeAgent() ? "自由教練" : _userProfile!=null && _userProfile.IsSysAdmin() && _model.ServingCoach.ProfessionalLevel!=null ? _model.ServingCoach.ProfessionalLevel.LevelName : "" %></small></h4>
+                            <h4 class="font-md"><small><%= _model.IsFreeAgent() ? "自由教練" : _userProfile!=null && _userProfile.IsOfficer() && _model.ServingCoach.ProfessionalLevel!=null ? _model.ServingCoach.ProfessionalLevel.LevelName : "" %></small></h4>
                         </div>
                     </div>
                     <%  Html.RenderPartial("~/Views/Member/CoachInfo.ascx", _model); %>

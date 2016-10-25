@@ -26,8 +26,7 @@
                 <tr>
                     <td><%= coach.UserProfile.RealName %></td>
                     <td><%= item.Count() %></td>
-                    <td><%  var achievement = item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "Cash").Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoff)
-                                  + item.Where(l => l.RegisterLesson.IntuitionCharge.Payment == "CreditCard").Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard);
+                    <td><%  var achievement = calcAchievement(item);
                             Writer.Write(achievement); %>
                     </td>
                     <td><%= coach.ProfessionalLevel.LevelName %></td>
@@ -89,6 +88,25 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (IEnumerable<LessonTime>)this.Model;
+    }
+
+    int? calcAchievement(IEnumerable<LessonTime> items)
+    {
+        var lessons = items.Where(l => !l.GroupID.HasValue).Select(l => l.RegisterLesson)
+                .Concat(items.Where(l => l.GroupID.HasValue).Select(l => l.GroupingLesson)
+                    .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r));
+
+        Utility.Logger.Debug(
+        String.Join("\r\n", lessons.Select(r => r.RegisterID + "\t"
+            + r.IntuitionCharge.Payment + "\t"
+            + r.IntuitionCharge.FeeShared + "\t"
+            + r.LessonPriceType.CoachPayoff + "\t"
+            + r.LessonPriceType.CoachPayoffCreditCard + "\t"
+            + r.GroupingLessonDiscount.PercentageOfDiscount + "\t"
+            )));
+
+        return lessons.Where(r => r.IntuitionCharge.Payment == "Cash" || r.IntuitionCharge.FeeShared == 0).Sum(l => l.LessonPriceType.CoachPayoff * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
+            + lessons.Where(r => r.IntuitionCharge.Payment == "CreditCard" && r.IntuitionCharge.FeeShared == 1).Sum(l => l.LessonPriceType.CoachPayoffCreditCard * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
     }
 
 </script>

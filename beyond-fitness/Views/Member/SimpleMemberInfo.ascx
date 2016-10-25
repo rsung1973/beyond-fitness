@@ -22,10 +22,11 @@
                     <div class="col-sm-3 profile-pic">
                         <% _model.RenderUserPicture(Writer, "profileImg"); %>
                         <div class="padding-10">
-                            <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>
+                            <%--<i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>--%>
                             <br />
                             <h4 class="font-md"><strong><% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
                                 <%= totalLessons
+                                        - _currentLessons.Sum(c=>c.AttendedLessons)
                                         - _currentLessons.Sum(c=>c.LessonTime.Count(l=>l.LessonAttendance!= null))
                                         - _currentLessons
                                         .Where(c=>c.RegisterGroupID.HasValue)

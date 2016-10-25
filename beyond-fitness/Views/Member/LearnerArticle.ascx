@@ -127,7 +127,6 @@
     LessonViewModel _viewModel;
 
     IEnumerable<RegisterLesson> _items;
-    IEnumerable<RegisterLesson> _currentLessons;
 
     protected override void OnInit(EventArgs e)
     {
@@ -141,7 +140,6 @@
             .Where(r=>r.ClassLevel.HasValue && r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
             .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
-        _currentLessons = _items.Where(i => i.Lessons != i.LessonTime.Count(s => s.LessonAttendance != null));
     }
 
 

@@ -117,7 +117,7 @@
             },
             eventClick: function (calEvent) {
                 $global.lessonID = calEvent.lessonID;
-                $('#lessonContent').load('<%= Url.Action("LessonContent","Report") %>', { lessonID: calEvent.lessonID }, function () { });
+                $('#lessonContent').load('<%= Url.Action("LessonContent","Report") %>', { lessonID: calEvent.lessonID, byCalendar: true }, function () { });
             }
         };
 

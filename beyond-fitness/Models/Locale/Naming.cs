@@ -51,7 +51,9 @@ namespace WebHome.Models.Locale
             Coach = 2,
             FreeAgent = 3,
             Learner = 4,
-            Guest = 5
+            Guest = 5,
+            Accounting = 6,
+            Officer = 7
         }
 
         public enum LessonStatus
@@ -69,6 +71,11 @@ namespace WebHome.Models.Locale
             是非題 = 203,
             單選其他 = 204,
             多重選其他 = 205
+        }
+
+        public enum FitnessAssessmentGroup
+        {
+            檢測體能 = 1,
         }
 
     }

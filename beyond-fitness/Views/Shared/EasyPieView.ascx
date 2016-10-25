@@ -31,7 +31,7 @@
 		    }
 
 		    placeholder.unbind();
-		    $.plot(placeholder, data, {
+		    var plot = $.plot(placeholder, data, {
 		        series: {
 		            pie: {
 		                show: true,
@@ -66,6 +66,10 @@
 		            hoverable: true,
 		            clickable: true
 		        },
+		    });
+
+		    placeholder.on('click',function (evt) {
+		        plot.draw();
 		    });
         }
 

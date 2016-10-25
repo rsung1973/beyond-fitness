@@ -385,6 +385,7 @@ namespace WebHome.Models.ViewModel
         public bool? HasQuery { get; set; }
         public int? TrainingBySelf { get; set; }
         public int? LessonID { get; set; }
+        public int? LessonStatus { get; set; }
     }
 
     public class LessonPriceViewModel
@@ -444,6 +445,18 @@ namespace WebHome.Models.ViewModel
     {
         public int? ItemID { get; set; }
         public decimal? Assessment { get; set; }
+    }
+
+    public class FitnessAssessmentReportViewModel
+    {
+        public int AssessmentID { get; set; }
+        public int TrendItem { get; set; }
+        public decimal? TrendAssessment { get; set; }
+        public int? ItemID { get; set; }
+        public decimal? TotalAssessment { get; set; }
+        public String Calc { get; set; }
+        public int? ByTimes { get; set; }
+        public decimal? SingleAssessment { get; set; }
     }
 
 

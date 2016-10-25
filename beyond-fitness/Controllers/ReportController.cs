@@ -82,7 +82,7 @@ namespace WebHome.Controllers
                 items = items.Where(l => l.LessonID == lessonID);
             }
 
-            var dataItems = items.OrderByDescending(t => t.LessonID).Take(2).ToArray();
+            var dataItems = items.OrderByDescending(t => t.ClassTime).Take(2).ToArray();
 
             if (dataItems.Count() == 0)
             {
@@ -107,7 +107,7 @@ namespace WebHome.Controllers
                 items = items.Where(l => l.LessonID == lessonID);
             }
 
-            var dataItems = items.OrderByDescending(t => t.LessonID).Take(2).ToArray();
+            var dataItems = items.OrderByDescending(t => t.ClassTime).Take(2).ToArray();
 
             if (dataItems.Count() == 0)
             {
@@ -117,10 +117,11 @@ namespace WebHome.Controllers
             var item = dataItems.Last();
 
             ViewBag.LessonDate = item.ClassTime;
+            ViewBag.ByCalendar = true;
             return View("~/Views/Lessons/LessonContent.ascx",item);
         }
 
-        public ActionResult LessonContent(int lessonID,bool? edit,bool? learner,int? tabIndex)
+        public ActionResult LessonContent(int lessonID,bool? edit,bool? learner,int? tabIndex,bool? byCalendar)
         {
             var item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
 
@@ -135,6 +136,7 @@ namespace WebHome.Controllers
             if (learner == true)
                 ViewBag.Learner = true;
             ViewBag.TabIndex = tabIndex;
+            ViewBag.ByCalendar = byCalendar;
             return View("~/Views/Lessons/LessonContent.ascx", item);
         }
 

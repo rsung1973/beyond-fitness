@@ -163,6 +163,11 @@ namespace WebHome.Helper
             return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent;
         }
 
+        public static bool IsOfficer(this UserProfile profile)
+        {
+            return profile != null && profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Officer);
+        }
+
         public static bool IsSysAdmin(this UserProfile profile)
         {
             return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
@@ -179,6 +184,11 @@ namespace WebHome.Helper
         public static bool IsAuthorizedSysAdmin(this UserProfile profile)
         {
             return profile!=null && profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Administrator);
+        }
+
+        public static bool IsAccounting(this UserProfile profile)
+        {
+            return profile != null && profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Accounting);
         }
 
 

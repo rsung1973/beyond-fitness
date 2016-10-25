@@ -67,7 +67,7 @@ namespace WebHome.Helper
                 try
                 {
 
-                    StringBuilder body = new StringBuilder();
+                    //StringBuilder body = new StringBuilder();
                     MailMessage message = new MailMessage();
                     message.ReplyToList.Add(Settings.Default.WebMaster);
                     message.From = new MailAddress(Settings.Default.WebMaster);
@@ -75,12 +75,18 @@ namespace WebHome.Helper
                     message.Subject = "Beyond-fitness會員密碼重設通知";
                     message.IsBodyHtml = true;
 
-                    body.Append("您好，請由下列連結重設您的密碼，謝謝。<br/>")
-                        .Append("<a href=").Append(Settings.Default.HostDomain).Append(VirtualPathUtility.ToAbsolute("~/Account/ResetPass"))
-                        .Append("/").Append(item.ResetID)
-                        .Append(">會員重設密碼</a>");
+                    //body.Append("您好，請由下列連結重設您的密碼，謝謝。<br/>")
+                    //    .Append("<a href=").Append(Settings.Default.HostDomain).Append(VirtualPathUtility.ToAbsolute("~/Account/ResetPass"))
+                    //    .Append("/").Append(item.ResetID)
+                    //    .Append(">會員重設密碼</a>");
 
-                    message.Body = body.ToString();
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Encoding = Encoding.UTF8;
+                        message.Body = client.DownloadString(Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Account/NotifyResetPassword") + "?resetID=" + item.ResetID);
+                    }
+
+                        //message.Body = body.ToString();
 
                     SmtpClient smtpclient = new SmtpClient(Settings.Default.SmtpServer);
                     //smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;

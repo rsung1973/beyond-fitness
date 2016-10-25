@@ -214,6 +214,7 @@
 
         $(function () {
 
+
             $pageFormValidator.settings.submitHandler = function (form) {
 
                 <%--                var $items = $('input[name="registerID"]:checked');
@@ -231,7 +232,7 @@
                     return;
                 }
 
-
+                $('#pageForm button[type="submit"]').prop('disabled', true);
                 //$(form).submit();
                 return true;
             };

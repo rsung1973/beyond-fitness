@@ -116,7 +116,7 @@
             }
         });
     </script>
-
+    <%  Html.RenderPartial("~/Views/Shared/MorrisGraphView.ascx"); %>
 </asp:Content>
 <script runat="server">
 

@@ -16,7 +16,7 @@
 
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
-
+    <%  Html.RenderPartial("~/Views/Activity/EditAssessmentItem.ascx"); %>
 </asp:Content>
 
 <script runat="server">

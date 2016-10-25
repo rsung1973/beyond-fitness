@@ -120,6 +120,7 @@
             //"bPaginate": false,
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            "ordering": true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",

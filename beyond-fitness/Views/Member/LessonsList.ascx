@@ -62,7 +62,7 @@
                                 否
                         <%  } %>
                     </td>
-                    <td><%= item.Lessons
+                    <td><%= item.Lessons  - (item.AttendedLessons ?? 0)
                                 - item.LessonTime.Count(l=>l.LessonAttendance!= null)
                                 - (item.RegisterGroupID.HasValue 
                                     ? item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=item.RegisterID && l.LessonAttendance!= null)

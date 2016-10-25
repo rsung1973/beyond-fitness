@@ -405,6 +405,12 @@ namespace WebHome.Controllers
                 return View(viewModel);
             }
 
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
             UserProfile item = models.EntityList.Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)).FirstOrDefault();
 
             if (item == null)
@@ -432,7 +438,10 @@ namespace WebHome.Controllers
                 item.Birthday = viewModel.Birthday;
 
             item.ServingCoach.Description = viewModel.Description;
-            item.ServingCoach.LevelID = viewModel.LevelID;
+            if (profile.IsOfficer())
+            {
+                item.ServingCoach.LevelID = viewModel.LevelID;
+            }
 
             models.SubmitChanges();
             models.ExecuteCommand("update UserRole set RoleID = {0} where UID = {1}", viewModel.CoachRole, item.UID);
@@ -583,23 +592,14 @@ namespace WebHome.Controllers
                 RegisterID = item.RegisterID
             };
 
-            if(item.IntuitionCharge.TuitionInstallment.Count>0)
+            var itemCount = Math.Max(item.IntuitionCharge.ByInstallments.Value, item.IntuitionCharge.TuitionInstallment.Count);
+            viewModel.PayoffAmount = new int?[itemCount];
+            viewModel.PayoffDate = new DateTime?[itemCount];
+
+            if (item.IntuitionCharge.TuitionInstallment.Count > 0)
             {
-                viewModel.PayoffAmount = item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffAmount).ToArray();
-                viewModel.PayoffDate = item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffDate).ToArray();
-            }
-            else
-            {
-                if (!item.IntuitionCharge.ByInstallments.HasValue || item.IntuitionCharge.ByInstallments < 2)
-                {
-                    viewModel.PayoffAmount = new int?[1];
-                    viewModel.PayoffDate = new DateTime?[1];
-                }
-                else
-                {
-                    viewModel.PayoffAmount = new int?[item.IntuitionCharge.ByInstallments.Value];
-                    viewModel.PayoffDate = new DateTime?[item.IntuitionCharge.ByInstallments.Value];
-                }
+                Array.Copy(item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffAmount).ToArray(), viewModel.PayoffAmount, item.IntuitionCharge.TuitionInstallment.Count);
+                Array.Copy(item.IntuitionCharge.TuitionInstallment.Select(t => t.PayoffDate).ToArray(), viewModel.PayoffDate, item.IntuitionCharge.TuitionInstallment.Count);
             }
 
             ViewBag.ViewModel = viewModel;
@@ -620,22 +620,24 @@ namespace WebHome.Controllers
                 return ListLearners(null);
             }
 
-            if (item.IntuitionCharge.TuitionInstallment.Count == 0)
+            List<TuitionInstallment> items = new List<TuitionInstallment>();
+            for(int i=0;i< viewModel.PayoffAmount.Length;i++)
             {
-                for (int i = 0; i < item.IntuitionCharge.ByInstallments; i++)
+                if(viewModel.PayoffAmount[i].HasValue && viewModel.PayoffDate[i].HasValue)
                 {
-                    item.IntuitionCharge.TuitionInstallment.Add(new TuitionInstallment { });
+                    items.Add(new TuitionInstallment
+                    {
+                        PayoffAmount = viewModel.PayoffAmount[i],
+                        PayoffDate = viewModel.PayoffDate[i],
+                        RegisterID = item.RegisterID
+                    });
                 }
             }
 
-            for (int i = 0; i < item.IntuitionCharge.ByInstallments; i++)
-            {
-                var installment = item.IntuitionCharge.TuitionInstallment[i];
-                installment.PayoffAmount = viewModel.PayoffAmount[i];
-                installment.PayoffDate = installment.PayoffAmount.HasValue ? viewModel.PayoffDate[i] : null;
-            }
-
+            models.ExecuteCommand("delete from TuitionInstallment where RegisterID = {0} ", item.RegisterID);
+            models.GetTable<TuitionInstallment>().InsertAllOnSubmit(items);
             models.SubmitChanges();
+
             ViewBag.Message = "資料已儲存!!";
 
             return AddLessons((int)HttpContext.GetCacheValue(CachingKey.EditMemberUID));
@@ -888,7 +890,8 @@ namespace WebHome.Controllers
                         FeeShared = viewModel.Payment == "CreditCard" ? viewModel.FeeShared : 0,
                         ByInstallments = viewModel.Installments == "Y" ? viewModel.ByInstallments : 1
                     },
-                    AdvisorID = viewModel.AdvisorID
+                    AdvisorID = viewModel.AdvisorID,
+                    AttendedLessons = 0
                 });
             }
             else
@@ -896,10 +899,10 @@ namespace WebHome.Controllers
                 item.Lessons = viewModel.Lessons;
                 item.ClassLevel = viewModel.ClassLevel;
                 item.GroupingMemberCount = viewModel.Grouping == "Y" ? viewModel.MemberCount : 1;
-                if (item.GroupingMemberCount != 1 && item.RegisterGroupID.HasValue)
-                {
-                    item.RegisterGroupID = null;
-                }
+                //if (item.GroupingMemberCount != 1 && item.RegisterGroupID.HasValue)
+                //{
+                //    item.RegisterGroupID = null;
+                //}
                 item.AdvisorID = viewModel.AdvisorID;
                 item.IntuitionCharge.Payment = viewModel.Payment;
                 item.IntuitionCharge.FeeShared = viewModel.Payment == "CreditCard" ? viewModel.FeeShared : 0;

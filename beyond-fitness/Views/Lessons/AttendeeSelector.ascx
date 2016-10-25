@@ -12,9 +12,11 @@
     <% if (_items != null && _items.Count() > 0)
         {
             foreach (var item in _items)
-            { %>
-                <label class="radio">
-                <input type="radio" name="registerID" value="<%= item.RegisterID %>" />
+            {
+                var lessonCount = item.Lessons - (item.AttendedLessons ?? 0) - (item.RegisterGroupID.HasValue ? item.GroupingLesson.LessonTime.Count : item.LessonTime.Count);
+                %>
+                <label class="<%= lessonCount>0 ? "radio" : "radio state-disabled" %>">
+                <input type="radio" name="registerID" value="<%= item.RegisterID %>" <%= lessonCount>0 ? null : "disabled" %> />
                 <i></i><div><%= item.UserProfile.RealName %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
                 <%  if( item.GroupingMemberCount>1)
                     {   %>
@@ -28,7 +30,7 @@
                     {   %>
                         <li class="fa fa-child"></li>
                         個人
-                <%  } %>
+                <%  } %>(剩餘<%= lessonCount %>堂)
                     </div>
                 </label>
 

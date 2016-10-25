@@ -67,7 +67,9 @@
                 defaultDate: '<%= _lessonDate.HasValue ? _lessonDate.Value.ToString("yyyy-MM-dd") : DateTime.Today.ToString("yyyy-MM-dd") %>',
 
                 events: '<%= VirtualPathUtility.ToAbsolute(ViewBag.ByQuery==true ? "~/Lessons/QueryBookingEvents" : "~/Lessons/BookingEvents") %>',
-
+                viewRender: function (view, element) {
+                    hideLoading();
+                },
                 eventRender: function (event, element, icon) {
                     if (!event.description == "") {
                         element.find('.fc-title').append("<br/><span class='ultra-light'>" + event.description + "</span>");
@@ -94,18 +96,21 @@
 
         // calendar prev
         $('#calendar-buttons #btn-prev').click(function () {
+            showLoading();
             $('.fc-prev-button').click();
             return false;
         });
 
         // calendar next
         $('#calendar-buttons #btn-next').click(function () {
+            showLoading();
             $('.fc-next-button').click();
             return false;
         });
 
         // calendar today
         $('#calendar-buttons #btn-today').click(function () {
+            showLoading();
             $('.fc-button-today').click();
             return false;
         });

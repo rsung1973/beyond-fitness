@@ -15,7 +15,7 @@
             <td>
                 <div class="chat-body no-padding profile-message">
                     <ul>
-                        <li class="message">
+                        <%--<li class="message">
                             <% _profile.PictureID.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                             <span class="message-text" id="msgLessonFeedBack">
                                 <%  if (_item != null)
@@ -23,13 +23,20 @@
                                         Html.RenderPartial("~/Views/Activity/LessonFeedBackItem.ascx", _item);
                                     } %>
                             </span>
-                        </li>
+                        </li>--%>
                         <li>
-                            <div class="input-group wall-comment-reply">
-                                <input id="lessonFeedBack" type="text" class="form-control" placeholder="請輸入50個中英文字"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" onclick="updateLessonFeedBack(<%= _model.LessonID %>);">
-                                        <i class="fa fa-reply"></i>更新
+                            <div class="chat-footer">
+                                <!-- CHAT TEXTAREA -->
+                                <div class="textarea-div">
+                                    <div class="typearea">
+                                        <textarea id="lessonFeedBack" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _item!=null ? _item.FeedBack : null %></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- CHAT REPLY/SEND -->
+                                <span class="textarea-controls">
+                                    <button onclick="updateLessonFeedBack(<%= _model.LessonID %>);" class="btn btn-sm btn-primary pull-right">
+                                        更新
                                     </button>
                                 </span>
                             </div>

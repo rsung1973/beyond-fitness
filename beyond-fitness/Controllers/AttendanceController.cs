@@ -94,8 +94,8 @@ namespace WebHome.Controllers
 
                 LessonPlan plan = model.LessonTime.LessonPlan;
                 plan.Warming = viewModel.Warming;
-                plan.RecentStatus = viewModel.RecentStatus;
-                model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
+                //plan.RecentStatus = viewModel.RecentStatus;
+                //model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
                 plan.EndingOperation = viewModel.EndingOperation;
                 plan.Remark = viewModel.Remark;
             }
@@ -132,35 +132,7 @@ namespace WebHome.Controllers
             if (item == null)
                 return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
 
-            LessonAttendance attendance = item.LessonAttendance;
-            if (attendance == null)
-                attendance = item.LessonAttendance = new LessonAttendance { };
-            attendance.CompleteDate = DateTime.Now;
-
-            models.SubmitChanges();
-
-            if(item.GroupID.HasValue)
-            {
-                var group = item.GroupingLesson;
-                var lesson = group.RegisterLesson.First();
-                if (lesson.Lessons <= group.LessonTime.Count(t => t.LessonAttendance != null))
-                {
-                    foreach (var r in group.RegisterLesson)
-                    {
-                        r.Attended = (int)Naming.LessonStatus.課程結束;
-                    }
-                    models.SubmitChanges();
-                }
-            }
-            else
-            {
-                var lesson = item.RegisterLesson;
-                if (lesson.Lessons <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
-                {
-                    lesson.Attended = (int)Naming.LessonStatus.課程結束;
-                    models.SubmitChanges();
-                }
-            }
+            models.AttendLesson(item);
 
             return Json(new { result = true, message = "資料存檔完成!!" });
 
@@ -180,7 +152,6 @@ namespace WebHome.Controllers
             return Json(new { result = true, message = "資料存檔完成!!" });
 
         }
-
 
         public ActionResult CommitAssessment(TrainingAssessmentViewModel viewModel)
         {
@@ -202,7 +173,7 @@ namespace WebHome.Controllers
             {
                 var group = timeItem.GroupingLesson;
                 var lesson = group.RegisterLesson.First();
-                if (lesson.Lessons <= group.LessonTime.Count(t => t.LessonAttendance != null))
+                if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= group.LessonTime.Count(t => t.LessonAttendance != null))
                 {
                     foreach (var r in group.RegisterLesson)
                     {
@@ -214,7 +185,7 @@ namespace WebHome.Controllers
             else
             {
                 var lesson = timeItem.RegisterLesson;
-                if (lesson.Lessons <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+                if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
                 {
                     lesson.Attended = (int)Naming.LessonStatus.課程結束;
                     models.SubmitChanges();

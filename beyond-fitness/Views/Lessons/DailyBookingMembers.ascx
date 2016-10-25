@@ -29,7 +29,7 @@
                         </td>
                         <td class="col-xs-1 col-sm-1"><%= item.LessonTime.AsAttendingCoach.UserProfile.RealName %></td> 
                         <td><%= item.LessonTime.TrainingPlan.Count==0 
-                                    ? "待編輯課程內容"
+                                    ? "已預約"
                                     : item.LessonTime.LessonAttendance!=null 
                                         ? "已完成課程"
                                         : "編輯課程內容中" %>

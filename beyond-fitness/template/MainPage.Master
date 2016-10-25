@@ -194,10 +194,13 @@
             <div class="col-xs-12 col-sm-6">
                 <span class="txt-color-white">Beyond-Fitness <span class="hidden-xs">- ALL RIGHTS RESERVED</span> © 2016</span>
             </div>
-
             <div class="col-xs-6 col-sm-6 text-right hidden-xs">
                 <div class="txt-color-white inline-block">
-                    <i class="txt-color-blueLight hidden-mobile">Last update time <i class="fa fa-clock-o"></i><strong>2016/07/23 PM 20:03 &nbsp;</strong> </i>
+                    <i class="txt-color-blueLight hidden-mobile"> 
+                        <%  if (ViewBag.CountDown == true)
+                            { %>
+                        <i class="fa fa-clock-o"></i><strong id="countDown"></strong> 後自動登出</i>
+                        <%  } %>
                 </div>
             </div>
         </div>
@@ -209,6 +212,37 @@
 <% Html.RenderPartial("~/Views/Shared/ReportInputError.ascx"); %>
 <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
 <% Html.RenderPartial("~/Views/Shared/GlobalScript.ascx"); %>
+<%  if (ViewBag.CountDown == true)
+    { %>
+<script>
+    var timeOut;
+    function initCountDown() {
+        timeOut = moment();
+        timeOut.add(4, 'h');
+    }
+    function checkCountDown() {
+        var duration = timeOut.diff(moment());
+        if (duration <= 0) {
+            clearInterval($checkCountDown);
+            smartAlert("您已被登出!!", function () {
+                window.location.href = '<%= Url.Action("Logout","Account",new { message = "您已被登出!!" }) %>';
+            });
+            return;
+        }
+        var countDown = moment.duration(duration);
+        $('#countDown').text(countDown.hours() + '時 ' + countDown.minutes() + '分 ' + countDown.seconds() + '秒 ');
+    }
+    var $checkCountDown;
+    $(function () {
+        initCountDown();
+        checkCountDown();
+        $checkCountDown = setInterval(checkCountDown, 1000);
+    });
+    $('body').on('click', function (evt) {
+        initCountDown();
+    });
+</script>
+<%  } %>
 
 <script runat="server">
     UserProfile _userProfile;
@@ -216,5 +250,6 @@
     {
         base.OnInit(e);
         _userProfile = this.Context.GetUser();
+        ViewBag.CountDown = _userProfile!=null;
     }
 </script>

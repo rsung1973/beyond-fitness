@@ -62,6 +62,9 @@
                         element.find('.fc-title').append("<i class='air air-top-right fa " + event.icon + " '></i>");
                     }
                 },
+                viewRender: function (view, element) {
+                    hideLoading();
+                },
                 dayClick: function (calEvent, jsEvent, view) {
                     if (calEvent && calendarEventHandler.dayClick) {
                         calendarEventHandler.dayClick(calEvent);    /*calEvent.format('YYYY-MM-DD')*/
@@ -80,12 +83,14 @@
 
         // calendar prev
         $('#calendar-buttons #btn-prev').click(function () {
+            showLoading();
             $('.fc-prev-button').click();
             return false;
         });
 
         // calendar next
         $('#calendar-buttons #btn-next').click(function () {
+            showLoading();
             $('.fc-next-button').click();
             return false;
         });

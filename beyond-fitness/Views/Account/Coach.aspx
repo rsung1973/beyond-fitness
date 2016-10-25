@@ -283,7 +283,7 @@
     }
 
         $(function () {
-            showLoading(true);
+            showLoading();
         });
 
     </script>

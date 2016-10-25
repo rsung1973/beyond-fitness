@@ -18,7 +18,7 @@
                         <div class="chat-body no-padding profile-message">
                             <ul>
                                 <li class="message">
-                                    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "online" }); %>
+                                    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                                     <span class="message-text">
                                         <a href="#" class="username"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.RealName %></a>
                                         <%= item.FeedBack %>

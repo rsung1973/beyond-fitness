@@ -44,12 +44,18 @@ namespace WebHome.Controllers
             //    return View();
             //else
             //    return processLogin(profile);
+            this.HttpContext.Logout();
+            Session.Abandon();
+
             return View();
         }
 
         
         public ActionResult LoginByMail()
         {
+            this.HttpContext.Logout();
+            Session.Abandon();
+
             return View();
         }
 
@@ -492,10 +498,11 @@ namespace WebHome.Controllers
             return View();
         }
 
-        public ActionResult Logout()
+        public ActionResult Logout(String message = null)
         {
             this.HttpContext.Logout();
             Session.Abandon();
+            ViewBag.Message = message;
             return View();
         }
 
@@ -787,7 +794,10 @@ namespace WebHome.Controllers
             return View("CompleteRegister", item);
         }
 
-
+        public ActionResult NotifyResetPassword(String resetID)
+        {
+            return View("NotifyResetPassword", (object)resetID);
+        }
 
     }
 }
