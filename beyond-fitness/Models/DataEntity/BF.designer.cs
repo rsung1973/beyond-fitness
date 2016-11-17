@@ -168,6 +168,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertLessonFeedBack(LessonFeedBack instance);
     partial void UpdateLessonFeedBack(LessonFeedBack instance);
     partial void DeleteLessonFeedBack(LessonFeedBack instance);
+    partial void InsertLessonAttendanceDueDate(LessonAttendanceDueDate instance);
+    partial void UpdateLessonAttendanceDueDate(LessonAttendanceDueDate instance);
+    partial void DeleteLessonAttendanceDueDate(LessonAttendanceDueDate instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -573,6 +576,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<LessonFeedBack>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonAttendanceDueDate> LessonAttendanceDueDate
+		{
+			get
+			{
+				return this.GetTable<LessonAttendanceDueDate>();
 			}
 		}
 	}
@@ -12245,6 +12256,68 @@ namespace WebHome.Models.DataEntity
 						this._RegisterID = default(int);
 					}
 					this.SendPropertyChanged("RegisterLesson");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonAttendanceDueDate")]
+	public partial class LessonAttendanceDueDate : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.DateTime _DueDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDueDateChanging(System.DateTime value);
+    partial void OnDueDateChanged();
+    #endregion
+		
+		public LessonAttendanceDueDate()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DueDate", DbType="Date NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime DueDate
+		{
+			get
+			{
+				return this._DueDate;
+			}
+			set
+			{
+				if ((this._DueDate != value))
+				{
+					this.OnDueDateChanging(value);
+					this.SendPropertyChanging();
+					this._DueDate = value;
+					this.SendPropertyChanged("DueDate");
+					this.OnDueDateChanged();
 				}
 			}
 		}

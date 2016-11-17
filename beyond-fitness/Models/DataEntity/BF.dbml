@@ -543,4 +543,9 @@
       <Association Name="RegisterLesson_LessonFeedBack" Member="RegisterLesson" ThisKey="RegisterID" OtherKey="RegisterID" Type="RegisterLesson" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.LessonAttendanceDueDate" Member="LessonAttendanceDueDate">
+    <Type Name="LessonAttendanceDueDate">
+      <Column Name="DueDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>
