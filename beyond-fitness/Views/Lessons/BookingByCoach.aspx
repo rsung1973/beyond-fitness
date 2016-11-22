@@ -94,41 +94,42 @@
                         <form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>" id="pageForm" class="smart-form" method="post">
                             <fieldset>
                                 <section>
-                                    <label>是否為自主訓練</label>
                                     <label class="select">
-                                        <select class="input-lg" name="trainingBySelf">
-                                            <option value="0">否</option>
-                                            <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
-                                        </select>
+                                        <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
+                                            if (ViewBag.DefaultCoach != null)
+                                                inputItem.DefaultValue = ViewBag.DefaultCoach;
+                                            Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
                                         <i class="icon-append fa fa-file-word-o"></i>
-                                        <script>
-                                            $(function () {
-                                                $('select[name="trainingBySelf"]').on('change', function (evt) {
-                                                    if ($(this).val() == '1') {
-                                                        $('#queryAttendee').val('');
-                                                        $('#attendee').empty();
-                                                    }
-                                                });
-                                            });
-                                        </script>
                                     </label>
                                 </section>
                             </fieldset>
-                            <fieldset>
+                            <fieldset class="freeAgentexclusive">
                                 <div class="row">
                                     <section class="col col-6">
+                                        <label>是否為自主訓練</label>
                                         <label class="select">
-                                            <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.UID };
-                                                if (ViewBag.DefaultCoach != null)
-                                                    inputItem.DefaultValue = ViewBag.DefaultCoach;
-                                                Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
+                                            <select class="input-lg" name="trainingBySelf">
+                                                <option value="0">否</option>
+                                                <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
+                                            </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
+                                            <script>
+                                                $(function () {
+                                                    $('select[name="trainingBySelf"]').on('change', function (evt) {
+                                                        if ($(this).val() == '1') {
+                                                            $('#queryAttendee').val('');
+                                                            $('#attendee').empty();
+                                                        }
+                                                    });
+                                                });
+                                            </script>
                                         </label>
                                     </section>
                                     <section class="col col-6">
+                                        <label>請選擇學生</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-user"></i>
-                                            <input type="text" onclick="javascript:addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇學員" readonly="readonly" />
+                                            <input type="text" onclick="javascript: addUser($('select[name=\'trainingBySelf\']').val());" name="queryAttendee" id="queryAttendee" class="input-lg" placeholder="請選擇學員" readonly="readonly" />
                                         </label>
                                         <div id="attendee"></div>
                                         <label id="registerID-error" class="error" for="registerID" style="display: none;"></label>
@@ -145,19 +146,18 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label>請選擇上課小時數</label>
+                                        <label>請選擇上課分鐘數</label>
                                         <label class="select">
                                             <select name="duration" class="input-lg">
-                                                <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>1 小時</option>
-                                                <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>1.5 小時</option>
+                                                <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
+                                                <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
                                     </section>
                                 </div>
-
                             </fieldset>
-                            
+
 
                             <footer>
                                 <button type="submit" name="submit" class="btn btn-primary">
@@ -181,7 +181,7 @@
         <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <!-- /well -->
             <div class="well bg-color-darken txt-color-white padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i>快速功能</h5>
                 <ul class="no-padding no-margin">
                     <p class="no-margin">
                         <ul class="icons-list">
@@ -200,15 +200,18 @@
         <!-- END COL -->
 
     </div>
-    
+
 
     <script>
         $('#vip,#m_vip').addClass('active');
         //$('#theForm').addClass('contact-form');
 
         $('#coachID').on('change', function (evt) {
-            if ($('#coachID option:selected').text().indexOf('自由教練') > 0) {
-                window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>' + '?coachID=' + $('#coachID').val();
+            if ($('#coachID option:selected').text().indexOf('自由教練') >= 0) {
+                <%--window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>' + '?coachID=' + $('#coachID').val();--%>
+                $('.freeAgentexclusive').css('display', 'none');
+            } else {
+                $('.freeAgentexclusive').css('display', 'block');
             }
         });
 
@@ -224,13 +227,15 @@
                     return;
                 }
 --%>
-
-                if ($('input[name="registerID"]').length <= 0
-                    && $('input[name="UID"]').length<=0) {
-                    $('#registerID-error').css('display', 'block');
-                    $('#registerID-error').text('請選擇上課學員!!');
-                    return;
+                if ($('#coachID option:selected').text().indexOf('自由教練') < 0) {
+                    if ($('input[name="registerID"]').length <= 0
+                        && $('input[name="UID"]').length <= 0) {
+                        $('#registerID-error').css('display', 'block');
+                        $('#registerID-error').text('請選擇上課學員!!');
+                        return;
+                    }
                 }
+
 
                 $('#pageForm button[type="submit"]').prop('disabled', true);
                 //$(form).submit();

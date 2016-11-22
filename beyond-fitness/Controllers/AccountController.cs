@@ -698,9 +698,25 @@ namespace WebHome.Controllers
             return View("Coach",item);
         }
 
-        public ActionResult FreeAgent(DateTime? lessonDate, DateTime? endQueryDate)
+        public ActionResult FreeAgent(DateTime? lessonDate, DateTime? endQueryDate,String message=null)
         {
-            return Coach(lessonDate, endQueryDate);
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Redirect(FormsAuthentication.LoginUrl);
+            }
+
+            if (ViewBag.LessonDate == null)
+            {
+                if (!lessonDate.HasValue)
+                    lessonDate = DateTime.Today;
+
+                ViewBag.LessonDate = lessonDate;
+            }
+            ViewBag.EndQueryDate = endQueryDate;
+            ViewBag.Message = message;
+
+            return View(item);
         }
 
         public ActionResult FreeAgentClockIn()

@@ -78,7 +78,7 @@
             }, function (data) {
                 hideLoading();
                 if (data) {
-                    $('#msgLessonFeedBack').html(data);
+                    $('.feedback-item').html(data);
                     smartAlert('資料已更新!!');
                 } else {
                     smartAlert(data.message);

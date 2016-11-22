@@ -55,7 +55,7 @@
 
                 <div class="row">
 
-                    <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>
+                    <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
 
                     <div class="col-sm-12">
 

@@ -55,7 +55,7 @@
                     <span class="widget-icon"><i class="fa fa-rss text-success"></i></span>
                     <h2><%= _model.ClassDate.ToString("yyyy/MM/dd") %> <%= String.Format("{0:00}",_model.Hour) %>:00-<%= String.Format("{0:00}",_model.Hour+1) %>:00 課表</h2>
                     <div class="widget-toolbar">
-                        <%  if ((_model.LessonTime.TrainingBySelf==1 || _model.LessonTime.CouldMarkToAttendLesson()) && _model.LessonTime.LessonAttendance == null)
+                        <%  if ((_model.LessonTime.TrainingBySelf==1 || models.CouldMarkToAttendLesson(_model.LessonTime)) && _model.LessonTime.LessonAttendance == null)
                             { %>
                         <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>完成上課</a>
                         <%  } %>
@@ -105,7 +105,7 @@
                                         <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
                                         <ul>
                                             <li class="message">
-                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
                                                     <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> <div id="msgWarming"><%= _plan.Warming %></div>
@@ -117,7 +117,7 @@
                                         <!-- CHAT TEXTAREA -->
                                         <div class="textarea-div">
                                             <div class="typearea">
-                                                <textarea id="warming" name="warming" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.Warming %></textarea>
+                                                <textarea id="warming" name="warming" placeholder="請輸入100個中英文字" class="custom-scroll" maxlength="100" rows="20"><%= _plan.Warming %></textarea>
                                             </div>
                                         </div>
 
@@ -144,7 +144,7 @@
                                         <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
                                         <ul>
                                             <li class="message">
-                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online",@style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
                                                     <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
@@ -159,7 +159,7 @@
                                         <!-- CHAT TEXTAREA -->
                                         <div class="textarea-div">
                                             <div class="typearea">
-                                                <textarea id="endingOperation" name="endingOperation" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.EndingOperation %></textarea>
+                                                <textarea id="endingOperation" name="endingOperation" placeholder="請輸入100個中英文字" class="custom-scroll" maxlength="100" rows="20"><%= _plan.EndingOperation %></textarea>
                                             </div>
                                         </div>
 
@@ -189,7 +189,7 @@
                                         <%  Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model.LessonTime); %>
                                         <ul>
                                             <li class="message">
-                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
+                                                <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
                                                     <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> 
@@ -202,7 +202,7 @@
                                         <!-- CHAT TEXTAREA -->
                                         <div class="textarea-div">
                                             <div class="typearea">
-                                                <textarea id="remark" name="remark"  placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _plan.Remark %></textarea>
+                                                <textarea id="remark" name="remark"  placeholder="請輸入100個中英文字" class="custom-scroll" maxlength="100" rows="20"><%= _plan.Remark %></textarea>
                                             </div>
                                         </div>
 

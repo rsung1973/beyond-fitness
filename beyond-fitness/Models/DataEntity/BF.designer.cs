@@ -162,15 +162,15 @@ namespace WebHome.Models.DataEntity
     partial void InsertLessonFitnessAssessment(LessonFitnessAssessment instance);
     partial void UpdateLessonFitnessAssessment(LessonFitnessAssessment instance);
     partial void DeleteLessonFitnessAssessment(LessonFitnessAssessment instance);
-    partial void InsertLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
-    partial void UpdateLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
-    partial void DeleteLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
     partial void InsertLessonFeedBack(LessonFeedBack instance);
     partial void UpdateLessonFeedBack(LessonFeedBack instance);
     partial void DeleteLessonFeedBack(LessonFeedBack instance);
     partial void InsertLessonAttendanceDueDate(LessonAttendanceDueDate instance);
     partial void UpdateLessonAttendanceDueDate(LessonAttendanceDueDate instance);
     partial void DeleteLessonAttendanceDueDate(LessonAttendanceDueDate instance);
+    partial void InsertLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
+    partial void UpdateLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
+    partial void DeleteLessonFitnessAssessmentReport(LessonFitnessAssessmentReport instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -563,14 +563,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<LessonFitnessAssessmentReport> LessonFitnessAssessmentReport
-		{
-			get
-			{
-				return this.GetTable<LessonFitnessAssessmentReport>();
-			}
-		}
-		
 		public System.Data.Linq.Table<LessonFeedBack> LessonFeedBack
 		{
 			get
@@ -584,6 +576,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<LessonAttendanceDueDate>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonFitnessAssessmentReport> LessonFitnessAssessmentReport
+		{
+			get
+			{
+				return this.GetTable<LessonFitnessAssessmentReport>();
 			}
 		}
 	}
@@ -11037,6 +11037,10 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _GroupID;
 		
+		private System.Nullable<bool> _UseSingleSide;
+		
+		private System.Nullable<bool> _UseCustom;
+		
 		private EntitySet<LearnerFitnessAssessmentResult> _LearnerFitnessAssessmentResult;
 		
 		private EntitySet<FitnessAssessmentGroup> _FitnessAssessmentGroup1;
@@ -11057,6 +11061,10 @@ namespace WebHome.Models.DataEntity
     partial void OnUnitChanged();
     partial void OnGroupIDChanging(System.Nullable<int> value);
     partial void OnGroupIDChanged();
+    partial void OnUseSingleSideChanging(System.Nullable<bool> value);
+    partial void OnUseSingleSideChanged();
+    partial void OnUseCustomChanging(System.Nullable<bool> value);
+    partial void OnUseCustomChanged();
     #endregion
 		
 		public FitnessAssessmentItem()
@@ -11148,6 +11156,46 @@ namespace WebHome.Models.DataEntity
 					this._GroupID = value;
 					this.SendPropertyChanged("GroupID");
 					this.OnGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UseSingleSide", DbType="Bit")]
+		public System.Nullable<bool> UseSingleSide
+		{
+			get
+			{
+				return this._UseSingleSide;
+			}
+			set
+			{
+				if ((this._UseSingleSide != value))
+				{
+					this.OnUseSingleSideChanging(value);
+					this.SendPropertyChanging();
+					this._UseSingleSide = value;
+					this.SendPropertyChanged("UseSingleSide");
+					this.OnUseSingleSideChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UseCustom", DbType="Bit")]
+		public System.Nullable<bool> UseCustom
+		{
+			get
+			{
+				return this._UseCustom;
+			}
+			set
+			{
+				if ((this._UseCustom != value))
+				{
+					this.OnUseCustomChanging(value);
+					this.SendPropertyChanging();
+					this._UseCustom = value;
+					this.SendPropertyChanged("UseCustom");
+					this.OnUseCustomChanged();
 				}
 			}
 		}
@@ -11777,246 +11825,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonFitnessAssessmentReport")]
-	public partial class LessonFitnessAssessmentReport : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _AssessmentID;
-		
-		private int _ItemID;
-		
-		private System.Nullable<decimal> _TotalAssessment;
-		
-		private System.Nullable<decimal> _SingleAssessment;
-		
-		private System.Nullable<int> _ByTimes;
-		
-		private EntityRef<FitnessAssessmentItem> _FitnessAssessmentItem;
-		
-		private EntityRef<LessonFitnessAssessment> _LessonFitnessAssessment;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnAssessmentIDChanging(int value);
-    partial void OnAssessmentIDChanged();
-    partial void OnItemIDChanging(int value);
-    partial void OnItemIDChanged();
-    partial void OnTotalAssessmentChanging(System.Nullable<decimal> value);
-    partial void OnTotalAssessmentChanged();
-    partial void OnSingleAssessmentChanging(System.Nullable<decimal> value);
-    partial void OnSingleAssessmentChanged();
-    partial void OnByTimesChanging(System.Nullable<int> value);
-    partial void OnByTimesChanged();
-    #endregion
-		
-		public LessonFitnessAssessmentReport()
-		{
-			this._FitnessAssessmentItem = default(EntityRef<FitnessAssessmentItem>);
-			this._LessonFitnessAssessment = default(EntityRef<LessonFitnessAssessment>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssessmentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int AssessmentID
-		{
-			get
-			{
-				return this._AssessmentID;
-			}
-			set
-			{
-				if ((this._AssessmentID != value))
-				{
-					if (this._LessonFitnessAssessment.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAssessmentIDChanging(value);
-					this.SendPropertyChanging();
-					this._AssessmentID = value;
-					this.SendPropertyChanged("AssessmentID");
-					this.OnAssessmentIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ItemID
-		{
-			get
-			{
-				return this._ItemID;
-			}
-			set
-			{
-				if ((this._ItemID != value))
-				{
-					if (this._FitnessAssessmentItem.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnItemIDChanging(value);
-					this.SendPropertyChanging();
-					this._ItemID = value;
-					this.SendPropertyChanged("ItemID");
-					this.OnItemIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalAssessment", DbType="Decimal(12,2)")]
-		public System.Nullable<decimal> TotalAssessment
-		{
-			get
-			{
-				return this._TotalAssessment;
-			}
-			set
-			{
-				if ((this._TotalAssessment != value))
-				{
-					this.OnTotalAssessmentChanging(value);
-					this.SendPropertyChanging();
-					this._TotalAssessment = value;
-					this.SendPropertyChanged("TotalAssessment");
-					this.OnTotalAssessmentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SingleAssessment", DbType="Decimal(12,2)")]
-		public System.Nullable<decimal> SingleAssessment
-		{
-			get
-			{
-				return this._SingleAssessment;
-			}
-			set
-			{
-				if ((this._SingleAssessment != value))
-				{
-					this.OnSingleAssessmentChanging(value);
-					this.SendPropertyChanging();
-					this._SingleAssessment = value;
-					this.SendPropertyChanged("SingleAssessment");
-					this.OnSingleAssessmentChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ByTimes", DbType="Int")]
-		public System.Nullable<int> ByTimes
-		{
-			get
-			{
-				return this._ByTimes;
-			}
-			set
-			{
-				if ((this._ByTimes != value))
-				{
-					this.OnByTimesChanging(value);
-					this.SendPropertyChanging();
-					this._ByTimes = value;
-					this.SendPropertyChanged("ByTimes");
-					this.OnByTimesChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FitnessAssessmentItem_LessonFitnessAssessmentReport", Storage="_FitnessAssessmentItem", ThisKey="ItemID", OtherKey="ItemID", IsForeignKey=true)]
-		public FitnessAssessmentItem FitnessAssessmentItem
-		{
-			get
-			{
-				return this._FitnessAssessmentItem.Entity;
-			}
-			set
-			{
-				FitnessAssessmentItem previousValue = this._FitnessAssessmentItem.Entity;
-				if (((previousValue != value) 
-							|| (this._FitnessAssessmentItem.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FitnessAssessmentItem.Entity = null;
-						previousValue.LessonFitnessAssessmentReport.Remove(this);
-					}
-					this._FitnessAssessmentItem.Entity = value;
-					if ((value != null))
-					{
-						value.LessonFitnessAssessmentReport.Add(this);
-						this._ItemID = value.ItemID;
-					}
-					else
-					{
-						this._ItemID = default(int);
-					}
-					this.SendPropertyChanged("FitnessAssessmentItem");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonFitnessAssessment_LessonFitnessAssessmentReport", Storage="_LessonFitnessAssessment", ThisKey="AssessmentID", OtherKey="AssessmentID", IsForeignKey=true)]
-		public LessonFitnessAssessment LessonFitnessAssessment
-		{
-			get
-			{
-				return this._LessonFitnessAssessment.Entity;
-			}
-			set
-			{
-				LessonFitnessAssessment previousValue = this._LessonFitnessAssessment.Entity;
-				if (((previousValue != value) 
-							|| (this._LessonFitnessAssessment.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LessonFitnessAssessment.Entity = null;
-						previousValue.LessonFitnessAssessmentReport.Remove(this);
-					}
-					this._LessonFitnessAssessment.Entity = value;
-					if ((value != null))
-					{
-						value.LessonFitnessAssessmentReport.Add(this);
-						this._AssessmentID = value.AssessmentID;
-					}
-					else
-					{
-						this._AssessmentID = default(int);
-					}
-					this.SendPropertyChanged("LessonFitnessAssessment");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonFeedBack")]
 	public partial class LessonFeedBack : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -12318,6 +12126,294 @@ namespace WebHome.Models.DataEntity
 					this._DueDate = value;
 					this.SendPropertyChanged("DueDate");
 					this.OnDueDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonFitnessAssessmentReport")]
+	public partial class LessonFitnessAssessmentReport : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _AssessmentID;
+		
+		private int _ItemID;
+		
+		private System.Nullable<decimal> _TotalAssessment;
+		
+		private System.Nullable<decimal> _SingleAssessment;
+		
+		private System.Nullable<int> _ByTimes;
+		
+		private System.Nullable<bool> _BySingleSide;
+		
+		private string _ByCustom;
+		
+		private EntityRef<LessonFitnessAssessment> _LessonFitnessAssessment;
+		
+		private EntityRef<FitnessAssessmentItem> _FitnessAssessmentItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnAssessmentIDChanging(int value);
+    partial void OnAssessmentIDChanged();
+    partial void OnItemIDChanging(int value);
+    partial void OnItemIDChanged();
+    partial void OnTotalAssessmentChanging(System.Nullable<decimal> value);
+    partial void OnTotalAssessmentChanged();
+    partial void OnSingleAssessmentChanging(System.Nullable<decimal> value);
+    partial void OnSingleAssessmentChanged();
+    partial void OnByTimesChanging(System.Nullable<int> value);
+    partial void OnByTimesChanged();
+    partial void OnBySingleSideChanging(System.Nullable<bool> value);
+    partial void OnBySingleSideChanged();
+    partial void OnByCustomChanging(string value);
+    partial void OnByCustomChanged();
+    #endregion
+		
+		public LessonFitnessAssessmentReport()
+		{
+			this._LessonFitnessAssessment = default(EntityRef<LessonFitnessAssessment>);
+			this._FitnessAssessmentItem = default(EntityRef<FitnessAssessmentItem>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AssessmentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int AssessmentID
+		{
+			get
+			{
+				return this._AssessmentID;
+			}
+			set
+			{
+				if ((this._AssessmentID != value))
+				{
+					if (this._LessonFitnessAssessment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAssessmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._AssessmentID = value;
+					this.SendPropertyChanged("AssessmentID");
+					this.OnAssessmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ItemID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ItemID
+		{
+			get
+			{
+				return this._ItemID;
+			}
+			set
+			{
+				if ((this._ItemID != value))
+				{
+					if (this._FitnessAssessmentItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnItemIDChanging(value);
+					this.SendPropertyChanging();
+					this._ItemID = value;
+					this.SendPropertyChanged("ItemID");
+					this.OnItemIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalAssessment", DbType="Decimal(12,2)")]
+		public System.Nullable<decimal> TotalAssessment
+		{
+			get
+			{
+				return this._TotalAssessment;
+			}
+			set
+			{
+				if ((this._TotalAssessment != value))
+				{
+					this.OnTotalAssessmentChanging(value);
+					this.SendPropertyChanging();
+					this._TotalAssessment = value;
+					this.SendPropertyChanged("TotalAssessment");
+					this.OnTotalAssessmentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SingleAssessment", DbType="Decimal(12,2)")]
+		public System.Nullable<decimal> SingleAssessment
+		{
+			get
+			{
+				return this._SingleAssessment;
+			}
+			set
+			{
+				if ((this._SingleAssessment != value))
+				{
+					this.OnSingleAssessmentChanging(value);
+					this.SendPropertyChanging();
+					this._SingleAssessment = value;
+					this.SendPropertyChanged("SingleAssessment");
+					this.OnSingleAssessmentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ByTimes", DbType="Int")]
+		public System.Nullable<int> ByTimes
+		{
+			get
+			{
+				return this._ByTimes;
+			}
+			set
+			{
+				if ((this._ByTimes != value))
+				{
+					this.OnByTimesChanging(value);
+					this.SendPropertyChanging();
+					this._ByTimes = value;
+					this.SendPropertyChanged("ByTimes");
+					this.OnByTimesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BySingleSide", DbType="Bit")]
+		public System.Nullable<bool> BySingleSide
+		{
+			get
+			{
+				return this._BySingleSide;
+			}
+			set
+			{
+				if ((this._BySingleSide != value))
+				{
+					this.OnBySingleSideChanging(value);
+					this.SendPropertyChanging();
+					this._BySingleSide = value;
+					this.SendPropertyChanged("BySingleSide");
+					this.OnBySingleSideChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ByCustom", DbType="NVarChar(64)")]
+		public string ByCustom
+		{
+			get
+			{
+				return this._ByCustom;
+			}
+			set
+			{
+				if ((this._ByCustom != value))
+				{
+					this.OnByCustomChanging(value);
+					this.SendPropertyChanging();
+					this._ByCustom = value;
+					this.SendPropertyChanged("ByCustom");
+					this.OnByCustomChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonFitnessAssessment_LessonFitnessAssessmentReport", Storage="_LessonFitnessAssessment", ThisKey="AssessmentID", OtherKey="AssessmentID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LessonFitnessAssessment LessonFitnessAssessment
+		{
+			get
+			{
+				return this._LessonFitnessAssessment.Entity;
+			}
+			set
+			{
+				LessonFitnessAssessment previousValue = this._LessonFitnessAssessment.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonFitnessAssessment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonFitnessAssessment.Entity = null;
+						previousValue.LessonFitnessAssessmentReport.Remove(this);
+					}
+					this._LessonFitnessAssessment.Entity = value;
+					if ((value != null))
+					{
+						value.LessonFitnessAssessmentReport.Add(this);
+						this._AssessmentID = value.AssessmentID;
+					}
+					else
+					{
+						this._AssessmentID = default(int);
+					}
+					this.SendPropertyChanged("LessonFitnessAssessment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FitnessAssessmentItem_LessonFitnessAssessmentReport", Storage="_FitnessAssessmentItem", ThisKey="ItemID", OtherKey="ItemID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public FitnessAssessmentItem FitnessAssessmentItem
+		{
+			get
+			{
+				return this._FitnessAssessmentItem.Entity;
+			}
+			set
+			{
+				FitnessAssessmentItem previousValue = this._FitnessAssessmentItem.Entity;
+				if (((previousValue != value) 
+							|| (this._FitnessAssessmentItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._FitnessAssessmentItem.Entity = null;
+						previousValue.LessonFitnessAssessmentReport.Remove(this);
+					}
+					this._FitnessAssessmentItem.Entity = value;
+					if ((value != null))
+					{
+						value.LessonFitnessAssessmentReport.Add(this);
+						this._ItemID = value.ItemID;
+					}
+					else
+					{
+						this._ItemID = default(int);
+					}
+					this.SendPropertyChanged("FitnessAssessmentItem");
 				}
 			}
 		}

@@ -65,7 +65,9 @@
         .Select(f => new {
             f.ItemID,
             f.ItemName,
-            f.Unit
+            f.Unit,
+            f.UseCustom,
+            f.UseSingleSide
         }).ToArray()) %>;
     
     $(function () {
@@ -75,12 +77,21 @@
         });
 
         fitnessItem.forEach(function(item,index) {
-            $('<option>').prop('value',item.ItemID).prop('unit',item.Unit)
+            $('<option>').prop('value',item.ItemID)
+                .prop('unit',item.Unit)
+                .prop('useCustom',item.UseCustom)
             .text(item.ItemName).appendTo($('select[name="itemID"]'));
         });
 
         $('select[name="itemID"]').on('change',function(evt){
             $('#itemUnit').text($('select[name="itemID"]').find('option:selected').prop('unit'));
+            if($('select[name="itemID"]').find('option:selected').prop('useCustom')==true) {
+                $('.bySide').css('display','none');
+                $('.byCustom').css('display','block');
+            } else {
+                $('.bySide').css('display','block');
+                $('.byCustom').css('display','none');
+            }
         });
 
         //$modal.on('shown.bs.modal', function () {

@@ -161,34 +161,42 @@ namespace WebHome.Controllers
             if (result != null)
                 return result;
 
-            LessonAttendance attendance = model.LessonTime.LessonAttendance;
-            if (attendance == null)
-                attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
-            attendance.CompleteDate = DateTime.Now;
-
-            models.SubmitChanges();
-
-            var timeItem = model.LessonTime;
-            if (timeItem.GroupID.HasValue)
+            if (models.IsAttendanceOverdue(model.LessonTime))
             {
-                var group = timeItem.GroupingLesson;
-                var lesson = group.RegisterLesson.First();
-                if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= group.LessonTime.Count(t => t.LessonAttendance != null))
-                {
-                    foreach (var r in group.RegisterLesson)
-                    {
-                        r.Attended = (int)Naming.LessonStatus.課程結束;
-                    }
-                    models.SubmitChanges();
-                }
+                models.SubmitChanges();
             }
             else
             {
-                var lesson = timeItem.RegisterLesson;
-                if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+
+                LessonAttendance attendance = model.LessonTime.LessonAttendance;
+                if (attendance == null)
+                    attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
+                attendance.CompleteDate = DateTime.Now;
+
+                models.SubmitChanges();
+
+                var timeItem = model.LessonTime;
+                if (timeItem.GroupID.HasValue)
                 {
-                    lesson.Attended = (int)Naming.LessonStatus.課程結束;
-                    models.SubmitChanges();
+                    var group = timeItem.GroupingLesson;
+                    var lesson = group.RegisterLesson.First();
+                    if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= group.LessonTime.Count(t => t.LessonAttendance != null))
+                    {
+                        foreach (var r in group.RegisterLesson)
+                        {
+                            r.Attended = (int)Naming.LessonStatus.課程結束;
+                        }
+                        models.SubmitChanges();
+                    }
+                }
+                else
+                {
+                    var lesson = timeItem.RegisterLesson;
+                    if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+                    {
+                        lesson.Attended = (int)Naming.LessonStatus.課程結束;
+                        models.SubmitChanges();
+                    }
                 }
             }
 

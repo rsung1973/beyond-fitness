@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="col-xs-8 col-sm-6">
+<div class="col-xs-6 col-sm-5">
     <h1>
         <span class="semi-bold"><%= _model.RealName %></span>
     </h1>

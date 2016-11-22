@@ -61,7 +61,14 @@
                                 {
                                     if (((LessonEvent)item).Lesson.LessonAttendance == null)
                                     {
-                                        Html.RenderPartial("~/Views/Activity/ReservedLessonEvent.ascx", item);
+                                        if (((LessonEvent)item).Lesson.ClassTime < DateTime.Today)
+                                        {
+                                            Html.RenderPartial("~/Views/Activity/PastReservedLessonEvent.ascx", item);
+                                        }
+                                        else
+                                        {
+                                            Html.RenderPartial("~/Views/Activity/ReservedLessonEvent.ascx", item);
+                                        }
                                     }
                                     else
                                     {

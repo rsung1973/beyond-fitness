@@ -9,7 +9,9 @@
 <%@ Import Namespace="WebHome.Models.Timeline" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<a class="username"><%= _model.RegisterLesson.UserProfile.RealName %> <%= String.Format("{0:yyyy/MM/dd HH:mm}",_model.FeedBackDate) %></a><%= _model.FeedBack %>
+<time><%= String.Format("{0:yyyy/MM/dd HH:mm}",_model.FeedBackDate) %></time>
+<a class="username"><%= _model.RegisterLesson.UserProfile.RealName %></a>
+<%= _model.FeedBack %>
 
 <script runat="server">
 

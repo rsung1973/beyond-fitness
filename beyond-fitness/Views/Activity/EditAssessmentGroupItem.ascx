@@ -32,6 +32,36 @@
                             </div>
                         </div>
                     </div>
+                    <%  if (_model.FitnessAssessmentItem.UseSingleSide == true)
+                        { %>
+                    <div class="col-md-6 bySide">
+                        <div class="form-group">
+                            <div class="icon-addon addon-lg">
+                                <select class="form-control" name="bySingleSide">
+                                    <option value="False">雙邊</option>
+                                    <option value="True">單邊</option>
+                                </select>
+                                <script>
+                                    $(function(){
+                                        $('select[name="bySingleSide"]').val('<%= _model.BySingleSide == true %>');
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <%  }
+                        if (_model.FitnessAssessmentItem.UseCustom == true)
+                        { %>
+                    <div class="col-md-6 byCustom">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="icon-addon addon-lg">
+                                    <input placeholder="請輸入20個中文字" class="form-control" name="byCustom" value="<%= _model.ByCustom %>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%  } %>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -151,7 +181,9 @@
                 'calc': $('input[name="calc"]:checked').val(),
                 'totalAssessment': $('input[name="totalAssessment"]').val(),
                 'singleAssessment': $('input[name="singleAssessment"]').val(),
-                'byTimes': $('input[name="byTimes"]').val()},<%= _model.FitnessAssessmentItem.FitnessAssessmentGroup.MajorID %>);
+                'byTimes': $('input[name="byTimes"]').val(),
+                'bySingleSide': $('select[name="bySingleSide"]').val(),
+                'byCustom': $('input[name="byCustom"]').val()},<%= _model.FitnessAssessmentItem.FitnessAssessmentGroup.MajorID %>);
         });
     });
 

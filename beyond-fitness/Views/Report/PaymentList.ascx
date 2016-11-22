@@ -29,15 +29,15 @@
         <%  foreach (var item in _model)
             { %>
                 <tr>
-                    <td><%= item.ServingCoach.UserProfile.RealName %></td>
+                    <td><%= item.AdvisorID.HasValue ?  item.ServingCoach.UserProfile.RealName : null %></td>
                     <td><%= item.UserProfile.RealName %></td>
                     <td><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
                     <td><%= item.LessonPriceType.Description %></td>
                     <td><%= item.GroupingMemberCount > 1 ? "是" : "否" %></td>
                     <td><%= item.Lessons
-                                - item.LessonTime.Count(t=>t.LessonAttendance!= null)
+                                - item.LessonTime.Count(/*t=>t.LessonAttendance!= null*/)
                                 - (item.RegisterGroupID.HasValue 
-                                    ? item.GroupingLesson.LessonTime.Count(t=>t.RegisterID!=item.RegisterID && t.LessonAttendance!= null)
+                                    ? item.GroupingLesson.LessonTime.Count(t=>t.RegisterID!=item.RegisterID /*&& t.LessonAttendance!= null*/)
                                     : 0 )%> / <%= item.Lessons %></td>
                     <td><%= item.IntuitionCharge.Payment=="Cash" ? "現金" : "信用卡" %></td>
                     <td><%= item.IntuitionCharge.ByInstallments>1 ? item.IntuitionCharge.ByInstallments+"期" : "否" %></td>

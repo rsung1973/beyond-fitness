@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using WebHome.Models.DataEntity;
-using WebHome.Models.ViewModel;
-using WebHome.Helper;
-using System.Threading;
-using System.Text;
-using WebHome.Models.Locale;
-using Utility;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
 using System.Web.Security;
-using System.Linq.Expressions;
+
+using Utility;
+using WebHome.Helper;
+using WebHome.Models.DataEntity;
+using WebHome.Models.Locale;
+using WebHome.Models.ViewModel;
+using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
@@ -30,7 +32,8 @@ namespace WebHome.Controllers
             if (viewModel.HasQuery == true)
             {
                 items = models.GetTable<RegisterLesson>()
-                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約);
 
                 if (viewModel.Payoff == true)
                 {
@@ -96,7 +99,7 @@ namespace WebHome.Controllers
             return View(item);
         }
 
-        public ActionResult RecentLessons(int uid,int? lessonID)
+        public ActionResult RecentLessons(int uid,int? lessonID,bool? edit)
         {
             var items = models.GetTable<LessonTime>().Where(t => t.RegisterLesson.UID == uid
                     || t.GroupingLesson.RegisterLesson.Any(r => r.UID == uid));
@@ -118,6 +121,8 @@ namespace WebHome.Controllers
 
             ViewBag.LessonDate = item.ClassTime;
             ViewBag.ByCalendar = true;
+            if (edit == true)
+                ViewBag.Edit = true;
             return View("~/Views/Lessons/LessonContent.ascx",item);
         }
 
@@ -151,10 +156,18 @@ namespace WebHome.Controllers
             return View();
         }
 
-        public ActionResult ListLessonAttendance(int? coachID,DateTime? dateFrom,DateTime? dateTo)
+        [CoachAuthorize]
+        public ActionResult CoachAchievement()
+        {
+            return View();
+        }
+
+
+        public ActionResult ListLessonAttendance(int? coachID,DateTime? dateFrom,DateTime? dateTo,int? month)
         {
             var items = models.GetTable<LessonTime>().Where(t => t.LessonAttendance != null)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
                 .Where(t => t.LessonPlan.CommitAttendance.HasValue);
 
             if(coachID.HasValue)
@@ -171,6 +184,13 @@ namespace WebHome.Controllers
             {
                 items = items.Where(t => t.ClassTime < dateTo.Value.AddDays(1));
             }
+            else if(month.HasValue)
+            {
+                dateTo = dateFrom.Value.AddMonths(month.Value);
+                items = items.Where(t => t.ClassTime < dateTo);
+                dateTo = dateTo.Value.AddDays(-1);
+            }
+
 
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
@@ -179,7 +199,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult ListRegisterLesson(int? coachID, DateTime? dateFrom, DateTime? dateTo)
+        public ActionResult ListRegisterLesson(int? coachID, DateTime? dateFrom, DateTime? dateTo,int? month)
         {
             IQueryable<RegisterLesson> items = models.GetTable<RegisterLesson>()
                 .Where(r => r.AdvisorID.HasValue);
@@ -198,6 +218,12 @@ namespace WebHome.Controllers
             if (dateTo.HasValue)
             {
                 installment = installment.Where(i => i.PayoffDate < dateTo.Value.AddDays(1));
+            }
+            else if(month.HasValue)
+            {
+                dateTo = dateFrom.Value.AddMonths(month.Value);
+                installment = installment.Where(i => i.PayoffDate < dateTo);
+                dateTo = dateTo.Value.AddDays(-1);
             }
 
             installment = items.Join(installment, t => t.RegisterID, i => i.RegisterID, (t, i) => i);

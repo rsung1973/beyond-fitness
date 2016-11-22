@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="col-xs-8 col-sm-7">
+<div class="col-xs-6 col-sm-5">
     <h1>
         <span class="semi-bold"><%= _model.RealName %></span>
     </h1>
@@ -20,7 +20,7 @@
 </div>
 <%  if (_userProfile != null)
     { %>
-<div class="col-xs-12 col-sm-3">
+<div class="col-xs-12 col-sm-4">
     <h1><small>聯絡方式</small></h1>
     <ul class="list-unstyled">
         <li>

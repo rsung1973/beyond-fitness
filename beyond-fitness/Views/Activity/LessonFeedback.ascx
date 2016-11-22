@@ -13,35 +13,32 @@
     <tbody>
         <tr>
             <td>
-                <div class="chat-body no-padding profile-message">
+                <div class="chat-body custom-scroll" style="height: 150px">
                     <ul>
-                        <%--<li class="message">
-                            <% _profile.PictureID.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                            <span class="message-text" id="msgLessonFeedBack">
-                                <%  if (_item != null)
-                                    {
-                                        Html.RenderPartial("~/Views/Activity/LessonFeedBackItem.ascx", _item);
-                                    } %>
-                            </span>
-                        </li>--%>
-                        <li>
-                            <div class="chat-footer">
-                                <!-- CHAT TEXTAREA -->
-                                <div class="textarea-div">
-                                    <div class="typearea">
-                                        <textarea id="lessonFeedBack" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _item!=null ? _item.FeedBack : null %></textarea>
-                                    </div>
-                                </div>
-
-                                <!-- CHAT REPLY/SEND -->
-                                <span class="textarea-controls">
-                                    <button onclick="updateLessonFeedBack(<%= _model.LessonID %>);" class="btn btn-sm btn-primary pull-right">
-                                        更新
-                                    </button>
-                                </span>
+                        <li class="message">
+                            <% _model.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:80px" }); %>
+                            <div class="message-text feedback-item">
+                                <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",_item!=null ? _item.FeedBackDate : null) %></time>
+                                <a class="username"><%= _model.RegisterLesson.UserProfile.RealName %></a> 
+                                <%= _item!=null ? _item.FeedBack : null %>
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="chat-footer">
+                    <!-- CHAT TEXTAREA -->
+                    <div class="textarea-div">
+                        <div class="typearea">
+                            <textarea id="lessonFeedBack" placeholder="請輸入100個中英文字" class="custom-scroll" maxlength="100" rows="20"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- CHAT REPLY/SEND -->
+                    <span class="textarea-controls">
+                        <button onclick="updateLessonFeedBack(<%= _model.LessonID %>);" class="btn btn-sm btn-primary pull-right">
+                            更新
+                        </button>
+                    </span>
                 </div>
             </td>
         </tr>

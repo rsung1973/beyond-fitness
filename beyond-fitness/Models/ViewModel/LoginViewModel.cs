@@ -457,6 +457,8 @@ namespace WebHome.Models.ViewModel
         public String Calc { get; set; }
         public int? ByTimes { get; set; }
         public decimal? SingleAssessment { get; set; }
+        public bool? BySingleSide { get; set; }
+        public String ByCustom { get; set; }
     }
 
 

@@ -43,12 +43,24 @@ namespace WebHome.Helper
             }
         }
 
-        public static bool CouldMarkToAttendLesson(this LessonTime item)
+        public static bool CouldMarkToAttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item)
+            where TEntity : class, new()
         {
+            if(models.IsAttendanceOverdue(item))
+                return false;
+
             return !item.LessonFitnessAssessment.Any(f => f.LessonFitnessAssessmentReport.Count(r => r.FitnessAssessmentItem.ItemID == 16) == 0
                     || f.LessonFitnessAssessmentReport.Count(r => r.FitnessAssessmentItem.ItemID == 17) == 0
                     || f.LessonFitnessAssessmentReport.Count(r => r.FitnessAssessmentItem.GroupID == 3) == 0);
         }
+
+        public static bool IsAttendanceOverdue<TEntity>(this ModelSource<TEntity> models, LessonTime item)
+            where TEntity : class, new()
+        {
+            var due = models.GetTable<LessonAttendanceDueDate>().OrderByDescending(d => d.DueDate).FirstOrDefault();
+            return due != null && item.ClassTime < due.DueDate;
+        }
+
 
     }
 }

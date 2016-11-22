@@ -13,7 +13,7 @@
         <p class="alert alert-success">
         <%  foreach (var f in _lessonFeedback)
             { %>
-                <strong><i class="fa fa-commenting-o"></i><%= f.LessonTime.RegisterLesson.UserProfile.RealName %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.FeedBack %></strong><br />
+                <strong><i class="fa fa-commenting-o"></i><%= f.RegisterLesson.UserProfile.RealName %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.Remark %></strong><br />
         <%  } %>
         </p>
 <%  } %>
@@ -32,8 +32,8 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     LessonTime _model;
-    IEnumerable<LessonPlan> _lessonFeedback;
-    List<LessonFeedBack> _learnerFeedback;
+    IEnumerable<LessonFeedBack> _lessonFeedback;
+    IEnumerable<LessonFeedBack> _learnerFeedback;
 
     protected override void OnInit(EventArgs e)
     {
@@ -41,27 +41,37 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (LessonTime)this.Model;
-        _lessonFeedback = models.GetTable<LessonTime>().Where(l => l.RegisterLesson.UID == _model.RegisterLesson.UID
-                || l.GroupingLesson.RegisterLesson.Any(r => r.UID == _model.RegisterLesson.UID))
-            .Select(l => l.LessonPlan)
-            .Where(p => p.FeedBack!=null)
-            .OrderByDescending(l => l.FeedBackDate).Take(2);
+        var groupingLesson = models.GetTable<LessonTime>().Where(l => l.LessonID == _model.LessonID)
+            .Select(l => l.GroupingLesson)
+            .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+
         if(_model.GroupID.HasValue)
         {
-            _learnerFeedback = new List<LessonFeedBack>();
-            foreach(var lesson in _model.GroupingLesson.RegisterLesson )
-            {
-                _learnerFeedback.AddRange(models.GetTable<LessonFeedBack>()
-                    .Where(f => f.RegisterLesson.UID == lesson.UID)
-                    .Where(f => f.FeedBack != null)
-                    .OrderByDescending(f => f.FeedBackDate).Take(2));
-            }
+            _lessonFeedback = models.GetTable<LessonFeedBack>().Where(f => f.Remark != null && f.Remark.Length > 0)
+                .Join(models.GetTable<RegisterLesson>()
+                    .Join(groupingLesson,
+                        r => r.UID, g => g.UID, (r, g) => r),
+                    f => f.RegisterID, r => r.RegisterID, (f, r) => f)
+                .OrderByDescending(l => l.RemarkDate).Take(2).ToList();
+
+            _learnerFeedback = models.GetTable<LessonFeedBack>().Where(f => f.FeedBack != null && f.FeedBack.Length > 0)
+                .Join(models.GetTable<RegisterLesson>()
+                    .Join(groupingLesson,
+                        r => r.UID, g => g.UID, (r, g) => r),
+                    f => f.RegisterID, r => r.RegisterID, (f, r) => f)
+                .OrderByDescending(l => l.FeedBackDate).Take(2).ToList();
+
         }
         else
         {
+            _lessonFeedback = models.GetTable<LessonFeedBack>()
+                    .Where(f => f.RegisterLesson.UID == _model.RegisterLesson.UID)
+                    .Where(f => f.Remark != null && f.Remark.Length > 0)
+                    .OrderByDescending(f => f.RemarkDate).Take(2).ToList();
+
             _learnerFeedback = models.GetTable<LessonFeedBack>()
                     .Where(f => f.RegisterLesson.UID == _model.RegisterLesson.UID)
-                    .Where(f => f.FeedBack != null)
+                    .Where(f => f.FeedBack != null && f.FeedBack.Length > 0)
                     .OrderByDescending(f => f.FeedBackDate).Take(2).ToList();
         }
     }

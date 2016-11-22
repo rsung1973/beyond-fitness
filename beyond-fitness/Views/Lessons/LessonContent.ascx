@@ -60,25 +60,31 @@
                         {
                             Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
                         }%>
-                    <ul>
-                        <li class="message">
-                            <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
-                            <span class="message-text">
-                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
-                                <%= _model.LessonPlan!=null ? _model.LessonPlan.Remark : null %>
-                            </span>
-                        </li>
+                    
 
-                        <%  Html.RenderPartial("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", _model); %>
-                       
-                        <%  if (ViewBag.Learner == true)
-                            { %>
-                        <li>
+                </div>
+                <div class="panel-body status">
+                    <div class="chat-body custom-scroll" style="height: 150px">
+                        <ul>
+                            <li class="message">
+                                <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
+                                <span class="message-text">
+                                    <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
+                                    <%= _model.LessonPlan!=null ? _model.LessonPlan.Remark : null %>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <%  if (ViewBag.Learner == true)
+                        { %>
+                            <span class="msg-remark"></span>
+                            <%  Html.RenderPartial("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", _model); %>
                             <div class="chat-footer">
                                 <!-- CHAT TEXTAREA -->
                                 <div class="textarea-div">
                                     <div class="typearea">
-                                        <textarea id="feedBack" name="feedBack" placeholder="請輸入50個中英文字" class="custom-scroll" maxlength="50" rows="20"><%= _model.LessonPlan.FeedBack %></textarea>
+                                        <textarea id="feedBack" name="feedBack" placeholder="請輸入100個中英文字" class="custom-scroll" maxlength="100" rows="20"></textarea>
                                     </div>
                                 </div>
 
@@ -89,30 +95,29 @@
                                     </button>
                                 </span>
                             </div>
-                        </li>
-                        <%  } %>
-                    </ul>
-
+                    <%  } %>
                 </div>
+
             </div>
             <!-- end s1 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os2_<%= _ticks %>">
-                <div class="chat-body no-padding profile-message">
+                <div class="panel-body status">
                     <%  if (ViewBag.Edit == true)
                         {
                             Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
                         }%>
-                    <ul>
-                        <li class="message">
-                            <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
-                            <span class="message-text">
-                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
-                                <%= _model.LessonPlan!=null ? _model.LessonPlan.Warming : null %>
-                            </span>
-                        </li>
-                        <li></li>
-                        <li></li>
-                    </ul>
+
+                    <div class="chat-body custom-scroll">
+                        <ul>
+                            <li class="message">
+                                <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" ,@style = "width:95px" }); %>
+                                <div class="message-text">
+                                    <time></time>
+                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan!=null ? _model.LessonPlan.Warming : null %>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <!-- end s2 tab pane -->
@@ -134,22 +139,23 @@
             </div>
             <!-- end s3 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os4_<%= _ticks %>">
-                <div class="chat-body no-padding profile-message">
+                <div class="panel-body status">
                     <%  if (ViewBag.Edit == true)
                         {
                             Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
                         }%>
-                    <ul>
-                        <li class="message">
-                            <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" }); %>
-                            <span class="message-text">
-                                <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
-                                <%= _model.LessonPlan!=null ? _model.LessonPlan.EndingOperation : null %>
-                            </span>
-                        </li>
-                        <li></li>
-                        <li></li>
-                    </ul>
+
+                    <div class="chat-body custom-scroll">
+                        <ul>
+                            <li class="message">
+                                <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
+                                <div class="message-text">
+                                    <time></time>
+                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan!=null ? _model.LessonPlan.EndingOperation : null %>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <!-- end s4 tab pane -->
@@ -195,9 +201,9 @@
                 }, function (data) {
                     hideLoading();
                     smartAlert('資料已更新!!');
-                    $('#os1_<%= _ticks %> .message-reply').remove();
+                    $('#os1_<%= _ticks %> .remark-item').remove();
                     if (data) {
-                        $('#os1_<%= _ticks %> .message').after($(data));
+                        $('#os1_<%= _ticks %> .msg-remark').after($(data));
                     }
                 });
         }

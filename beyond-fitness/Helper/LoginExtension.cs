@@ -174,7 +174,9 @@ namespace WebHome.Helper
         }
         public static bool IsCoach(this UserProfile profile)
         {
-            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach;
+            return profile != null 
+                && ( profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach 
+                    || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach));
         }
         public static bool IsLearner(this UserProfile profile)
         {

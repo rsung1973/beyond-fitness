@@ -80,24 +80,24 @@
             new
             {
                 period = String.Format("{0:yyyy-MM-dd}", g.LessonTime.ClassTime),
-                up = filterZero(g.LessonFitnessAssessmentReport.Where(r => upperLimbsID.Contains(r.ItemID)).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))),
-                down = filterZero(g.LessonFitnessAssessmentReport.Where(r => lowerLimbsID.Contains(r.ItemID)).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0)))
+                up = filterZero(g.LessonFitnessAssessmentReport.Where(r => upperLimbsID.Contains(r.ItemID)).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1))),
+                down = filterZero(g.LessonFitnessAssessmentReport.Where(r => lowerLimbsID.Contains(r.ItemID)).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1)))
             }).ToArray();
 
     var upperLimbsData = _items.Select(g => new
             {
                 period = String.Format("{0:yyyy-MM-dd}", g.LessonTime.ClassTime),
-                _25 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 25).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))),
-                _26 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 26).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))),
-                _34 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 34).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))),
-                _35 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 35).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0)))
+                _25 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 25).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1))),
+                _26 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 26).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1))),
+                _34 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 34).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1))),
+                _35 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 35).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1)))
             }).ToArray();
 
     var lowerLimbsData = _items.Select(g => new
             {
                 period = String.Format("{0:yyyy-MM-dd}", g.LessonTime.ClassTime),
-                _23 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 23).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))),
-                _24 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 24).Sum(r => (r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0)))
+                _23 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 23).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1))),
+                _24 = filterZero(g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 24).Sum(r => ((r.TotalAssessment ?? 0) + (r.SingleAssessment ?? 0) * (r.ByTimes ?? 0))* (r.BySingleSide == true ? 2 : 1)))
             }).ToArray();
 
       %>

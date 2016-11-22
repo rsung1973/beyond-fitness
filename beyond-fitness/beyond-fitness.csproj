@@ -748,6 +748,7 @@
     <Content Include="img\superbox\product_24.jpg" />
     <Content Include="img\superbox\product_25.jpg" />
     <Content Include="img\superbox\product_26.jpg" />
+    <Content Include="img\superbox\product_27.jpg" />
     <Content Include="img\versions\ajaxversion.png" />
     <Content Include="img\versions\angularversion.png" />
     <Content Include="img\versions\dotnetversion.png" />
@@ -1448,6 +1449,7 @@
     <Content Include="Views\Activity\BasicFitnessAssessmentGroup.ascx" />
     <Content Include="Views\Activity\CardioPower.ascx" />
     <Content Include="Views\Activity\FitnessAssessmentTrend.ascx" />
+    <Content Include="Views\Activity\PastReservedLessonEvent.ascx" />
     <Content Include="Views\Activity\ShowLessonFeedback.ascx" />
     <Content Include="Views\Activity\LessonFeedback.ascx" />
     <Content Include="Views\Activity\LessonFeedBackItem.ascx" />
@@ -1460,7 +1462,7 @@
     <Content Include="Views\Activity\ReservedLessonEvent.ascx" />
     <Content Include="Views\Activity\TimeLine.aspx" />
     <Content Include="Views\Attendance\AddTraining.ascx" />
-    <Content Include="Views\Attendance\TrainingPlan.aspx" />
+    <Content Include="Views\BulletinBoard\LearnerBirthdayNotification.ascx" />
     <Content Include="Views\Error\Http404.aspx" />
     <Content Include="Views\Error\Http500.aspx" />
     <Content Include="Views\Fitness\BodyEnergyAssessment.ascx" />
@@ -1495,6 +1497,7 @@
     <Content Include="Views\Layout\NavItem\Members.ascx" />
     <Content Include="Views\Layout\NavItem\PaymentList.ascx" />
     <Content Include="Views\Layout\NavItem\Professional.ascx" />
+    <Content Include="Views\Layout\NavItem\CoachReport.ascx" />
     <Content Include="Views\Layout\NavItem\Report.ascx" />
     <Content Include="Views\Layout\NavItem\SystemInfo.ascx" />
     <Content Include="Views\Layout\NavItem\TimeLine.ascx" />
@@ -1651,6 +1654,7 @@
     <Content Include="Views\Report\LearnerRecentLessons.ascx" />
     <Content Include="Views\Report\PaymentList.ascx" />
     <Content Include="Views\Report\RecentLessonsCalendar.ascx" />
+    <Content Include="Views\Report\CoachAchievement.aspx" />
     <Content Include="Views\Report\StaffAchievement.aspx" />
     <Content Include="Views\Sample\DataTable.ascx" />
     <Content Include="Views\Sample\Sample.ascx" />
@@ -1678,6 +1682,13 @@
     <Content Include="Views\Shared\SetPassword.ascx" />
     <Content Include="Views\Shared\Success.ascx" />
     <Content Include="Views\Shared\UploadResource.ascx" />
+    <Content Include="Views\SiteAction\Guest.ascx" />
+    <Content Include="Views\SiteAction\Coach.ascx" />
+    <Content Include="Views\SiteAction\SystemAdmin.ascx" />
+    <Content Include="Views\SiteAction\Learner.ascx" />
+    <Content Include="Views\SiteAction\FreeAgent.ascx" />
+    <Content Include="Views\SiteAction\Navigation - Copy.ascx" />
+    <Content Include="Views\SiteAction\Navigation.ascx" />
     <Content Include="Views\SystemInfo\ConfigureAll.aspx" />
     <Content Include="Views\SystemInfo\EditLessonPrice.aspx" />
     <Content Include="Views\SystemInfo\LessonPriceTypeList.ascx" />
@@ -1698,6 +1709,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
+    <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FitnessController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
@@ -1724,6 +1736,7 @@
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
     <Compile Include="Models\Resource\SiteMenuItem.cs" />
+    <Compile Include="Security\Authorization\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />
     <Compile Include="Models\Timeline\TimelineEvent.cs" />
     <Compile Include="Models\ViewModel\InputViewModel.cs" />

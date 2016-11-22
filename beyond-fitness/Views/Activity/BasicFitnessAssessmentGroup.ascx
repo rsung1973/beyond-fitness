@@ -175,29 +175,6 @@
 
     });
 </script>--%>
-<script>
-    function updateBasicAssessment() {
-        var event = event || window.event;
-        var hasValue = false;
-        var form = event.target.form
-        $(form).find('input').each(function (idx) {
-            if ($(this).val() != '') {
-                hasValue = true;
-            }
-        });
-        if(hasValue) {
-            $(form).ajaxSubmit({
-                    success: function (data) {
-                        $(".<%= _formID %>").html(data);
-                        smartAlert("資料已儲存!!");
-
-                    }
-                });
-        } else {
-            smartAlert("請輸入至少一個項目!!");
-        }
-    }
-</script>
 
 <script runat="server">
 

@@ -66,7 +66,7 @@
                     </article>
                     <article class="col-sm-12 col-md-8 col-lg-8">
                         <div class="jarviswidget" id="lessonContent" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                            <%  Html.RenderAction("RecentLessons", new { uid = _model.UID,lessonID = ViewBag.LessonID }); %>
+                            <%  Html.RenderAction("RecentLessons", new { uid = _model.UID, lessonID = ViewBag.LessonID, edit = true }); %>
                         </div>
                     </article>
                 </div>
@@ -117,7 +117,7 @@
             },
             eventClick: function (calEvent) {
                 $global.lessonID = calEvent.lessonID;
-                $('#lessonContent').load('<%= Url.Action("LessonContent","Report") %>', { lessonID: calEvent.lessonID, byCalendar: true }, function () { });
+                $('#lessonContent').load('<%= Url.Action("LessonContent","Report") %>', { lessonID: calEvent.lessonID, byCalendar: true, edit: true }, function () { });
             }
         };
 

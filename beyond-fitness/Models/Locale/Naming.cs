@@ -34,7 +34,8 @@ namespace WebHome.Models.Locale
             已刪除 = 0,
             正常 = 1,
             暫存 = 2,
-            自主訓練 = 103
+            自主訓練 = 103,
+            自由教練預約 = 1004
         }
 
         public enum MemberStatusDefinition

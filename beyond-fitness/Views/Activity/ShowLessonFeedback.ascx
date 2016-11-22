@@ -15,20 +15,16 @@
             { %>
                 <tr>
                     <td colspan="4">
-                        <div class="chat-body no-padding profile-message">
+                        <div class="chat-body custom-scroll">
                             <ul>
                                 <li class="message">
-                                    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                                    <span class="message-text">
-                                        <a href="#" class="username"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.RealName %></a>
+                                    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:80px" }); %>
+                                    <div class="message-text">
+                                        <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.FeedBackDate) %></time>
+                                        <a href="#" class="username"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.RealName %></a> 
                                         <%= item.FeedBack %>
-                                    </span>
+                                    </div>
                                 </li>
-                                <ul class="list-inline font-xs">
-                                    <li><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.FeedBackDate) %>
-                                    </li>
-                                </ul>
-                                <li></li>
                             </ul>
                         </div>
                     </td>

@@ -9,17 +9,17 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+<article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
     <div class="well well-sm bg-color-darken txt-color-white">
         <div class="row">
 
-            <%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>
+            <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
 
             <div class="col-sm-12">
 
                 <div class="row">
 
-                    <div class="col-xs-4 col-sm-2 profile-pic">
+                    <div class="col-xs-6 col-sm-3 profile-pic">
                         <% _model.RenderUserPicture(Writer, "profileImg"); %>
                         <div class="padding-10">
                             <h4 class="font-md"><small><%= _model.IsFreeAgent() ? "自由教練" : _userProfile!=null && _userProfile.IsOfficer() && _model.ServingCoach.ProfessionalLevel!=null ? _model.ServingCoach.ProfessionalLevel.LevelName : "" %></small></h4>

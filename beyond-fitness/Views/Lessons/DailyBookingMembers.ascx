@@ -18,7 +18,12 @@
                     <tr> 
                         <td style="width: 50px;"></td> 
                         <td class="col-xs-2 col-sm-2"><%= item.LessonTime.ClassTime.Value.ToString("HH:mm") %> - <%= item.LessonTime.ClassTime.Value.AddMinutes(item.LessonTime.DurationInMinutes.Value).ToString("HH:mm") %><%= item.LessonTime.TrainingBySelf==1 ? "(自主訓練)" : null %></td> 
-                        <td class="col-xs-3 col-sm-3"><%  if (item.RegisterLesson.GroupingMemberCount > 1)
+                        <td class="col-xs-3 col-sm-3">
+                            <%  if(item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
+                                {   %>
+                                    <i class="fa fa-child fa-2x text-danger"></i> 自由教練學員
+                            <%  }
+                                else if (item.RegisterLesson.GroupingMemberCount > 1)
                                 { %>
                                     <i class="fa fa-group fa-2x text-danger"></i> <%= String.Join("/", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName)) %>
                             <%  }
@@ -43,7 +48,13 @@
                                 {
                                     if (item.LessonTime.LessonAttendance == null )
                                     { %>
-                                        <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
+                                        <div class="btn-group dropup" data-toggle="dropdown">
+                                            <button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button>
+                                            <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>取消上課</a></li>
+                                            </ul>
+                                        </div>
                                 <%  }            
                                 }
                                 else

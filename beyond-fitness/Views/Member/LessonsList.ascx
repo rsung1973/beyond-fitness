@@ -63,9 +63,9 @@
                         <%  } %>
                     </td>
                     <td><%= item.Lessons  - (item.AttendedLessons ?? 0)
-                                - item.LessonTime.Count(l=>l.LessonAttendance!= null)
+                                - item.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)
                                 - (item.RegisterGroupID.HasValue 
-                                    ? item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=item.RegisterID && l.LessonAttendance!= null)
+                                    ? item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=item.RegisterID /*&& l.LessonAttendance!= null*/)
                                     : 0)%>/<%= item.Lessons %></td>
                     <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.Payment=="Cash" ? "現金" : "信用卡" %></td>
                     <td><%= item.IntuitionCharge!=null && item.IntuitionCharge.ByInstallments > 1 ? item.IntuitionCharge.ByInstallments + "期" : "無" %></td>
@@ -76,11 +76,11 @@
                                 { %>
                                     <%= t.PayoffDate.HasValue ? String.Format("{0:yyyy/MM/dd}",t.PayoffDate) : "尚未付款" %><%= t.PayoffAmount.HasValue ? "《"+ String.Format("{0:##,###,###,###}",t.PayoffAmount)+ "》" : null %><br />
                             <%  }
-                                }
-                                else
-                                {   %>
-                                    尚未付款
-                            <%  } %>
+                            }
+                            else
+                            {   %>
+                                尚未付款
+                        <%  } %>
                     </td>
                     <%  if (ViewBag.ShowOnly != true)
                         { %>

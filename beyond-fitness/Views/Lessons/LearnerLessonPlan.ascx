@@ -11,7 +11,7 @@
 <div class="row">
 
     <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.UserProfile); %>
-    <div class="col-xs-8 col-sm-6">
+    <div class="col-xs-8 col-sm-5">
         <h1>
             <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
         </h1>
@@ -58,7 +58,7 @@
             </button>
         </p>
     </div>
-    <div class="col-xs-12 col-sm-3">
+    <div class="col-xs-12 col-sm-4">
         <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.UserProfile); %>
         <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model.UserProfile); %>
     </div>

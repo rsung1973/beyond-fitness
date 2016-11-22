@@ -46,12 +46,12 @@
                     totalLessons = items.Sum(l => l.Lessons);
                     Writer.Write(totalLessons); %></td>
             <td><%  attended = 
-                        items.Sum(l => l.LessonTime.Count(t => t.LessonAttendance != null))
+                        items.Sum(l => l.LessonTime.Count(/*t => t.LessonAttendance != null*/))
                         + items.Sum(l => l.AttendedLessons)
                         + items.Where(c=>c.RegisterGroupID.HasValue)
                             .Sum(c=>c.GroupingLesson.LessonTime
                                 .Where(l=>l.RegisterID!=c.RegisterID)
-                                .Count(l=>l.LessonAttendance!= null));
+                                .Count(/*l=>l.LessonAttendance!= null*/));
                     Writer.Write(totalLessons - attended); %></td>
             <td>
                 <div class="btn-group dropup">

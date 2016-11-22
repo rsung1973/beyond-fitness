@@ -106,7 +106,7 @@
 <!-- Your GOOGLE ANALYTICS CODE Below -->
 <script type="text/javascript">
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+    _gaq.push(['_setAccount', 'UA-84335528-1']);
     _gaq.push(['_trackPageview']);
 
     (function () {

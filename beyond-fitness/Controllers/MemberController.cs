@@ -16,6 +16,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Web.Security;
 using System.Text.RegularExpressions;
+using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
@@ -795,7 +796,7 @@ namespace WebHome.Controllers
 
         }
 
-
+        [AuthorizedSysAdmin]
         public ActionResult AddLessons(int id)
         {
             UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();

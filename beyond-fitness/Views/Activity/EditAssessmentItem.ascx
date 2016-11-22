@@ -57,6 +57,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 bySide" style="display: none">
+                        <div class="form-group">
+                            <div class="icon-addon addon-lg">
+                                <select class="form-control" name="bySingleSide" >
+                                    <option value="False">雙邊</option>
+                                    <option value="True">單邊</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 byCustom" style="display:none">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <div class="icon-addon addon-lg">
+                                    <input placeholder="請輸入20個中文字" class="form-control" name="byCustom">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row subItem">
                     <div class="col-md-12">
@@ -142,7 +161,9 @@
             .Select(f=>new {
                 f.ItemID,
                 f.ItemName,
-                f.Unit
+                f.Unit,
+                f.UseCustom,
+                f.UseSingleSide
             }).ToArray()
         }).ToArray()) %>;
     
@@ -166,6 +187,7 @@
         $('select[name="trendItem"]').on('change',function(evt) {
             buildSubItem($(this).val());
         });
+
         $('select[name="itemID"]').on('change',function(evt) {
             var unit = $(this).find('option:selected').prop('unit');
             $('#itemUnit').text(unit);
@@ -173,6 +195,16 @@
                 $('#calcSingle').css('display','none');
             } else {
                 $('#calcSingle').css('display','block');
+            }
+            if($('select[name="itemID"]').find('option:selected').prop('useCustom')==true) {
+                $('.byCustom').css('display','block');
+            } else {
+                $('.byCustom').css('display','none');
+            }
+            if($('select[name="itemID"]').find('option:selected').prop('useSingleSide')==true) {
+                $('.bySide').css('display','block');
+            } else {
+                $('.bySide').css('display','none');
             }
         });
 
@@ -191,6 +223,8 @@
         function buildSubItem(itemID) {
             var hasItem = false;
             var unit;
+            var useCustom;
+            var useSingleSide;
             fitnessItem.forEach(function(item,index) {
                 if(item.ItemID==itemID) {
                     $('input[name="trendAssessment"]').val(item.TotalAssessment);
@@ -198,11 +232,16 @@
                         hasItem = true;
                         $('select[name="itemID"]').empty();
                         item.items.forEach(function(item,itemIdx) {
-                            $('<option>').prop('value',item.ItemID).prop('unit',item.Unit)
-                            .text(item.ItemName).appendTo($('select[name="itemID"]'));
+                            $('<option>').prop('value',item.ItemID)
+                                .prop('unit',item.Unit)
+                                .prop('useCustom',item.UseCustom)
+                                .prop('useSingleSide',item.UseSingleSide)
+                                .text(item.ItemName).appendTo($('select[name="itemID"]'));
                             if(itemIdx==0) {
                                 unit = item.Unit;
                                 $('#itemUnit').text(unit);
+                                useCustom = item.UseCustom;
+                                useSingleSide = item.UseSingleSide;
                             }
                         });
                         $('.subItem').css('display','block');
@@ -210,6 +249,16 @@
                             $('#calcSingle').css('display','none');
                         } else {
                             $('#calcSingle').css('display','block');
+                        }
+                        if(useCustom==true) {
+                            $('.byCustom').css('display','block');
+                        } else {
+                            $('.byCustom').css('display','none');
+                        }
+                        if(useSingleSide==true) {
+                            $('.bySide').css('display','block');
+                        } else {
+                            $('.bySide').css('display','none');
                         }
                     }
                 }

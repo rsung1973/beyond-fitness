@@ -11,18 +11,18 @@
 
 <%  foreach (var item in _model.LessonFeedBack.Where(f => f.Remark != null))
     { %>
-<li class="message message-reply">
-    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "authorImg online" }); %>
-    <span class="message-text">
-        <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + item.RegisterLesson.UID %>"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.RealName %></a>
-        <%= item.Remark %>
-    </span>
-    <ul class="list-inline font-xs">
-        <li>
-            <a href="javascript:void(0);" class="text-muted"><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.RemarkDate) %></a>
-        </li>
-    </ul>
-</li>
+        <div class="chat-body custom-scroll remark-item" style="height: 150px">
+            <ul>
+                <li class="message">
+                    <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:80px" }); %>
+                    <div class="message-text">
+                        <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.RemarkDate) %>
+                        </time><a class="username"><%= _model.RegisterLesson.UserProfile.RealName %></a>
+                        <%= item.Remark %>
+                    </div>
+                </li>
+            </ul>
+        </div>
 <%  } %>
 
 <script runat="server">

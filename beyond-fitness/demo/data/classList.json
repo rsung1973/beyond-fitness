@@ -1,0 +1,53 @@
+{
+    "data": [
+        {
+            "timezone": "08:00 - 09:00",
+            "count": "5",
+            "booktime": "--",
+            "function": ""
+        },   
+        {
+            "timezone": "09:00 - 10:00",
+            "count": "25",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "10:00 - 11:00",
+            "count": "8",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "11:00 - 12:00",
+            "count": "4",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "12:00 - 13:00",
+            "count": "15",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "13:00 - 14:00",
+            "count": "10",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "14:00 - 15:00",
+            "count": "22",
+            "booktime": "--",
+            "function": ""
+        },  
+        {
+            "timezone": "15:00 - 16:00",
+            "count": "18",
+            "booktime": "--",
+            "function": ""
+        }
+         
+    ]
+}

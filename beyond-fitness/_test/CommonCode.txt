@@ -44,3 +44,6 @@
             $(data).appendTo($('#content'));
             hideLoading();
         });
+
+5.Month picker
+	<input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起月" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) : null %>" />

@@ -491,6 +491,8 @@
       <Column Name="ItemName" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
       <Column Name="Unit" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
       <Column Name="GroupID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UseSingleSide" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="UseCustom" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="FitnessAssessmentItem_LearnerFitnessAssessmentResult" Member="LearnerFitnessAssessmentResult" ThisKey="ItemID" OtherKey="ItemID" Type="LearnerFitnessAssessmentResult" />
       <Association Name="FitnessAssessmentItem_FitnessAssessmentGroup" Member="MinorItemFitnessAssessmentGroup" Storage="_FitnessAssessmentGroup1" ThisKey="ItemID" OtherKey="MajorID" Type="FitnessAssessmentGroup" />
       <Association Name="FitnessAssessmentItem_LessonFitnessAssessmentReport" Member="LessonFitnessAssessmentReport" ThisKey="ItemID" OtherKey="ItemID" Type="LessonFitnessAssessmentReport" />
@@ -520,17 +522,6 @@
       <Association Name="UserProfile_LessonFitnessAssessment" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.LessonFitnessAssessmentReport" Member="LessonFitnessAssessmentReport">
-    <Type Name="LessonFitnessAssessmentReport">
-      <Column Name="AssessmentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TotalAssessment" Type="System.Decimal" DbType="Decimal(12,2)" CanBeNull="true" />
-      <Column Name="SingleAssessment" Type="System.Decimal" DbType="Decimal(12,2)" CanBeNull="true" />
-      <Column Name="ByTimes" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="FitnessAssessmentItem_LessonFitnessAssessmentReport" Member="FitnessAssessmentItem" ThisKey="ItemID" OtherKey="ItemID" Type="FitnessAssessmentItem" IsForeignKey="true" />
-      <Association Name="LessonFitnessAssessment_LessonFitnessAssessmentReport" Member="LessonFitnessAssessment" ThisKey="AssessmentID" OtherKey="AssessmentID" Type="LessonFitnessAssessment" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.LessonFeedBack" Member="LessonFeedBack">
     <Type Name="LessonFeedBack">
       <Column Name="LessonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -546,6 +537,19 @@
   <Table Name="dbo.LessonAttendanceDueDate" Member="LessonAttendanceDueDate">
     <Type Name="LessonAttendanceDueDate">
       <Column Name="DueDate" Type="System.DateTime" DbType="Date NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LessonFitnessAssessmentReport" Member="LessonFitnessAssessmentReport">
+    <Type Name="LessonFitnessAssessmentReport">
+      <Column Name="AssessmentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TotalAssessment" Type="System.Decimal" DbType="Decimal(12,2)" CanBeNull="true" />
+      <Column Name="SingleAssessment" Type="System.Decimal" DbType="Decimal(12,2)" CanBeNull="true" />
+      <Column Name="ByTimes" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BySingleSide" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ByCustom" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Association Name="LessonFitnessAssessment_LessonFitnessAssessmentReport" Member="LessonFitnessAssessment" ThisKey="AssessmentID" OtherKey="AssessmentID" Type="LessonFitnessAssessment" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="FitnessAssessmentItem_LessonFitnessAssessmentReport" Member="FitnessAssessmentItem" ThisKey="ItemID" OtherKey="ItemID" Type="FitnessAssessmentItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
 </Database>

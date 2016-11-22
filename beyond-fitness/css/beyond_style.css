@@ -60,16 +60,23 @@ table.has-columns-hidden>tbody>tr.row-detail>td {
 }
 
 
-#authorImg, .authorImg {
+/*#authorImg, .authorImg {
     width: 30px !important;
     height: 30px !important;
-}
+}*/
 
-#profileImg, .profileImg, .userImg {
+/*#profileImg, .profileImg, .userImg {
     width: 60px !important;
     height: 60px !important;
+}*/
+
+#profile-pic>img,.profile-pic>img {
+    border: 2px solid #fff;
 }
 
+.chat-body li.message .message-text {
+    margin-left: 100px;
+}
 
 body.modal-open {
     overflow: hidden;

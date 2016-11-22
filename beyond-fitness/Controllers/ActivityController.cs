@@ -521,7 +521,7 @@ namespace WebHome.Controllers
 
             models.SubmitChanges();
 
-            if (fitnessAssessment.LessonTime.CouldMarkToAttendLesson())
+            if (models.CouldMarkToAttendLesson(fitnessAssessment.LessonTime))
             {
                 models.AttendLesson(fitnessAssessment.LessonTime);
             }
@@ -605,31 +605,45 @@ namespace WebHome.Controllers
 
             if (viewModel.ItemID.HasValue)
             {
-                item = fitnessAssessment.LessonFitnessAssessmentReport.Where(r => r.ItemID == viewModel.ItemID).FirstOrDefault();
-                if (item == null)
+                var fitnessItem = models.GetTable<FitnessAssessmentItem>().Where(f => f.ItemID == viewModel.ItemID).FirstOrDefault();
+                if (fitnessItem != null)
                 {
-                    item = new LessonFitnessAssessmentReport
+                    item = fitnessAssessment.LessonFitnessAssessmentReport.Where(r => r.ItemID == viewModel.ItemID).FirstOrDefault();
+                    if (item == null)
                     {
-                        ItemID = viewModel.ItemID.Value
-                    };
-                    fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
-                }
+                        item = new LessonFitnessAssessmentReport
+                        {
+                            ItemID = viewModel.ItemID.Value
+                        };
+                        fitnessAssessment.LessonFitnessAssessmentReport.Add(item);
+                    }
 
-                if(viewModel.Calc=="total")
-                {
-                    item.TotalAssessment = viewModel.TotalAssessment;
-                }
-                else
-                {
-                    item.TotalAssessment = null;
-                    item.SingleAssessment = viewModel.SingleAssessment;
-                    item.ByTimes = viewModel.ByTimes;
+                    if (viewModel.Calc == "total")
+                    {
+                        item.TotalAssessment = viewModel.TotalAssessment;
+                    }
+                    else
+                    {
+                        item.TotalAssessment = null;
+                        item.SingleAssessment = viewModel.SingleAssessment;
+                        item.ByTimes = viewModel.ByTimes;
+                    }
+
+                    if (fitnessItem.UseCustom == true)
+                    {
+                        item.ByCustom = viewModel.ByCustom;
+                    }
+                    if (fitnessItem.UseSingleSide == true)
+                    {
+                        item.BySingleSide = viewModel.BySingleSide;
+                    }
+
                 }
             }
 
             models.SubmitChanges();
 
-            if (fitnessAssessment.LessonTime.CouldMarkToAttendLesson())
+            if (models.CouldMarkToAttendLesson(fitnessAssessment.LessonTime))
                 models.AttendLesson(fitnessAssessment.LessonTime);
 
 
@@ -672,8 +686,8 @@ namespace WebHome.Controllers
             return Json(items.GroupBy(r=>r.FitnessAssessmentItem.GroupID)
                 .Select(r => new
                 {
-                    label = r.First().FitnessAssessmentItem.FitnessAssessmentGroup.GroupName + " " + (int)r.Sum(t => (t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0)) + "KG",
-                    data = r.Sum(t => (t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0))
+                    label = r.First().FitnessAssessmentItem.FitnessAssessmentGroup.GroupName + " " + (int)r.Sum(t => ((t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0)) * (t.BySingleSide == true ? 2 : 1)) + "KG",
+                    data = r.Sum(t => ((t.TotalAssessment ?? 0) + (t.SingleAssessment ?? 0) * (t.ByTimes ?? 0)) * (t.BySingleSide == true ? 2 : 1))
                 }).ToArray(), JsonRequestBehavior.AllowGet);
 
         }
@@ -697,7 +711,7 @@ namespace WebHome.Controllers
                 .Select(r => new
                 {
                     label = r.FitnessAssessmentItem.ItemName,
-                    data = r.TotalAssessment.HasValue ? r.TotalAssessment.Value : r.SingleAssessment * r.ByTimes
+                    data = (r.TotalAssessment.HasValue ? r.TotalAssessment.Value : r.SingleAssessment * r.ByTimes) * (r.BySingleSide == true ? 2 : 1)
                 }).ToArray(), JsonRequestBehavior.AllowGet);
 
         }
@@ -717,7 +731,7 @@ namespace WebHome.Controllers
             return EditAssessmentTrendItem(assessmentID, itemID);
         }
 
-        public ActionResult CommitAssessmentTrendItem(int assessmentID, int itemID,decimal? totalAssessment,decimal? singleAssessment,int? byTimes,String calc)
+        public ActionResult CommitAssessmentTrendItem(int assessmentID, int itemID,decimal? totalAssessment,decimal? singleAssessment,int? byTimes,String calc,bool? bySingleSide,String byCustom)
         {
             var item = models.GetTable<LessonFitnessAssessmentReport>().Where(f => f.AssessmentID == assessmentID
                 && f.ItemID == itemID).FirstOrDefault();
@@ -735,6 +749,15 @@ namespace WebHome.Controllers
                 item.TotalAssessment = null;
                 item.SingleAssessment = singleAssessment;
                 item.ByTimes = byTimes;
+            }
+
+            if (item.FitnessAssessmentItem.UseCustom == true)
+            {
+                item.ByCustom = byCustom;
+            }
+            if (item.FitnessAssessmentItem.UseSingleSide == true)
+            {
+                item.BySingleSide = bySingleSide;
             }
 
             models.SubmitChanges();
@@ -755,7 +778,7 @@ namespace WebHome.Controllers
                                         WHERE   (LessonFitnessAssessmentReport.AssessmentID = {0}) AND (FitnessAssessmentGroup.MajorID = {1})", assessmentID, itemID);
 
                 var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).First();
-                if (!fitnessAssessment.LessonTime.CouldMarkToAttendLesson() && fitnessAssessment.LessonTime.LessonAttendance != null)
+                if (!models.IsAttendanceOverdue(fitnessAssessment.LessonTime) && !models.CouldMarkToAttendLesson(fitnessAssessment.LessonTime) && fitnessAssessment.LessonTime.LessonAttendance != null)
                 {
                     models.ExecuteCommand("delete LessonAttendance where LessonID={0}", fitnessAssessment.LessonID);
                 }

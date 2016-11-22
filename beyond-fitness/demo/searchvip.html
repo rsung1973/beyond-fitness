@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+    <title>BEYOND FITNESS</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+    <!-- SmartAdmin RTL Support  -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css">
+    <!-- DateTimePicker : plugin -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-datetimepicker.min.css">
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.-->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/beyond_style.css">
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+    <!-- GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    <!-- Specifying a Webpage Icon for Web Clip 
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+    <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- Startup image for web apps -->
+    <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+    <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+    <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+</head>
+<!--
+      TABLE OF CONTENTS.
+      
+      Use search to find needed section.
+      
+      ===================================================================
+      
+      |  01. #CSS Links                |  all CSS links and file paths  |
+      |  02. #FAVICONS                 |  Favicon links and file paths  |
+      |  03. #GOOGLE FONT              |  Google font link              |
+      |  04. #APP SCREEN / ICONS       |  app icons, screen backdrops   |
+      |  05. #BODY                     |  body tag                      |
+      |  06. #HEADER                   |  header tag                    |
+      |  07. #PROJECTS                 |  project lists                 |
+      |  08. #TOGGLE LAYOUT BUTTONS    |  layout buttons and actions    |
+      |  09. #MOBILE                   |  mobile view dropdown          |
+      |  10. #SEARCH                   |  search field                  |
+      |  11. #NAVIGATION               |  left panel & navigation       |
+      |  12. #RIGHT PANEL              |  right panel userlist          |
+      |  13. #MAIN PANEL               |  main panel                    |
+      |  14. #MAIN CONTENT             |  content holder                |
+      |  15. #PAGE FOOTER              |  page footer                   |
+      |  16. #SHORTCUT AREA            |  dropdown shortcuts area       |
+      |  17. #PLUGINS                  |  all scripts and plugins       |
+      
+      ===================================================================
+      
+      -->
+<!-- #BODY -->
+<!-- Possible Classes
+      * 'smart-style-{SKIN#}'
+      * 'smart-rtl'         - Switch theme mode to RTL
+      * 'menu-on-top'       - Switch to top navigation (no DOM change required)
+      * 'no-menu'         - Hides the menu completely
+      * 'hidden-menu'       - Hides the main menu but still accessable by hovering over left edge
+      * 'fixed-header'      - Fixes the header
+      * 'fixed-navigation'  - Fixes the main menu
+      * 'fixed-ribbon'      - Fixes breadcrumb
+      * 'fixed-page-footer' - Fixes footer
+      * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
+      -->
+
+<body class="smart-style-5 menu-on-top fixed-header fixed-navigation">
+    <!-- HEADER -->
+    <header id="header">
+        <div id="logo-group">
+            <!-- PLACE YOUR LOGO HERE -->
+            <span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+            <!-- END LOGO PLACEHOLDER -->
+            <!-- Note: The activity badge color changes when clicked and resets the number to 0
+               Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
+            <span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span>
+            <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+            <div class="ajax-dropdown">
+                <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                    <label class="btn btn-default">
+                        <input type="radio" name="activity" id="ajax/notify/mail.html">個人訊息 (14)</label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="activity" id="ajax/notify/notifications.html">提醒通知 (3)</label>
+                </div>
+                <!-- notification content -->
+                <div class="ajax-notifications custom-scroll">
+                    <div class="alert alert-transparent">
+                        <h4>在這邊有許多有趣的訊息喔！</h4>
+                        This blank page message helps protect your privacy, or you can show the first message here automatically.
+                    </div>
+                    <i class="fa fa-lock fa-4x fa-border"></i>
+                </div>
+                <!-- end notification content -->
+                <!-- footer: refresh area -->
+                <span> 最後更新時間: 2016/07/23 9:43AM
+               <button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+               <i class="fa fa-refresh"></i>
+               </button> </span>
+                <!-- end footer -->
+            </div>
+            <!-- END AJAX-DROPDOWN -->
+        </div>
+        <!-- pulled right: nav area -->
+        <div class="pull-right">
+            <!-- collapse menu button -->
+            <div id="hide-menu" class="btn-header pull-right">
+                <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+            </div>
+            <!-- end collapse menu -->
+            <!-- #MOBILE -->
+            <!-- Top menu profile link : this shows only when top menu is active -->
+            <ul id="mobile-profile-img" class="header-dropdown-list hidden-xs padding-5">
+                <li class="">
+                    <a href="#" class="dropdown-toggle no-margin userdropdown" data-toggle="dropdown">
+                        <img src="img/avatars/male.png" alt="親愛的" class="online" />
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="settingprofile.html" class="padding-10 padding-top-0 padding-bottom-0"><i class="fa fa-cog"></i> Setting</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html" class="padding-10 padding-top-0 padding-bottom-0"> <i class="fa fa-user"></i>  <u>P</u>rofile</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="login.html" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout" data-logout-msg="為了安全起見，建議您登出後將網頁關閉！"><i class="fa fa-sign-out fa-lg"></i> <strong><u>L</u>ogout</strong></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- logout button -->
+            <div id="logout" class="btn-header transparent pull-right">
+                <span> <a href="login.html" title="Sign Out" data-action="userLogout" data-logout-msg="為了安全起見，建議您登出後將網頁關閉！"><i class="fa fa-sign-out"></i></a> </span>
+            </div>
+            <!-- end logout button -->
+            <!-- FB mobile button (this is hidden till mobile view port) -->
+            <div class="btn-header transparent pull-right">
+                <span> <a href="#" title="Facebook"><i class="fa fa-facebook"></i></a> </span>
+            </div>
+            <!-- end FB mobile button -->
+            <!-- fullscreen button -->
+            <div id="fullscreen" class="btn-header transparent pull-right">
+                <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
+            </div>
+            <!-- end fullscreen button -->
+            <!-- multiple lang dropdown : find all flags in the flags page -->
+            <ul class="header-dropdown-list hidden-xs">
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="img/blank.gif" class="flag flag-tw" alt="United States"> <span> 中文 </span>  <i class="fa fa-angle-down"></i> 
+                    </a>
+                </li>
+            </ul>
+            <!-- end multiple lang -->
+        </div>
+        <!-- end pulled right: nav area -->
+    </header>
+    <!-- END HEADER -->
+    <!-- Left panel : Navigation area -->
+    <!-- Note: This width of the aside area can be adjusted through LESS variables -->
+    <aside id="left-panel">
+        <!-- User info -->
+        <div class="login-info">
+            <span>
+               <!-- User image size is adjusted inside CSS, it should stay as it --> 
+               <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+               <img src="img/avatars/male.png" alt="me" class="online" /> 
+               <span>
+               親愛的 
+               </span>
+            <i class="fa fa-angle-down"></i>
+            </a>
+            </span>
+        </div>
+        <!-- end user info -->
+        <!-- NAVIGATION : This navigation is also responsive-->
+        <nav>
+            <ul>
+                <li>
+                    <a href="index.html" title="關於我們"><i class="fa fa-lg fa-fw fa-graduation-cap"></i> <span class="menu-item-parent">關於我們</span></a>
+                </li>
+                <li>
+                    <a href="professional.html" title="專業體能訓練"><i class="fa fa-lg fa-fw fa-heartbeat"></i> <span class="menu-item-parent">專業訓練</span></a>
+                </li>
+                <li>
+                    <a href="blog.html" title="專業知識"><i class="fa fa-lg fa-fw fa-puzzle-piece"></i> <span class="menu-item-parent">專業知識</span></a>
+                </li>
+                <li>
+                    <a href="rental.html" title="場地租借"><i class="fa fa-lg fa-fw fa-at"></i> <span class="menu-item-parent">場地租借</span></a>
+                </li>
+                <li>
+                    <a href="products.html" title="相關商品"><i class="fa fa-lg fa-fw fa-product-hunt"></i> <span class="menu-item-parent">相關商品</span></a>
+                </li>
+                <li>
+                    <a href="cooperation.html" title="相關合作"><i class="fa fa-lg fa-fw fa-link"></i> <span class="menu-item-parent">相關合作</span></a>
+                </li>
+                <li>
+                    <a href="contact.html" title="聯絡我們"><i class="fa fa-lg fa-fw fa fa-envelope"></i> <span class="menu-item-parent">聯絡我們</span></a>
+                </li>
+                <li>
+                    <a href="map.html" title="服務據點"><i class="fa fa-lg fa-fw fa-map-marker"></i> <span class="menu-item-parent">服務據點</span></a>
+                </li>
+                <li>
+                    <a href="timeline.html" title="我的足印"><i class="fa fa-lg fa-fw fa-paw"></i> <span class="menu-item-parent">我的足印</span></a>
+                </li>
+                <li>
+                    <a href="classlist.html" title="課程管理"><i class="fa fa-lg fa-fw fa-calendar"></i> <span class="menu-item-parent">課程管理</span></a>
+                    <ul>
+                        <li>
+                            <a href="classlist.html"><i class="fa fa-fw fa-dashboard"></i> 課程總覽</a>
+                        </li>
+                        <li>
+                            <a href="searchvip.html"><i class="fa fa-fw fa-search"></i> 我的學員</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="viplist.html" title="人員管理"><i class="fa fa-lg fa-fw fa-group"></i> <span class="menu-item-parent">人員管理</span></a>
+                    <ul>
+                        <li>
+                            <a href="viplist.html"><i class="fa fa-fw fa-user"></i> 學員管理</a>
+                        </li>
+                        <li>
+                            <a href="coachlist.html"><i class="fa fa-fw fa-user-secret"></i> 員工管理</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="classReportlist.html" title="報表管理"><i class="fa fa-lg fa-fw fa-calculator"></i> <span class="menu-item-parent">報表管理</span></a>
+                    <ul>
+                        <li>
+                            <a href="classReportlist.html"><i class="fa fa-fw fa-trophy"></i> 業績統計表</a>
+                        </li>
+                        <li>
+                            <a href="paymentReportlist.html"><i class="fa fa-fw fa-usd"></i> 付款紀錄表</a>
+                        </li>
+                        <li>
+                            <a href="testingReportlist.html"><i class="fa fa-fw fa-heartbeat"></i> 體能檢測表</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="bloglist.html" title="上稿管理"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">上稿管理</span></a>
+                    <ul>
+                        <li>
+                            <a href="bloglist.html"><i class="fa fa-fw fa-puzzle-piece"></i> 專業知識</a>
+                        </li>
+                        <li>
+                            <a href="qalist.html"><i class="fa fa-fw fa-question"></i> 問與答</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="pricelist.html"><i class="fa fa-lg fa-fw fa-tasks"></i> 課程價目表</a>
+                </li>
+                <li>
+                    <a href="basicdatalist.html" title="基本資料"><i class="fa fa-lg fa-fw fa-database"></i> <span class="menu-item-parent">基本資料</span></a>
+                </li>
+            </ul>
+        </nav>
+        <span class="minifyme" data-action="minifyMenu"> 
+         <i class="fa fa-arrow-circle-left hit"></i> 
+         </span>
+    </aside>
+    <!-- END NAVIGATION -->
+    <!-- MAIN PANEL -->
+    <div id="main" role="main">
+        <!-- RIBBON -->
+        <div id="ribbon">
+            <span class="ribbon-button-alignment"> 
+            <span id="refresh" class="btn btn-ribbon">
+            <i class="fa fa-search"></i>
+            </span> 
+            </span>
+            <!-- breadcrumb -->
+            <ol class="breadcrumb">
+                <li>課程管理></li>
+                <li>我的VIP</li>
+            </ol>
+            <!-- end breadcrumb -->
+            <!-- You can also add more buttons to the
+               ribbon for further usability
+               
+               Example below:
+               
+               <span class="ribbon-button-alignment pull-right">
+               <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+               <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+               <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+               </span> -->
+        </div>
+        <!-- END RIBBON -->
+        <!-- MAIN CONTENT -->
+        <div id="content">
+            <div class="row">
+                <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                    <h1 class="page-title txt-color-blueDark">
+                     <!-- PAGE HEADER -->
+                     <i class="fa-fw fa fa-search"></i> 課程管理
+                     <span>>  
+                     我的VIP
+                     </span>
+                  </h1>
+                </div>
+                <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+                    <!-- sparks -->
+                    <ul id="sparks">
+                        <li class="sparks-info">
+                            <h5> 現在上課人數 <span class="txt-color-blue">50人</span></h5>
+                            <div class="sparkline txt-color-blue">
+                                1300, 1877, 2500, 2577, 2000, 2100, 3000, 2700, 3631, 2471, 2700, 3631, 2471
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- end sparks -->
+                </div>
+            </div>
+            <!-- widget grid -->
+            <section id="widget-grid" class="">
+                <!-- row -->
+                <div class="row">
+                    <article class="col-sm-12 col-md-6 col-lg-6">
+                        <!-- new widget -->
+                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                            <!-- widget options:
+                           usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                           
+                           data-widget-colorbutton="false"
+                           data-widget-editbutton="false"
+                           data-widget-togglebutton="false"
+                           data-widget-deletebutton="false"
+                           data-widget-fullscreenbutton="false"
+                           data-widget-custombutton="false"
+                           data-widget-collapsed="true"
+                           data-widget-sortable="false"
+                           
+                           -->
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-search txt-color-white"></i> </span>
+                                <h2> 查詢條件 </h2>
+                                <!-- <div class="widget-toolbar">
+                              add: non-hidden - to disable auto hide
+                              
+                              </div>-->
+                            </header>
+                            <!-- widget div-->
+                            <div>
+                                <!-- widget edit box -->
+                                <div class="jarviswidget-editbox">
+                                    <!-- This area used as dropdown edit box -->
+                                </div>
+                                <!-- end widget edit box -->
+                                <!-- widget content -->
+                                <div class="widget-body bg-color-darken txt-color-white no-padding">
+                                    <form action="#" id="search-form" class="smart-form">
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="input"> <i class="icon-append fa fa-user"></i>
+                                                        <input type="text" name="vipname" class="input-lg" name="vipname" placeholder="請輸入VIP姓名">
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="select">
+                                                        <select class="input-lg">
+                                                            <option value="0">全部教練</option>
+                                                            <option value="1">Alexandra</option>
+                                                            <option value="2">Alice</option>
+                                                            <option value="3">Anastasia</option>
+                                                            <option value="4">Avelina</option>
+                                                        </select>
+                                                        <i class="icon-append fa fa-file-word-o"></i>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                    <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入查詢起日" readonly="readonly">
+                                                    </label>
+                                                </section>
+                                                <section class="col col-6">
+                                                    <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入查詢迄日" readonly="readonly">
+                                                    </label>
+                                                </section>                                                
+                                            </div>
+                                        </fieldset>
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-6">
+                                                        <label class="select">
+                                                            <select class="input-lg">
+                                                                <option value="0">請選擇上課地點</option>
+                                                                <option value="1">小巨蛋</option>
+                                                                <option value="2">１０１</option>
+                                                            </select> <i class="icon-append fa fa-file-word-o"></i>
+                                                        </label>
+                                                    </section>
+                                                <section class="col col-6">
+                                                        <label class="select">
+                                                            <select class="input-lg">
+                                                                <option value="0">全部狀態</option>
+                                                                <option value="1">教練已完成上課</option>
+                                                                <option value="2">教練未完成上課</option>
+                                                                <option value="3">學員尚未打卡</option>
+                                                                <option value="4">自由教練</option>
+                                                            </select>
+                                                            <i class="icon-append fa fa-file-word-o"></i>
+                                                        </label>
+                                                </section>
+                                              </div>
+                                        </fieldset>
+                                        <footer>
+                                            <button type="submit" name="submit" class="btn btn-primary">
+                                                送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                            </button>
+                                        </footer>
+                                        <div class="message">
+                                            <i class="fa fa-check fa-lg"></i>
+                                            <p>
+                                                Your comment was successfully added!
+                                            </p>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end widget content -->
+                            </div>
+                            <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+                    </article>
+                    <article class="col-sm-12 col-md-6 col-lg-6">
+                        <!-- new widget -->
+                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-3" data-widget-colorbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                            <!-- widget options:
+                           usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                           
+                           data-widget-colorbutton="false"
+                           data-widget-editbutton="false"
+                           data-widget-togglebutton="false"
+                           data-widget-deletebutton="false"
+                           data-widget-fullscreenbutton="false"
+                           data-widget-custombutton="false"
+                           data-widget-collapsed="true"
+                           data-widget-sortable="false"
+                           
+                           -->
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                                <h2> BEYOND FITNESS Events </h2>
+                                <div class="widget-toolbar">
+                                    <a href="bookingclass.html" class="btn btn-primary"><i class="fa fa-fw fa-bookmark"></i> 預約上課時間</a>
+                                    <a href="bookingExperienceProgram.html" class="btn bg-color-pink"><i class="fa fa-fw fa-magic"></i> 預約體驗課程</a>
+                                    <a href="#" data-toggle="modal" data-target="#bookingCoachProgram" class="btn bg-color-teal"><i class="fa fa-fw fa-university"></i> 預約內部訓練</a>
+                                    <div class="btn-group">
+                                            <button class="btn dropdown-toggle btn-xs btn-warning" data-toggle="dropdown">
+                                                上課地點 <i class="fa fa-caret-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li>
+                                                    <a href="javascript:void(0);">全部</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">小巨蛋</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">101</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                </div>
+                            </header>
+                            <!-- widget div-->
+                            <div>
+                                <!-- widget edit box -->
+                                <div class="jarviswidget-editbox">
+                                    <input class="form-control" type="text">
+                                </div>
+                                <!-- end widget edit box -->
+                                <div class="widget-body bg-color-darken txt-color-white no-padding">
+                                    <!-- content goes here -->
+                                    <div class="widget-body-toolbar">
+                                        <div id="calendar-buttons">
+                                            <div class="btn-group">
+                                                <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                                <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="calendar"></div>
+                                    <!-- end content -->
+                                </div>
+                            </div>
+                            <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+                    </article>
+                </div>
+                <!-- row -->
+                <div class="row">
+                    <article class="col-sm-12">
+                        <!-- new widget -->
+                        <div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <!-- widget options:
+                           usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                           
+                           data-widget-colorbutton="false"
+                           data-widget-editbutton="false"
+                           data-widget-togglebutton="false"
+                           data-widget-deletebutton="false"
+                           data-widget-fullscreenbutton="false"
+                           data-widget-custombutton="false"
+                           data-widget-collapsed="true"
+                           data-widget-sortable="false"
+                           
+                           -->
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-rss text-success"></i> </span>
+                                <h2>2016/07/01 - 2016/08/01 </h2>
+                                <ul class="nav nav-tabs pull-right in" id="myTab">
+                                    <li>
+                                        <a data-toggle="tab" href="#s1"><i class="fa fa-list"></i> <span>列表</span></a>
+                                    </li>
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#s2"><i class="fa fa-bar-chart"></i> <span>統計表</span></a>
+                                    </li>
+                                </ul>
+                            </header>
+                            <!-- widget div-->
+                            <div class="no-padding">
+                                <!-- widget edit box -->
+                                <div class="jarviswidget-editbox">
+                                </div>
+                                <!-- end widget edit box -->
+                                <div class="widget-body">
+                                    <!-- content -->
+                                    <div id="myTabContent" class="tab-content">
+                                        <div class="tab-pane fade widget-body no-padding-bottom" id="s1">
+                                                <table id="dt_basic" class="table table-forum" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:50px">
+                                                                <a href="#" >
+                                                                    <i class="fa fa-minus-circle text-danger"></i>
+                                                                </a>
+                                                                <a href="#" >
+                                                                    <i class="fa fa-plus-circle text-success"></i>
+                                                                </a>
+                                                            </th>
+                                                            <th><i class="fa fa-fw fa-calendar text-muted hidden-md hidden-sm hidden-xs"></i> 上課時間</th>
+                                                            <th><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> 人數</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                        </div>
+                                        <!-- end s1 tab pane -->
+                                        <div class="tab-pane fade widget-body no-padding-bottom active in" id="s2">
+                                            <div id="bar-graph" class="chart no-padding"></div>
+                                        </div>
+                                        <!-- end s3 tab pane -->
+                                    </div>
+                                    <!-- end content -->
+                                </div>
+                            </div>
+                            <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+                    </article>
+                </div>
+                <!-- end row -->
+            </section>
+            <!-- end widget grid -->
+            <!-- Modal -->
+            <div class="modal fade" id="freecheck" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-check-square-o"></i> 自由教練打卡</h4>
+                        </div>
+                        <div class="modal-body bg-color-darken txt-color-white">
+                            <form action="classlist.html" id="add-form" class="smart-form">
+                                <fieldset>
+                                     <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1"><i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="birthday" id="birthday" class="form-control input-lg" placeholder="請輸入上課開始時間" readonly="readonly">
+                                    </label>
+                                </fieldset>                            
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                取消
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                確定 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->            
+        </div>
+        <!-- END MAIN CONTENT -->
+    </div>
+    <!-- END MAIN PANEL -->
+    <!-- PAGE FOOTER -->
+    <div class="page-footer">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <span class="txt-color-white">Beyond-Fitness <span class="hidden-xs"> - ALL RIGHTS RESERVED</span> © 2016</span>
+            </div>
+            <div class="col-xs-6 col-sm-6 text-right hidden-xs">
+                <div class="txt-color-white inline-block">
+                    <i class="txt-color-blueLight hidden-mobile">Last update time <i class="fa fa-clock-o"></i>  <strong>2016/07/23 PM 20:03 &nbsp;</strong> 
+                    </i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE FOOTER -->
+    <!--================================================== -->
+    <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+    <script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            document.write('<script src="js/libs/jquery-2.1.1.min.js"><\/script>');
+        }
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script>
+        if (!window.jQuery.ui) {
+            document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+        }
+    </script>
+    <!-- IMPORTANT: APP CONFIG -->
+    <script src="js/app.config.js"></script>
+    <!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+    <script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+    <!-- BOOTSTRAP JS -->
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <!-- CUSTOM NOTIFICATION -->
+    <script src="js/notification/SmartNotification.min.js"></script>
+    <!-- JARVIS WIDGETS -->
+    <script src="js/smartwidgets/jarvis.widget.min.js"></script>
+    <!-- EASY PIE CHARTS -->
+    <script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+    <!-- SPARKLINES -->
+    <script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+    <!-- JQUERY VALIDATE -->
+    <script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+    <!-- JQUERY MASKED INPUT -->
+    <script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+    <!-- JQUERY SELECT2 INPUT -->
+    <script src="js/plugin/select2/select2.min.js"></script>
+    <!-- JQUERY UI + Bootstrap Slider -->
+    <script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+    <!-- browser msie issue fix -->
+    <script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+    <!-- FastClick: For mobile devices -->
+    <script src="js/plugin/fastclick/fastclick.min.js"></script>
+    <!--[if IE 8]>
+      <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+      <![endif]-->
+    <!-- MAIN APP JS FILE -->
+    <script src="js/app.min.js"></script>
+    <!-- ENHANCEMENT PLUGINS : NOT A REQUIREMENT -->
+    <!-- Voice command : plugin -->
+    <script src="js/speech/voicecommand.min.js"></script>
+    <!-- SmartChat UI : plugin -->
+    <script src="js/smart-chat-ui/smart.chat.ui.min.js"></script>
+    <script src="js/smart-chat-ui/smart.chat.manager.min.js"></script>
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <!-- Flot Chart Plugin: Flot Engine, Flot Resizer, Flot Tooltip -->
+    <script src="js/plugin/flot/jquery.flot.cust.min.js"></script>
+    <script src="js/plugin/flot/jquery.flot.resize.min.js"></script>
+    <script src="js/plugin/flot/jquery.flot.time.min.js"></script>
+    <script src="js/plugin/flot/jquery.flot.tooltip.min.js"></script>
+    <!-- Vector Maps Plugin: Vectormap engine, Vectormap language -->
+    <script src="js/plugin/vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="js/plugin/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- Full Calendar -->
+    <script src="js/plugin/moment/moment.min.js"></script>
+    <script src="js/plugin/fullcalendar/jquery.fullcalendar.min.js"></script>
+    <script src="js/plugin/fullcalendar/lang-all.js"></script>
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="js/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="js/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="js/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="js/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="js/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <!-- DateTimePicker : plugin -->
+    <script src="js/plugin/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="js/plugin/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-TW.js"></script>
+    
+     <!-- Morris Chart Dependencies -->
+    <script src="js/plugin/morris/raphael.min.js"></script>
+    <script src="js/plugin/morris/morris.min.js"></script>     
+    <script>
+        $(document).ready(function() {
+
+            // DO NOT REMOVE : GLOBAL FUNCTIONS!
+            pageSetUp();
+
+            // TAB GRAPH //
+            // bar graph color
+            if ($('#bar-graph').length) {
+
+                    Morris.Bar({
+                        element : 'bar-graph',
+                        data : [{
+                            x : '2011 Q1',
+                            y : 0
+                        }, {
+                            x : '2011 Q2',
+                            y : 1
+                        }, {
+                            x : '2011 Q3',
+                            y : 2
+                        }, {
+                            x : '2011 Q4',
+                            y : 3
+                        }, {
+                            x : '2012 Q1',
+                            y : 4
+                        }, {
+                            x : '2012 Q2',
+                            y : 5
+                        }, {
+                            x : '2012 Q3',
+                            y : 6
+                        }, {
+                            x : '2012 Q4',
+                            y : 7
+                        }, {
+                            x : '2013 Q1',
+                            y : 8
+                        }],
+                        xkey : 'x',
+                        ykeys : ['y'],
+                        labels : ['Y'],
+                        barColors : function(row, series, type) {
+                            if (type === 'bar') {
+                                var red = Math.ceil(150 * row.y / this.ymax);
+                                return 'rgb(' + red + ',0,0)';
+                            } else {
+                                return '#000';
+                            }
+                        }
+                    });
+            }
+
+
+            /*
+             * FULL CALENDAR JS
+             */
+
+            if ($("#calendar").length) {
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+                var calendar = $('#calendar').fullCalendar({
+                    lang: 'zh-TW',
+                    editable: false,
+                    draggable: false,
+                    selectable: false,
+                    selectHelper: true,
+                    unselectAuto: false,
+                    disableResizing: false,
+                    height: "auto",
+
+                    header: {
+                        left: 'title', //,today
+                        center: 'prev, next, today',
+                        right: 'month, agendaWeek, agenDay' //month, agendaDay,
+                    },
+
+                    select: function(start, end, allDay) {
+                        var title = prompt('Event Title:');
+                        if (title) {
+                            calendar.fullCalendar('renderEvent', {
+                                    title: title,
+                                    start: start,
+                                    end: end,
+                                    allDay: allDay
+                                }, true // make the event "stick"
+                            );
+                        }
+                        calendar.fullCalendar('unselect');
+                    },
+
+                    events: [{
+                        title: '25',
+                        start: new Date(y, m, 1),
+                        description: '課程訓練',
+                        allDay: true,
+                        className: ["event", "bg-color-greenLight"],
+                        icon: 'fa-check'
+                    }, {
+                        id: 999,
+                        title: '30',
+                        start: new Date(y, m, d - 3),
+                        description: '課程訓練',
+                        allDay: true,
+                        className: ["event", "bg-color-blue"],
+                        icon: 'fa-clock-o'
+                    }, {
+                        id: 999,
+                        title: '50',
+                        start: new Date(y, m, d + 4),
+                        description: '課程訓練',
+                        allDay: true,
+                        className: ["event", "bg-color-blue"],
+                        icon: 'fa-clock-o'
+                    }, {
+                        id: 999,
+                        title: '3',
+                        start: new Date(y, m, d + 4),
+                        description: '自主訓練',
+                        allDay: true,
+                        className: ["event", "bg-color-red"],
+                        icon: 'fa-clock-o'
+                    }],
+
+
+                    eventRender: function(event, element, icon) {
+                        if (!event.description == "") {
+                            element.find('.fc-title').append("<br/><span class='ultra-light'>" + event.description + "</span>");
+                        }
+                        if (!event.icon == "") {
+                            element.find('.fc-title').append("<i class='air air-top-right fa " + event.icon + " '></i>");
+                        }
+                    }
+                });
+
+            };
+
+            /* hide default buttons */
+            $('.fc-toolbar .fc-right, .fc-toolbar .fc-center').hide();
+
+            // calendar prev
+            $('#calendar-buttons #btn-prev').click(function() {
+                $('.fc-prev-button').click();
+                return false;
+            });
+
+            // calendar next
+            $('#calendar-buttons #btn-next').click(function() {
+                $('.fc-next-button').click();
+                return false;
+            });
+
+            // calendar today
+            $('#calendar-buttons #btn-today').click(function() {
+                $('.fc-button-today').click();
+                return false;
+            });
+
+            // calendar month
+            $('#mt').click(function() {
+                $('#calendar').fullCalendar('changeView', 'month');
+            });
+
+            // calendar agenda week
+            $('#ag').click(function() {
+                $('#calendar').fullCalendar('changeView', 'agendaWeek');
+            });
+
+            // calendar agenda day
+            $('#td').click(function() {
+                $('#calendar').fullCalendar('changeView', 'agendaDay');
+            });
+
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_dt_basi2 = undefined;
+
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet: 1024,
+                phone: 480
+            };
+            
+            /* Formatting function for row details - modify as you need */
+                function format ( d ) {
+                    // `d` is the original data object for the row
+                    return '<table id="dt_basic2" cellpadding="5" cellspacing="0" border="0" class="table table-hover table-condensed">'+
+                        '<tbody>'+
+                            '<tr>'+
+                                '<td style="width:50px"></td>'+
+                                '<td class="col-xs-2 col-sm-2">08:00 - 09:00</td>'+
+                                '<td class="col-xs-3 col-sm-3"><i class="fa fa-group fa-2x text-danger"></i> 宋胖子/劉加菲</td>'+
+                                '<td class="col-xs-1 col-sm-1">黃比爾</td>'+
+                                '<td>待編輯課程內容</td>'+
+                                '<td style="width:130px"><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a></li><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'updateclasstime.html\');"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i> 修改上課時間</a></li><li><a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 取消上課</a></li></ul></div></td>'+
+                            '</tr>'+
+                            '<tr>'+
+                                '<td style="width:50px"></td>'+
+                                '<td>08:00 - 09:00</td>'+
+                                '<td><i class="fa fa-group fa-2x text-danger"></i> 宋胖子/劉加菲</td>'+
+                                '<td>黃比爾</td>'+
+                                '<td>編輯課程內容中</td>'+
+                                '<td><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a></li><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'updateclasstime.html\');"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i> 修改上課時間</a></li><li><a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 取消上課</a></li><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'viewvipdiary.html\');"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i> 檢視上課內容</a></li></ul></div></td>'+
+                            '</tr>'+
+                            '<tr class="bg-color-blueDark">'+
+                                '<td style="width:50px"></td>'+
+                                '<td>08:15 - 09:15</td>'+
+                                '<td><i class="fa fa-child fa-2x text-danger"></i> 鄭胖子</td>'+
+                                '<td>黃比爾</td>'+                                
+                                '<td>已完成課程</td>'+
+                                '<td><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a></li><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'viewvipdiary.html\');"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i> 檢視上課內容</a></li></ul></div></td>'+
+                            '</tr>'+
+                            '<tr class="bg-color-blueDark">'+
+                                '<td style="width:50px"></td>'+
+                                '<td>08:30 - 09:30</td>'+
+                                '<td><i class="fa fa-child fa-2x text-danger"></i> 陳小瓦(自主訓練)</td>'+
+                                '<td>黃比爾</td>'+
+                                '<td>待編輯上課內容</td>'+                                
+                                '<td><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a><li><a href="#"><i class="fa fa-fw fa fa-check-square-o" aria-hidden="true"></i> 自主訓練打卡</a><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'updateclasstime.html\');"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i> 修改上課時間</a></li><li><a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 取消上課</a></li></ul></div></td>'+
+                            '</tr>'+
+                            '<tr class="bg-color-blueDark">'+
+                                '<td style="width:50px"></td>'+
+                                '<td>08:30 - 09:30</td>'+
+                                '<td><i class="fa fa-child fa-2x text-danger"></i> 陳小瓦(自主訓練)</td>'+
+                                '<td>黃比爾</td>'+                                
+                                '<td>編輯課程內容中</td>'+
+                                '<td><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a><li><a href="#"><i class="fa fa-fw fa fa-check-square-o" aria-hidden="true"></i> 自主訓練打卡</a><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'updateclasstime.html\');"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i> 修改上課時間</a></li><li><a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 取消上課</a></li><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'viewvipdiary.html\');"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i> 檢視上課內容</a></li></ul></div></td>'+
+                            '</tr>'+
+                            '<tr class="bg-color-blueDark">'+
+                                '<td style="width:50px"></td>'+
+                                '<td>08:30 - 09:30</td>'+
+                                '<td><i class="fa fa-child fa-2x text-danger"></i> 郭小美(自主訓練)</td>'+
+                                '<td>黃比爾</td>'+                                
+                                '<td>已完成課程</td>'+
+                                '<td><div class="btn-group dropup" data-toggle="dropdown"><button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button><button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu"><li><a href="#" onclick="javascript:(window.location.href=\'editclass.html\');"><i class="fa fa-fw fa fa-edit aria-hidden="true"></i> 編輯上課內容</a><li class="divider"></li><li><a href="#" onclick="javascript:(window.location.href=\'viewvipdiary.html\');"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i> 檢視上課內容</a></li></ul></div></td>'+
+                            '</tr>'+
+                        '</tbody>'+
+                    '</table>';
+                }
+
+                // clears the variable if left blank
+                var table = $('#dt_basic').DataTable( {
+                    "sDom": "",
+                    "ajax": "data/vipquery.json",
+                    "autoWidth": true,
+                    "bDestroy": true,
+                    "order": [[ 1, "desc" ]],
+                    "bPaginate": false,
+                    "oLanguage": {
+                        "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                    },
+                    "preDrawCallback": function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    },
+                    "columns": [
+                            {
+                                "class":          'details-control',
+                                "orderable":      false,
+                                "data":           null,
+                                "defaultContent": ''
+                            },
+                            { "data": "timezone" },
+                            { "data": "count" }
+                        ]
+                });
+
+                // Add event listener for opening and closing details
+                $('#dt_basic tbody').on('click', 'td.details-control', function () {
+                    var tr = $(this).closest('tr');
+                    var row = table.row( tr );
+             
+                    if ( row.child.isShown() ) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child( format(row.data()) ).show();
+                        tr.addClass('shown');
+                    }
+                });
+            /* END BASIC */
+
+            $('.form_month').datetimepicker({
+                language: 'zh-TW',
+                weekStart: 0,
+                //todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 3,
+                minView: 3,
+                forceParse: 0
+            });
+
+            $('.form_date').datetimepicker({
+                language: 'zh-TW',
+                weekStart: 0,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });            
+        });
+    </script>
+    <!-- Your GOOGLE ANALYTICS CODE Below -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>

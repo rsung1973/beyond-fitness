@@ -53,7 +53,7 @@
                                 <div class="push-bit">
                                     <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _item.AuthorID %>">
                                         <%  if (_item.AuthorID.HasValue)
-                                                _item.UserProfile.PictureID.RenderUserPicture(this.Writer, new { id = "profileImg", @class = "online" }); %>
+                                                _item.UserProfile.PictureID.RenderUserPicture(this.Writer, new { id = "profileImg", @class = "online", style="width:100px" }); %>
                                     </a>
                                 </div>
                                 <small><%: _item.AuthorID.HasValue ? _item.UserProfile.UserName : ""  %></small></td>

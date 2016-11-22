@@ -24,7 +24,14 @@
                                                                             -->
     <header>
         <span class="widget-icon"><i class="fa fa-heartbeat"></i></span>
-        <h2><%= _model.FitnessAssessmentItem.ItemName %>-<%= String.Format("{0:.}",_model.TotalAssessment) %>分鐘(<%= Math.Round((_model.TotalAssessment ?? 0) / (_model.LessonFitnessAssessment.LessonFitnessAssessmentReport.Where(r=>r.FitnessAssessmentItem.GroupID==3).Sum(r=>r.TotalAssessment) ?? 1) * 100 ) %> %) </h2>
+        <h2><%= _model.FitnessAssessmentItem.ItemName %>-<%= String.Format("{0:.}",_model.TotalAssessment) %>分鐘(
+            <%  var totalAssessment = _model.LessonFitnessAssessment.LessonFitnessAssessmentReport.Where(r => r.FitnessAssessmentItem.GroupID == 3).Sum(r => r.TotalAssessment);
+                if (!totalAssessment.HasValue || totalAssessment <= 0)
+                {
+                    totalAssessment = 1;
+                }
+                Writer.Write(Math.Round((_model.TotalAssessment ?? 0) / (totalAssessment ?? 1) * 100)); %>
+             %) </h2>
     </header>
 
     <!-- widget div-->

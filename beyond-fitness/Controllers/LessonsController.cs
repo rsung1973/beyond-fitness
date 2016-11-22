@@ -84,7 +84,7 @@ namespace WebHome.Controllers
                     DurationInMinutes = viewModel.Duration
                 };
 
-                var users = checkOverlapedBooking(timeItem, item.RegisterLesson);
+                var users = checkOverlapedBooking(timeItem, item.RegisterLesson, item);
                 if (users.Count() > 0)
                 {
                     ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
@@ -210,6 +210,26 @@ namespace WebHome.Controllers
                 return View(item);
             }
 
+            var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
+            if (coach == null)
+            {
+                ViewBag.Message = "未指定上課教練!!";
+                return View(item);
+            }
+
+            if(coach.UserProfile.IsFreeAgent())
+            {
+                var result = bookingByFreeAgent(viewModel, coach);
+                if(result!=null)
+                {
+                    return result;
+                } 
+                else
+                {
+                    return this.TransferToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
+                }
+            }
+
 
             RegisterLesson lesson;
             if (viewModel.TrainingBySelf == 1)
@@ -235,8 +255,14 @@ namespace WebHome.Controllers
                         ByInstallments = 1,
                         Payment = "Cash",
                         FeeShared = 0
-                    }
+                    },
+                    AdvisorID = viewModel.CoachID
                 };
+                lesson.IntuitionCharge.TuitionInstallment.Add(new TuitionInstallment
+                {
+                    PayoffDate = viewModel.ClassDate,
+                    PayoffAmount = priceType.ListPrice
+                });
                 models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
                 models.SubmitChanges();
             }
@@ -364,30 +390,82 @@ namespace WebHome.Controllers
             }
 
             ViewBag.ViewModel = viewModel;
+            var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == item.UID).FirstOrDefault();
 
-            if (!this.ModelState.IsValid)
+            if(coach==null || !coach.UserProfile.IsFreeAgent())
             {
-                ViewBag.ModelState = this.ModelState;
+                ViewBag.Message = "未指定自由教練!!";
                 return View(item);
             }
 
+            //if (!this.ModelState.IsValid)
+            //{
+            //    ViewBag.ModelState = this.ModelState;
+            //    return View(item);
+            //}
+
+            var result = bookingByFreeAgent(viewModel, coach);
+            if(result!=null)
+            {
+                return result;
+            }
+            else
+            {
+                return this.TransferToAction("FreeAgent", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
+            }
+
+        }
+
+        private ActionResult bookingByFreeAgent(LessonTimeViewModel viewModel, ServingCoach item)
+        {
+            UserProfile learner = models.GetTable<UserProfile>().Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Anonymous).FirstOrDefault();
+            if (learner == null)
+            {
+                ViewBag.Message = "自由教練學員未設定!!";
+                return View(item);
+            }
+
+            var priceType = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.自由教練預約).FirstOrDefault();
+            if (priceType == null)
+            {
+                ViewBag.Message = "自由教練預約課程類別未設定!!";
+                return View(item);
+            }
+
+            RegisterLesson lesson = new RegisterLesson
+            {
+                UID = learner.UID,
+                RegisterDate = DateTime.Now,
+                GroupingMemberCount = 1,
+                Lessons = 1,
+                ClassLevel = priceType != null ? priceType.PriceID : (int?)null,
+                IntuitionCharge = new IntuitionCharge
+                {
+                    ByInstallments = 1,
+                    Payment = "Cash",
+                    FeeShared = 0
+                }
+            };
+
+            models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
+            models.SubmitChanges(); ;
+
             LessonTime timeItem = new LessonTime
             {
-                InvitedCoach = viewModel.CoachID,
-                AttendingCoach = viewModel.CoachID,
+                InvitedCoach = item.CoachID,
+                AttendingCoach = item.CoachID,
+                //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
                 ClassTime = viewModel.ClassDate,
                 DurationInMinutes = viewModel.Duration,
-                RegisterLesson = new RegisterLesson
+                RegisterID = lesson.RegisterID,
+                LessonPlan = new LessonPlan
                 {
-                    UID = viewModel.UID.Value,
-                    RegisterDate = DateTime.Now,
-                    GroupingMemberCount = 1,
-                    Lessons = 1
+
                 }
             };
 
             models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
-            models.SubmitChanges();
+            //models.SubmitChanges();
 
             var timeExpansion = models.GetTable<LessonTimeExpansion>();
 
@@ -396,26 +474,46 @@ namespace WebHome.Controllers
                 timeExpansion.InsertOnSubmit(new LessonTimeExpansion
                 {
                     ClassDate = timeItem.ClassTime.Value.Date,
-                    LessonID = timeItem.LessonID,
+                    //LessonID = timeItem.LessonID,
+                    LessonTime = timeItem,
                     Hour = timeItem.ClassTime.Value.Hour + i,
-                    RegisterID = timeItem.RegisterID
+                    RegisterID = lesson.RegisterID
                 });
             }
 
-            models.SubmitChanges();
-            if (item.IsFreeAgent())
-                return RedirectToAction("FreeAgent", "Account");
-            else
-                return RedirectToAction("Coach", "Account");
+
+            try
+            {
+                models.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                ViewBag.Message = "預約未完成，請重新預約!!";
+                return View(item);
+            }
+
+            return null;
+
         }
 
-
-        private IEnumerable<UserProfile> checkOverlapedBooking(LessonTime timeItem, RegisterLesson lesson)
+        private IEnumerable<UserProfile> checkOverlapedBooking(LessonTime timeItem, RegisterLesson lesson,LessonTime source = null)
         {
             int durationHours = (timeItem.ClassTime.Value.Minute + timeItem.DurationInMinutes.Value + 59) / 60;
-            var items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
-                && t.Hour >= timeItem.ClassTime.Value.Hour
-                && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours));
+            IQueryable<LessonTimeExpansion> items;
+            if (source == null)
+            {
+                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+                    && t.Hour >= timeItem.ClassTime.Value.Hour
+                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours));
+            }
+            else
+            {
+                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+                    && t.Hour >= timeItem.ClassTime.Value.Hour
+                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours)
+                    && t.LessonID != source.LessonID);
+            }
 
             if (lesson.GroupingMemberCount > 1)
             {
@@ -509,40 +607,84 @@ namespace WebHome.Controllers
             //            start = g.Key.ToString("yyyy-MM-dd")
             //        }), JsonRequestBehavior.AllowGet);
 
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                return Json(new object[] { }, JsonRequestBehavior.AllowGet);
+            }
+
             var today = DateTime.Today;
 
             var dataItems = models.GetTable<LessonTimeExpansion>()
                 .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1));
 
-            var items = dataItems
-                .Where(t=>!t.LessonTime.TrainingBySelf.HasValue || t.LessonTime.TrainingBySelf==0)
-                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
-                .GroupBy(t => t.ClassDate)
-                .Select(g => new _calendarEvent
-                {
-                    id = "course",
-                    title = g.Distinct().Count().ToString(),
-                    start = g.Key.ToString("yyyy-MM-dd"),
-                    description = "課程訓練",
-                    allDay = true,
-                    className = g.Key < today ? new string[] {"event","bg-color-greenLight"} : new string[] { "event", "bg-color-blue" },
-                    icon = g.Key<today ? "fa-check" : "fa-clock-o"
-                });
+            IEnumerable<_calendarEvent> items;
+            if (profile.IsFreeAgent())
+            {
+                items = models.GetTable<LessonTime>()
+                        .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                        .Where(t => t.AttendingCoach == profile.UID)
+                        .Select(t => new { t.ClassTime.Value.Date, t.RegisterLesson.GroupingMemberCount }).ToList()
+                        .GroupBy(t => t.Date)
+                        .Select(g => new _calendarEvent
+                        {
+                            id = "freeAgent",
+                            title = g.Sum(v => v.GroupingMemberCount).ToString(),
+                            start = g.Key.ToString("yyyy-MM-dd"),
+                            description = "自由教練",
+                            allDay = true,
+                            className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-yellow" },
+                            icon = g.Key < today ? "fa-check" : "fa-tags"
+                        });
+            }
+            else
+            {
+                items = models.GetTable<LessonTime>()
+                        .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                        .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
+                        .Select(t => new { t.ClassTime.Value.Date, t.RegisterLesson.GroupingMemberCount }).ToList()
+                        .GroupBy(t => t.Date)
+                        .Select(g => new _calendarEvent
+                        {
+                            id = "freeAgent",
+                            title = g.Sum(v => v.GroupingMemberCount).ToString(),
+                            start = g.Key.ToString("yyyy-MM-dd"),
+                            description = "自由教練",
+                            allDay = true,
+                            className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-yellow" },
+                            icon = g.Key < today ? "fa-check" : "fa-tags"
+                        });
 
-            items = items.Concat(dataItems
-                .Where(t => t.LessonTime.TrainingBySelf == 1)
-                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
-                .GroupBy(t => t.ClassDate)
-                .Select(g => new _calendarEvent
-                {
-                    id = "self",
-                    title = g.Distinct().Count().ToString(),
-                    start = g.Key.ToString("yyyy-MM-dd"),
-                    description = "自主訓練",
-                    allDay = true,
-                    className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
-                    icon = "fa-child" // g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                items = items.Concat(dataItems
+                   .Where(t => !t.LessonTime.TrainingBySelf.HasValue || t.LessonTime.TrainingBySelf == 0)
+                   .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                   .GroupBy(t => t.ClassDate)
+                   .Select(g => new _calendarEvent
+                   {
+                       id = "course",
+                       title = g.Distinct().Count().ToString(),
+                       start = g.Key.ToString("yyyy-MM-dd"),
+                       description = "課程訓練",
+                       allDay = true,
+                       className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
+                       icon = g.Key < today ? "fa-check" : "fa-clock-o"
+                   }));
+
+                items = items.Concat(dataItems
+                    .Where(t => t.LessonTime.TrainingBySelf == 1)
+                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .GroupBy(t => t.ClassDate)
+                    .Select(g => new _calendarEvent
+                    {
+                        id = "self",
+                        title = g.Distinct().Count().ToString(),
+                        start = g.Key.ToString("yyyy-MM-dd"),
+                        description = "自主訓練",
+                        allDay = true,
+                        className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
+                        icon = "fa-child" // g.Key < today ? "fa-ckeck" : "fa-clock-o"
                 }));
+            }
 
 
             return Json(items, JsonRequestBehavior.AllowGet);
@@ -574,7 +716,7 @@ namespace WebHome.Controllers
             public int? lessonID { get; set; }
         }
 
-        public ActionResult VipEvents(int? id,DateTime start, DateTime end,bool? learner)
+        public ActionResult VipEvents(int? id, DateTime start, DateTime end, bool? learner)
         {
             UserProfile item = models.GetTable<UserProfile>().Where(u => u.UID == id).FirstOrDefault();
             if (item == null)
@@ -616,7 +758,7 @@ namespace WebHome.Controllers
                     description = "1 對 1",
                     lessonID = g.LessonID,
                     allDay = true,
-                    className = new string[] { "event", "bg-color-blue" },
+                    className = g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pinkDark" },
                     icon = "fa-user"
                 });
 
@@ -631,7 +773,7 @@ namespace WebHome.Controllers
                     description = "1 對 " + g.RegisterLesson.GroupingMemberCount,
                     lessonID = g.LessonID,
                     allDay = true,
-                    className = new string[] { "event", "bg-color-pinkDark" },
+                    className = g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-pinkDark" },
                     icon = "fa-users"
                 }));
 
@@ -646,7 +788,7 @@ namespace WebHome.Controllers
                     description = "自主訓練",
                     lessonID = g.LessonID,
                     allDay = true,
-                    className = g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
+                    className = /*g.ClassTime < today ? new string[] { "event", "bg-color-greenLight" } :*/ new string[] { "event", "bg-color-orange" },
                     icon = "fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
@@ -744,7 +886,7 @@ namespace WebHome.Controllers
             }
 
             item.Remark = viewModel.FeedBack;
-            item.FeedBackDate = DateTime.Now;
+            item.RemarkDate = DateTime.Now;
             models.SubmitChanges();
 
             return View("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", lesson);
@@ -809,6 +951,12 @@ namespace WebHome.Controllers
 
         public ActionResult DailyBookingListJson(DateTime lessonDate,DateTime? endQueryDate)
         {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                return Json(new { data = new object[] { } }, JsonRequestBehavior.AllowGet);
+            }
+
             Expression<Func<LessonTime, bool>> queryExpr = l => true;
 
             if (endQueryDate.HasValue)
@@ -818,6 +966,11 @@ namespace WebHome.Controllers
             else
             {
                 queryExpr = l => l.ClassTime >= lessonDate && l.ClassTime < lessonDate.AddDays(1);
+            }
+
+            if(item.IsFreeAgent())
+            {
+                queryExpr = queryExpr.And(l => l.AttendingCoach == item.UID);
             }
 
             var items = models.GetTable<LessonTime>().Where(queryExpr)
@@ -840,7 +993,7 @@ namespace WebHome.Controllers
                     booktime = "--",
                     hour = g.Key.Hour,
                     function = "",
-                    details = getDailyBookingMembers(items, g.Key.ClassDate, g.Key.Hour)
+                    details = ""    //getDailyBookingMembers(items, g.Key.ClassDate, g.Key.Hour)
                 })
                 .ToArray()
             }, JsonRequestBehavior.AllowGet);
@@ -954,7 +1107,7 @@ namespace WebHome.Controllers
             UserProfile item = HttpContext.GetUser();
             if (item == null)
             {
-                return Redirect(FormsAuthentication.LoginUrl);
+                return new EmptyResult();
             }
 
             IQueryable<LessonTime> lessons = queryBookingLessons(item);
@@ -969,7 +1122,15 @@ namespace WebHome.Controllers
                 items = items.Where(t => t.Hour == hour);
             }
 
-            return View("DailyBookingMembers", items);
+            if (item.IsFreeAgent())
+            {
+                //return View("DailyBookingMembersByFreeAgent", items);
+                return View("DailyBookingMembers", items);
+            }
+            else
+            {
+                return View("DailyBookingMembers", items);
+            }
         }
 
 
@@ -1025,7 +1186,7 @@ namespace WebHome.Controllers
 
 
 
-        private IQueryable<LessonTime> queryBookingLessons(UserProfile item)
+        private IQueryable<LessonTime> queryBookingLessons(UserProfile profile)
         {
             DailyBookingQueryViewModel viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue(CachingKey.DailyBookingQuery);
 
@@ -1080,9 +1241,9 @@ namespace WebHome.Controllers
                 }
             }
 
-            if (item.IsFreeAgent())
+            if (profile.IsFreeAgent())
             {
-                items = items.Where(l => l.AttendingCoach == item.UID);
+                items = items.Where(l => l.AttendingCoach == profile.UID);
             }
 
             return items;
@@ -1124,38 +1285,71 @@ namespace WebHome.Controllers
 
 
             var today = DateTime.Today;
+            IEnumerable<_calendarEvent> items;
 
-            var items = lessons.Where(n => !n.TrainingBySelf.HasValue || n.TrainingBySelf == 0)
-                .Join(models.GetTable<LessonTimeExpansion>(),n=>n.LessonID,t=>t.LessonID,(n,t)=> t)
-                .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
-                .Select(t => new { t.ClassDate, t.LessonID }).ToList()
-                .GroupBy(t => t.ClassDate)
-                .Select(g => new _calendarEvent
-                {
-                    id = "course",
-                    title = g.Distinct().Count().ToString(),
-                    start = g.Key.ToString("yyyy-MM-dd"),
-                    description = "課程訓練",
-                    allDay = true,
-                    className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
-                    icon = g.Key < today ? "fa-check" : "fa-clock-o"
-                });
+            if (item.IsFreeAgent())
+            {
+                items = lessons.Select(t => new { t.ClassTime.Value.Date, t.RegisterLesson.GroupingMemberCount }).ToList()
+                    .GroupBy(t => t.Date)
+                    .Select(g => new _calendarEvent
+                    {
+                        id = "freeAgent",
+                        title = g.Sum(v => v.GroupingMemberCount).ToString(),
+                        start = g.Key.ToString("yyyy-MM-dd"),
+                        description = "自由教練",
+                        allDay = true,
+                        className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-yellow" },
+                        icon = g.Key < today ? "fa-check" : "fa-tags"
+                    });
+            }
+            else
+            {
+                items = lessons.Where(l=>l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
+                    .Select(t => new { t.ClassTime.Value.Date, t.RegisterLesson.GroupingMemberCount }).ToList()
+                    .GroupBy(t => t.Date)
+                    .Select(g => new _calendarEvent
+                    {
+                        id = "freeAgent",
+                        title = g.Sum(v => v.GroupingMemberCount).ToString(),
+                        start = g.Key.ToString("yyyy-MM-dd"),
+                        description = "自由教練",
+                        allDay = true,
+                        className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-yellow" },
+                        icon = g.Key < today ? "fa-check" : "fa-tags"
+                    });
 
-            items = items.Concat(lessons.Where(n => n.TrainingBySelf == 1)
-                .Join(models.GetTable<LessonTimeExpansion>(), n => n.LessonID, t => t.LessonID, (n, t) => t)
-                .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
-                .Select(t => new { t.ClassDate, t.LessonID }).ToList()
-                .GroupBy(t => t.ClassDate)
-                .Select(g => new _calendarEvent
-                {
-                    id = "self",
-                    title = g.Distinct().Count().ToString(),
-                    start = g.Key.ToString("yyyy-MM-dd"),
-                    description = "自主訓練",
-                    allDay = true,
-                    className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
-                    icon = "fa-child"   //g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                items = items.Concat(lessons.Where(n => !n.TrainingBySelf.HasValue || n.TrainingBySelf == 0)
+                    .Join(models.GetTable<LessonTimeExpansion>(), n => n.LessonID, t => t.LessonID, (n, t) => t)
+                    .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
+                    .Select(t => new { t.ClassDate, t.LessonID }).ToList()
+                    .GroupBy(t => t.ClassDate)
+                    .Select(g => new _calendarEvent
+                    {
+                        id = "course",
+                        title = g.Distinct().Count().ToString(),
+                        start = g.Key.ToString("yyyy-MM-dd"),
+                        description = "課程訓練",
+                        allDay = true,
+                        className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-blue" },
+                        icon = g.Key < today ? "fa-check" : "fa-clock-o"
+                    }));
+
+                items = items.Concat(lessons.Where(n => n.TrainingBySelf == 1)
+                    .Join(models.GetTable<LessonTimeExpansion>(), n => n.LessonID, t => t.LessonID, (n, t) => t)
+                    .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
+                    .Select(t => new { t.ClassDate, t.LessonID }).ToList()
+                    .GroupBy(t => t.ClassDate)
+                    .Select(g => new _calendarEvent
+                    {
+                        id = "self",
+                        title = g.Distinct().Count().ToString(),
+                        start = g.Key.ToString("yyyy-MM-dd"),
+                        description = "自主訓練",
+                        allDay = true,
+                        className = g.Key < today ? new string[] { "event", "bg-color-greenLight" } : new string[] { "event", "bg-color-red" },
+                        icon = "fa-child"   //g.Key < today ? "fa-ckeck" : "fa-clock-o"
                 }));
+            }
 
             return Json(items, JsonRequestBehavior.AllowGet);
 
@@ -1250,14 +1444,30 @@ namespace WebHome.Controllers
                 index[idx] = 0;
             }
 
-            var items = models.GetTable<LessonTimeExpansion>()
-                .Where(t => t.ClassDate == lessonDate)
-                .Select(t => t.Hour).ToList()
-                .GroupBy(t => t);
+            UserProfile profile = HttpContext.GetUser();
 
-            foreach (var item in items)
+            if (profile != null)
             {
-                index[item.Key] = item.Count();
+                IEnumerable<LessonTimeExpansion> lessonTime;
+                //if(profile.IsFreeAgent())
+                //{
+                //    lessonTime = models.GetTable<LessonTimeExpansion>()
+                //        .Where(t => t.LessonTime.AttendingCoach == profile.UID);
+                //}
+                //else
+                {
+                    lessonTime = models.GetTable<LessonTimeExpansion>();
+                }
+
+                var items = lessonTime
+                    .Where(t => t.ClassDate == lessonDate)
+                    .Select(t => t.Hour).ToList()
+                    .GroupBy(t => t);
+
+                foreach (var item in items)
+                {
+                    index[item.Key] = item.Count();
+                }
             }
 
             return index;
@@ -1599,14 +1809,37 @@ namespace WebHome.Controllers
 
             //return View(items.GroupBy(l => l.LessonID).Select(g => g.First()));
 
-            IQueryable<LessonTimeExpansion> items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate)
-                .GroupBy(l => l.LessonID).Select(g => g.OrderBy(m => m.Hour).First());
-            if (hour.HasValue)
+            UserProfile profile = HttpContext.GetUser();
+            if (profile == null)
             {
-                items = items.Where(t => t.Hour == hour);
+                return new EmptyResult();
             }
 
-            return View(items);
+            if (profile.IsFreeAgent())
+            {
+                IQueryable<LessonTimeExpansion> items = models.GetTable<LessonTimeExpansion>()
+                    .Where(t => t.LessonTime.AttendingCoach == profile.UID)
+                    .Where(t => t.ClassDate == lessonDate)
+                    .GroupBy(l => l.LessonID).Select(g => g.OrderBy(m => m.Hour).First());
+                if (hour.HasValue)
+                {
+                    items = items.Where(t => t.Hour == hour);
+                }
+
+                //return View("DailyBookingMembersByFreeAgent", items);
+                return View(items);
+            }
+            else
+            {
+                IQueryable<LessonTimeExpansion> items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == lessonDate)
+                    .GroupBy(l => l.LessonID).Select(g => g.OrderBy(m => m.Hour).First());
+                if (hour.HasValue)
+                {
+                    items = items.Where(t => t.Hour == hour);
+                }
+
+                return View(items);
+            }
 
         }
 
