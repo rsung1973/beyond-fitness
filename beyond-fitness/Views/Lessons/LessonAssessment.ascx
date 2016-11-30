@@ -54,16 +54,16 @@
     function updateBasicAssessment() {
         var event = event || window.event;
         var hasValue = false;
-        var form = event.target.form
-        $(form).find('input').each(function (idx) {
+        var $form = $(event.target).closest('form');
+        $form.find('input').each(function (idx) {
             if ($(this).val() != '') {
                 hasValue = true;
             }
         });
         if(hasValue) {
-            $(form).ajaxSubmit({
+            $form.ajaxSubmit({
                     success: function (data) {
-                        $('.'+$(form).prop('id')).html(data);
+                        $('.'+$form.prop('id')).html(data);
                         smartAlert("資料已儲存!!");
                     }
                 });

@@ -71,8 +71,14 @@
                     </div>
                     <ul id="widget-tab-1" class="nav nav-tabs pull-right">
                         <li class="active">
-                            <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>課前叮嚀</span></a>
+                            <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i><span>教練悄悄話</span></a>
                         </li>
+                        <%  if (_model.LessonTime.TrainingBySelf != 1)
+                            { %>
+                        <li>
+                            <a data-toggle="tab" href="#s7"><i class="fa fa-history"></i><span>身體健康指數</span></a>
+                        </li>
+                        <%  } %>
                         <li>
                             <a data-toggle="tab" href="#s1"><i class="fa fa-child"></i><span>暖身</span></a>
                         </li>
@@ -180,6 +186,9 @@
                             </div>
                             <div class="tab-pane fade widget-body no-padding-bottom" id="s6">
                                 <% Html.RenderPartial("~/Views/Lessons/LessonAssessmentReport.ascx", _model.LessonTime); %>
+                            </div>
+                            <div class="tab-pane fade widget-body no-padding-bottom" id="s7">
+                                <% Html.RenderPartial("~/Views/Lessons/HealthAssessment.ascx", _model.LessonTime); %>
                             </div>
                             <%  } %>
                             <!-- end s4 tab pane -->

@@ -14,7 +14,7 @@
         { %>
             <option value="">全部</option>
     <%  } %>
-    <%  if (ViewBag.SelectIndication != null)
+    <%  if (ViewBag.SelectIndication != null && _items.Count() > 1)
         {
             Writer.WriteLine(ViewBag.SelectIndication);
         } %>
@@ -37,6 +37,14 @@
         if (ViewBag.ByFreeAgent != null)
         {
             _items = _items.Where(c => c.CoachID == (int?)ViewBag.ByFreeAgent);
+        }
+        else if(ViewBag.ByAuthorization==true)
+        {
+            var profile = Context.GetUser();
+            if (!profile.IsAuthorizedSysAdmin())
+            {
+                _items = _items.Where(c => c.CoachID == profile.UID);
+            }
         }
     }
 </script>

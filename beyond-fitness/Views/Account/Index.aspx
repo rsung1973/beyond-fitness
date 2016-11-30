@@ -77,7 +77,7 @@
                                         <h4>高端專業訓練品質</h4>
                                         <p class="hidden-sm hidden-xs">針對不同年齡及需求提供多種體適能課程，以高端專業訓練品質，提供您全方位的服務。</p>
                                         <br>
-                                        <a href="blog.html" class="btn btn-info btn-sm">Read more</a>
+                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Blog") %>" class="btn btn-info btn-sm">Read more</a>
                                     </div>
                                 </div>
                                 <!-- Slide 2 -->
@@ -87,7 +87,7 @@
                                         <h4>專業量身訂做規劃</h4>
                                         <p class="hidden-sm hidden-xs">了解或許您想一個人、三五好友，或公司團體，都能為您量身訂做規劃，讓您無後顧之憂。</p>
                                         <br>
-                                        <a href="contact.html" class="btn btn-danger btn-sm">Contact Us</a>
+                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>" class="btn btn-danger btn-sm">Contact Us</a>
                                     </div>
                                 </div>
                                 <!-- Slide 3 -->
@@ -98,7 +98,7 @@
                                         <p class="hidden-sm hidden-xs">
                                             深入每位學員的體能狀況，提供運動前後的諮詢建議，貼心的服務，做的永遠比您想得更多。
                                         </p>
-                                        <a href="contact.html" class="btn btn-danger btn-sm">Contact Us</a>
+                                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/ContactUs") %>" class="btn btn-danger btn-sm">Contact Us</a>
                                     </div>
                                 </div>
                             </div>

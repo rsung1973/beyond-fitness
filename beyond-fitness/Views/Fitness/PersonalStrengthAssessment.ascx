@@ -29,7 +29,7 @@
                                                                         -->
             <header>
                 <span class="widget-icon"><i class="fa fa-line-chart text-success"></i></span>
-                <h2><%= String.Format("{0:yyyy/MM/dd}",_first.AssessmentDate) %> - <%= String.Format("{0:yyyy/MM/dd}",_last.AssessmentDate) %> 肌力系統強度 </h2>
+                <h2><%= String.Format("{0:yyyy/MM/dd}",_first.AssessmentDate) %> - <%= String.Format("{0:yyyy/MM/dd}",_last.AssessmentDate) %> 訓練系統強度 </h2>
 
             </header>
 

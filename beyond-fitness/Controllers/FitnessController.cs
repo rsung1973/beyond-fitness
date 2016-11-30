@@ -38,6 +38,12 @@ namespace WebHome.Controllers
             return getAssessmentReportItem(uid, itemID);
         }
 
+        public ActionResult MuscleStrengthAssessment(int uid, int[] itemID)
+        {
+            return getAssessmentReportItem(uid, itemID);
+        }
+
+
 
         private ActionResult getAssessmentReportItem(int uid, int[] itemID)
         {

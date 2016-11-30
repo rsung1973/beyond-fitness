@@ -94,6 +94,7 @@
                                         <label class="select">
                                             <%  var inputItem = new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _viewModel.CoachID };
                                                 ViewBag.SelectIndication = "<option value=''>請選擇教練</option>";
+                                                ViewBag.ByAuthorization = true;
                                                 Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
@@ -106,6 +107,31 @@
                                                 <option value="false" <%= _viewModel.Payoff==false ? "selected" : null %>>否</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
+                                            <script>
+                                                $(function () {
+                                                    $('select[name="payoff"]').on('change', function (evt) {
+                                                        if ($(this).val() == 'true') {
+                                                            $('.byDate').css('display', 'block');
+                                                        } else {
+                                                            $('.byDate').css('display', 'none');
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row byDate" style="<%= _viewModel.Payoff!=true ? "display: none;" : null %>">
+                                    <section class="col col-6">
+                                        <label class="input input-group">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起日" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) %>" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="input input-group">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="dateTo" id="dateTo" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.DateTo) %>" />
                                         </label>
                                     </section>
                                 </div>

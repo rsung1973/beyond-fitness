@@ -35,9 +35,17 @@ namespace WebHome.Controllers
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約);
 
+
                 if (viewModel.Payoff == true)
                 {
-                    items = items.Where(r => r.IntuitionCharge.TuitionInstallment.Any(t => t.PayoffDate.HasValue));
+                    Expression<Func<TuitionInstallment,bool>> f = t => t.PayoffDate.HasValue;
+                    if (viewModel.DateFrom.HasValue)
+                         f = f.And(t => t.PayoffDate >= viewModel.DateFrom);
+                    if (viewModel.DateTo.HasValue)
+                        f = f.And(t => t.PayoffDate < viewModel.DateTo.Value.AddDays(1));
+                    var queryItems = models.GetTable<TuitionInstallment>().Where(f).Select(t => t.IntuitionCharge.RegisterLesson);
+
+                    items = items.Join(queryItems, i => i.RegisterID, q => q.RegisterID, (i, q) => i);
                 }
                 else if (viewModel.Payoff == false)
                 {

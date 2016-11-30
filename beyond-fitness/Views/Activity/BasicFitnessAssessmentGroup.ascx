@@ -9,62 +9,6 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <form action="<%= Url.Action("UpdateLessonFitnessAssessment","Activity",new { assessmentID = _model.AssessmentID,groupID = 2 }) %>" id="<%= _formID %>" class="form-horizontal" method="post">
-    <fieldset>
-        <div class="form-group">
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">疲勞指數</span>
-                    <% var item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 10).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入1-10" name="_10" value="<%= item!=null ? item.TotalAssessment : null %>"/>
-                    <span class="input-group-addon">指數</span>
-                </div>
-            </div>
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">水分攝取</span>
-                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 11).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_11" value="<%= item!=null ? item.TotalAssessment : null %>" />
-                    <span class="input-group-addon">CC</span>
-                </div>
-            </div>
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">睡眠時間</span>
-                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 12).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_12" value="<%= item!=null ? item.TotalAssessment : null %>" />
-                    <span class="input-group-addon">小時</span>
-                </div>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset>
-        <div class="form-group">
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">腰</span>
-                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 13).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_13" value="<%= item!=null ? item.TotalAssessment : null %>" />
-                    <span class="input-group-addon">CM</span>
-                </div>
-            </div>
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">腿</span>
-                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 14).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_14" value="<%= item!=null ? item.TotalAssessment : null %>" />
-                    <span class="input-group-addon">CM</span>
-                </div>
-            </div>
-            <div class="col col-sm-6 col-md-4">
-                <div class="input-group">
-                    <span class="input-group-addon">臀</span>
-                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 15).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_15" value="<%= item!=null ? item.TotalAssessment : null %>" />
-                    <span class="input-group-addon">CM</span>
-                </div>
-            </div>
-        </div>
-    </fieldset>
     <fieldset class="<%= _formID %>">
         <%  Html.RenderPartial("~/Views/Activity/CardioPower.ascx", _model); %>
     </fieldset>
@@ -73,7 +17,7 @@
             <div class="col col-sm-5 col-md-4">
                 <div class="input-group">
                     <span class="input-group-addon">安靜心跳</span>
-                    <% item = models.GetTable<LessonFitnessAssessmentReport>()
+                    <% var item = models.GetTable<LessonFitnessAssessmentReport>()
                               .Where(r => r.ItemID == 16)
                               .Where(r => r.LessonFitnessAssessment.UID == _model.UID)
                               .OrderByDescending(r => r.AssessmentID)
@@ -82,12 +26,25 @@
                     <span class="input-group-addon">次</span>
                 </div>
             </div>
-            <div class="col col-sm-7 col-md-8">
+            <div class="col col-sm-7 col-md-4">
                 <div class="input-group">
                     <span class="input-group-addon">能量系統訓練當下心跳</span>
                     <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 17).FirstOrDefault(); %>
-                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_17" value="<%= item!=null ? String.Format("{0:.}",item.TotalAssessment) : null %>" />
+                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_17" value="<%= item!=null ? String.Format("{0:0.}",item.TotalAssessment) : null %>" />
                     <span class="input-group-addon">次</span>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <hr class="simple" />
+    <fieldset>
+        <div class="form-group">
+            <div class="col col-sm-5 col-md-4">
+                <div class="input-group">
+                    <span class="input-group-addon">肌力強度</span>
+                    <% item = _model.LessonFitnessAssessmentReport.Where(r => r.ItemID == 52).FirstOrDefault(); %>
+                    <input class="form-control" type="number" placeholder="請輸入純數字" name="_52" value="<%= item!=null ? String.Format("{0:.}",item.TotalAssessment) : null %>" />
+                    <span class="input-group-addon">%</span>
                 </div>
             </div>
         </div>

@@ -14,6 +14,7 @@
     <!-- end widget -->
     <!-- new widget -->
     <%  Html.RenderAction("BodyEnergyAssessment", "Fitness", new { uid = _model.UID, itemID = new int[] { 16, 17 } }); %>
+    <%  Html.RenderAction("MuscleStrengthAssessment", "Fitness", new { uid = _model.UID, itemID = new int[] { 52 } }); %>
     <!-- end widget -->
 </div>
 

@@ -504,7 +504,7 @@ namespace WebHome.Controllers
             return View();
         }
 
-        public ActionResult UpdateLessonFitnessAssessment(int assessmentID,int groupID)
+        public ActionResult UpdateLessonFitnessAssessment(int assessmentID,int groupID,bool? forHealth)
         {
             var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
             if (fitnessAssessment == null)
@@ -533,7 +533,15 @@ namespace WebHome.Controllers
                 }
             }
 
-            return View("CardioPower",fitnessAssessment);
+            if (forHealth == true)
+            {
+                return View("HealthIndex", fitnessAssessment);
+            }
+            else
+            {
+                return View("CardioPower", fitnessAssessment);
+            }
+
 
         }
 

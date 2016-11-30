@@ -28,7 +28,7 @@
                                                                             -->
         <header>
             <span class="widget-icon"><i class="fa fa-edit"></i></span>
-            <h2>訓練強度 </h2>
+            <h2>填寫身體健康指數 </h2>
         </header>
 
         <!-- widget div-->
@@ -36,7 +36,7 @@
 
             <!-- widget content -->
             <div class="widget-body">
-                <%  Html.RenderPartial("~/Views/Activity/BasicFitnessAssessmentGroup.ascx", _model); %>
+                <%  Html.RenderPartial("~/Views/Activity/HealthFitnessAssessmentGroup.ascx", _model); %>
             </div>
             <!-- end widget content -->
 
@@ -46,36 +46,7 @@
     </div>
     <%  } %>
     <!-- end widget -->
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <%  Html.RenderPartial("~/Views/Activity/FitnessAssessmentTrend.ascx", _model); %>
-        <!-- end widget -->
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <!-- Widget ID (each widget will need unique ID)-->
-        <div id="<%= "_"+_model.AssessmentID+"_18" %>">
-            <%  Html.RenderAction("FitnessAssessmentGroup", "Activity", new { assessmentID = _model.AssessmentID, itemID = 18, viewIndex = ViewBag.Index, learnerAttendance = ViewBag.LearnerAttendance, showOnly = ViewBag.ShowOnly }); %>
-        </div>
-        <!-- end widget -->
-
-        <!-- Widget ID (each widget will need unique ID)-->
-        <div id="<%= "_"+_model.AssessmentID+"_19" %>">
-            <%  Html.RenderAction("FitnessAssessmentGroup", "Activity", new { assessmentID = _model.AssessmentID, itemID = 19, viewIndex = ViewBag.Index, learnerAttendance = ViewBag.LearnerAttendance, showOnly = ViewBag.ShowOnly }); %>
-        </div>
-        <!-- end widget -->
-        <!-- Widget ID (each widget will need unique ID)-->
-        <div id="<%= "_"+_model.AssessmentID+"_20" %>">
-            <%  Html.RenderAction("FitnessAssessmentGroup", "Activity", new { assessmentID = _model.AssessmentID, itemID = 20, viewIndex = ViewBag.Index, learnerAttendance = ViewBag.LearnerAttendance, showOnly = ViewBag.ShowOnly }); %>
-        </div>
-
-        <div id="<%= "_"+_model.AssessmentID+"_21" %>">
-            <%  Html.RenderAction("FitnessAssessmentGroup", "Activity", new { assessmentID = _model.AssessmentID, itemID = 21, viewIndex = ViewBag.Index, learnerAttendance = ViewBag.LearnerAttendance, showOnly = ViewBag.ShowOnly }); %>
-        </div>
-        <!-- end widget -->
-    </div>
 </div>
-
-<% Html.RenderPartial("~/Views/Shared/EasyPieView.ascx"); %>
 
 <script runat="server">
 

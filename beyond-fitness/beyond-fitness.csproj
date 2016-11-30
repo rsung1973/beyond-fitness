@@ -1428,6 +1428,8 @@
     <Content Include="Views\Account\ViewLearner.aspx" />
     <Content Include="Views\Account\Vip.aspx" />
     <Content Include="Views\Activity\AttendedLessonEvent.ascx" />
+    <Content Include="Views\Activity\HealthIndex.ascx" />
+    <Content Include="Views\Activity\HealthFitnessAssessmentGroup.ascx" />
     <Content Include="Views\Activity\BirthdayEvent.ascx" />
     <Content Include="Views\Activity\EditAssessmentGroupItem.ascx" />
     <Content Include="Views\Activity\EditAssessmentTrendItem.ascx" />
@@ -1465,6 +1467,7 @@
     <Content Include="Views\BulletinBoard\LearnerBirthdayNotification.ascx" />
     <Content Include="Views\Error\Http404.aspx" />
     <Content Include="Views\Error\Http500.aspx" />
+    <Content Include="Views\Fitness\MuscleStrengthAssessment.ascx" />
     <Content Include="Views\Fitness\BodyEnergyAssessment.ascx" />
     <Content Include="Views\Fitness\PersonalStrengthAssessment.ascx" />
     <Content Include="Views\Information\Blog.aspx" />
@@ -1483,6 +1486,7 @@
     <Content Include="Views\Information\EditBlog.aspx" />
     <Content Include="Views\Information\Error.aspx" />
     <Content Include="Views\Information\Footer.ascx" />
+    <Content Include="Views\Information\PriceList.aspx" />
     <Content Include="Views\Information\Location.aspx" />
     <Content Include="Views\Information\Preview.aspx" />
     <Content Include="Views\Information\Products.aspx" />
@@ -1552,10 +1556,12 @@
     <Content Include="Views\Lessons\FitnessGraphView.ascx" />
     <Content Include="Views\Lessons\GoalTurnsSelector.ascx" />
     <Content Include="Views\Lessons\LearnerLessonPlan.ascx" />
+    <Content Include="Views\Lessons\HealthAssessment.ascx" />
     <Content Include="Views\Lessons\LessonAssessmentReport.ascx" />
     <Content Include="Views\Lessons\LessonAssessment.ascx" />
     <Content Include="Views\Lessons\LessonContent.ascx" />
     <Content Include="Views\Lessons\LessonGoal.ascx" />
+    <Content Include="Views\Lessons\LearnerHealthAssessment.ascx" />
     <Content Include="Views\Lessons\LessonLearnerAssessmentReportByUserProfile.ascx" />
     <Content Include="Views\Lessons\LessonLearnerAssessmentReport.ascx" />
     <Content Include="Views\Lessons\LessonsCalendar.ascx" />

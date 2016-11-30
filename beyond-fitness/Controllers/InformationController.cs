@@ -122,6 +122,12 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        public ActionResult PriceList()
+        {
+            return View();
+        }
+
+
         [AllowAnonymous]
         public ActionResult Resource(int id)
         {

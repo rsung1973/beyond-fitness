@@ -54,7 +54,7 @@
         </p>
         <p class="text-right">
             <button type="button" name="editStatus" onclick="editRecentStatus(<%= _model.UID %>);" class="btn btn-primary btn-sm">
-                <i class="fa fa-reply"></i>更新
+                <i class="fa fa-reply"></i>更新個人近況
             </button>
         </p>
     </div>

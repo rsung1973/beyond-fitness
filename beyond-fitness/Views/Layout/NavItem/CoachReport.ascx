@@ -12,9 +12,9 @@
 <li>
     <a href="#" title="報表管理"><i class="fa fa-lg fa-fw fa-calculator"></i><span class="menu-item-parent">報表管理</span></a>
     <ul>
-        <li>
+<%--        <li>
             <a href="<%= Url.Action("CoachAchievement", "Report") %>"><i class="fa fa-fw fa-trophy"></i>業績統計表</a>
-        </li>
+        </li>--%>
         <%  Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile); %>
         <li>
             <a href="<%= Url.Action("AverageFitness", "Activity") %>"><i class="fa fa-fw fa-heartbeat"></i>體能檢測表</a>

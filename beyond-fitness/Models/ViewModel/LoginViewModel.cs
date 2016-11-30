@@ -418,6 +418,8 @@ namespace WebHome.Models.ViewModel
         public bool? Payoff { get; set; }
         public String UserName { get; set; }
         public bool? HasQuery { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
     }
 
     public class PDQQuestionViewModel

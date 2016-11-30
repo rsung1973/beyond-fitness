@@ -298,7 +298,7 @@
             <!-- breadcrumb -->
             <ol class="breadcrumb">
                 <li>課程管理></li>
-                <li>我的VIP</li>
+                <li>我的學員</li>
             </ol>
             <!-- end breadcrumb -->
             <!-- You can also add more buttons to the
@@ -321,7 +321,7 @@
                      <!-- PAGE HEADER -->
                      <i class="fa-fw fa fa-search"></i> 課程管理
                      <span>>  
-                     我的VIP
+                     我的學員
                      </span>
                   </h1>
                 </div>
@@ -342,7 +342,7 @@
             <section id="widget-grid" class="">
                 <!-- row -->
                 <div class="row">
-                    <article class="col-sm-12 col-md-6 col-lg-6">
+                     <article class="col-sm-12">
                         <!-- new widget -->
                         <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
                             <!-- widget options:
@@ -378,12 +378,12 @@
                                     <form action="#" id="search-form" class="smart-form">
                                         <fieldset>
                                             <div class="row">
-                                                <section class="col col-6">
+                                                <section class="col col-3">
                                                     <label class="input"> <i class="icon-append fa fa-user"></i>
                                                         <input type="text" name="vipname" class="input-lg" name="vipname" placeholder="請輸入VIP姓名">
                                                     </label>
                                                 </section>
-                                                <section class="col col-6">
+                                                <section class="col col-3">
                                                     <label class="select">
                                                         <select class="input-lg">
                                                             <option value="0">全部教練</option>
@@ -394,6 +394,27 @@
                                                         </select>
                                                         <i class="icon-append fa fa-file-word-o"></i>
                                                     </label>
+                                                </section>
+                                                <section class="col col-3">
+                                                        <label class="select">
+                                                            <select class="input-lg">
+                                                                <option value="0">請選擇上課地點</option>
+                                                                <option value="1">小巨蛋</option>
+                                                                <option value="2">１０１</option>
+                                                            </select> <i class="icon-append fa fa-file-word-o"></i>
+                                                        </label>
+                                                    </section>
+                                                <section class="col col-3">
+                                                        <label class="select">
+                                                            <select class="input-lg">
+                                                                <option value="0">全部狀態</option>
+                                                                <option value="1">教練已完成上課</option>
+                                                                <option value="2">教練未完成上課</option>
+                                                                <option value="3">學員尚未打卡</option>
+                                                                <option value="4">自由教練</option>
+                                                            </select>
+                                                            <i class="icon-append fa fa-file-word-o"></i>
+                                                        </label>
                                                 </section>
                                             </div>
                                         </fieldset>
@@ -412,31 +433,6 @@
                                                     </label>
                                                 </section>                                                
                                             </div>
-                                        </fieldset>
-                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-6">
-                                                        <label class="select">
-                                                            <select class="input-lg">
-                                                                <option value="0">請選擇上課地點</option>
-                                                                <option value="1">小巨蛋</option>
-                                                                <option value="2">１０１</option>
-                                                            </select> <i class="icon-append fa fa-file-word-o"></i>
-                                                        </label>
-                                                    </section>
-                                                <section class="col col-6">
-                                                        <label class="select">
-                                                            <select class="input-lg">
-                                                                <option value="0">全部狀態</option>
-                                                                <option value="1">教練已完成上課</option>
-                                                                <option value="2">教練未完成上課</option>
-                                                                <option value="3">學員尚未打卡</option>
-                                                                <option value="4">自由教練</option>
-                                                            </select>
-                                                            <i class="icon-append fa fa-file-word-o"></i>
-                                                        </label>
-                                                </section>
-                                              </div>
                                         </fieldset>
                                         <footer>
                                             <button type="submit" name="submit" class="btn btn-primary">
@@ -457,6 +453,84 @@
                         </div>
                         <!-- end widget -->
                     </article>
+                </div>
+                <!-- row -->
+                <div class="row">
+                   
+                    <article class="col-sm-12 col-md-6 col-lg-6">
+                         <!-- new widget -->
+                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+
+                            <!-- widget options:
+                                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                                data-widget-colorbutton="false"
+                                data-widget-editbutton="false"
+                                data-widget-togglebutton="false"
+                                data-widget-deletebutton="false"
+                                data-widget-fullscreenbutton="false"
+                                data-widget-custombutton="false"
+                                data-widget-collapsed="true"
+                                data-widget-sortable="false"
+
+                                -->
+
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-check txt-color-white"></i> </span>
+                                <h2> 待辦事項 </h2>
+                                <!-- <div class="widget-toolbar">
+                                    add: non-hidden - to disable auto hide
+
+                                    </div>-->
+                            </header>
+
+                            <!-- widget div-->
+                            <div>
+
+                                <div class="widget-body bg-color-darken txt-color-white no-padding smart-form">
+                                    <!-- content goes here -->
+                                    <h5 class="todo-group-title"><i class="fa fa-exclamation"></i> 生日提醒 (<small class="num-of-tasks">3</small>)</h5>
+                                    <ul id="sortable2" class="todo">
+                                        <li>
+                                            <span class="handle"> <i class="fa fa-birthday-cake fa-2x text-warning"></i>&nbsp;&nbsp;</span>
+                                            <p>
+                                                <strong>黃比爾今天長尾巴喔！</strong>
+                                                <a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F"><img src="img/line/linebutton_36x60_zh-hant.png" width="36" height="60" alt="用LINE傳送" /></a>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <span class="handle"> <i class="fa fa-birthday-cake fa-2x text-warning"></i>&nbsp;&nbsp;</span>
+                                            <p>
+                                                <strong>宋小胖今天長尾巴喔！</strong>
+                                                <a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F"><img src="img/line/linebutton_36x60_zh-hant.png" width="36" height="60" alt="用LINE傳送" /></a>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <h5 class="todo-group-title"><i class="fa fa-exclamation"></i> 學生悄悄話 (<small class="num-of-tasks">3</small>)</h5>
+                                    <ul id="sortable2" class="todo">
+                                        <li>
+                                            <span class="handle"> <i class="fa fa-commenting-o fa-2x text-primary"></i>&nbsp;&nbsp;</span>
+                                            <p>
+                                                <strong>劉加菲針對2016/09/06的課程回覆你悄悄話喔！<a href="javascript:void(0);" class="btn btn-xs txt-color-white bg-color-blueLight"><i class="fa fa-commenting-o"></i> 回覆</a></strong>                                                
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <span class="handle"> <i class="fa fa-commenting-o fa-2x text-primary"></i>&nbsp;&nbsp;</span>
+                                            <p>
+                                                <strong>陳小瓦針對2016/09/06的課程回覆你悄悄話喔！<a href="javascript:void(0);" class="btn btn-xs txt-color-white bg-color-blueLight"><i class="fa fa-commenting-o"></i> 回覆</a></strong>                                                
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <!-- end content -->
+                                </div>
+
+                            </div>
+                            <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+
+                    </article>       
+
                     <article class="col-sm-12 col-md-6 col-lg-6">
                         <!-- new widget -->
                         <div class="jarviswidget jarviswidget-color-darken" id="wid-id-3" data-widget-colorbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
@@ -521,11 +595,12 @@
                             </div>
                             <!-- end widget div -->
                         </div>
-                        <!-- end widget -->
-                    </article>
+                        <!-- end widget -->                    
+                    </article>             
                 </div>
                 <!-- row -->
                 <div class="row">
+                    
                     <article class="col-sm-12">
                         <!-- new widget -->
                         <div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">

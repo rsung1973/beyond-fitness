@@ -28,7 +28,7 @@
 <fieldset>
     <div class="row">
         <div class="col col-12">
-            <% _model.PictureID.RenderUserPicture(Writer, "profileImg"); %>
+            <% _model.PictureID.RenderUserPicture(this.Writer, new { id = "profileImg", @class = "online", style="width:100px" }); %>
             <div class="input input-file">
                 <span class="button">
                     <input type="file" id="photopic" name="photopic" onchange="this.parentNode.nextSibling.value = this.value" />瀏覽

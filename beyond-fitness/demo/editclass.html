@@ -561,7 +561,7 @@
                                                                     <a data-toggle="tab" href="#s5"><i class="fa fa-commenting-o"></i> <span>課前提醒</span></a>
                                                                 </li>
                                                                 <li>
-                                                                    <a data-toggle="tab" href="#s7"><i class="fa fa-history"></i> <span>身體基本指數</span></a>
+                                                                    <a data-toggle="tab" href="#s7"><i class="fa fa-history"></i> <span>身體健康指數</span></a>
                                                                 </li>
                                                                 <li>
                                                                     <a data-toggle="tab" href="#s1"><i class="fa fa-child"></i> <span>暖身</span></a>
@@ -925,7 +925,7 @@
                                                                      -->
                                                                                     <header>
                                                                                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                                                                                        <h2>能量系統訓練強度<span class="badge bg-color-blueLight txt-color-white"><i class="fa fa-male"></i></span> 陳小瓦</h2>
+                                                                                        <h2>訓練強度<span class="badge bg-color-blueLight txt-color-white"><i class="fa fa-male"></i></span> 陳小瓦</h2>
                                                                                     </header>
                                                                                     <!-- widget div-->
                                                                                     <div>
@@ -959,6 +959,18 @@
                                                                                                                 <span class="input-group-addon">能量系統訓練當下心跳</span>
                                                                                                                 <input class="form-control" type="number" placeholder="請輸入純數字">
                                                                                                                 <span class="input-group-addon">次</span>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </fieldset>
+                                                                                                <hr class="simple"/>
+                                                                                                <fieldset>
+                                                                                                    <div class="form-group">
+                                                                                                        <div class="col col-sm-5 col-md-4">
+                                                                                                            <div class="input-group">
+                                                                                                                <span class="input-group-addon">肌力強度</span>
+                                                                                                                <input class="form-control" type="number" placeholder="請輸入純數字">
+                                                                                                                <span class="input-group-addon">%</span>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -1508,22 +1520,9 @@
                                                                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                                                 <!-- new widget -->
                                                                                 <div class="jarviswidget" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                                                                                    <!-- widget options:
-                                                                     usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-                                                                     
-                                                                     data-widget-colorbutton="false"
-                                                                     data-widget-editbutton="false"
-                                                                     data-widget-togglebutton="false"
-                                                                     data-widget-deletebutton="false"
-                                                                     data-widget-fullscreenbutton="false"
-                                                                     data-widget-custombutton="false"
-                                                                     data-widget-collapsed="true"
-                                                                     data-widget-sortable="false"
-                                                                     
-                                                                     -->
                                                                                     <header>
                                                                                         <span class="widget-icon"> <i class="fa fa-line-chart text-success"></i> </span>
-                                                                                        <h2>2015/07/27 - 2016/07/27 能量系統強度 </h2>
+                                                                                        <h2>2015/07/27 - 2016/07/27 訓練系統強度 </h2>
                                                                                     </header>
                                                                                     <!-- widget div-->
                                                                                     <div class="no-padding">
@@ -1537,6 +1536,12 @@
                                                                                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                                                                     <div class="caption text-center">能量系統強度</div>
                                                                                                     <div id="energyGraph" class="chart no-padding"></div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                                                                    <div class="caption text-center">肌力系統強度</div>
+                                                                                                    <div id="strength2Graph" class="chart no-padding"></div>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <!-- end content -->
@@ -1569,7 +1574,7 @@
                                                                      -->
                                                                                     <header>
                                                                                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                                                                                        <h2>填寫身體指數<span class="badge bg-color-blueLight txt-color-white"><i class="fa fa-male"></i></span> 陳小瓦</h2>
+                                                                                        <h2>填寫身體健康指數<span class="badge bg-color-blueLight txt-color-white"><i class="fa fa-male"></i></span> 陳小瓦</h2>
                                                                                     </header>
                                                                                     <!-- widget div-->
                                                                                     <div>
@@ -1666,10 +1671,10 @@
                                                                                             <th data-class="expand">日期</th>
                                                                                             <th>疲勞指數</th>
                                                                                             <th>睡眠時間</th>
-                                                                                            <th>腰</th>
+                                                                                            <th>體重</th>
+                                                                                            <th data-hide="phone">腰</th>
                                                                                             <th data-hide="phone">腿</th>
-                                                                                            <th data-hide="phone">臀</th>
-                                                                                            <th data-hide="phone">體重</th>
+                                                                                            <th data-hide="phone">臀</th>                                                                                            
                                                                                             <th data-hide="phone">皮脂厚度</th>
                                                                                             <th data-hide="phone">體脂率</th>
                                                                                         </tr>
@@ -3634,6 +3639,43 @@
                     ykeys: ['energy'],
                     resize: true,
                     labels: ['能量系統訓練強度']
+                })
+            }
+            /* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
+            if ($('#strength2Graph').length) {
+                var day_data = [{
+                    "period": "2015-07-21",
+                    "strength2": 42
+                }, {
+                    "period": "2015-08-01",
+                    "strength2": 40
+                }, {
+                    "period": "2015-08-21",
+                    "strength2": 38
+                }, {
+                    "period": "2015-08-30",
+                    "strength2": 41
+                }, {
+                    "period": "2015-09-03",
+                    "strength2": 46
+                }, {
+                    "period": "2015-09-15",
+                    "strength2": 45
+                }, {
+                    "period": "2015-09-21",
+                    "strength2": 50
+                }];
+                Morris.Line({
+                    element: 'strength2Graph',
+                    data: day_data,
+                    xkey: 'period',
+                    yLabelFormat: function(y) {
+                        return parseFloat(y) + '%';
+                    },
+                    xLabelAngle: 30.0,
+                    ykeys: ['strength2'],
+                    resize: true,
+                    labels: ['肌力系統訓練強度']
                 })
             }
             // Open&Close

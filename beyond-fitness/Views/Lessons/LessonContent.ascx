@@ -23,8 +23,14 @@
     </div>
     <ul id="introduction_<%= _ticks %>" class="nav nav-tabs pull-right">
         <li class="active">
-            <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>課前叮嚀</span></a>
+            <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>教練悄悄話</span></a>
         </li>
+        <%  if (_model.TrainingBySelf != 1 && ViewBag.LearnerAttendance != true)
+            { %>
+        <li>
+            <a data-toggle="tab" href="#os7_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>身體健康指數</span></a>
+        </li>
+        <%  } %>
         <li>
             <a data-toggle="tab" href="#os2_<%= _ticks %>"><i class="fa fa-child"></i><span>暖身</span></a>
         </li>
@@ -174,7 +180,13 @@
                             ViewBag.Index = DateTime.Now.Ticks;
                             Html.RenderPartial("~/Views/Lessons/LessonAssessment.ascx", _model); %>
                     </div>
-                <%  if (ViewBag.ByCalendar != true)
+                <%  if (ViewBag.LearnerAttendance != true)
+                    { %>
+                    <div class="tab-pane fade widget-body no-padding-bottom" id="os7_<%= _ticks %>">
+                        <%  Html.RenderPartial("~/Views/Lessons/HealthAssessment.ascx", _model); %>
+                    </div>
+                <%  }
+                    if (ViewBag.ByCalendar != true)
                     { %>
                         <div class="tab-pane fade widget-body no-padding-bottom" id="os6_<%= _ticks %>">
                             <% Html.RenderPartial("~/Views/Lessons/LessonAssessmentReport.ascx", _model); %>

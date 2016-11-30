@@ -234,6 +234,7 @@
                         },
                         icon_url: $('#map').data('marker-img'),
                         overviewMapControl: true,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
 
                     map = new google.maps.Map(document.getElementById('map_canvas1'), mapOptions);
@@ -252,7 +253,7 @@
 
                     // Setup skin for the map
                     map.mapTypes.set('greyscale_style', greyStyleMap);
-                    map.setMapTypeId('greyscale_style');
+                    //map.setMapTypeId('greyscale_style');
 
                 }
 
