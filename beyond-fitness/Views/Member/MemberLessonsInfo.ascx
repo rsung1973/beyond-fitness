@@ -12,21 +12,12 @@
     { %>
 <h4 class="font-md">
     <strong><%= _item.Lessons
-                    -_item.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)
-                    -(_item.RegisterGroupID.HasValue 
-                        ? _item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=_item.RegisterID /*&& l.LessonAttendance!=null*/)
-                        : 0)%> / <%= _item.Lessons %></strong>
+                    -_item.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/) %> / <%= _item.Lessons %></strong>
     <br />
     <small>剩餘/購買上課次數</small>
     <br />
-    <strong><%= _item.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1))
-                    + (_item.RegisterGroupID.HasValue 
-                        ? _item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=_item.RegisterID && l.LessonAttendance==null && l.ClassTime<DateTime.Today.AddDays(1))
-                                                            : 0)%> / 
-            <%= _item.LessonTime.Count(l=>l.ClassTime>=DateTime.Today)
-                    + (_item.RegisterGroupID.HasValue 
-                        ? _item.GroupingLesson.LessonTime.Count(l=>l.RegisterID!=_item.RegisterID && l.ClassTime>=DateTime.Today)
-                                                            : 0)%></strong>
+    <strong><%= _item.GroupingLesson.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1)) %> / 
+            <%= _item.GroupingLesson.LessonTime.Count(l=>l.ClassTime>=DateTime.Today) %></strong>
     <br />
     <small>未完成/已預約 上課數</small>
 </h4>

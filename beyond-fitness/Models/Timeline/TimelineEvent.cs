@@ -9,6 +9,7 @@ namespace WebHome.Models.Timeline
     public class TimelineEvent
     {
         public DateTime EventTime { get; set; }
+        public UserProfile Profile { get; set; }
     }
 
     public class LessonEvent : TimelineEvent

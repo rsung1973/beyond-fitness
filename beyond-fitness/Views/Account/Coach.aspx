@@ -72,7 +72,9 @@
                                 <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
                                 <h2> BEYOND FITNESS Events </h2>
                                 <div class="widget-toolbar">
-                                    <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>"><i class="fa fa-fw fa-bookmark"></i> 登記上課時間</a>
+                                    <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByCoach") %>"><i class="fa fa-fw fa-bookmark"></i> 預約上課時間</a>
+                                    <a class="btn bg-color-teal" 
+                                        onclick="bookingSelfTraining();"><i class="fa fa-fw fa-university"></i>預約內部訓練</a>
                                 </div>
 
                             </header>
@@ -283,11 +285,15 @@
     }
 
         $(function () {
+
+            $global.reload = function () {
+                window.location.href = '<%= Url.Action("Coach","Account") %>';
+            };
+
             showLoading();
         });
 
     </script>
-
 
 </asp:Content>
 <script runat="server">

@@ -57,30 +57,30 @@
     </div>
 </div>
 <script>
-    <%
-
-    var energyData = _items
-        .Select(g =>
-            new
-            {
-                g.LessonTime.ClassTime,
-                Item17 = g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 17).FirstOrDefault(),
-                Item16 = g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 16).FirstOrDefault(),
-            })
-        .Where(g=>g.Item16!=null && g.Item17!=null)
-        .Select(g =>
-            new
-            {
-                period = String.Format("{0:yyyy-MM-dd}", g.ClassTime),
-                energy = filterZero((int)((g.Item17.TotalAssessment - g.Item16.TotalAssessment) / (206.9m - (0.67m * (DateTime.Today.Year - _profile.Birthday.Value.Year)) - g.Item16.TotalAssessment) * 100 + 0.5m))
-            }).ToArray();
+    <%  if (_profile.Birthday.HasValue)
+    {
+        var energyData = _items
+            .Select(g =>
+                new
+                {
+                    g.LessonTime.ClassTime,
+                    Item17 = g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 17).FirstOrDefault(),
+                    Item16 = g.LessonFitnessAssessmentReport.Where(r => r.ItemID == 16).FirstOrDefault(),
+                })
+            .Where(g => g.Item16 != null && g.Item17 != null)
+            .Select(g =>
+                new
+                {
+                    period = String.Format("{0:yyyy-MM-dd}", g.ClassTime),
+                    energy = filterZero((int)((g.Item17.TotalAssessment - g.Item16.TotalAssessment) / (206.9m - (0.67m * (DateTime.Today.Year - _profile.Birthday.Value.Year)) - g.Item16.TotalAssessment) * 100 + 0.5m))
+                }).ToArray();
 
       %>
     $(function () {
-        var energyData = <%= JsonConvert.SerializeObject(energyData,new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }) %>;
+        var energyData = <%= JsonConvert.SerializeObject(energyData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }) %>;
 
         Morris.Line({
-            element: '<%= "bodyEnergy"+_first.AssessmentID %>',
+            element: '<%= "bodyEnergy" + _first.AssessmentID %>',
             data: energyData,
             xkey: 'period',
             yLabelFormat: function(y) {
@@ -95,8 +95,8 @@
             resize: true,
             labels: ['能量系統訓練強度']
         });
-
     });
+<%  } %>
 </script>
 
 <script runat="server">

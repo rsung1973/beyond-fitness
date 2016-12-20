@@ -33,7 +33,8 @@ namespace WebHome.Controllers
             {
                 items = models.GetTable<RegisterLesson>()
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約);
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練);
 
 
                 if (viewModel.Payoff == true)
@@ -176,6 +177,7 @@ namespace WebHome.Controllers
             var items = models.GetTable<LessonTime>().Where(t => t.LessonAttendance != null)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
                 .Where(t => t.LessonPlan.CommitAttendance.HasValue);
 
             if(coachID.HasValue)

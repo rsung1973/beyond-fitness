@@ -49,33 +49,6 @@
 </div>
 <%  } %>
 
-<script>
-
-    function updateHealthAssessment() {
-        var event = event || window.event;
-        var hasValue = false;
-        var $form = $(event.target).closest('form');
-        $form.find('input').each(function (idx) {
-            if ($(this).val() != '') {
-                hasValue = true;
-            }
-        });
-        if(hasValue) {
-            $form.ajaxSubmit({
-                    success: function (data) {
-                        $('.'+$form.prop('id')).html(data);
-                        smartAlert("資料已儲存!!");
-                    }
-                });
-        } else {
-            smartAlert("請輸入至少一個項目!!" + 'id:' + $form.prop('id'));
-        }
-    }
-
-
-</script>
-
-
 <script runat="server">
 
     ModelSource<UserProfile> models;

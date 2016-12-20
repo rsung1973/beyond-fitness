@@ -176,7 +176,7 @@ namespace WebHome.Controllers
                 models.SubmitChanges();
 
                 var timeItem = model.LessonTime;
-                if (timeItem.GroupID.HasValue)
+                if (timeItem.RegisterLesson.GroupingMemberCount > 1)
                 {
                     var group = timeItem.GroupingLesson;
                     var lesson = group.RegisterLesson.First();

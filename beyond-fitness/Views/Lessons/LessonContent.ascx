@@ -22,9 +22,12 @@
     <%  } %>
     </div>
     <ul id="introduction_<%= _ticks %>" class="nav nav-tabs pull-right">
+        <%  if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+            { %>
         <li class="active">
             <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>教練悄悄話</span></a>
         </li>
+        <%  } %>
         <%  if (_model.TrainingBySelf != 1 && ViewBag.LearnerAttendance != true)
             { %>
         <li>
@@ -37,9 +40,12 @@
         <li>
             <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
         </li>
+        <%  if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+            { %>
         <li>
             <a data-toggle="tab" href="#os4_<%= _ticks %>"><i class="fa fa-comments-o"></i><span>課後提醒</span></a>
         </li>
+        <%  } %>
         <%  if (_model.TrainingBySelf != 1)
             { %>
         <li>
@@ -60,12 +66,14 @@
     <div class="widget-body no-padding">
         <!-- content -->
         <div id="tabContent_<%= _ticks %>" class="tab-content padding-10">
+            <%  if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                { %>
             <div class="tab-pane fade widget-body no-padding-bottom active in" id="os1_<%= _ticks %>">
                 <div class="chat-body no-padding profile-message">
                     <%  if (ViewBag.Edit == true)
-                        {
-                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
-                        }%>
+                      {
+                          Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                      }%>
                     
 
                 </div>
@@ -76,14 +84,14 @@
                                 <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                 <span class="message-text">
                                     <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
-                                    <%= _model.LessonPlan!=null ? _model.LessonPlan.Remark : null %>
+                                    <%= _model.LessonPlan != null ? _model.LessonPlan.Remark : null %>
                                 </span>
                             </li>
                         </ul>
                     </div>
 
                     <%  if (ViewBag.Learner == true)
-                        { %>
+                      { %>
                             <span class="msg-remark"></span>
                             <%  Html.RenderPartial("~/Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx", _model); %>
                             <div class="chat-footer">
@@ -105,6 +113,7 @@
                 </div>
 
             </div>
+            <%  } %>
             <!-- end s1 tab pane -->
             <div class="tab-pane fade widget-body no-padding-bottom" id="os2_<%= _ticks %>">
                 <div class="panel-body status">
@@ -144,12 +153,14 @@
                         Html.RenderPartial("~/Views/Activity/ShowLessonFeedBack.ascx", _model); %>
             </div>
             <!-- end s3 tab pane -->
+            <%  if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                { %>
             <div class="tab-pane fade widget-body no-padding-bottom" id="os4_<%= _ticks %>">
                 <div class="panel-body status">
                     <%  if (ViewBag.Edit == true)
-                        {
-                            Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
-                        }%>
+                      {
+                          Html.RenderPartial("~/Views/Lessons/Feedback/CommonFeedback.ascx", _model);
+                      }%>
 
                     <div class="chat-body custom-scroll">
                         <ul>
@@ -157,13 +168,14 @@
                                 <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                 <div class="message-text">
                                     <time></time>
-                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan!=null ? _model.LessonPlan.EndingOperation : null %>
+                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan != null ? _model.LessonPlan.EndingOperation : null %>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+            <%  } %>
             <!-- end s4 tab pane -->
             <%  if (_model.TrainingBySelf != 1)
                 { %>

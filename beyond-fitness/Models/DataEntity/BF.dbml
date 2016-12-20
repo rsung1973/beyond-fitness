@@ -97,6 +97,7 @@
       <Column Name="AttendingCoach" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="GroupID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TrainingBySelf" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="LessonTime_LessonTimeExpansion" Member="LessonTimeExpansion" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTimeExpansion" />
       <Association Name="LessonTime_TrainingPlan" Member="TrainingPlan" ThisKey="LessonID" OtherKey="LessonID" Type="TrainingPlan" />
       <Association Name="LessonTime_FitnessAssessment" Member="FitnessAssessment" ThisKey="LessonID" OtherKey="LessonID" Type="FitnessAssessment" Cardinality="One" />
@@ -105,6 +106,7 @@
       <Association Name="LessonTime_LessonPlan" Member="LessonPlan" ThisKey="LessonID" OtherKey="LessonID" Type="LessonPlan" Cardinality="One" />
       <Association Name="LessonTime_LessonFitnessAssessment" Member="LessonFitnessAssessment" ThisKey="LessonID" OtherKey="LessonID" Type="LessonFitnessAssessment" />
       <Association Name="LessonTime_LessonFeedBack" Member="LessonFeedBack" ThisKey="LessonID" OtherKey="LessonID" Type="LessonFeedBack" />
+      <Association Name="BranchStore_LessonTime" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
       <Association Name="GroupingLesson_LessonTime" Member="GroupingLesson" ThisKey="GroupID" OtherKey="GroupID" Type="GroupingLesson" IsForeignKey="true" />
       <Association Name="ServingCoach_LessonTime" Member="AsInvitedCoach" Storage="_ServingCoach" ThisKey="InvitedCoach" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
       <Association Name="ServingCoach_LessonTime1" Member="AsAttendingCoach" Storage="_ServingCoach1" ThisKey="AttendingCoach" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
@@ -117,8 +119,8 @@
       <Column Name="Hour" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="RegisterID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="LessonID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="LessonTime_LessonTimeExpansion" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" />
       <Association Name="RegisterLesson_LessonTimeExpansion" Member="RegisterLesson" ThisKey="RegisterID" OtherKey="RegisterID" Type="RegisterLesson" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonTimeExpansion" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
   <Table Name="dbo.TrainingType" Member="TrainingType">
@@ -134,8 +136,8 @@
       <Column Name="ExecutionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="PlanStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="TrainingPlan_TrainingExecution" Member="TrainingExecution" ThisKey="ExecutionID" OtherKey="ExecutionID" Type="TrainingExecution" Cardinality="One" />
-      <Association Name="LessonTime_TrainingPlan" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
       <Association Name="LevelExpression_TrainingPlan" Member="LevelExpression" ThisKey="PlanStatus" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="LessonTime_TrainingPlan" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.FitnessAssessment" Member="FitnessAssessment">
@@ -147,7 +149,7 @@
       <Column Name="Endurance" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ExplosiveForce" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SportsPerformance" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="LessonTime_FitnessAssessment" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
+      <Association Name="LessonTime_FitnessAssessment" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LessonTrend" Member="LessonTrend">
@@ -157,14 +159,14 @@
       <Column Name="PostureRedress" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Training" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Counseling" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="LessonTime_LessonTrend" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonTrend" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LessonAttendance" Member="LessonAttendance">
     <Type Name="LessonAttendance">
       <Column Name="LessonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="CompleteDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="LessonTime_LessonAttendance" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonAttendance" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.UserProfile" Member="UserProfile">
@@ -270,16 +272,26 @@
       <Column Name="GroupingMemberCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="AdvisorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="AttendedLessons" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="RegisterLesson_LessonTime" Member="LessonTime" ThisKey="RegisterID" OtherKey="RegisterID" Type="LessonTime" />
       <Association Name="RegisterLesson_LessonTimeExpansion" Member="LessonTimeExpansion" ThisKey="RegisterID" OtherKey="RegisterID" Type="LessonTimeExpansion" />
       <Association Name="RegisterLesson_IntuitionCharge" Member="IntuitionCharge" ThisKey="RegisterID" OtherKey="RegisterID" Type="IntuitionCharge" Cardinality="One" />
       <Association Name="RegisterLesson_LessonFeedBack" Member="LessonFeedBack" ThisKey="RegisterID" OtherKey="RegisterID" Type="LessonFeedBack" />
       <Association Name="GroupingLesson_RegisterLesson" Member="GroupingLesson" ThisKey="RegisterGroupID" OtherKey="GroupID" Type="GroupingLesson" IsForeignKey="true" DeleteRule="SET NULL" />
-      <Association Name="LevelExpression_RegisterLesson" Member="LevelExpression" ThisKey="Attended" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
-      <Association Name="UserProfile_RegisterLesson" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="ServingCoach_RegisterLesson" Member="ServingCoach" ThisKey="AdvisorID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
-      <Association Name="LessonPriceType_RegisterLesson" Member="LessonPriceType" ThisKey="ClassLevel" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
       <Association Name="GroupingLessonDiscount_RegisterLesson" Member="GroupingLessonDiscount" ThisKey="GroupingMemberCount" OtherKey="GroupingMemberCount" Type="GroupingLessonDiscount" IsForeignKey="true" />
+      <Association Name="LessonPriceType_RegisterLesson" Member="LessonPriceType" ThisKey="ClassLevel" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
+      <Association Name="LevelExpression_RegisterLesson" Member="LevelExpression" ThisKey="Attended" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="ServingCoach_RegisterLesson" Member="ServingCoach" ThisKey="AdvisorID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
+      <Association Name="UserProfile_RegisterLesson" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="BranchStore_RegisterLesson" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BranchStore" Member="BranchStore">
+    <Type Name="BranchStore">
+      <Column Name="BranchID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BranchName" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Association Name="BranchStore_LessonTime" Member="LessonTime" ThisKey="BranchID" OtherKey="BranchID" Type="LessonTime" />
+      <Association Name="BranchStore_RegisterLesson" Member="RegisterLesson" ThisKey="BranchID" OtherKey="BranchID" Type="RegisterLesson" />
     </Type>
   </Table>
   <Table Name="dbo.IntuitionCharge" Member="IntuitionCharge">
@@ -347,7 +359,7 @@
       <Column Name="FeedBack" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="FeedBackDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="CommitAttendance" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="LessonTime_LessonPlan" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonPlan" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrainingExecution" Member="TrainingExecution">
@@ -518,8 +530,8 @@
       <Column Name="Remark" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="FeedBack" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Association Name="LessonFitnessAssessment_LessonFitnessAssessmentReport" Member="LessonFitnessAssessmentReport" ThisKey="AssessmentID" OtherKey="AssessmentID" Type="LessonFitnessAssessmentReport" />
-      <Association Name="LessonTime_LessonFitnessAssessment" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" />
       <Association Name="UserProfile_LessonFitnessAssessment" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonFitnessAssessment" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LessonFeedBack" Member="LessonFeedBack">
@@ -530,8 +542,8 @@
       <Column Name="FeedBackDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="Remark" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="RemarkDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="LessonTime_LessonFeedBack" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="RegisterLesson_LessonFeedBack" Member="RegisterLesson" ThisKey="RegisterID" OtherKey="RegisterID" Type="RegisterLesson" IsForeignKey="true" />
+      <Association Name="LessonTime_LessonFeedBack" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LessonAttendanceDueDate" Member="LessonAttendanceDueDate">

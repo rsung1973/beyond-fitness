@@ -49,7 +49,8 @@ namespace WebHome.Controllers
             items.AddRange(lessons.Select(t => new LessonEvent
             {
                 EventTime = t.ClassTime.Value,
-                Lesson = t
+                Lesson = t,
+                Profile = profile
             }));
 
             ///2. fetch top 5 attended lessons
@@ -61,14 +62,16 @@ namespace WebHome.Controllers
             items.AddRange(lessons.Select(t => new LessonEvent
             {
                 EventTime = t.ClassTime.Value,
-                Lesson = t
+                Lesson = t,
+                Profile = profile
             }));
 
             ///3. add monthly review
             ///
             items.Add(new LearnerMonthlyReviewEvent
             {
-                EventTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)
+                EventTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                Profile = profile
             });
 
             ///4. add birthday
@@ -82,7 +85,8 @@ namespace WebHome.Controllers
                 {
                     items.Add(new BirthdayEvent
                     {
-                        EventTime = birthDate
+                        EventTime = birthDate,
+                        Profile = profile
                     });
                 }
             }
@@ -103,7 +107,7 @@ namespace WebHome.Controllers
             LessonFeedBack item = lesson.LessonFeedBack.Where(f => f.RegisterLesson.UID == profile.UID).FirstOrDefault();
             if (item == null)
             {
-                if (lesson.GroupID.HasValue)
+                if (lesson.RegisterLesson.GroupingMemberCount > 1)
                 {
                     RegisterLesson regItem = lesson.GroupingLesson.RegisterLesson.Where(r => r.UID == profile.UID).FirstOrDefault();
                     if (regItem == null)
@@ -191,12 +195,8 @@ namespace WebHome.Controllers
             }
 
             if (models.GetTable<PDQTask>().Count(t => t.UID == profile.UID && t.PDQQuestion.GroupID == 6) >=
-                (models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID && !r.RegisterGroupID.HasValue)
-                    .Join(models.GetTable<LessonTime>(), r => r.RegisterID, l => l.RegisterID, (r, l) => l)
-                    .Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)
-                + models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID)
-                    .Join(models.GetTable<LessonTime>(), r => r.RegisterGroupID, l => l.GroupID, (r, l) => l)
-                    .Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
+                models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID)
+                    .Select(r => r.GroupingLesson).Sum(g => g.LessonTime.Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
             {
                 return new EmptyResult();
             }
@@ -502,6 +502,27 @@ namespace WebHome.Controllers
         public ActionResult AverageFitness()
         {
             return View();
+        }
+
+        public ActionResult CommitLearnerHealthAssessment(int assessmentID, int groupID)
+        {
+            var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).FirstOrDefault();
+            if (fitnessAssessment == null)
+            {
+                return Json(new { result = false, message = "學員課程資料錯誤!!" });
+            }
+
+            foreach (var key in Request.Form.AllKeys.Where(k => Regex.IsMatch(k, "_\\d")))
+            {
+                saveAssessment(fitnessAssessment, key);
+            }
+
+            fitnessAssessment.AssessmentDate = DateTime.Now;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+
         }
 
         public ActionResult UpdateLessonFitnessAssessment(int assessmentID,int groupID,bool? forHealth)
@@ -820,6 +841,12 @@ namespace WebHome.Controllers
             ViewBag.ShowOnly = showOnly;
             return View(item);
 
+        }
+
+        public ActionResult HealthIndex(int id)
+        {
+            var model = models.GetTable<LessonFitnessAssessment>().Where(f => f.UID == id).OrderByDescending(f => f.AssessmentID).FirstOrDefault();
+            return View(model);
         }
 
 

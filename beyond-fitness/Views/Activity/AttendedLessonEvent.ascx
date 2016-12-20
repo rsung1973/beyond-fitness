@@ -25,6 +25,9 @@
                 <button class="btn btn-xs btn-success" onclick="learnerAttendLesson(<%= _model.Lesson.LessonID %>);"><i class="fa fa-check"></i> 上課打卡</button>
                 <%  } %>
             </p>
+            <p>
+                <button class="btn btn-xs btn-info" onclick="assessLearnerHealth(<%= _model.Lesson.LessonID %>,<%= _model.Profile.UID %>);"><i class="fa fa-history"></i> 確認健康指數</button>
+            </p>
         </div>
     </div>
 </li>

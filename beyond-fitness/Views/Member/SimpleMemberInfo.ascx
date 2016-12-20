@@ -27,28 +27,14 @@
                             <h4 class="font-md"><strong><% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
                                 <%= totalLessons
                                         - _currentLessons.Sum(c=>c.AttendedLessons)
-                                        - _currentLessons.Sum(c=>c.LessonTime.Count(/*l=>l.LessonAttendance!= null*/))
-                                        - _currentLessons
-                                        .Where(c=>c.RegisterGroupID.HasValue)
-                                        .Sum(c=>c.GroupingLesson.LessonTime
-                                            .Where(l=>l.RegisterID!=c.RegisterID)
-                                            .Count(/*l=>l.LessonAttendance!= null*/)) %> / <%= totalLessons %></strong>
+                                        - _currentLessons.Sum(c=>c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %> / 
+                                <%= totalLessons %></strong>
                                 <br/>
                                 <small>剩餘/購買上課次數</small>
                                 <br />
                                 <strong>
-                                    <%= _currentLessons.Sum(c=>c.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1)))
-                                            +_currentLessons
-                                            .Where(c=>c.RegisterGroupID.HasValue)
-                                            .Sum(c=>c.GroupingLesson.LessonTime
-                                                .Where(l=>l.RegisterID!=c.RegisterID)
-                                                .Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1))) %> / 
-                                    <%= _currentLessons.Sum(c=>c.LessonTime.Count(l=> l.ClassTime>=DateTime.Today))
-                                            +_currentLessons
-                                            .Where(c=>c.RegisterGroupID.HasValue)
-                                            .Sum(c=>c.GroupingLesson.LessonTime
-                                                .Where(l=>l.RegisterID!=c.RegisterID)
-                                                .Count(l=>l.ClassTime>=DateTime.Today)) %></strong>
+                                    <%= _currentLessons.Sum(c=>c.GroupingLesson.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1))) %> / 
+                                    <%= _currentLessons.Sum(c=>c.GroupingLesson.LessonTime.Count(l=> l.ClassTime>=DateTime.Today)) %></strong>
                                 <br />
                                 <small>未完成/已預約 上課數</small>
                                 <br />

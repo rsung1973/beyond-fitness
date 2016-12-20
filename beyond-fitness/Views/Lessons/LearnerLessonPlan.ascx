@@ -10,7 +10,14 @@
 
 <div class="row">
 
-    <%  Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.UserProfile); %>
+    <%  if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+        {
+            Html.RenderPartial("~/Views/Member/CoachSelfLesson.ascx", _model.UserProfile);
+        }
+        else
+        {
+            Html.RenderPartial("~/Views/Member/LessonCount.ascx", _model.UserProfile);
+        } %>
     <div class="col-xs-8 col-sm-5">
         <h1>
             <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
@@ -19,6 +26,8 @@
         <p style="display:none;">
             <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
         </p>
+        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+            { %>
         <p class="alert alert-danger secret-info">
             <strong>
                 <%  foreach (var pdq in _pdqConclusion)
@@ -32,6 +41,7 @@
                 <%  } %>
             </strong>
         </p>
+        <%  } %>
         <p class="secret-info">
             <%= _model.UserProfile.RecentStatus!=null ? _model.UserProfile.RecentStatus.Replace("\n","<br/>") : null %>
             <%--<form action="<%= VirtualPathUtility.ToAbsolute("~/Lessons/CommitPlan") %>" class="smart-form" method="post">
@@ -56,12 +66,18 @@
             <button type="button" name="editStatus" onclick="editRecentStatus(<%= _model.UID %>);" class="btn btn-primary btn-sm">
                 <i class="fa fa-reply"></i>更新個人近況
             </button>
+            <button type="button" name="editHealth" onclick="editHealth(<%= _model.RegisterID %>)" class="btn btn-primary btn-sm" id="btn-chat">
+                <i class="fa fa-history"></i>更新身體基本指數
+            </button>
         </p>
     </div>
+    <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+        { %>
     <div class="col-xs-12 col-sm-4">
         <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.UserProfile); %>
         <%  Html.RenderPartial("~/Views/Member/UserAssessmentInfo.ascx", _model.UserProfile); %>
     </div>
+    <%  } %>
 </div>
 
 <script runat="server">

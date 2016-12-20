@@ -45,7 +45,7 @@
             .Select(l => l.GroupingLesson)
             .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
-        if(_model.GroupID.HasValue)
+        if (_model.RegisterLesson.GroupingMemberCount > 1)
         {
             _lessonFeedback = models.GetTable<LessonFeedBack>().Where(f => f.Remark != null && f.Remark.Length > 0)
                 .Join(models.GetTable<RegisterLesson>()

@@ -259,6 +259,7 @@ namespace WebHome.Controllers
             return View("RegisterByMail", item);
         }
 
+        [Authorize]
         public ActionResult ViewProfile(int? id)
         {
             UserProfile item = HttpContext.GetUser();

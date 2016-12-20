@@ -42,16 +42,13 @@
             <td><%= item.MemberCode %></td>
             <td><%= item.YearsOld() %></td>
             <td><%= item.UserProfileExtension!=null ? item.UserProfileExtension.Gender=="M" ? "男" : "女" : null %></td>
-            <td><%  var items = item.RegisterLesson.Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
+            <td><%  var items = item.RegisterLesson.Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                        .Where(l=>l.RegisterGroupID.HasValue);
                     totalLessons = items.Sum(l => l.Lessons);
                     Writer.Write(totalLessons); %></td>
             <td><%  attended = 
-                        items.Sum(l => l.LessonTime.Count(/*t => t.LessonAttendance != null*/))
-                        + items.Sum(l => l.AttendedLessons)
-                        + items.Where(c=>c.RegisterGroupID.HasValue)
-                            .Sum(c=>c.GroupingLesson.LessonTime
-                                .Where(l=>l.RegisterID!=c.RegisterID)
-                                .Count(/*l=>l.LessonAttendance!= null*/));
+                        items.Sum(l => l.GroupingLesson.LessonTime.Count(/*t => t.LessonAttendance != null*/))
+                        + items.Sum(l => l.AttendedLessons);
                     Writer.Write(totalLessons - attended); %></td>
             <td>
                 <div class="btn-group dropup">

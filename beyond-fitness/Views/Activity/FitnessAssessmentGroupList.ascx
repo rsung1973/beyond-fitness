@@ -18,6 +18,7 @@
             <th data-class="expand">項目</th>
             <th data-hide="phone"><%= _model.FitnessAssessmentItem.Unit=="次" ? "次數"
                                           : _model.FitnessAssessmentItem.Unit=="組" ? "組數"
+                                          : _model.FitnessAssessmentItem.Unit=="分鐘" ? "訓練總量"
                                           : "訓練總量KG" %></th>
         </tr>
     </thead>
@@ -39,7 +40,7 @@
                     <td><%= item.FitnessAssessmentItem.ItemName %><%= item.BySingleSide==true ? "(單邊)" : item.BySingleSide==false ? "(雙邊)" : null %><%= !String.IsNullOrEmpty(item.ByCustom) ? "("+item.ByCustom+")" : null %></td>
                     <td><%  if (item.TotalAssessment.HasValue)
                             { %>
-                                <%= String.Format("{0:.}", item.TotalAssessment * (item.BySingleSide==true ? 2 : 1)) %> 
+                                <%= String.Format("{0:.#}", item.TotalAssessment * (item.BySingleSide==true ? 2 : 1)) %> 
                                 <%  if (item.BySingleSide == true)
                                     {   %>
                                         (<%= item.TotalAssessment %> * 2) 
@@ -48,7 +49,7 @@
                         <%  }
                             else
                             { %>
-                                <%= String.Format("{0:.}", item.SingleAssessment*item.ByTimes*(item.BySingleSide==true ? 2 : 1)) %> 
+                                <%= String.Format("{0:.#}", item.SingleAssessment*item.ByTimes*(item.BySingleSide==true ? 2 : 1)) %> 
                                 <%= item.FitnessAssessmentItem.Unit %>(<%= String.Format("{0:.#}", item.SingleAssessment) %><%= item.FitnessAssessmentItem.Unit %> * <%= String.Format("{0:.}", item.ByTimes) %> 次 <%= item.BySingleSide==true ? " * 2" : null %>)
                         <%  } %>
                     </td>

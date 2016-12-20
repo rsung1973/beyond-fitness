@@ -67,6 +67,25 @@
                 </ul>
             </div>
         </article>
+
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+            <ul class="nav nav-tabs tabs-pull-right">
+                <li class="active">
+                    <a data-toggle="tab" href="#health01"><i class="fa fa-history"></i><span>身體健康指數</span></a>
+                </li>
+                <li>
+            </ul>
+            <div class="tab-content padding-top-10">
+                <div class="tab-pane fade in active" id="health01">
+                    <div class="row ">
+                        <div class="col-xs-12 col-sm-12">
+                            <%  Html.RenderAction("HealthIndex", "Activity", new { id = _model.UID }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     
 

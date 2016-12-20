@@ -23,8 +23,15 @@
                                     lessonID = item.LessonID
                                 }) %>);'><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>編輯上課內容</a></li>
         <li class="divider"></li>
+<%  if (_model.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+    {   %>
+        <li><a onclick="bookingSelfTraining(<%= _model.LessonID %>);"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i>修改上課時間</a></li>
+<%  }
+    else
+    { %>
         <li><a onclick="showLoading(true,function(){ window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/RebookingByCoach/") + _model.LessonID %>';});"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i>修改上課時間</a></li>
-<%  if (item.LessonTime.LessonAttendance == null)
+<%  }
+    if (item.LessonTime.LessonAttendance == null)
     { %>
         <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>取消上課</a></li>
 <%  }

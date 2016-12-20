@@ -106,28 +106,28 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/27/2016 22:23:22</publishTime>
     </File>
     <File Include="bin/beyond-fitness.dll">
-      <publishTime>11/30/2016 23:51:42</publishTime>
+      <publishTime>12/18/2016 22:24:36</publishTime>
     </File>
     <File Include="bin/beyond-fitness.pdb">
-      <publishTime>11/30/2016 23:51:42</publishTime>
+      <publishTime>12/18/2016 22:24:36</publishTime>
     </File>
     <File Include="bin/CommonLib.dll">
-      <publishTime>11/30/2016 22:02:30</publishTime>
+      <publishTime>12/18/2016 22:24:21</publishTime>
     </File>
     <File Include="bin/CommonLib.Logger.dll">
-      <publishTime>11/30/2016 22:02:29</publishTime>
+      <publishTime>12/18/2016 22:24:19</publishTime>
     </File>
     <File Include="bin/CommonLib.Logger.pdb">
-      <publishTime>11/30/2016 22:02:29</publishTime>
+      <publishTime>12/18/2016 22:24:19</publishTime>
     </File>
     <File Include="bin/CommonLib.pdb">
-      <publishTime>11/30/2016 22:02:30</publishTime>
+      <publishTime>12/18/2016 22:24:21</publishTime>
     </File>
     <File Include="bin/CommonLib.PlugInAdapter.dll">
-      <publishTime>11/30/2016 22:02:29</publishTime>
+      <publishTime>12/18/2016 22:24:12</publishTime>
     </File>
     <File Include="bin/CommonLib.PlugInAdapter.pdb">
-      <publishTime>11/30/2016 22:02:29</publishTime>
+      <publishTime>12/18/2016 22:24:12</publishTime>
     </File>
     <File Include="bin/img/favicon/apple-touch-icon.png">
       <publishTime>08/03/2016 22:50:31</publishTime>
@@ -4075,7 +4075,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/27/2016 22:23:23</publishTime>
     </File>
     <File Include="Models/DataEntity/BF.dbml">
-      <publishTime>11/17/2016 22:33:55</publishTime>
+      <publishTime>12/02/2016 01:06:58</publishTime>
     </File>
     <File Include="Module/Common/CommonScriptInclude.ascx">
       <publishTime>09/25/2016 10:17:31</publishTime>
@@ -4294,7 +4294,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/20/2016 23:52:25</publishTime>
     </File>
     <File Include="Views/Account/Coach.aspx">
-      <publishTime>09/24/2016 23:37:57</publishTime>
+      <publishTime>12/18/2016 22:01:21</publishTime>
     </File>
     <File Include="Views/Account/CompleteEditMySelf.aspx">
       <publishTime>07/11/2016 23:35:56</publishTime>
@@ -4312,13 +4312,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/17/2016 18:21:18</publishTime>
     </File>
     <File Include="Views/Account/FreeAgent.aspx">
-      <publishTime>10/28/2016 00:18:43</publishTime>
+      <publishTime>12/18/2016 22:01:20</publishTime>
     </File>
     <File Include="Views/Account/FreeAgentClockIn.ascx">
       <publishTime>08/06/2016 23:38:57</publishTime>
     </File>
     <File Include="Views/Account/Index.aspx">
-      <publishTime>07/28/2016 00:44:30</publishTime>
+      <publishTime>12/01/2016 00:20:37</publishTime>
     </File>
     <File Include="Views/Account/LessonSummary.ascx">
       <publishTime>07/08/2016 17:54:32</publishTime>
@@ -4363,13 +4363,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/03/2016 21:46:24</publishTime>
     </File>
     <File Include="Views/Account/ViewLearner.aspx">
-      <publishTime>09/17/2016 18:21:18</publishTime>
+      <publishTime>12/15/2016 23:59:58</publishTime>
     </File>
     <File Include="Views/Account/Vip.aspx">
       <publishTime>10/08/2016 18:32:51</publishTime>
     </File>
     <File Include="Views/Activity/AttendedLessonEvent.ascx">
-      <publishTime>10/08/2016 17:31:19</publishTime>
+      <publishTime>12/16/2016 00:03:51</publishTime>
     </File>
     <File Include="Views/Activity/AverageFitness.aspx">
       <publishTime>09/17/2016 18:17:37</publishTime>
@@ -4390,13 +4390,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/16/2016 22:53:32</publishTime>
     </File>
     <File Include="Views/Activity/EditAssessmentGroupItem.ascx">
-      <publishTime>11/20/2016 11:16:47</publishTime>
+      <publishTime>12/18/2016 21:02:43</publishTime>
     </File>
     <File Include="Views/Activity/EditAssessmentItem.ascx">
       <publishTime>11/20/2016 11:19:39</publishTime>
     </File>
     <File Include="Views/Activity/EditAssessmentTrendItem.ascx">
-      <publishTime>10/02/2016 01:22:51</publishTime>
+      <publishTime>12/18/2016 21:02:43</publishTime>
     </File>
     <File Include="Views/Activity/EditDailyQuestion.aspx">
       <publishTime>09/25/2016 10:17:41</publishTime>
@@ -4408,7 +4408,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/03/2016 17:23:05</publishTime>
     </File>
     <File Include="Views/Activity/FitnessAssessmentGroupList.ascx">
-      <publishTime>11/20/2016 11:12:36</publishTime>
+      <publishTime>12/18/2016 21:14:32</publishTime>
     </File>
     <File Include="Views/Activity/FitnessAssessmentGroupPie.ascx">
       <publishTime>10/09/2016 00:28:26</publishTime>
@@ -4429,7 +4429,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/09/2016 00:54:03</publishTime>
     </File>
     <File Include="Views/Activity/HealthFitnessAssessmentGroup.ascx">
-      <publishTime>11/27/2016 13:53:34</publishTime>
+      <publishTime>12/11/2016 23:45:32</publishTime>
     </File>
     <File Include="Views/Activity/HealthIndex.ascx">
       <publishTime>11/27/2016 16:08:11</publishTime>
@@ -4474,7 +4474,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/03/2016 23:06:55</publishTime>
     </File>
     <File Include="Views/Activity/TimeLine.aspx">
-      <publishTime>11/07/2016 20:58:25</publishTime>
+      <publishTime>12/11/2016 21:00:14</publishTime>
     </File>
     <File Include="Views/Attendance/AddTraining.ascx">
       <publishTime>07/04/2016 00:05:27</publishTime>
@@ -4493,6 +4493,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Views/Fitness/BodyEnergyAssessment.ascx">
       <publishTime>10/13/2016 10:34:09</publishTime>
+    </File>
+    <File Include="Views/Fitness/LearnerHealthAssessment.ascx">
+      <publishTime>12/16/2016 00:09:55</publishTime>
     </File>
     <File Include="Views/Fitness/MuscleStrengthAssessment.ascx">
       <publishTime>11/28/2016 22:40:11</publishTime>
@@ -4696,10 +4699,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/15/2016 00:10:52</publishTime>
     </File>
     <File Include="Views/Lessons/BookingByCoach.aspx">
-      <publishTime>11/07/2016 13:38:49</publishTime>
+      <publishTime>12/18/2016 22:01:21</publishTime>
     </File>
     <File Include="Views/Lessons/BookingByFreeAgent.aspx">
-      <publishTime>10/29/2016 00:30:47</publishTime>
+      <publishTime>12/18/2016 22:01:20</publishTime>
     </File>
     <File Include="Views/Lessons/CoachSelector.ascx">
       <publishTime>07/03/2016 16:59:30</publishTime>
@@ -4711,7 +4714,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2016 22:57:53</publishTime>
     </File>
     <File Include="Views/Lessons/DailyBookingMembers.ascx">
-      <publishTime>11/07/2016 16:55:53</publishTime>
+      <publishTime>12/12/2016 18:20:34</publishTime>
     </File>
     <File Include="Views/Lessons/DailyBookingMembersByFreeAgent.ascx">
       <publishTime>10/28/2016 00:18:43</publishTime>
@@ -4747,7 +4750,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/01/2016 00:15:09</publishTime>
     </File>
     <File Include="Views/Lessons/Feedback/CommonFeedback.ascx">
-      <publishTime>11/07/2016 13:12:22</publishTime>
+      <publishTime>12/03/2016 22:21:33</publishTime>
     </File>
     <File Include="Views/Lessons/Feedback/LearnerLessonRemarkItem.ascx">
       <publishTime>11/04/2016 00:17:34</publishTime>
@@ -4759,13 +4762,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/01/2016 12:22:06</publishTime>
     </File>
     <File Include="Views/Lessons/HealthAssessment.ascx">
-      <publishTime>12/01/2016 00:03:54</publishTime>
+      <publishTime>12/18/2016 12:25:26</publishTime>
     </File>
     <File Include="Views/Lessons/LearnerHealthAssessment.ascx">
       <publishTime>11/27/2016 00:27:50</publishTime>
     </File>
     <File Include="Views/Lessons/LearnerLessonPlan.ascx">
-      <publishTime>11/27/2016 14:04:21</publishTime>
+      <publishTime>12/18/2016 22:16:51</publishTime>
     </File>
     <File Include="Views/Lessons/LessonAssessment.ascx">
       <publishTime>12/01/2016 00:08:54</publishTime>
@@ -4774,7 +4777,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/09/2016 00:10:43</publishTime>
     </File>
     <File Include="Views/Lessons/LessonContent.ascx">
-      <publishTime>11/29/2016 14:35:51</publishTime>
+      <publishTime>12/14/2016 22:20:50</publishTime>
     </File>
     <File Include="Views/Lessons/LessonGoal.ascx">
       <publishTime>07/08/2016 11:34:38</publishTime>
@@ -4792,10 +4795,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/24/2016 22:12:02</publishTime>
     </File>
     <File Include="Views/Lessons/LessonsInfo.ascx">
-      <publishTime>09/27/2016 15:07:36</publishTime>
+      <publishTime>12/11/2016 13:34:37</publishTime>
+    </File>
+    <File Include="Views/Lessons/LessonTime/DataContent.ascx">
+      <publishTime>12/14/2016 22:25:00</publishTime>
+    </File>
+    <File Include="Views/Lessons/LessonTime/DataItem.aspx">
+      <publishTime>12/05/2016 00:20:41</publishTime>
+    </File>
+    <File Include="Views/Lessons/LessonTime/EditContent.ascx">
+      <publishTime>12/14/2016 22:16:06</publishTime>
+    </File>
+    <File Include="Views/Lessons/LessonTime/EditItem.aspx">
+      <publishTime>12/18/2016 22:22:43</publishTime>
+    </File>
+    <File Include="Views/Lessons/LessonTime/Module/BookingSelfTraining.ascx">
+      <publishTime>12/12/2016 18:56:31</publishTime>
     </File>
     <File Include="Views/Lessons/LessonTimeExpansionHandler.ascx">
-      <publishTime>09/05/2016 22:28:49</publishTime>
+      <publishTime>12/13/2016 15:06:03</publishTime>
     </File>
     <File Include="Views/Lessons/LessonTrendItem.ascx">
       <publishTime>09/04/2016 01:21:31</publishTime>
@@ -4822,10 +4840,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/17/2016 09:00:14</publishTime>
     </File>
     <File Include="Views/Lessons/QueryVip.aspx">
-      <publishTime>10/16/2016 01:38:46</publishTime>
+      <publishTime>12/18/2016 22:01:21</publishTime>
     </File>
     <File Include="Views/Lessons/RebookingByCoach.aspx">
-      <publishTime>09/17/2016 18:21:18</publishTime>
+      <publishTime>12/18/2016 22:01:21</publishTime>
     </File>
     <File Include="Views/Lessons/SelectVipDay.ascx">
       <publishTime>07/08/2016 22:18:44</publishTime>
@@ -4896,6 +4914,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Member/CoachList.ascx">
       <publishTime>08/12/2016 00:06:08</publishTime>
     </File>
+    <File Include="Views/Member/CoachSelfLesson.ascx">
+      <publishTime>12/18/2016 22:15:27</publishTime>
+    </File>
     <File Include="Views/Member/CoachUpdated.aspx">
       <publishTime>06/26/2016 23:13:09</publishTime>
     </File>
@@ -4939,19 +4960,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/17/2016 16:19:06</publishTime>
     </File>
     <File Include="Views/Member/LearnerList.ascx">
-      <publishTime>11/07/2016 00:06:39</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Member/LearnerUpdated.aspx">
       <publishTime>06/26/2016 23:12:37</publishTime>
     </File>
     <File Include="Views/Member/LessonCount.ascx">
-      <publishTime>11/14/2016 21:52:40</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Member/LessonsItem.ascx">
       <publishTime>06/25/2016 16:09:50</publishTime>
     </File>
     <File Include="Views/Member/LessonsList.ascx">
-      <publishTime>11/07/2016 00:17:19</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Member/LessonsUpdated.aspx">
       <publishTime>09/22/2016 08:50:36</publishTime>
@@ -4975,7 +4996,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/15/2016 00:25:28</publishTime>
     </File>
     <File Include="Views/Member/MemberLessonsInfo.ascx">
-      <publishTime>11/07/2016 01:45:38</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Member/PayInstallment.ascx">
       <publishTime>08/28/2016 22:44:30</publishTime>
@@ -5065,7 +5086,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/22/2016 23:10:34</publishTime>
     </File>
     <File Include="Views/Report/LessonAttendanceAchievement.ascx">
-      <publishTime>10/16/2016 12:11:38</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Report/LessonAttendanceTypeGroup.ascx">
       <publishTime>09/16/2016 12:37:10</publishTime>
@@ -5080,7 +5101,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/16/2016 13:42:20</publishTime>
     </File>
     <File Include="Views/Report/PaymentList.ascx">
-      <publishTime>11/20/2016 09:40:04</publishTime>
+      <publishTime>12/03/2016 22:00:54</publishTime>
     </File>
     <File Include="Views/Report/RecentLessonsCalendar.ascx">
       <publishTime>09/01/2016 23:34:29</publishTime>
@@ -5096,6 +5117,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Views/Sample/DataTable.ascx">
       <publishTime>09/28/2016 22:26:12</publishTime>
+    </File>
+    <File Include="Views/Sample/ModalUI.ascx">
+      <publishTime>12/12/2016 11:39:33</publishTime>
     </File>
     <File Include="Views/Sample/Sample.ascx">
       <publishTime>06/25/2016 17:35:11</publishTime>
@@ -5125,7 +5149,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/27/2016 17:40:32</publishTime>
     </File>
     <File Include="Views/Shared/GlobalScript.ascx">
-      <publishTime>11/04/2016 00:26:51</publishTime>
+      <publishTime>12/18/2016 22:22:41</publishTime>
     </File>
     <File Include="Views/Shared/GraphView.ascx">
       <publishTime>07/08/2016 20:52:39</publishTime>

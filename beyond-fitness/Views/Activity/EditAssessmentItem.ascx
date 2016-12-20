@@ -91,7 +91,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <div class="icon-addon">
-                                    <input type="number" placeholder="請輸入純數字" class="form-control" name="totalAssessment" required/>
+                                    <input type="number" step="0.1" placeholder="請輸入純數字" class="form-control" name="totalAssessment" required />
                                 </div>
                                 <span class="input-group-addon" id="itemUnit">KG</span>
                             </div>
@@ -115,7 +115,7 @@
                         <div class="col-sm-6 col-md-5">
                             <div class="input-group">
                                 <div class="icon-addon">
-                                    <input type="number" placeholder="請輸入純數字" class="form-control" name="singleAssessment" step="0.5"/>
+                                    <input type="number" step="0.1" placeholder="請輸入純數字" class="form-control" name="singleAssessment" />
                                 </div>
                                 <span class="input-group-addon">KG</span>
                             </div>

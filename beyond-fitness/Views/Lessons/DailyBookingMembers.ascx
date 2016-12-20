@@ -32,7 +32,11 @@
                                     <i class="fa fa-child fa-2x text-danger"></i><%= item.RegisterLesson.UserProfile.RealName %>
                             <%  } %>
                         </td>
-                        <td class="col-xs-1 col-sm-1"><%= item.LessonTime.AsAttendingCoach.UserProfile.RealName %></td> 
+                        <td class="col-xs-1 col-sm-1">
+                            <%= item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練
+                                    ? "內部訓練"
+                                    : item.LessonTime.AsAttendingCoach.UserProfile.RealName %>
+                        </td> 
                         <td><%= item.LessonTime.TrainingPlan.Count==0 
                                     ? "已預約"
                                     : item.LessonTime.LessonAttendance!=null 

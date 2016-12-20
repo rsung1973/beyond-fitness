@@ -1467,6 +1467,7 @@
     <Content Include="Views\BulletinBoard\LearnerBirthdayNotification.ascx" />
     <Content Include="Views\Error\Http404.aspx" />
     <Content Include="Views\Error\Http500.aspx" />
+    <Content Include="Views\Fitness\LearnerHealthAssessment.ascx" />
     <Content Include="Views\Fitness\MuscleStrengthAssessment.ascx" />
     <Content Include="Views\Fitness\BodyEnergyAssessment.ascx" />
     <Content Include="Views\Fitness\PersonalStrengthAssessment.ascx" />
@@ -1567,6 +1568,11 @@
     <Content Include="Views\Lessons\LessonsCalendar.ascx" />
     <Content Include="Views\Lessons\LessonsInfo.ascx" />
     <Content Include="Views\Lessons\LessonTimeExpansionHandler.ascx" />
+    <Content Include="Views\Lessons\LessonTime\DataContent.ascx" />
+    <Content Include="Views\Lessons\LessonTime\EditItem.aspx" />
+    <Content Include="Views\Lessons\LessonTime\EditContent.ascx" />
+    <Content Include="Views\Lessons\LessonTime\DataItem.aspx" />
+    <Content Include="Views\Lessons\LessonTime\Module\BookingSelfTraining.ascx" />
     <Content Include="Views\Lessons\LessonTrendItem.ascx" />
     <Content Include="Views\Lessons\PreviewLesson.aspx" />
     <Content Include="Views\Lessons\ProfessionalLevelSelector.ascx" />
@@ -1617,6 +1623,7 @@
     <Content Include="Views\Member\LearnerItem.ascx" />
     <Content Include="Views\Member\LearnerList.ascx" />
     <Content Include="Views\Member\LearnerUpdated.aspx" />
+    <Content Include="Views\Member\CoachSelfLesson.ascx" />
     <Content Include="Views\Member\LessonCount.ascx" />
     <Content Include="Views\Member\LessonsItem.ascx" />
     <Content Include="Views\Member\LessonsList.ascx" />
@@ -1663,6 +1670,7 @@
     <Content Include="Views\Report\CoachAchievement.aspx" />
     <Content Include="Views\Report\StaffAchievement.aspx" />
     <Content Include="Views\Sample\DataTable.ascx" />
+    <Content Include="Views\Sample\ModalUI.ascx" />
     <Content Include="Views\Sample\Sample.ascx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />

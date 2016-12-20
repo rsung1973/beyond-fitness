@@ -60,5 +60,19 @@ namespace WebHome.Controllers
 
             return View(items);
         }
+
+        public ActionResult EditLearnerHealth(int lessonID,int uid)
+        {
+            var model = models.GetTable<LessonFitnessAssessment>().Where(f => f.LessonID == lessonID && f.UID == uid).FirstOrDefault();
+            if(model==null)
+            {
+                ViewBag.Message = "學員課程資料錯誤!!";
+                return View("~/Views/Shared/AlertMessage.ascx");
+            }
+            else
+            {
+                return View("~/Views/Fitness/LearnerHealthAssessment.ascx", model);
+            }
+        }
     }
 }

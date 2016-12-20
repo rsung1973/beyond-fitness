@@ -25,7 +25,7 @@
         <!-- breadcrumb -->
         <ol class="breadcrumb">
             <li>課程管理></li>
-            <li>登記上課時間</li>
+            <li>預約上課時間</li>
         </ol>
         <!-- end breadcrumb -->
 
@@ -47,7 +47,7 @@
         <!-- PAGE HEADER -->
         <i class="fa-fw fa fa-bookmark"></i>課程管理
 							<span>>  
-								登記上課時間
+								預約上課時間
                             </span>
     </h1>
 </asp:Content>
@@ -138,19 +138,29 @@
                             </fieldset>
                             <fieldset>
                                 <div class="row">
-                                    <section class="col col-6">
+                                    <section class="col col-4">
                                         <label>請選擇上課時段</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="classDate" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
                                         </label>
                                     </section>
-                                    <section class="col col-6">
+                                    <section class="col col-4">
                                         <label>請選擇上課分鐘數</label>
                                         <label class="select">
                                             <select name="duration" class="input-lg">
                                                 <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
                                                 <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
+                                        <label>請選擇上課地點</label>
+                                        <label class="select">
+                                            <select class="input-lg" name="branchID">
+                                                <option value="1" <%= _viewModel.BranchID==1 ? "selected": null %>>小巨蛋</option>
+                                                <option value="2" <%= _viewModel.BranchID==2 ? "selected": null %>>１０１</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>

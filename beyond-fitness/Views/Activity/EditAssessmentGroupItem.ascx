@@ -77,7 +77,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <div class="icon-addon">
-                                    <input type="number" placeholder="請輸入純數字" class="form-control" name="totalAssessment" value="<%= String.Format("{0:.}",_model.TotalAssessment) %>" <%= _model.TotalAssessment.HasValue ? "required" : null %> />
+                                    <input type="number" step="0.1" placeholder="請輸入純數字" class="form-control" name="totalAssessment" value="<%= String.Format("{0:.#}",_model.TotalAssessment) %>" <%= _model.TotalAssessment.HasValue ? "required" : null %> />
                                 </div>
                                 <span class="input-group-addon"><%= _model.FitnessAssessmentItem.Unit %></span>
                             </div>
@@ -103,7 +103,7 @@
                         <div class="col-sm-6 col-md-5">
                             <div class="input-group">
                                 <div class="icon-addon">
-                                    <input type="number" step="0.5" placeholder="請輸入純數字" class="form-control" name="singleAssessment" value="<%= String.Format("{0:.}",_model.SingleAssessment) %>" <%= !_model.TotalAssessment.HasValue ? "required" : null %> />
+                                    <input type="number" step="0.1" placeholder="請輸入純數字" class="form-control" name="singleAssessment" value="<%= String.Format("{0:.#}",_model.SingleAssessment) %>" <%= !_model.TotalAssessment.HasValue ? "required" : null %> />
                                 </div>
                                 <span class="input-group-addon">KG</span>
                             </div>

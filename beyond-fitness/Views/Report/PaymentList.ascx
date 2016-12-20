@@ -35,10 +35,7 @@
                     <td><%= item.LessonPriceType.Description %></td>
                     <td><%= item.GroupingMemberCount > 1 ? "是" : "否" %></td>
                     <td><%= item.Lessons
-                                - item.LessonTime.Count(/*t=>t.LessonAttendance!= null*/)
-                                - (item.RegisterGroupID.HasValue 
-                                    ? item.GroupingLesson.LessonTime.Count(t=>t.RegisterID!=item.RegisterID /*&& t.LessonAttendance!= null*/)
-                                    : 0 )%> / <%= item.Lessons %></td>
+                                - item.GroupingLesson.LessonTime.Count(/*t=>t.LessonAttendance!= null*/) %> / <%= item.Lessons %></td>
                     <td><%= item.IntuitionCharge.Payment=="Cash" ? "現金" : "信用卡" %></td>
                     <td><%= item.IntuitionCharge.ByInstallments>1 ? item.IntuitionCharge.ByInstallments+"期" : "否" %></td>
                     <td><% var subtotal = item.Lessons * item.LessonPriceType.ListPrice * item.GroupingLessonDiscount.PercentageOfDiscount / 100;

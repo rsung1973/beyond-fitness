@@ -34,7 +34,7 @@
                     <div class="col-md-6">
                         <div class="input-group input-group-lg">
                             <div class="icon-addon addon-lg">
-                                <input type="number" name="totalAssessment" placeholder="請輸入純數字" class="form-control" value="<%= String.Format("{0:.}",_model.TotalAssessment) %>" required/>
+                                <input type="number" step="0.1" name="totalAssessment" placeholder="請輸入純數字" class="form-control" value="<%= String.Format("{0:.#}",_model.TotalAssessment) %>" required/>
                             </div>
                             <span class="input-group-addon">分鐘</span>
                         </div>

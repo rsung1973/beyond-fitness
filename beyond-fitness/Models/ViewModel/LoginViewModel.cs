@@ -223,6 +223,12 @@ namespace WebHome.Models.ViewModel
 
         public int? TrainingBySelf { get; set; }
 
+        [Required]
+        [Display(Name = "上課地點")]
+        public int BranchID { get; set; }
+
+        public int? LessonID { get; set; }
+
     }
 
     public class LessonTimeExpansionViewModel

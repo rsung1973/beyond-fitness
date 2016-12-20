@@ -19,7 +19,7 @@ namespace WebHome.Helper
 
             models.SubmitChanges();
 
-            if (item.GroupID.HasValue)
+            if (item.RegisterLesson.GroupingMemberCount > 1)
             {
                 var group = item.GroupingLesson;
                 var lesson = group.RegisterLesson.First();

@@ -92,9 +92,8 @@
 
     int? calcAchievement(IEnumerable<LessonTime> items)
     {
-        var lessons = items.Where(l => !l.GroupID.HasValue).Select(l => l.RegisterLesson)
-                .Concat(items.Where(l => l.GroupID.HasValue).Select(l => l.GroupingLesson)
-                    .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r));
+        var lessons = items.Select(l => l.GroupingLesson)
+                    .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
         Utility.Logger.Debug(
         String.Join("\r\n", lessons.Select(r => r.RegisterID + "\t"
