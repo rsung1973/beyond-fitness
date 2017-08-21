@@ -31,11 +31,9 @@ namespace WebHome.Controllers
 
             if (result != null)
                 return result;
-            
-            models.SubmitChanges();
-            ViewBag.Message = "資料存檔完成!!";
 
-            return View("TrainingPlan", model);
+            models.SubmitChanges();
+            return Json(new { result = true, message = "資料存檔完成!!" });
 
         }
 
@@ -52,7 +50,7 @@ namespace WebHome.Controllers
             return AddTraining(viewModel);
         }
 
-        private LessonTimeExpansion storeAssessment(TrainingAssessmentViewModel viewModel,out ActionResult result)
+        private LessonTimeExpansion storeAssessment(TrainingAssessmentViewModel viewModel,out ActionResult result,bool assessmentOnly = false)
         {
             result = null;
             LessonTimeExpansion model = null;
@@ -67,28 +65,39 @@ namespace WebHome.Controllers
 
             if (model == null)
             {
-                ViewBag.Message = "未登記此上課時間!!";
-                result = RedirectToAction("Coach", "Account");
+                result = Json(new { result = false, message = "未登記此上課時間!!", forceLogout = true });
                 return null;
             }
 
             if (model.LessonTime.TrainingPlan.Count == 0)
             {
-                ViewBag.Message = "尚未編定上課內容";
-                result = RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.RegisterID, lessonID = item.LessonID });
+                result = Json(new { result = false, message = "尚未編定上課內容!!" });
                 return null;
             }
 
-            int itemIdx = 0;
-            for (int idx = 0; idx < viewModel.Conclusion.Length && idx < model.LessonTime.TrainingPlan.Count; idx++)
+            if (assessmentOnly != true)
             {
-                model.LessonTime.TrainingPlan[idx].TrainingExecution.Conclusion = viewModel.Conclusion[idx];
-                foreach (var trainItem in model.LessonTime.TrainingPlan[idx].TrainingExecution.TrainingItem)
+                if (viewModel.Conclusion != null)
                 {
-                    trainItem.ActualStrength = viewModel.ActualStrength[itemIdx];
-                    trainItem.ActualTurns = viewModel.ActualTurns[itemIdx];
-                    itemIdx++;
+                    int itemIdx = 0;
+                    for (int idx = 0; idx < viewModel.Conclusion.Length && idx < model.LessonTime.TrainingPlan.Count; idx++)
+                    {
+                        model.LessonTime.TrainingPlan[idx].TrainingExecution.Conclusion = viewModel.Conclusion[idx];
+                        foreach (var trainItem in model.LessonTime.TrainingPlan[idx].TrainingExecution.TrainingItem)
+                        {
+                            trainItem.ActualStrength = viewModel.ActualStrength[itemIdx];
+                            trainItem.ActualTurns = viewModel.ActualTurns[itemIdx];
+                            itemIdx++;
+                        }
+                    }
                 }
+
+                LessonPlan plan = model.LessonTime.LessonPlan;
+                plan.Warming = viewModel.Warming;
+                //plan.RecentStatus = viewModel.RecentStatus;
+                //model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
+                plan.EndingOperation = viewModel.EndingOperation;
+                plan.Remark = viewModel.Remark;
             }
 
             LessonTrend trend = model.LessonTime.LessonTrend;
@@ -97,6 +106,7 @@ namespace WebHome.Controllers
             trend.ActionLearning = viewModel.ActionLearning;
             trend.PostureRedress = viewModel.PostureRedress;
             trend.Training = viewModel.Training;
+            trend.Counseling = viewModel.Counseling;
 
             FitnessAssessment fitness = model.LessonTime.FitnessAssessment;
             if (fitness == null)
@@ -111,36 +121,100 @@ namespace WebHome.Controllers
             model.LessonTime.AttendingCoach = viewModel.CoachID;
             model.LessonTime.RegisterLesson.Attended = (int)Naming.LessonStatus.上課中;
 
-            LessonPlan plan = model.LessonTime.LessonPlan;
-            plan.Warming = viewModel.Warming;
-            plan.RecentStatus = viewModel.RecentStatus;
-            model.RegisterLesson.UserProfile.RecentStatus = viewModel.RecentStatus;
-            plan.EndingOperation = viewModel.EndingOperation;
-            plan.Remark = viewModel.Remark;
-
             return model;
         }
 
 
+        public ActionResult AttendLesson(int lessonID)
+        {
+            LessonTime item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
+
+            if (item == null)
+                return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
+
+            models.AttendLesson(item);
+            foreach (var r in item.GroupingLesson.RegisterLesson)
+            {
+                models.CheckLearnerQuestionnaireRequest(r);
+            }
+
+            return Json(new { result = true, message = "資料存檔完成!!" });
+
+        }
+
+        public ActionResult LearnerAttendLesson(int lessonID)
+        {
+            LessonTime item = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
+
+            if (item == null)
+                return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
+
+            item.LessonPlan.CommitAttendance = DateTime.Now;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = "資料存檔完成!!" });
+
+        }
 
         public ActionResult CommitAssessment(TrainingAssessmentViewModel viewModel)
         {
             ActionResult result;
-            LessonTimeExpansion model = storeAssessment(viewModel, out result);
+            LessonTimeExpansion model = storeAssessment(viewModel, out result, true);
 
             if (result != null)
                 return result;
 
-            LessonAttendance attendance = model.LessonTime.LessonAttendance;
-            if (attendance == null)
-                attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
-            attendance.CompleteDate = DateTime.Now;
+            if (models.IsAttendanceOverdue(model.LessonTime))
+            {
+                models.SubmitChanges();
+            }
+            else
+            {
 
-            models.SubmitChanges();
-            ViewBag.Message = "資料存檔完成!!";
+                LessonAttendance attendance = model.LessonTime.LessonAttendance;
+                if (attendance == null)
+                {
+                    attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
+                    attendance.CompleteDate = DateTime.Now;
+                    models.SubmitChanges();
+                    foreach (var r in model.LessonTime.GroupingLesson.RegisterLesson)
+                    {
+                        models.CheckLearnerQuestionnaireRequest(r);
+                    }
+                }
+                else
+                {
+                    attendance.CompleteDate = DateTime.Now;
+                    models.SubmitChanges();
+                }
 
-            HttpContext.RemoveCache(CachingKey.Training);
-            return RedirectToAction("Coach", "Account", new { lessonDate = model.ClassDate, hour = model.Hour, registerID = model.RegisterID, lessonID = model.LessonID });
+                var timeItem = model.LessonTime;
+                if (timeItem.RegisterLesson.GroupingMemberCount > 1)
+                {
+                    var group = timeItem.GroupingLesson;
+                    var lesson = group.RegisterLesson.First();
+                    if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= group.LessonTime.Count(t => t.LessonAttendance != null))
+                    {
+                        foreach (var r in group.RegisterLesson)
+                        {
+                            r.Attended = (int)Naming.LessonStatus.課程結束;
+                        }
+                        models.SubmitChanges();
+                    }
+                }
+                else
+                {
+                    var lesson = timeItem.RegisterLesson;
+                    if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
+                    {
+                        lesson.Attended = (int)Naming.LessonStatus.課程結束;
+                        models.SubmitChanges();
+                    }
+                }
+            }
+
+            return Json(new { result = true, message = "資料存檔完成!!" });
 
         }
 

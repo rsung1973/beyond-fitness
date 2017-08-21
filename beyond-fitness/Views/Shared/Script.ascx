@@ -683,7 +683,7 @@
                     var bg = $(this).css("backgroundImage");
                     $("body").css("backgroundImage", bg);
                 } else {
-                    alert('Please select boxed layout');
+                    smartAlert('Please select boxed layout');
                 }
             });
 
@@ -709,6 +709,7 @@
             weekStart: 1,
             todayBtn: 1,
             autoclose: 1,
+            clearBtn: 1,
             todayHighlight: 1,
             startView: 2,
             forceParse: 0,
@@ -718,6 +719,7 @@
             language: 'zh-TW',
             weekStart: 0,
             todayBtn: 1,
+            clearBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
             startView: 2,
@@ -728,6 +730,7 @@
             language: 'zh-TW',
             weekStart: 0,
             todayBtn: 0,
+            clearBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
             startView: 2,
@@ -743,6 +746,7 @@
             language: 'zh-TW',
             weekStart: 0,
             //todayBtn: 1,
+            clearBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
             startView: 3,

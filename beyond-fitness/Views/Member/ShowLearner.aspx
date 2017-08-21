@@ -10,67 +10,79 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-eye"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>人員管理></li>
+            <li>學員管理</li>
+            <li>檢視VIP</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+                ribbon for further usability
+
+                Example below:
+
+                <span class="ribbon-button-alignment pull-right">
+                <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+                <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+                <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+                </span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-eye"></i>學員管理
+        <span>>  
+            檢視VIP
+        </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
+
+
+        <%  Html.RenderPartial("~/Views/Member/LearnerArticle.ascx", _model); %>
+
+        <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <ul class="icons-list">
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/LearnerFitness.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditLearner.ascx",_model); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
+                        <%--<%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>--%>
+                    </ul>
+                </ul>
+            </div>
+        </article>
+    </div>
     
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-md-10">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
-                    <!-- Start Post -->
-                    <%  ViewBag.Argument = new ArgumentModel { }; ViewBag.ShowPerson = true; Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
-                    
-
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab-1" data-toggle="tab"><i class="fa fa-calendar-o"></i>購買上課紀錄</a></li>
-                        <li><a href="#tab-2" data-toggle="tab"><i class="fa fa-pencil" aria-hidden="true"></i>問卷調查</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <!-- Tab Content 1 -->
-                        <div class="tab-pane fade in active" id="tab-1">
-                            <!-- TABLE 1 -->
-                            <% Html.RenderPartial("~/Views/Member/LessonsList.ascx", _items); %>
-                        </div>
-                        <!-- Tab Content 2 -->
-                        <div class="tab-pane fade" id="tab-2">
-                            <%  ViewBag.DataItems = models.GetTable<PDQQuestion>().OrderBy(q => q.QuestionNo).ToArray();
-                                Html.RenderPartial("~/Views/Member/PDQInfoByLearner.ascx", _model); %>
-                        </div>
-                    </div>
-                    <!-- End Post -->
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-                    <a class="btn-system btn-medium" href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- End content -->
-
-    <script>
-        $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
-
-    </script>
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
-    IEnumerable<RegisterLesson> _items;
 
     protected override void OnInit(EventArgs e)
     {
@@ -79,8 +91,6 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
 
-        _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
-            .OrderByDescending(r => r.RegisterID);
         ViewBag.ShowOnly = true;
     }
 

@@ -1,0 +1,173 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
+<%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq.Expressions" %>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
+<%@ Import Namespace="WebHome.Helper" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
+<%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
+
+<div id="<%= _dialog %>" title="待辦事項：服務申請(<%= ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)" class="bg-color-darken">
+    <!-- content -->
+    <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
+        <thead>
+            <tr>
+                <th data-hide="phone">體能顧問</th>
+                <th data-class="expand">學員</th>
+                <th>編輯日期</th>
+                <th>申請項目</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%  foreach (var r in _model)
+                {
+                    var item = r.CourseContract;%>
+            <tr>
+                <td><%= item.ServingCoach.UserProfile.RealName %></td>
+                <td>
+                    <%  if (item.CourseContractType.IsGroup==true)
+                        { %>
+                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
+                    <%  }
+                        else
+                        { %>
+                <%= item.ContractOwner.RealName %>
+                    <%  } %>
+                </td>
+                <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
+                <td>
+                    <%  if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
+                        {   %>
+                    <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <%  }
+                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待簽名)
+                        {   %>
+                    <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <%  }
+                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待生效)
+                        {   %>
+                    <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { r.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.enableAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <%  } %>
+                    <%= r.Reason %>
+                </td>
+            </tr>
+            <%  } %>
+        </tbody>
+    </table>
+    <!-- end content -->
+    <script>
+
+        $('#<%= _dialog %>').dialog({
+            //autoOpen: false,
+            resizable: true,
+            modal: true,
+            width: "auto",
+            height: "auto",
+            title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：新合約(<%= ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)</h4>",
+            close: function () {
+                $('#<%= _dialog %>').remove();
+            }
+        });
+
+        $(function () {
+            var responsiveHelper_<%= _tableId %> = undefined;
+
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet: 1024,
+                phone: 480
+            };
+
+            $('#<%= _tableId %>').dataTable({
+                "sDom": "",
+                "autoWidth": true,
+                "bPaginate": false,
+                "order": [],
+                "oLanguage": {
+                    "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                },
+                "preDrawCallback": function () {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_<%= _tableId %>) {
+                        responsiveHelper_<%= _tableId %> = new ResponsiveDatatablesHelper($('#<%= _tableId %>'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function (nRow) {
+                    responsiveHelper_<%= _tableId %>.createExpandIcon(nRow);
+                },
+                "drawCallback": function (oSettings) {
+                    responsiveHelper_<%= _tableId %>.respond();
+                }
+            });
+
+            $global.openToApproveAmendment = function (revisionID) {
+                $('#<%= _dialog %>').dialog('close');
+                window.open('<%= Url.Action("ContractAmendmentApprovalView","CourseContract") %>' + '?revisionID=' + revisionID, '_blank', 'fullscreen=yes');
+                smartAlert('合約審核中...', function () {
+                    //showLoading();
+                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                });
+            };
+
+            $global.openToSignAmendment = function (revisionID) {
+                $('#<%= _dialog %>').dialog('close');
+                window.open('<%= Url.Action("ContractAmendmentSignatureView","CourseContract") %>' + '?revisionID=' + revisionID, '_blank', 'fullscreen=yes');
+                smartAlert('簽名進行中...', function () {
+                    //showLoading();
+                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                });
+
+            };
+
+            $global.enableAmendment = function (revisionID) {
+                var event = event || window.event;
+                var $a = $(event.target);
+                if (!$a.is('a')) {
+                    $a = $a.closest('a');
+                }
+                showLoading();
+                $.post('<%= Url.Action("EnableContractAmendment","CourseContract",new { Status = (int)Naming.CourseContractStatus.已開立 }) %>', { 'revisionID': revisionID }, function (data) {
+                    hideLoading();
+                    if (data.result) {
+                        alert('合約已生效!!');
+                        $a.closest('td').prev().text('已生效');
+                        $a.remove();
+                    } else {
+                        $(data).appendTo($('body')).remove();
+                    }
+                });
+            };
+
+        });
+
+    </script>
+</div>
+
+
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    String _tableId = "dt_contractTodo" + DateTime.Now.Ticks;
+    IQueryable<CourseContractRevision> _model;
+    String _dialog = "draftContractlist" + DateTime.Now.Ticks;
+    CourseContractViewModel _viewModel;
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<CourseContractRevision>)this.Model;
+        _viewModel = (CourseContractViewModel)ViewBag.ViewModel;
+
+    }
+
+</script>

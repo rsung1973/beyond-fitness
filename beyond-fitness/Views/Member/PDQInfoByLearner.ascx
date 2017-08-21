@@ -8,53 +8,51 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
+    <div class="col-xs-6 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body status">
+                <div class="who clearfix">
+                    <img runat="server" src="~/img/avatars/female.png" alt="img" class="busy" />
+                    <span class="from"><b><%= _pdqGroups[0].GroupName %></b> </span>
+                </div>
+                <ol>
+                    <%  foreach (var item in _pdqGroups[0].PDQQuestion.OrderBy(q => q.QuestionNo))
+                        {
+                            renderItem(item);
+                        } %>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-6">
+        <%  for(int i=1;i<_pdqGroups.Length;i++)
+            {
+                var g = _pdqGroups[i]; %>
+                <div class="panel panel-default">
+                    <div class="panel-body status">
+                        <div class="who clearfix">
+                            <img alt="img" class="busy" src="<%= VirtualPathUtility.ToAbsolute("~/img/avatars/female.png") %>" />
+                            <span class="from"><b><%= g.GroupName %></b> </span>
+                        </div>
 
-<h4><span class="fa fa-hourglass-start">第一步：目標</span></h4>
-<table class="panel panel-default table">
-    <%  
-        ViewBag.Offset = 0;
-        for (int idx = 0; idx < 7; idx++)
-        {
-            renderItem(idx);
-        } %>
-</table>
-<h4><span class="fa fa-hourglass-half">第二步：風格</span></h4>
-<table class="panel panel-default table">
-    <%                                  
-        ViewBag.Offset = 7;
-        for (int idx = 7; idx < 13; idx++)
-        {
-            renderItem(idx);
-        } %>
-</table>
-<h4><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
-<table class="panel panel-default table">
-    <%  
-        ViewBag.Offset = 13;
-        for (int idx = 13; idx < 18; idx++)
-        {
-            renderItem(idx);
-        } %>
-</table>
-<h4><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
-<table class="panel panel-default table">
-    <%                                  
-        ViewBag.Offset = 18;
-        for (int idx = 18; idx < 30; idx++)
-        {
-            renderItem(idx);
-        } %>
-</table>
+                        <ol>
+                            <%  foreach (var item in g.PDQQuestion.OrderBy(q => q.QuestionNo))
+                                {
+                                    renderItem(item);
+                                } %>
+                        </ol>
+                    </div>
+                </div>
+        <%  } %>
+    </div>
 
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
-    PDQQuestion[] _items;
     UserProfile _model;
-    Dictionary<int, String> _evalIndex;
+    PDQGroup[] _pdqGroups;
 
     protected override void OnInit(EventArgs e)
     {
@@ -62,28 +60,17 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
-        _items = (PDQQuestion[])ViewBag.DataItems;
-        _evalIndex = new Dictionary<int, string>();
-        _evalIndex[7] = null;
-        _evalIndex[11] = "風格評分：";
-        _evalIndex[16] = null;
-        _evalIndex[28] = null;
+        _pdqGroups = models.GetTable<PDQGroup>()
+            .Where(g => g.GroupID < 6)
+            .OrderBy(g => g.GroupID).ToArray();
 
     }
 
-    void renderItem(int idx)
+    void renderItem(PDQQuestion item)
     {
-        var item = _items[idx];
         ViewBag.PDQTask = item.PDQTask.Where(p => p.UID == _model.UID).FirstOrDefault();
-        if (_evalIndex.ContainsKey(item.QuestionID))
-        {
-            ViewBag.AdditionalTitle = _evalIndex[item.QuestionID];
-            Html.RenderPartial("~/Views/Member/PDQItemInfoII.ascx", item);
-        }
-        else
-        {
-            Html.RenderPartial("~/Views/Member/PDQItemInfo.ascx", item);
-        }
+        ViewBag.Answer = item.PDQTask.Where(p => p.UID == _model.UID && !p.SuggestionID.HasValue).FirstOrDefault();
+        Html.RenderPartial("~/Views/Member/PDQItemInfo.ascx", item);
     }
 
 </script>

@@ -54,16 +54,52 @@ namespace WebHome.Helper
         public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, String tagId)
         {
             writer.WriteLine(
-                String.Concat("<img width=\"100\" id=\"", tagId,
-                "\" alt=\"\" src=\"",
-                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/images/noMember.jpg"),
+                String.Concat("<img id=\"", tagId,
+                "\" src=\"",
+                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
                 "\" />"));
+        }
+
+        public static void RenderUserPicture(this UserProfile profile, HtmlTextWriter writer, Object htmlAttributes)
+        {
+            profile.PictureID.RenderUserPicture(writer, htmlAttributes);
+        }
+
+
+        public static void RenderUserPicture(this int? pictureID, HtmlTextWriter writer, Object htmlAttributes)
+        {
+            if (htmlAttributes != null)
+            {
+                foreach (var item in HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes))
+                {
+                    writer.AddAttribute(item.Key, (String)item.Value);
+                }
+            }
+
+            writer.AddAttribute("src", pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"));
+            writer.RenderBeginTag(HtmlTextWriterTag.Img);
+            writer.RenderEndTag();
+
+        }
+
+        public static String GetVipName(this UserProfile profile)
+        {
+            return profile.UserName ?? profile.RealName;
         }
 
         public static String ErrorMessage(this ModelStateDictionary modelState)
         {
             return String.Join("、", modelState.Keys.Where(k => modelState[k].Errors.Count > 0)
                     .Select(k => /*k + " : " +*/ String.Join("/", modelState[k].Errors.Select(r => r.ErrorMessage))));
+        }
+
+        public static String HtmlBreakLine(this String strVal)
+        {
+            if(strVal != null)
+            {
+                return strVal.Replace("\r\n", "<br/>").Replace("\n", "<br/>");
+            }
+            return null;
         }
 
     }

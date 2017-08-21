@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en-us">
+   <head>
+      <meta charset="utf-8">
+      <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+      <title>BEYOND FITNESS</title>
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <!-- Basic Styles -->
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome.min.css">
+      <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-production-plugins.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-production.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-skins.min.css">
+      <!-- SmartAdmin RTL Support -->
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-rtl.min.css">
+      <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.-->
+      <link rel="stylesheet" type="text/css" media="screen" href="../../css/beyond_style.css">
+      <!--[if IE 9]>
+      <style>
+         .error-text {
+         color: #333 !important;
+         }
+      </style>
+      <![endif]-->
+        <style type="text/css">
+
+            div {
+                margin-top:1em;
+                margin-bottom:1em;
+            }
+            input {
+                padding: .5em;
+                margin: .5em;
+            }
+            select {
+                padding: .5em;
+                margin: .5em;
+            }
+
+            #signatureparent {
+                color:darkblue;
+                background-color:darkgrey;
+                /*max-width:600px;*/
+                padding:20px;
+            }
+
+            /*This is the div within which the signature canvas is fitted*/
+            #signature {
+                border: 2px dotted black;
+                background-color:lightgrey;
+            }
+
+            /* Drawing the 'gripper' for touch-enabled devices */ 
+            html.touch #content {
+                float:left;
+                width:92%;
+            }
+            html.touch #scrollgrabber {
+                float:right;
+                width:4%;
+                margin-right:2%;
+                background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAFCAAAAACh79lDAAAAAXNSR0IArs4c6QAAABJJREFUCB1jmMmQxjCT4T/DfwAPLgOXlrt3IwAAAABJRU5ErkJggg==)
+            }
+            html.borderradius #scrollgrabber {
+                border-radius: 1em;
+            }
+
+        </style>       
+   </head>
+   <!--
+      TABLE OF CONTENTS.
+      
+      Use search to find needed section.
+      
+      ===================================================================
+      
+      |  01. #CSS Links                |  all CSS links and file paths  |
+      |  02. #FAVICONS                 |  Favicon links and file paths  |
+      |  03. #GOOGLE FONT              |  Google font link              |
+      |  04. #APP SCREEN / ICONS       |  app icons, screen backdrops   |
+      |  05. #BODY                     |  body tag                      |
+      |  06. #HEADER                   |  header tag                    |
+      |  07. #PROJECTS                 |  project lists                 |
+      |  08. #TOGGLE LAYOUT BUTTONS    |  layout buttons and actions    |
+      |  09. #MOBILE                   |  mobile view dropdown          |
+      |  10. #SEARCH                   |  search field                  |
+      |  11. #NAVIGATION               |  left panel & navigation       |
+      |  12. #RIGHT PANEL              |  right panel userlist          |
+      |  13. #MAIN PANEL               |  main panel                    |
+      |  14. #MAIN CONTENT             |  content holder                |
+      |  15. #PAGE FOOTER              |  page footer                   |
+      |  16. #SHORTCUT AREA            |  dropdown shortcuts area       |
+      |  17. #PLUGINS                  |  all scripts and plugins       |
+      
+      ===================================================================
+      
+      -->
+   <!-- #BODY -->
+   <!-- Possible Classes
+      * 'smart-style-{SKIN#}'
+      * 'smart-rtl'         - Switch theme mode to RTL
+      * 'menu-on-top'       - Switch to top navigation (no DOM change required)
+      * 'no-menu'             - Hides the menu completely
+      * 'hidden-menu'       - Hides the main menu but still accessable by hovering over left edge
+      * 'fixed-header'      - Fixes the header
+      * 'fixed-navigation'  - Fixes the main menu
+      * 'fixed-ribbon'      - Fixes breadcrumb
+      * 'fixed-page-footer' - Fixes footer
+      * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
+      -->
+   <body class="smart-style-3 no-menu">
+      <!-- MAIN PANEL -->
+      <div id="main" role="main">
+         <!-- MAIN CONTENT -->
+         <div id="content">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="well well-md" style="width:23cm; height:34cm">
+                     <h2 class="text-center">體能顧問聘請服務合約</h2>
+                     <div class="bs-example bs-example-type">
+                        <h5>
+                        <table class="table">
+                           <tbody>
+                              <tr>
+                                 <td colspan="2">合約編號：CFA201705050001</td>
+                                 <td>日期：2017/01/05</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3">學員資料</td>
+                              </tr>
+                              <tr>
+                                 <td>姓名：劉思琳</td>
+                                 <td colspan="2">身份證字號/護照號碼：</td>
+                              </tr>
+                              <tr>
+                                 <td>性別：女</td>
+                                 <td colspna="2">出生：1979/10/07</td>
+                              </tr>
+                              <tr>
+                                 <td>住家電話：02-89213245</td>
+                                 <td colspna="2">行動電話：0922186668</td>
+                              </tr>
+                              <tr>
+                                 <td>緊急聯絡人姓名：劉思琳</td>
+                                 <td>關係：朋友</td>
+                                 <td>聯絡電話：0922186668</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3">地址：新北市永和區林森路44巷6弄2號3樓</td>
+                              </tr>
+                           </tbody>                          
+                        </table>
+                         <table class="table">
+                             <tbody>
+                              <tr>
+                                 <td colspan="2">名稱：1對1課程(60分鐘)</td>
+                                 <td>上課場所：南京小巨蛋</td>
+                              </tr>
+                              <tr>
+                                 <td>單堂原價：1,800</td>
+                                 <td>購買堂數：75</td>
+                                 <td>課程單價：1,400</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3">專業顧問服務總費用：10,500</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="3">顧問服務使用期限：自 2017/01/05 起，至 2018/01/06 止。</td>
+                              </tr>
+                              <tr style="height:260px">
+                                  <td colspan="3">備註：2016年之前的舊合約</td>
+                              </tr>
+                           </tbody>
+                         </table>
+                        <table class="table">
+                           <tr>
+                              <td><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
+                              <td>展延：無法於上述使用期限內完成服務堂數者，得於到期前30日內申請展延使用，並得就未完成部分協商展延3個月內完成，且展延後不得申請轉讓或退費。</td>
+                           </tr>
+                           <tr>
+                              <td><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
+                              <td>預約：須於欲使用其體能顧問服務時段至少24小時前向其負責之體能顧問預約其服務與其場地租用權力。</td>
+                           </tr>
+                           <tr>
+                              <td><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
+                              <td>取消：如欲取消預約時段，學員必須於原定時間24小時前通知負責之體能顧問，否則該未使用之預約顧問服務仍應記入已使用後體能顧問服務次數內。</td>
+                           </tr>
+                           <tr>
+                              <td colspan="2">您已確認並瞭解於簽署本合約後，即表示即日起您同意接受本合約正面及背面一切條款之約束。</td>
+                           </tr>
+                        </table>
+                        <table class="table">
+                           <tr>
+                              <td colspan="2"></td>
+                              <td>超越體能顧問有限公司</td>
+                           </tr>
+                           <tr>
+                              <td>學員簽名：<img src="Sign.jpg" width="160px" class="modifySignDialog_link"><img src="Sign.jpg" class="modifySignDialog_link" width="160px"></td>
+                              <td></td>
+                              <td>簽約代表：<img src="Sign.jpg" width="200px" class="modifySignDialog_link"></td>
+                           </tr>
+                           <tr>
+                              <td colspan="2">家長/監護人簽名：<img src="Sign.jpg" width="200px" class="modifySignDialog_link"></td>
+                              <td>體能顧問：<img src="Sign.jpg" width="200px" class="modifySignDialog_link"></td>
+                           </tr>
+                        </table>
+                        </h5>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="well well-md" style="width:23cm; height:35cm">
+                     <h2 class="text-center">Beyond Fitness訓練特約條款</h2>
+                     <div class="bs-example bs-example-type">
+                        <table class="table">
+                           <tr>
+                              <td>本場館為超越體能顧問有限公司 (以下簡稱本公司)負責經營管理並提供各項體能顧問服務，學員權利義務均以本合約與特約條款之規定為準，相關內容應於申請時詳加閱讀，並同意遵守以維護場館之環境品質。</td>
+                           </tr>
+                           <tr>
+                              <td class="text-right">簽名：<img src="Sign.jpg" width="200px" class="modifySignDialog_link"></td>
+                           </tr>
+                        </table>
+                        <ol style="-webkit-padding-start: 20px; font-size:14px">
+                            <li>營業時間及設備：營業時間及設備參照各上課地點規定。</li>
+                            <li>學員資格：未成年人應得其法定代理人允許或承認。</li>
+                            <li>學員健康情形與醫療諮詢：您聲明其身體健康狀況良好，並無存在會妨礙其預計使用體能顧問服務之醫療原因或傷病。您確認本公司未在客戶簽署本特約條款之前為您提供醫療建議，且在簽署本特約條款後亦不會為您提供有關身體狀況和使用訓練課程能力的任何建議。如果您目前或簽約後有任何健康或醫療方面的問題，應先諮詢醫生，然後再使用其體能顧問服務之權利。</li>
+                            <li>展延：無法於上述使用期限內完成服務堂數者，得於到期前30日內申請展延使用，並得就未完成部分協商展延3個月內完成，且展延後不得申請轉讓或退費。</li>
+                            <li>預約：須於欲使用其體能顧問服務時段至少24小時前向其負責之體能顧問預約其服務與其場地租用權力。</li>
+                            <li>取消：如欲取消預約時段，學員必須於原定時間24小時前通知負責之體能顧問，否則該未使用之預約顧問服務仍應記入已使用體能顧問服務次數內。</li>
+                            <li>遲到：若學員遲到20分鐘以上，其負責之體能顧問有權利視為「缺席」處理，並應記入已使用體能顧問服務次數內，且本公司無義務於剩餘預約時段內提供服務（特殊情形視情況由體能顧問及本公司協調而定）。</li>
+                            <li>學員使用體能顧問服務需完成系統登錄確認。</li>
+                            <li>更換教練：學員有權利選擇體能顧問，並瞭解且同意其係購買本公司之課程而非指定體能顧問或其他特定體能顧問之個人服務，若該排定之體能顧問無法提供服務，本公司得指派其他體能顧問進行其服務交接。</li>
+                            <li>轉讓：學員需親自至本公司申請辦理後，得將課程轉讓第三人，惟本公司需酌收手續費新台幣500元。</li>
+                            <li>轉點：學員得於合約存續期間申請轉換使用本公司其他營業場所，為轉換時應遵循下列方式：
+                                <ul class="list-unstyled">
+                                    <li>(1)	轉換至費用較高之場所：依同方案之價格計算補足差額。</li>
+                                    <li>(2)	轉換至費用較低之場所：直接轉換無退費。</li>
+                                </ul>
+                            </li>
+                            <li>學員於簽署本合約且支付「顧問費用」後，有權於「使用期限」內使用本「體能顧問服務合約」所簽訂之顧問條款。所有體能顧問相關服務需於「使用期限」內使用完畢，逾期且未申請展延之剩餘未使用之體能顧問服務次數，將喪失使用權。未使用或喪失使用權之課程堂數，將不予退費。</li>
+                            <li>終止合約及退費計算基準：
+                                <ul class="list-unstyled">
+                                    <li>(1)	學員得於本合約期限屆滿前，隨時終止本合約，惟因涉及學員權益及金額，請學員須親赴本公司辦理。</li>
+                                    <li>(2)	合約簽訂後七日內，學員未使用所約定服務(課程)而解除契約者，全額退還學員已繳費用。</li>
+                                    <li>(3)	退費計算方式：已繳服務總費用扣除依簽約時課程單堂原價乘以實際上課堂數之費用。倘原係以信用卡繳費者，退費時需另加計以退費金額乘以信用卡手續費率之手續費。</li>
+                                </ul>
+                            </li>
+                            <li>場所使用規定
+                                <ul class="list-unstyled">
+                                    <li>(1)	學員應遵守本合約及本公司管理規範，並應遵守本公司及專業教練指導，並不得攜帶違禁品或危險物品進入營業場所，及勿攜帶貴重物品至場內。</li>
+                                    <li>(2)	學員應於每次使用本公司設備完畢後即行攜離。其有學員未攜離物品經本公司定2個月以上期間公告招領而仍未取回者，依《民法》第607條等相關規定處理。</li>
+                                    <li>(3)	學員應了解本公司之置物櫃並非保險箱，其功能僅在於提供學員更換及置放衣物使用，不應用做存放財物用途，學員應避免攜帶貴重物品，否則應自行隨身攜帶並妥善保管。</li>
+                                    <li>(4)	使用場所設備應著適當合宜服裝，且場所內不得有賭博、喝酒、吸菸、喧嘩、口出穢言或其他不當或足以影響其他學員權益等行為；於場所指定區域內並不得飲食。</li>
+                                    <li>(5)	學員應適當使用場所內各種設備，並自行斟酌個人健康狀況，遵守本公司指導，不作不當運動或參與其體力所無法負荷之活動。</li>
+                                </ul>
+                            </li>
+                            <li>依個人資料保護法妥為保護學員因簽約提供資料及其相關消費資訊，未經學員簽署同意之前，不得利用於推廣與行銷。但其提供政府相關機關依法查核用途者，不在此限。</li>
+                            <li>本公司未授權任何銷售人員、體能顧問就本合約以外事項為任何口頭表示或承諾，您確認本合約構成您與本公司之完整協議。任何與本合約不符之明示、默示或口頭之承諾，對於本公司均不生效力。</li>
+                            <li>您瞭解本公司並無授權員工向您介紹營養食品或醫療產品，您同意不得因信賴本公司員工所為之推銷或建議，而向本公司請求任何賠償。</li>
+                            <li>本公司為便利學員充分有效使用本公司運動器材設備，得為各種管理規範之訂頒及其修正。</li>
+                            <li>本合約如有未盡事宜，由雙方本誠信原則協議之或依民法或其他相關法令定之。因本合約涉訟時，除法律另有規定外，雙方同意以台北地方法院為第一審管轄法院。</li>                            
+                         </ol>
+                         您已詳閱上述各項記載、購買服務之項目及各項特約條款，並確認收到副本。
+                         <table class="table">
+                           <tr>
+                              <td>學員簽名：<img src="Sign.jpg" width="160px" class="modifySignDialog_link"><img src="Sign.jpg" width="160px" class="modifySignDialog_link"></td>
+                              <td>日期：2017/01/05</td>
+                           </tr>
+                           <tr>
+                              <td colspan="2">家長/監護人簽名：<img src="Sign.jpg" width="180px" class="modifySignDialog_link"></td>
+                           </tr>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- END MAIN CONTENT -->
+          <!-- ui-dialog -->
+        <div id="modifySignDialog" title="Sign Here" class="bg-color-darken">
+           <div id="signatureparent">
+            <div id="signature"></div>
+            </div>
+        </div>                       
+         <!-- dialog-message --> 
+        <!-- ui-dialog -->          
+      </div>
+      <!-- END MAIN PANEL -->
+      <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <script>
+         if (!window.jQuery) {
+             document.write('<script src="../../js/libs/jquery-2.1.1.min.js"><\/script>');
+         }
+      </script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+      <script>
+         if (!window.jQuery.ui) {
+             document.write('<script src="../../js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+         }
+      </script>       
+        <script>
+        /*  @preserve
+        jQuery pub/sub plugin by Peter Higgins (dante@dojotoolkit.org)
+        Loosely based on Dojo publish/subscribe API, limited in scope. Rewritten blindly.
+        Original is (c) Dojo Foundation 2004-2010. Released under either AFL or new BSD, see:
+        http://dojofoundation.org/license for more information.
+        */
+        (function($) {
+            var topics = {};
+            $.publish = function(topic, args) {
+                if (topics[topic]) {
+                    var currentTopic = topics[topic],
+                    args = args || {};
+
+                    for (var i = 0, j = currentTopic.length; i < j; i++) {
+                        currentTopic[i].call($, args);
+                    }
+                }
+            };
+            $.subscribe = function(topic, callback) {
+                if (!topics[topic]) {
+                    topics[topic] = [];
+                }
+                topics[topic].push(callback);
+                return {
+                    "topic": topic,
+                    "callback": callback
+                };
+            };
+            $.unsubscribe = function(handle) {
+                var topic = handle.topic;
+                if (topics[topic]) {
+                    var currentTopic = topics[topic];
+
+                    for (var i = 0, j = currentTopic.length; i < j; i++) {
+                        if (currentTopic[i] === handle.callback) {
+                            currentTopic.splice(i, 1);
+                        }
+                    }
+                }
+            };
+        })(jQuery);
+
+        </script>       
+    <script src="../../js/plugin/jSignature/jSignature.js"></script>
+    <script src="../../js/plugin/jSignature/plugins/jSignature.CompressorBase30.js"></script>
+    <script src="../../js/plugin/jSignature/plugins/jSignature.CompressorSVG.js"></script>
+    <script src="../../js/plugin/jSignature/plugins/jSignature.UndoButton.js"></script> 
+    <script src="../../js/plugin/jSignature/plugins/signhere/jSignature.SignHere.js"></script>
+    <script type="text/javascript">
+         // DO NOT REMOVE : GLOBAL FUNCTIONS!
+         $(document).ready(function() {
+             
+ 
+             // Dialog click
+             $('.modifySignDialog_link').click(function() {
+               $('#modifySignDialog').dialog('open');
+               return false;
+         
+             });   
+         
+             $('#modifySignDialog').dialog({
+                  autoOpen : false,
+                  width : "500",
+                  resizable: false,
+                  modal : true,
+                  title : "<div class='modal-title'><h4><i class='fa fa-edit'></i> Sign Here</h4></div>",
+                  buttons : [{
+                     html : "<i class='fa fa-floppy-o'></i>&nbsp; 清除",
+                     "class" : "btn bg-color-darken",
+                     click : function() {
+                        $sigdiv.jSignature('reset')
+                     }
+                  }, {
+                     html : "<i class='fa fa-file-text-o'></i>&nbsp; 確定",
+                     "class" : "btn btn-primary",
+                     click : function() {
+                         $(this).dialog("close");
+                     }
+                  }],
+                  create: function (event, ui) {
+                      
+                  },
+                  open: function (event, ui) {
+                      //$('#modifySignDialog canvas.jSignature').css('height', '110px');
+                      initSignature();
+                  }
+                 
+             });
+
+             function initSignature() {
+
+                 $("#signature").empty();
+                 // This is the part where jSignature is initialized.
+                 var $sigdiv = $("#signature").jSignature({ 'UndoButton': true })
+
+                 // All the code below is just code driving the demo. 
+                 , $tools = $('#tools')
+                 , $extraarea = $('#displayarea')
+                 , pubsubprefix = 'jSignature.demo.'
+
+                 var export_plugins = $sigdiv.jSignature('listPlugins', 'export')
+                 , chops = ['<span><b>Extract signature data as: </b></span><select>', '<option value="">(select export format)</option>']
+                 , name
+                 for (var i in export_plugins) {
+                     if (export_plugins.hasOwnProperty(i)) {
+                         name = export_plugins[i]
+                         chops.push('<option value="' + name + '">' + name + '</option>')
+                     }
+                 }
+                 chops.push('</select><span><b> or: </b></span>')
+
+                 $(chops.join('')).bind('change', function (e) {
+                     if (e.target.value !== '') {
+                         var data = $sigdiv.jSignature('getData', e.target.value)
+                         $.publish(pubsubprefix + 'formatchanged')
+                         if (typeof data === 'string') {
+                             $('textarea', $tools).val(data)
+                         } else if ($.isArray(data) && data.length === 2) {
+                             $('textarea', $tools).val(data.join(','))
+                             $.publish(pubsubprefix + data[0], data);
+                         } else {
+                             try {
+                                 $('textarea', $tools).val(JSON.stringify(data))
+                             } catch (ex) {
+                                 $('textarea', $tools).val('Not sure how to stringify this, likely binary, format.')
+                             }
+                         }
+                     }
+                 }).appendTo($tools)
+
+
+                 $('<input type="button" value="Reset">').bind('click', function (e) {
+                     $sigdiv.jSignature('reset')
+                 }).appendTo($tools)
+
+                 $('<div><textarea style="width:100%;height:7em;"></textarea></div>').appendTo($tools)
+
+                 $.subscribe(pubsubprefix + 'formatchanged', function () {
+                     $extraarea.html('')
+                 })
+
+                 $.subscribe(pubsubprefix + 'image/svg+xml', function (data) {
+
+                     try {
+                         var i = new Image()
+                         i.src = 'data:' + data[0] + ';base64,' + btoa(data[1])
+                         $(i).appendTo($extraarea)
+                     } catch (ex) {
+
+                     }
+
+                     var message = [
+                         "If you don't see an image immediately above, it means your browser is unable to display in-line (data-url-formatted) SVG."
+                         , "This is NOT an issue with jSignature, as we can export proper SVG document regardless of browser's ability to display it."
+                         , "Try this page in a modern browser to see the SVG on the page, or export data as plain SVG, save to disk as text file and view in any SVG-capabale viewer."
+                     ]
+                     $("<div>" + message.join("<br/>") + "</div>").appendTo($extraarea)
+                 });
+
+                 $.subscribe(pubsubprefix + 'image/svg+xml;base64', function (data) {
+                     var i = new Image()
+                     i.src = 'data:' + data[0] + ',' + data[1]
+                     $(i).appendTo($extraarea)
+
+                     var message = [
+                         "If you don't see an image immediately above, it means your browser is unable to display in-line (data-url-formatted) SVG."
+                         , "This is NOT an issue with jSignature, as we can export proper SVG document regardless of browser's ability to display it."
+                         , "Try this page in a modern browser to see the SVG on the page, or export data as plain SVG, save to disk as text file and view in any SVG-capabale viewer."
+                     ]
+                     $("<div>" + message.join("<br/>") + "</div>").appendTo($extraarea)
+                 });
+
+                 $.subscribe(pubsubprefix + 'image/png;base64', function (data) {
+                     var i = new Image()
+                     i.src = 'data:' + data[0] + ',' + data[1]
+                     $('<span><b>As you can see, one of the problems of "image" extraction (besides not working on some old Androids, elsewhere) is that it extracts A LOT OF DATA and includes all the decoration that is not part of the signature.</b></span>').appendTo($extraarea)
+                     $(i).appendTo($extraarea)
+                 });
+
+                 $.subscribe(pubsubprefix + 'image/jsignature;base30', function (data) {
+                     $('<span><b>This is a vector format not natively render-able by browsers. Format is a compressed "movement coordinates arrays" structure tuned for use server-side. The bonus of this format is its tiny storage footprint and ease of deriving rendering instructions in programmatic, iterative manner.</b></span>').appendTo($extraarea)
+                 });
+
+                 if (Modernizr.touch) {
+                     $('#scrollgrabber').height($('#content').height())
+                 }
+             }
+                   
+         })
+      </script>
+      <script>
+         /*
+          * CONVERT DIALOG TITLE TO HTML
+          * REF: http://stackoverflow.com/questions/14488774/using-html-in-a-dialogs-title-in-jquery-ui-1-10
+          */
+         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title : function(title) {
+               if (!this.options.title) {
+                  title.html("&#160;");
+               } else {
+                  title.html(this.options.title);
+               }
+            }
+         }));    
+         
+      </script>        
+   </body>   
+</html>

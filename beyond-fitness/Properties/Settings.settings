@@ -2,25 +2,31 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WebHome.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="BFDbConnection" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=.\sqlexpress;Initial Catalog=BeyondFitness;Integrated Security=True&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=.\sqlexpress;Initial Catalog=BeyondFitness;Integrated Security=True</Value>
-    </Setting>
-    <Setting Name="UserTimeoutInMinutes" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">480</Value>
-    </Setting>
     <Setting Name="WebMaster" Type="System.String" Scope="Application">
       <Value Profile="(Default)">系統管理員 &lt;WebMaster@beyond-fitness.bigbox.info&gt;</Value>
     </Setting>
     <Setting Name="SmtpServer" Type="System.String" Scope="Application">
       <Value Profile="(Default)">localhost</Value>
     </Setting>
+    <Setting Name="BFDbConnection" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="UserTimeoutInMinutes" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20160</Value>
+    </Setting>
+    <Setting Name="ResourceMaxWidth" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
     <Setting Name="HostDomain" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://beyond-fitness.bigbox.info</Value>
+      <Value Profile="(Default)">http://localhost</Value>
+    </Setting>
+    <Setting Name="CreateContractPdf" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">~/CourseContract/CreateContractPdf</Value>
     </Setting>
   </Settings>
 </SettingsFile>

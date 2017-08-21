@@ -8,157 +8,153 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-street-view"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>人員管理></li>
+            <li>員工管理</li>
+            <li>問卷調查表</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+                ribbon for further usability
+
+                Example below:
+
+                <span class="ribbon-button-alignment pull-right">
+                <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+                <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+                <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+                </span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-street-view"></i> 學員管理
+                            <span>>  
+                                問卷調查表
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
+        <article class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-6" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+                                    usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                                    
+                                    data-widget-colorbutton="false" 
+                                    data-widget-editbutton="false"
+                                    data-widget-togglebutton="false"
+                                    data-widget-deletebutton="false"
+                                    data-widget-fullscreenbutton="false"
+                                    data-widget-custombutton="false"
+                                    data-widget-collapsed="true" 
+                                    data-widget-sortable="false"
+                                    
+                                -->
+                <header>
+                    <h2><strong>Step<%= _pdqGroup.GroupID %>.</strong> <i><%= _pdqGroup.GroupName %></i> </h2>
+                    <div class="widget-toolbar">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+                        <div class="progress progress-striped active" rel="tooltip" data-original-title="20%" data-placement="bottom">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style="width: 20%">20%</div>
+                        </div>
 
-            <div class="row">
+                    </div>
+                </header>
+                <!-- widget div-->
+                <div>
 
-                <div class="col-md-12">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <!-- end widget edit box -->
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-pencil">填寫問卷</span></h4>
-
-                    <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                        <h4><span class="fa fa-hourglass-start">第一步：目標</span></h4>
-                        <table class="panel panel-default table">
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
+                        <form action="<%= VirtualPathUtility.ToAbsolute("~/Member/UpdatePDQ/") + _model.UID %>" id="pageForm" class="smart-form" method="post">
+                            <input type="hidden" name="groupID" value="<%= _pdqGroup.GroupID %>" />
+                            <fieldset>
+                                <div class="row">
+                                <%  
+                                    for (int idx = 0; idx < 9; idx++)
+                                    {   %>
+                                    <section class="col col-6">
+                                        <% renderItem(idx); %>
+                                    </section>
+                                <%  } %>
+                                </div>
+                            </fieldset>
                             <%  
-                                ViewBag.Offset = 0;
-                                for (int idx = 0; idx < 7; idx++)
-                                {
-                                    renderItem(idx);
-                                } %>
-                        </table>
-                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-                        </div>
-                        <div class="col-md-6">                        
-                            <h4><span class="fa fa-hourglass-half">第二步：風格</span></h4>
-                        <table class="panel panel-default table">
-                            <%                                  
-                                ViewBag.Offset = 7;
-                                for (int idx = 7; idx < 13; idx++)
-                                {
-                                    renderItem(idx);
-                                } %>
-                        </table>
-                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-                        </div>
+                                    for (int idx = 9; idx < _items.Length; idx++)
+                                    {   %>
+                                        <fieldset>
+                                        <% renderItem(idx); %>
+                                        </fieldset>
+                               <%   } %>
+
+                            <div class="widget-footer">
+
+                                <button class="btn btn-lg btn-primary" type="button" onclick="saveAll();">
+                                    下一步
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">                        
-                            <h4><span class="fa fa-hourglass-end">第三步：訓練水平</span></h4>
-                        <table class="panel panel-default table">
-                            <%  
-                                ViewBag.Offset = 13;
-                                for (int idx = 13; idx < 18; idx++)
-                                {
-                                    renderItem(idx);
-                                } %>
-                        </table>
-                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-                        </div>
-                        <div class="col-md-6">
-                        <h4><span class="fa fa-hourglass">第四步：參與目標動機</span></h4>
-                        <table class="panel panel-default table">
-                            <%                                  
-                                ViewBag.Offset = 18;
-                                for (int idx = 18; idx < 30; idx++)
-                                {
-                                    renderItem(idx);
-                                } %>
-                        </table>
-                        <%--<a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>--%>
-                        </div>
-                    </div>
-
-                    <div class="col-md-8">
-
-                        <h4 class="classic-title"><span class="fa fa-tags">方案設計工具結果，請在下面選擇每個方案分類的合適結果</span></h4>
-
-                        <div class="panel panel-default">
-                            <table class="table">
-                                <tr class="info">
-                                    <th>目標</th>
-                                    <th>風格</th>
-                                    <th>訓練水準</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <select name="goalID" class="form-control">
-                                            <%  foreach (var item in models.GetTable<GoalAboutPDQ>())
-                                                { %>
-                                                    <option value="<%= item.GoalID %>"><%= item.Goal %></option>
-                                            <%  } %>
-                                        </select>
-                                        <%  if (_model.PDQUserAssessment != null)
-                                            { %>
-                                        <script>
-                                            $('select[name="goalID"]').val(<%= _model.PDQUserAssessment.GoalID %>)
-                                        </script>
-                                        <%  } %>
-                                    </td>
-                                    <td>
-                                        <select name="styleID" class="form-control">
-                                            <%  foreach (var item in models.GetTable<StyleAboutPDQ>())
-                                                { %>
-                                                    <option value="<%= item.StyleID %>"><%= item.Style %></option>
-                                            <%  } %>
-                                        </select>
-                                        <%  if (_model.PDQUserAssessment != null)
-                                            { %>
-                                        <script>
-                                            $('select[name="styleID"]').val(<%= _model.PDQUserAssessment.StyleID %>)
-                                        </script>
-                                        <%  } %>
-                                    </td>
-                                    <td>
-                                        <select name="levelID" class="form-control">
-                                            <%  foreach (var item in models.GetTable<TrainingLevelAboutPDQ>())
-                                                { %>
-                                                    <option value="<%= item.LevelID %>"><%= item.TrainingLevel %></option>
-                                            <%  } %>
-                                        </select>
-                                        <%  if (_model.PDQUserAssessment != null)
-                                            { %>
-                                        <script>
-                                            $('select[name="levelID"]').val(<%= _model.PDQUserAssessment.LevelID %>)
-                                        </script>
-                                        <%  } %>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
-                        <a onclick="saveAll();" class="btn-system btn-medium"><span class="glyphicon glyphicon-save" aria-hidden="true"></span>存檔</a>
-                    </div>
-
-                    <!-- End Contact Form -->
+                    <!-- end widget content -->
 
                 </div>
-                <!-- End Post -->
-
+                <!-- end widget div -->
 
             </div>
+            <!-- end widget -->
+        </article>
 
-        </div>
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewLessons.ascx",_model); %>
+                            <%--<%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/AddPDQ.ascx",_model); %>--%>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/LearnerFitness.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ShowLearner.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditLearner.ascx",_model); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ViewVip.ascx",_model); %>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+
+        </article>
+        <!-- END COL -->
+
     </div>
-
-    <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
     <script>
-        $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
             startLoading();
@@ -168,29 +164,23 @@
         });
 
         function saveAll() {
-            $('form').ajaxForm({
+            $('#pageForm').ajaxForm({
                 url: "<%= VirtualPathUtility.ToAbsolute("~/Member/UpdatePDQ/") + _model.UID %>",
                 beforeSubmit: function () {
                 },
                 success: function (data) {
                     if (data.result) {
-                        alert("資料已儲存!!");
+                        smartAlert("資料已儲存!!", function () {
+                            window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Member/PDQ") + "?id=" + _model.UID + "&groupID=" + (_pdqGroup.GroupID+1) %>';
+                        });
                     } else {
-                        alert(data.message);
+                        smartAlert(data.message);
                     }
                 },
                 error: function () {
                 }
             }).submit();
         }
-
-        $('#grouping').on('click', function (evt) {
-            if ($(this).is(':checked')) {
-                $('#selectMemberCount').css('display', 'block');
-            } else {
-                $('#selectMemberCount').css('display', 'none');
-            }
-        });
 
     </script>
 </asp:Content>
@@ -199,8 +189,8 @@
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     PDQQuestion[] _items;
+    PDQGroup _pdqGroup;
     UserProfile _model;
-    Dictionary<int, String> _evalIndex;
 
     protected override void OnInit(EventArgs e)
     {
@@ -208,12 +198,9 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
-        _items = (PDQQuestion[])ViewBag.DataItems;
-        _evalIndex = new Dictionary<int, string>();
-        _evalIndex[7] = null;
-        _evalIndex[11] = "風格評分：";
-        _evalIndex[16] = null;
-        _evalIndex[28] = null;
+        _pdqGroup = models.GetTable<PDQGroup>().Where(g => g.GroupID == 1).First();
+        _items = _pdqGroup.PDQQuestion.ToArray();
+
 
     }
 
@@ -221,13 +208,15 @@
     {
         var item = _items[idx];
         ViewBag.PDQTask = item.PDQTask.Where(p => p.UID == _model.UID).FirstOrDefault();
-        if (_evalIndex.ContainsKey(item.QuestionID))
+        ViewBag.Answer = item.PDQTask.Where(p => p.UID == _model.UID && !p.SuggestionID.HasValue).FirstOrDefault();
+        if (item.QuestionID == _pdqGroup.ConclusionID)
         {
-            ViewBag.AdditionalTitle = _evalIndex[item.QuestionID];
+            ViewBag.InlineGroup = false;
             Html.RenderPartial("~/Views/Member/PDQItemII.ascx", item);
         }
         else
         {
+            ViewBag.InlineGroup = true;
             Html.RenderPartial("~/Views/Member/PDQItem.ascx", item);
         }
     }

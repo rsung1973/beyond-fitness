@@ -22,10 +22,17 @@ namespace WebHome.Controllers
         where TEntity : class, new()
     {
         protected ModelSource<TEntity> models;
+        protected bool _dbInstance;
 
         protected SampleController() :base()
         {
-            models = new ModelSource<TEntity>();
+            models = TempData["__DB_Instance"] as ModelSource<TEntity>;
+            if (models == null)
+            {
+                models = new ModelSource<TEntity>();
+                _dbInstance = true;
+                TempData["__DB_Instance"] = models;
+            }
             
         }
 
@@ -40,7 +47,8 @@ namespace WebHome.Controllers
         protected override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             base.OnResultExecuted(filterContext);
-            models.Dispose();
+            if (_dbInstance)
+                models.Dispose();
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Utility;
@@ -10,11 +14,13 @@ using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
+using WebHome.Properties;
+using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
     [Authorize]
-    public class InformationController : SampleController<Article>
+    public class InformationController : SampleController<UserProfile>
     {
         public InformationController() : base() { }
         // GET: Information
@@ -24,12 +30,12 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
 
 
-            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
+            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
                 .OrderByDescending(a => a.Document.DocDate)
                 .Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 .Take(viewModel.PageSize);
 
-            return View(models.Items);
+            return View(items);
         }
 
         [AllowAnonymous]
@@ -38,7 +44,7 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 return Redirect("~/Views/Shared/Error.aspx");
@@ -56,38 +62,42 @@ namespace WebHome.Controllers
 
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
-                return Redirect("~/Views/Shared/Error.aspx");
+                ViewBag.Message = "資料錯誤!!";
+                return Publish(null);
             }
 
             item.Document.CurrentStep = (int)Naming.DocumentLevelDefinition.已刪除;
             models.SubmitChanges();
 
-            return Json(new { result = true, message = "文件已刪除!!" });
+            ViewBag.Message = "文件已刪除!!";
+            return Publish(null);
 
         }
 
+        [CoachOrAssistantAuthorize]
         public ActionResult Publish(PagingIndexViewModel viewModel)
         {
             ViewBag.PagingModel = viewModel;
 
 
-            models.Items = models.GetDataContext().GetNormalArticles(models.EntityList)
+            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
                 .OrderByDescending(a => a.Document.DocDate);
             //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
             //.Take(viewModel.PageSize);
 
-            return View(models.Items);
+            return View("Publish",items);
         }
 
+        [CoachOrAssistantAuthorize]
         public ActionResult CreateNew()
         {
 
 
 
-            var item = models.Items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.暫存).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.暫存).FirstOrDefault();
             if (item == null)
             {
                 item = new Article
@@ -99,16 +109,17 @@ namespace WebHome.Controllers
                         DocType = (int)Naming.DocumentTypeDefinition.Knowledge
                     }
                 };
-                models.EntityList.InsertOnSubmit(item);
+                models.GetTable<Article>().InsertOnSubmit(item);
                 models.SubmitChanges();
             }
             return View("EditBlog", item);
         }
 
+        [CoachOrAssistantAuthorize]
         public ActionResult EditBlog(int id)
         {
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 ViewBag.Message = "文章資料不存在!!";
@@ -117,13 +128,20 @@ namespace WebHome.Controllers
             return View(item);
         }
 
+        [CoachOrAssistantAuthorize]
+        public ActionResult PriceList()
+        {
+            return View();
+        }
+
+
         [AllowAnonymous]
         public ActionResult Resource(int id)
         {
 
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             return View(item);
         }
 
@@ -132,7 +150,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == id).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == id).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -169,7 +187,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -209,7 +227,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -236,7 +254,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult UpdateArticle(int docID, int docType, String title, String docDate, String content)
+        public ActionResult UpdateArticle(int docID, int docType, String title,String subtitle,String[] category, String docDate, String content,int? authorID)
         {
 
             if(String.IsNullOrEmpty(title))
@@ -244,7 +262,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "請輸入文標題!!" });
             }
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -256,9 +274,20 @@ namespace WebHome.Controllers
                 item.Document.DocDate = DateTime.ParseExact(docDate, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture);
                 item.Document.CurrentStep = (int)Naming.DocumentLevelDefinition.正常;
                 item.Title = title;
+                item.Subtitle = subtitle;
+                item.AuthorID = authorID;
                 item.ArticleContent = HttpUtility.HtmlDecode(content);
 
                 models.SubmitChanges();
+
+                models.ExecuteCommand("delete ArticleCategory where DocID = {0}", item.DocID);
+                if(category!=null && category.Length>0)
+                {
+                    foreach(var c in category)
+                    {
+                        models.ExecuteCommand("INSERT INTO ArticleCategory (DocID, Category) VALUES({0},{1})", item.DocID, c);
+                    }
+                }
 
                 return Json(new { result = true, message = "文章已更新!!" });
             }
@@ -274,7 +303,7 @@ namespace WebHome.Controllers
         {
 
 
-            var item = models.Items.Where(a => a.DocID == docID).FirstOrDefault();
+            var item = models.GetTable<Article>().Where(a => a.DocID == docID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "文章不存在!!" });
@@ -311,12 +340,31 @@ namespace WebHome.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult GetResource(int id)
+        public ActionResult GetResource(int id, bool? stretch = true)
         {
             var item = models.GetTable<Attachment>().Where(a => a.AttachmentID == id).FirstOrDefault();
             if (item != null)
             {
-                return File(item.StoredPath, "application/octet-stream");
+                if (System.IO.File.Exists(item.StoredPath))
+                {
+                    if (stretch == true)
+                    {
+                        using (var img = Bitmap.FromFile(item.StoredPath))
+                        {
+                            if (img.Width > Settings.Default.ResourceMaxWidth)
+                            {
+                                using (Bitmap m = new Bitmap(img, new Size(Settings.Default.ResourceMaxWidth, img.Height * Settings.Default.ResourceMaxWidth / img.Width)))
+                                {
+                                    Response.Clear();
+                                    Response.ContentType = "application/octet-stream";
+                                    m.Save(Response.OutputStream, ImageFormat.Jpeg);
+                                    return new EmptyResult();
+                                }
+                            }
+                        }
+                    }
+                    return File(item.StoredPath, "application/octet-stream");
+                }
             }
             return new EmptyResult();
 
@@ -347,9 +395,49 @@ namespace WebHome.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Location()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public ActionResult ContactUs()
         {
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ContactUs(String email,String userName,String subject,String comment)
+        {
+            ThreadPool.QueueUserWorkItem(t => {
+
+                try
+                {
+
+                    StringBuilder body = new StringBuilder();
+                    System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                    message.ReplyToList.Add(Settings.Default.WebMaster);
+                    message.From = new System.Net.Mail.MailAddress(email,userName);
+                    message.To.Add(Settings.Default.WebMaster);
+                    message.Subject = subject;
+                    message.IsBodyHtml = true;
+
+                    message.Body = HttpUtility.HtmlDecode(comment);
+
+                    System.Net.Mail.SmtpClient smtpclient = new System.Net.Mail.SmtpClient(Settings.Default.SmtpServer);
+                    //smtpclient.Credentials = CredentialCache.DefaultNetworkCredentials;
+                    smtpclient.Send(message);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+
+            ViewBag.Success = "Your comment was successfully added!";
+            return View("Success");
         }
 
         public ActionResult Vip()
@@ -372,6 +460,107 @@ namespace WebHome.Controllers
         public ActionResult Error()
         {
             return View();
+        }
+
+        [AuthorizedSysAdmin]
+        public ActionResult MotivationalWords()
+        {
+            var items = models.GetTable<Article>().Where(a => a.Document.DocType == (int)Naming.DocumentTypeDefinition.Inspirational);
+            return View(items);
+        }
+
+        [AuthorizedSysAdmin]
+        public ActionResult EditMotivationalWords(int? id)
+        {
+            var item = models.GetTable<Article>().Where(a => a.DocID == id && a.Document.DocType == (int)Naming.DocumentTypeDefinition.Inspirational).FirstOrDefault();
+
+            MotivationalWordsViewModel viewModel = new MotivationalWordsViewModel
+            {
+                StartDate = DateTime.Today
+            };
+            ViewBag.ViewModel = viewModel;
+
+            if(item!=null)
+            {
+                viewModel.DocID = item.DocID;
+                viewModel.Title = item.Title;
+                viewModel.StartDate = item.Publication.StartDate;
+                viewModel.EndDate = item.Publication.EndDate;
+            }
+
+            return View(item);
+        }
+
+        [AuthorizedSysAdmin]
+        public ActionResult CommitMotivationalWords(MotivationalWordsViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var profile = HttpContext.GetUser();
+
+            if(String.IsNullOrEmpty(viewModel.Title))
+            {
+                ModelState.AddModelError("Title", "請輸入激勵小語!!");
+            }
+
+            if(!viewModel.StartDate.HasValue)
+            {
+                ModelState.AddModelError("StartDate", "請選擇開始時間!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("EditMotivationalWords",viewModel);
+            }
+
+            var item = models.GetTable<Article>().Where(a => a.DocID == viewModel.DocID && a.Document.DocType == (int)Naming.DocumentTypeDefinition.Inspirational).FirstOrDefault();
+
+            if (item == null)
+            {
+                item = new Article
+                {
+                    Document = new Document
+                    {
+                        DocDate = DateTime.Now,
+                        DocType = (int)Naming.DocumentTypeDefinition.Inspirational
+                    },
+                    Publication = new Publication { }
+                };
+                models.GetTable<Article>().InsertOnSubmit(item);
+            }
+
+            item.AuthorID = profile.UID;
+            item.Title = viewModel.Title;
+            item.Publication.StartDate = viewModel.StartDate;
+            item.Publication.EndDate = viewModel.EndDate;
+
+            models.SubmitChanges();
+
+            ViewBag.Message = "資料已儲存!!";
+            ViewResult result = (ViewResult)MotivationalWords();
+            result.ViewName = "MotivationalWords";
+            return result;
+        }
+
+        [AssistantOrSysAdminAuthorize]
+        public ActionResult DeleteMotivationalWords(int? id)
+        {
+            var item = models.DeleteAny<Document>(a => a.DocID == id && a.DocType == (int)Naming.DocumentTypeDefinition.Inspirational);
+
+            if (item == null)
+            {
+                ViewBag.Message = "資料不存在!!";
+            }
+            else
+            {
+                ViewBag.Message = "資料已刪除!!";
+            }
+
+            ViewResult result = (ViewResult)MotivationalWords();
+            result.ViewName = "MotivationalWords";
+            return result;
+
         }
 
     }

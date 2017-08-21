@@ -9,6 +9,7 @@ using System.Web.SessionState;
 using System.Web.Http;
 using Utility;
 using System.Security.Claims;
+using WebHome.Helper.Jobs;
 
 namespace WebHome
 {
@@ -44,7 +45,8 @@ namespace WebHome
             // Code that runs on application startup
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);            
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            JobLauncher.StartUp();
         }
 
         void Application_Error(object sender, EventArgs e)

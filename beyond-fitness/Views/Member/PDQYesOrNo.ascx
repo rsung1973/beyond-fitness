@@ -8,25 +8,21 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<tr class="info">
-    <th><%=  _model.QuestionNo - (int?)ViewBag.Offset %>.<%= _model.Question %></th>
-</tr>
-<tr>
-    <td>
-        <div class="form-group has-feedback">
-            <select class="form-control" name='<%= "_" + _model.QuestionID %>'>
-                <option value="1">是</option>
-                <option value="0">否</option>
-            </select>
+    <label class="label font-md"><%=  _model.QuestionNo %>.<%= _model.Question %></label>
+    <div class="inline-group">
+        <label class="radio font-md">
+            <input type="radio" name="<%= "_" + _model.QuestionID %>" value="1"/>
+            <i></i>是</label>
+        <label class="radio font-md">
+            <input type="radio" name="<%= "_" + _model.QuestionID %>" value="0" />
+            <i></i>否</label>
             <%  if (_task != null && _task.YesOrNo.HasValue)
                 { %>
             <script>
-                $('select[name="<%= "_" + _model.QuestionID %>"]').val(<%= _task.YesOrNo==true ? 1 : 0%>);
+                $('input:radio[name="<%= "_" + _model.QuestionID %>"][value="<%= _task.YesOrNo==true ? 1 : 0 %>"]').prop('checked', true);
             </script>
             <%  } %>
-        </div>
-    </td>
-</tr>
+    </div>
 
 <script runat="server">
 

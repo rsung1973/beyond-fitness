@@ -11,57 +11,113 @@
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-user"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>我的簡介</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-user"></i>我的簡介
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <div id="content">
-        <div class="container">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+            <!--Start Profile-->
+            <div class="well well-sm bg-color-darken txt-color-white no-margin no-padding">
 
-            <div class="row">
+                <div class="row">
 
-                <div class="col-md-5">
+                    <%--<%  Html.RenderPartial("~/Views/Layout/Carousel.ascx"); %>--%>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="<%= _item.ExternalID==null ? "fa fa-envelope-o" : "fa fa-facebook-square" %>">註冊 - Step 3</span></h4>
+                    <div class="col-sm-12">
 
-                    <!-- Start Post -->
-                    <div class="blog-post quote-post">
-                        <!-- Post Content -->
-                        <div class="user-info clearfix">
-                            <div class="user-image">
-                                <img alt="" src="<%= _item.PictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _item.PictureID : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" />
+                        <div class="row">
+
+                            <div class="col-sm-3 profile-pic">
+                                <% _item.PictureID.RenderUserPicture(this.Writer, "profileImg"); %>
+                                <div class="padding-10">
+                                    <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _item.YearsOld() %>歲</span>
+                                    <br/>
+                                    <% Html.RenderPartial("~/Views/Member/MemberLessonsInfo.ascx", _item); %>
+                                </div>
                             </div>
-                            <div class="user-bio">
-                                <h2 class="text-primary"><%= _item.UserName %> <span class="subtext">您好</span></h2>
+                            <div class="col-sm-9">
+                                <h1><span class="semi-bold"><%= String.IsNullOrEmpty(_item.UserName) ? _item.RealName :_item.UserName %></span>
+                                    <br/>
+                                    <small></small></h1>
 
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p><strong>會員編號：</strong><%= _item.MemberCode %></p>
-                                <p><strong>Email：</strong><%= _item.PID %></p>
-
-                                <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                                <p>您的註冊已經完成。歡迎加入BEYOND FITNESS。</p>
-                                <!-- Divider -->
-                                <div class="hr1" style="margin-bottom: 10px;"></div>
-                                <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Login") %>" class="btn-system btn-small">進入會員專區 <i class="fa fa-chevron-right" aria-hidden="true"></i></a></p>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <p class="text-muted">
+                                            <i class="fa fa-phone"></i>&nbsp;&nbsp;(<span class="txt-color-darken">886) <%= _item.Phone %></span>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p class="text-muted">
+                                            <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:<%= _item.PID %>"><%= _item.PID %></a>
+                                        </p>
+                                    </li>
+                                </ul>
                             </div>
+
                         </div>
+
                     </div>
-                    <!-- End Post -->
 
                 </div>
 
             </div>
+
+            <!--End Profile-->
+
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/TimeLine.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditProfile.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Logout.ascx"); %>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
         </div>
     </div>
-
-    <script>
-    $('#vip,#m_vip').addClass('active');
-    </script>
 
 </asp:Content>
 <script runat="server">

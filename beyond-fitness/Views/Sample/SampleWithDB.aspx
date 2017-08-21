@@ -8,31 +8,28 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
-
-
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
 
     <script>
-    $('#vip,#m_vip').addClass('active');
-    $('#theForm').addClass('contact-form');
+
     </script>
 
 </asp:Content>
 <script runat="server">
 
-    ModelSource<Article> models;
+    ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
 
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = ((SampleController<Article>)ViewContext.Controller).DataSource;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
 

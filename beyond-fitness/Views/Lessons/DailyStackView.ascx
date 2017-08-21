@@ -94,13 +94,13 @@
         });
     }
 
-    $(function () {
+<%--    $(function () {
 
         plotData('<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>');
         // Add the Flot version string to the footer
 
         $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
-    });
+    });--%>
 
 </script>
 

@@ -10,55 +10,134 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-edit"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>人員管理></li>
+            <li>員工管理</li>
+            <li>修改員工</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-edit"></i>員工管理
+							<span>>  
+								修改員工
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>填寫個人資訊 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-5">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-edit"> 修改教練資料</span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
+                    </div>
+                    <!-- end widget edit box -->
 
-                    <p><strong>員工編號：</strong><span class="text-primary"><%= _model.MemberCode %></span></p>
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-                    <!-- Divider -->
-                    <div class="hr5" style="margin-top: 10px; margin-bottom: 10px;"></div>
+                        <form action="<%= Url.Action("EditCoach","Member",new { IsCoach = _model.IsCoach }) %>" id="pageForm" class="smart-form" method="post">
 
-                    <% Html.RenderPartial("~/Views/Member/CoachItem.ascx", _model); %>
+                                <% Html.RenderPartial("~/Views/Member/CoachItem.ascx", _model); %>
 
+                            <footer>
+                                <button type="submit" name="submit" class="btn btn-primary">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+                        </form>
 
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-
-                    <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
-
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-
-                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
-                    <a id="nextStep" class="btn-system btn-medium">確定 <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></a>
-
-                    <!-- End Contact Form -->
+                    </div>
+                    <!-- end widget content -->
 
                 </div>
+                <!-- end widget div -->
 
             </div>
-        </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <p class="no-margin">
+                        <ul class="icons-list">
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                            <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ShowMember.ascx",_profile); %>
+                        </ul>
+                    </p>
+                </ul>
+            </div>
+            <!-- /well -->
+
+
+        </article>
+        <!-- END COL -->
+
     </div>
-    <!-- End content -->
 
 
     <script>
-        $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
 
         $('#nextStep').on('click', function (evt) {
             startLoading();
@@ -73,11 +152,13 @@
 
     ModelStateDictionary _modelState;
     CoachViewModel _model;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (CoachViewModel)this.Model;
+        _profile = (UserProfile)ViewBag.Profile;
     }
 </script>

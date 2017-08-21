@@ -119,7 +119,7 @@
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
-    IEnumerable<RegisterLesson> _items;
+    IQueryable<RegisterLesson> _items;
 
 
     protected override void OnInit(EventArgs e)

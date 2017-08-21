@@ -9,12 +9,12 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<label class="control-label" for="classno">教練：</label>
+<label class="control-label" for="classno">體能顧問：</label>
 <% Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", _model); %>
 <script runat="server">
 
     InputViewModel _model;
-    IEnumerable<ServingCoach> _items;
+    IQueryable<ServingCoach> _items;
 
     protected override void OnInit(EventArgs e)
     {

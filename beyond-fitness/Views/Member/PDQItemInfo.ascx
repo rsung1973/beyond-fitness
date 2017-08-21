@@ -8,26 +8,44 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<tr class="info">
-    <th><%=  _model.QuestionNo - (int?)ViewBag.Offset %>.<%= _model.Question %></th>
-</tr>
-<tr>
-    <td>
+<li><strong><%= _model.Question %></strong>
+    <ul class="list-unstyled">
         <%  if (_task != null)
             {
                 switch ((Naming.QuestionType)_model.QuestionType)
                 {
                     case Naming.QuestionType.問答題:
-                        Writer.Write(_task.PDQAnswer);
+                        if(!String.IsNullOrEmpty(_task.PDQAnswer))
+                        { %>
+                            <li class="text-warning"><i class="fa fa-commenting-o"></i><strong><%= _task.PDQAnswer %></strong></li>
+                <%      }
                         break;
                     case Naming.QuestionType.單選題:
                     case Naming.QuestionType.單選其他:
-                        Writer.Write(_task.SuggestionID.HasValue ? _task.PDQSuggestion.Suggestion : _task.PDQAnswer);
+                        if(_task.SuggestionID.HasValue)
+                        {   %>
+                            <li class="text-success"><i class="fa fa-check"></i><strong><%= _task.PDQSuggestion.Suggestion %></strong></li>
+                        <%  if(!String.IsNullOrEmpty(_task.PDQAnswer))
+                            { %>
+                                <li class="text-warning"><i class="fa fa-commenting-o"></i><strong><%= _task.PDQAnswer %></strong></li>
+                    <%      }
+                        }
+                        if (_answer != null)
+                        {         %>
+                            <li class="text-warning"><i class="fa fa-commenting-o"></i><strong><%= _answer.PDQAnswer %></strong></li>
+        <%              } 
                         break;
                     case Naming.QuestionType.多重選:
                         break;
                     case Naming.QuestionType.是非題:
-                        Writer.Write(_task.YesOrNo == true ? "是" : "否");
+                        if (_task.YesOrNo == true)
+                        {  %>
+                            <li class="text-danger"><i class="fa fa-check"></i><strong>是</strong></li>
+                    <%  }
+                        else
+                        { %>
+                            <li class="text-success"><i class="fa fa-times"></i><strong>否</strong></li>
+                    <%  } 
                         break;
                 }
             }
@@ -35,8 +53,8 @@
             {
                 Writer.Write("N/A");
             } %>
-    </td>
-</tr>
+    </ul>
+</li>
 
 
 <script runat="server">
@@ -45,6 +63,7 @@
     ModelSource<UserProfile> models;
     PDQQuestion _model;
     PDQTask _task;
+    PDQTask _answer;
 
     protected override void OnInit(EventArgs e)
     {
@@ -53,6 +72,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (PDQQuestion)this.Model;
         _task = (PDQTask)ViewBag.PDQTask;
+        _answer = (PDQTask)ViewBag.Answer;
     }
 
 </script>

@@ -723,68 +723,70 @@ PatternLockScreen.prototype.showHint = function(show){
 };
 ;
 var $appLock;
+function initLockScreen() {
+    var app = new PatternLockScreen({
+        container: "lock-screen",
+        width: 300,
+        height: 300,
+        onSuccess: function(){
+            console.log('success');
+        },
+        onFailure: function(){
+            console.log('failure');
+        },
+        pattern: '1-2-3-4-5-6-7-8-9'
+    });
+
+    $appLock = app;
+
+    //var unlockButton = document.getElementById('unlock-button');
+    //var savePatternButton = document.getElementById('save-pattern-button');
+    var resetButton = document.getElementById('reset-button');
+    var showHint = true;
+
+    //savePatternButton.addEventListener('click', function(){
+    //    var span = this.getElementsByClassName('gray');
+    //    if( span.className==='red' ){
+    //        this.innerHTML = '<span class="gray"></span>Record Pattern';
+    //        span.className = 'gray';
+    //        app.stopRecordPattern();
+    //        unlockButton.style.display = 'inline';
+    //    }
+    //    else {
+    //        this.innerHTML = '<span class="red"></span>Recording...';
+    //        span.className = 'red';
+    //        app.startRecordPattern();
+    //        unlockButton.style.display = 'none';
+    //    }
+    //}, false);
+    //unlockButton.addEventListener('click', function(){
+    //    var btn = this;
+    //    if( !app.unlock() ){
+    //        this.className = "button red";
+    //        setTimeout(function(){
+    //            btn.className = "button blue";
+    //        }, 1000);
+    //    }
+    //    else {
+    //        btn.className = "button green";
+    //        alert('Access Granted!');
+    //    }
+    //}, false);
+    resetButton.addEventListener('click', function(){
+        app.reset();
+        event.preventDefault();
+        return false;
+    });
+    document.addEventListener('keyup', function(e){
+        var code = e.keyCode || e.which;
+        if( code === 72 ){      
+            app.showHint(showHint);
+            showHint = !showHint;
+        }
+    });
+
+}
+
 (function(){
-    window.addEventListener('load', function() {
-        var app = new PatternLockScreen({
-            container: "lock-screen",
-            width: 300,
-            height: 300,
-            onSuccess: function(){
-                console.log('success');
-            },
-            onFailure: function(){
-                console.log('failure');
-            },
-            pattern: '1-2-3-4-5-6-7-8-9'
-        });
-
-        $appLock = app;
-
-        //var unlockButton = document.getElementById('unlock-button');
-        //var savePatternButton = document.getElementById('save-pattern-button');
-        var resetButton = document.getElementById('reset-button');
-        var showHint = true;
-
-        //savePatternButton.addEventListener('click', function(){
-        //    var span = this.getElementsByClassName('gray');
-        //    if( span.className==='red' ){
-        //        this.innerHTML = '<span class="gray"></span>Record Pattern';
-        //        span.className = 'gray';
-        //        app.stopRecordPattern();
-        //        unlockButton.style.display = 'inline';
-        //    }
-        //    else {
-        //        this.innerHTML = '<span class="red"></span>Recording...';
-        //        span.className = 'red';
-        //        app.startRecordPattern();
-        //        unlockButton.style.display = 'none';
-        //    }
-        //}, false);
-        //unlockButton.addEventListener('click', function(){
-        //    var btn = this;
-        //    if( !app.unlock() ){
-        //        this.className = "button red";
-        //        setTimeout(function(){
-        //            btn.className = "button blue";
-        //        }, 1000);
-        //    }
-        //    else {
-        //        btn.className = "button green";
-        //        alert('Access Granted!');
-        //    }
-        //}, false);
-        resetButton.addEventListener('click', function(){
-            app.reset();
-            event.preventDefault();
-            return false;
-        });
-        document.addEventListener('keyup', function(e){
-            var code = e.keyCode || e.which;
-            if( code === 72 ){      
-                app.showHint(showHint);
-                showHint = !showHint;
-            }
-        });
-
-    }, false);
+    window.addEventListener('load', initLockScreen, false);
 }());

@@ -9,111 +9,234 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
 
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-dashboard"></i>
+            </span>
+        </span>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>課程管理></li>
+            <li>課程總覽</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-dashboard"></i>課程管理
+							<span>>  
+								課程總覽
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="pageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <article class="col-sm-12 col-md-6 col-lg-6">
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
 
-            <div class="row">
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
 
-                <div class="col-md-4">
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
 
-                    <!-- Classic Heading -->
-                    <% Html.RenderPartial("~/Views/Member/SimpleMemberInfo.ascx", _model); %>
-                    <!-- End Classic -->
-
-                    <!-- Start Contact Form -->
-                    <!-- Categories Widget -->
-
-
-                    <!-- Responsive calendar - START -->
-                    <% Html.RenderPartial("~/Views/Lessons/LessonsCalendar.ascx", _model); %>
-
-                    <!-- Responsive calendar - END -->
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                    <% Html.RenderPartial("~/Views/Lessons/DailyStackView.ascx", _lessonDate); %>
-
-                    <!-- End Contact Form -->
-
-                </div>
-                <div class="col-md-8">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-calendar">行事曆清單</span></h4>
-
-                    <!-- Start Contact Form -->
-                    <!-- Stat Search -->
-                    <div class="navbar bg_gray" style="min-height: 30px;">
-                        <div class="search-side">
-                            <a class="btn-system btn-small" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>">登記上課時間 <span class="fa fa-calendar-plus-o"></span></a>
-                            <span id="clockIn">
-                                <% Html.RenderPartial("~/Views/Account/FreeAgentClockIn.ascx", _model); %>
-                            </span>
-                            <a class="btn btn-search" onclick="inquire();"><i class="fa fa-search"></i></a>
-                        </div>
-                        <div class="form-horizontal" style="display: none;" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true">
-                            <% Html.RenderPartial("~/Views/Lessons/QueryModalByFreeAgent.ascx"); %>
-                        </div>
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                    <h2>BEYOND FITNESS Events </h2>
+                    <div class="widget-toolbar">
+                        <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>"><i class="fa fa-fw fa-bookmark"></i>預約上課時間</a>
                     </div>
 
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
+                </header>
 
-                    <div class="panel panel-default">
-                        <div id="dailyBooking" class="panel-body">
-                            <!-- TABLE 1 -->
-                            <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox bg-color-darken">
+                    </div>
+                    <!-- end widget edit box -->
+
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
+                        <!-- content goes here -->
+                        <div class="widget-body-toolbar">
+
+                            <div id="calendar-buttons">
+
+                                <div class="btn-group">
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
                         </div>
-                        <div id="attendeeList" class="panel-body">
-                        </div>
+                        <% Html.RenderPartial("~/Views/Lessons/LessonsCalendar.ascx", _model); %>
+
+                        <!-- end content -->
                     </div>
 
-                    <!-- End Contact Form -->
-
                 </div>
+                <!-- end widget div -->
             </div>
-        </div>
+            <!-- end widget -->
+
+        </article>
+
+        <%--<article class="col-sm-12 col-md-6 col-lg-6">
+
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-check txt-color-white"></i></span>
+                    <h2>待辦事項 </h2>
+                    <!-- <div class="widget-toolbar">
+									add: non-hidden - to disable auto hide
+
+									</div>-->
+                </header>
+
+                <!-- widget div-->
+                <div>
+
+                    <% Html.RenderPartial("~/Views/Lessons/DailyTodoList.ascx", _lessonDate); %>
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>--%>
     </div>
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+
+    <!-- row -->
+    <div class="row">
+        <article class="col-sm-12">
+            <!-- new widget -->
+            <div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-rss text-success"></i></span>
+                    <h2><%= _lessonDate.Value.ToString("yyyy/MM/dd") %> 課程表 </h2>
+
+                    <ul class="nav nav-tabs pull-right in" id="myTab">
+                        <li class="active">
+                            <a data-toggle="tab" href="#s1"><i class="fa fa-list"></i><span>列表</span></a>
+                        </li>
+
+                        <li>
+                            <a data-toggle="tab" href="#s2"><i class="fa fa-bar-chart"></i><span>統計表</span></a>
+                        </li>
+                    </ul>
+
+                </header>
+
+                <!-- widget div-->
+                <div class="no-padding">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <!-- end widget edit box -->
+
+                    <div class="widget-body">
+                        <!-- content -->
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade active in" id="s1">
+                                <% Html.RenderPartial("~/Views/Lessons/DailyBookingList.ascx", _lessonDate); %>
+                            </div>
+                            <!-- end s1 tab pane -->
+                            <div class="tab-pane fade" id="s2">
+                                <% Html.RenderPartial("~/Views/Lessons/DailyBarGraph.ascx", _lessonDate); %>
+                            </div>
+                            <!-- end s3 tab pane -->
+                        </div>
+                        <script>
+                            $('a[data-toggle="tab"]').on('shown.bs.tab', function (evt) {
+                                if ($('#s2').css('display') == 'block') {
+                                    plotData('<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>');
+                                }
+                            });
+                        </script>
+
+                        <!-- end content -->
+                    </div>
+
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>
+    </div>
+    <!-- Start Content -->
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
     <!-- End content -->
 
     <script>
-        $('#vip,#m_vip').addClass('active');
-        //$('#theForm').addClass('contact-form');
 
         var pageParam = {
             lessonDate: '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>',
             endQueryDate: '<%= String.Format("{0:yyyy-MM-dd}",ViewBag.EndQueryDate??_lessonDate) %>'
         };
 
-        function inquire() {
-            <%--        var $modal = $('<div class="form-horizontal modal fade" tabindex="-1" role="dialog" aria-labelledby="searchdilLabel" aria-hidden="true" />');
-        $modal.on('hidden.bs.modal', function (evt) {
-            $modal.remove();
-        });
-        $modal.appendTo($('body'))
-            .load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/QueryModal") %>', pageParam, function () {
-                    $modal.modal('show');
-                });--%>
-            $('#queryModal').css('display', 'block');
-        }
-
         $(function () {
-            $('#loading').css('display', 'table');
-            $('#attendeeList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/DailyBookingMembersByFreeAgent") %>', { 'lessonDate': '<%= _lessonDate.Value.ToString("yyyy-MM-dd") %>' }, function () {
-                $('#loading').css('display', 'none');
-            });
+            showLoading();
         });
 
     </script>
+
+
 </asp:Content>
 <script runat="server">
 

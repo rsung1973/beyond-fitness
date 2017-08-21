@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="exampleInputFile" class="col-md-2 control-label">依教練：</label>
+                <label for="exampleInputFile" class="col-md-2 control-label">依體能顧問：</label>
                 <div class="col-md-10">
                     <%  ViewBag.SelectAll = true;
                         Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID" }); %>

@@ -19,7 +19,7 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    IEnumerable<TrainingType> _items;
+    IQueryable<TrainingType> _items;
     int? _trainingID;
 
     protected override void OnInit(EventArgs e)
@@ -28,7 +28,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _items = models.GetTable<TrainingType>();
-        _trainingID = (int?)this.Model;
+        _trainingID = this.Model as int?;
     }
 
 </script>

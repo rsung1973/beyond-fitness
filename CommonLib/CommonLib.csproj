@@ -106,6 +106,7 @@
     <Compile Include="Utility\NetTool.cs" />
     <Compile Include="Utility\PredicateBuilder.cs" />
     <Compile Include="Utility\ValueValidity.cs" />
+    <Compile Include="Web\ExtensionMethods.cs" />
     <Compile Include="Web\HttpContextDataModelCache.cs" />
     <Compile Include="Web\DataModelCache.cs" />
   </ItemGroup>

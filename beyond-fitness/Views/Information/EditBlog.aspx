@@ -13,101 +13,207 @@
 <%@ Register Src="~/Views/Shared/UploadResource.ascx" TagPrefix="uc1" TagName="UploadResource" %>
 
 
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="<%= VirtualPathUtility.ToAbsolute("~/CKEditor/ckeditor.js") %>"></script>
+    <script type="text/javascript" src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/ckeditor/ckeditor.js") %>"></script>
+</asp:Content>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-pencil"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>上稿管理></li>
+            <li>專業知識</li>
+            <li>新增文章</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-pencil"></i>專業知識
+							<span>>  
+								新增文章
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>填寫文章資訊 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-12">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-edit"><%= _item.Document.CurrentStep==(int)Naming.DocumentLevelDefinition.暫存 ? " 新增文章" : " 修改文章" %></span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
-
-                    <div class="blog-post quote-post">
-                        <div class="form-group has-feedback">
-                            <% Html.RenderInput("標題：", "title", "title", "請輸入文章標題", _modelState, defaultValue: _item.Title); %>
-                        </div>
-
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="docDate">日期：</label>
-                            <div class="input-group date form_date" data-date="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                                <input class="form-control" size="16" type="text" value="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" name="docDate" readonly>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                            </div>
-                        </div>
-
-                        <%--<div class="form-group has-feedback">
-                            <label class="control-label" for="docType">文章分類：</label>
-                            <div class="form-control">
-                                <select name="docType">
-                                    <option value="1">專業體能訓練</option>
-                                    <option value="2">專業知識</option>
-                                    <option value="3">場地租借</option>
-                                    <option value="4">相關商品</option>
-                                    <option value="5">相關合作</option>
-                                    <option value="6">聯絡我們</option>
-                                </select>
-                            </div>
-                        </div>--%>
-
-                        <uc1:UploadResource runat="server" ID="uploadResource" />
-                        <div id="resource" class="form-group has-feedback">
-                        </div>
-
-                        <div class="form-group has-feedback">
-                            <label class="control-label" for="nickname">內文：</label>
-                            <textarea class="form-control" id="articleContent" rows="20"><%= _item.ArticleContent %></textarea>
-                        </div>
                     </div>
+                    <!-- end widget edit box -->
 
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-                    <a  onclick="javascript:updateArticle();" class="btn-system btn-medium">送出</a>
-                    <a  onclick="window.location.href = '<%= Request.UrlReferrer %>';" class="btn-system btn-medium border-btn">取消</a>
+                    <!-- widget content -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
 
-                    <!-- End Contact Form -->
+                        <form id="pageForm" class="smart-form">
+
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-6">
+                                        <label class="input input-group">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" class="form-control input-lg date form_date" data-date="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請輸入發佈時間" value="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" name="docDate" id="docDate" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="select">
+                                            <% ViewBag.SelectIndication = "<option value='1'>請選擇撰文者</option>";
+                                                Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "authorID", Name = "authorID", DefaultValue = _item.AuthorID }); %>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                </div>
+
+                                <section>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <input type="text" class="input-lg" name="title" id="title" maxlength="50" placeholder="請輸入文章主要標題" value="<%= _item.Title %>" />
+                                    </label>
+                                </section>
+                                <%--<section>
+                                    <label class="input">
+                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <input type="text" class="input-lg" name="subtitle" maxlength="50" placeholder="請輸入文章次要標題" value="<%= _item.Subtitle %>">
+                                    </label>
+                                </section>--%>
+                                <section>
+                                    <label class="label">請選擇文章類別</label>
+                                    <div class="row">
+                                    <%  for (int r = 0; r < (_categories.Length + 2) / 3; r++)
+                                        { %>
+                                        <div class="col col-4">
+                                            <%  for (int c = 0; c < 3; c++)
+                                                {
+                                                    var idx = r * 3 + c;
+                                                    if (idx >= _categories.Length)
+                                                        break; %>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox" name="articleCategory" value="<%= _categories[idx].Category %>" <%= _item.ArticleCategory.Any(a=>a.Category==_categories[idx].Category) ? "checked" : null %> />
+                                                        <i></i><%= _categories[idx].Description %></label>
+                                            <%  } %>
+                                        </div>
+                                    <%  } %>
+                                    </div>
+                                </section>
+                                <section>
+                                    <uc1:UploadResource runat="server" ID="uploadResource" />
+                                </section>
+                                <section>
+                                    <div id="resource">
+                                    </div>
+                                </section>
+                                <section>
+                                    <textarea class="form-control" id="articleContent" rows="20"><%= _item.ArticleContent %></textarea>
+                                </section>
+                            </fieldset>
+
+                            <footer>
+                                <button type="button" name="btnUpdate" class="btn btn-primary" onclick="javascript:updateArticle();">
+                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+                        </form>
+
+                    </div>
+                    <!-- end widget content -->
+
                 </div>
+                <!-- end widget div -->
 
             </div>
-        </div>
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
+
     </div>
-    <!-- End content -->
 
     <script>
         $('#vip,#m_vip').addClass('active');
         //$('#theForm').addClass('contact-form');
         $(function() {
             loadResource(<%= _item.DocID %>);
-            CKEDITOR.config.height = 300;
+            CKEDITOR.config.height = 380;
             CKEDITOR.config.width = 'auto';
             CKEDITOR.replace( 'articleContent' );
 
             $('#title').rules('add', {
-                'required': true
+                'required': true,
+                'messages': {
+                    'required': '請輸入您的標題'
+                }
             });
 
         });
 
         function updateArticle() {
+            var category=[];
+            $('input[name="articleCategory"]:checked')
+                    .serializeArray()
+                    .forEach(function(element) { 
+                        category.push(element.value)});
+
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/UpdateArticle")%>', 
                 { 
                     'docID': <%= _item.DocID %>, 
                     'docType': 2, //$('select[name="docType"]').val(),
                     'docDate': $('input[name="docDate"]').val(),
                     'title': $('input[name="title"]').val(),
+                    //'subtitle': $('input[name="subtitle"]').val(),
+                    'authorID': $('select[name="authorID"]').val(),
+                    'category': category,
                     'content': $('<div>').text(CKEDITOR.instances.articleContent.getData()).html()
                 }, function (data) {
-                    alert(data.message);
+                    smartAlert(data.message);
                     if(data.result) {
                         window.location.href = '<%= Request.UrlReferrer %>';
                     }
@@ -120,7 +226,7 @@
                     if(data.result) {
                         loadResource(<%= _item.DocID %>);
                     }
-                    alert(data.message);
+                    smartAlert(data.message);
                 });
             }
         }
@@ -132,7 +238,7 @@
                     var $this = $(this);
                     if ($this.val() != '') {
                         $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/MakeTheme")%>', { 'docID':docID , 'attachmentID':$this.val() } , function (data) {
-                            alert(data.message);
+                            smartAlert(data.message);
                         });
                     }
                 });
@@ -152,17 +258,19 @@
 </asp:Content>
 <script runat="server">
 
-    ModelSource<Article> models;
+    ModelSource<UserProfile> models;
     Article _item;
     ModelStateDictionary _modelState;
+    ArticleCategoryDefinition[] _categories;
     
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = ((SampleController<Article>)ViewContext.Controller).DataSource;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _item = (Article)this.Model;
         uploadResource.DocID = _item.DocID;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        _categories = models.GetTable<ArticleCategoryDefinition>().ToArray();
     }
 
 

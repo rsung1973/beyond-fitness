@@ -54,7 +54,7 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     DateTime? _lessonDate;
-    IEnumerable<LessonTime> _items;
+    IQueryable<LessonTime> _items;
 
     protected override void OnInit(EventArgs e)
     {
@@ -62,7 +62,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _lessonDate = (DateTime?)this.Model;
-        _items = (IEnumerable<LessonTime>)ViewBag.DataItems;
+        _items = (IQueryable<LessonTime>)ViewBag.DataItems;
     }
 
 </script>

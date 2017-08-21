@@ -1,4 +1,4 @@
-﻿<%@  Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
 
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
@@ -9,54 +9,56 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<p><strong>會員編號：</strong><span class="text-primary"><%= _model.MemberCode %></span></p>
-<!-- Divider -->
-<div class="hr5" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState, defaultValue: _model.EMail); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("暱稱：", "userName", "userName", "請輸入暱稱", _modelState, defaultValue: _model.UserName); %>
-</div>
-
-<%--<div class="form-group has-feedback">
-    <label class="control-label" for="classno">生日：</label>
-    <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-        <input id="birthDay" name="birthDay" class="form-control" size="16" type="text" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' readonly>
-        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-envelope-o "></i>
+                <input class="form-control input-lg" maxlength="256" placeholder="請輸入註冊時的E-mail" type="email" name="EMail" id="EMail" value="<%= _model.EMail %>" />
+            </label>
+        </section>
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-user "></i>
+                <input class="form-control input-lg" maxlength="20" placeholder="請輸入暱稱" type="text" name="userName" id="userName" value="<%= _model.UserName %>" />
+            </label>
+        </section>
     </div>
-</div>--%>
+</fieldset>
+<fieldset>
+    <div class="row">
+        <div class="col col-6">
+            <% _model.PictureID.RenderUserPicture(this.Writer, new { id = "profileImg", @class = "online", style = "width:100px" }); %>
+            <div class="input input-file">
+                <span class="button">
+                    <input type="file" id="photopic" name="photopic" onchange="this.parentNode.nextSibling.value = this.value" />瀏覽
+                </span>
+                <input type="text" placeholder="請選擇圖片" readonly="" />
+            </div>
+        </div>
+        <div class="col col-6">
+            <label>合約簽名檔</label>
+            <div><% Html.RenderAction("UserSignature", "Account", new { _model.UID }); %></div>
+        </div>
+    </div>
+</fieldset>
 
-<div class="form-group has-feedback">
-    <% Html.RenderInput("頭像：", "photopic", "photopic", "", _modelState, "file"); %>
-</div>
-<div class="author-image">
-    <% _model.PictureID.RenderUserPicture(this.Writer, "authorImg"); %>
-</div>
-
-<% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
-<!-- End Tab Panels -->
+<fieldset>
+    <% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
+</fieldset>
 
 <script>
 
     $(function () {
-        $('#email').rules('add', {
-            'required': true,
-            'email': true
-        });
-    });
 
+        var fileUpload = $('#photopic');
+        var elmt = fileUpload.parent();
 
-    var fileUpload = $('#photopic');
-    var elmt = fileUpload.prev();
+        fileUpload.off('click').on('change', function () {
 
-    fileUpload.off('click').on('change', function () {
-
-        $('<form method="post" id="myForm" enctype="multipart/form-data"></form>')
-        .append(fileUpload).ajaxForm({
-            url: "<%= VirtualPathUtility.ToAbsolute("~/Account/UpdateMemberPicture") %>",
+            $('<form method="post" id="myForm" enctype="multipart/form-data"></form>')
+            .append(fileUpload).ajaxForm({
+                url: "<%= VirtualPathUtility.ToAbsolute("~/Account/UpdateMemberPicture") %>",
                 data: { 'memberCode': '<%= _model.MemberCode %>' },
                 beforeSubmit: function () {
                     //status.show();
@@ -64,11 +66,11 @@
                     //console.log('提交時');
                 },
                 success: function (data) {
-                    elmt.after(fileUpload);
+                    elmt.append(fileUpload);
                     if (data.result) {
-                        $('#authorImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
+                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
                     } else {
-                        alert(data.message);
+                        smartAlert(data.message);
                     }
                     //status.hide();
                     //console.log('提交成功');
@@ -81,10 +83,10 @@
                 }
             }).submit();
         });
+    });
 
 </script>
 
-</asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;

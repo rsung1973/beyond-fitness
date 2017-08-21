@@ -1,32 +1,43 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" %>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery-2.1.4.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.migrate.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/modernizrr.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/asset/js/bootstrap.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.fitvids.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/owl.carousel.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/nivo-lightbox.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.isotope.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.appear.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/count-to.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.textillate.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.lettering.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.easypiechart.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.nicescroll.min.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.parallax.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.slicknav.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/bootstrap-datetimepicker.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/bootstrap-datetimepicker.zh-TW.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/moment.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.form.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/jquery.validate.js") %>"></script>
-<script type="text/javascript" src="<%=VirtualPathUtility.ToAbsolute("~/js/locales/messages_zh_TW.js") %>"></script>
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
+<%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq.Expressions" %>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
+<%@ Import Namespace="WebHome.Helper" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
+<%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
+<%  String basePath = VirtualPathUtility.ToAbsolute("~/"); %>
+
+<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+<script src="<%= basePath + "Scripts/jquery-2.1.4.min.js" %>"></script>
+<script src="<%= basePath + "Scripts/jquery-ui-1.10.3.min.js" %>"></script>
+<script src="<%= basePath + "Scripts/jquery.scrollUp.min.js" %>"></script>
+<!-- JQUERY VALIDATE -->
+<script src="<%= basePath + "js/plugin/jquery-validate/jquery.validate.min.js" %>"></script>
+<script src="<%= basePath + "js/jquery.form.js" %>"></script>
+<script src="<%= basePath + "js/bootstrap-datetimepicker.js" %>"></script>
+<script src="<%= basePath + "js/plugin/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-TW.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/jquery.dataTables.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.colVis.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.tableTools.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatables/dataTables.bootstrap.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/datatable-responsive/datatables.responsive.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/moment/moment.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/fullcalendar/jquery.fullcalendar.min.js" %>"></script>
+<script src="<%= basePath + "js/plugin/fullcalendar/lang-all.js" %>"></script>
+<script src="<%= basePath + "js/plugin/jquery-blockui/jquery.blockUI.js" %>"></script>
+
+<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+<%--<script data-pace-options='{ "restartOnRequestAfter": true }' src="<%= basePath + "js/plugin/pace/pace.min.js" %>"></script>--%>
+
 <script>
     var $formValidator;
+    var $pageFormValidator;
 
     $(function () {
 
-        $formValidator = $("form").validate({
+        $formValidator = $("#theForm").validate({
             //debug: true,
             //errorClass: "label label-danger",
 
@@ -44,8 +55,65 @@
             }
         });
 
+        $pageFormValidator = $("#pageForm")
+            //.submit(function (e) {
+            //    e.preventDefault();
+            //    showLoading();
+            //})
+            .validate({
+                //invalidHandler: function () {
+                //    hideLoading();
+                //},
+                // Do not change code below
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                }
+            });
+
         $.validator.addMethod("regex", function (value, element, regexpr) {
             return regexpr.test(value);
         }, "資料格式錯誤!!");
+
+        $.scrollUp({
+            //animation: 'slide',
+            //activeOverlay: '#00FFFF',
+            scrollText: '',
+            scrollImg: true,
+        });
+
     });
+
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
+</script>
+<script>
+         /*
+          * CONVERT DIALOG TITLE TO HTML
+          * REF: http://stackoverflow.com/questions/14488774/using-html-in-a-dialogs-title-in-jquery-ui-1-10
+          */
+         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title : function(title) {
+               if (!this.options.title) {
+                  title.html("&#160;");
+               } else {
+                  title.html(this.options.title);
+               }
+            }
+         }));    
+         
 </script>

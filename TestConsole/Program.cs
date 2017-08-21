@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -23,7 +24,19 @@ namespace TestConsole
             //XmlDocument doc = new XmlDocument();
             //doc.Load("SampleData.xml");
             //var items = doc.SelectNodes("//REC[position()=1]/Detail");
-            test3();
+            //test3();
+            test4();
+            Console.ReadKey();
+        }
+
+        private static void test4()
+        {
+            String data;
+            using (WebClient client = new WebClient())
+            {
+                data = client.DownloadString("http://61.219.99.47/LED-CP5200.TXT");
+            }
+            Console.WriteLine(data);
         }
 
         private static void test3()

@@ -10,43 +10,76 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
+
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-eye"></i>
+            </span>
+        </span>
+
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>人員管理></li>
+            <li>員工管理</li>
+            <li>檢視員工</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+                ribbon for further usability
+
+                Example below:
+
+                <span class="ribbon-button-alignment pull-right">
+                <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+                <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+                <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+                </span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-eye"></i>員工管理
+                            <span>>  
+                                檢視員工
+                            </span>
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <%  Html.RenderPartial("~/Views/Member/CoachArticle.ascx", _model); %>
 
-            <div class="row">
-                <div class="col-md-10">
-
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-eye"> 檢視詳細資訊</span></h4>
-                    <!-- Start Post -->
-                    <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>
-                    <!-- End Post -->
-                    <div class="hr1" style="margin-bottom: 10px;"></div>
-                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListAll") %>" class="btn-system btn-medium">回清單頁 <i class="fa fa-th-list" aria-hidden="true"></i></a>
-                </div>
+        <article class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+            <!-- /well -->
+            <div class="well bg-color-darken txt-color-white padding-10">
+                <h5 class="margin-top-0"><i class="fa fa-external-link"></i> 快速功能</h5>
+                <ul class="no-padding no-margin">
+                    <ul class="icons-list">
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListCoaches.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/ListLearners.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/Overview.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/VipOverview.ascx"); %>
+                        <%  Html.RenderPartial("~/Views/Layout/QuickLinkItem/EditCoach.ascx",_model); %>
+                    </ul>
+                </ul>
             </div>
-        </div>
+        </article>
+
     </div>
-    <!-- End content -->
 
-    <script>
-        $('#vip,#m_vip').addClass('active');
-        $('#theForm').addClass('contact-form');
-
-    </script>
 </asp:Content>
 <script runat="server">
 
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -54,6 +87,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
+        _userProfile = Context.GetUser();
     }
 
 

@@ -73,6 +73,7 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
+        public int? UID;
 
     }
 
@@ -91,6 +92,8 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "圖形密碼")]
         public string lockPattern { get; set; }
 
+        public String PID { get; set; }
+
     }
 
     public class LearnerViewModel
@@ -100,7 +103,6 @@ namespace WebHome.Models.ViewModel
         //    ClassLevel = 1;
         //}
 
-        [Required]
         [Display(Name = "真實姓名")]
         public string RealName { get; set; }
 
@@ -116,6 +118,13 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
+
+        public String Gender { get; set; }
+        public int? AthleticLevel { get; set; }
+        public int? CurrentTrial { get; set; }
+
+        public Naming.MemberStatusDefinition? MemberStatus { get; set; }
+        public String Address { get; set; }
 
     }
 
@@ -135,9 +144,19 @@ namespace WebHome.Models.ViewModel
 
         public string Grouping { get; set; }
 
-        [Display(Name = "會員編號")]
         public int MemberCount { get; set; }
 
+        public String Payment { get; set; }
+
+        public int? FeeShared { get; set; }
+
+        public string Installments { get; set; }
+
+        public int? ByInstallments { get; set; }
+
+        public int? AdvisorID { get; set; }
+
+        public int? RegisterID { get; set; }
     }
 
 
@@ -160,15 +179,23 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "電話")]
         public string Phone { get; set; }
 
-        [Required]
-        [Display(Name = "教練身份")]
-        public int CoachRole { get; set; }
+        [Display(Name = "體能顧問身份")]
+        public int? CoachRole { get; set; }
 
         [Display(Name = "會員編號")]
         public string MemberCode { get; set; }
 
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
+
+        public String Description { get; set; }
+
+        public int? LevelID { get; set; } 
+
+        public bool? IsCoach { get; set; } = true;
+        public int? UID { get; set; }
+        public int? BranchID { get; set; }
+        public int? LevelCategory { get; set; } = (int)Naming.ProfessionalCategory.新制;
 
     }
 
@@ -181,12 +208,11 @@ namespace WebHome.Models.ViewModel
             Duration = 60;
         }
 
-        [Required]
         [Display(Name = "學員姓名")]
-        public int RegisterID { get; set; }
+        public int? RegisterID { get; set; }
 
         [Required]
-        [Display(Name = "教練姓名")]
+        [Display(Name = "體能顧問姓名")]
         public int CoachID { get; set; }
 
         [Required]
@@ -203,6 +229,15 @@ namespace WebHome.Models.ViewModel
 
         public int? UID { get; set; }
 
+        public int? TrainingBySelf { get; set; }
+
+        [Required]
+        [Display(Name = "上課地點")]
+        public int BranchID { get; set; }
+
+        public int? LessonID { get; set; }
+        public int? CurrentTrial { get; set; }
+
     }
 
     public class LessonTimeExpansionViewModel
@@ -217,10 +252,10 @@ namespace WebHome.Models.ViewModel
     {
 
         [Display(Name = "組數")]
-        public int? Repeats { get; set; }
+        public String Repeats { get; set; }
 
         [Display(Name = "休息秒數")]
-        public int? BreakInterval { get; set; }
+        public String BreakInterval { get; set; }
 
         [Display(Name = "肌力訓練")]
         public int?[] TrainingID { get; set; }
@@ -235,13 +270,23 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "備註")]
         public String[] Remark { get; set; }
+
+        [Display(Name = "實際次數")]
+        public String[] ActualTurns { get; set; }
+
+        [Display(Name = "實際強度")]
+        public String[] ActualStrength { get; set; }
+
+        [Display(Name = "評論")]
+        public String Conclusion { get; set; }
+
+        public int ExecutionID { get; set; }
     }
 
     public class TrainingItemViewModel
     {
 
         [Display(Name = "肌力訓練")]
-        [Required]
         public int? TrainingID { get; set; }
 
         public String Description { get; set; }
@@ -254,6 +299,21 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "備註")]
         public String Remark { get; set; }
+        public int ExecutionID { get; set; }
+
+        [Display(Name = "實際次數")]
+        public String ActualTurns { get; set; }
+
+        [Display(Name = "實際強度")]
+        public String ActualStrength { get; set; }
+
+        [Display(Name = "組數")]
+        public String Repeats { get; set; }
+
+        [Display(Name = "休息秒數")]
+        public String BreakInterval { get; set; }
+
+        public int? ItemID { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -267,14 +327,14 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "收操")]
         public String EndingOperation { get; set; }
 
-        [Display(Name = "教練評鑑")]
+        [Display(Name = "體能顧問評鑑")]
         public String Remark { get; set; }
     }
 
     public class TrainingAssessmentViewModel : TrainingPlanViewModel
     {
 
-        [Display(Name = "教練")]
+        [Display(Name = "體能顧問")]
         public int CoachID { get; set; }
 
         [Display(Name = "實際次數")]
@@ -294,6 +354,9 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "訓練")]
         public int? Training { get; set; }
+
+        [Display(Name = "狀態溝通")]
+        public int? Counseling { get; set; }
 
         [Display(Name = "柔軟度")]
         public int? Flexibility { get; set; }
@@ -322,6 +385,9 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "學員意見反饋")]
         public String FeedBack { get; set; }
 
+        public String[] Conclusion { get; set; }
+
+
     }
 
     public class DailyBookingQueryViewModel
@@ -331,6 +397,22 @@ namespace WebHome.Models.ViewModel
         public String UserName { get; set; }
         public int? CoachID { get; set; }
         public int? MonthInterval { get; set; }
+        public bool? HasQuery { get; set; }
+        public int? TrainingBySelf { get; set; }
+        public int? LessonID { get; set; }
+        public int? LessonStatus { get; set; }
+        public int? BranchID { get; set; }
+    }
+
+    public class LessonPriceViewModel
+    {
+        public int? PriceID { get; set; }
+        public String Description { get; set; }
+        public int? ListPrice { get; set; }
+        public int? Status { get; set; }
+        public int? UsageType { get; set; }
+        public int? CoachPayoff { get; set; }
+        public int? CoachPayoffCreditCard { get; set; }
     }
 
     public class MembersQueryViewModel
@@ -339,10 +421,173 @@ namespace WebHome.Models.ViewModel
         public Naming.RoleID? RoleID { get; set; }
     }
 
+    public class InstallmentViewModel
+    {
+        public int RegisterID { get; set; }
+        public int?[] PayoffAmount { get; set; }
+        public DateTime?[] PayoffDate { get; set; }
+    }
+
+    public class SingleInstallmentViewModel
+    {
+        public int RegisterID { get; set; }
+        public int CoachID { get; set; }
+        public int? PayoffAmount { get; set; }
+        public DateTime? PayoffDate { get; set; }
+    }
+
+    public class AchievementShareViewModel
+    {
+        public int InstallmentID { get; set; }
+        public int CoachID { get; set; }
+        public int? ShareAmount { get; set; }
+    }
+
+    public class LearnerPaymentViewModel
+    {
+        public int? CoachID { get; set; }
+        public bool? Payoff { get; set; }
+        public String UserName { get; set; }
+        public bool? HasQuery { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+    }
+
+    public class PDQQuestionViewModel
+    {
+        public PDQQuestionViewModel()
+        {
+            QuestionType = (int)Naming.QuestionType.單選題;
+            GroupID = 6;
+            BonusPoint = 1;
+        }
+
+        public int? QuestionID { get; set; }
+        public String Question { get; set; }
+        public int? QuestionType { get; set; }
+        public int QuestionNo { get; set; }
+        public int? GroupID { get; set; }
+        public int? AskerID { get; set; }
+
+        public String[] Suggestion { get; set; }
+        public int? RightAnswerIndex { get; set; }
+        public int? BonusPoint { get; set; }
+    }
+
+    public class FitnessAssessmentViewModel
+    {
+        public int? ItemID { get; set; }
+        public decimal? Assessment { get; set; }
+    }
+
+    public class FitnessAssessmentReportViewModel
+    {
+        public int AssessmentID { get; set; }
+        public int TrendItem { get; set; }
+        public decimal? TrendAssessment { get; set; }
+        public int? ItemID { get; set; }
+        public decimal? TotalAssessment { get; set; }
+        public String Calc { get; set; }
+        public int? ByTimes { get; set; }
+        public decimal? SingleAssessment { get; set; }
+        public bool? BySingleSide { get; set; }
+        public String ByCustom { get; set; }
+    }
+
 
     public class ArgumentModel
     {
         public String PartialViewName { get; set; }
         public object Model { get; set; }
     }
+
+    public class MotivationalWordsViewModel
+    {
+        public int? DocID { get; set; }
+        public String Title { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
+    public class FullCalendarViewModel : DailyBookingQueryViewModel
+    {
+        public DateTime? DefaultDate { get; set; }
+        public String DefaultView { get; set; }
+        public String Category { get; set; }
+        public DateTime? LessonDate { get; set; }
+        public int? Duration { get; set; }
+        public int? UID { get; set; }
+        public String QueryType { get; set; } = "default";
+    }
+
+    public class LessonQueryViewModel
+    {
+        public int? CoachID { get; set; }
+        public DateTime? QueryStart { get; set; }
+    }
+    public class LessonTimeBookingViewModel
+    {
+
+        public int? LessonID { get; set; }
+        public DateTime? ClassTimeStart { get; set; }
+        public DateTime? ClassTimeEnd { get; set; }
+
+    }
+
+    public class TrialLearnerViewModel
+    {
+        [Display(Name = "真實姓名")]
+        public string RealName { get; set; }
+        [Display(Name = "電話")]
+        public string Phone { get; set; }
+        public String Gender { get; set; }
+
+    }
+
+    public class UserEventViewModel
+    {
+        public int? EventID { get; set; }
+        public int? UID { get; set; }
+        public String Title { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public String ActivityProgram { get; set; }
+        public int[] MemberID { get; set; }
+        public String Accompanist { get; set; }
+        public int? BranchID { get; set; }
+
+    }
+
+    public class FitnessDiagnosisViewModel
+    {
+        public int? DiagnosisID { get; set; }
+        public int? UID { get; set; }
+        public String Goal { get; set; }
+        public String Description { get; set; }
+        public int? ItemID { get; set; }
+        public Decimal? Assessment { get; set; }
+        public Decimal? AdditionalAssessment { get; set; }
+        public String Judgement { get; set; }
+        public String DiagnosisAction { get; set; }
+    }
+
+    public class UserEventBookingViewModel
+    {
+        public int? EventID { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? UID { get; set; }
+
+    }
+
+    public class CoachCertificateViewModel
+    {
+        public int? CertificateID { get; set; }
+        public DateTime? Expiration { get; set; }
+        public int? UID { get; set; }
+
+    }
+
+
+
 }

@@ -64,7 +64,7 @@
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     UserProfile _model;
-    IEnumerable<RegisterLesson> _items;
+    IQueryable<RegisterLesson> _items;
 
     protected override void OnInit(EventArgs e)
     {
@@ -73,7 +73,9 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
 
-        _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
+        _items = models.GetTable<RegisterLesson>()
+            .Where(r=>r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+            .Where(r => r.UID == _model.UID)
             .OrderByDescending(r => r.RegisterID);
     }
 

@@ -8,67 +8,199 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%@ Register Src="~/Views/Shared/PageBanner.ascx" TagPrefix="uc1" TagName="PageBanner" %>
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
 
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-dashboard"></i>
+            </span>
+        </span>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>課程總覽</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-dashboard"></i>課程總覽
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="pageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
+        <article class="col-sm-12 col-md-6 col-lg-6">
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-3" data-widget-colorbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
 
-                    <!-- Classic Heading -->
-                    <%  ViewBag.Argument = new ArgumentModel { Model = _model, PartialViewName = "~/Views/Account/LessonSummary.ascx" };
-                        Html.RenderPartial("~/Views/Member/SimpleMemberInfo.ascx", _model); %>
-                    <!-- End Classic -->
-                </div>
-                <div class="col-md-12">
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 5px;"></div>
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
 
-                    <!-- Responsive calendar - START -->
-                    <% Html.RenderPartial("~/Views/Lessons/VipCalendar.ascx"); %>
-                    <!-- Responsive calendar - END -->
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
 
-                    <!-- End Contact Form -->
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                    <h2>BEYOND FITNESS Events </h2>
+                </header>
 
-                </div>
-                <div class="col-md-12">
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
 
-                    <!-- Classic Heading -->
-                    <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                    <h4 class="classic-title"><span><%= _lessonDate.Value.ToString("yyyy/M/d") %>~<%= _endQueryDate.Value.ToString("yyyy/M/d") %> 運動走勢圖</span></h4>
+                        <input class="form-control" type="text"/>
+                    </div>
+                    <!-- end widget edit box -->
 
-                    <!-- Start Contact Form -->
+                    <div class="widget-body bg-color-darken txt-color-white no-padding">
+                        <!-- content goes here -->
+                        <div class="widget-body-toolbar">
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
-                            <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                            <% Html.RenderPartial("~/Views/Lessons/TrendGraphView.ascx"); %>
+                            <div id="calendar-buttons">
+
+                                <div class="btn-group">
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <h4><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
-                            <div class="hr1" style="margin-top: 5px; margin-bottom: 10px;"></div>
-                            <% Html.RenderPartial("~/Views/Lessons/FitnessGraphView.ascx"); %>
-                        </div>
+                        <% Html.RenderPartial("~/Views/Lessons/VipCalendar.ascx",_model); %>
+
+                        <!-- end content -->
                     </div>
 
-                    <!-- End Contact Form -->
                 </div>
+                <!-- end widget div -->
             </div>
-        </div>
+            <!-- end widget -->
+
+        </article>
+
+        <article class="col-sm-12 col-md-6 col-lg-6">
+
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+
+                <header>
+                    <span class="widget-icon"><i class="fa fa-check txt-color-white"></i></span>
+                    <h2>提醒事項 </h2>
+                    <!-- <div class="widget-toolbar">
+									add: non-hidden - to disable auto hide
+
+									</div>-->
+                </header>
+
+                <!-- widget div-->
+                <div>
+                    <div class="widget-body bg-color-darken txt-color-white no-padding smart-form">
+                        <%  Html.RenderPartial("~/Views/BulletinBoard/LearnerRemindOfQuestionnaire.ascx");
+                            Html.RenderAction("ListReservedLessons", "Activity", new { uid = _model.UID });
+                            Html.RenderPartial("~/Views/BulletinBoard/CoachRemarkNotification.ascx");  %>
+                    </div>
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>
     </div>
-    <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/GraphView.ascx"); %>
-    <script>
-    $('#vip,#m_vip').addClass('active');
-    </script>
+
+    <!-- row -->
+    <div class="row">
+        <article class="col-sm-12">
+            <!-- new widget -->
+            <div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+								usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+								data-widget-colorbutton="false"
+								data-widget-editbutton="false"
+								data-widget-togglebutton="false"
+								data-widget-deletebutton="false"
+								data-widget-fullscreenbutton="false"
+								data-widget-custombutton="false"
+								data-widget-collapsed="true"
+								data-widget-sortable="false"
+
+								-->
+<%--                <header>
+                    <span class="widget-icon"><i class="fa fa-line-chart text-success"></i></span>
+                    <h2><%= _lessonDate.Value.ToString("yyyy/MM/dd") %>~<%= _endQueryDate.Value.ToString("yyyy/MM/dd") %> 分析表 </h2>
+
+                </header>--%>
+
+                <!-- widget div-->
+                <div class="no-padding">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <!-- end widget edit box -->
+
+                    <div class="widget-body">
+                        <!-- content -->
+                        <div class="row">
+<%--                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <% Html.RenderPartial("~/Views/Lessons/TrendGraphView.ascx"); %>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                <% Html.RenderPartial("~/Views/Lessons/FitnessGraphView.ascx"); %>
+                            </div>--%>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <% Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessmentReportByUserProfile.ascx", _model); %>
+                            </div>
+                        </div>
+                        <!-- end content -->
+                    </div>
+
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>
+    </div>
+
+    <% Html.RenderPartial("~/Views/Shared/MorrisGraphView.ascx"); %>
+
 </asp:Content>
 <script runat="server">
 

@@ -24,7 +24,8 @@
                     }) %>;
 
         $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/TrendGraph") %>', lessonDate, function (data) {
-            drawGraph($("#trendholder"),data.data,data.ticks);
+            //drawGraph($("#trendholder"),data.data,data.ticks);
+            drawTrendGraph('trendholder',data);
         });
     });
 

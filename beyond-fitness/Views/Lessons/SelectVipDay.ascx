@@ -33,14 +33,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    IEnumerable<LessonTime> _items;
+    IQueryable<LessonTime> _items;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _items = (IEnumerable<LessonTime>)this.Model;
+        _items = (IQueryable<LessonTime>)this.Model;
     }
 
 </script>

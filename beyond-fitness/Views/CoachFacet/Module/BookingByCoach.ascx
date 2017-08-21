@@ -1,0 +1,228 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
+<%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Linq.Expressions" %>
+<%@ Import Namespace="System.Web.Mvc.Html" %>
+<%@ Import Namespace="WebHome.Helper" %>
+<%@ Import Namespace="WebHome.Models.Locale" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
+<%@ Import Namespace="WebHome.Models.DataEntity" %>
+<%@ Import Namespace="WebHome.Controllers" %>
+
+<div id="bookingDialog" title="新增行事曆" class="bg-color-darken">
+    <div class="row padding-10">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#bookingclass_tab" data-toggle="tab">預約課程</a>
+            </li>
+            <li>
+                <a href="#selfevent_tab" data-toggle="tab">個人行程</a>
+            </li>
+        </ul>
+        <div class="tab-content padding-top-10">
+            <div class="tab-pane fade in active" id="bookingclass_tab">
+    <form class="smart-form" id="bookingForm" autofocus>
+        <fieldset>
+            <div class="row">
+                <section class="col col-6">
+                    <label class="label">請選擇課程類別</label>
+                    <label class="select">
+                        <select class="input-lg" id="lessonType">
+                            <option value="0">P.T session</option>
+                            <option value="1">P.I session</option>
+                            <option value="2">內部訓練</option>
+                            <option value="3">體驗課程</option>
+                        </select>
+                        <script>
+                            $('#lessonType').on('change', function (evt) {
+                                var lessonType = $(this).val();
+
+                                $('input[name="userName"]').val('');
+                                $('#attendeeSelector').empty();
+
+                                switch(lessonType)
+                                {
+                                    case '0':
+                                        $('.part0').css('display', 'block');
+                                        break;
+                                    case '1':
+                                        $('.part0').css('display', 'block');
+                                        break;
+                                    case '2':
+                                        $('.part0').css('display', 'none');
+                                        break;
+                                    case '3':
+                                        $('.part0').css('display', 'block');
+                                        break;
+
+                                }
+                            });
+                            $(function () {
+
+                            });
+                        </script>
+                        <i class="icon-append fa fa-clock-o"></i>
+                    </label>
+                </section>
+                <section class="col col-6">
+                    <label class="label">請選擇開始時間</label>
+                    <label class="input">
+                        <i class="icon-append fa fa-calendar"></i>
+                        <input type="text" name="ClassDate" id="classDate" class="form-control input-lg date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.LessonDate) %>" placeholder="請輸入上課開始時間" />
+                    </label>
+                </section>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <section class="col col-6">
+                    <label class="label">請選擇上課長度</label>
+                    <label class="select">
+                        <select name="Duration" class="input-lg">
+                            <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
+                            <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
+                        </select>
+                        <i class="icon-append fa fa-file-word-o"></i>
+                    </label>
+                </section>
+                <section class="col col-6">
+                    <label class="label">請選擇上課地點</label>
+                    <label class="select">
+                        <select class="input-lg" name="BranchID">
+                            <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
+                        </select>
+                        <i class="icon-append fa fa-file-word-o"></i>
+                    </label>
+                </section>
+            </div>
+        </fieldset>
+        <fieldset class="part0">
+            <div class="row">
+                <section class="col col-8">
+                    <%--<label class="label">請選擇上課學員</label>--%>
+                    <label class="input">
+                        <i class="icon-prepend fa fa-search"></i>
+                        <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" />
+                        <script>
+                            $('#btnAttendeeQuery').on('click', function (evt) {
+                                var userName = $('input[name="userName"]').val();
+                                console.log('debug...');
+
+                                clearErrors();
+                                showLoading();
+                                if ($('#lessonType').val() == '0') {
+                                    $('#attendeeSelector').load('<%= Url.Action("AttendeeSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
+                                } else if ($('#lessonType').val() == '1') {
+                                    $('#attendeeSelector').load('<%= Url.Action("VipSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
+                                } else if ($('#lessonType').val() == '3') {
+                                    $('#attendeeSelector').load('<%= Url.Action("TrialLearnerSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
+                                }
+                            });
+                        </script>
+                    </label>
+                </section>
+                <section class="col col-4">
+                    <button id="btnAttendeeQuery" class="btn bg-color-blue btn-sm" type="button">查詢</button>
+                </section>
+            </div>
+            <div class="row">
+                <section id="attendeeSelector" class="col col-12">
+                </section>
+            </div>
+        </fieldset>
+        <input type="hidden" name="CoachID" value="<%= _viewModel.CoachID %>" />
+    </form>
+    <script>
+        $(function () {
+            $global.commitBooking = function (callback) {
+                var lessonType = $('#lessonType').val();
+                switch (lessonType) {
+                    case '0':
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize(), function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+                    case '1':
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize()+'&trainingBySelf=1', function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+                    case '2':
+                        $.post('<%= Url.Action("CommitBookingSelfTraining","Lessons") %>', $('#bookingForm').serialize(), function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+                    case '3':
+                        $.post('<%= Url.Action("CommitTrialLesson","CoachFacet") %>', $('#bookingForm').serialize(), function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+
+                }
+            };
+        });
+
+        $('.input_time').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            todayBtn: 1,
+            clearBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 1,
+            minView: 0,
+            minuteStep: 30,
+            forceParse: 0
+        });
+    </script>
+                </div>
+            <div class="tab-pane fade" id="selfevent_tab">
+                <%  Html.RenderAction("EditCoachEvent","CoachFacet",new { UID = _viewModel.CoachID,StartDate = _viewModel.LessonDate,EndDate = _viewModel.LessonDate }); %>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    FullCalendarViewModel _viewModel;
+    UserProfile _profile;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _viewModel = (FullCalendarViewModel)ViewBag.ViewModel;
+        _profile = Context.GetUser();
+    }
+
+</script>

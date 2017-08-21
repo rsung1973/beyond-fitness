@@ -173,11 +173,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4><span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>著重方向：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _lessonTime); %>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyTrendPieView.ascx", _lessonTime.LessonTime); %>
                         </div>
                         <div class="col-md-6">
                             <h4><span class="glyphicon glyphicon-heart-empty" aria-hidden="true"></span>體適能：</h4>
-                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _lessonTime); %>
+                            <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _lessonTime.LessonTime); %>
                         </div>
                     </div>
 
@@ -226,7 +226,7 @@
     </div>
     </div>
     <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
     <% Html.RenderPartial("~/Views/Shared/PieView.ascx"); %>
 
@@ -237,9 +237,9 @@
         function saveAll() {
             $.post('<%= VirtualPathUtility.ToAbsolute("~/Lessons/Feedback/") + _model.LessonID %>', $('form').serialize(), function (data) {
                 if (data.result) {
-                    alert("資已更新!!");
+                    smartAlert("資已更新!!");
                 } else {
-                    alert(data.message);
+                    smartAlert(data.message);
                 }
             });
         }

@@ -13,7 +13,7 @@
     { %>
         <div class="row">
             <div class="col-md-2">
-                <h4>上課教練：</h4>
+                <h4>體能顧問：</h4>
             </div>
             <div class="col-md-4">
                 <% Html.RenderPartial("~/Views/Lessons/CoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID", DefaultValue = _model.AttendingCoach }); %>
@@ -22,7 +22,7 @@
 <%  }
     else
     { %>
-        <h4>上課教練：<%= _model.AsAttendingCoach.UserProfile.RealName %></h4>
+        <h4>體能顧問：<%= _model.AsAttendingCoach.UserProfile.RealName %></h4>
 <%  } %>
 
 <h4><span class="fa fa-tags"></span> 方案設計工具結果</h4>

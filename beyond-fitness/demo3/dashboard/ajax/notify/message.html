@@ -1,0 +1,80 @@
+<ul class="notification-body">
+	<li>
+		<span class="unread">
+			<a href="#" class="msg" id="messagereplyDialog_link">
+				<img src="../../img/avatars/garfaild.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">John Doe <i class="icon-paperclip"></i></span>
+				<time>2016/02/03 18:00 PM<span class="news_msg"></span></time>
+				<span class="msg-body">上課回家後有做收操放鬆約1HR, 晚上稍微覺得比較痛, 但還算是可以忍耐睡著 之後持續觀察疼痛指數等等 </span>
+			</a>
+		</span>
+	</li>
+	<li>
+		<span>
+			<a href="#" class="msg">
+				<img src="../../img/avatars/female.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">Sonya Birthday</span>
+				<time>2016/02/03 18:00 PM</time>
+				<span class="msg-body">sed quia non numquam eius modi tempora incidunt ut labor</span>
+			</a>
+		</span>
+	</li>
+	<li>
+		<span>
+			<a href="#" class="msg">
+				<img src="../../img/avatars/bill.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">Cristina Algera</span>
+				<time>2016/02/03 18:00 PM</time>
+				<span class="msg-body"> ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</span>
+			</a>
+		</span>
+	</li>
+	<li>
+		<span>
+			<a href="#" class="msg">
+				<img src="../../img/avatars/male.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">Lam Tampora</span>
+				<time>2016/02/03 18:00 PM</time>
+				<span class="msg-body">imus qui blanditiis praesentium voluptatum deleniti atque corrup</span>
+			</a>
+		</span>
+	</li>
+	<li>
+		<span class="unread">
+			<a href="#" class="msg">
+				<img src="../../img/avatars/jack.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">Project approved! <i class="icon-paperclip"></i></span>
+				<time>2016/02/03 18:00 PM<span class="news_msg"></span></time>		
+				<span class="msg-body">...</span>
+			</a>
+		</span>
+	</li>
+	<li>
+		<span>
+			<a href="#" class="msg">
+				<img src="../../img/avatars/male.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
+				<span class="from">JEFF, me</span>
+				<time>2016/02/03 18:00 PM</time>
+				<span class="msg-body">Nam libero tempore, cum soluta nobis est eligendi optio cumque</span>
+			</a>
+		</span>
+	</li>
+</ul>   
+<script>
+         // DO NOT REMOVE : GLOBAL FUNCTIONS!
+         $(document).ready(function() {
+            $('#messagereplyDialog_link').click(function() {
+               $('#messagereplyDialog').dialog('open');
+               return false;
+            });
+
+            $('#messagereplyDialog').dialog({
+               autoOpen : false,
+               resizable : true,
+               modal : true,
+               width: "auto",
+               height: "auto",    
+               title: "<h4 class='modal-title'><i class='fa fa-fw fa-envelope'></i>  運動留言板</h4>"
+            }); 
+          })  
+</script>

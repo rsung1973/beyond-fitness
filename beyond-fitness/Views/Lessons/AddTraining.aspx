@@ -112,7 +112,7 @@
     </div>
 
     <!-- End content -->
-    <% Html.RenderPartial("~/Views/Shared/AlertMessage.ascx"); %>
+    
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
 
     <script>
@@ -138,7 +138,7 @@
                     $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute(ViewBag.AssessLesson==true ? "~/Attendance/CommitTraining" : "~/Lessons/CommitTraining") %>')
                         .submit();
                 } else {
-                    alert(data.message);
+                    smartAlert(data.message);
                 }
                 $('#loading').css('display', 'none');
             });
@@ -169,7 +169,7 @@
                     if (data.result) {
                         $(event.target).parent().parent().remove();
                     } else {
-                        alert(data.message);
+                        smartAlert(data.message);
                     }
                 });
             });

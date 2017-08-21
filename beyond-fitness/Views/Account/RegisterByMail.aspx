@@ -13,67 +13,105 @@
 <%@ Register Src="~/Views/Shared/LockScreen.ascx" TagPrefix="uc1" TagName="LockScreen" %>
 
 
+<asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
+    <div id="ribbon">
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+        <span class="ribbon-button-alignment">
+            <span id="refresh" class="btn btn-ribbon">
+                <i class="fa fa-user"></i>
+            </span>
+        </span>
 
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>會員註冊</li>
+        </ol>
+        <!-- end breadcrumb -->
+
+        <!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+    </div>
+</asp:Content>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
+    <h1 class="page-title txt-color-blueDark">
+        <!-- PAGE HEADER -->
+        <i class="fa-fw fa fa-user"></i>會員註冊
+    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <uc1:PageBanner runat="server" ID="PageBanner" Title="會員專區" TitleInEng="VIP" />
+    <div class="row">
 
-    <!-- Start Content -->
-    <div id="content">
-        <div class="container">
+        <!-- NEW COL START -->
+        <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget" id="wid-id-6" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                <!-- widget options:
+									usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+									
+									data-widget-colorbutton="false"	
+									data-widget-editbutton="false"
+									data-widget-togglebutton="false"
+									data-widget-deletebutton="false"
+									data-widget-fullscreenbutton="false"
+									data-widget-custombutton="false"
+									data-widget-collapsed="true" 
+									data-widget-sortable="false"
+									
+								-->
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Step2.輸入資本資料 </h2>
 
-            <div class="row">
+                </header>
 
-                <div class="col-md-5">
+                <!-- widget div-->
+                <div>
 
-                    <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-envelope-o"> 註冊 - Step 2</span></h4>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
 
-                    <!-- Start Contact Form -->
-                    <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-                    <p><strong>會員編號：</strong><span class="text-primary"><%= _item.MemberCode %></span></p>
-
-                    <!-- Divider -->
-                    <div class="hr5" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-                    <div class="form-group has-feedback">
-                        <% Html.RenderInput("Email：", "email", "email", "請輸入Email", _modelState); %>
                     </div>
+                    <!-- end widget edit box -->
 
-                    <div class="form-group has-feedback">
-                        <% Html.RenderInput("暱稱：", "userName", "userName", "請輸入暱稱", _modelState); %>
+                    <!-- widget content -->
+                    <div class="widget-body no-padding bg-color-darken txt-color-white">
+                        <%  Html.RenderPartial("~/Views/Account/Module/RegisterByMailForm.ascx"); %>
                     </div>
-
-                    <div class="form-group has-feedback">
-                        <% Html.RenderInput("頭像：", "photopic", "photopic", "", _modelState, "file"); %>
-                    </div>
-                    <div class="author-image">
-                        <% _item.RenderUserPicture(this.Writer, "authorImg"); %>
-                    </div>
-
-                    <% Html.RenderPartial("~/Views/Shared/SetPassword.ascx"); %>
-                    <!-- End Tab Panels -->
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-
-                    <!--<div style="height:60px;border:1px solid #000;">驗證碼區塊</div>-->
-
-                    <!-- End Tab Panels -->
-                    <div class="hr1" style="margin: 5px 0px;"></div>
-                    <a  id="nextStep" class="btn-system btn-medium">下一步</a>
-                    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Register") %>" class="btn-system btn-medium border-btn">取消</a>
-
-                    <!-- End Contact Form -->
+                    <!-- end widget content -->
 
                 </div>
-
+                <!-- end widget div -->
             </div>
-        </div>
-    </div>
-    <!-- End content -->
+            <!-- end widget -->
+        </article>
+        <!-- END COL -->
 
+        <!-- NEW COL START -->
+        <%  Html.RenderPartial("~/Views/Layout/QuickLink.ascx"); %>
+        <!-- END COL -->
+    </div>
+
+    <script>
+
+        $('#btnSend').on('click', function (evt) {
+
+            var form = $(this)[0].form;
+            form.submit();
+
+        });
+
+    </script>
 
     <script>
         $('#vip,#m_vip').addClass('active');
@@ -86,45 +124,20 @@
 
         });
 
-        $(function () {
-            $('#email').rules('add', {
-                'required': true,
-                'email': true
-            });
+        $('#EMail').rules('add', {
+            'required': true,
+            'email': true,
+            messages: {
+                'required': '請輸入您的 email address',
+                'email': '請輸入合法的 email address'
+            }
         });
 
-
-        var fileUpload = $('#photopic');
-        var elmt = fileUpload.prev();
-
-        fileUpload.off('click').on('change', function () {
-
-            $('<form method="post" id="myForm" enctype="multipart/form-data"></form>')
-            .append(fileUpload).ajaxForm({
-                url: "<%= VirtualPathUtility.ToAbsolute("~/Account/UpdateMemberPicture") %>",
-                data: {'memberCode':'<%= _item.MemberCode %>'},
-                beforeSubmit: function () {
-                    //status.show();
-                    //btn.hide();
-                    //console.log('提交時');
-                },
-                success: function (data) {
-                    elmt.after(fileUpload);
-                    if (data.result) {
-                        $('#authorImg').prop('src','<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID );
-                    } else {
-                        alert(data.message);
-                    }
-                    //status.hide();
-                    //console.log('提交成功');
-                },
-                error: function () {
-                    elmt.after(fileUpload);
-                    //status.hide();
-                    //btn.show();
-                    //console.log('提交失败');
-                }
-            }).submit();
+        $('#UserName').rules('add', {
+            'required': true,
+            messages: {
+                'required': '請輸入您的暱稱'
+            }
         });
 
     </script>
@@ -133,14 +146,12 @@
 <script runat="server">
 
     ModelSource<UserProfile> models;
-    UserProfile _item;
     ModelStateDictionary _modelState;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _item = (UserProfile)this.Model;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
     }
 

@@ -12,28 +12,38 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="searchdilLabel"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>選擇上課學員</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">查詢學員購買課程</h4>
         </div>
-        <div class="modal-body">
-            <!-- Stat Search -->
-            <div class="form-group">
-                <label for="exampleInputFile" class="col-md-2 control-label">依姓名：</label>
-                <div class="col-md-6">
-                    <input name="userName" class="form-control" type="text" value="" />
-                </div>
-                <div class="col-md-4">
-                    <a id="btnQuery" class="btn btn-search"><i class="fa fa-search"></i></a>
-                </div>
+        <div class="modal-body bg-color-darken txt-color-white">
+            <form class="smart-form">
+                <fieldset>
+                    <div class="row">
+                        <section class="col col-8">
+                            <label class="input">
+                                <i class="icon-append fa fa-search"></i>
+                                <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" />
+                            </label>
+                        </section>
+                        <section class="col col-4">
+                            <button id="btnQuery" class="btn bg-color-blue btn-sm" type="button">查詢</button>
+                        </section>
+                    </div>
+                </fieldset>
+                <fieldset id="userList">
+                </fieldset>
 
-                <div class="col-md-12" id="userList">
-                </div>
-
-                <div class="col-md-12 modal-footer">
-                    <button id="btnAttending" type="button" class="btn btn-system btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>確定</button>
-                    <button type="button" id="btnDismiss" class="btn btn-default btn-sm" data-dismiss="modal"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>關閉</button>
-                </div>
-            </div>
+                <footer>
+                    <button id="btnAttending" type="button" class="btn btn-primary">
+                        送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                    </button>
+                    <button id="btnDismiss" type="button" class="btn btn-default" data-dismiss="modal">
+                        取消
+                    </button>
+                </footer>
+            </form>
         </div>
     </div>
 </div>
@@ -41,11 +51,13 @@
     $('#btnAttending').on('click', function (evt) {
         var $items = $('input[name="registerID"]:checked');
         if ($items.length <= 0) {
-            alert('請勾選上課學員!!');
+            smartAlert('請勾選上課學員!!');
             return;
         }
         $('#attendee').empty();
-        $items.parent().detach().appendTo($('#attendee'));
+        $('#queryAttendee').val($items.parent().text().replace(/./g,function(x) { return x.charCodeAt(0)==32 ? '' : x; }));
+        $items.prop('type', 'hidden')
+            .detach().appendTo($('#attendee'));
         $('#btnDismiss').trigger('click');
 
 <%--        $('form').prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Member/ApplyGroupLessons") %>')
@@ -53,10 +65,10 @@
     });
 
     $('#btnQuery').on('click', function (evt) {
-        $('#loading').css('display', 'table');
+        showLoading(true);
         var userName = $('input[name="userName"]').val();
         $('#userList').load('<%= VirtualPathUtility.ToAbsolute("~/Lessons/AttendeeSelector") %>', { 'userName': userName }, function () {
-            $('#loading').css('display', 'none');
+            hideLoading();
         });
     });
 

@@ -9,49 +9,119 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="form-group has-feedback">
-    <% Html.RenderInput("學員姓名：", "realName", "realName", "請輸入姓名", _modelState, defaultValue: _model.RealName); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("EMail：", "email", "email", "請輸入EMail", _modelState, defaultValue: _model.Email); %>
-</div>
-
-<div class="form-group has-feedback">
-    <% Html.RenderInput("電話：", "phone", "phone", "請輸入市話或手機號碼", _modelState, defaultValue: _model.Phone); %>
-</div>
-
-<div class="form-group has-feedback">
-    <label class="control-label" for="classno">生日：</label>
-    <div class="input-group date form_date" data-date="" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-        <input id="birthDay" name="birthDay" class="form-control" size="16" type="text" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' readonly>
-        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-append fa fa-user"></i>
+                <input type="text" name="realName" id="realName" maxlength="20" class="input-lg" placeholder="請輸入姓名" value="<%= _model.RealName %>" />
+            </label>
+        </section>
+        <section class="col col-6">
+            <label class="input">
+                <i class="icon-prepend fa fa-phone"></i>
+                <input type="tel" name="phone" id="phone" maxlength="20" class="input-lg" placeholder="請輸入手機號碼或市話" data-mask="0999999999" value="<%= _model.Phone %>" />
+            </label>
+        </section>
     </div>
-</div>
-
-<%--<% Html.RenderPartial("~/Views/Member/LessonsItem.ascx", _model);  %>--%>
+</fieldset>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="input input-group">
+                <i class="icon-append fa fa-calendar"></i>
+                <input type="text" name="birthDay" id="birthDay" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
+            </label>
+        </section>
+        <section class="col col-6">
+            <%  if (_model.MemberStatus == Naming.MemberStatusDefinition.Checked)
+                { %>
+            <label class="input">
+                <i class="icon-append fa fa-envelope-o"></i>
+                <input type="email" id="email" name="email" class="input-lg" maxlength="256" placeholder="請輸入E-mail" value="<%= _model.Email %>" />
+            </label>
+            <%  } %>
+        </section>
+    </div>
+</fieldset>
+<fieldset>
+    <div class="row">
+        <section class="col col-6">
+            <label class="label">性別</label>
+            <label class="select">
+                <select class="input-lg" name="Gender" id="Gender">
+                    <option value="M">男</option>
+                    <option value="F">女</option>
+                </select>
+                <i class="icon-append fa fa-file-word-o"></i>
+            </label>
+            <%  if (_model.Gender != null)
+                { %>
+            <script>
+                $(function () {
+                    $('#Gender').val('<%= _model.Gender %>')
+                        });
+            </script>
+            <%  } %>
+        </section>
+        <section class="col col-6">
+            <label class="label">是否為運動員</label>
+            <div class="inline-group">
+                <label class="radio">
+                    <input type="radio" name="AthleticLevel" value="1" />
+                    <i></i>是</label>
+                <label class="radio">
+                    <input type="radio" name="AthleticLevel" value="0" />
+                    <i></i>否</label>
+            </div>
+            <%  if (_model.AthleticLevel.HasValue)
+                { %>
+            <script>
+                $(function () {
+                    $('input[name="AthleticLevel"][value="<%= _model.AthleticLevel %>"]').prop('checked', true);
+                        });
+            </script>
+            <%  } %>
+        </section>
+    </div>
+</fieldset>
 
 <script>
 
     $(function () {
+        <%  if (_model.MemberStatus == Naming.MemberStatusDefinition.Checked)
+    { %>
         $('#email').rules('add', {
             'required': false,
-            'email': true
+            'email': true,
+            'messages': {
+                'email': '請輸入E-mail',
+            }
         });
+        <%  }   %>
 
         $('#realName').rules('add', {
             'required': true,
-            'maxlength': 20
+            'maxlength': 20,
+            'messages': {
+                required: '請輸入姓名',
+            }
         });
 
         $('#phone').rules('add', {
             'required': true,
-            'regex': /^[0-9]{6,20}$/
+            'regex': /^[0-9]{6,20}$/,
+            'messages': {
+                required: '請輸入手機號碼或市話'
+            }
         });
 
-        $('#birthDay').rules('add', {
-            'required': true
-        });
+        //$('#birthDay').rules('add', {
+        //    'required': true,
+        //    'messages': {
+        //        required: '請點選日曆'
+        //    }
+        //});
 
     });
 

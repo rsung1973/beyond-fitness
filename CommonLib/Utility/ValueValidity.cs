@@ -487,12 +487,8 @@ namespace Utility
             return String.Join("", md5.ComputeHash(Encoding.Default.GetBytes(password)).Select(i => String.Format("{0:X02}", i)));
         }
 
-        public static Boolean ChkID(string id)
+        public static Boolean CheckIDNo(this string id)
         {
-
-
-            //string LegalID = "0123456789";
-            //string LegalUserName = "0123456789abcdefghijklmnopqrstuvwxyz_";
             int value = 0;
             string sId;
             if (String.IsNullOrEmpty(id) || id.Length != 10)
@@ -502,7 +498,35 @@ namespace Utility
             else
             {
                 sId = id.ToUpper();
-                value = sId[0] - 'A' + 10;
+                switch (sId[0])
+                {
+                    case 'A': value = 10; break;
+                    case 'B': value = 11; break;
+                    case 'C': value = 12; break;
+                    case 'D': value = 13; break;
+                    case 'E': value = 14; break;
+                    case 'F': value = 15; break;
+                    case 'G': value = 16; break;
+                    case 'H': value = 17; break;
+                    case 'I': value = 34; break;
+                    case 'J': value = 18; break;
+                    case 'K': value = 19; break;
+                    case 'L': value = 20; break;
+                    case 'M': value = 21; break;
+                    case 'N': value = 22; break;
+                    case 'O': value = 35; break;
+                    case 'P': value = 23; break;
+                    case 'Q': value = 24; break;
+                    case 'R': value = 25; break;
+                    case 'S': value = 26; break;
+                    case 'T': value = 27; break;
+                    case 'U': value = 28; break;
+                    case 'V': value = 29; break;
+                    case 'W': value = 32; break;
+                    case 'X': value = 30; break;
+                    case 'Y': value = 31; break;
+                    case 'Z': value = 33; break;
+                }
 
                 if (value < 10 || value > 35)
                     return false;
@@ -513,16 +537,16 @@ namespace Utility
             if (!long.TryParse(sId.Substring(1), out suffix))
                 return false;
 
-            value = value/10 + (value % 10) * 9 +
-            sId[1] * 8 +
-            sId[2] * 7 +
-            sId[3] * 6 +
-            sId[4] * 5 +
-            sId[5] * 4 +
-            sId[6] * 3 +
-            sId[7] * 2 +
-            sId[8] +
-            sId[9];
+            value = value / 10 + (value % 10) * 9 +
+            (sId[1] - '0') * 8 +
+            (sId[2] - '0') * 7 +
+            (sId[3] - '0') * 6 +
+            (sId[4] - '0') * 5 +
+            (sId[5] - '0') * 4 +
+            (sId[6] - '0') * 3 +
+            (sId[7] - '0') * 2 +
+            (sId[8] - '0') +
+            (sId[9] - '0');
             value = value % 10;
             if (value != 0)
             {
