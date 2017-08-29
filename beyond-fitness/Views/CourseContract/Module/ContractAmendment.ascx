@@ -21,7 +21,7 @@
             resizable : false,
             modal : true,
             title: "<div class='modal-title'><h4><i class='fa fa-cogs'></i> 學員服務申請歷程</h4></div>",
-            <%  if (!_model.RevisionList.Any(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已開立))
+            <%  if (!_model.RevisionList.Any(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效))
                 { %>
             buttons : [{
                 html : "<i class='fa fa-send'></i>&nbsp; 新增服務申請",
@@ -63,7 +63,7 @@
                     $a = $a.closest('a');
                 }
                 showLoading();
-                $.post('<%= Url.Action("EnableContractAmendment","CourseContract",new { Status = (int)Naming.CourseContractStatus.已開立 }) %>', { 'revisionID': revisionID }, function (data) {
+                $.post('<%= Url.Action("EnableContractAmendment","CourseContract",new { Status = (int)Naming.CourseContractStatus.已生效 }) %>', { 'revisionID': revisionID }, function (data) {
                     hideLoading();
                     if (data.result) {
                         alert('合約已生效!!');

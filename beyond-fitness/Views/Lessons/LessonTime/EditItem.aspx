@@ -56,7 +56,7 @@
                             foreach (var item in learnerLesson)
                             { %>
                                 <li>
-                                    <a data-toggle="tab" class="userTab" href="#<%= prefix + item.RegisterID %>" data-role="<%= idx++ %>" ><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i><%= item.UserProfile.RealName %></span></a>
+                                    <a data-toggle="tab" class="userTab" href="#<%= prefix + item.RegisterID %>" data-role="<%= idx++ %>" ><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i><%= item.UserProfile.FullName() %></span></a>
                                 </li>
                         <%  } %>
                     </ul>
@@ -130,7 +130,7 @@
                     {
                         'lessonID':lessonID,
                         <%--'coachID':<%= _model.LessonTime.AttendingCoach %>,--%>
-                        'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.RealName %>',
+                        'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.FullName() %>',
                         'classDate': '<%= _model.ClassDate.ToString("yyyy-MM-dd") %>',
                         'hour': <%= _model.Hour %>,
                         'registerID': <%= _model.RegisterID %>

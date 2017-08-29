@@ -27,7 +27,13 @@ namespace WebHome.Models.Locale
             Products = 4,
             Cooperation = 5,
             ContactUs = 6,
-            Inspirational = 7
+            Inspirational = 7,
+            E_Invoice = 8,
+            E_InvoiceCancellation = 9,
+            E_Allowance = 10,
+            E_AllowanceCancellation = 11,
+            PaperInvoice = 12,
+            PaperInvoiceCancellation = 13
         }
 
         public enum DocumentLevelDefinition
@@ -178,10 +184,38 @@ namespace WebHome.Models.Locale
         public enum CourseContractStatus
         {
             草稿 = 1201,
-            待審核 = 1202,
+            待確認 = 1202,
             待簽名 = 1203,
-            待生效 = 1204,
-            已開立 = 1205,
+            待審核 = 1204,
+            已生效 = 1205,
+        }
+
+        public enum PaymentTransactionType
+        {
+            體能顧問費 = 1,
+            自主訓練 = 2,
+            飲品 = 3,
+            運動商品 = 4
+        }
+
+        public enum MerchandiseStatus
+        {
+            Discontinued = 0,
+            OnSale = 1,
+            SoldOut = 2
+        }
+
+
+        public enum InvoiceTypeDefinition
+        {
+            三聯式 = 1,
+            二聯式 = 2,
+            二聯式收銀機 = 3,
+            特種稅額 = 4,
+            電子計算機 = 5,
+            三聯式收銀機 = 6,
+            一般稅額計算之電子發票 = 7,
+            特種稅額計算之電子發票 = 8,
         }
 
     }

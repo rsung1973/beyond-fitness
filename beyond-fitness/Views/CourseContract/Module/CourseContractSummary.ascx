@@ -14,42 +14,47 @@
         <tr>
             <th></th>
             <th class="text-center">草稿</th>
+            <%--<th class="text-center">待確認</th>--%>
+            <th class="text-center">待客戶簽名</th>
             <th class="text-center">待審核</th>
-            <th class="text-center">待簽名</th>
-            <th class="text-center">待生效</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><%  var items = models.GetApplyingContractByAgent(_model); %>
-                新合約(<%= items.Count() %>)</td>
+            <td><%  var items = models.GetApplyingContractByAgent(_model);
+                    var editingItems = models.GetContractInEditingByAgent(_model);
+                    var toConfirmItems = models.GetContractToConfirmByAgent(_model);
+                    var toSignItems = models.GetContractToSignByAgent(_model);
+                    //var toAllowItems = models.GetContractToAllowByAgent(_model);
+                %>
+                新合約(<%= editingItems.Count() + toSignItems.Count() + toConfirmItems.Count() %>)</td>
             <td class="text-center">
-                <%  items = models.GetContractInEditingByAgent(_model);
-                    if (items.Count() > 0)
+                <%  
+                    if (editingItems.Count() > 0)
                     {   %>
-                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.草稿 %>);" ><u>(<%= items.Count() %>)</u></a>
+                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.草稿 %>);" ><u>(<%= editingItems.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
                     --
                 <%  } %>
             </td>
-            <td class="text-center">
-                <%  items = models.GetContractToAllowByAgent(_model);
-                    if (items.Count() > 0)
+            <%--<td class="text-center">
+                <%  
+                    if (toAllowItems.Count() > 0)
                     {   %>
-                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待審核 %>);"><u>(<%= items.Count() %>)</u></a>
+                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待確認 %>);"><u>(<%= toAllowItems.Count() %>)</u></a>
             <%      }
                     else
                     { %>
                     --
                 <%  } %>
-            </td>
+            </td>--%>
             <td class="text-center">
-                <%  items = models.GetContractToSignByAgent(_model);
-                    if (items.Count() > 0)
+                <%  
+                    if (toSignItems.Count() > 0)
                     {   %>
-                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待簽名 %>);" ><u>(<%= items.Count() %>)</u></a>
+                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待簽名 %>);" ><u>(<%= toSignItems.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
@@ -57,10 +62,10 @@
                 <%  } %>
             </td>
             <td class="text-center">
-                <%  items = models.GetContractToConfirmByAgent(_model);
-                    if (items.Count() > 0)
+                <%  
+                    if (toConfirmItems.Count() > 0)
                     {   %>
-                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待生效 %>);" ><u>(<%= items.Count() %>)</u></a>
+                <a onclick="showContractTodoList(<%= (int)Naming.CourseContractStatus.待審核 %>);" ><u>(<%= toConfirmItems.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
@@ -69,25 +74,28 @@
             </td>
         </tr>
         <tr>
-            <td><%  var revisions = models.GetApplyingAmendmentByAgent(_model); %>
-                服務申請(<%= revisions.Count() %>)</td>
+            <td><%  var revisions = models.GetApplyingAmendmentByAgent(_model);
+                    var toConfirmRevisions = models.GetAmendmentToConfirmByAgent(_model);
+                    var toSignRevisions = models.GetAmendmentToSignByAgent(_model);
+                     %>
+                服務申請(<%= toSignRevisions.Count() + toConfirmRevisions.Count() %>)</td>
             <td class="text-center">--</td>
-            <td class="text-center">
+            <%--<td class="text-center">
                 <%  revisions = models.GetAmendmentToAllowByAgent(_model);
                     if (revisions.Count() > 0)
                     {   %>
-                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待審核 %>);"><u>(<%= revisions.Count() %>)</u></a>
+                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待確認 %>);"><u>(<%= revisions.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
                     --
                 <%  } %>            
-            </td>
+            </td>--%>
             <td class="text-center">
-                <%  revisions = models.GetAmendmentToSignByAgent(_model);
-                    if (revisions.Count() > 0)
+                <%  
+                    if (toSignRevisions.Count() > 0)
                     {   %>
-                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待簽名 %>);"><u>(<%= revisions.Count() %>)</u></a>
+                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待簽名 %>);"><u>(<%= toSignRevisions.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
@@ -95,10 +103,10 @@
                 <%  } %>
             </td>
             <td class="text-center">
-                <%  revisions = models.GetAmendmentToConfirmByAgent(_model);
-                    if (revisions.Count() > 0)
+                <%  
+                    if (toConfirmRevisions.Count() > 0)
                     {   %>
-                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待生效 %>);"><u>(<%= revisions.Count() %>)</u></a>
+                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待審核 %>);"><u>(<%= toConfirmRevisions.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
@@ -107,10 +115,9 @@
             </td>
         </tr>
         <tr>
-            <td>付款(7)</td>
+            <td>收款(7)</td>
             <td class="text-center">--</td>
             <td class="text-center"><u>(5)</u></td>
-            <td class="text-center">--</td>
             <td class="text-center"><a href="#" id=""><u>(2)</u></a></td>
         </tr>
     </tbody>

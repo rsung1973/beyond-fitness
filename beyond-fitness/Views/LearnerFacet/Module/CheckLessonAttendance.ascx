@@ -26,7 +26,7 @@
             <tr>
                 <td><%= String.Format("{0:yyyy/MM/dd}",item.ClassTime) %></td>
                 <td><%= String.Format("{0:H:mm}",item.ClassTime) %>~<%= String.Format("{0:H:mm}",item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value)) %></td>
-                <td><%= item.AsAttendingCoach.UserProfile.RealName %></td>
+                <td><%= item.AsAttendingCoach.UserProfile.FullName() %></td>
                 <td>
                     <a href="#" onclick="checkLessonAttendance(<%= item.LessonID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-check" aria-hidden="true"></i></a>
                 </td>

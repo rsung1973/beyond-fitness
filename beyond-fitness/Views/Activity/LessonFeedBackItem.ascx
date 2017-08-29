@@ -10,7 +10,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",_model.FeedBackDate) %></time>
-<a class="username"><%= _model.RegisterLesson.UserProfile.RealName %></a>
+<a class="username"><%= _model.RegisterLesson.UserProfile.FullName() %></a>
 <%= _model.FeedBack %>
 
 <script runat="server">

@@ -114,7 +114,7 @@
                                                 <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
-                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> <div id="msgWarming"><%= _plan.Warming %></div>
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.FullName() %></a> <div id="msgWarming"><%= _plan.Warming %></div>
                                                 </div>
                                             </li>
                                         </ul>
@@ -153,7 +153,7 @@
                                                 <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online",@style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
-                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.FullName() %></a>
                                                     <div id="msgEndingOperation">
                                                         <%= _plan.EndingOperation %>
                                                     </div>
@@ -201,7 +201,7 @@
                                                 <% _model.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                                 <div class="message-text">
                                                     <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_model.LessonTime.ClassTime) %></time>
-                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.RealName %></a> 
+                                                    <a class="username"><%= _model.LessonTime.AsAttendingCoach.UserProfile.FullName() %></a> 
                                                     <div id="msgRemark"><%= _plan.Remark %></div>
                                                 </div>
                                             </li>
@@ -371,7 +371,7 @@
                     {
                         'lessonID':lessonID,
                         <%--'coachID':<%= _model.LessonTime.AttendingCoach %>,--%>
-                        'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.RealName %>',
+                        'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.FullName() %>',
                         'classDate': '<%= _model.ClassDate.ToString("yyyy-MM-dd") %>',
                         'hour': <%= _model.Hour %>,
                         'registerID': <%= _model.RegisterID %>

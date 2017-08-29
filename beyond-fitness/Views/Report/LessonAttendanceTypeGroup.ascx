@@ -23,7 +23,7 @@
                 UserProfile coach = models.GetTable<UserProfile>().Where(u => u.UID == item.Key.CoachID).First();
                 LessonPriceType priceType = models.GetTable<LessonPriceType>().Where(p => p.PriceID == item.Key.ClassLevel).First();   %>
                 <tr>
-                    <td><%= coach.RealName %></td>
+                    <td><%= coach.FullName() %></td>
                     <td><%= priceType.Description %></td>
                     <td><%= item.Count() %>【<%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="Cash").Count() %> / <%= item.Where(l=>l.RegisterLesson.IntuitionCharge.Payment=="CreditCard").Count() %>
                         <%  var feeShared = item.Where(l => l.RegisterLesson.IntuitionCharge.FeeShared == 1).Count();

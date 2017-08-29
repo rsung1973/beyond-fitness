@@ -1584,6 +1584,7 @@
     <Content Include="Views\CourseContract\Module\ApplyAmendment.ascx" />
     <Content Include="Views\CourseContract\Module\ConfirmAmendmentSignature.ascx" />
     <Content Include="Views\CourseContract\Module\ContractAmendmentApproval.ascx" />
+    <Content Include="Views\CourseContract\Module\ContractAllowance.ascx" />
     <Content Include="Views\CourseContract\Module\ContractApproval.ascx" />
     <Content Include="Views\CourseContract\Module\ContractAmendmentList.ascx" />
     <Content Include="Views\CourseContract\Module\ContractQueryAmendmentList.ascx" />
@@ -1616,6 +1617,7 @@
     <Content Include="Views\CourseContract\Module\ApplyQuery.ascx" />
     <Content Include="Views\CourseContract\Module\WidgeGrid.ascx" />
     <Content Include="Views\CourseContract\CourseContractView.aspx" />
+    <Content Include="Views\Layout\NavItem\Payment.ascx" />
     <Content Include="Views\Layout\NavItem\Contract.ascx" />
     <Content Include="Views\Learner\Index.aspx" />
     <Content Include="Views\Learner\Module\FitnessAdvisorList.ascx" />
@@ -1913,6 +1915,17 @@
     <Content Include="Views\MyTest\Index.aspx" />
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="Views\MyTest\TestPopup.aspx" />
+    <Content Include="Views\Payment\Module\EditPaymentForContract - Copy %282%29.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentForProduct.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentForShopping.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentForPISession.ascx" />
+    <Content Include="Views\Payment\Module\PaymentCancellationList.ascx" />
+    <Content Include="Views\Payment\Module\PaymentList.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentForContract.ascx" />
+    <Content Include="Views\SystemInfo\MerchandiseOptions.ascx" />
+    <Content Include="Views\Payment\Module\UnpaidPISession.ascx" />
+    <Content Include="Views\Payment\PaymentIndex.aspx" />
+    <Content Include="Views\Payment\Module\WidgeGrid.ascx" />
     <Content Include="Views\Report\Module\BonusAwardList.ascx" />
     <Content Include="Views\Report\Module\LessonTuitionPaymentList.ascx" />
     <Content Include="Views\Report\Module\LessonAttendanceList.ascx" />
@@ -2014,6 +2027,7 @@
     <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MyTestController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Controllers\SystemInfoController.cs" />
@@ -2023,6 +2037,7 @@
     <Compile Include="Helper\BusinessExtensionMethods.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\GlobalDefinition.cs" />
+    <Compile Include="Helper\InvoiceExtensionMethods.cs" />
     <Compile Include="Helper\Jobs\FreeAgentAutoClockIn.cs" />
     <Compile Include="Helper\Jobs\ReviewProfessionalLevelEachQuarter.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
@@ -2036,6 +2051,7 @@
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
     <Compile Include="Models\Resource\SiteMenuItem.cs" />
+    <Compile Include="Models\ViewModel\InvoiceViewModel.cs" />
     <Compile Include="Models\ViewModel\JsonViewModel.cs" />
     <Compile Include="Security\Authorization\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />

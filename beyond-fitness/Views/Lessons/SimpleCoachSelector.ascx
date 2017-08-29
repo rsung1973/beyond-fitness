@@ -20,7 +20,7 @@
         } %>
     <% foreach (var item in _items)
         { %>
-            <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.RealName %><%= item.UserProfile.IsFreeAgent() ? "(自由教練)" : null %></option>
+            <option value="<%= item.CoachID %>" <%= item.CoachID == (int?)_model.DefaultValue ? "selected" : null %> ><%= item.UserProfile.FullName() %><%= item.UserProfile.IsFreeAgent() ? "(自由教練)" : null %></option>
     <%  } %>
 </select>
 <script runat="server">

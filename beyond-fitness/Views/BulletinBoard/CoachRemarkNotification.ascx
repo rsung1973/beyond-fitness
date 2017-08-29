@@ -21,7 +21,7 @@
                     <span class="handle">
                         <%  item.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "air air-top-left margin-top-5", @style = "width:40px" }); %></span>
                     <p class="notification-body">
-                        <span class="from"><%= item.LessonTime.AsAttendingCoach.UserProfile.RealName %> <i class="icon-paperclip"></i><a href="javascript:showLearnerLesson(<%= item.LessonID %>, true);" class="btn btn-xs txt-color-white bg-color-blueLight"><i class="fa fa-commenting-o"></i> 回覆</a></span>
+                        <span class="from"><%= item.LessonTime.AsAttendingCoach.UserProfile.FullName() %> <i class="icon-paperclip"></i><a href="javascript:showLearnerLesson(<%= item.LessonID %>, true);" class="btn btn-xs txt-color-white bg-color-blueLight"><i class="fa fa-commenting-o"></i> 回覆</a></span>
                         <time><%= item.LessonTime.ClassTime %></time>
                         <span class="msg-body"><%= item.Remark %></span>
                     </p>

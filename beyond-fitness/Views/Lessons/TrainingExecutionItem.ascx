@@ -89,7 +89,7 @@
                     <li class="message">
                         <% _model.TrainingPlan.LessonTime.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
                         <span class="message-text">
-                            <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.TrainingPlan.LessonTime.AttendingCoach %>"><%= _model.TrainingPlan.LessonTime.AsAttendingCoach.UserProfile.RealName %></a>
+                            <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.TrainingPlan.LessonTime.AttendingCoach %>"><%= _model.TrainingPlan.LessonTime.AsAttendingCoach.UserProfile.FullName() %></a>
                             <%= _model.Conclusion %>
                         </span>
                     </li>

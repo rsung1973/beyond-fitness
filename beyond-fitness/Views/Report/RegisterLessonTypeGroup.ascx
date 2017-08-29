@@ -23,7 +23,7 @@
                 UserProfile coach = models.GetTable<UserProfile>().Where(u => u.UID == item.Key.CoachID).First();
                 LessonPriceType priceType = models.GetTable<LessonPriceType>().Where(p => p.PriceID == item.Key.ClassLevel).First();   %>
                 <tr>
-                    <td><%= coach.RealName %></td>
+                    <td><%= coach.FullName() %></td>
                     <td><%= priceType.Description %></td>
                     <td><%= item.Sum(i=>i.PayoffAmount) %></td>
                 </tr>

@@ -23,7 +23,7 @@
                     { %>
                         <div class="user">
                             <a href="http://line.me/R/msg/text/?｡◕‿◕｡╔ ░ⒽⒶⓅⓅⓎ░ ⒷⒾⓇⓉⒽ ⒹⒶⓎ░ ╗(◕‿◕✿)" target="_blank">
-                                <%  item.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %><%= item.RealName %>
+                                <%  item.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %><%= item.FullName() %>
                                 <div class="email">
                                 <%  if (item.Birthday.Value.DayOfYear == DateTime.Today.DayOfYear)
                                     {   %>

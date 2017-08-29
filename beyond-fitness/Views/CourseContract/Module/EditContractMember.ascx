@@ -13,14 +13,21 @@
         <form action="<%= Url.Action("CommitContractMember","CourseContract",new { uid = _viewModel.UID }) %>" class="smart-form" autofocus method="post">
             <fieldset>
                 <div class="row">
-                    <section class="col col-6">
+                    <section class="col col-4">
                         <label class="label">姓名</label>
                         <label class="input">
                             <i class="icon-append fa fa-user"></i>
                             <input type="text" name="RealName" value="<%= _viewModel.RealName %>" maxlength="20" placeholder="請輸入學員姓名"/>
                         </label>
                     </section>
-                    <section class="col col-6">
+                    <section class="col col-4">
+                        <label class="label">暱稱</label>
+                        <label class="input">
+                            <i class="icon-append fa fa-user"></i>
+                            <input type="text" name="Nickname" value="<%= _viewModel.Nickname %>" maxlength="20" placeholder="請輸入學員暱稱" />
+                        </label>
+                    </section>
+                    <section class="col col-4">
                         <label class="label">身份證字號/護照號碼</label>
                         <label class="input">
                             <i class="icon-append fa fa-id-card-o"></i>

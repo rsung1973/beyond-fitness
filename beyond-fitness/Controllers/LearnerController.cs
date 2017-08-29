@@ -33,14 +33,74 @@ namespace WebHome.Controllers
         // GET: Learner
         public ActionResult Index()
         {
-            var items = models.EntityList
-                        .Join(models.GetTable<UserRole>()
-                                .Where(r => r.RoleID == (int)Naming.RoleID.Learner),
-                            u => u.UID, r => r.UID, (u, r) => u)
-                        .OrderByDescending(u => u.UID);
-
-            return View(items);
+             return View();
         }
+
+        public ActionResult InquireLearner(LearnerQueryViewModel viewModel)
+        {
+            IQueryable<UserProfile> items = models.EntityList
+                         .Join(models.GetTable<UserRole>()
+                                 .Where(r => r.RoleID == (int)Naming.RoleID.Learner),
+                             u => u.UID, r => r.UID, (u, r) => u);
+
+            Expression<Func<UserProfile, bool>> queryExpr = u => false;
+
+            bool hasCondition = false;
+
+            viewModel.RealName = viewModel.RealName.GetEfficientString();
+            if (viewModel.RealName != null)
+            {
+                queryExpr = queryExpr.Or(m => m.RealName.Contains(viewModel.RealName) || m.Nickname.Contains(viewModel.RealName));
+                hasCondition = true;
+            }
+
+            viewModel.IDNo = viewModel.IDNo.GetEfficientString();
+            if (viewModel.IDNo != null)
+            {
+                queryExpr = queryExpr.Or(c => c.UserProfileExtension.IDNo.StartsWith(viewModel.IDNo));
+                hasCondition = true;
+            }
+
+            viewModel.Phone = viewModel.Phone.GetEfficientString();
+            if (viewModel.Phone != null)
+            {
+                queryExpr = queryExpr.Or(c => c.Phone == viewModel.Phone);
+                hasCondition = true;
+            }
+
+            if (hasCondition)
+            {
+                items = items.Where(queryExpr);
+            }
+
+            if(viewModel.CurrentTrial.HasValue)
+            {
+                if (viewModel.CurrentTrial == 1)
+                    items = items.Where(u => u.UserProfileExtension.CurrentTrial.HasValue);
+                else
+                    items = items.Where(u => !u.UserProfileExtension.CurrentTrial.HasValue);
+            }
+
+            if(viewModel.MemberStatus.HasValue)
+            {
+                items = items.Where(u => u.LevelID == (int)viewModel.MemberStatus);
+            }
+
+            viewModel.Gender = viewModel.Gender.GetEfficientString();
+            if (viewModel.Gender!=null)
+            {
+                    items = items.Where(u => u.UserProfileExtension.Gender == viewModel.Gender);
+            }
+
+            if (viewModel.AthleticLevel.HasValue)
+            {
+                items = items.Where(u => u.UserProfileExtension.AthleticLevel == viewModel.AthleticLevel);
+            }
+                        
+            return View("~/Views/Learner/Module/LearnerList.ascx", items);
+
+        }
+
 
         public ActionResult LearnerList()
         {
@@ -68,6 +128,7 @@ namespace WebHome.Controllers
                 viewModel.Birthday = item.Birthday;
                 viewModel.AthleticLevel = item.UserProfileExtension.AthleticLevel;
                 viewModel.RealName = item.RealName;
+                viewModel.Nickname = item.Nickname;
                 viewModel.Address = item.Address;
                 viewModel.Nickname = item.Nickname;
 

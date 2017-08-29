@@ -24,7 +24,7 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.RealName %><%= item.Nickname!=null ? "（" + item.Nickname + "）" : null %></td>
+            <td><%= item.FullName() %></td>
             <td><%= item.Phone %></td>
             <td><%= item.LevelID == (int)Naming.MemberStatus.尚未註冊 || item.UserProfileExtension.CurrentTrial==1 ? "--" : item.PID %></td>
             <td><%= item.UserProfileExtension.CurrentTrial==1 ? "--" : item.MemberCode %></td>
@@ -44,11 +44,17 @@
                     <%  
                         Writer.Write(totalLessons);
                     }   %></td>
-            <td><%= item.UserProfileExtension.CurrentTrial==1 ? "" : ((Naming.MemberStatus)item.LevelID).ToString() %></td>
+            <td><%= item.UserProfileExtension.CurrentTrial==1 ? "--" : ((Naming.MemberStatus)item.LevelID).ToString() %></td>
             <td nowrap="noWrap">
                 <a onclick="$global.editLearner(<%= item.UID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  if (!item.UserProfileExtension.CurrentTrial.HasValue)
+                    { %>
                 <a onclick="$global.editPDQ(<%= item.UID %>);" class="btn btn-circle bg-color-green modifyPDQDialog_link"><i class="fa fa-fw fa fa-lg fa-street-view " aria-hidden="true"></i></a>&nbsp;&nbsp;   
+                        <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                            { %>
                 <a onclick="$global.listAdvisor(<%= item.UID %>);" class="btn btn-circle bg-color-blueLight"><i class="fa fa-fw fa fa-lg fa-address-book-o" aria-hidden="true"></i></a>&nbsp;&nbsp;   
+                        <%  } %>
+                <%  } %>
                 <%  if (item.LevelID == (int)Naming.MemberStatus.已註冊 || item.LevelID == (int)Naming.MemberStatus.尚未註冊 )
                     { %>
                         <a onclick="$global.deleteLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
@@ -110,6 +116,7 @@
     ModelSource<UserProfile> models;
     String _tableId;
     IQueryable<UserProfile> _model;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -119,6 +126,7 @@
         _model = (IQueryable<UserProfile>)this.Model;
         _model = _model.OrderByDescending(u => u.LevelID);
         _tableId = "dt_learner" + DateTime.Now.Ticks;
+        _profile = Context.GetUser();
     }
 
 </script>

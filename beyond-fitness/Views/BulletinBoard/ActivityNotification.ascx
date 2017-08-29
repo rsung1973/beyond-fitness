@@ -68,7 +68,9 @@
         }
         else
         {
-            questItems = questItems.Where(q => q.RegisterLesson.UserProfile.LearnerFitnessAdvisor.Any(f => f.CoachID == _profile.UID));
+            var uid = models.GetTable<LearnerFitnessAdvisor>().Where(l => l.CoachID == _profile.UID).Select(l => l.UID);
+            questItems = questItems.Where(q => uid.Contains(q.UID));
+
             _items = questItems.Where(q => q.Status == (int)Naming.IncommingMessageStatus.未讀);
             _comments = models.GetTable<LessonComment>().Where(u => u.HearerID == _profile.UID)
                 .Where(u => u.Status == (int)Naming.IncommingMessageStatus.未讀 || u.CommentDate >= DateTime.Today.AddDays(-7));

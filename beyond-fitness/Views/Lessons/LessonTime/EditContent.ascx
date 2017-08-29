@@ -84,7 +84,7 @@
                                             <% _item.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                             <div class="message-text">
                                                 <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_item.ClassTime) %></time>
-                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.FullName() %></a>
                                                 <div id="msgWarming"><%= _plan.Warming %></div>
                                             </div>
                                         </li>
@@ -131,7 +131,7 @@
                                             <% _item.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                             <div class="message-text">
                                                 <time><%= String.Format("{0:yyyy-MM-dd HH:mm}", _item.ClassTime) %></time>
-                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.FullName() %></a>
                                                 <div id="msgEndingOperation">
                                                     <%= _plan.EndingOperation %>
                                                 </div>
@@ -183,7 +183,7 @@
                                             <% _item.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                             <div class="message-text">
                                                 <time><%= String.Format("{0:yyyy-MM-dd HH:mm}",_item.ClassTime) %></time>
-                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.RealName %></a>
+                                                <a class="username"><%= _item.AsAttendingCoach.UserProfile.FullName() %></a>
                                                 <div id="msgRemark"><%= _plan.Remark %></div>
                                             </div>
                                         </li>

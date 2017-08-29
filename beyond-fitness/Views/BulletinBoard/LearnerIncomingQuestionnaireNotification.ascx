@@ -24,7 +24,7 @@
                             <a href="<%= Url.Action("ShowLearner","Member", new { id = item.UID }) %>">
                                 <%  item.UserProfile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %></a>
                         </em>
-                        <span><%= item.UserProfile.RealName %>已填寫階段性調整計劃囉！
+                        <span><%= item.UserProfile.FullName() %>已填寫階段性調整計劃囉！
                             <button class="btn btn-xs bg-color-red margin-top-5" onclick="learnerQuestionnaire(<%= item.QuestionnaireID %>);"><i class="fa fa-unlock-alt"></i>讀取</button></span>
                         <time><%= String.Format("{0:yyyy/MM/dd}",item.PDQTask.First().TaskDate) %>
                             <%  if (item.Status == (int)Naming.IncommingMessageStatus.未讀)

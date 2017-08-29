@@ -64,7 +64,7 @@
                             <%  foreach (var g in currentGroups)
                                 { %>
                         <tr>
-                            <td class="text-center"><%= g.UserProfile.RealName %> 
+                            <td class="text-center"><%= g.UserProfile.FullName() %> 
                                 <%  if (g.GroupingLesson.LessonTime.Count() == 0)
                                     { %>
                                 <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/RemoveGroupUser/") + g.RegisterID %>" class="btn btn-system btn-small">刪除<i class="fa fa-user-times" aria-hidden="true"></i></a>

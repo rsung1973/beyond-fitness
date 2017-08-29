@@ -20,9 +20,9 @@
         } %>
     <div class="col-xs-8 col-sm-5">
         <h1>
-            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
+            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.FullName() %></a></span>
         </h1>
-        <p class="font-md"><a onclick="flipflop();" ><i class="fa fa-eye-slash fa-2x closeureye"></i></a> 關於<%= _model.UserProfile.UserName ?? _model.UserProfile.RealName %>...</p>
+        <p class="font-md"><a onclick="flipflop();" ><i class="fa fa-eye-slash fa-2x closeureye"></i></a> 關於<%= _model.UserProfile.UserName ?? _model.UserProfile.FullName() %>...</p>
         <p style="display:none;">
             <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
         </p>

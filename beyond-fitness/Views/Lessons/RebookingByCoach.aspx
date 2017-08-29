@@ -110,7 +110,7 @@
                                                 else
                                                 {   %>
                                                     <li class="fa fa-child"></li>
-                                                    <%= _model.RegisterLesson.UserProfile.RealName %>
+                                                    <%= _model.RegisterLesson.UserProfile.FullName() %>
                                                 <%  if (_model.TrainingBySelf == 1)
                                                     {   %>
                                                             (P.I session)

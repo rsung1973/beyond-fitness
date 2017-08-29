@@ -58,7 +58,7 @@
         退件 <i class='fa fa-times' aria-hidden='true'></i>
     </button>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="confirmSignature();">
-        確定產生合約 <i class="fa fa-file-text-o" aria-hidden="true"></i>
+        確定 <i class="fa fa-send" aria-hidden="true"></i>
     </button>
 </div>
 <script>
@@ -74,8 +74,12 @@
                 if (data.result) {
                     done = true;
                     $('#contractAction').remove();
-                    window.location.href = data.pdf;
-                    //alert('簽約完成!!');
+                    if (data.pdf) {
+                        window.location.href = data.pdf;
+                    } else {
+                        alert('合約已送審!!');
+                        window.close();
+                    }
                 } else {
                     $(data).appendTo($('body')).remove();
                 }
@@ -84,7 +88,7 @@
 
     function rejectSignature() {
         showLoading();
-        $.post('<%= Url.Action("ExecuteContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.草稿 }) %>', {}, function (data) {
+        $.post('<%= Url.Action("ExecuteContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.草稿, Drawback=true }) %>', {}, function (data) {
             hideLoading();
             if (data.result) {
                 done = true;

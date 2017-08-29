@@ -23,7 +23,7 @@
             <%  foreach (var item in _model)
                 { %>
             <tr>
-                <td><%= item.ServingCoach.UserProfile.RealName %></td>
+                <td><%= item.ServingCoach.UserProfile.FullName() %></td>
                 <td>
                     <%  if (item.CourseContractType.IsGroup==true)
                         { %>
@@ -31,7 +31,7 @@
                     <%  }
                         else
                         { %>
-                <%= item.ContractOwner.RealName %>
+                <%= item.ContractOwner.FullName() %>
                     <%  } %>
                 </td>
                 <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
@@ -41,7 +41,7 @@
                     <a onclick="$global.editContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
                     <a onclick="$global.deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
                     <%  }
-                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
+                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待確認)
                         {   %>
                     <a onclick="$global.openToApproveContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
                     <%  }
@@ -49,10 +49,10 @@
                         {   %>
                     <a onclick="$global.openToSignContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
                     <%  }
-                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待生效)
+                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
-                    <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-                    <a onclick="$global.enableContractStatus(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <%--<a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                    <a onclick="$global.openToEnableContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
                     <%  } %>
                     <%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)
                 </td>
@@ -176,11 +176,20 @@
                 });
             };
 
+            $global.openToEnableContract = function (contractID) {
+                $('#<%= _dialog %>').dialog('close');
+                window.open('<%= Url.Action("ContractAllowanceView","CourseContract") %>' + '?contractID=' + contractID, '_blank', 'fullscreen=yes');
+                smartAlert('合約審核中...', function () {
+                    //showLoading();
+                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                });
+            };
+
             $global.enableContractStatus = function (contractID) {
                 var event = event || window.event;
                 var $tr = $(event.target).closest('tr');
                 showLoading();
-                $.post('<%= Url.Action("EnableContractStatus","CourseContract",new { Status = (int)Naming.CourseContractStatus.已開立 }) %>', { 'contractID': contractID }, function (data) {
+                $.post('<%= Url.Action("EnableContractStatus","CourseContract",new { Status = (int)Naming.CourseContractStatus.已生效 }) %>', { 'contractID': contractID }, function (data) {
                     hideLoading();
                     if (data.result) {
                         alert('合約已生效!!');

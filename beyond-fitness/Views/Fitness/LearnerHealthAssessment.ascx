@@ -23,7 +23,7 @@
                         <div class="panel-body status smart-form vote">
                             <div class="who clearfix">
                                 <%  _model.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online" }); %>
-                                <span class="from font-md"><b>Hi, <%= _model.UserProfile.RealName %></b> 請填寫相關健康指數</span>
+                                <span class="from font-md"><b>Hi, <%= _model.UserProfile.FullName() %></b> 請填寫相關健康指數</span>
                             </div>
                             <fieldset>
                                 <div class="form-group no-padding">

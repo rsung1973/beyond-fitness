@@ -22,7 +22,7 @@
         <%  foreach (var item in _model)
             { %>
                 <tr>
-                    <td><%= item.UserProfile.RealName %></td>
+                    <td><%= item.UserProfile.FullName() %></td>
                     <td><%= item.Title %></td>
                     <td><%= String.Format("{0:yyyy/MM/dd}", item.Publication.StartDate) %></td>
                     <td><%= item.Publication.EndDate.HasValue ? String.Format("{0:yyyy/MM/dd}", item.Publication.EndDate) : "--" %></td>

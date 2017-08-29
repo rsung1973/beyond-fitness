@@ -39,7 +39,7 @@
                                        -->
                             <header>
                                 <span class="widget-icon"><i class="fa fa-calendar"></i></span>
-                                <h2><%= _model.RealName %>的上課日曆 </h2>
+                                <h2><%= _model.FullName() %>的上課日曆 </h2>
                             </header>
                             <!-- widget div-->
                             <div>

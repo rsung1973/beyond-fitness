@@ -11,7 +11,7 @@
 <div id="calendarView" class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
     <header>
         <span class="widget-icon"><i class="fa fa-calendar"></i></span>
-        <h2><span id="coachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.RealName %></span>的行事曆：<span id="branchName"><%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></span></h2>
+        <h2><span id="coachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.FullName() %></span>的行事曆：<span id="branchName"><%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></span></h2>
         <div class="widget-toolbar">
 <%--            <div class="btn-group">
                 <button class="btn dropdown-toggle btn-xs bg-color-blue" data-toggle="dropdown">
@@ -52,26 +52,26 @@
                     </li>
                     <%  if (_model.IsAssistant() || _model.IsManager() || _model.IsViceManager())
                         {
-                            IQueryable<ServingCoach> items = models.GetTable<ServingCoach>();
+                            IQueryable<ServingCoach> items;
                             if(_model.IsManager() || _model.IsViceManager())
                             {
-                                items = items
-                                        .Join(models.GetTable<BranchStore>().Where(b => b.ManagerID == _model.UID || b.ViceManagerID == _model.UID)
-                                            .Join(models.GetTable<CoachWorkplace>(),
-                                                b => b.BranchID, w => w.BranchID, (b, w) => w),
-                                            s => s.CoachID, w => w.CoachID, (s, w) => s);
+                                items = _model.GetServingCoachInSameStore(models);
+                            }
+                            else
+                            {
+                                items = models.GetTable<ServingCoach>();
                             }
                             foreach (var item in items)
                             { %>
                                 <li>
-                                    <a href="javascript:selectCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.RealName %>');"><%= item.UserProfile.RealName %></a>
+                                    <a href="javascript:selectCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.FullName() %>');"><%= item.UserProfile.FullName() %></a>
                                 </li>
                     <%      }
                         }
                         else
                         {   %>
                             <li>
-                                <a href="javascript:selectCoach(<%= _model.UID %>,'我');"><%= _model.RealName %></a>
+                                <a href="javascript:selectCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
                             </li>
                     <%  } %>
                 </ul>

@@ -37,7 +37,7 @@
             <td>
                 <%  foreach(var t in item.TuitionAchievement)
                     { %>
-                        <%= t.ServingCoach.UserProfile.RealName %>《<%= String.Format("{0:##,###,###,###}",t.ShareAmount) %>》
+                        <%= t.ServingCoach.UserProfile.FullName() %>《<%= String.Format("{0:##,###,###,###}",t.ShareAmount) %>》
                         <a onclick="deleteAchievementShare(<%= t.InstallmentID %>,<%= t.CoachID %>);" class="deletePay"><i class="fa fa-trash-o btn btn-xs bg-color-redLight"></i></a>
                         <br />
                 <%  } %>

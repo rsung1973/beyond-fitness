@@ -269,7 +269,7 @@
                                         <th data-hide="phone">發票狀態</th>
                                         <th data-hide="phone,tablet">買受人統編</th>
                                         <th data-hide="phone,tablet">合約編號</th>
-                                        <th data-hide="phone,tablet">狀態</th>
+                                        <th data-hide="phone,tablet">結帳勾記</th>
                                      </tr>
                                   </thead>
                                   <tbody>
@@ -285,7 +285,7 @@
                                         <td>--</td>
                                         <td>--</td>
                                         <td noWrap="noWrap">CPA201701050001-00</td>
-                                        <td>待審核</td>
+                                        <td>是</td>
                                      </tr>
                                      <tr>
                                         <td>AU00000002</td>
@@ -296,10 +296,10 @@
                                         <td>300</td>
                                         <td>現金</td>
                                         <td>電子</td>
-                                        <td>未作廢</td>
+                                        <td>已開立</td>
                                         <td>--</td>
                                         <td noWrap="noWrap">--</td>
-                                        <td>已生效</td>
+                                        <td>是</td>
                                      </tr>
                                      <tr>
                                         <td>AU00000003</td>
@@ -310,10 +310,10 @@
                                         <td>15</td>
                                         <td>現金</td>
                                         <td>電子</td>
-                                        <td>未作廢</td>
+                                        <td>已開立</td>
                                         <td>--</td>
                                         <td noWrap="noWrap">--</td>
-                                        <td>已生效</td>
+                                        <td>否</td>
                                      </tr>
                                      <tr>
                                         <td></td>
@@ -324,10 +324,10 @@
                                         <td>5,600</td>
                                         <td>轉帳</td>
                                         <td>電子</td>
-                                        <td>尚未開立</td>
+                                        <td>未開立</td>
                                         <td>--</td>
                                         <td noWrap="noWrap">--</td>
-                                        <td>待生效</td>
+                                        <td>否</td>
                                      </tr>
                                       <tr>
                                         <td></td>
@@ -338,10 +338,24 @@
                                         <td>30,000</td>
                                         <td>信用卡</td>
                                         <td>電子</td>
-                                        <td>尚未開立</td>
+                                        <td>未開立</td>
                                         <td>--</td>
                                         <td noWrap="noWrap">--</td>
-                                        <td>待生效</td>
+                                        <td>否</td>
+                                     </tr>
+                                     <tr>
+                                        <td></td>
+                                        <td>小巨蛋</td>
+                                        <td>陳小瓦</td>
+                                        <td>2017/01/05</td>
+                                        <td>體能顧問服務費</td>
+                                        <td>30,000</td>
+                                        <td>轉帳</td>
+                                        <td>紙本</td>
+                                        <td>未開立</td>
+                                        <td>--</td>
+                                        <td noWrap="noWrap">CPA201701050002-00</td>
+                                        <td>是</td>
                                      </tr>
                                   </tbody>
                                </table>
@@ -420,7 +434,7 @@
                                         <td>電子</td>
                                         <td>待作廢</td>
                                         <td>--</td>
-                                        <td noWrap="noWrap">--</td>
+                                        <td noWrap="noWrap">CPA201701050001-00</td>
                                         <td>待審核</td>
                                      </tr>
                                   </tbody>
@@ -455,7 +469,7 @@
                                     <option value="3">飲品</option>
                                     <option value="4">運動商品</option>
                                 </select>
-                                <i class="icon-append fa fa-file-word-o"></i>
+                                <i class="icon-append fa fa-cart-plus"></i>
                             </label>
                      </section>                           
                  </fieldset>                
@@ -479,18 +493,26 @@
                     </div>
                  </fieldset>
                  <fieldset id="other" style="display:none">
-                     <section>
-                            <label class="label">項目</label>
-                            <label class="select">
-                                <select>
-                                    <option value="1">椰子水50</option>
-                                    <option value="2">礦泉水</option>
-                                    <option value="3">礦泉水</option>
-                                    <option value="4">氣泡水</option>
-                                </select>
-                                <i class="icon-append fa fa-file-word-o"></i>
-                            </label>
+                     <div class="row">
+                         <section class="col col-6">
+                                <label class="label">項目</label>
+                                <label class="select">
+                                    <select>
+                                        <option value="1">椰子水50</option>
+                                        <option value="2">礦泉水</option>
+                                        <option value="3">礦泉水</option>
+                                        <option value="4">氣泡水</option>
+                                    </select>
+                                    <i class="icon-append fa fa-file-word-o"></i>
+                                </label>
+                             </section>
+                         <section class="col col-6">
+                             <label class="label">數量</label>
+                            <label class="input"> <i class="icon-append fa fa-cart-plus"></i>
+                              <input type="tel" name="contractno" maxlength="10" placeholder="請輸入數量">
+                              </label>
                          </section>
+                     </div>
                  </fieldset>
                  <fieldset id="contract">
                      <section>
@@ -502,7 +524,7 @@
                  </fieldset>
                  <fieldset>
                     <div class="row">
-                        <section class="col col-6">
+                       <section class="col col-6">
                           <label class="label">收款日期</label>
                           <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1"><i class="icon-append fa fa-calendar"></i>
                           <input type="text" name="birthday" class="form-control" placeholder="請選擇收款日期" readonly="readonly">
@@ -521,7 +543,18 @@
                        </section>
                     </div>
                     <div class="row">
-                        <section class="col col-6">
+                        <section class="col col-4">
+                            <label class="label">開立分店</label>
+                            <label class="select">
+                                <select>
+                                    <option value="1">南京小巨蛋</option>
+                                    <option value="2">Enhanced 101</option>
+                                    <option value="3">忠孝</option>
+                                </select>
+                                <i class="icon-append fa fa-file-word-o"></i>
+                            </label>
+                        </section>
+                        <section class="col col-4">
                              <label class="label">收款方式</label>
                              <label class="select">
                                 <select>
@@ -532,7 +565,7 @@
                                 <i class="icon-append fa fa-file-word-o"></i>
                             </label>
                          </section>   
-                         <section class="col col-6">
+                         <section class="col col-4">
                              <label class="label">收款金額</label>
                              <label class="input"> <i class="icon-append fa fa-usd"></i>
                               <input type="number" name="name" maxlength="10" placeholder="請輸入收款金額">
@@ -568,33 +601,22 @@
         <!-- ui-dialog -->
         <div id="deletePaymentDialog" title="作廢收款" class="bg-color-darken">
            <div class="modal-body bg-color-darken txt-color-white no-padding">
-              <form action="#" class="smart-form" autofocus>
+              <form action="#" class="smart-form" autofocus>                 
                  <fieldset>
-                    <div class="row">
-                        <section class="col col-6">
-                              <section>
-                                <label class="label">合約編號</label>
-                                <label class="input"> <i class="icon-append fa fa-file-text-o"></i>
-                                  <input type="text" name="contractno" maxlength="20" placeholder="請輸入合約編號">
-                                  </label>
-                             </section>
-                         </section>   
-                         <section class="col col-6">
-                             <label class="label">發票號碼</label>
-                             <label class="input"> <i class="icon-append fa fa-qrcode"></i>
-                              <input type="text" name="name" maxlength="20" placeholder="請輸入發票號碼">
-                              </label>
-                         </section>
-                     </div>
+                        <section>
+                            <label class="label">發票號碼</label>
+                            <label class="input"> <i class="icon-append fa fa-file-text-o"></i>
+                                <input type="text" name="contractno" maxlength="20" placeholder="請輸入發票號碼">
+                            </label>
+                        </section>
                  </fieldset>                 
                  <fieldset>
                     <div class="row">
                        <section class="col col-12">
-                          <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
+                          <label class="label">依您輸入的發票號碼，搜尋結果如下：</label>
                           <table id="deletelist_dt" class="table table-striped table-bordered table-hover" width="100%">
                                   <thead>
                                      <tr>
-                                        <th>作廢</th>
                                         <th data-class="expand">發票號碼</th>
                                         <th>分店</th>
                                         <th data-hide="phone">收款人</th>
@@ -612,13 +634,6 @@
                                   </thead>
                                   <tbody>
                                      <tr>
-                                        <td>
-                                            <div class="inline-group">
-                                                <label class="radio">
-                                                    <input type="radio" name="delete" value="1" />
-                                                    <i></i></label>
-                                           </div>
-                                        </td>
                                         <td>AU00000002</td>
                                         <td>小巨蛋</td>
                                         <td>黃政浩 Bill</td>
@@ -633,80 +648,10 @@
                                         <td noWrap="noWrap">--</td>
                                         <td>已生效</td>
                                      </tr>
-                                     <tr>
-                                        <td>
-                                            <div class="inline-group">
-                                                <label class="radio">
-                                                    <input type="radio" name="delete" value="1" />
-                                                    <i></i></label>
-                                           </div>
-                                        </td>
-                                        <td>AU00000003</td>
-                                        <td>小巨蛋</td>
-                                        <td>黃政浩 Bill</td>
-                                        <td>宋胖子</td>
-                                        <td>2017/01/05</td>
-                                        <td>水</td>
-                                        <td>15</td>
-                                        <td>現金</td>
-                                        <td>電子</td>
-                                        <td>未作廢</td>
-                                        <td>--</td>
-                                        <td noWrap="noWrap">--</td>
-                                        <td>已生效</td>
-                                     </tr>
-                                     <tr>
-                                        <td>
-                                            <label class="checkbox">
-                                            <input type="checkbox" name="checkbox">
-                                            <i></i></label>
-                                        </td>
-                                        <td>AU00000004</td>
-                                        <td>小巨蛋</td>
-                                        <td>黃政浩 Bill</td>
-                                        <td>宋胖子</td>
-                                        <td>2017/07/05</td>
-                                        <td>體能顧問費用</td>
-                                        <td>30,000</td>
-                                        <td>轉帳</td>
-                                        <td>電子</td>
-                                        <td>未作廢</td>
-                                        <td>--</td>
-                                        <td noWrap="noWrap">CPA201701050001-00</td>
-                                        <td>已生效</td>
-                                     </tr>
-                                     <tr>
-                                        <td>
-                                            <label class="checkbox">
-                                            <input type="checkbox" name="checkbox">
-                                            <i></i></label>
-                                        </td>
-                                        <td>AU00000005</td>
-                                        <td>小巨蛋</td>
-                                        <td>黃政浩 Bill</td>
-                                        <td>宋胖子</td>
-                                        <td>2017/05/05</td>
-                                        <td>體能顧問費用</td>
-                                        <td>20,000</td>
-                                        <td>轉帳</td>
-                                        <td>電子</td>
-                                        <td>未作廢</td>
-                                        <td>--</td>
-                                        <td noWrap="noWrap">CPA201701050001-00</td>
-                                        <td>已生效</td>
-                                     </tr>
                                   </tbody>
                                </table>
                        </section>
                     </div>
-                 </fieldset> 
-                 <fieldset>
-                     <section>
-                             <label class="label">作廢金額</label>
-                             <label class="input"> <i class="icon-append fa fa-usd"></i>
-                              <input type="number" name="name" maxlength="10" placeholder="請輸入作廢金額">
-                              </label>
-                         </section>
                  </fieldset>
                   <fieldset>
                     <section>
@@ -850,6 +795,7 @@
                      click : function() {
                         if (confirm("請再次確認收款資料正確")) {
                              $(this).dialog("close");
+                            window.location.href="invoicelist.html";
                         }                       
                      }
                   }]
@@ -872,14 +818,6 @@
                   buttons : [{
                      html : "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
                      "class" : "btn bg-color-red",
-                     click : function() {
-                        if (confirm("請再次確認作廢資料正確")) {
-                             $(this).dialog("close");
-                        }                       
-                     }
-                  }, {
-                     html : "<i class='fa fa-pencil'></i>&nbsp; 確定作廢發票",
-                     "class" : "btn btn-primary",
                      click : function() {
                         if (confirm("請再次確認作廢資料正確")) {
                              $(this).dialog("close");

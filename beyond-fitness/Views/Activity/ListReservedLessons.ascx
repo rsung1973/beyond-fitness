@@ -24,7 +24,7 @@
                 <%  }
                     else
                     { %>
-                        與<%= item.AsAttendingCoach.UserProfile.RealName %>一起運動喔！
+                        與<%= item.AsAttendingCoach.UserProfile.FullName() %>一起運動喔！
                 <%  } %>
                 <span><a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F">
                     <img src="<%= VirtualPathUtility.ToAbsolute("~/img/line/linebutton_84x20_zh-hant.png") %>" width="84" height="20" alt="用LINE傳送" /></a></span>

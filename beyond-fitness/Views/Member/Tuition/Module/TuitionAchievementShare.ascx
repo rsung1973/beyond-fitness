@@ -23,7 +23,7 @@
                     目前業績所屬體能顧問：
                     <%  foreach(var t in _model.TuitionAchievement)
                         { %>
-                            <%= t.ServingCoach.UserProfile.RealName %>《<%= String.Format("{0:##,###,###,###}",t.ShareAmount) %>》<br />
+                            <%= t.ServingCoach.UserProfile.FullName() %>《<%= String.Format("{0:##,###,###,###}",t.ShareAmount) %>》<br />
                     <%  } %>
                     </label>
                 <form action="<%= Url.Action("CommitAchievementShare","Member",new { InstallmentID = _model.InstallmentID }) %>" id="shareInstallmentForm" class="smart-form" method="post">

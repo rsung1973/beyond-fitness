@@ -13,7 +13,7 @@
     { %>
         <label class="radio">
             <input type="radio" name="sourceID" value="<%= item.LessonID %>" />
-            <i></i><%= item.RegisterLesson.UserProfile.RealName %>「<%= String.Format("{0:yyyy/MM/dd HH:mm}",item.ClassTime) %>-<%= String.Format("{0:HH:mm}",item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value)) %>」課表
+            <i></i><%= item.RegisterLesson.UserProfile.FullName() %>「<%= String.Format("{0:yyyy/MM/dd HH:mm}",item.ClassTime) %>-<%= String.Format("{0:HH:mm}",item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value)) %>」課表
             <%  if( item.RegisterLesson.GroupingMemberCount>1)
                 {   %>
                         <li class="fa fa-group"></li>

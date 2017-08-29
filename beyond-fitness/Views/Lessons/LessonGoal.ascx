@@ -22,7 +22,7 @@
 <%  }
     else
     { %>
-        <h4>體能顧問：<%= _model.AsAttendingCoach.UserProfile.RealName %></h4>
+        <h4>體能顧問：<%= _model.AsAttendingCoach.UserProfile.FullName() %></h4>
 <%  } %>
 
 <h4><span class="fa fa-tags"></span> 方案設計工具結果</h4>

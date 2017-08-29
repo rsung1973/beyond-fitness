@@ -168,7 +168,8 @@
             }
             if (_viewModel.CoachID.HasValue)
             {
-                questionnaireItems = questionnaireItems.Where(q => q.RegisterLesson.UserProfile.LearnerFitnessAdvisor.Any(f => f.CoachID == _viewModel.CoachID));
+                var uid = models.GetTable<LearnerFitnessAdvisor>().Where(l => l.CoachID == _viewModel.CoachID).Select(l => l.UID);
+                questionnaireItems = questionnaireItems.Where(q => uid.Contains(q.UID));
             }
             %>
         <tr>

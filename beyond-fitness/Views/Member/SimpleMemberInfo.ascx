@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="col-sm-9">
-                        <h1><span class="semi-bold"><%= _model.RealName %></span>
+                        <h1><span class="semi-bold"><%= _model.FullName() %></span>
                             <br>
                             <small></small></h1>
 

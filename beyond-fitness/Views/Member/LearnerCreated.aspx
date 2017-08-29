@@ -37,7 +37,7 @@
                                     <% _model.RenderUserPicture(this.Writer, "userImg"); %>
                                 </div>
                                 <div class="user-bio">
-                                    <h2 class="text-primary"><%= _model.RealName %> </h2>
+                                    <h2 class="text-primary"><%= _model.FullName() %> </h2>
 
                                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 

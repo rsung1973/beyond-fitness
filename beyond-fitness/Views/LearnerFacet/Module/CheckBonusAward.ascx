@@ -13,8 +13,8 @@
             <%  var lesson = _model.RegisterLesson.OrderByDescending(r => r.RegisterID).First();
                 lesson.ServingCoach.UserProfile.PictureID.RenderUserPicture(Writer, new { @class = "busy", @style = "width:40px" });
                 var currentBonusPoint = _model.BonusPoint(models); %>
-            <span class="name font-lg"><b><%= lesson.ServingCoach.UserProfile.RealName %></b></span>
-            <span class="from font-md"><b>Hi, <%= _model.RealName %></b>您現在已經累積點數<b><%= currentBonusPoint %>點</b>，截至目前為止已兌換的商品如下</span>
+            <span class="name font-lg"><b><%= lesson.ServingCoach.UserProfile.FullName() %></b></span>
+            <span class="from font-md"><b>Hi, <%= _model.FullName() %></b>您現在已經累積點數<b><%= currentBonusPoint %>點</b>，截至目前為止已兌換的商品如下</span>
         </div>
         <ul class="comments">
             <%  foreach (var item in _model.LearnerAward)

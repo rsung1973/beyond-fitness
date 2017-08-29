@@ -23,7 +23,7 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.RealName %></td>
+            <td><%= item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName() %></td>
             <td><%= item.TuitionInstallment.IntuitionCharge.RegisterLesson.LessonPriceType.Description %> <%= item.TuitionInstallment.IntuitionCharge.RegisterLesson.LessonPriceType.ListPrice %></td>
             <td><%= item.TuitionInstallment.IntuitionCharge.RegisterLesson.GroupingMemberCount>1 ? "是" : "否" %></td>
             <td><%= String.Format("{0:yyyy/MM/dd}",item.TuitionInstallment.PayoffDate) %></td>

@@ -39,7 +39,7 @@
 
                                 <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
 
-                                <p><strong>姓名：</strong><%= _model.RealName %></p>
+                                <p><strong>姓名：</strong><%= _model.FullName() %></p>
                                 <p><strong>會員編號：</strong><%= _model.MemberCode %></p>
                                 <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
 

@@ -23,7 +23,7 @@
         <td class="text-center"><%= item.Hour %>:00 - <%= item.Hour + 1 %>:00</td>
         <%--<td class="text-center"><%= item.RegisterLesson.GroupingMemberCount > 1
                          ? String.Join("<br/>", item.RegisterLesson.GroupingLesson.RegisterLesson.Select(l => l.UserProfile.RealName))
-                         : item.RegisterLesson.UserProfile.RealName %></td>--%>
+                         : item.RegisterLesson.UserProfile.FullName() %></td>--%>
         <%--<td>
             <%
                 if (item.LessonTime.LessonAttendance == null && item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)

@@ -16,7 +16,7 @@
                 <%  foreach (var item in _model.GroupingLesson.RegisterLesson)
                     {
                         item.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg busy", @style = "width:40px" });  %>
-                        <span class="name font-lg"><b><%= item.UserProfile.RealName %></b></span><br />
+                        <span class="name font-lg"><b><%= item.UserProfile.FullName() %></b></span><br />
                 <%  }   %>
                 <span class="from font-md text-warning"><%= _model.RegisterLesson.GroupingMemberCount>1
                                                                 ? "團體課程"

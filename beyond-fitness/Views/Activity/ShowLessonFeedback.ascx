@@ -21,7 +21,7 @@
                                     <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:80px" }); %>
                                     <div class="message-text">
                                         <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.FeedBackDate) %></time>
-                                        <a href="#" class="username"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.RealName %></a> 
+                                        <a href="#" class="username"><%= item.RegisterLesson.UserProfile.UserName ?? item.RegisterLesson.UserProfile.FullName() %></a> 
                                         <%= item.FeedBack %>
                                     </div>
                                 </li>

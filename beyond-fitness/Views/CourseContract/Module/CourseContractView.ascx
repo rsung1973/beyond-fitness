@@ -49,7 +49,7 @@
                         <tr>
                             <td>緊急聯絡人姓名：<%= m.UserProfile.UserProfileExtension.EmergencyContactPerson %></td>
                             <td>關係：<%= m.UserProfile.UserProfileExtension.Relationship %></td>
-                            <td>聯絡電話：<%= m.UserProfile.UserProfileExtension.EmergencyContactPhone %></td>
+                            <td>緊急聯絡電話：<%= m.UserProfile.UserProfileExtension.EmergencyContactPhone %></td>
                         </tr>
                         <tr>
                             <td colspan="3">地址：<%= m.UserProfile.Address %></td>
@@ -67,7 +67,12 @@
                         <tr>
                             <td>單堂原價：<%= _model.LessonPriceType.SeriesID.HasValue ? String.Format("{0:##,###,###,###}",_model.LessonPriceType.CurrentPriceSeries.LessonPriceType.ListPrice) : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人</td>
                             <td>購買堂數：<%= _model.Lessons %></td>
-                            <td>課程單價：<%= String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人</td>
+                            <td>課程單價：<%= String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人 
+                                <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核 && Request["pdf"]!="1")
+                                    { %>
+                                        (<%= _model.LessonPriceType.Description %>)
+                                <%  } %>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="3">專業顧問服務總費用：<%= String.Format("{0:##,###,###,###}",_model.TotalCost) %></td>
@@ -83,7 +88,7 @@
                 <table class="table" style="font-size: 16px">
                     <tr>
                         <td>
-                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待生效)
+                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核)
                                 { %>
                                 ☑
                             <%  }
@@ -96,7 +101,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待生效)
+                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核)
                                 { %>
                                 ☑
                             <%  }
@@ -109,7 +114,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待生效)
+                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核)
                                 { %>
                                 ☑
                                 <%  }
@@ -146,14 +151,20 @@
                                                 } %>
                         </td>
                         <td></td>
-                        <td>主管簽核代表：<img src="<%= _model.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>
+                            <%  if (_model.Status > (int)Naming.CourseContractStatus.待簽名)
+                                { %>
+                            主管簽核代表：
+                            <img src="<%= _model.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link">
+                            <%  } %>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：
                                             <%  ViewBag.SignatureName = "GuardianSignature";
                                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner); %>
                         </td>
-                        <td>體能顧問：<img src="<%= _model.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>簽約體能顧問：<img src="<%= _model.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
                     </tr>
                     <tr>
                         <td colspan="2">日期：<%= String.Format("{0:yyyy/MM/dd}",_signatureDate) %></td>
@@ -366,7 +377,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (CourseContract)this.Model;
         _owner = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID).First();
-        var item = _model.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待生效).FirstOrDefault();
+        var item = _model.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待審核).FirstOrDefault();
         if (item != null)
         {
             _signatureDate = item.LevelDate;

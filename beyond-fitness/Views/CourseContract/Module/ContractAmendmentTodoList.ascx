@@ -24,7 +24,7 @@
                 {
                     var item = r.CourseContract;%>
             <tr>
-                <td><%= item.ServingCoach.UserProfile.RealName %></td>
+                <td><%= item.ServingCoach.UserProfile.FullName() %></td>
                 <td>
                     <%  if (item.CourseContractType.IsGroup==true)
                         { %>
@@ -32,12 +32,12 @@
                     <%  }
                         else
                         { %>
-                <%= item.ContractOwner.RealName %>
+                <%= item.ContractOwner.FullName() %>
                     <%  } %>
                 </td>
                 <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
                 <td>
-                    <%  if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
+                    <%  if(_viewModel.Status == (int)Naming.CourseContractStatus.待確認)
                         {   %>
                     <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
                     <%  }
@@ -45,7 +45,7 @@
                         {   %>
                     <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
                     <%  }
-                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待生效)
+                        else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
                     <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { r.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
                     <a onclick="$global.enableAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
@@ -131,7 +131,7 @@
                     $a = $a.closest('a');
                 }
                 showLoading();
-                $.post('<%= Url.Action("EnableContractAmendment","CourseContract",new { Status = (int)Naming.CourseContractStatus.已開立 }) %>', { 'revisionID': revisionID }, function (data) {
+                $.post('<%= Url.Action("EnableContractAmendment","CourseContract",new { Status = (int)Naming.CourseContractStatus.已生效 }) %>', { 'revisionID': revisionID }, function (data) {
                     hideLoading();
                     if (data.result) {
                         alert('合約已生效!!');

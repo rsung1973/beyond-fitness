@@ -20,7 +20,7 @@
             Html.RenderPartial("~/Views/ClassFacet/Module/LessonCount.ascx", _model.UserProfile);
         } %>        
         <div class="list-group list-group-icons bg-color-darken">
-            <a style="cursor:pointer;" onclick="flipflopByAnchor();" class="list-group-item"><i class="fa fa-eye-slash"></i>&nbsp;&nbsp; About <%= _model.UserProfile.RealName %><i class="fa fa-angle-down pull-right"></i><br />
+            <a style="cursor:pointer;" onclick="flipflopByAnchor();" class="list-group-item"><i class="fa fa-eye-slash"></i>&nbsp;&nbsp; About <%= _model.UserProfile.FullName() %><i class="fa fa-angle-down pull-right"></i><br />
                 <span class="text-warning" onclick="editRecentStatus(<%= _model.UID %>,$(this));"><%= !String.IsNullOrEmpty(_model.UserProfile.RecentStatus) ? _model.UserProfile.RecentStatus.HtmlBreakLine() : "點此新增個人近況" %></span>
             </a>
             <a href="#" class="list-group-item" id="diagnosisDialog_link"><i class="fa fa-child"></i>&nbsp;&nbsp;Fitness Diagnosis<i class="fa fa-angle-right pull-right"></i></a>
@@ -29,9 +29,9 @@
     </div>
     <%--<div class="col-xs-9 col-sm-9">
         <h1>
-            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.RealName %></a></span>
+            <span class="semi-bold"><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + _model.UID %>"><%= _model.UserProfile.FullName() %></a></span>
         </h1>
-        <p class="font-md"><a onclick="flipflop();" ><i class="fa fa-eye-slash fa-2x closeureye"></i></a> 關於<%= _model.UserProfile.UserName ?? _model.UserProfile.RealName %>...</p>
+        <p class="font-md"><a onclick="flipflop();" ><i class="fa fa-eye-slash fa-2x closeureye"></i></a> 關於<%= _model.UserProfile.UserName ?? _model.UserProfile.FullName() %>...</p>
         <p style="display:none;">
             <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
         </p>

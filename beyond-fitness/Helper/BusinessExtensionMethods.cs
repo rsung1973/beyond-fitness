@@ -731,7 +731,7 @@ namespace WebHome.Helper
             {
                 return models.GetTable<CourseContract>()
                     .Where(c => c.CourseContractRevision == null)
-                    .Where(c => c.AgentID == agent.UID && c.Status == (int)Naming.CourseContractStatus.草稿);
+                    .Where(c => (c.AgentID == agent.UID || c.FitnessConsultant==agent.UID) && c.Status == (int)Naming.CourseContractStatus.草稿);
             }
         }
 
@@ -755,7 +755,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             var items = models.GetTable<CourseContractRevision>()
-                .Where(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已開立);
+                .Where(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效);
             items = models.filterAmendmentByAgent(agent, items);
             return items;
         }
@@ -775,7 +775,7 @@ namespace WebHome.Helper
         {
             var items = models.GetTable<CourseContract>()
                 .Where(c => c.CourseContractRevision == null)
-                .Where(c => c.Status == (int)Naming.CourseContractStatus.待審核);
+                .Where(c => c.Status == (int)Naming.CourseContractStatus.待確認);
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = models.FilterByBranchStoreManager(items, agent);
@@ -795,7 +795,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             var items = models.GetTable<CourseContractRevision>()
-                .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待審核);
+                .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待確認);
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
@@ -883,7 +883,7 @@ namespace WebHome.Helper
         {
             var items = models.GetTable<CourseContract>()
                 .Where(c => c.CourseContractRevision == null)
-                .Where(c => c.Status == (int)Naming.CourseContractStatus.待生效);
+                .Where(c => c.Status == (int)Naming.CourseContractStatus.待審核);
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = models.FilterByBranchStoreManager(items, agent);
@@ -903,7 +903,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             var items = models.GetTable<CourseContractRevision>()
-                .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待生效);
+                .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待審核);
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
@@ -925,7 +925,7 @@ namespace WebHome.Helper
             String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.ContractNo + ".pdf");
             if (createNew == true || !File.Exists(pdfFile))
             {
-                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContract") + "?contractID=" + item.ContractID;
+                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContract") + "?pdf=1&contractID=" + item.ContractID;
                 viewUrl.ConvertHtmlToPDF(pdfFile, 20);
             }
             return pdfFile;
@@ -946,16 +946,17 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             return models.GetTable<CourseContractMember>().Where(m => uid.Contains(m.UID))
-                            .Any(m => m.CourseContract.Status == (int)Naming.CourseContractStatus.已開立);
+                            .Any(m => m.CourseContract.Status == (int)Naming.CourseContractStatus.已生效);
         }
 
         public static IQueryable<ServingCoach> GetServingCoachInSameStore<TEntity>(this UserProfile profile, ModelSource<TEntity> models)
             where TEntity : class, new()
         {
-            return models.GetTable<BranchStore>().Where(w => w.ManagerID == profile.UID || w.ViceManagerID==profile.UID)
-                    .Join(models.GetTable<CoachWorkplace>(), 
-                        w => w.BranchID, u => u.BranchID, (w, u) => u)
-                    .Select(u => u.ServingCoach);
+            return models.GetTable<ServingCoach>()
+                .Join(models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
+                                            .Join(models.GetTable<CoachWorkplace>(),
+                                                b => b.BranchID, w => w.BranchID, (b, w) => w),
+                                            s => s.CoachID, w => w.CoachID, (s, w) => s);
         }
 
     }

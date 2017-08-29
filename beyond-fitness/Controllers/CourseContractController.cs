@@ -52,7 +52,7 @@ namespace WebHome.Controllers
         }
 
         [CoachOrAssistantAuthorize]
-        public ActionResult EditCourseContract(CourseContractViewModel viewModel)
+        public ActionResult EditCourseContract(CourseContractViewModel viewModel,bool? viewOnly)
         {
 
             var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
@@ -75,6 +75,7 @@ namespace WebHome.Controllers
             }
 
             ViewBag.ViewModel = viewModel;
+            ViewBag.ViewOnly = viewOnly;
             return View("~/Views/CourseContract/Module/EditCourseContract.ascx", item);
         }
 
@@ -120,7 +121,7 @@ namespace WebHome.Controllers
 
 
 
-        public ActionResult ListContractMember(int[] uid,int? contractType,int? ownerID)
+        public ActionResult ListContractMember(int[] uid,int? contractType,int? ownerID,bool? viewOnly)
         {
             IQueryable<UserProfile> items = models.GetTable<UserProfile>();
             if (uid != null)
@@ -135,6 +136,7 @@ namespace WebHome.Controllers
             }
             ViewBag.ContractType = contractType;
             ViewBag.OwnerID = ownerID;
+            ViewBag.ViewOnly = viewOnly;
             return View("~/Views/CourseContract/Module/ContractMemberList.ascx", items);
         }
 
@@ -341,11 +343,13 @@ namespace WebHome.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ListLessonPrice(int branchID, int? duration, Naming.LessonPriceFeature? feature)
+        public ActionResult ListLessonPrice(int branchID, int? duration, Naming.LessonPriceFeature? feature,int? priceID)
         {
+
             var items = models.GetTable<LessonPriceType>().Where(l => l.Status == (int)Naming.LessonSeriesStatus.已啟用)
                 .Where(l => l.BranchID == branchID
                 && (l.LowerLimit.HasValue && (!l.SeriesID.HasValue || l.CurrentPriceSeries.Status == (int)Naming.LessonSeriesStatus.已啟用)));
+
             if (duration.HasValue)
                 items = items.Where(l => !l.DurationInMinutes.HasValue || l.DurationInMinutes == duration);
             if(!feature.HasValue)
@@ -358,13 +362,18 @@ namespace WebHome.Controllers
             }
 
             var profile = HttpContext.GetUser();
-            if(profile.IsAssistant() || profile.IsManager())
+            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager())
             {
 
             }
             else
             {
-                items = items.Where(l => l.UsageType != 0);
+                items = items.Where(p => p.SeriesID.HasValue);
+            }
+
+            if(priceID.HasValue)
+            {
+                items = items.Concat(models.GetTable<LessonPriceType>().Where(p => p.PriceID == priceID));
             }
 
             items = items.OrderBy(l => l.LowerLimit).ThenBy(l => l.ListPrice);
@@ -382,7 +391,7 @@ namespace WebHome.Controllers
             {
                 return Naming.CourseContractStatus.待簽名;
             }
-            return Naming.CourseContractStatus.待審核;
+            return Naming.CourseContractStatus.待確認;
         }
 
         public ActionResult CommitContract(CourseContractViewModel viewModel)
@@ -418,7 +427,7 @@ namespace WebHome.Controllers
                 models.GetTable<CourseContract>().InsertOnSubmit(item);
             }
 
-            item.Status = (int)checkInitialStatus(viewModel, profile);
+            item.Status = (int)Naming.CourseContractStatus.待簽名;  //  (int)checkInitialStatus(viewModel, profile);
             item.CourseContractLevel.Add(new CourseContractLevel
             {
                 LevelDate = DateTime.Now,
@@ -430,7 +439,7 @@ namespace WebHome.Controllers
             item.ContractDate = DateTime.Now;
             item.Subject = viewModel.Subject;
             item.ValidFrom = DateTime.Today;
-            item.Expiration = DateTime.Today.AddDays(viewModel.Lessons.Value * 7 + 1);
+            item.Expiration = DateTime.Today.AddMonths(18);
             item.OwnerID = viewModel.OwnerID.Value;
             item.SequenceNo = viewModel.SequenceNo;
             item.Lessons = viewModel.Lessons;
@@ -460,17 +469,17 @@ namespace WebHome.Controllers
                 models.ExecuteCommand("update UserProfileExtension set CurrentTrial = null where UID = {0}", uid);
             }
 
-            return Json(new { result = true, status = item.Status });
+            return Json(new { result = true, status = item.Status, contractID = item.ContractID });
         }
 
         private void markContractNo(CourseContract item)
         {
             if (item.ContractNo == null)
             {
-                var items = models.GetTable<CourseContract>().Where(c => c.ContractDate >= DateTime.Today
-                        && c.Status >= (int)Naming.CourseContractStatus.待生效);
+                var items = models.GetTable<CourseContract>().Where(c => c.EffectiveDate >= DateTime.Today
+                        && c.Status >= (int)Naming.CourseContractStatus.待審核);
                 int seqNo = 1 + items.Count();
-                item.ContractNo = item.CourseContractType.ContractCode + String.Format("{0:yyyyMMdd}", item.ContractDate) + String.Format("{0:0000}", seqNo);
+                item.ContractNo = item.CourseContractType.ContractCode + String.Format("{0:yyyyMMdd}", DateTime.Today) + String.Format("{0:0000}", seqNo);
                 models.SubmitChanges();
             }
         }
@@ -600,10 +609,10 @@ namespace WebHome.Controllers
                 case Naming.CourseContractStatus.草稿:
                     items = models.GetContractInEditingByAgent(agent);
                     break;
-                case Naming.CourseContractStatus.待審核:
+                case Naming.CourseContractStatus.待確認:
                     items = models.GetContractToAllowByAgent(agent);
                     break;
-                case Naming.CourseContractStatus.待生效:
+                case Naming.CourseContractStatus.待審核:
                     items = models.GetContractToConfirmByAgent(agent);
                     break;
                 case Naming.CourseContractStatus.待簽名:
@@ -627,10 +636,10 @@ namespace WebHome.Controllers
                 //case Naming.CourseContractStatus.草稿:
                 //    items = models.GetContractInEditingByAgent(agent);
                 //    break;
-                case Naming.CourseContractStatus.待審核:
+                case Naming.CourseContractStatus.待確認:
                     items = models.GetAmendmentToAllowByAgent(agent);
                     break;
-                case Naming.CourseContractStatus.待生效:
+                case Naming.CourseContractStatus.待審核:
                     items = models.GetAmendmentToConfirmByAgent(agent);
                     break;
                 case Naming.CourseContractStatus.待簽名:
@@ -714,6 +723,20 @@ namespace WebHome.Controllers
             return result;
         }
 
+        public ActionResult ContractAllowanceView(CourseContractViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)ViewContract(viewModel);
+            if (result.Model is CourseContract)
+            {
+                var profile = HttpContext.GetUser();
+                var item = (CourseContract)result.Model;
+                item.AgentID = profile.UID;
+                models.SubmitChanges();
+                ViewBag.ContractAction = "~/Views/CourseContract/Module/ContractAllowance.ascx";
+            }
+            return result;
+        }
+
         public ActionResult ContractAmendmentApprovalView(CourseContractViewModel viewModel)
         {
             ViewResult result = (ViewResult)ViewContractAmendment(viewModel);
@@ -741,6 +764,11 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 executeContractStatus(profile, item,(Naming.CourseContractStatus)viewModel.Status.Value);
+                if (viewModel.Drawback == true)
+                {
+                    item.ContractNo = null;
+                    models.DeleteAllOnSubmit<CourseContractSignature>(s => s.ContractID == item.ContractID);
+                }
                 models.SubmitChanges();
 
                 return Json(new { result = true });
@@ -766,52 +794,59 @@ namespace WebHome.Controllers
             var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
             if (item != null)
             {
-                executeContractStatus(profile, item, (Naming.CourseContractStatus)viewModel.Status.Value);
-
-                var groupLesson = new GroupingLesson { };
-                models.GetTable<GroupingLesson>().InsertOnSubmit(groupLesson);
-
-                foreach(var m in item.CourseContractMember)
-                {
-                    var lesson = new RegisterLesson
-                    {
-                        ClassLevel = item.PriceID,
-                        RegisterDate = DateTime.Now,
-                        Lessons = item.Lessons.Value,
-                        Attended = (int)Naming.LessonStatus.準備上課,
-                        GroupingMemberCount = item.CourseContractMember.Count,
-                        IntuitionCharge = new IntuitionCharge
-                        {
-                            Payment = "CreditCard",
-                            FeeShared = 0,
-                            ByInstallments = 1
-                        },
-                        AdvisorID = item.FitnessConsultant,
-                        AttendedLessons = 0,
-                        UID = m.UID,
-                        RegisterLessonContract = new RegisterLessonContract
-                        {
-                            ContractID = item.ContractID
-                        }
-                    };
-
-                    groupLesson.RegisterLesson.Add(lesson);
-                }
-                
-                models.SubmitChanges();
-
-                foreach (var m in item.CourseContractMember)
-                {
-                    models.ExecuteCommand(@"
-                        UPDATE UserRole
-                        SET        RoleID = {2}
-                        WHERE   (UID = {0}) AND (RoleID = {1})", m.UID, (int)Naming.RoleID.Preliminary, (int)Naming.RoleID.Learner);
-                }
-
-                return Json(new { result = true });
+                var pdfFile = makeContractEffective(profile, item);
+                return Json(new { result = true, pdf = pdfFile != null ? VirtualPathUtility.ToAbsolute("~/" + pdfFile.Replace(HttpRuntime.AppDomainAppPath, "")) : null });
             }
             else
                 return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
+        }
+
+        private String makeContractEffective(UserProfile profile, CourseContract item)
+        {
+            executeContractStatus(profile, item, Naming.CourseContractStatus.已生效);
+
+            var groupLesson = new GroupingLesson { };
+            models.GetTable<GroupingLesson>().InsertOnSubmit(groupLesson);
+
+            foreach (var m in item.CourseContractMember)
+            {
+                var lesson = new RegisterLesson
+                {
+                    ClassLevel = item.PriceID,
+                    RegisterDate = DateTime.Now,
+                    Lessons = item.Lessons.Value,
+                    Attended = (int)Naming.LessonStatus.準備上課,
+                    GroupingMemberCount = item.CourseContractMember.Count,
+                    IntuitionCharge = new IntuitionCharge
+                    {
+                        Payment = "CreditCard",
+                        FeeShared = 0,
+                        ByInstallments = 1
+                    },
+                    AdvisorID = item.FitnessConsultant,
+                    AttendedLessons = 0,
+                    UID = m.UID,
+                    RegisterLessonContract = new RegisterLessonContract
+                    {
+                        ContractID = item.ContractID
+                    }
+                };
+
+                groupLesson.RegisterLesson.Add(lesson);
+            }
+
+            models.SubmitChanges();
+
+            foreach (var m in item.CourseContractMember)
+            {
+                models.ExecuteCommand(@"
+                        UPDATE UserRole
+                        SET        RoleID = {2}
+                        WHERE   (UID = {0}) AND (RoleID = {1})", m.UID, (int)Naming.RoleID.Preliminary, (int)Naming.RoleID.Learner);
+            }
+
+            var pdfFile = item.CreateContractPDF();
+            return pdfFile;
         }
 
         public ActionResult ConfirmSignature(CourseContractViewModel viewModel, bool? extension, bool? booking, bool? cancel)
@@ -864,16 +899,22 @@ namespace WebHome.Controllers
                 {
                     ExecutorID = profile.UID,
                     LevelDate = DateTime.Now,
-                    LevelID = (int)Naming.CourseContractStatus.待生效
+                    LevelID = (int)Naming.CourseContractStatus.待審核
                 });
 
-                item.Status = (int)Naming.CourseContractStatus.待生效;
+                item.Status = (int)Naming.CourseContractStatus.待審核;
+                item.EffectiveDate = DateTime.Now;
                 models.SubmitChanges();
 
                 markContractNo(item);
 
-                var pdfFile = item.CreateContractPDF();
-                
+                String pdfFile = null;
+
+                if(item.ServingCoach.UserProfile.IsManager())
+                {
+                    pdfFile = makeContractEffective(profile, item);
+                }
+
                 //ThreadPool.QueueUserWorkItem(t =>
                 //{
                 //    try
@@ -886,8 +927,8 @@ namespace WebHome.Controllers
                 //    }
                 //});
 
-                String contractPDF = pdfFile.Replace(HttpRuntime.AppDomainAppPath, "");
-                return Json(new { result = true, pdf = VirtualPathUtility.ToAbsolute("~/" + contractPDF) });
+                return Json(new { result = true, pdf = pdfFile != null ? VirtualPathUtility.ToAbsolute("~/" + pdfFile.Replace(HttpRuntime.AppDomainAppPath, "")) : null });
+
             }
             else
                 return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
@@ -944,10 +985,10 @@ namespace WebHome.Controllers
                 {
                     ExecutorID = profile.UID,
                     LevelDate = DateTime.Now,
-                    LevelID = (int)Naming.CourseContractStatus.待生效
+                    LevelID = (int)Naming.CourseContractStatus.待審核
                 });
 
-                contract.Status = (int)Naming.CourseContractStatus.待生效;
+                contract.Status = (int)Naming.CourseContractStatus.待審核;
                 models.SubmitChanges();
 
                 var pdfFile = item.CreateContractAmendmentPDF(true);
@@ -1156,7 +1197,7 @@ namespace WebHome.Controllers
         public ActionResult InquireContractForAmendment(CourseContractQueryViewModel viewModel)
         {
             IQueryable<CourseContract> items = models.GetTable<CourseContract>()
-                    .Where(c => c.Status == (int)Naming.CourseContractStatus.已開立);
+                    .Where(c => c.Status == (int)Naming.CourseContractStatus.已生效);
 
             bool hasCondition = false;
 
@@ -1251,7 +1292,7 @@ namespace WebHome.Controllers
                 };
                 newItem.ContractNo = item.ContractNo + "-" + String.Format("{0:00}", newItem.CourseContractRevision.RevisionNo);
 
-                newItem.Status = (int)Naming.CourseContractStatus.待審核;
+                newItem.Status = (int)Naming.CourseContractStatus.待確認;
                 item.CourseContractLevel.Add(new CourseContractLevel
                 {
                     LevelDate = DateTime.Now,

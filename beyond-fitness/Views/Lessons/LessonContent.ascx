@@ -83,7 +83,7 @@
                             <li class="message">
                                 <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                 <span class="message-text">
-                                    <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.RealName %></a>
+                                    <a class="username" href="<%= VirtualPathUtility.ToAbsolute("~/Account/ViewProfile/") + _model.AttendingCoach %>"><%= _model.AsAttendingCoach.UserProfile.FullName() %></a>
                                     <%= _model.LessonPlan != null ? _model.LessonPlan.Remark : null %>
                                 </span>
                             </li>
@@ -127,7 +127,7 @@
                                 <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer,new { @class = "profileImg online" ,@style = "width:95px" }); %>
                                 <div class="message-text">
                                     <time></time>
-                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan!=null ? _model.LessonPlan.Warming : null %>
+                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.FullName() %></a> <%= _model.LessonPlan!=null ? _model.LessonPlan.Warming : null %>
                                 </div>
                             </li>
                         </ul>
@@ -168,7 +168,7 @@
                                 <% _model.AsAttendingCoach.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:95px" }); %>
                                 <div class="message-text">
                                     <time></time>
-                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.RealName %></a> <%= _model.LessonPlan != null ? _model.LessonPlan.EndingOperation : null %>
+                                    <a class="username"><%= _model.AsAttendingCoach.UserProfile.FullName() %></a> <%= _model.LessonPlan != null ? _model.LessonPlan.EndingOperation : null %>
                                 </div>
                             </li>
                         </ul>

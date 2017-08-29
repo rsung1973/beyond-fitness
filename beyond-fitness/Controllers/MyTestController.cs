@@ -82,5 +82,21 @@ namespace WebHome.Controllers
             return new HttpUnauthorizedResult();
         }
 
+        public ActionResult TestViewModel(ViewModelA A,ViewModelB B)
+        {
+            return Content(A.Data + B.Data);
+        }
+
+    }
+
+    public class ViewModelA
+    {
+        public int? No { get; set; }
+        public String Data { get; set; }
+    }
+    public class ViewModelB
+    {
+        public int? ID { get; set; }
+        public String Data { get; set; }
     }
 }

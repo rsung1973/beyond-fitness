@@ -23,8 +23,8 @@
             { %>
         <tr>
             <td><%= item.AwardDate.ToString("yyyy/MM/dd") %></td>
-            <td><%= item.UserProfile.RealName %></td>
-            <td><%= item.Actor.RealName %></td>
+            <td><%= item.UserProfile.FullName() %></td>
+            <td><%= item.Actor.FullName() %></td>
             <td><%= item.BonusAwardingItem.ItemName %></td>
             <td><%= item.BonusAwardingItem.PointValue %>點</td>
         </tr>

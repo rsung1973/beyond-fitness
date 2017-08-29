@@ -16,7 +16,7 @@
             foreach (var item in _model.GroupingLesson.RegisterLesson)
             { %>
         <li class="<%= idx++ ==0 ? "active" : null %>">
-            <a data-toggle="tab" href="#" onclick="showLessonWidget(<%= _model.LessonID %>,<%= item.RegisterID %>);" ><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i></span><%= item.UserProfile.RealName %></span></a>
+            <a data-toggle="tab" href="#" onclick="showLessonWidget(<%= _model.LessonID %>,<%= item.RegisterID %>);" ><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i></span><%= item.UserProfile.FullName() %></span></a>
         </li>
         <%  } %>
     </ul>

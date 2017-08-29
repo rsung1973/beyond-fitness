@@ -137,6 +137,24 @@
             }
 
         });
+
+        <%  if (_model != null && (_model.RegisterLesson.Count > 0 || _model.CourseContract.Count > 0))
+        {   %>
+
+        $(function () {
+            $('#<%= _dialog %> input').each(function (idx, element) {
+                var $this = $(this);
+                $this.attr('readOnly', 'readOnly');
+            });
+
+            $('#<%= _dialog %> select[name!="Status"]').each(function (idx, element) {
+                var $this = $(this);
+                var $option = $this.find('option:selected');
+                $this.empty().append($option);
+            });
+        });
+    <%  } %>
+
     </script>
 </div>
 

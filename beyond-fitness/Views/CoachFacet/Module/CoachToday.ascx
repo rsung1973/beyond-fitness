@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <h3><%= _model.UserProfile.RealName %>
+            <h3><%= _model.UserProfile.FullName() %>
                 <span class="label label-info" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'><%= _items.Count() %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true"><%= _model.ProfessionalLevel.LevelName %> <i class="fa fa-fw fa fa-info-circle"></i></span>
                 <%--                                             <span class="label label-success" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>離下一等級的業績尚有１０萬<br/>平均上課數５堂即可晉級</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-info-circle"></i></span>
                                             <span class="label label-warning" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>您目前的業績尚有１０萬<br/>平均上課數５堂未達到</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-exclamation-triangle"></i></span>

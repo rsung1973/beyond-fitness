@@ -30,7 +30,7 @@
             { %>
                 <tr>
                     <td><%= item.AdvisorID.HasValue ?  item.ServingCoach.UserProfile.RealName : null %></td>
-                    <td><%= item.UserProfile.RealName %></td>
+                    <td><%= item.UserProfile.FullName() %></td>
                     <td><%= item.RegisterDate.ToString("yyyy/MM/dd") %></td>
                     <td>
                         <%= item.LessonPriceType.Description %>                        
@@ -47,7 +47,7 @@
                         <ul class="list-inline friends-list">
                             <%  foreach (var g in item.GroupingLesson.RegisterLesson.Where(r=>r.RegisterID!=item.RegisterID))
                                 { %>
-                            <li><%= g.UserProfile.RealName %></li>
+                            <li><%= g.UserProfile.FullName() %></li>
                             <%  } %>
                         </ul>
                         <%  } %>

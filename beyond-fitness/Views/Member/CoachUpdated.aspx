@@ -37,10 +37,10 @@
                                     <% _model.RenderUserPicture(this.Writer, "authorImg"); %>
                                 </div>
                                 <div class="user-bio">
-                                    <h2 class="text-primary"><%= _model.RealName %> </h2>
+                                    <h2 class="text-primary"><%= _model.FullName() %> </h2>
 
                                     <div class="hr1" style="margin-top: 10px; margin-bottom: 10px;"></div>
-                                    <p><strong>姓名：</strong><%= _model.RealName %></p>
+                                    <p><strong>姓名：</strong><%= _model.FullName() %></p>
                                     <p><strong>員工編號：</strong><%= _model.MemberCode %></p>
                                     <p><strong>Email：</strong><%= _model.PID.Contains("@") ? _model.PID : null %></p>
 

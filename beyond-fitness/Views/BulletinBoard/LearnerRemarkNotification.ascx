@@ -22,7 +22,7 @@
             <span>
                 <a href="<%= Url.Action("ShowLearner","Member", new { id = item.RegisterLesson.UID }) %>" class="msg">
                     <%  item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "air air-top-left margin-top-5", @style = "width:40px" }); %>
-                    <span class="from"><%= item.RegisterLesson.UserProfile.RealName %> <i class="icon-paperclip"></i><i class="icon-paperclip"></i>
+                    <span class="from"><%= item.RegisterLesson.UserProfile.FullName() %> <i class="icon-paperclip"></i><i class="icon-paperclip"></i>
                         <button class="btn btn-xs txt-color-white bg-color-blueLight" onclick="javascript:lessonRemark(<%= item.LessonID %>,<%= item.RegisterID %>);return false;"><i class="fa fa-commenting-o"></i>回覆</button>
                         <button class="btn btn-primary btn-xs" onclick="showRecentLessons(<%= item.RegisterLesson.UID %>, <%= item.LessonID %>, false);return false;"><i class="fa fa-fw fa-eye"></i>檢視上課記錄</button>
                     </span>

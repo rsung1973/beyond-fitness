@@ -26,10 +26,11 @@
                 "class": "btn btn-primary",
                 click: function () {
                     showLoading();
-                    $.post('<%= Url.Action("EnableContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.已開立 }) %>', {}, function (data) {
+                    $.post('<%= Url.Action("EnableContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.已生效 }) %>', {}, function (data) {
                         hideLoading();
                         if (data.result) {
                             alert('合約已生效!!');
+                            window.open(data.pdf, '_blank', 'fullscreen=yes');
                             showLoading();
                             window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
                         } else {

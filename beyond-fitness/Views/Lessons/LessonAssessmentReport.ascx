@@ -19,7 +19,7 @@
                     <li class='<%= idx==1 ? "active" : null %>'>
                         <a href="#<%= _tabPrefix + idx %>" data-toggle="tab" class="assessment">
                             <span class="<%= idx==1 ? "badge bg-color-blue txt-color-white" : "badge bg-color-blueDark txt-color-white" %>">
-                                <i class="<%= item.UserProfile.UserProfileExtension.Gender=="F" ? "fa fa-female" : "fa fa-male" %>"></i></span><%= item.UserProfile.RealName %></a>
+                                <i class="<%= item.UserProfile.UserProfileExtension.Gender=="F" ? "fa fa-female" : "fa fa-male" %>"></i></span><%= item.UserProfile.FullName() %></a>
                     </li>
             <%      
                 } %>

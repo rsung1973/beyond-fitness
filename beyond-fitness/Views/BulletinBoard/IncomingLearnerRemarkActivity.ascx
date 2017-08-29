@@ -20,7 +20,7 @@
                 <span class="unread">
                     <a onclick="lessonCommentActivity(event,<%= item.CommentID %>);" class="msg">
                         <%  item.Speaker.RenderUserPicture(Writer, new { @class = "air air-top-left margin-top-5", @style = "width:40px" }); %>
-                        <span class="from"><%= item.Speaker.RealName %> <i class="icon-paperclip"></i></span>
+                        <span class="from"><%= item.Speaker.FullName() %> <i class="icon-paperclip"></i></span>
                         <time><%= item.CommentDate %><span class="news_msg"></span></time>
                         <span class="msg-body"><%= item.Comment %> </span>
                     </a>

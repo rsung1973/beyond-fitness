@@ -32,7 +32,7 @@
                         idx++;  %>
                         <tr>
                             <td><%= item.ServingCoach==null ? "--" : item.ServingCoach.ProfessionalLevel.LevelName %></td>
-                            <td><%= item.RealName %></td>
+                            <td><%= item.FullName() %></td>
                             <td><%= item.ServingCoach==null ? "--" : String.Join("<br/>",item.ServingCoach.CoachWorkplace.Select(w=>w.BranchStore.BranchName)) %></td>
                             <td><%= item.Phone %></td>
                             <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>

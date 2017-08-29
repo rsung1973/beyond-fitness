@@ -24,7 +24,7 @@
             { %>
         <tr>
             <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
-            <td><%= item.ServingCoach.UserProfile.RealName %></td>
+            <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
                 <%  if (item.CourseContractType.IsGroup==true)
                     { %>
@@ -32,7 +32,7 @@
                 <%  }
                     else
                     { %>
-                <%= item.ContractOwner.RealName %>
+                <%= item.ContractOwner.FullName() %>
                 <%  } %>
             </td>
             <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>

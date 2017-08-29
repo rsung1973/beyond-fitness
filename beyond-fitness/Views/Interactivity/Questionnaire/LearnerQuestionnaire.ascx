@@ -23,7 +23,7 @@
                         <div class="panel-body status vote">
                             <div class="who clearfix">
                                 <%  _model.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg busy", @style = "width:40px" }); %>
-                                <span class="name font-lg"><b><%= _model.UserProfile.RealName %></b></span><br />
+                                <span class="name font-lg"><b><%= _model.UserProfile.FullName() %></b></span><br />
                                 <span class="from font-md">已於 <%= String.Format("{0:yyyy/MM/dd}",_model.PDQTask.First().TaskDate) %> 回填上課滿意度問卷！</span>
                             </div>
                             <%  foreach (var item in _model.PDQTask.OrderBy(t=>t.PDQQuestion.QuestionNo))

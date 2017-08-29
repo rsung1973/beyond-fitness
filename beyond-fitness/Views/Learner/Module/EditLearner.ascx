@@ -36,7 +36,7 @@
                         <label class="label">暱稱</label>
                         <label class="input">
                             <i class="icon-append fa fa-user"></i>
-                            <input type="tel" name="nickname" maxlength="20" placeholder="請輸入暱稱">
+                            <input type="tel" name="nickname" maxlength="20" placeholder="請輸入暱稱" value="<%= _viewModel.Nickname %>">
                         </label>
                     </section>
                 </div>

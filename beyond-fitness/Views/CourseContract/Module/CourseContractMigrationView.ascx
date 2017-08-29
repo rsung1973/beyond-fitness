@@ -19,13 +19,13 @@
                             <td colspan="2">合約編號：<%= _contract.ContractNo %></td>
                         </tr>
                         <tr>
-                            <td>姓名：<%= _contract.ContractOwner.RealName %></td>
+                            <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
                             <td>聯絡電話：<%= _contract.ContractOwner.Phone %></td>
                         </tr>
                     </tbody>
                     <tbody>
                         <tr>
-                            <td colspan="2">申請項目：<%  if (_contract.Status >= (int)Naming.CourseContractStatus.待生效)
+                            <td colspan="2">申請項目：<%  if (_contract.Status >= (int)Naming.CourseContractStatus.待審核)
                                                      { %>
                                 ☑
                             <%  }
@@ -94,7 +94,7 @@
         _model = (CourseContractRevision)this.Model;
         _contract = _model.CourseContract;
         _owner = _contract.CourseContractMember.Where(m => m.UID == _contract.OwnerID).First();
-        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待生效).FirstOrDefault();
+        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待審核).FirstOrDefault();
         if (item != null)
         {
             _signatureDate = item.LevelDate;

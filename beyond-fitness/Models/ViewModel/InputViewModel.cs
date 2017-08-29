@@ -43,6 +43,7 @@ namespace WebHome.Models.ViewModel
         public String Reason { get; set; }
         public int? MonthExtension { get; set; }
         public int? RevisionID { get; set; }
+        public bool? Drawback { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -99,5 +100,33 @@ namespace WebHome.Models.ViewModel
         public int?[] ListPriceSeries { get; set; }
         public int? SeriesID { get; set; }
         public int?[] PriceSeriesID { get; set; }
+        public bool?[] ReadOnly { get; set; }
+    }
+
+    public class LearnerQueryViewModel : LearnerViewModel
+    {
+        public String IDNo { get; set; }
+    }
+
+    public class PaymentViewModel
+    {
+        public int? PaymentID { get; set; }
+        public int? PayoffAmount { get; set; }
+        public DateTime? PayoffDate { get; set; } = DateTime.Today;
+        public int? Status { get; set; }
+        public int? HandlerID { get; set; }
+        public string PaymentType { get; set; } = "現金";
+        public int? InvoiceID { get; set; }
+        public int? TransactionType { get; set; }
+        public String ContractNo { get; set; }
+        public Naming.InvoiceTypeDefinition? InvoiceType { get; set; } = Naming.InvoiceTypeDefinition.二聯式;
+        public string BuyerReceiptNo { get; set; }
+        public string InvoiceNo { get; set; }
+        public string Remark { get; set; }
+        public int? SellerID { get; set; }
+        public int? RegisterID { get; set; }
+        public int? ProductID { get; set; }
+        public int? ProductCount { get; set; } = 1;
+
     }
 }

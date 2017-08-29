@@ -32,7 +32,7 @@
                                                                     ? "個人課程"
                                                                     : ((Naming.LessonPriceStatus)item.RegisterLesson.LessonPriceType.Status).ToString() %></td>
                 <td><%= String.Join("、",item.GroupingLesson.RegisterLesson.Select(r=>r.UserProfile.RealName)) %></td>
-                <td><%= item.AsAttendingCoach.UserProfile.RealName %></td>
+                <td><%= item.AsAttendingCoach.UserProfile.FullName() %></td>
                 <td>
                     <%  if (item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
                         {   %>

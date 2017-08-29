@@ -26,7 +26,7 @@
             {
                 ServingCoach coach = models.GetTable<ServingCoach>().Where(u => u.CoachID == item.Key.CoachID).First(); %>
                 <tr>
-                    <td><%= coach.UserProfile.RealName %></td>
+                    <td><%= coach.UserProfile.FullName() %></td>
                     <td><%= item.Count() %>
                         <%   totalCount += item.Count(); %></td>
                     <td><%  var achievement = models.CalcAchievement(item);

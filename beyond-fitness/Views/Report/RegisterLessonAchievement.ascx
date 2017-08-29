@@ -23,7 +23,7 @@
             {
                 UserProfile coach = models.GetTable<UserProfile>().Where(u => u.UID == item.Key).First();   %>
                 <tr>
-                    <td><%= coach.RealName %></td>
+                    <td><%= coach.FullName() %></td>
                     <td><%  var summary = item.Sum(l => l.ShareAmount);
                             subtotal += summary.Value; %>
                         <%= summary %></td>

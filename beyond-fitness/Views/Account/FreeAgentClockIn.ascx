@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu" aria-labelledby="freeAgentClockIn">
                     <%  foreach (var item in _items)
                         { %>
-                            <li><a onclick="clockIn(<%= item.CoachID %>);"><%= item.UserProfile.RealName %></a></li>
+                            <li><a onclick="clockIn(<%= item.CoachID %>);"><%= item.UserProfile.FullName() %></a></li>
                     <%  } %>
                 </ul>
             </span>

@@ -26,8 +26,8 @@
                             <i class="icon-append fa fa-file-word-o"></i>
                             <script>
                                 function selectContractType() {
-                                    $('div.modal-title h4').html('<i class="fa fa-edit"></i>  合約名稱：' + $('select[name="ContractType"] option:selected').text());
-                                    $global.contractType = $('select[name="ContractType"]').val();
+                                    $('div.modal-title h4').html('<i class="fa fa-edit"></i>  合約名稱：' + $('#<%= _dialog %> select[name="ContractType"] option:selected').text());
+                                    $global.contractType = $('#<%= _dialog %> select[name="ContractType"]').val();
                                     if($global.contractType=="2" || $global.contractType=="3") {
                                         $('#members label.label').html('學員資料 <span class="label-warning"><i class="fa fa-asterisk"></i> 為主約簽名代表</span>');
                                     } else {
@@ -35,28 +35,31 @@
                                     }
                                 }
                                 $(function() {
-                                    $('select[name="ContractType"]').on('change',function(evt) {
+                                    $('#<%= _dialog %> select[name="ContractType"]').on('change',function(evt) {
                                         selectContractType();
                                     });
-                                    $('select[name="ContractType"]').val('<%= _viewModel.ContractType ?? 1 %>');
+                                    $('#<%= _dialog %> select[name="ContractType"]').val('<%= _viewModel.ContractType ?? 1 %>');
                                 });
                             </script>
                         </label>
                     </section>
                     <section class="col col-6">
-                    <%  if (_profile.IsAssistant())
-                        { %>
+                        <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                            { %>
                         <label class="label">體能顧問</label>
                         <label class="select">
                             <select name="FitnessConsultant">
                                 <option value="">請選擇體能顧問</option>
-                                <%  Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx",models.GetTable<ServingCoach>()); %>
+                                <%  IQueryable<ServingCoach> items = _profile.IsAssistant()
+                                                    ? models.GetTable<ServingCoach>()
+                                                    : _profile.GetServingCoachInSameStore(models);
+                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", items); %>
                             </select>
                             <i class="icon-append fa fa-file-word-o"></i>
                         </label>
                         <script>
                             $(function(){
-                                $('select[name="FitnessConsultant"]').val('<%= _viewModel.FitnessConsultant %>');
+                                $('#<%= _dialog %> select[name="FitnessConsultant"]').val('<%= _viewModel.FitnessConsultant %>');
                             });
                         </script>
                         <%  }
@@ -70,7 +73,7 @@
             <fieldset>
                 <section id="members">
                     <label class="label">學員資料</label>
-                    <%  Html.RenderAction("ListContractMember", "CourseContract", _viewModel); %>
+                    <%  Html.RenderAction("ListContractMember", "CourseContract",new { _viewModel.UID, _viewModel.ContractType, _viewModel.OwnerID, viewOnly = (bool?)ViewBag.ViewOnly }); %>
                 </section>
                 <input type="hidden" name="OwnerID" value="<%= _viewModel.OwnerID %>" />
                 <script>
@@ -78,7 +81,7 @@
                         $global.renderMember = function() {
                             $('#members table').remove();
                             showLoading();
-                            $.post('<%= Url.Action("ListContractMember","CourseContract") %>',{'uid':$global.UID, 'contractType':$('select[name="ContractType"]').val(),'ownerID':$('input[name="OwnerID"]').val()},function(data){
+                            $.post('<%= Url.Action("ListContractMember","CourseContract") %>',{'uid':$global.UID, 'contractType':$('#<%= _dialog %> select[name="ContractType"]').val(),'ownerID':$('input[name="OwnerID"]').val()},function(data){
                                 hideLoading();
                                 $(data).appendTo($('#members'));
                                 $global.UID = [];
@@ -117,7 +120,7 @@
                             </select>
                             <i class="icon-append fa fa-at"></i>
                             <script>
-                                $('select[name="BranchID"]').on('change',function(evt) {
+                                $('#<%= _dialog %> select[name="BranchID"]').on('change',function(evt) {
                                     loadPriceList();
                                 });
                             </script>
@@ -133,7 +136,7 @@
                             </select>
                             <i class="icon-append fa fa-clock-o"></i>
                             <script>
-                                $('select[name="DurationInMinutes"]').on('change',function(evt) {
+                                $('#<%= _dialog %> select[name="DurationInMinutes"]').on('change',function(evt) {
                                     loadPriceList();
                                 });
                             </script>
@@ -184,7 +187,7 @@
                                 $global.defaultPriceID = '<%= _viewModel.PriceID %>';
                             });
 
-                            $('select[name="PriceID"]').on('change',function(evt) {
+                            $('#<%= _dialog %> select[name="PriceID"]').on('change',function(evt) {
                                 calcTotalCost();
                             });
 
@@ -204,14 +207,14 @@
                         var $priceList;
                         console.log('debug...');
                         function loadPriceList() {
-                            $.post('<%= Url.Action("ListLessonPrice","CourseContract") %>',{ 'branchID':$('select[name="BranchID"]').val(), 'duration':$('select[name="DurationInMinutes"]').val(),'feature': $global.useLearnerDiscount ? '<%= (int?)Naming.LessonPriceFeature.舊會員續約 %>':null },function(data){
-                                $('select[name="PriceID"]').empty()
+                            $.post('<%= Url.Action("ListLessonPrice","CourseContract",new { _viewModel.PriceID }) %>',{ 'branchID':$('#<%= _dialog %> select[name="BranchID"]').val(), 'duration':$('#<%= _dialog %> select[name="DurationInMinutes"]').val(),'feature': $global.useLearnerDiscount ? '<%= (int?)Naming.LessonPriceFeature.舊會員續約 %>':null },function(data){
+                                $('#<%= _dialog %> select[name="PriceID"]').empty()
                                 .html('<option value="">請選擇</option>')
                                 .append($(data));
                                 //$('input[name="Lessons"]').val('');
                                 $priceList = [];
                                 $('#singlePrice').text('');
-                                $('select[name="PriceID"] option[lowerLimit]').each(function(idx,element) {
+                                $('#<%= _dialog %> select[name="PriceID"] option[lowerLimit]').each(function(idx,element) {
                                     var $opt = $(this);
                                     if($opt.attr('lowerLimit')!='') {
                                         $priceList.push({
@@ -227,13 +230,22 @@
                                 }
 
                                 if($global.defaultPriceID!='') {
-                                    $('select[name="PriceID"]').val($global.defaultPriceID);
+                                    $('#<%= _dialog %> select[name="PriceID"]').val($global.defaultPriceID);
                                     $global.defaultPriceID = '';
                                 } else {
                                     if($priceList.length>0) {
                                         matchLessonPrice();
                                     }
                                 }
+
+    <%  if (ViewBag.ViewOnly == true)
+        {   %>
+                                $('#<%= _dialog %> select').each(function (idx, element) {
+                                    var $this = $(this);
+                                    var $option = $this.find('option:selected');
+                                    $this.empty().append($option);
+                                });
+    <%  }   %>
                             });
                         }
 
@@ -260,17 +272,20 @@
             resizable: false,
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  合約名稱：1對1</h4></div>",
-            buttons: [{
+            buttons: [
+        <%  if (ViewBag.ViewOnly != true)
+        {   %>
+            {
                 html: "<i class='fa fa-floppy-o'></i>&nbsp; 儲存草稿",
                 "class": "btn bg-color-darken",
                 click: function () {
                     var $form = $('#<%= _dialog%> form');
                     clearErrors();
-                    $.post('<%= Url.Action("SaveContract","CourseContract",_viewModel.ContractID) %>',$form.serialize(),function(data) {
+                    $.post('<%= Url.Action("SaveContract", "CourseContract", _viewModel.ContractID) %>',$form.serialize(),function(data) {
                         if(data.result) {
                             alert('合約資料已儲存草稿!!');
                             showLoading();
-                            window.location.href='<%= Url.Action("CreateContract","CourseContract") %>';
+                            window.location.href='<%= Url.Action("CreateContract", "CourseContract") %>';
                         } else {
                             $(data).appendTo($('body'));
                         }
@@ -278,24 +293,27 @@
                     <%--$('#<%= _dialog%>').dialog("close");--%>
                 }
             }, {
-                html: "<i class='fa fa-check-square-o'></i>&nbsp; 提交",
-                "class": "btn bg-color-red",
+                html: "<i class='fa fa-send'></i>&nbsp; 確定產生合約",
+                "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認合約內容資料正確?")) {
                         var $form = $('#<%= _dialog%> form');
                         clearErrors();
-                        $.post('<%= Url.Action("CommitContract","CourseContract",_viewModel.ContractID) %>',$form.serialize(),function(data) {
+                        $.post('<%= Url.Action("CommitContract", "CourseContract", _viewModel.ContractID) %>',$form.serialize(),function(data) {
                             if(data.result) {
-                                alert(data.status == 1202 ? '合約資料待店長審核，請至行事曆待辦事項點選待簽名連結！' : '合約資料待客戶簽名，請至行事曆待辦事項點選待簽名連結！' );
+                                <%-- alert(data.status == 1202 ? '合約資料待店長審核，請至行事曆待辦事項點選待簽名連結！' : '合約資料待客戶簽名，請至行事曆待辦事項點選待簽名連結！' );--%>
+                                //window.open('<%= Url.Action("ContractSignatureView", "CourseContract") %>' + '?contractID=' + data.contractID, '_blank', 'fullscreen=yes');
                                 showLoading();
-                                window.location.href='<%= Url.Action("Index","CoachFacet") %>';
+                                window.location.href='<%= Url.Action("Index", "CoachFacet") %>';
                             } else {
                                 $(data).appendTo($('body'));
                             }
                         });
                     } 
                 }
-            }, <%--{
+            }, 
+        <%  }   %>
+            <%--{
                 html: "<i class='fa fa-pencil'></i>&nbsp; 送交簽名",
                 "class": "btn bg-color-green",
                 click: function () {
@@ -345,6 +363,7 @@
             };
         });
 
+    
     </script>
 </div>
 

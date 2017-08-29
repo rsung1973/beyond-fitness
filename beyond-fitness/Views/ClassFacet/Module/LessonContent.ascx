@@ -23,7 +23,7 @@
     <%  } %>
     <li class="pull-right">
         <span class="margin-top-10 display-inline">
-            <i class="fa fa-rss text-success"></i><span id="classTime"><%= String.Format("{0:yyyy/MM/dd H:mm}",_item.ClassTime) %>-<%= String.Format("{0:H:mm}",_item.ClassTime.Value.AddMinutes(_item.DurationInMinutes.Value)) %></span> (體能顧問：<%= _item.AsAttendingCoach.UserProfile.RealName %>)
+            <i class="fa fa-rss text-success"></i><span id="classTime"><%= String.Format("{0:yyyy/MM/dd H:mm}",_item.ClassTime) %>-<%= String.Format("{0:H:mm}",_item.ClassTime.Value.AddMinutes(_item.DurationInMinutes.Value)) %></span> (體能顧問：<%= _item.AsAttendingCoach.UserProfile.FullName() %>)
         </span>
     </li>
 </ul>

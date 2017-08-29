@@ -28,7 +28,7 @@
         <tr>
             <td><%= item.ContractNo %></td>
             <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
-            <td><%= item.ServingCoach.UserProfile.RealName %></td>
+            <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
                 <%  if (item.CourseContractType.IsGroup==true)
                     { %>
@@ -36,7 +36,7 @@
                 <%  }
                     else
                     { %>
-                <%= item.ContractOwner.RealName %>
+                <%= item.ContractOwner.FullName() %>
                 <%  } %>
             </td>
             <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
@@ -46,19 +46,19 @@
             <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>
             <td nowrap="noWrap">
                 <%  if(revision==null)
-                    { 
-                        if (item.Status >= (int)Naming.CourseContractStatus.待生效)
+                    {   %>
+                    <a onclick="$global.viewContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
+                    <%  if (item.Status > (int)Naming.CourseContractStatus.待審核)
                         { %>
-                    <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
                     <%  }
                         else
                         { %>
-                    <a href="<%= Url.Action("ViewContract","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
                     <%  }
                     }
                     else
                     {
-                        if (item.Status >= (int)Naming.CourseContractStatus.待生效)
+                        if (item.Status > (int)Naming.CourseContractStatus.待審核)
                         { %>
                     <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { revision.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
                     <%  }
@@ -112,6 +112,14 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
+
+        $global.viewContract = function (contractID) {
+            showLoading();
+            $.post('<%= Url.Action("EditCourseContract","CourseContract",new { viewOnly = true }) %>', { 'contractID': contractID }, function (data) {
+                hideLoading();
+                $(data).appendTo($('body'));
+            });
+        };
     });
 </script>
 

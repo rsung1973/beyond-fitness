@@ -671,7 +671,8 @@ namespace WebHome.Controllers
             }
             if (viewModel.CoachID.HasValue)
             {
-                items = items.Where(q => q.RegisterLesson.AdvisorID == viewModel.CoachID);
+                var uid = models.GetTable<LearnerFitnessAdvisor>().Where(l => l.CoachID == viewModel.CoachID).Select(l => l.UID);
+                items = items.Where(q => uid.Contains(q.UID));
             }
 
             return View("~/Views/CoachFacet/Module/QuestionnaireList.ascx", items);

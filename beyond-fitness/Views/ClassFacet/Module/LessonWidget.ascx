@@ -43,7 +43,7 @@
                                 <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
                                     <header>
                                         <span class="widget-icon"><i class="fa fa-calendar"></i></span>
-                                        <h2><%= _lesson.UserProfile.RealName %>行事曆</h2>
+                                        <h2><%= _lesson.UserProfile.FullName() %>行事曆</h2>
                                         <div class="widget-toolbar">
                                             <a href="#" class="btn  btn-primary" onclick="bookingByCoach('<%= DateTime.Today.ToString("yyyy-MM-dd") %>');">預約上課</a>
                                         </div>

@@ -25,11 +25,11 @@
                                 <%  item.UserProfile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %></a>
                         </em>
                         <time>
-                            <a href="http://line.me/R/msg/text/?Hi <%= item.UserProfile.RealName %>, 請記得登入http%3A%2F%2Fwww.beyond-fitness.tw%2F填寫課後滿意度問卷喔！">
+                            <a href="http://line.me/R/msg/text/?Hi <%= item.UserProfile.FullName() %>, 請記得登入http%3A%2F%2Fwww.beyond-fitness.tw%2F填寫課後滿意度問卷喔！">
                                 <img src="../img/line/linebutton_84x20_zh-hant.png" width="84" height="20" alt="用LINE傳送" />
                             </a>
                         </time>
-                        <span><%= item.UserProfile.RealName %>尚未填寫上課滿意度問卷
+                        <span><%= item.UserProfile.FullName() %>尚未填寫上課滿意度問卷
                                                             <br/>
                             <span class="font-xs text-muted"><i>提醒您通知學員登入系統後填寫滿意度問卷才可預約下一次上課！</i></span>
                         </span>

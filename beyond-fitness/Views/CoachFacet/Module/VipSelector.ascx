@@ -16,8 +16,8 @@
             foreach (var item in _items)
             { %>
                 <label class="radio">
-                <input type="radio" name="UID" value="<%= item.UID %>" data-name="<%= item.RealName %>" />
-                <i></i> <%= item.RealName %><%= item.Nickname!=null ? "("+item.Nickname+")" : null %>
+                <input type="radio" name="UID" value="<%= item.UID %>" data-name="<%= item.FullName() %>" />
+                <i></i> <%= item.FullName() %>
                 </label>
 
     <%      }   %>

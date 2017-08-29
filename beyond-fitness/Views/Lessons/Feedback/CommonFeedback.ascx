@@ -13,7 +13,7 @@
         <p class="alert alert-success">
         <%  foreach (var f in _lessonFeedback)
             { %>
-                <strong><i class="fa fa-commenting-o"></i><%= f.RegisterLesson.UserProfile.RealName %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.Remark %></strong><br />
+                <strong><i class="fa fa-commenting-o"></i><%= f.RegisterLesson.UserProfile.FullName() %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的課程有話要說:<%= f.Remark %></strong><br />
         <%  } %>
         </p>
 <%  } %>
@@ -22,7 +22,7 @@
         <p class="alert alert-info">
     <%  foreach (var f in _learnerFeedback)
         { %>
-            <strong><i class="fa fa-comments-o"></i><%= f.RegisterLesson.UserProfile.RealName %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的訓練內容回覆:<%= f.FeedBack %></strong><br />
+            <strong><i class="fa fa-comments-o"></i><%= f.RegisterLesson.UserProfile.FullName() %>針對<%= String.Format("{0:yyyy/MM/dd}",f.LessonTime.ClassTime) %>的訓練內容回覆:<%= f.FeedBack %></strong><br />
     <%  } %>
         </p>
 <%  } %>

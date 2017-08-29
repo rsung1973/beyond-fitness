@@ -46,7 +46,7 @@
             <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
                 <header>
                     <span class="widget-icon"><i class="fa fa-user-circle-o"></i></span>
-                    <h2>體能顧問：<%= _model.Conductor.RealName %></h2>
+                    <h2>體能顧問：<%= _model.Conductor.FullName() %></h2>
                     <div class="widget-toolbar">
                         <div class="widget-toolbar">
                             <%  if (_model.LevelID == (int)Naming.DocumentLevelDefinition.暫存)

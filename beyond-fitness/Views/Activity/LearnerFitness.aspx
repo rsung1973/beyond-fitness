@@ -71,7 +71,7 @@
                                 -->
                 <header>
                     <span class="widget-icon"><i class="fa fa-heart"></i></span>
-                    <h2><%= _profile.RealName %>的體能檢測表 </h2>
+                    <h2><%= _profile.FullName() %>的體能檢測表 </h2>
                     <div class="widget-toolbar">
                         <a onclick="addAssessment(<%= _profile.UID %>)" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i>新增測試項目</a>
                     </div>

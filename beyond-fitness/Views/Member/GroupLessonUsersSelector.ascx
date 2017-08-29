@@ -19,7 +19,7 @@
                 { %>
                     <label class="checkbox">
                         <input type="checkbox" name="registerID" value="<%= _items[i * 3 + j].RegisterID %>" <%= _items[i * 3 + j].RegisterGroupID==_model.RegisterGroupID ? "checked" : null %> />
-                        <i></i><%= _items[i * 3 + j].UserProfile.RealName %></label>
+                        <i></i><%= _items[i * 3 + j].UserProfile.FullName() %></label>
 <%              }
             } %>
 <%      }

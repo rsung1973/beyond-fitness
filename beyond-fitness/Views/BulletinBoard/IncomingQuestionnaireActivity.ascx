@@ -20,7 +20,7 @@
                             <span class="unread">
                                 <a onclick="learnerQuestionnaireActivity(event,<%= item.QuestionnaireID %>);" class="msg">
                                     <%  item.UserProfile.RenderUserPicture(Writer, new { @class = "air air-top-left margin-top-5", @style = "width:40px" }); %>
-                                    <span class="from"><%= item.UserProfile.RealName %><i class="icon-paperclip"></i></span>
+                                    <span class="from"><%= item.UserProfile.FullName() %><i class="icon-paperclip"></i></span>
                                     <time><%= String.Format("{0}",item.PDQTask.First().TaskDate) %>
                                         <%  if (item.Status == (int)Naming.IncommingMessageStatus.未讀)
                                             { %>
@@ -59,7 +59,9 @@
         }
         else
         {
-            questItems = questItems.Where(q => q.RegisterLesson.UserProfile.LearnerFitnessAdvisor.Any(f => f.CoachID == _profile.UID));
+            var uid = models.GetTable<LearnerFitnessAdvisor>().Where(l => l.CoachID == _profile.UID).Select(l => l.UID);
+            questItems = questItems.Where(q => uid.Contains(q.UID));
+
             _items = questItems.Where(q => q.Status == (int)Naming.IncommingMessageStatus.未讀)
                 .OrderByDescending(q => q.PDQTask.First().TaskDate);
         }

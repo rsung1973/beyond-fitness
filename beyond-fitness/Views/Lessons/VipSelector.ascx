@@ -18,7 +18,7 @@
             { %>
                 <label class="radio">
                 <input type="radio" name="UID" value="<%= item.UID %>" />
-                <i></i><div><%= item.RealName %>「P.I session」
+                <i></i><div><%= item.FullName() %>「P.I session」
                     </div>
                 </label>
 

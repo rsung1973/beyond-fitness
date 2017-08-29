@@ -17,7 +17,7 @@
                     <% item.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:80px" }); %>
                     <div class="message-text">
                         <time><%= String.Format("{0:yyyy/MM/dd HH:mm}",item.RemarkDate) %>
-                        </time><a class="username"><%= item.RegisterLesson.UserProfile.RealName %></a>
+                        </time><a class="username"><%= item.RegisterLesson.UserProfile.FullName() %></a>
                         <%= item.Remark %>
                     </div>
                 </li>

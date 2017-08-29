@@ -20,7 +20,7 @@
                     <span class="padding-10">
                         <em class="badge padding-5 no-border-radius bg-color-darken pull-left margin-right-5">
                             <%  item.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %></em>
-                        <span><%= item.RealName %> <%= item.Birthday.Value.DayOfYear == DateTime.Today.DayOfYear ? "今天" : String.Format("{0:M月d日}",item.Birthday) %>生日喔！
+                        <span><%= item.FullName() %> <%= item.Birthday.Value.DayOfYear == DateTime.Today.DayOfYear ? "今天" : String.Format("{0:M月d日}",item.Birthday) %>生日喔！
                                                             <a href="http://line.me/R/msg/text/?在這特別的一天, 祝你生日快樂">
                                                                 <img src="../img/line/linebutton_84x20_zh-hant.png" width="84" height="20" alt="用LINE傳送" /></a>
                         </span>

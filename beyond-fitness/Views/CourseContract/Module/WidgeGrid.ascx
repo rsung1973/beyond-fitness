@@ -41,7 +41,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
-                        <form action="<%= Url.Action("InquireContract","CourseContract") %>" method="post" id="search-form" class="smart-form">
+                        <form action="<%= Url.Action("InquireContract","CourseContract") %>" method="post" class="smart-form">
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
@@ -82,7 +82,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號" />
                                         </label>
                                     </section>
-                                <%  if (_profile.IsAssistant())
+                                    <%  if (_profile.IsAssistant())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>
@@ -94,7 +94,7 @@
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
                                     </section>
-                                <%  }
+                                    <%  }
                                     else
                                     {
                                         //ViewBag.DataItems = models.GetTable<CoachWorkplace>().Where(w => w.CoachID == _profile.UID)
@@ -122,9 +122,9 @@
                                             <select class="input" name="Status">
                                                 <option value="">全部</option>
                                                 <option value="1201">草稿</option>
-                                                <option value="1202">待審核</option>
+                                                <option value="1202">待確認</option>
                                                 <option value="1203">待簽名</option>
-                                                <option value="1204">待生效</option>
+                                                <option value="1204">待審核</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>

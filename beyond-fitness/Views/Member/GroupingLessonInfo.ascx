@@ -13,7 +13,7 @@
         foreach (var item in _model.RegisterLesson)
         {
             idx++;%>
-            <li class='<%= idx==1 ? "active" : null %>'><a id='<%= "toggleTab-" + idx %>' data-target='<%= "#tab-" + idx %>' role="tab" data-toggle="tab"><i class="fa fa-th-list"></i><%= item.UserProfile.RealName %></a></li>
+            <li class='<%= idx==1 ? "active" : null %>'><a id='<%= "toggleTab-" + idx %>' data-target='<%= "#tab-" + idx %>' role="tab" data-toggle="tab"><i class="fa fa-th-list"></i><%= item.UserProfile.FullName() %></a></li>
     <%  } %>
 </ul>
 <!-- Tab panels -->

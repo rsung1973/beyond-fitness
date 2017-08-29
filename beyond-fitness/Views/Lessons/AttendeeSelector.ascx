@@ -37,7 +37,7 @@
                     <%  }
                         else
                         {   %>
-                            <%= item.UserProfile.RealName %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
+                            <%= item.UserProfile.FullName() %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
                         <%  if( item.GroupingMemberCount>1)
                             {   %>
                             <li class="fa fa-group"></li>
@@ -75,7 +75,7 @@
                                     if (r.IntuitionCharge == null || r.IntuitionCharge.TuitionInstallment.Count() == 0)
                                     {%>
                                         <span class="label label-danger">
-                                            <li class="fa fa-exclamation-triangle"></li> <%= r.UserProfile.RealName %>未有付款紀錄!!!</span>
+                                            <li class="fa fa-exclamation-triangle"></li> <%= r.UserProfile.FullName() %>未有付款紀錄!!!</span>
                         <%  
                                     }
                                 }

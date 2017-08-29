@@ -141,6 +141,7 @@ namespace WebHome.Controllers
 
             viewModel.ListPriceSeries = new int?[16];
             viewModel.PriceSeriesID = new int?[16];
+            viewModel.ReadOnly = new bool?[16];
 
             var item = models.GetTable<LessonPriceSeries>().Where(p => p.PriceID == viewModel.SeriesID).FirstOrDefault();
             if (item != null)
@@ -158,24 +159,28 @@ namespace WebHome.Controllers
                     {
                         viewModel.ListPriceSeries[i * 4] = price.ListPrice;
                         viewModel.PriceSeriesID[i * 4] = price.PriceID;
+                        viewModel.ReadOnly[i * 4] = price.RegisterLesson.Count > 0 || price.CourseContract.Count > 0;
                     }
                     price = priceItems.Where(p => p.LowerLimit == limitItems[i] && p.DurationInMinutes == 90 && !p.Description.Contains("舊會員")).FirstOrDefault();
                     if (price != null)
                     {
                         viewModel.ListPriceSeries[i * 4 + 1] = price.ListPrice;
                         viewModel.PriceSeriesID[i * 4 + 1] = price.PriceID;
+                        viewModel.ReadOnly[i * 4 + 1] = price.RegisterLesson.Count > 0 || price.CourseContract.Count > 0;
                     }
                     price = priceItems.Where(p => p.LowerLimit == limitItems[i] && p.DurationInMinutes == 60 && p.Description.Contains("舊會員")).FirstOrDefault();
                     if (price != null)
                     {
                         viewModel.ListPriceSeries[i * 4 + 2] = price.ListPrice;
                         viewModel.PriceSeriesID[i * 4 + 2] = price.PriceID;
+                        viewModel.ReadOnly[i * 4 + 2] = price.RegisterLesson.Count > 0 || price.CourseContract.Count > 0;
                     }
                     price = priceItems.Where(p => p.LowerLimit == limitItems[i] && p.DurationInMinutes == 90 && p.Description.Contains("舊會員")).FirstOrDefault();
                     if (price != null)
                     {
                         viewModel.ListPriceSeries[i * 4 + 3] = price.ListPrice;
                         viewModel.PriceSeriesID[i * 4 + 3] = price.PriceID;
+                        viewModel.ReadOnly[i * 4 + 3] = price.RegisterLesson.Count > 0 || price.CourseContract.Count > 0;
                     }
                 }
             }
@@ -298,7 +303,7 @@ namespace WebHome.Controllers
                         }
 
                         items[idx].Description = String.Format("【{0}-{1:00}】《{2}》{3}堂 / {4}分鐘{5}",
-                            viewModel.Year, periodNo, branch.BranchName, lowerLimit[i], duration[d], info[f]);
+                            viewModel.Year, item.PeriodNo, branch.BranchName, lowerLimit[i], duration[d], info[f]);
                         items[idx].ListPrice = viewModel.ListPriceSeries[idx];
                         items[idx].Status = viewModel.Status;
                         items[idx].BranchID = branch.BranchID;

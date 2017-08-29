@@ -476,11 +476,10 @@
                                                       <table id="provelist_dt" class="table table-striped table-bordered table-hover" width="100%">
                                                          <thead>
                                                             <tr>
-                                                               <th></th>
-                                                               <th class="text-center">草稿</th>
+                                                               <th>合約項目</th>
+                                                               <th class="text-center">草稿/退件</th>
                                                                <th class="text-center">待客戶簽名</th>
-                                                               <th class="text-center">待審核</th>                                                               
-<!--                                                               <th class="text-center">待生效</th>-->
+                                                               <th class="text-center">待審核</th>
                                                             </tr>
                                                          </thead>
                                                          <tbody>
@@ -488,23 +487,59 @@
                                                                <td>新合約(15)</td>
                                                                <td class="text-center"><a href="#" id="draftContractlistDialog_link"><u>(10)</u></a></td>
                                                                <td class="text-center"><a href="#" id="approveContractlistDialog_link"><u>(2)</u></a></td>
-                                                               <td class="text-center"><a href="#" id="signContractlistDialog_link"><u>(1)</u></a></td>                                                               
-<!--                                                               <td class="text-center"><a href="#" id="effectiveContractlistDialog_link"><u>(2)</u></a></td>-->
+                                                               <td class="text-center"><a href="#" id="signContractlistDialog_link"><u>(1)</u></a></td> 
                                                             </tr>
                                                             <tr>
                                                                <td>服務申請(14)</td>
-                                                               <td class="text-center">--</u></a></td>
+                                                               <td class="text-center">--</td>
                                                                <td class="text-center"><a href="#" id="applylistDialog_link"><u>(1)</u></a></td>
-                                                               <td class="text-center"><a href="#" id="approveApplylistDialog_link"><u>(2)</u></a></td>                                                               
-<!--                                                               <td class="text-center">--</td>-->
+                                                               <td class="text-center"><a href="#" id="approveApplylistDialog_link"><u>(2)</u></a></td> 
+                                                            </tr>                                                    
+                                                         </tbody>
+                                                      </table>                                                                                                     
+                                                   </div>
+                                                   <!-- end widget content -->
+                                                </div>
+                                                <!-- end widget div -->
+                                                <!-- widget div-->
+                                                <div class="row padding-5">
+                                                   <!-- widget content -->
+                                                   <div class="widget-body txt-color-white">
+                                                      <table id="provelist_dt" class="table table-striped table-bordered table-hover" width="100%">
+                                                         <thead>
+                                                            <tr>
+                                                               <th>收款項目</th>
+                                                               <th class="text-center">退件</th>
+                                                               <th class="text-center">待結帳勾記</th>
+                                                               <th class="text-center">待審核（作廢）</th>
+                                                            </tr>
+                                                         </thead>
+                                                         <tbody>                                                            
+                                                            <tr>
+                                                               <td>體能顧問費(11)</td>
+                                                               <td class="text-center"><u>(3)</u></td>                                                               
+                                                                <td class="text-center"><a href="#" class="approvePaymentlistDialog_link"><u>(2)</u></a></td>
+                                                               <td class="text-center"><u>(1)</u></td>
+                                                            </tr> 
+                                                            <tr>
+                                                               <td>自主訓練(5)</td>
+                                                               <td class="text-center">--</td>                                                                                                                              
+                                                               <td class="text-center"><a href="#" class="approvePaymentlistDialog_link"><u>(2)</u></a></td>
+                                                               <td class="text-center">--</td>
                                                             </tr>
                                                             <tr>
-                                                               <td>收款(7)</td>
-                                                               <td class="text-center">--</td>                                                               
+                                                               <td>飲品(7)</td>
+                                                               <td class="text-center">--</td>  
+                                                               <td class="text-center"><a href="#" class="approvePaymentlistDialog_link"><u>(2)</u></a></td>
                                                                <td class="text-center">--</td>
-<!--                                                               <td class="text-center"><a href="#" id=""><u>(2)</u></a></td>-->
-                                                                <td class="text-center"><u>(5)</u></td>
-                                                            </tr>                                                           
+                                                                                                                             
+                                                            </tr>
+                                                            <tr>
+                                                               <td>運動商品(3)</td>
+                                                               <td class="text-center">--</td>                                                               
+                                                               <td class="text-center"><a href="#" class="approvePaymentlistDialog_link"><u>(2)</u></a></td>
+                                                               <td class="text-center">--</td>    
+                                                            </tr>
                                                          </tbody>
                                                       </table>                                                                                                     
                                                    </div>
@@ -1826,12 +1861,12 @@
             <!-- dialog-message -->                
          </div>
             <!-- ui-dialog -->
-            <div id="draftContractlistDialog" title="待辦事項：新合約(草稿)" class="bg-color-darken">
+            <div id="draftContractlistDialog" title="待辦事項：新合約(草稿/退件)" class="bg-color-darken">
                <!-- content -->
                 <table id="contractlist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
                    <thead>
                       <tr>
-                         <th data-hide="phone">體能顧問</th>
+                         <th data-hide="phone">簽約體能顧問</th>
                          <th data-class="expand">學員</th>
                          <th>編輯日期</th>
                          <th>合約名稱</th>
@@ -1859,7 +1894,7 @@
                 <table id="approvecontractlist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
                    <thead>
                       <tr>
-                         <th data-hide="phone">體能顧問</th>
+                         <th data-hide="phone">簽約體能顧問</th>
                          <th data-class="expand">學員</th>
                          <th>編輯日期</th>
                          <th>合約名稱</th>
@@ -1886,7 +1921,7 @@
                 <table id="signcontractlist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
                    <thead>
                       <tr>
-                         <th data-hide="phone">體能顧問</th>
+                         <th data-hide="phone">簽約體能顧問</th>
                          <th data-class="expand">學員</th>
                          <th>編輯日期</th>
                          <th>合約類型</th>
@@ -1906,35 +1941,7 @@
                 </table>               
                <!-- end content -->
             </div>
-            <!-- dialog-message -->   
-            <!-- ui-dialog -->
-            <div id="effectiveContractlistDialog" title="待辦事項：新合約(待生效)" class="bg-color-darken">
-               <!-- content -->
-                <table id="effectivecontractlist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
-                   <thead>
-                      <tr>
-                         <th data-hide="phone">體能顧問</th>
-                         <th data-class="expand">學員</th>
-                         <th>編輯日期</th>
-                         <th>合約名稱</th>
-                      </tr>
-                   </thead>
-                   <tbody>
-                      <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
-                         <td>2017/01/05</td>
-                         <td>          
-                            <a href="contract_cpa.pdf" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
-                             1對1
-                         </td>
-                      </tr>
-                   </tbody>
-                </table>               
-               <!-- end content -->
-            </div>
-            <!-- dialog-message -->              
+            <!-- dialog-message -->                
             <!-- ui-dialog -->
             <div id="modifyPersonalContractDialog" title="編輯合約資料(1對1)" class="bg-color-darken">
                <div class="modal-body bg-color-darken txt-color-white no-padding">
@@ -2063,12 +2070,12 @@
             </div>                            
              <!-- dialog-message --> 
             <!-- ui-dialog -->
-            <div id="draftApplylistDialog" title="待辦事項：服務申請(草稿)" class="bg-color-darken">
+            <div id="draftApplylistDialog" title="待辦事項：服務申請(草稿/退件)" class="bg-color-darken">
                <!-- content -->
                 <table id="contractlist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
                    <thead>
                       <tr>
-                         <th data-hide="phone">體能顧問</th>
+                         <th data-hide="phone">簽約體能顧問</th>
                          <th data-class="expand">學員</th>
                          <th>編輯日期</th>
                          <th>申請項目</th>
@@ -2096,7 +2103,7 @@
                 <table id="approveApplylist_dt" class="table table-striped table-bordered table-hover" width="100%" autofocus>
                    <thead>
                       <tr>
-                         <th data-hide="phone">體能顧問</th>
+                         <th data-hide="phone">簽約體能顧問</th>
                          <th data-class="expand">學員</th>
                          <th>編輯日期</th>
                          <th>申請項目</th>
@@ -2357,7 +2364,50 @@
                   </form>
                </div>
             </div>                              
-             <!-- dialog-message -->             
+             <!-- dialog-message --> 
+            <!-- ui-dialog -->
+            <div id="approvePaymentlistDialog" title="待辦事項：收款項目(待勾記)" class="bg-color-darken">
+               <!-- content -->
+                <table id="approvePaymentlist_dt" class="table table-striped table-bordered table-hover" width="100%">
+                                  <thead>
+                                     <tr>
+                                        <th data-class="expand">發票號碼</th>
+                                        <th>分店</th>
+                                        <th data-hide="phone">收款人</th>
+                                        <th>學員</th>
+                                        <th>收款日期</th>
+                                        <th data-hide="phone">收款品項</th>
+                                        <th>金額</th>          
+                                        <th data-hide="phone">收款方式</th>
+                                        <th data-hide="phone">發票類型</th>
+                                        <th data-hide="phone">發票狀態</th>
+                                        <th data-hide="phone,tablet">買受人統編</th>
+                                        <th data-hide="phone,tablet">合約編號</th>
+                                        <th data-hide="phone,tablet">功能</th>
+                                     </tr>
+                                  </thead>
+                                  <tbody>
+                                     <tr>
+                                        <td>AU00000001</td>
+                                        <td>小巨蛋</td>
+                                        <td>黃政浩 Bill</td>
+                                        <td>鄭胖子</td>
+                                        <td>2017/01/05</td>
+                                        <td>體能顧問服務費</td>
+                                        <td>20,000</td>
+                                        <td>現金</td>
+                                        <td>紙本</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td noWrap="noWrap">CPA201701050001-00</td>
+                                        <td noWrap="noWrap"><a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a></td>
+                                     </tr>
+                                     
+                                  </tbody>
+                               </table>            
+               <!-- end content -->
+            </div>
+            <!-- dialog-message -->              
       </div>
       <!-- END MAIN PANEL -->
       <!-- PAGE FOOTER -->
@@ -2645,7 +2695,7 @@
                modal : true,
                width: "auto",
                height: "auto",    
-               title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：新合約(草稿)</h4>"
+               title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：新合約(草稿/退件)</h4>"
             });   
              
             $('#approveContractlistDialog_link').click(function() {
@@ -2827,7 +2877,23 @@
                          $(this).dialog("close");
                      }
                   }]
-             });              
+             });      
+             
+             // Dialog click
+             $('.approvePaymentlistDialog_link').click(function() {
+               $('#approvePaymentlistDialog').dialog('open');
+               return false;
+         
+             });   
+         
+             $('#approvePaymentlistDialog').dialog({
+                  autoOpen : false,
+                  width : "auto",
+                  resizable : false,
+                  modal : true,
+                  title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：收款項目-自主訓練(待勾記)</h4>"
+             }); 
+                          
              
              /*
               * FULL CALENDAR JS

@@ -11,6 +11,8 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
+            <%  if (ViewBag.ViewOnly != true)
+                { %>
             <th>
                 <%--<%  String display = "none";
                     if ((ViewBag.ContractType==1 && _model.Count()<1)
@@ -21,6 +23,7 @@
                     } %>--%>
                 <a href="#" class="btn btn-primary addMember"><i class="fa fa-fw fa-user-plus"></i>新增</a>
             </th>
+            <%  } %>
             <th data-class="expand">姓名</th>
             <th>身份證字號/護照號碼</th>
             <th>性別</th>
@@ -36,12 +39,15 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
+            <%  if (ViewBag.ViewOnly != true)
+                { %>
             <th nowrap="noWrap">
                 <input type="hidden" name="UID" value="<%= item.UID %>" />
                 <a onclick="$global.editContractMember(<%= item.UID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
                                    <a onclick="$global.deleteContractMember(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
             </th>
-            <td><%= (ViewBag.ContractType==2 || ViewBag.ContractType==3) && ViewBag.OwnerID==item.UID ? "*" : null %><%= item.RealName %></td>
+            <%  } %>
+            <td><%= (ViewBag.ContractType==2 || ViewBag.ContractType==3) && ViewBag.OwnerID==item.UID ? "*" : null %><%= item.FullName() %></td>
             <td nowrap="noWrap"><%= item.UserProfileExtension.IDNo %></td>
             <td><%= item.UserProfileExtension.Gender %></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.Birthday) %></td>

@@ -19,13 +19,13 @@
                             <td colspan="2">合約編號：<%= _contract.ContractNo %></td>
                         </tr>
                         <tr>
-                            <td>姓名：<%= _contract.ContractOwner.RealName %></td>
+                            <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
                             <td>聯絡電話：<%= _contract.ContractOwner.Phone %></td>
                         </tr>
                     </tbody>
                     <tbody>
                         <tr>
-                            <td colspan="2">申請項目：<%  if (_contract.Status >= (int)Naming.CourseContractStatus.待生效)
+                            <td colspan="2">申請項目：<%  if (_contract.Status >= (int)Naming.CourseContractStatus.待審核)
                                 { %>
                                 ☑
                             <%  }
@@ -41,7 +41,7 @@
                         <tr>
                             <td colspan="2">
                                 <%  var original = _model.SourceContract; %>
-                            申請內容：原合約編號 <%= original.ContractNo %> 剩餘上課堂數：<%= original.RegisterLessonContract.Count>0 ? original.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : original.Lessons %>堂，全部轉讓至 <%= _contract.ContractOwner.RealName %>。</td>
+                            申請內容：原合約編號 <%= original.ContractNo %> 剩餘上課堂數：<%= original.RegisterLessonContract.Count>0 ? original.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : original.Lessons %>堂，全部轉讓至 <%= _contract.ContractOwner.FullName() %>。</td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2"><%= _contract.Remark %></td>
@@ -94,7 +94,7 @@
         _model = (CourseContractRevision)this.Model;
         _contract = _model.CourseContract;
         _owner = _contract.CourseContractMember.Where(m => m.UID == _contract.OwnerID).First();
-        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待生效).FirstOrDefault();
+        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待審核).FirstOrDefault();
         if (item != null)
         {
             _signatureDate = item.LevelDate;

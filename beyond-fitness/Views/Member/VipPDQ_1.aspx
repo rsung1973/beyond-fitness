@@ -30,7 +30,7 @@
                     <h4 class="classic-title"><span>PDQ - Step 2</span></h4>
                     <!-- Start Contact Form -->
                     <p><strong>會員編號：</strong><span class="text-primary"><%= _model.MemberCode %></span></p>
-                    <p><strong>學員姓名：</strong><span class="text-primary"><%= _model.RealName %></span></p>
+                    <p><strong>學員姓名：</strong><span class="text-primary"><%= _model.FullName() %></span></p>
 
                     <div class="hr1" style="margin: 5px 0px;"></div>
                     <!-- Divider -->

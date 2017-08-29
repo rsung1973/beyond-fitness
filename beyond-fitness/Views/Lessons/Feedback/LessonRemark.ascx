@@ -21,7 +21,7 @@
                 <div class="panel panel-default bg-color-darken no-padding">
                     <div class="who clearfix">
                         <%  _model.RegisterLesson.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:40px" }); %>
-                        <span class="name font-lg"><b><%= _model.RegisterLesson.UserProfile.RealName %></b></span><br />
+                        <span class="name font-lg"><b><%= _model.RegisterLesson.UserProfile.FullName() %></b></span><br />
                         <span class="from font-md"><%= _model.Remark %></span>
                     </div>
                     <form id="remarkForm" action="<%= Url.Action("CommitLessonRemark","Lessons",new { id = _model.LessonID }) %>" method="post" class="smart-form">

@@ -25,7 +25,7 @@
                 <%  }
                     else
                     { %>
-                        與<%= _model.Lesson.AsAttendingCoach.UserProfile.RealName %>一起運動喔！
+                        與<%= _model.Lesson.AsAttendingCoach.UserProfile.FullName() %>一起運動喔！
                 <%  } %>
             </p>
             <p>

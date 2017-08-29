@@ -59,7 +59,7 @@
                             foreach (var item in learnerLesson)
                             { %>
                         <li>
-                            <a data-toggle="tab" href="#<%= prefix + item.RegisterID %>"><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i><%= item.UserProfile.RealName %></span></a>
+                            <a data-toggle="tab" href="#<%= prefix + item.RegisterID %>"><span class="badge bg-color-blue txt-color-white"><i class="<%= item.UserProfile.UserProfileExtension.Gender == "F" ? "fa fa-female" : "fa fa-male" %>"></i><%= item.UserProfile.FullName() %></span></a>
                         </li>
                         <%  } %>
                     </ul>

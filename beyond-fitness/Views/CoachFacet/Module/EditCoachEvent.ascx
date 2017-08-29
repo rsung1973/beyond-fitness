@@ -90,7 +90,7 @@
                     <div class="col col-4">
                         <label class="checkbox">
                             <input type="checkbox" name="MemberID" value="<%= items[idx].UID %>" <%= _viewModel.MemberID!=null && _viewModel.MemberID.Contains(items[idx].UID) ? "checked" : null %> />
-                            <i></i><%= items[idx].RealName %></label>
+                            <i></i><%= items[idx].FullName() %></label>
                     </div>
                     <%
                     idx++;

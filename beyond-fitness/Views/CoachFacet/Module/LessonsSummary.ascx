@@ -12,7 +12,7 @@
 <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
     <header>
         <span class="widget-icon"><i class="fa fa-check"></i></span>
-        <h2><span id="inspectedCoachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.RealName %></span>的待辦事項：<span id="queryInterval"><%= _viewModel.QueryStart.HasValue ? String.Format("{0:yyyy/MM}",_viewModel.QueryStart) : "全部" %></span></h2>
+        <h2><span id="inspectedCoachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.FullName() %></span>的待辦事項：<span id="queryInterval"><%= _viewModel.QueryStart.HasValue ? String.Format("{0:yyyy/MM}",_viewModel.QueryStart) : "全部" %></span></h2>
         <div class="widget-toolbar">
             <div class="btn-group">
                 <button class="btn dropdown-toggle btn-xs btn-warning" data-toggle="dropdown">
@@ -49,14 +49,14 @@
                             foreach (var item in items)
                             { %>
                     <li>
-                        <a href="javascript:selectInspectedCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.RealName %>');"><%= item.UserProfile.RealName %></a>
+                        <a href="javascript:selectInspectedCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.FullName() %>');"><%= item.UserProfile.FullName() %></a>
                     </li>
                     <%      }
                         }
                         else
                         {   %>
                     <li>
-                        <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.RealName %></a>
+                        <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
                     </li>
                     <%  } %>
                 </ul>

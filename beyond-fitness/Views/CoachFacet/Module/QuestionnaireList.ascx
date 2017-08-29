@@ -22,7 +22,7 @@
             <%  foreach (var item in _model)
                 { %>
             <tr>
-                <td><%= item.UserProfile.RealName %></td>
+                <td><%= item.UserProfile.FullName() %></td>
                 <td><%  if (item.PDQTask.Count == 0)
                         {
                             if (item.Status == (int)Naming.IncommingMessageStatus.拒答)
@@ -35,7 +35,7 @@
                                 {   %>
                             <a href="#" onclick="$global.rejectQuestionnaire(<%= item.QuestionnaireID %>);" class="btn btn-circle bg-color-redLight"><i class="fa fa-fw fa fa-lg fa-times" aria-hidden="true"></i></a>
                             <%  } %>
-                            <a href="http://line.me/R/msg/text/?Hi <%= item.UserProfile.RealName %>, 請記得登入http%3A%2F%2Fwww.beyond-fitness.tw%2F填寫階段性調整計劃喔！" target="_blank" class="btn btn-circle bg-color-greenLight">LINE</a>
+                            <a href="http://line.me/R/msg/text/?Hi <%= item.UserProfile.FullName() %>, 請記得登入http%3A%2F%2Fwww.beyond-fitness.tw%2F填寫階段性調整計劃喔！" target="_blank" class="btn btn-circle bg-color-greenLight">LINE</a>
                             尚未填寫
                     <%      }
                         }

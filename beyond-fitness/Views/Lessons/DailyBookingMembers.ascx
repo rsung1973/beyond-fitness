@@ -32,13 +32,13 @@
                             <%  }
                                 else
                                 { %>
-                                    <i class="fa fa-child fa-2x text-danger"></i><%= item.RegisterLesson.UserProfile.RealName %>
+                                    <i class="fa fa-child fa-2x text-danger"></i><%= item.RegisterLesson.UserProfile.FullName() %>
                             <%  } %>
                         </td>
                         <td class="col-xs-1 col-sm-1">
                             <%= item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練
                                     ? "內部訓練"
-                                    : item.LessonTime.AsAttendingCoach.UserProfile.RealName %>
+                                    : item.LessonTime.AsAttendingCoach.UserProfile.FullName() %>
                         </td> 
                         <td><%= item.LessonTime.TrainingPlan.Count==0
                                     ? item.LessonTime.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約 

@@ -23,7 +23,7 @@
                         <div class="panel-body status smart-form vote">
                             <div class="who clearfix">
                                 <%  _model.UserProfile.RenderUserPicture(Writer, new { @class = "profileImg online", @style = "width:40px" }); %>
-                                <span class="name font-lg"><b>Hi, <%= _model.UserProfile.RealName %></b></span><br />
+                                <span class="name font-lg"><b>Hi, <%= _model.UserProfile.FullName() %></b></span><br />
                                 <span class="from font-md">為了讓您的體能顧問做出更優化的階段性調整，下方提供
                 &lt;六個小問題&gt;
                 請您回答補充，資料僅提供訓練使用，不會外洩，敬請放心填寫！</span>

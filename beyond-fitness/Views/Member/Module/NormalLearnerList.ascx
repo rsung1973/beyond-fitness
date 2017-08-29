@@ -33,7 +33,7 @@
                 idx++;%>
         <tr>
             <td><%= String.Join("<br/>",item.RegisterLesson.Where(r=>r.AdvisorID.HasValue).Select(r=>r.ServingCoach.UserProfile.RealName).Distinct())  %></td>
-            <td><%= item.RealName %></td>
+            <td><%= item.FullName() %></td>
             <td><%= item.Phone %></td>
             <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>
             <td><%= item.MemberCode %></td>

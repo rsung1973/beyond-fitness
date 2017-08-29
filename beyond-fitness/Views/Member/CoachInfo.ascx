@@ -11,9 +11,9 @@
 
 <div class="col-xs-6 col-sm-5">
     <h1>
-        <span class="semi-bold"><%= _model.RealName %></span>
+        <span class="semi-bold"><%= _model.FullName() %></span>
     </h1>
-    <p class="font-md">關於<%= _model.UserName ?? _model.RealName %>...</p>
+    <p class="font-md">關於<%= _model.UserName ?? _model.FullName() %>...</p>
     <p>
         <%= _model.ServingCoach.Description.HtmlBreakLine() %>
     </p>

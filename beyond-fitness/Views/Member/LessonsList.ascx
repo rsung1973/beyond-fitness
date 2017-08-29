@@ -47,7 +47,7 @@
                                             { %>
                                                 <li>
                                                     <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ShowLearner/") + g.UID %>">
-                                                        <% g.UserProfile.RenderUserPicture(Writer, "_" + g.UID ); %><%= g.UserProfile.RealName %></a>
+                                                        <% g.UserProfile.RenderUserPicture(Writer, "_" + g.UID ); %><%= g.UserProfile.FullName() %></a>
                                                 </li>
                                         <%  } %>
                                     </ul>
