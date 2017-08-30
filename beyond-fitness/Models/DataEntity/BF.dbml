@@ -56,6 +56,8 @@
       <Association Name="LevelExpression_LessonPriceProperty" Member="LessonPriceProperty" ThisKey="LevelID" OtherKey="PropertyID" Type="LessonPriceProperty" />
       <Association Name="LevelExpression_Payment" Member="Payment" ThisKey="LevelID" OtherKey="Status" Type="Payment" />
       <Association Name="LevelExpression_MerchandiseWindow" Member="MerchandiseWindow" ThisKey="LevelID" OtherKey="Status" Type="MerchandiseWindow" />
+      <Association Name="LevelExpression_VoidPayment" Member="VoidPayment" ThisKey="LevelID" OtherKey="Status" Type="VoidPayment" />
+      <Association Name="LevelExpression_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="LevelID" OtherKey="LevelID" Type="VoidPaymentLevel" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -225,6 +227,9 @@
       <Association Name="UserProfile_LearnerFitnessAdvisor" Member="LearnerFitnessAdvisor" ThisKey="UID" OtherKey="UID" Type="LearnerFitnessAdvisor" />
       <Association Name="UserProfile_UserProfileExtension" Member="UserProfileExtension" ThisKey="UID" OtherKey="UID" Type="UserProfileExtension" Cardinality="One" />
       <Association Name="UserProfile_Payment" Member="Payment" ThisKey="UID" OtherKey="HandlerID" Type="Payment" />
+      <Association Name="UserProfile_PaymentAudit" Member="PaymentAudit" ThisKey="UID" OtherKey="AuditorID" Type="PaymentAudit" />
+      <Association Name="UserProfile_VoidPayment" Member="VoidPayment" ThisKey="UID" OtherKey="HandlerID" Type="VoidPayment" />
+      <Association Name="UserProfile_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="UID" OtherKey="ExecutorID" Type="VoidPaymentLevel" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1080,6 +1085,8 @@
       <Association Name="Payment_ContractPayment" Member="ContractPayment" ThisKey="PaymentID" OtherKey="PaymentID" Type="ContractPayment" Cardinality="One" />
       <Association Name="Payment_TuitionInstallment" Member="TuitionInstallment" ThisKey="PaymentID" OtherKey="InstallmentID" Type="TuitionInstallment" Cardinality="One" />
       <Association Name="Payment_PaymentTransaction" Member="PaymentTransaction" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentTransaction" Cardinality="One" />
+      <Association Name="Payment_PaymentAudit" Member="PaymentAudit" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentAudit" Cardinality="One" />
+      <Association Name="Payment_VoidPayment" Member="VoidPayment" ThisKey="PaymentID" OtherKey="VoidID" Type="VoidPayment" Cardinality="One" />
       <Association Name="InvoiceItem_Payment" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
       <Association Name="LevelExpression_Payment" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_Payment" Member="UserProfile" ThisKey="HandlerID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1405,6 +1412,40 @@
       <Column Name="ProductCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="MerchandiseWindow_PaymentOrder" Member="MerchandiseWindow" ThisKey="ProductID" OtherKey="ProductID" Type="MerchandiseWindow" IsForeignKey="true" />
       <Association Name="PaymentTransaction_PaymentOrder" Member="PaymentTransaction" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentTransaction" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PaymentAudit" Member="PaymentAudit">
+    <Type Name="PaymentAudit">
+      <Column Name="PaymentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AuditorID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AuditDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Payment_PaymentAudit" Member="Payment" ThisKey="PaymentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
+      <Association Name="UserProfile_PaymentAudit" Member="UserProfile" ThisKey="AuditorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VoidPayment" Member="VoidPayment">
+    <Type Name="VoidPayment">
+      <Column Name="VoidID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VoidDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="HandlerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="Drawback" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="VoidPayment_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="VoidID" OtherKey="VoidID" Type="VoidPaymentLevel" />
+      <Association Name="LevelExpression_VoidPayment" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="Payment_VoidPayment" Member="Payment" ThisKey="VoidID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
+      <Association Name="UserProfile_VoidPayment" Member="UserProfile" ThisKey="HandlerID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VoidPaymentLevel" Member="VoidPaymentLevel">
+    <Type Name="VoidPaymentLevel">
+      <Column Name="VoidID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LevelDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ExecutorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LevelID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="LevelExpression_VoidPaymentLevel" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="UserProfile_VoidPaymentLevel" Member="UserProfile" ThisKey="ExecutorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+      <Association Name="VoidPayment_VoidPaymentLevel" Member="VoidPayment" ThisKey="VoidID" OtherKey="VoidID" Type="VoidPayment" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

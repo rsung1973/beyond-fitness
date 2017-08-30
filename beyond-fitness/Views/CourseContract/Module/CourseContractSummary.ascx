@@ -114,12 +114,6 @@
                 <%  } %>
             </td>
         </tr>
-        <tr>
-            <td>收款(7)</td>
-            <td class="text-center">--</td>
-            <td class="text-center"><u>(5)</u></td>
-            <td class="text-center"><a href="#" id=""><u>(2)</u></a></td>
-        </tr>
     </tbody>
 </table>
 

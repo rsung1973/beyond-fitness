@@ -357,6 +357,15 @@ namespace WebHome.Models.DataEntity
     partial void InsertPaymentOrder(PaymentOrder instance);
     partial void UpdatePaymentOrder(PaymentOrder instance);
     partial void DeletePaymentOrder(PaymentOrder instance);
+    partial void InsertPaymentAudit(PaymentAudit instance);
+    partial void UpdatePaymentAudit(PaymentAudit instance);
+    partial void DeletePaymentAudit(PaymentAudit instance);
+    partial void InsertVoidPayment(VoidPayment instance);
+    partial void UpdateVoidPayment(VoidPayment instance);
+    partial void DeleteVoidPayment(VoidPayment instance);
+    partial void InsertVoidPaymentLevel(VoidPaymentLevel instance);
+    partial void UpdateVoidPaymentLevel(VoidPaymentLevel instance);
+    partial void DeleteVoidPaymentLevel(VoidPaymentLevel instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1268,6 +1277,30 @@ namespace WebHome.Models.DataEntity
 				return this.GetTable<PaymentOrder>();
 			}
 		}
+		
+		public System.Data.Linq.Table<PaymentAudit> PaymentAudit
+		{
+			get
+			{
+				return this.GetTable<PaymentAudit>();
+			}
+		}
+		
+		public System.Data.Linq.Table<VoidPayment> VoidPayment
+		{
+			get
+			{
+				return this.GetTable<VoidPayment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<VoidPaymentLevel> VoidPaymentLevel
+		{
+			get
+			{
+				return this.GetTable<VoidPaymentLevel>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRoleDefinition")]
@@ -2022,6 +2055,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<MerchandiseWindow> _MerchandiseWindow;
 		
+		private EntitySet<VoidPayment> _VoidPayment;
+		
+		private EntitySet<VoidPaymentLevel> _VoidPaymentLevel;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2054,6 +2091,8 @@ namespace WebHome.Models.DataEntity
 			this._LessonPriceProperty = new EntitySet<LessonPriceProperty>(new Action<LessonPriceProperty>(this.attach_LessonPriceProperty), new Action<LessonPriceProperty>(this.detach_LessonPriceProperty));
 			this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
 			this._MerchandiseWindow = new EntitySet<MerchandiseWindow>(new Action<MerchandiseWindow>(this.attach_MerchandiseWindow), new Action<MerchandiseWindow>(this.detach_MerchandiseWindow));
+			this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
+			this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
 			OnCreated();
 		}
 		
@@ -2351,6 +2390,32 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_VoidPayment", Storage="_VoidPayment", ThisKey="LevelID", OtherKey="Status")]
+		public EntitySet<VoidPayment> VoidPayment
+		{
+			get
+			{
+				return this._VoidPayment;
+			}
+			set
+			{
+				this._VoidPayment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_VoidPaymentLevel", Storage="_VoidPaymentLevel", ThisKey="LevelID", OtherKey="LevelID")]
+		public EntitySet<VoidPaymentLevel> VoidPaymentLevel
+		{
+			get
+			{
+				return this._VoidPaymentLevel;
+			}
+			set
+			{
+				this._VoidPaymentLevel.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2582,6 +2647,30 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_MerchandiseWindow(MerchandiseWindow entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = null;
+		}
+		
+		private void attach_VoidPayment(VoidPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = this;
+		}
+		
+		private void detach_VoidPayment(VoidPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = null;
+		}
+		
+		private void attach_VoidPaymentLevel(VoidPaymentLevel entity)
+		{
+			this.SendPropertyChanging();
+			entity.LevelExpression = this;
+		}
+		
+		private void detach_VoidPaymentLevel(VoidPaymentLevel entity)
 		{
 			this.SendPropertyChanging();
 			entity.LevelExpression = null;
@@ -5142,6 +5231,12 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<Payment> _Payment;
 		
+		private EntitySet<PaymentAudit> _PaymentAudit;
+		
+		private EntitySet<VoidPayment> _VoidPayment;
+		
+		private EntitySet<VoidPaymentLevel> _VoidPaymentLevel;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -5228,6 +5323,9 @@ namespace WebHome.Models.DataEntity
 			this._LearnerFitnessAdvisor = new EntitySet<LearnerFitnessAdvisor>(new Action<LearnerFitnessAdvisor>(this.attach_LearnerFitnessAdvisor), new Action<LearnerFitnessAdvisor>(this.detach_LearnerFitnessAdvisor));
 			this._UserProfileExtension = default(EntityRef<UserProfileExtension>);
 			this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
+			this._PaymentAudit = new EntitySet<PaymentAudit>(new Action<PaymentAudit>(this.attach_PaymentAudit), new Action<PaymentAudit>(this.detach_PaymentAudit));
+			this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
+			this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6095,6 +6193,45 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_PaymentAudit", Storage="_PaymentAudit", ThisKey="UID", OtherKey="AuditorID")]
+		public EntitySet<PaymentAudit> PaymentAudit
+		{
+			get
+			{
+				return this._PaymentAudit;
+			}
+			set
+			{
+				this._PaymentAudit.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_VoidPayment", Storage="_VoidPayment", ThisKey="UID", OtherKey="HandlerID")]
+		public EntitySet<VoidPayment> VoidPayment
+		{
+			get
+			{
+				return this._VoidPayment;
+			}
+			set
+			{
+				this._VoidPayment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_VoidPaymentLevel", Storage="_VoidPaymentLevel", ThisKey="UID", OtherKey="ExecutorID")]
+		public EntitySet<VoidPaymentLevel> VoidPaymentLevel
+		{
+			get
+			{
+				return this._VoidPaymentLevel;
+			}
+			set
+			{
+				this._VoidPaymentLevel.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -6594,6 +6731,42 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_Payment(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_PaymentAudit(PaymentAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_PaymentAudit(PaymentAudit entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_VoidPayment(VoidPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_VoidPayment(VoidPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_VoidPaymentLevel(VoidPaymentLevel entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_VoidPaymentLevel(VoidPaymentLevel entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -25064,6 +25237,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<PaymentTransaction> _PaymentTransaction;
 		
+		private EntityRef<PaymentAudit> _PaymentAudit;
+		
+		private EntityRef<VoidPayment> _VoidPayment;
+		
 		private EntityRef<InvoiceItem> _InvoiceItem;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -25099,6 +25276,8 @@ namespace WebHome.Models.DataEntity
 			this._ContractPayment = default(EntityRef<ContractPayment>);
 			this._TuitionInstallment = default(EntityRef<TuitionInstallment>);
 			this._PaymentTransaction = default(EntityRef<PaymentTransaction>);
+			this._PaymentAudit = default(EntityRef<PaymentAudit>);
+			this._VoidPayment = default(EntityRef<VoidPayment>);
 			this._InvoiceItem = default(EntityRef<InvoiceItem>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
@@ -25380,6 +25559,64 @@ namespace WebHome.Models.DataEntity
 						value.Payment = this;
 					}
 					this.SendPropertyChanged("PaymentTransaction");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_PaymentAudit", Storage="_PaymentAudit", ThisKey="PaymentID", OtherKey="PaymentID", IsUnique=true, IsForeignKey=false)]
+		public PaymentAudit PaymentAudit
+		{
+			get
+			{
+				return this._PaymentAudit.Entity;
+			}
+			set
+			{
+				PaymentAudit previousValue = this._PaymentAudit.Entity;
+				if (((previousValue != value) 
+							|| (this._PaymentAudit.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._PaymentAudit.Entity = null;
+						previousValue.Payment = null;
+					}
+					this._PaymentAudit.Entity = value;
+					if ((value != null))
+					{
+						value.Payment = this;
+					}
+					this.SendPropertyChanged("PaymentAudit");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_VoidPayment", Storage="_VoidPayment", ThisKey="PaymentID", OtherKey="VoidID", IsUnique=true, IsForeignKey=false)]
+		public VoidPayment VoidPayment
+		{
+			get
+			{
+				return this._VoidPayment.Entity;
+			}
+			set
+			{
+				VoidPayment previousValue = this._VoidPayment.Entity;
+				if (((previousValue != value) 
+							|| (this._VoidPayment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._VoidPayment.Entity = null;
+						previousValue.Payment = null;
+					}
+					this._VoidPayment.Entity = value;
+					if ((value != null))
+					{
+						value.Payment = this;
+					}
+					this.SendPropertyChanged("VoidPayment");
 				}
 			}
 		}
@@ -32474,6 +32711,788 @@ namespace WebHome.Models.DataEntity
 						this._PaymentID = default(int);
 					}
 					this.SendPropertyChanged("PaymentTransaction");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PaymentAudit")]
+	public partial class PaymentAudit : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PaymentID;
+		
+		private System.Nullable<int> _AuditorID;
+		
+		private System.Nullable<System.DateTime> _AuditDate;
+		
+		private EntityRef<Payment> _Payment;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPaymentIDChanging(int value);
+    partial void OnPaymentIDChanged();
+    partial void OnAuditorIDChanging(System.Nullable<int> value);
+    partial void OnAuditorIDChanged();
+    partial void OnAuditDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnAuditDateChanged();
+    #endregion
+		
+		public PaymentAudit()
+		{
+			this._Payment = default(EntityRef<Payment>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int PaymentID
+		{
+			get
+			{
+				return this._PaymentID;
+			}
+			set
+			{
+				if ((this._PaymentID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPaymentIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentID = value;
+					this.SendPropertyChanged("PaymentID");
+					this.OnPaymentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuditorID", DbType="Int")]
+		public System.Nullable<int> AuditorID
+		{
+			get
+			{
+				return this._AuditorID;
+			}
+			set
+			{
+				if ((this._AuditorID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuditorIDChanging(value);
+					this.SendPropertyChanging();
+					this._AuditorID = value;
+					this.SendPropertyChanged("AuditorID");
+					this.OnAuditorIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuditDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> AuditDate
+		{
+			get
+			{
+				return this._AuditDate;
+			}
+			set
+			{
+				if ((this._AuditDate != value))
+				{
+					this.OnAuditDateChanging(value);
+					this.SendPropertyChanging();
+					this._AuditDate = value;
+					this.SendPropertyChanged("AuditDate");
+					this.OnAuditDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_PaymentAudit", Storage="_Payment", ThisKey="PaymentID", OtherKey="PaymentID", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.PaymentAudit = null;
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.PaymentAudit = this;
+						this._PaymentID = value.PaymentID;
+					}
+					else
+					{
+						this._PaymentID = default(int);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_PaymentAudit", Storage="_UserProfile", ThisKey="AuditorID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.PaymentAudit.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.PaymentAudit.Add(this);
+						this._AuditorID = value.UID;
+					}
+					else
+					{
+						this._AuditorID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VoidPayment")]
+	public partial class VoidPayment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _VoidID;
+		
+		private System.Nullable<int> _Status;
+		
+		private System.Nullable<System.DateTime> _VoidDate;
+		
+		private System.Nullable<int> _HandlerID;
+		
+		private string _Remark;
+		
+		private System.Nullable<bool> _Drawback;
+		
+		private EntitySet<VoidPaymentLevel> _VoidPaymentLevel;
+		
+		private EntityRef<LevelExpression> _LevelExpression;
+		
+		private EntityRef<Payment> _Payment;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnVoidIDChanging(int value);
+    partial void OnVoidIDChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
+    partial void OnVoidDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnVoidDateChanged();
+    partial void OnHandlerIDChanging(System.Nullable<int> value);
+    partial void OnHandlerIDChanged();
+    partial void OnRemarkChanging(string value);
+    partial void OnRemarkChanged();
+    partial void OnDrawbackChanging(System.Nullable<bool> value);
+    partial void OnDrawbackChanged();
+    #endregion
+		
+		public VoidPayment()
+		{
+			this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
+			this._LevelExpression = default(EntityRef<LevelExpression>);
+			this._Payment = default(EntityRef<Payment>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoidID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int VoidID
+		{
+			get
+			{
+				return this._VoidID;
+			}
+			set
+			{
+				if ((this._VoidID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnVoidIDChanging(value);
+					this.SendPropertyChanging();
+					this._VoidID = value;
+					this.SendPropertyChanged("VoidID");
+					this.OnVoidIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoidDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> VoidDate
+		{
+			get
+			{
+				return this._VoidDate;
+			}
+			set
+			{
+				if ((this._VoidDate != value))
+				{
+					this.OnVoidDateChanging(value);
+					this.SendPropertyChanging();
+					this._VoidDate = value;
+					this.SendPropertyChanged("VoidDate");
+					this.OnVoidDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HandlerID", DbType="Int")]
+		public System.Nullable<int> HandlerID
+		{
+			get
+			{
+				return this._HandlerID;
+			}
+			set
+			{
+				if ((this._HandlerID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnHandlerIDChanging(value);
+					this.SendPropertyChanging();
+					this._HandlerID = value;
+					this.SendPropertyChanged("HandlerID");
+					this.OnHandlerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(256)")]
+		public string Remark
+		{
+			get
+			{
+				return this._Remark;
+			}
+			set
+			{
+				if ((this._Remark != value))
+				{
+					this.OnRemarkChanging(value);
+					this.SendPropertyChanging();
+					this._Remark = value;
+					this.SendPropertyChanged("Remark");
+					this.OnRemarkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Drawback", DbType="Bit")]
+		public System.Nullable<bool> Drawback
+		{
+			get
+			{
+				return this._Drawback;
+			}
+			set
+			{
+				if ((this._Drawback != value))
+				{
+					this.OnDrawbackChanging(value);
+					this.SendPropertyChanging();
+					this._Drawback = value;
+					this.SendPropertyChanged("Drawback");
+					this.OnDrawbackChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VoidPayment_VoidPaymentLevel", Storage="_VoidPaymentLevel", ThisKey="VoidID", OtherKey="VoidID")]
+		public EntitySet<VoidPaymentLevel> VoidPaymentLevel
+		{
+			get
+			{
+				return this._VoidPaymentLevel;
+			}
+			set
+			{
+				this._VoidPaymentLevel.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_VoidPayment", Storage="_LevelExpression", ThisKey="Status", OtherKey="LevelID", IsForeignKey=true)]
+		public LevelExpression LevelExpression
+		{
+			get
+			{
+				return this._LevelExpression.Entity;
+			}
+			set
+			{
+				LevelExpression previousValue = this._LevelExpression.Entity;
+				if (((previousValue != value) 
+							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LevelExpression.Entity = null;
+						previousValue.VoidPayment.Remove(this);
+					}
+					this._LevelExpression.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPayment.Add(this);
+						this._Status = value.LevelID;
+					}
+					else
+					{
+						this._Status = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LevelExpression");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_VoidPayment", Storage="_Payment", ThisKey="VoidID", OtherKey="PaymentID", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.VoidPayment = null;
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPayment = this;
+						this._VoidID = value.PaymentID;
+					}
+					else
+					{
+						this._VoidID = default(int);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_VoidPayment", Storage="_UserProfile", ThisKey="HandlerID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.VoidPayment.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPayment.Add(this);
+						this._HandlerID = value.UID;
+					}
+					else
+					{
+						this._HandlerID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_VoidPaymentLevel(VoidPaymentLevel entity)
+		{
+			this.SendPropertyChanging();
+			entity.VoidPayment = this;
+		}
+		
+		private void detach_VoidPaymentLevel(VoidPaymentLevel entity)
+		{
+			this.SendPropertyChanging();
+			entity.VoidPayment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VoidPaymentLevel")]
+	public partial class VoidPaymentLevel : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _VoidID;
+		
+		private System.DateTime _LevelDate;
+		
+		private int _ExecutorID;
+		
+		private int _LevelID;
+		
+		private EntityRef<LevelExpression> _LevelExpression;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+		private EntityRef<VoidPayment> _VoidPayment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnVoidIDChanging(int value);
+    partial void OnVoidIDChanged();
+    partial void OnLevelDateChanging(System.DateTime value);
+    partial void OnLevelDateChanged();
+    partial void OnExecutorIDChanging(int value);
+    partial void OnExecutorIDChanged();
+    partial void OnLevelIDChanging(int value);
+    partial void OnLevelIDChanged();
+    #endregion
+		
+		public VoidPaymentLevel()
+		{
+			this._LevelExpression = default(EntityRef<LevelExpression>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			this._VoidPayment = default(EntityRef<VoidPayment>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_VoidID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int VoidID
+		{
+			get
+			{
+				return this._VoidID;
+			}
+			set
+			{
+				if ((this._VoidID != value))
+				{
+					if (this._VoidPayment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnVoidIDChanging(value);
+					this.SendPropertyChanging();
+					this._VoidID = value;
+					this.SendPropertyChanged("VoidID");
+					this.OnVoidIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LevelDate", DbType="DateTime NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime LevelDate
+		{
+			get
+			{
+				return this._LevelDate;
+			}
+			set
+			{
+				if ((this._LevelDate != value))
+				{
+					this.OnLevelDateChanging(value);
+					this.SendPropertyChanging();
+					this._LevelDate = value;
+					this.SendPropertyChanged("LevelDate");
+					this.OnLevelDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExecutorID", DbType="Int NOT NULL")]
+		public int ExecutorID
+		{
+			get
+			{
+				return this._ExecutorID;
+			}
+			set
+			{
+				if ((this._ExecutorID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnExecutorIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExecutorID = value;
+					this.SendPropertyChanged("ExecutorID");
+					this.OnExecutorIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LevelID", DbType="Int NOT NULL")]
+		public int LevelID
+		{
+			get
+			{
+				return this._LevelID;
+			}
+			set
+			{
+				if ((this._LevelID != value))
+				{
+					if (this._LevelExpression.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLevelIDChanging(value);
+					this.SendPropertyChanging();
+					this._LevelID = value;
+					this.SendPropertyChanged("LevelID");
+					this.OnLevelIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_VoidPaymentLevel", Storage="_LevelExpression", ThisKey="LevelID", OtherKey="LevelID", IsForeignKey=true)]
+		public LevelExpression LevelExpression
+		{
+			get
+			{
+				return this._LevelExpression.Entity;
+			}
+			set
+			{
+				LevelExpression previousValue = this._LevelExpression.Entity;
+				if (((previousValue != value) 
+							|| (this._LevelExpression.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LevelExpression.Entity = null;
+						previousValue.VoidPaymentLevel.Remove(this);
+					}
+					this._LevelExpression.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPaymentLevel.Add(this);
+						this._LevelID = value.LevelID;
+					}
+					else
+					{
+						this._LevelID = default(int);
+					}
+					this.SendPropertyChanged("LevelExpression");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_VoidPaymentLevel", Storage="_UserProfile", ThisKey="ExecutorID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.VoidPaymentLevel.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPaymentLevel.Add(this);
+						this._ExecutorID = value.UID;
+					}
+					else
+					{
+						this._ExecutorID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="VoidPayment_VoidPaymentLevel", Storage="_VoidPayment", ThisKey="VoidID", OtherKey="VoidID", IsForeignKey=true)]
+		public VoidPayment VoidPayment
+		{
+			get
+			{
+				return this._VoidPayment.Entity;
+			}
+			set
+			{
+				VoidPayment previousValue = this._VoidPayment.Entity;
+				if (((previousValue != value) 
+							|| (this._VoidPayment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._VoidPayment.Entity = null;
+						previousValue.VoidPaymentLevel.Remove(this);
+					}
+					this._VoidPayment.Entity = value;
+					if ((value != null))
+					{
+						value.VoidPaymentLevel.Add(this);
+						this._VoidID = value.VoidID;
+					}
+					else
+					{
+						this._VoidID = default(int);
+					}
+					this.SendPropertyChanged("VoidPayment");
 				}
 			}
 		}

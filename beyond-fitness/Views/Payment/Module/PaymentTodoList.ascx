@@ -7,6 +7,7 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
@@ -22,7 +23,7 @@
             <th data-hide="phone">發票狀態</th>
             <th data-hide="phone,tablet">買受人統編</th>
             <th data-hide="phone,tablet">合約編號</th>
-            <th data-hide="phone,tablet">結帳勾記</th>
+            <th data-hide="phone,tablet">功能</th>
         </tr>
     </thead>
     <tbody>
@@ -31,8 +32,13 @@
         <tr>
             <td><%  if (item.InvoiceID.HasValue)
                     {   %>
-                        <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
-                <%  } %>
+                <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
+                <%      if (item.TransactionType == (int)Naming.PaymentTransactionType.自主訓練
+                    || item.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費)
+                    { %>
+                <input type="hidden" name="VoidID" value="<%= item.PaymentID %>" />
+                <%      }
+                    } %>
             </td>
             <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
             <td><%= item.TuitionInstallment!=null
@@ -59,16 +65,29 @@
             <td nowrap="noWrap">
                 <%  if (item.ContractPayment != null)
                     { %>
-                        <%= item.ContractPayment.CourseContract.ContractNo %>-00
+                <%= item.ContractPayment.CourseContract.ContractNo %>-00
                 <%  } %>
             </td>
-            <td><%= item.PaymentAudit.AuditorID.HasValue ? "是":"否" %></td>
+            <td>
+                <%  if (ViewBag.ViewAction == "勾記")
+                    { %>
+                <a onclick="$global.commitToAudit(<%= item.PaymentID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
+                <%  }
+                    else if(ViewBag.ViewAction == "審核作廢")
+                    { %>
+                <a onclick="$global.approveToVoid(<%= item.PaymentID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                <%  }
+                    else if(ViewBag.ViewAction == "編輯作廢")
+                    { %>
+                <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                <%  } %>
+            </td>
         </tr>
         <%  } %>
     </tbody>
 </table>
-
 <script>
+
     $(function () {
         var responsiveHelper_<%= _tableId %> = undefined;
 
@@ -83,13 +102,17 @@
 
         $('#<%= _tableId %>').dataTable({
             //"bPaginate": false,
-            "pageLength": 30,
-            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            //"pageLength": 30,
+            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            "searching": false,
             "ordering": true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                     "t" +
+                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
+            "paging": false,
+            "info": true,
+            "order": [3],
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
             },
@@ -106,9 +129,29 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
-    });
-</script>
 
+        $global.commitToAudit = function (paymentID) {
+            var event = event || window.event;
+            var $tr = $(event.target).closest('tr');
+            showLoading();
+            $.post('<%= Url.Action("CommitToAuditPayment","Payment") %>', { 'paymentID': paymentID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        alert('收款已勾記!!');
+                        $tr.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        };
+
+    });
+
+</script>
 <script runat="server">
 
     ModelStateDictionary _modelState;
@@ -122,6 +165,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (IQueryable<Payment>)this.Model;
+
     }
 
 </script>

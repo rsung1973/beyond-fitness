@@ -127,6 +127,7 @@ namespace WebHome.Models.ViewModel
         public int? RegisterID { get; set; }
         public int? ProductID { get; set; }
         public int? ProductCount { get; set; } = 1;
+        public int?[] VoidID { get; set; }
 
     }
 }

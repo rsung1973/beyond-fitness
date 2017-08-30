@@ -1915,6 +1915,9 @@
     <Content Include="Views\MyTest\Index.aspx" />
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="Views\MyTest\TestPopup.aspx" />
+    <Content Include="Views\Payment\Module\ApproveToVoidPayment.ascx" />
+    <Content Include="Views\Payment\Module\PaymentTodoList.ascx" />
+    <Content Include="Views\Payment\Module\PaymentAuditSummary.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForContract - Copy %282%29.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForProduct.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForShopping.ascx" />
@@ -1922,6 +1925,10 @@
     <Content Include="Views\Payment\Module\PaymentCancellationList.ascx" />
     <Content Include="Views\Payment\Module\PaymentList.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForContract.ascx" />
+    <Content Include="Views\Payment\Module\PaymentQueryList.ascx" />
+    <Content Include="Views\Payment\Module\AuditPayment.ascx" />
+    <Content Include="Views\Payment\Module\VoidPaymentApprovalView.ascx" />
+    <Content Include="Views\Payment\Module\VoidPayment.ascx" />
     <Content Include="Views\SystemInfo\MerchandiseOptions.ascx" />
     <Content Include="Views\Payment\Module\UnpaidPISession.ascx" />
     <Content Include="Views\Payment\PaymentIndex.aspx" />

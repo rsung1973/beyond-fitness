@@ -79,7 +79,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>作廢收款清單</h2>
                     <div class="widget-toolbar">
-                        <a href="#" class="btn btn-primary" id="deletePaymentDialog_link"><i class="fa fa-fw fa-minus"></i>作廢收款</a>
+                        <a onclick="voidPayment();" class="btn btn-primary" id="deletePaymentDialog_link"><i class="fa fa-fw fa-minus"></i>作廢收款</a>
                     </div>
                 </header>
                 <!-- widget div-->
@@ -116,18 +116,11 @@
         });
     }
 
-    function inquireContract() {
-        var event = event || window.event;
-        var $form = $(event.target).closest('form');
-        $form.ajaxSubmit({
-            beforeSubmit: function () {
-                showLoading();
-            },
-            success: function (data) {
-                hideLoading();
-                $('#contractList').empty()
-                    .append($(data));
-            }
+    function voidPayment() {
+        showLoading();
+        $.post('<%= Url.Action("VoidPayment","Payment") %>', {}, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
         });
     }
 </script>

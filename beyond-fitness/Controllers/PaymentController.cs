@@ -39,7 +39,7 @@ namespace WebHome.Controllers
         [CoachOrAssistantAuthorize]
         public ActionResult EditPayment(PaymentViewModel viewModel)
         {
-            switch((Naming.PaymentTransactionType?)viewModel.TransactionType)
+            switch ((Naming.PaymentTransactionType?)viewModel.TransactionType)
             {
                 case Naming.PaymentTransactionType.自主訓練:
                     return EditPaymentForPISession(viewModel);
@@ -117,7 +117,7 @@ namespace WebHome.Controllers
             {
                 contract = models.GetTable<CourseContract>()
                     .Where(c => c.ContractNo == viewModel.ContractNo)
-                    .Where(c=>c.Status >= (int)Naming.CourseContractStatus.已生效)
+                    .Where(c => c.Status >= (int)Naming.CourseContractStatus.已生效)
                     .FirstOrDefault();
                 if (contract == null)
                 {
@@ -132,7 +132,7 @@ namespace WebHome.Controllers
 
             var invoice = checkInvoiceNo(viewModel);
 
-            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount<=0)
+            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
             {
                 ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
             }
@@ -158,7 +158,10 @@ namespace WebHome.Controllers
                     item = new Payment
                     {
                         Status = (int)Naming.CourseContractStatus.已生效,
-                        ContractPayment = new ContractPayment { }
+                        ContractPayment = new ContractPayment { },
+                        PaymentTransaction = new PaymentTransaction
+                        { },
+                        PaymentAudit = new Models.DataEntity.PaymentAudit { }
                     };
                     models.GetTable<Payment>().InsertOnSubmit(item);
                     item.InvoiceItem = invoice;
@@ -167,6 +170,7 @@ namespace WebHome.Controllers
                 preparePayment(viewModel, profile, item);
 
                 item.ContractPayment.ContractID = contract.ContractID;
+                item.PaymentTransaction.BranchID = contract.LessonPriceType.BranchID.Value;
 
                 models.SubmitChanges();
 
@@ -246,7 +250,8 @@ namespace WebHome.Controllers
 
                         },
                         PaymentTransaction = new PaymentTransaction
-                        { }
+                        { },
+                        PaymentAudit = new Models.DataEntity.PaymentAudit { }
                     };
                     item.TuitionInstallment.TuitionAchievement.Add(new TuitionAchievement
                     {
@@ -325,7 +330,8 @@ namespace WebHome.Controllers
                     {
                         Status = (int)Naming.CourseContractStatus.已生效,
                         PaymentTransaction = new PaymentTransaction
-                        { }
+                        { },
+                        PaymentAudit = new Models.DataEntity.PaymentAudit { }
                     };
                     models.GetTable<Payment>().InsertOnSubmit(item);
                     item.InvoiceItem = invoice;
@@ -401,7 +407,7 @@ namespace WebHome.Controllers
                 }
             };
 
-            if(viewModel.InvoiceType!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+            if (viewModel.InvoiceType != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
             {
                 item.TrackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
                 item.No = viewModel.InvoiceNo.Substring(2);
@@ -416,7 +422,7 @@ namespace WebHome.Controllers
             var items = models.GetTable<LessonTime>().Where(r => r.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(r => r.RegisterLesson.IntuitionCharge.TuitionInstallment.Count == 0);
 
-            if(branchID.HasValue)
+            if (branchID.HasValue)
             {
                 items = items.Where(r => r.BranchID == branchID);
             }
@@ -424,5 +430,206 @@ namespace WebHome.Controllers
             return View("~/Views/Payment/Module/UnpaidPISession.ascx", items);
         }
 
+        public ActionResult PaymentAuditSummary()
+        {
+            return View("~/Views/Payment/Module/PaymentAuditSummary.ascx");
+        }
+
+        public ActionResult InquirePayment(PaymentViewModel viewModel)
+        {
+            IQueryable<Payment> items = models.GetTable<Payment>();
+            if (viewModel.InvoiceNo == null || !Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
+            {
+                ModelState.AddModelError("InvoiceNo", "請輸入正確發票號碼!!");
+            }
+
+            if(!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            string trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
+            string no = viewModel.InvoiceNo.Substring(2);
+
+            items = items.Where(p => p.InvoiceItem.TrackCode == trackCode && p.InvoiceItem.No == no);
+
+            return View("~/Views/Payment/Module/PaymentQueryList.ascx", items);
+        }
+
+        public ActionResult AuditPayment(PaymentViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+
+            IQueryable<Payment> items = models.GetPaymentToAuditByAgent(profile)
+                .Select(a => a.Payment)
+                .Where(p => p.TransactionType == viewModel.TransactionType);
+
+            ViewBag.ViewModel = viewModel;
+
+            return View("~/Views/Payment/Module/AuditPayment.ascx", items);
+        }
+
+        public ActionResult ApproveToVoidPayment(PaymentViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+
+            IQueryable<Payment> items = models.GetVoidPaymentToApproveByAgent(profile)
+                .Select(a => a.Payment)
+                .Where(p => p.TransactionType == viewModel.TransactionType);
+
+            ViewBag.ViewModel = viewModel;
+
+            return View("~/Views/Payment/Module/ApproveToVoidPayment.ascx", items);
+        }
+
+        public ActionResult ApproveToVoidPaymentView(PaymentViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+
+            var items = models.GetTable<Payment>().Where(v => v.PaymentID == viewModel.PaymentID);
+            var item = items.Select(p => p.VoidPayment).FirstOrDefault();
+
+            if (item != null)
+            {
+                viewModel.Remark = item.Remark;
+            }
+
+            ViewBag.ViewModel = viewModel;
+
+            return View("~/Views/Payment/Module/VoidPaymentApprovalView.ascx", items);
+        }
+
+        public ActionResult ExecuteVoidPaymentStatus(PaymentViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+            var item = models.GetTable<VoidPayment>().Where(c => c.VoidID == viewModel.PaymentID).FirstOrDefault();
+            if (item != null)
+            {
+                item.VoidPaymentLevel.Add(new VoidPaymentLevel
+                {
+                    ExecutorID = profile.UID,
+                    LevelDate = DateTime.Now,
+                    LevelID = viewModel.Status.Value
+                });
+                item.Status = viewModel.Status.Value;
+
+                models.SubmitChanges();
+
+                return Json(new { result = true });
+            }
+            else
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+        }
+
+
+        public ActionResult VoidPayment(PaymentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/Payment/Module/VoidPayment.ascx");
+        }
+
+        public ActionResult CommitToVoidPayment(PaymentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.VoidID==null || viewModel.VoidID.Length==0)
+            {
+                ModelState.AddModelError("InvoiceNo", "發票資料無效!!");
+            }
+
+
+            try
+            {
+
+                bool hasVoid = false;
+                foreach (var v in viewModel.VoidID)
+                {
+                    var item = models.GetTable<Payment>().Where(p => p.PaymentID == v).FirstOrDefault();
+                    if (item.VoidPayment == null)
+                    {
+                        if (item.InvoiceID.HasValue && item.InvoiceItem.InvoiceCancellation == null)
+                        {
+                            cancelInvoice(item.InvoiceItem);
+                            item.VoidPayment = new Models.DataEntity.VoidPayment
+                            {
+                                HandlerID = profile.UID,
+                                Remark = viewModel.Remark,
+                                Status = (int)Naming.CourseContractStatus.待審核,
+                                VoidDate = DateTime.Now
+                            };
+
+                            models.SubmitChanges();
+                            hasVoid = true;
+                        }
+                    }
+                }
+                if (hasVoid)
+                    return Json(new { result = true });
+                else
+                    return Json(new { result = false,message="作廢收款資料錯誤!!" });
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message });
+            }
+        }
+
+        [CoachOrAssistantAuthorize]
+        public ActionResult CommitToAuditPayment(PaymentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            try
+            {
+                Payment item = models.GetTable<Payment>()
+                    .Where(p => p.PaymentID == viewModel.PaymentID).FirstOrDefault();
+
+                if (item == null)
+                {
+                    return Json(new { result = false,message="收款資料錯誤!!" });
+                }
+
+                item.PaymentAudit.AuditDate = DateTime.Now;
+                item.PaymentAudit.AuditorID = profile.UID;
+
+                models.SubmitChanges();
+
+                return Json(new { result = true });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message });
+            }
+        }
+
+        private void cancelInvoice(InvoiceItem invoice)
+        {
+            invoice.InvoiceCancellation = new InvoiceCancellation
+            {
+                InvoiceItem = invoice,
+                CancellationNo = invoice.TrackCode + invoice.No,
+                Remark = "作廢收款",
+                //ReturnTaxDocumentNo = invoice.ReturnTaxDocumentNumber,
+                CancelDate = DateTime.Now
+            };
+
+            var doc = new DerivedDocument
+            {
+                Document = new Document
+                {
+                    DocType = (int)Naming.DocumentTypeDefinition.E_InvoiceCancellation,
+                    DocDate = DateTime.Now
+                },
+                SourceID = invoice.InvoiceID
+            };
+
+            models.GetTable<DerivedDocument>().InsertOnSubmit(doc);
+        }
     }
 }

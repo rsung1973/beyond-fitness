@@ -959,5 +959,55 @@ namespace WebHome.Helper
                                             s => s.CoachID, w => w.CoachID, (s, w) => s);
         }
 
+        public static IQueryable<PaymentAudit> GetPaymentToAuditByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile profile)
+            where TEntity : class, new()
+        {
+            IQueryable<PaymentAudit> items;
+            if (profile.IsAssistant())
+            {
+                items = models.GetTable<PaymentAudit>().Where(p => !p.AuditorID.HasValue);
+            }
+            else if (profile.IsManager() || profile.IsViceManager())
+            {
+                var payment = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
+                    .SelectMany(b => b.PaymentTransaction)
+                    .Select(p => p.Payment);
+
+                items = payment.Select(p => p.PaymentAudit)
+                    .Where(a => !a.AuditorID.HasValue);
+            }
+            else
+            {
+                items = models.GetTable<PaymentAudit>().Where(f => false);
+            }
+            return items;
+        }
+
+        public static IQueryable<VoidPayment> GetVoidPaymentToApproveByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile profile)
+            where TEntity : class, new()
+        {
+            IQueryable<VoidPayment> items;
+            if (profile.IsAssistant())
+            {
+                items = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.待審核);
+            }
+            else if (profile.IsManager() || profile.IsViceManager())
+            {
+                var payment = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
+                    .SelectMany(b => b.PaymentTransaction)
+                    .Select(p => p.Payment);
+
+                items = payment.Select(p => p.VoidPayment)
+                        .Where(p => p.Status == (int)Naming.CourseContractStatus.待審核);
+            }
+            else
+            {
+                items = models.GetTable<VoidPayment>().Where(f => false);
+            }
+
+            return items;
+        }
+
+
     }
 }

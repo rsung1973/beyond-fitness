@@ -79,6 +79,13 @@
                 <%  Html.RenderAction("CourseContractSummary", "CourseContract"); %>
             </div>
         </div>
+        <div class="row padding-5">
+            <!-- widget content -->
+            <div class="widget-body txt-color-white">
+                <%  Html.RenderAction("PaymentAuditSummary", "Payment"); %>
+            </div>
+            <!-- end widget content -->
+        </div>
     </div>
     <!-- end widget div -->
 </div>

@@ -31,16 +31,10 @@
         <tr>
             <td><%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
             </td>
-            <td><%= item.PaymentTransaction!=null 
-                        ? item.PaymentTransaction.BranchStore.BranchName 
-                        : item.ContractPayment !=null
-                            ?   item.ContractPayment.CourseContract.LessonPriceType.BranchStore.BranchName
-                            :   null    %></td>
-            <td><%= item.PaymentTransaction!=null
-                         ? item.TuitionInstallment!=null
-                            ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                            : "--"
-                         : item.ContractPayment!=null
+            <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
+            <td><%= item.TuitionInstallment!=null
+                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : item.ContractPayment!=null
                             ? item.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--" %></td>
             <td><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
@@ -52,7 +46,7 @@
                             ? "電子發票"
                             : "紙本" 
                         : "--" %></td>
-            <td><%= item.InvoiceItem.Document.AtSource.First().Document.CurrentStep != (int)Naming.CourseContractStatus.已生效
+            <td><%= item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
                         ? "待作廢" : "已作廢"  %></td>
             <td><%= item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo %></td>
             <td nowrap="noWrap">
@@ -61,7 +55,7 @@
                         <%= item.ContractPayment.CourseContract.ContractNo %>-00
                 <%  } %>
             </td>
-            <td><%= ((Naming.CourseContractStatus)item.InvoiceItem.Document.AtSource.First().Document.CurrentStep).ToString() %></td>
+            <td><%= ((Naming.CourseContractStatus)item.VoidPayment.Status).ToString() %></td>
         </tr>
         <%  } %>
     </tbody>
