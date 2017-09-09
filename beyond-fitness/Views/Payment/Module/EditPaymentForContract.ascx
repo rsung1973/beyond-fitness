@@ -49,13 +49,33 @@
                 </div>
             </fieldset>
             <fieldset id="contract">
-                <section>
-                    <label class="label">合約編號</label>
-                    <label class="input">
-                        <i class="icon-append fa fa-file-text-o"></i>
-                        <input type="text" name="ContractNo" maxlength="20" placeholder="請輸入合約編號" value="<%= _viewModel.ContractNo %>" />
-                    </label>
-                </section>
+                
+                <label class="label">合約編號</label>
+                <div class="row">
+                    <section class="col col-10">
+                        <label class="input">
+                            <i class="icon-append fa fa-file-text-o"></i>
+                            <input type="text" name="ContractNo" maxlength="20" placeholder="請輸入合約編號" value="<%= _viewModel.ContractNo %>" />
+                        </label>
+                    </section>                    
+                    <section class="col col-2">
+                        <button onclick="$global.listContractByNo();" class="btn bg-color-blue btn-sm" type="button">查詢</button>
+                    </section>
+                    <script>
+                        $(function () {
+                            $global.listContractByNo = function () {
+                                showLoading();
+                                $('#contractList').load('<%= Url.Action("ListContractByContractNo","Payment") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val() }, function (data) {
+                                    hideLoading();
+                                });
+                            };
+                        });
+                    </script>
+                </div>
+                <div class="row">
+                    <section class="col col-12" id="contractList">
+                    </section>
+                </div>
             </fieldset>
             <fieldset>
                 <div class="row">
@@ -134,8 +154,8 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
-                "class": "btn bg-color-red",
+                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認收款資料正確?")) {
                         clearErrors();
@@ -148,7 +168,7 @@
                                 hideLoading();
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
-                                        alert('收款資料已送交審核!!');
+                                        alert('收款資料已生效!!');
                                         <%--$('#<%= _dialog %>').dialog('close');--%>
                                         showLoading();
                                         window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';

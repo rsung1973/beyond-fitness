@@ -45,7 +45,7 @@
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">依學員姓名查詢</label>
+                                        <label class="label">依學員姓名(暱稱)查詢</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-user"></i>
                                             <input type="text" name="RealName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名"/>

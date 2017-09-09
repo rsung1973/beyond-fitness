@@ -86,7 +86,8 @@
             $('#<%= _tableId %>').dataTable({
                 "sDom": "",
                 "autoWidth": true,
-                "bPaginate": false,
+                "pageLength": 30,
+                "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
                 "order": [],
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
@@ -110,7 +111,7 @@
                 window.open('<%= Url.Action("ContractAmendmentApprovalView","CourseContract") %>' + '?revisionID=' + revisionID, '_blank', 'fullscreen=yes');
                 smartAlert('合約審核中...', function () {
                     //showLoading();
-                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                 });
             };
 
@@ -119,7 +120,7 @@
                 window.open('<%= Url.Action("ContractAmendmentSignatureView","CourseContract") %>' + '?revisionID=' + revisionID, '_blank', 'fullscreen=yes');
                 smartAlert('簽名進行中...', function () {
                     //showLoading();
-                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                 });
 
             };

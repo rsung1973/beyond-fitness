@@ -28,7 +28,7 @@
                         <label class="label">姓名</label>
                         <label class="input">
                             <i class="icon-append fa fa-user"></i>
-                            <input type="text" name="RealName" maxlength="20" placeholder="請輸入員工姓名" value="<%= _viewModel.FullName() %>" />
+                            <input type="text" name="RealName" maxlength="20" placeholder="請輸入員工姓名" value="<%= _viewModel.RealName %>" />
                         </label>
                     </section>
                     <section class="col col-6">

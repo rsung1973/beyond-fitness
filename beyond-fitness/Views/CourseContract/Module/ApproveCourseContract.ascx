@@ -30,7 +30,7 @@
                         if (data.result) {
                             alert('合約已退件!!');
                             showLoading();
-                            window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                            window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                         } else {
                             $(data).appendTo($('body')).remove();
                         }
@@ -47,7 +47,7 @@
                         if (data.result) {
                             alert('合約審核完成!!');
                             showLoading();
-                            window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                            window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                         } else {
                             $(data).appendTo($('body')).remove();
                         }

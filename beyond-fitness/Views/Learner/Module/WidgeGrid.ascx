@@ -44,21 +44,42 @@
                         <form action="<%= Url.Action("InquireLearner","Learner") %>" method="post" id="search-form" class="smart-form">
                             <fieldset>
                                 <div class="row">
-                                    <section class="col col-4">
+                                    <section class="col col-3">
+                                        <label class="label">依所屬體能顧問查詢</label>
+                                        <label class="select">
+                                            <select name="CoachID">
+                                                <option value="">全部</option>
+                                                <%  if (_profile.IsAssistant())
+                                                    {
+                                                        Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
+                                                    }
+                                                    else if (_profile.IsManager() || _profile.IsViceManager())
+                                                    {
+                                                        Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", _profile.GetServingCoachInSameStore(models));
+                                                    }
+                                                    else
+                                                    {
+                                                        Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
+                                                    } %>                                            
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
                                         <label class="label">依真實姓名或暱稱查詢</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-user"></i>
                                             <input type="text" name="RealName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名"/>
                                         </label>
                                     </section>
-                                    <section class="col col-4">
+                                    <section class="col col-3">
                                         <label class="label">或依身分證字號查詢</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-id-card-o"></i>
                                             <input type="text" name="IDNo" class="form-control input" maxlength="20" placeholder="請輸入身分證字號"/>
                                         </label>
                                     </section>
-                                    <section class="col col-4">
+                                    <section class="col col-3">
                                         <label class="label">或依聯絡電話查詢</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-phone"></i>
@@ -199,9 +220,11 @@
 
     $(function () {
 
-        $global.renderLearnerList = function () {
+        $global.renderLearnerList = function (uid) {
             showLoading();
-            inquireLearner();
+            $('#learnerList').load('<%= Url.Action("InquireLearner","Learner") %>', { 'uid': uid }, function (data) {
+                hideLoading();
+            });
         };
 
         $global.editLearner = function (uid) {
@@ -283,12 +306,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _profile = Context.GetUser();
     }
 
 </script>

@@ -919,47 +919,48 @@ namespace WebHome.Controllers
         public ActionResult CommitSinglePayment(SingleInstallmentViewModel viewModel)
         {
 
-            IntuitionCharge item = models.GetTable<IntuitionCharge>()
-                .Where(u => u.RegisterID == viewModel.RegisterID).FirstOrDefault();
+            //IntuitionCharge item = models.GetTable<IntuitionCharge>()
+            //    .Where(u => u.RegisterID == viewModel.RegisterID).FirstOrDefault();
 
-            if (item == null)
-            {
-                ViewBag.Message = "課程資料不存在!!";
-                return ListLearners(null);
-            }
+            //if (item == null)
+            //{
+            //    ViewBag.Message = "課程資料不存在!!";
+            //    return ListLearners(null);
+            //}
 
-            if(!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount<=0)
-            {
-                ModelState.AddModelError("PayoffAmount", "請輸入正確付款金額!!");
-            }
+            //if(!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount<=0)
+            //{
+            //    ModelState.AddModelError("PayoffAmount", "請輸入正確付款金額!!");
+            //}
 
-            if (!viewModel.PayoffDate.HasValue)
-            {
-                ModelState.AddModelError("PayoffDate", "請輸入付款日期!!");
-            }
+            //if (!viewModel.PayoffDate.HasValue)
+            //{
+            //    ModelState.AddModelError("PayoffDate", "請輸入付款日期!!");
+            //}
 
-            if (!ModelState.IsValid)
-            {
-                ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    ViewBag.ModelState = ModelState;
+            //    return View("~/Views/Shared/ReportInputError.ascx");
+            //}
 
-            var installment = new TuitionInstallment
-            {
-                PayoffAmount = viewModel.PayoffAmount,
-                PayoffDate = viewModel.PayoffDate,
-                RegisterID = item.RegisterID
-            };
-            installment.TuitionAchievement.Add(new TuitionAchievement
-            {
-                CoachID = item.RegisterLesson.AdvisorID.Value,
-                ShareAmount = installment.PayoffAmount
-            });
+            //var installment = new TuitionInstallment
+            //{
+            //    PayoffAmount = viewModel.PayoffAmount,
+            //    PayoffDate = viewModel.PayoffDate,
+            //    RegisterID = item.RegisterID
+            //};
+            //installment.TuitionAchievement.Add(new TuitionAchievement
+            //{
+            //    CoachID = item.RegisterLesson.AdvisorID.Value,
+            //    ShareAmount = installment.PayoffAmount
+            //});
 
-            item.TuitionInstallment.Add(installment);
-            models.SubmitChanges();
+            //item.TuitionInstallment.Add(installment);
+            //models.SubmitChanges();
 
-            return Json(new { result = true });
+            //return Json(new { result = true });
+            return Json(new { result = false, message = "請執行收款管理!!" });
 
         }
 
@@ -995,108 +996,117 @@ namespace WebHome.Controllers
 
         public ActionResult CommitAchievementShare(AchievementShareViewModel viewModel)
         {
-            TuitionInstallment item = models.GetTable<TuitionInstallment>()
-                .Where(u => u.InstallmentID == viewModel.InstallmentID).FirstOrDefault();
+            //TuitionInstallment item = models.GetTable<TuitionInstallment>()
+            //    .Where(u => u.InstallmentID == viewModel.InstallmentID).FirstOrDefault();
 
-            if (item == null)
-            {
-                return View("~/Views/Shared/MessageView.ascx", model: "付款資料不存在!!");
-            }
+            //if (item == null)
+            //{
+            //    return View("~/Views/Shared/MessageView.ascx", model: "付款資料不存在!!");
+            //}
 
-            if (!viewModel.ShareAmount.HasValue || viewModel.ShareAmount <= 0)
-            {
-                ModelState.AddModelError("ShareAmount", "請輸入業績金額!!");
-            }
+            //if (!viewModel.ShareAmount.HasValue || viewModel.ShareAmount <= 0)
+            //{
+            //    ModelState.AddModelError("ShareAmount", "請輸入業績金額!!");
+            //}
 
-            if(item.TuitionAchievement.Where(t=>t.CoachID!=viewModel.CoachID).Sum(t=>t.ShareAmount) + viewModel.ShareAmount > item.PayoffAmount)
-            {
-                ModelState.AddModelError("ShareAmount", "所屬體能顧問業績總額大於付款金額!!");
-            }
+            //if(item.TuitionAchievement.Where(t=>t.CoachID!=viewModel.CoachID).Sum(t=>t.ShareAmount) + viewModel.ShareAmount > item.PayoffAmount)
+            //{
+            //    ModelState.AddModelError("ShareAmount", "所屬體能顧問業績總額大於付款金額!!");
+            //}
 
-            if (!ModelState.IsValid)
-            {
-                ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    ViewBag.ModelState = ModelState;
+            //    return View("~/Views/Shared/ReportInputError.ascx");
+            //}
 
-            var shareItem = item.TuitionAchievement.Where(t => t.CoachID == viewModel.CoachID).FirstOrDefault();
-            if(shareItem==null)
-            {
-                shareItem = new TuitionAchievement
-                {
-                    CoachID = viewModel.CoachID
-                };
-                item.TuitionAchievement.Add(shareItem);
-            }
+            //var shareItem = item.TuitionAchievement.Where(t => t.CoachID == viewModel.CoachID).FirstOrDefault();
+            //if(shareItem==null)
+            //{
+            //    shareItem = new TuitionAchievement
+            //    {
+            //        CoachID = viewModel.CoachID
+            //    };
+            //    item.TuitionAchievement.Add(shareItem);
+            //}
 
-            shareItem.ShareAmount = viewModel.ShareAmount;
-            models.SubmitChanges();
+            //shareItem.ShareAmount = viewModel.ShareAmount;
+            //models.SubmitChanges();
 
-            return Json(new { result = true });
+            //return Json(new { result = true });
+
+            return Json(new { result = false, message = "請執行業績分潤設定!!" });
 
         }
 
         public ActionResult DeleteAchievementShare(int installmentID,int coachID)
         {
 
-            var item = models.DeleteAny<TuitionAchievement>(t => t.InstallmentID == installmentID
-                && t.CoachID==coachID);
+            //var item = models.DeleteAny<TuitionAchievement>(t => t.InstallmentID == installmentID
+            //    && t.CoachID==coachID);
 
-            if (item == null)
-            {
-                return Json(new { result = false, message = "業績資料錯誤!!" });
-            }
-            else
-            {
-                return Json(new { result = true });
-            }
+            //if (item == null)
+            //{
+            //    return Json(new { result = false, message = "業績資料錯誤!!" });
+            //}
+            //else
+            //{
+            //    return Json(new { result = true });
+            //}
+
+            return Json(new { result = false, message = "請執行業績分潤設定!!" });
+
 
         }
 
 
         public ActionResult CommitPayment(int registerID,InstallmentViewModel viewModel)
         {
-            RegisterLesson item = models.GetTable<RegisterLesson>()
-                .Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)
-                    && u.RegisterID == registerID).FirstOrDefault();
+            //RegisterLesson item = models.GetTable<RegisterLesson>()
+            //    .Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)
+            //        && u.RegisterID == registerID).FirstOrDefault();
 
-            if (item == null)
-            {
-                //ViewBag.Message = "課程資料不存在!!";
-                return ListLearners(null);
-            }
+            //if (item == null)
+            //{
+            //    //ViewBag.Message = "課程資料不存在!!";
+            //    return ListLearners(null);
+            //}
 
-            List<TuitionInstallment> items = new List<TuitionInstallment>();
-            for(int i=0;i< viewModel.PayoffAmount.Length;i++)
-            {
-                if(viewModel.PayoffAmount[i].HasValue && viewModel.PayoffDate[i].HasValue)
-                {
-                    var installment = new TuitionInstallment
-                    {
-                        PayoffAmount = viewModel.PayoffAmount[i],
-                        PayoffDate = viewModel.PayoffDate[i],
-                        RegisterID = item.RegisterID
-                    };
-                    installment.TuitionAchievement.Add(new TuitionAchievement
-                    {
-                        CoachID = item.AdvisorID.Value,
-                        ShareAmount = installment.PayoffAmount
-                    });
-                    items.Add(installment);
-                }
-            }
+            //List<TuitionInstallment> items = new List<TuitionInstallment>();
+            //for(int i=0;i< viewModel.PayoffAmount.Length;i++)
+            //{
+            //    if(viewModel.PayoffAmount[i].HasValue && viewModel.PayoffDate[i].HasValue)
+            //    {
+            //        var installment = new TuitionInstallment
+            //        {
+            //            PayoffAmount = viewModel.PayoffAmount[i],
+            //            PayoffDate = viewModel.PayoffDate[i],
+            //            RegisterID = item.RegisterID
+            //        };
+            //        installment.TuitionAchievement.Add(new TuitionAchievement
+            //        {
+            //            CoachID = item.AdvisorID.Value,
+            //            ShareAmount = installment.PayoffAmount
+            //        });
+            //        items.Add(installment);
+            //    }
+            //}
 
-            models.ExecuteCommand(@"DELETE FROM TuitionAchievement
-                    FROM     TuitionInstallment INNER JOIN
-                                    TuitionAchievement ON TuitionInstallment.InstallmentID = TuitionAchievement.InstallmentID
-                    WHERE   (TuitionInstallment.RegisterID = {0}) ", item.RegisterID);
-            models.ExecuteCommand("delete from TuitionInstallment where RegisterID = {0} ", item.RegisterID);
-            models.GetTable<TuitionInstallment>().InsertAllOnSubmit(items);
-            models.SubmitChanges();
+            //models.ExecuteCommand(@"DELETE FROM TuitionAchievement
+            //        FROM     TuitionInstallment INNER JOIN
+            //                        TuitionAchievement ON TuitionInstallment.InstallmentID = TuitionAchievement.InstallmentID
+            //        WHERE   (TuitionInstallment.RegisterID = {0}) ", item.RegisterID);
+            //models.ExecuteCommand("delete from TuitionInstallment where RegisterID = {0} ", item.RegisterID);
+            //models.GetTable<TuitionInstallment>().InsertAllOnSubmit(items);
+            //models.SubmitChanges();
 
-            ViewBag.Message = "資料已儲存!!";
+            //ViewBag.Message = "資料已儲存!!";
 
-            return AddLessons((int)HttpContext.GetCacheValue(CachingKey.EditMemberUID));
+            //return AddLessons((int)HttpContext.GetCacheValue(CachingKey.EditMemberUID));
+
+            ViewBag.Message = "請執行收款管理!!";
+            return ListLearners(null);
+
 
         }
 

@@ -12,11 +12,11 @@
     <div class="col-md-12">
         <div class="well no-padding well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>學員服務申請表</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
                     <tbody>
                         <tr>
-                            <td colspan="2">合約編號：<%= _contract.ContractNo %></td>
+                            <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
                             <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
@@ -41,7 +41,7 @@
                         <tr>
                             <td colspan="2">
                                 <%  var original = _model.SourceContract; %>
-                            申請內容：原合約編號 <%= original.ContractNo %> 剩餘上課堂數：<%= original.RegisterLessonContract.Count>0 ? original.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : original.Lessons %>堂，全部轉讓至 <%= _contract.ContractOwner.FullName() %>。</td>
+                            申請內容：原合約編號 <%= original.ContractNo() %> 剩餘上課堂數：<%= original.RegisterLessonContract.Count>0 ? original.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : original.Lessons %>堂，全部轉讓至 <%= _contract.ContractOwner.FullName() %>。</td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2"><%= _contract.Remark %></td>

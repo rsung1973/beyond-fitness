@@ -12,11 +12,11 @@
     <div class="col-md-12">
         <div class="well no-padding well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>學員服務申請表</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
                     <tbody>
                         <tr>
-                            <td colspan="2">合約編號：<%= _contract.ContractNo %></td>
+                            <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
                             <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
@@ -41,7 +41,7 @@
                         <tr>
                             <td colspan="2">
                                 <%  var original = _model.SourceContract; %>
-                                申請內容：原合約編號 <%= original.ContractNo %> 使用截止日為 <%= String.Format("{0:yyyy/MM/dd}",original.Expiration) %> 展延至 <%= String.Format("{0:yyyy/MM/dd}",_contract.Expiration) %> 止。</td>
+                                申請內容：原合約編號 <%= original.ContractNo() %> 使用截止日為 <%= String.Format("{0:yyyy/MM/dd}",original.Expiration) %> 展延至 <%= String.Format("{0:yyyy/MM/dd}",_contract.Expiration) %> 止。</td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2">說明：<%= _contract.Remark %></td>

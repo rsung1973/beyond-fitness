@@ -17,7 +17,7 @@ namespace WebHome.Helper
     {
         public static bool IsB2C(this InvoiceBuyer buyer)
         {
-            return buyer.ReceiptNo == "0000000000";
+            return String.IsNullOrEmpty(buyer.ReceiptNo) || buyer.ReceiptNo == "0000000000";
         }
 
         public static bool IsB2C(this InvoiceAllowanceBuyer buyer)

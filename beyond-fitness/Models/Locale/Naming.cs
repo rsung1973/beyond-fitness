@@ -190,6 +190,15 @@ namespace WebHome.Models.Locale
             已生效 = 1205,
         }
 
+        public enum VoidPaymentStatus
+        {
+            退件 = 1201,
+            待確認 = 1202,
+            待簽名 = 1203,
+            待審核 = 1204,
+            已生效 = 1205,
+        }
+
         public enum PaymentTransactionType
         {
             體能顧問費 = 1,

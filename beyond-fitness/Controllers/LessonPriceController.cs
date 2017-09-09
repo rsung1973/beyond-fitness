@@ -225,7 +225,7 @@ namespace WebHome.Controllers
             }
 
             item.Description = viewModel.Description;
-            item.ListPrice = viewModel.ListPrice;
+            item.ListPrice = item.CoachPayoffCreditCard = item.CoachPayoff = viewModel.ListPrice;
             item.Status = viewModel.Status;
             item.BranchID = viewModel.BranchID;
             item.DurationInMinutes = viewModel.DurationInMinutes;
@@ -304,7 +304,7 @@ namespace WebHome.Controllers
 
                         items[idx].Description = String.Format("【{0}-{1:00}】《{2}》{3}堂 / {4}分鐘{5}",
                             viewModel.Year, item.PeriodNo, branch.BranchName, lowerLimit[i], duration[d], info[f]);
-                        items[idx].ListPrice = viewModel.ListPriceSeries[idx];
+                        items[idx].ListPrice = items[idx].CoachPayoff= items[idx].CoachPayoffCreditCard = viewModel.ListPriceSeries[idx];
                         items[idx].Status = viewModel.Status;
                         items[idx].BranchID = branch.BranchID;
                         items[idx].LowerLimit = lowerLimit[i];

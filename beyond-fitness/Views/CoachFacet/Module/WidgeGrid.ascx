@@ -107,8 +107,8 @@
             var $li = $('li.active');
             $li.removeClass('active');
             $($li.find('a').attr('href')).removeClass('active in');
-            $('a[href="#birthdaylist_tab"]').closest('li').addClass('active');
-            $('#birthdaylist_tab').addClass('active in');
+            $('a[href="#<%= ViewBag.ShowTodoTab==true ? "todolist_tab" : "birthdaylist_tab" %>"]').closest('li').addClass('active');
+            $('#<%= ViewBag.ShowTodoTab==true ? "todolist_tab" : "birthdaylist_tab" %>').addClass('active in');
         }
 
         $(window).resize(function () {

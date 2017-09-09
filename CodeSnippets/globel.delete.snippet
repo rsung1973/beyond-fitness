@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.1.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+      <SnippetType>SurroundsWith</SnippetType>
+    </SnippetTypes>
+    <Title>$global.delete</Title>
+    <Author>my</Author>
+    <Description>global.delete</Description>
+    <HelpUrl>
+    </HelpUrl>
+    <Shortcut>global.delete</Shortcut>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal Editable="true">
+        <ID>Achievement</ID>
+        <ToolTip>Achievement</ToolTip>
+        <Default>Achievement</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>coachID</ID>
+        <ToolTip>coachID</ToolTip>
+        <Default>coachID</Default>
+        <Function>
+        </Function>
+      </Literal>
+    </Declarations>
+    <Code Language="javascript" Delimiter="$"><![CDATA[            $$global.deleteAchievement = function ($coachID$) {
+                var event = event || window.event;
+                var $$tr = $$(event.target).closest('tr');
+                if (confirm('確定刪除?')) {
+                    showLoading();
+                    $$.post('<%= Url.Action("DeleteCoachAchievement","Payment") %>', {}, function (data) {
+                        hideLoading();
+                        if (data.isPlainObject(data)) {
+                            if (data.result) {
+                                alert('資料已刪除!!')
+                                $$tr.remove();
+                            } else {
+                                alert(data.message);
+                            }
+                        } else {
+                            $$(data).appendTo($$('body'));
+                        }
+                    });
+                }
+            };]]></Code>
+  </Snippet>
+</CodeSnippet>

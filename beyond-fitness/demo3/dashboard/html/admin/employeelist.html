@@ -243,8 +243,7 @@
                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                            <h2>人員列表</h2>
                            <div class="widget-toolbar">
-                              <a href="#" class="btn btn-primary modifyCoachDialog_link"><i class="fa fa-fw fa-user-plus"></i> 新增體能顧問</a>
-                              <a href="#" class="btn bg-color-pink modifyStaffDialog_link"><i class="fa fa-fw fa-user-secret"></i> 新增行政人員</a>
+                              <a href="#" class="btn btn-primary modifyCoachDialog_link"><i class="fa fa-fw fa-user-plus"></i> 新增員工</a>
                            </div>
                         </header>
                         <!-- widget div-->
@@ -361,33 +360,56 @@
            <div class="modal-body bg-color-darken txt-color-white no-padding">
               <form action="#" class="smart-form" autofocus>
                 <fieldset>
-                    <section>
-                          <label class="label">隸屬分店</label>
-                          <label class="select">
-                             <select>
-                                <option value="1">小巨蛋</option>
-                                <option value="2">Enhanced 101</option>
-                                 <option value="3">忠孝</option>
-                             </select>
-                             <i class="icon-append fa fa-file-word-o"></i>
-                          </label>
-                       </section>
-                 </fieldset>
+                    <div class="row">
+                         <section class="col col-6">
+                              <label class="label">適用主要角色</label>
+                              <label class="select">
+                                 <select>
+                                    <option value="0">店長</option>
+                                    <option value="1">副店長</option>
+                                    <option value="2">體能顧問</option>
+                                    <option value="3">行政助理</option>
+                                    <option value="4">財務助理</option>
+                                 </select>
+                                 <i class="icon-append fa fa-file-word-o"></i>
+                              </label>
+                           </section>
+                            <section class="col col-6">
+                              <label class="label">隸屬分店</label>
+                              <label class="select">
+                                 <select>
+                                    <option value="1">小巨蛋</option>
+                                    <option value="2">Enhanced 101</option>
+                                     <option value="3">忠孝</option>
+                                 </select>
+                                 <i class="icon-append fa fa-file-word-o"></i>
+                              </label>
+                           </section>
+                    </div>                    
+                  </fieldset> 
                  <fieldset>
                     <div class="row">
                        <section class="col col-6">
-                          <label class="label">姓名</label>
+                          <label class="label">真實姓名</label>
                           <label class="input"> <i class="icon-append fa fa-user"></i>
                           <input type="text" name="name" maxlength="20" placeholder="請輸入員工姓名">
                           </label>
                        </section>
                        <section class="col col-6">
+                          <label class="label">暱稱</label>
+                          <label class="input"> <i class="icon-append fa fa-user"></i>
+                          <input type="text" name="name" maxlength="20" placeholder="請輸入員工姓名">
+                          </label>
+                       </section>                       
+                    </div>
+                 </fieldset>
+                 <fieldset>
+                     <section>
                           <label class="label">行動電話</label>
                           <label class="input"> <i class="icon-append fa fa-phone"></i>
                           <input type="tel" name="phone" maxlength="20" placeholder="請輸入行動電話" data-mask="0999999999">
                           </label>
                        </section>
-                    </div>
                  </fieldset>
                  <fieldset>
                     <section>
@@ -396,7 +418,7 @@
                        <input type="text" name="name" maxlength="20" placeholder="請輸入Email">
                        </label>
                     </section>
-                 </fieldset>
+                 </fieldset>                                 
                 <fieldset>
                     <div class="row">
                        <section class="col col-6">
@@ -430,50 +452,6 @@
            </div>
         </div>              
          <!-- dialog-message --> 
-        <!-- ui-dialog -->
-        <div id="modifyStaffDialog" title="編輯行政人員資料" class="bg-color-darken">
-           <div class="modal-body bg-color-darken txt-color-white no-padding">
-              <form action="#" class="smart-form" autofocus>
-                 <fieldset>
-                    <div class="row">
-                       <section class="col col-6">
-                          <label class="label">姓名</label>
-                          <label class="input"> <i class="icon-append fa fa-user"></i>
-                          <input type="text" name="name" maxlength="20" placeholder="請輸入員工姓名">
-                          </label>
-                       </section>
-                       <section class="col col-6">
-                          <label class="label">行動電話</label>
-                          <label class="input"> <i class="icon-append fa fa-phone"></i>
-                          <input type="tel" name="phone" maxlength="20" placeholder="請輸入行動電話" data-mask="0999999999">
-                          </label>
-                       </section>
-                    </div>
-                 </fieldset>
-                 <fieldset>
-                    <section>
-                       <label class="label">Email</label>
-                       <label class="input"> <i class="icon-append fa fa-envelope"></i>
-                       <input type="text" name="name" maxlength="20" placeholder="請輸入Email">
-                       </label>
-                    </section>
-                 </fieldset>
-                 <fieldset>
-                     <section>
-                          <label class="label">適用角色</label>
-                          <label class="select">
-                             <select>
-                                <option value="1">行政助理</option>
-                                <option value="2">財務助理</option>
-                             </select>
-                             <i class="icon-append fa fa-file-word-o"></i>
-                          </label>
-                       </section>
-                  </fieldset>
-              </form>
-           </div>
-        </div>
-          <!-- dialog-message -->  
         <div id="listCertDialog" title="證照清單" class="bg-color-darken">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">

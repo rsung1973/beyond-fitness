@@ -11,7 +11,7 @@
 
 <%  foreach (var item in _model)
     { %>
-<option value="<%= item.ProductID %>"><%= item.ProductName %></option>
+<option value="<%= item.ProductID %>" data-unit-price="<%= item.UnitPrice %>"><%= item.ProductName %> / <%= item.UnitPrice %>元</option>
 <%  } %>
 
 <script runat="server">

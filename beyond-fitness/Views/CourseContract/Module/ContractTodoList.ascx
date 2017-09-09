@@ -23,8 +23,8 @@
             <%  foreach (var item in _model)
                 { %>
             <tr>
-                <td><%= item.ServingCoach.UserProfile.FullName() %></td>
-                <td>
+                <td nowrap="noWrap"><%= item.ServingCoach.UserProfile.FullName() %></td>
+                <td nowrap="noWrap">
                     <%  if (item.CourseContractType.IsGroup==true)
                         { %>
                 <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
@@ -34,8 +34,8 @@
                 <%= item.ContractOwner.FullName() %>
                     <%  } %>
                 </td>
-                <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
-                <td>
+                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
+                <td nowrap="noWrap">
                     <%  if (_viewModel.Status == (int)Naming.CourseContractStatus.草稿)
                         { %>
                     <a onclick="$global.editContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
@@ -95,6 +95,7 @@
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
+                "info": true,
                 "preDrawCallback": function () {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_<%= _tableId %>) {
@@ -154,7 +155,7 @@
                 window.open('<%= Url.Action("ContractApprovalView","CourseContract") %>' + '?contractID=' + contractID, '_blank', 'fullscreen=yes');
                 smartAlert('合約審核中...', function () {
                     //showLoading();
-                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                 });
             };
 
@@ -163,7 +164,7 @@
                 window.open('<%= Url.Action("ContractSignatureView","CourseContract") %>' + '?contractID=' + contractID, '_blank', 'fullscreen=yes');
                 smartAlert('簽名進行中...', function () {
                     //showLoading();
-                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                 });
             };
 
@@ -181,7 +182,7 @@
                 window.open('<%= Url.Action("ContractAllowanceView","CourseContract") %>' + '?contractID=' + contractID, '_blank', 'fullscreen=yes');
                 smartAlert('合約審核中...', function () {
                     //showLoading();
-                    window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                 });
             };
 

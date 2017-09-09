@@ -334,12 +334,12 @@
       <Association Name="ServingCoach_LessonTime" Member="LessonTime" ThisKey="CoachID" OtherKey="InvitedCoach" Type="LessonTime" />
       <Association Name="ServingCoach_LessonTime1" Member="AttendingLesson" Storage="_LessonTime1" ThisKey="CoachID" OtherKey="AttendingCoach" Type="LessonTime" />
       <Association Name="ServingCoach_RegisterLesson" Member="RegisterLesson" ThisKey="CoachID" OtherKey="AdvisorID" Type="RegisterLesson" />
-      <Association Name="ServingCoach_TuitionAchievement" Member="TuitionAchievement" ThisKey="CoachID" OtherKey="CoachID" Type="TuitionAchievement" />
       <Association Name="ServingCoach_CoachWorkplace" Member="CoachWorkplace" ThisKey="CoachID" OtherKey="CoachID" Type="CoachWorkplace" />
       <Association Name="ServingCoach_CoachCertificate" Member="CoachCertificate" ThisKey="CoachID" OtherKey="CoachID" Type="CoachCertificate" />
       <Association Name="ServingCoach_CoachRating" Member="CoachRating" ThisKey="CoachID" OtherKey="CoachID" Type="CoachRating" />
       <Association Name="ServingCoach_CourseContract" Member="CourseContract" ThisKey="CoachID" OtherKey="FitnessConsultant" Type="CourseContract" />
       <Association Name="ServingCoach_LearnerFitnessAdvisor" Member="LearnerFitnessAdvisor" ThisKey="CoachID" OtherKey="CoachID" Type="LearnerFitnessAdvisor" />
+      <Association Name="ServingCoach_TuitionAchievement" Member="TuitionAchievement" ThisKey="CoachID" OtherKey="CoachID" Type="TuitionAchievement" />
       <Association Name="UserProfile_ServingCoach" Member="UserProfile" ThisKey="CoachID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="ProfessionalLevel_ServingCoach" Member="ProfessionalLevel" ThisKey="LevelID" OtherKey="LevelID" Type="ProfessionalLevel" IsForeignKey="true" />
     </Type>
@@ -577,15 +577,6 @@
     <Type Name="QuestionnaireGroup">
       <Column Name="GroupID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="PDQGroup_QuestionnaireGroup" Member="PDQGroup" ThisKey="GroupID" OtherKey="GroupID" Type="PDQGroup" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.TuitionAchievement" Member="TuitionAchievement">
-    <Type Name="TuitionAchievement">
-      <Column Name="InstallmentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="CoachID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ShareAmount" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="ServingCoach_TuitionAchievement" Member="ServingCoach" ThisKey="CoachID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
-      <Association Name="TuitionInstallment_TuitionAchievement" Member="TuitionInstallment" ThisKey="InstallmentID" OtherKey="InstallmentID" Type="TuitionInstallment" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.LessonComment" Member="LessonComment">
@@ -1029,7 +1020,6 @@
       <Column Name="RegisterID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PayoffAmount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="PayoffDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="TuitionInstallment_TuitionAchievement" Member="TuitionAchievement" ThisKey="InstallmentID" OtherKey="InstallmentID" Type="TuitionAchievement" />
       <Association Name="IntuitionCharge_TuitionInstallment" Member="IntuitionCharge" ThisKey="RegisterID" OtherKey="RegisterID" Type="IntuitionCharge" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="Payment_TuitionInstallment" Member="Payment" ThisKey="InstallmentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
     </Type>
@@ -1087,6 +1077,7 @@
       <Association Name="Payment_PaymentTransaction" Member="PaymentTransaction" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentTransaction" Cardinality="One" />
       <Association Name="Payment_PaymentAudit" Member="PaymentAudit" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentAudit" Cardinality="One" />
       <Association Name="Payment_VoidPayment" Member="VoidPayment" ThisKey="PaymentID" OtherKey="VoidID" Type="VoidPayment" Cardinality="One" />
+      <Association Name="Payment_TuitionAchievement" Member="TuitionAchievement" ThisKey="PaymentID" OtherKey="InstallmentID" Type="TuitionAchievement" />
       <Association Name="InvoiceItem_Payment" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
       <Association Name="LevelExpression_Payment" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_Payment" Member="UserProfile" ThisKey="HandlerID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1446,6 +1437,15 @@
       <Association Name="LevelExpression_VoidPaymentLevel" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_VoidPaymentLevel" Member="UserProfile" ThisKey="ExecutorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
       <Association Name="VoidPayment_VoidPaymentLevel" Member="VoidPayment" ThisKey="VoidID" OtherKey="VoidID" Type="VoidPayment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TuitionAchievement" Member="TuitionAchievement">
+    <Type Name="TuitionAchievement">
+      <Column Name="InstallmentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CoachID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShareAmount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Payment_TuitionAchievement" Member="Payment" ThisKey="InstallmentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
+      <Association Name="ServingCoach_TuitionAchievement" Member="ServingCoach" ThisKey="CoachID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -69,7 +69,7 @@
                                         </label>
                                     </section>
                                     <section class="ol col-xs-12 col-sm-6 col-md-3">
-                                        <label class="label">或依學員姓名查詢</label>
+                                        <label class="label">或依學員姓名(暱稱)查詢</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-user"></i>
                                             <input type="text" name="RealName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名" />
@@ -122,9 +122,10 @@
                                             <select class="input" name="Status">
                                                 <option value="">全部</option>
                                                 <option value="1201">草稿</option>
-                                                <option value="1202">待確認</option>
-                                                <option value="1203">待簽名</option>
+                                                <%--<option value="1202">待確認</option>--%>
+                                                <option value="1203">待客戶簽名</option>
                                                 <option value="1204">待審核</option>
+                                                <option value="1205">已生效</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>

@@ -439,7 +439,6 @@
                                  <option value="2">轉讓</option>
                                  <option value="3">轉點</option>
                                  <option value="4">終止</option>
-                                 <option value="5">其他</option>
                               </select>
                               <i class="icon-append fa fa-file-word-o"></i>
                            </label>
@@ -455,7 +454,14 @@
                               </select>
                               <i class="icon-append fa fa-clock-o"></i>
                            </label>
-                        </section>                        
+                        </section>  
+                        <section class="col col-6" style="display:none" id="end"> 
+                               <label class="label">課程單價 <span class="label-warning"><i class="fa fa-info-circle"></i> 原購買堂數：75堂 / 1,400元</span></label>                               
+                               <label class="input">
+                                  <i class="icon-append fa fa-usd"></i>
+                                  <input type="tel" name="money" maxlength="20" placeholder="請輸入單堂折算價格">
+                                  </label>
+                           </section>  
                       </div>
                       <div class="row" style="display:none" id="transfer_spot">                                                       
                           <section class="col col-6">
@@ -633,6 +639,7 @@
                        <label class="label label-info" id="extend_des" style="display:none">原合約編號 CPA201701050001 使用截止日為 2018/01/06 展延至 2018/07/06 止。</label>
                        <label class="label label-info" id="transfer_spot_des" style="display:none">原合約編號 CPA201701050001 上課地點為 南京小巨蛋 轉點至 Enhanced 101，轉換至費用較高之場所依同方案價格計算補足差額。</label>
                         <label class="label label-info" id="transfer_person_des" style="display:none">原合約編號 CPA201701050001 剩餘上課堂數：8堂，全部轉讓至 宋小胖。</label>
+                        <label class="label label-info" id="end_des" style="display:none">原合約編號 CPA201701050001 原購買堂數：75堂 / 1,400元，終止時全部堂數以單堂 / 2,100元 計價，並扣除剩餘上課堂數：8堂，計算補足差額 5,100元 。</label>
                        <label class="label">備註</label>
                        <textarea class="form-control" placeholder="請輸入備註" rows="3"></textarea>
                     </section>
@@ -810,6 +817,8 @@
                         $("#extend_des").show();
                         $("#transfer_spot_des").hide();
                         $("#transfer_person_des").hide();
+                        $("#end_des").hide();
+                        $("#end").hide();
                     } else if (this.value == 3) {
                         $("#transfer_spot").show();
                         $("#extend").hide();
@@ -817,6 +826,8 @@
                         $("#extend_des").hide();
                         $("#transfer_spot_des").show();
                         $("#transfer_person_des").hide();
+                        $("#end_des").hide();
+                        $("#end").hide();
                     } else if (this.value ==2) {
                         $("#transfer_spot").hide();
                         $("#extend").hide();
@@ -824,13 +835,17 @@
                         $("#extend_des").hide();
                         $("#transfer_spot_des").hide();
                         $("#transfer_person_des").show();
-                    } else if (this.value ==4 || this.value ==5) {
+                        $("#end_des").hide();
+                        $("#end").hide();
+                    } else if (this.value ==4) {
                         $("#transfer_spot").hide();
                         $("#extend").hide();
                         $("#transfer_person").hide();
                         $("#extend_des").hide();
                         $("#transfer_spot_des").hide();
                         $("#transfer_person_des").hide();
+                        $("#end_des").show();
+                        $("#end").show();
                     }
                 });
             });

@@ -255,21 +255,34 @@
                               <form action="contact.html" method="post" id="search-form" class="smart-form">
                                   <fieldset>
                                      <div class="row">
-                                          <section class="col col-4">
-                                            <label class="label">依真實姓名或暱稱查詢</label>
+                                          <section class="col col-3">
+                                              <label class="label">依所屬體能顧問查詢</label>
+                                              <label class="select">
+                                                 <select>
+                                                    <option value="0">店長</option>
+                                                    <option value="1">副店長</option>
+                                                    <option value="2">體能顧問</option>
+                                                    <option value="3">行政助理</option>
+                                                    <option value="4">財務助理</option>
+                                                 </select>
+                                                 <i class="icon-append fa fa-file-word-o"></i>
+                                              </label>
+                                           </section>
+                                          <section class="col col-3">
+                                            <label class="label">或真實姓名(暱稱)查詢</label>
                                               <label class="input input-group" >
                                                 <i class="icon-append fa fa-user"></i>
                                                 <input type="text" name="studentname" class="form-control input" maxlength="20" placeholder="請輸入學員姓名">
                                                </label>
                                           </section>
-                                          <section class="col col-4">
+                                          <section class="col col-3">
                                                 <label class="label">或依身分證字號查詢</label>
                                               <label class="input input-group" >
                                                 <i class="icon-append fa fa-id-card-o"></i>
                                                 <input type="text" name="contractno" class="form-control input" maxlength="20" placeholder="請輸入合約編號">
                                                </label>
                                           </section>
-                                          <section class="col col-4">
+                                          <section class="col col-3">
                                                 <label class="label">或依聯絡電話查詢</label>
                                               <label class="input input-group" >
                                                 <i class="icon-append fa fa-phone"></i>

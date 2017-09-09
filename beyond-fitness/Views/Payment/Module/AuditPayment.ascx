@@ -24,7 +24,7 @@
             close: function () {
                 $('#<%= _dialog %>').remove();
                 showLoading();
-                window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
             }
         });
 

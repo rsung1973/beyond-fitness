@@ -30,16 +30,17 @@ namespace WebHome.Controllers
     {
         // GET: CoachFacet
         [CoachOrAssistantAuthorize]
-        public ActionResult Index(DailyBookingQueryViewModel viewModel)
+        public ActionResult Index(DailyBookingQueryViewModel viewModel,bool? showTodoTab)
         {
             var profile = HttpContext.GetUser();
-            //if(!viewModel.CoachID.HasValue && !profile.IsSysAdmin())
-            //{
-            //    viewModel.CoachID = profile.UID;
-            //}
+            if (!viewModel.CoachID.HasValue && !profile.IsAssistant())
+            {
+                viewModel.CoachID = profile.UID;
+            }
 
             ViewBag.ViewModel = viewModel;
             ViewBag.CurrentCoach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
+            ViewBag.ShowTodoTab = showTodoTab;
             var item = models.GetTable<UserProfile>().Where(s => s.UID == profile.UID).FirstOrDefault();
 
             return View("~/Views/CoachFacet/Index.aspx", item);
@@ -418,18 +419,23 @@ namespace WebHome.Controllers
                 AdvisorID = viewModel.CoachID,
                 GroupingLesson = new GroupingLesson { }
             };
-            var installment = new TuitionInstallment
-            {
-                PayoffDate = viewModel.ClassDate,
-                PayoffAmount = priceType.ListPrice
-            };
-            installment.TuitionAchievement.Add(new TuitionAchievement
-            {
-                CoachID = lesson.AdvisorID.Value,
-                ShareAmount = installment.PayoffAmount
-            });
+            //var installment = new TuitionInstallment
+            //{
+            //    PayoffDate = viewModel.ClassDate,
+            //    PayoffAmount = priceType.ListPrice,
+            //    Payment = new Payment
+            //    {
+            //        PayoffAmount = priceType.ListPrice,
+            //        PayoffDate = viewModel.ClassDate
+            //    }
+            //};
+            //installment.Payment.TuitionAchievement.Add(new TuitionAchievement
+            //{
+            //    CoachID = lesson.AdvisorID.Value,
+            //    ShareAmount = installment.PayoffAmount
+            //});
 
-            lesson.IntuitionCharge.TuitionInstallment.Add(installment);
+            //lesson.IntuitionCharge.TuitionInstallment.Add(installment);
             models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
             models.SubmitChanges();
 

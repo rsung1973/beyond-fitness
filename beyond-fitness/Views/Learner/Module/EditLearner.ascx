@@ -17,9 +17,9 @@
                         <label class="label">是否為體驗學員</label>
                         <div class="inline-group">
                             <label class="select">
-                                <select>
-                                    <option value="0">否</option>
-                                    <option value="1">是</option>
+                                <select name="CurrentTrial">
+                                    <option value="">否</option>
+                                    <option value="1" <%= _viewModel.CurrentTrial==1 ? "selected" : null %>>是</option>
                                 </select>
                                 <i class="icon-append fa fa-address-card"></i>
                             </label>
@@ -211,7 +211,7 @@
                         success: function (data) {
                             if ($.isPlainObject(data)) {
                                 if (data.result) {
-                                    $global.renderLearnerList();
+                                    $global.renderLearnerList(data.UID);
                                     $('#<%= _dialog %>').dialog('close');
                                 } else {
                                     alert(data.message);

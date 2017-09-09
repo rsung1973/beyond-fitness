@@ -64,7 +64,8 @@
                             <select name="ProductID">
                                 <%  var items = models.GetTable<MerchandiseTransaction>().Where(m => m.TransactionID == _viewModel.TransactionType)
                                         .Select(m => m.MerchandiseWindow)
-                                        .Where(p => p.Status == (int)Naming.MerchandiseStatus.OnSale);
+                                        .Where(p => p.Status == (int)Naming.MerchandiseStatus.OnSale)
+                                        .OrderBy(p => p.ProductName);
                                     Html.RenderPartial("~/Views/SystemInfo/MerchandiseOptions.ascx", items); %>
                             </select>
                             <i class="icon-append fa fa-file-word-o"></i>
@@ -74,8 +75,31 @@
                         <label class="label">數量</label>
                         <label class="input">
                             <i class="icon-append fa fa-cart-plus"></i>
-                            <input type="number" name="ProductCount" maxlength="10" placeholder="請輸入數量" value="<%= _viewModel.ProductCount %>" //>
+                            <input type="number" name="ProductCount" maxlength="10" placeholder="請輸入數量" value="<%= _viewModel.ProductCount %>" />
                         </label>
+                        <script>
+                            $(function () {
+                                function calc() {
+                                    var count = Number($('#<%= _dialog %> input[name="ProductCount"]').val());
+                                    if (!isNaN(count)) {
+                                        var price = Number($('#<%= _dialog %> select[name="ProductID"] option:selected').attr('data-unit-price'));
+                                        if (!isNaN(price)) {
+                                            $('#<%= _dialog %> input[name="PayoffAmount"]').val(count * price);
+                                        }
+                                    }
+                                }
+
+                                $('#<%= _dialog %> input[name="ProductCount"]').on('blur', function (evt) {
+                                    calc();
+                                });
+
+                                $('#<%= _dialog %> select[name="ProductID"]').on('change', function (evt) {
+                                    calc();
+                                });
+
+                                calc();
+                            });
+                        </script>
                     </section>
                 </div>
             </fieldset>
@@ -156,8 +180,8 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
-                "class": "btn bg-color-red",
+                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認收款資料正確?")) {
                         clearErrors();
@@ -170,7 +194,7 @@
                                 hideLoading();
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
-                                        alert('收款資料已送交審核!!');
+                                        alert('收款資料已生效!!');
                                         <%--$('#<%= _dialog %>').dialog('close');--%>
                                         showLoading();
                                         window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';

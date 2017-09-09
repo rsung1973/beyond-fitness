@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>Report Input Error</Title>
+      <Author>Windows 使用者</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>
+      </Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+<!--         <Literal Editable="true">
+          <ID>ToAuditPayment</ID>
+          <ToolTip>ToAuditPayment</ToolTip>
+          <Default>ToAuditPayment</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>PaymentViewModel</ID>
+          <ToolTip>PaymentViewModel</ToolTip>
+          <Default>PaymentViewModel</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>AuditPayment</ID>
+          <ToolTip>AuditPayment</ToolTip>
+          <Default>AuditPayment</Default>
+          <Function>
+          </Function>
+        </Literal> -->
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[                    if(!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -614,3 +614,9 @@ body.modal-open {
     padding: 7px 8px;
     border-top: 0px;
 }
+
+.seal {
+  background-image: url("../img/seal.png"); 
+  background-repeat: no-repeat; 
+  background-position: center center; 
+}

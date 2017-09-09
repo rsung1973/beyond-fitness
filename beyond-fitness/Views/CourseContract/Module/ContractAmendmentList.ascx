@@ -22,7 +22,7 @@
     <tbody>
         <%  foreach (var item in _model)
             { %>
-        <td><%= item.CourseContract.ContractNo %></td>
+        <td><%= item.CourseContract.ContractNo + "-" + String.Format("{0:00}",item.RevisionNo) %></td>
         <td><%= item.CourseContract.ServingCoach.UserProfile.FullName() %></td>
         <td><%= String.Format("{0:yyyy/MM/dd}",item.CourseContract.ContractDate) %></td>
         <td><%= item.Reason %></td>

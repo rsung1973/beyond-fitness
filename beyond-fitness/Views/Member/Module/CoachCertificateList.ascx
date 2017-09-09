@@ -35,14 +35,14 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    IQueryable<CoachCertificate> _model;
+    IEnumerable<CoachCertificate> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<CoachCertificate>)this.Model;
+        _model = (IEnumerable<CoachCertificate>)this.Model;
     }
 
 </script>

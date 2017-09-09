@@ -9,10 +9,9 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
-<div id="<%= _dialog %>" title="待辦事項：作廢收款(待審核)" class="bg-color-darken">
+<div id="<%= _dialog %>" title="待辦事項：作廢收款(<%= ViewBag.ViewAction %>)" class="bg-color-darken">
     <!-- content -->
-    <%  ViewBag.ViewAction = "審核作廢";
-        Html.RenderPartial("~/Views/Payment/Module/PaymentTodoList.ascx", _model); %>
+    <%  Html.RenderPartial("~/Views/Payment/Module/PaymentTodoList.ascx", _model); %>
     <!-- end content -->
     <script>
         $('#<%= _dialog %>').dialog({
@@ -20,18 +19,26 @@
             width: "auto",
             resizable: false,
             modal: true,
-            title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：作廢收款項目-<%= ((Naming.PaymentTransactionType)_viewModel.TransactionType).ToString() %>(待審核)</h4>",
+            title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：作廢收款項目-<%= ((Naming.PaymentTransactionType)_viewModel.TransactionType).ToString() %>(<%= ViewBag.ViewAction %>)</h4>",
             close: function () {
                 $('#<%= _dialog %>').remove();
             }
         });
 
-        console.log('debug...');
         $(function () {
 
             $global.approveToVoid = function (paymentID) {
                 showLoading();
                 $.post('<%= Url.Action("ApproveToVoidPaymentView","Payment") %>', { 'paymentID': paymentID }, function (data) {
+                    hideLoading();
+                    $('#<%= _dialog %>').dialog("close");
+                    $(data).appendTo($('body'));
+                });
+            };
+
+            $global.editToVoid = function (paymentID) {
+                showLoading();
+                $.post('<%= Url.Action("EditToVoidPaymentView","Payment") %>', { 'paymentID': paymentID }, function (data) {
                     hideLoading();
                     $('#<%= _dialog %>').dialog("close");
                     $(data).appendTo($('body'));

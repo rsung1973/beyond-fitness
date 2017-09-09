@@ -217,43 +217,70 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
-            viewModel.IDNo = viewModel.IDNo.GetEfficientString();
-            if(viewModel.IDNo==null)
+            if (viewModel.CurrentTrial != 1)
             {
-                ModelState.AddModelError("IDNo", "請輸入身份證字號/護照號碼!!");
-            }
-            else if(viewModel.IDNo.Length== 10 && !viewModel.IDNo.CheckIDNo())
-            {
-                ModelState.AddModelError("IDNo", "身份證字號格式錯誤!!");
-            }
-            else if(viewModel.UID.HasValue)
-            {
-                if(models.GetTable<UserProfileExtension>().Any(u=>u.IDNo==viewModel.IDNo && u.UID!=viewModel.UID))
+                viewModel.IDNo = viewModel.IDNo.GetEfficientString();
+                if (viewModel.IDNo == null)
                 {
-                    ModelState.AddModelError("IDNo", "身份證字號/護照號碼已存在!!");
+                    ModelState.AddModelError("IDNo", "請輸入身份證字號/護照號碼!!");
                 }
-            }
-            else
-            {
-                if (models.GetTable<UserProfileExtension>().Any(u => u.IDNo == viewModel.IDNo))
+                else if (viewModel.IDNo.Length == 10 && !viewModel.IDNo.CheckIDNo())
                 {
-                    ModelState.AddModelError("IDNo", "身份證字號/護照號碼已存在!!");
+                    ModelState.AddModelError("IDNo", "身份證字號格式錯誤!!");
                 }
-            }
+                else if (viewModel.UID.HasValue)
+                {
+                    if (models.GetTable<UserProfileExtension>().Any(u => u.IDNo == viewModel.IDNo && u.UID != viewModel.UID))
+                    {
+                        ModelState.AddModelError("IDNo", "身份證字號/護照號碼已存在!!");
+                    }
+                }
+                else
+                {
+                    if (models.GetTable<UserProfileExtension>().Any(u => u.IDNo == viewModel.IDNo))
+                    {
+                        ModelState.AddModelError("IDNo", "身份證字號/護照號碼已存在!!");
+                    }
+                }
 
+                if (!viewModel.Birthday.HasValue)
+                {
+                    ModelState.AddModelError("Birthday", "請輸入生日!!");
+                }
+
+                if (String.IsNullOrEmpty(viewModel.AdministrativeArea))
+                {
+                    ModelState.AddModelError("AdministrativeArea", "請選擇縣市!!");
+                }
+                if (String.IsNullOrEmpty(viewModel.Address))
+                {
+                    ModelState.AddModelError("Address", "請輸入居住地址!!");
+                }
+                if (String.IsNullOrEmpty(viewModel.EmergencyContactPerson))
+                {
+                    ModelState.AddModelError("EmergencyContactPerson", "請輸入緊急聯絡人!!");
+                }
+                if (String.IsNullOrEmpty(viewModel.Relationship))
+                {
+                    ModelState.AddModelError("Relationship", "請選擇緊急聯絡人關係!!");
+                }
+                if (String.IsNullOrEmpty(viewModel.EmergencyContactPhone))
+                {
+                    ModelState.AddModelError("EmergencyContactPhone", "請輸入緊急聯絡人電話!!");
+                }
+            }
 
             if (String.IsNullOrEmpty(viewModel.RealName))
             {
                 ModelState.AddModelError("RealName", "請輸入學員姓名!!");
             }
-            if (!viewModel.Birthday.HasValue)
-            {
-                ModelState.AddModelError("Birthday", "請輸入生日!!");
-            }
+
+            viewModel.Phone = viewModel.Phone.GetEfficientString();
             if (String.IsNullOrEmpty(viewModel.Phone))
             {
                 ModelState.AddModelError("Phone", "請輸聯絡電話!!");
             }
+
             if (String.IsNullOrEmpty(viewModel.Gender))
             {
                 ModelState.AddModelError("Gender", "請選擇性別!!");
@@ -262,26 +289,7 @@ namespace WebHome.Controllers
             {
                 ModelState.AddModelError("AthleticLevel", "請選擇是否為運動員!!");
             }
-            if (String.IsNullOrEmpty(viewModel.AdministrativeArea))
-            {
-                ModelState.AddModelError("AdministrativeArea", "請選擇縣市!!");
-            }
-            if (String.IsNullOrEmpty(viewModel.Address))
-            {
-                ModelState.AddModelError("Address", "請輸入居住地址!!");
-            }
-            if (String.IsNullOrEmpty(viewModel.EmergencyContactPerson))
-            {
-                ModelState.AddModelError("EmergencyContactPerson", "請輸入緊急聯絡人!!");
-            }
-            if (String.IsNullOrEmpty(viewModel.Relationship))
-            {
-                ModelState.AddModelError("Relationship", "請選擇緊急聯絡人關係!!");
-            }
-            if (String.IsNullOrEmpty(viewModel.EmergencyContactPhone))
-            {
-                ModelState.AddModelError("EmergencyContactPhone", "請輸入緊急聯絡人電話!!");
-            }
+
 
             if (!ModelState.IsValid)
             {
@@ -309,6 +317,7 @@ namespace WebHome.Controllers
             item.UserProfileExtension.Relationship = viewModel.Relationship;
             item.UserProfileExtension.AdministrativeArea = viewModel.AdministrativeArea;
             item.UserProfileExtension.IDNo = viewModel.IDNo.ToUpper();
+            item.UserProfileExtension.CurrentTrial = viewModel.CurrentTrial;
 
             models.SubmitChanges();
 
@@ -441,7 +450,7 @@ namespace WebHome.Controllers
             item.ValidFrom = DateTime.Today;
             item.Expiration = DateTime.Today.AddMonths(18);
             item.OwnerID = viewModel.OwnerID.Value;
-            item.SequenceNo = viewModel.SequenceNo;
+            item.SequenceNo = 0;// viewModel.SequenceNo;
             item.Lessons = viewModel.Lessons;
             item.PriceID = viewModel.PriceID.Value;
             item.Remark = viewModel.Remark;
@@ -526,7 +535,7 @@ namespace WebHome.Controllers
             item.ValidFrom = DateTime.Today;
             //item.Expiration = viewModel.Expiration;
             item.OwnerID = viewModel.OwnerID.Value;
-            item.SequenceNo = viewModel.SequenceNo;
+            item.SequenceNo = 0;// viewModel.SequenceNo;
             item.Lessons = viewModel.Lessons;
             item.PriceID = viewModel.PriceID.Value;
             item.Remark = viewModel.Remark;
@@ -571,6 +580,14 @@ namespace WebHome.Controllers
             {
                 ModelState.AddModelError("FitnessConsultant", "請選擇體能顧問!!");
             }
+            else
+            {
+                if (!models.GetTable<ServingCoach>().Any(s => s.CoachID == viewModel.FitnessConsultant
+                     && s.UserProfile.UserProfileExtension.Signature != null))
+                {
+                    ModelState.AddModelError("FitnessConsultant", "體能顧問未建立簽名檔!!");
+                }
+            }
 
             if (!viewModel.OwnerID.HasValue)
             {
@@ -581,7 +598,8 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("OwnerID", "請設定學員!!");
             }
             else if ((viewModel.ContractType == 1 && viewModel.UID.Length != 1)
-                || (viewModel.ContractType == 3 && viewModel.UID.Length != 2))
+                || (viewModel.ContractType == 3 && viewModel.UID.Length != 2)
+                || (viewModel.ContractType == 4 && viewModel.UID.Length != 3))
             {
                 ModelState.AddModelError("OwnerID", "學員數與合約不符!!");
             }
@@ -595,8 +613,14 @@ namespace WebHome.Controllers
             //    items = items.Where(t => t.AttendingCoach == viewModel.CoachID);
             //if (viewModel.QueryStart.HasValue)
             //    items = items.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
-
-            return View("~/Views/CourseContract/Module/CourseContractSummary.ascx",item);
+            if (item.IsAssistant() || item.IsManager() || item.IsViceManager())
+            {
+                return View("~/Views/CourseContract/Module/CourseContractSummary.ascx", item);
+            }
+            else
+            {
+                return View("~/Views/CourseContract/Module/CourseContractSummaryCoachView.ascx", item);
+            }
         }
 
         public ActionResult ContractTodoList(CourseContractViewModel viewModel)
@@ -1139,33 +1163,9 @@ namespace WebHome.Controllers
             IQueryable<CourseContract> items = models.GetTable<CourseContract>();
 
             var profile = HttpContext.GetUser();
-            if (profile.IsManager() || profile.IsViceManager())
-            {
-                var coaches = profile.GetServingCoachInSameStore(models);
-                items = items.Join(coaches, c => c.FitnessConsultant, h => h.CoachID, (c, h) => c);
-            }
 
             Expression<Func<CourseContract, bool>> queryExpr = c => false;
             bool hasConditon = false;
-
-            if (viewModel.BranchID.HasValue)
-            {
-                hasConditon = true;
-                queryExpr = queryExpr.Or(c => c.LessonPriceType.BranchID == viewModel.BranchID);
-            }
-
-            if (viewModel.FitnessConsultant.HasValue)
-            {
-                hasConditon = true;
-                queryExpr = queryExpr.Or(c => c.FitnessConsultant == viewModel.FitnessConsultant);
-            }
-
-            viewModel.ContractNo = viewModel.ContractNo.GetEfficientString();
-            if (viewModel.ContractNo != null)
-            {
-                hasConditon = true;
-                queryExpr = queryExpr.Or(c => c.ContractNo.StartsWith(viewModel.ContractNo));
-            }
 
             viewModel.RealName = viewModel.RealName.GetEfficientString();
             if (viewModel.RealName != null)
@@ -1174,7 +1174,64 @@ namespace WebHome.Controllers
                 queryExpr = queryExpr.Or(c => c.CourseContractMember.Any(m => m.UserProfile.RealName.Contains(viewModel.RealName) || m.UserProfile.Nickname.Contains(viewModel.RealName)));
             }
 
-            if(hasConditon)
+            if(!hasConditon)
+            {
+                viewModel.ContractNo = viewModel.ContractNo.GetEfficientString();
+                if (viewModel.ContractNo != null)
+                {
+                    hasConditon = true;
+                    var no = viewModel.ContractNo.Split('-');
+                    int seqNo;
+                    if (no.Length > 1)
+                    {
+                        int.TryParse(no[1], out seqNo);
+                        queryExpr = queryExpr.Or(c => c.ContractNo.StartsWith(no[0])
+                            && c.SequenceNo == seqNo);
+                    }
+                    else
+                    {
+                        queryExpr = queryExpr.Or(c => c.ContractNo.StartsWith(viewModel.ContractNo));
+                    }
+                }
+            }
+
+
+            if (!hasConditon)
+            {
+                if (viewModel.FitnessConsultant.HasValue)
+                {
+                    hasConditon = true;
+                    queryExpr = queryExpr.Or(c => c.FitnessConsultant == viewModel.FitnessConsultant);
+                }
+            }
+
+            if (!hasConditon)
+            {
+                if (viewModel.BranchID.HasValue)
+                {
+                    hasConditon = true;
+                    queryExpr = queryExpr.Or(c => c.LessonPriceType.BranchID == viewModel.BranchID);
+                }
+            }
+
+            if (!hasConditon)
+            {
+                if (profile.IsAssistant())
+                {
+
+                }
+                else if (profile.IsManager() || profile.IsViceManager())
+                {
+                    var coaches = profile.GetServingCoachInSameStore(models);
+                    items = items.Join(coaches, c => c.FitnessConsultant, h => h.CoachID, (c, h) => c);
+                }
+                else if (profile.IsCoach())
+                {
+                    items = items.Where(c => c.FitnessConsultant == profile.UID);
+                }
+            }
+
+            if (hasConditon)
             {
                 items = items.Where(queryExpr);
             }
@@ -1211,8 +1268,19 @@ namespace WebHome.Controllers
             viewModel.ContractNo = viewModel.ContractNo.GetEfficientString();
             if (viewModel.ContractNo != null)
             {
-                items = items.Where(c => c.ContractNo.StartsWith(viewModel.ContractNo));
                 hasCondition = true;
+                var no = viewModel.ContractNo.Split('-');
+                int seqNo;
+                if (no.Length > 1)
+                {
+                    int.TryParse(no[1], out seqNo);
+                    items = items.Where(c => c.ContractNo.StartsWith(no[0])
+                        && c.SequenceNo == seqNo);
+                }
+                else
+                {
+                    items = items.Where(c => c.ContractNo.StartsWith(viewModel.ContractNo));
+                }
             }
 
             if(!hasCondition)
@@ -1278,7 +1346,6 @@ namespace WebHome.Controllers
                 newItem.ValidFrom = item.ValidFrom;
                 newItem.Expiration = item.Expiration;
                 newItem.OwnerID = item.OwnerID;
-                newItem.SequenceNo = item.SequenceNo;
                 newItem.Lessons = item.Lessons;
                 newItem.PriceID = item.PriceID;
                 newItem.Remark = viewModel.Remark;
@@ -1290,7 +1357,8 @@ namespace WebHome.Controllers
                     Reason = viewModel.Reason,
                     RevisionNo = item.RevisionList.Count + 1
                 };
-                newItem.ContractNo = item.ContractNo + "-" + String.Format("{0:00}", newItem.CourseContractRevision.RevisionNo);
+                newItem.SequenceNo = newItem.CourseContractRevision.RevisionNo;
+                newItem.ContractNo = item.ContractNo;   // + "-" + String.Format("{0:00}", newItem.CourseContractRevision.RevisionNo);
 
                 newItem.Status = (int)Naming.CourseContractStatus.待確認;
                 item.CourseContractLevel.Add(new CourseContractLevel

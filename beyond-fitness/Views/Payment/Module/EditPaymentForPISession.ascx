@@ -149,8 +149,8 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
-                "class": "btn bg-color-red",
+                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認收款資料正確?")) {
                         clearErrors();
@@ -163,7 +163,7 @@
                                 hideLoading();
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
-                                        alert('收款資料已送交審核!!');
+                                        alert('收款資料已生效!!');
                                         <%--$('#<%= _dialog %>').dialog('close');--%>
                                         showLoading();
                                         window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';

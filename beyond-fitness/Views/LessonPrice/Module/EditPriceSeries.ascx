@@ -30,7 +30,7 @@
                         <label class="label">請選擇價格適用年份</label>
                         <label class="select">
                             <select class="input" name="Year">
-                                <%  for (int year = DateTime.Today.Year; year < DateTime.Today.Year + 5; year++)
+                                <%  for (int year = _viewModel.Year.HasValue ? Math.Min(_viewModel.Year.Value, DateTime.Today.Year) : DateTime.Today.Year ; year < DateTime.Today.Year + 5; year++)
                                     { %>
                                 <option><%= year %></option>
                                 <%  } %>

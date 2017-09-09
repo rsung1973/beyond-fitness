@@ -12,11 +12,11 @@
     <div class="col-md-12">
         <div class="well no-padding well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>學員服務申請表</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
                     <tbody>
                         <tr>
-                            <td colspan="2">合約編號：<%= _contract.ContractNo %></td>
+                            <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
                             <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
@@ -41,7 +41,7 @@
                         <tr>
                             <td colspan="2">
                                 <%  var original = _model.SourceContract; %>
-                                申請內容：原合約編號 <%= original.ContractNo %> 上課地點為 <%= original.LessonPriceType.BranchStore.BranchName %> 轉點至 <%= _contract.LessonPriceType.BranchStore.BranchName %><%= _contract.LessonPriceType.BranchID==2 ? "，轉換至費用較高之場所依同方案價格計算補足差額" : null %>。</td>
+                                申請內容：原合約編號 <%= original.ContractNo() %> 上課地點為 <%= original.LessonPriceType.BranchStore.BranchName %> 轉點至 <%= _contract.LessonPriceType.BranchStore.BranchName %><%= _contract.LessonPriceType.BranchID==2 ? "，轉換至費用較高之場所依同方案價格計算補足差額" : null %>。</td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2">說明：<%= _contract.Remark %></td>

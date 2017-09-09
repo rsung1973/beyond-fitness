@@ -162,9 +162,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertQuestionnaireGroup(QuestionnaireGroup instance);
     partial void UpdateQuestionnaireGroup(QuestionnaireGroup instance);
     partial void DeleteQuestionnaireGroup(QuestionnaireGroup instance);
-    partial void InsertTuitionAchievement(TuitionAchievement instance);
-    partial void UpdateTuitionAchievement(TuitionAchievement instance);
-    partial void DeleteTuitionAchievement(TuitionAchievement instance);
     partial void InsertLessonComment(LessonComment instance);
     partial void UpdateLessonComment(LessonComment instance);
     partial void DeleteLessonComment(LessonComment instance);
@@ -366,6 +363,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertVoidPaymentLevel(VoidPaymentLevel instance);
     partial void UpdateVoidPaymentLevel(VoidPaymentLevel instance);
     partial void DeleteVoidPaymentLevel(VoidPaymentLevel instance);
+    partial void InsertTuitionAchievement(TuitionAchievement instance);
+    partial void UpdateTuitionAchievement(TuitionAchievement instance);
+    partial void DeleteTuitionAchievement(TuitionAchievement instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -755,14 +755,6 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<QuestionnaireGroup>();
-			}
-		}
-		
-		public System.Data.Linq.Table<TuitionAchievement> TuitionAchievement
-		{
-			get
-			{
-				return this.GetTable<TuitionAchievement>();
 			}
 		}
 		
@@ -1299,6 +1291,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<VoidPaymentLevel>();
+			}
+		}
+		
+		public System.Data.Linq.Table<TuitionAchievement> TuitionAchievement
+		{
+			get
+			{
+				return this.GetTable<TuitionAchievement>();
 			}
 		}
 	}
@@ -8772,8 +8772,6 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
-		private EntitySet<TuitionAchievement> _TuitionAchievement;
-		
 		private EntitySet<CoachWorkplace> _CoachWorkplace;
 		
 		private EntitySet<CoachCertificate> _CoachCertificate;
@@ -8783,6 +8781,8 @@ namespace WebHome.Models.DataEntity
 		private EntitySet<CourseContract> _CourseContract;
 		
 		private EntitySet<LearnerFitnessAdvisor> _LearnerFitnessAdvisor;
+		
+		private EntitySet<TuitionAchievement> _TuitionAchievement;
 		
 		private EntityRef<UserProfile> _UserProfile;
 		
@@ -8807,12 +8807,12 @@ namespace WebHome.Models.DataEntity
 			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
 			this._LessonTime1 = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime1), new Action<LessonTime>(this.detach_LessonTime1));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
-			this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
 			this._CoachWorkplace = new EntitySet<CoachWorkplace>(new Action<CoachWorkplace>(this.attach_CoachWorkplace), new Action<CoachWorkplace>(this.detach_CoachWorkplace));
 			this._CoachCertificate = new EntitySet<CoachCertificate>(new Action<CoachCertificate>(this.attach_CoachCertificate), new Action<CoachCertificate>(this.detach_CoachCertificate));
 			this._CoachRating = new EntitySet<CoachRating>(new Action<CoachRating>(this.attach_CoachRating), new Action<CoachRating>(this.detach_CoachRating));
 			this._CourseContract = new EntitySet<CourseContract>(new Action<CourseContract>(this.attach_CourseContract), new Action<CourseContract>(this.detach_CourseContract));
 			this._LearnerFitnessAdvisor = new EntitySet<LearnerFitnessAdvisor>(new Action<LearnerFitnessAdvisor>(this.attach_LearnerFitnessAdvisor), new Action<LearnerFitnessAdvisor>(this.detach_LearnerFitnessAdvisor));
+			this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
 			this._UserProfile = default(EntityRef<UserProfile>);
 			this._ProfessionalLevel = default(EntityRef<ProfessionalLevel>);
 			OnCreated();
@@ -8945,19 +8945,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_TuitionAchievement", Storage="_TuitionAchievement", ThisKey="CoachID", OtherKey="CoachID")]
-		public EntitySet<TuitionAchievement> TuitionAchievement
-		{
-			get
-			{
-				return this._TuitionAchievement;
-			}
-			set
-			{
-				this._TuitionAchievement.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_CoachWorkplace", Storage="_CoachWorkplace", ThisKey="CoachID", OtherKey="CoachID")]
 		public EntitySet<CoachWorkplace> CoachWorkplace
 		{
@@ -9020,6 +9007,19 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._LearnerFitnessAdvisor.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_TuitionAchievement", Storage="_TuitionAchievement", ThisKey="CoachID", OtherKey="CoachID")]
+		public EntitySet<TuitionAchievement> TuitionAchievement
+		{
+			get
+			{
+				return this._TuitionAchievement;
+			}
+			set
+			{
+				this._TuitionAchievement.Assign(value);
 			}
 		}
 		
@@ -9147,18 +9147,6 @@ namespace WebHome.Models.DataEntity
 			entity.ServingCoach = null;
 		}
 		
-		private void attach_TuitionAchievement(TuitionAchievement entity)
-		{
-			this.SendPropertyChanging();
-			entity.ServingCoach = this;
-		}
-		
-		private void detach_TuitionAchievement(TuitionAchievement entity)
-		{
-			this.SendPropertyChanging();
-			entity.ServingCoach = null;
-		}
-		
 		private void attach_CoachWorkplace(CoachWorkplace entity)
 		{
 			this.SendPropertyChanging();
@@ -9214,6 +9202,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_LearnerFitnessAdvisor(LearnerFitnessAdvisor entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach = null;
+		}
+		
+		private void attach_TuitionAchievement(TuitionAchievement entity)
+		{
+			this.SendPropertyChanging();
+			entity.ServingCoach = this;
+		}
+		
+		private void detach_TuitionAchievement(TuitionAchievement entity)
 		{
 			this.SendPropertyChanging();
 			entity.ServingCoach = null;
@@ -14209,198 +14209,6 @@ namespace WebHome.Models.DataEntity
 						this._GroupID = default(int);
 					}
 					this.SendPropertyChanged("PDQGroup");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TuitionAchievement")]
-	public partial class TuitionAchievement : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _InstallmentID;
-		
-		private int _CoachID;
-		
-		private System.Nullable<int> _ShareAmount;
-		
-		private EntityRef<ServingCoach> _ServingCoach;
-		
-		private EntityRef<TuitionInstallment> _TuitionInstallment;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnInstallmentIDChanging(int value);
-    partial void OnInstallmentIDChanged();
-    partial void OnCoachIDChanging(int value);
-    partial void OnCoachIDChanged();
-    partial void OnShareAmountChanging(System.Nullable<int> value);
-    partial void OnShareAmountChanged();
-    #endregion
-		
-		public TuitionAchievement()
-		{
-			this._ServingCoach = default(EntityRef<ServingCoach>);
-			this._TuitionInstallment = default(EntityRef<TuitionInstallment>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InstallmentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int InstallmentID
-		{
-			get
-			{
-				return this._InstallmentID;
-			}
-			set
-			{
-				if ((this._InstallmentID != value))
-				{
-					if (this._TuitionInstallment.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnInstallmentIDChanging(value);
-					this.SendPropertyChanging();
-					this._InstallmentID = value;
-					this.SendPropertyChanged("InstallmentID");
-					this.OnInstallmentIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoachID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int CoachID
-		{
-			get
-			{
-				return this._CoachID;
-			}
-			set
-			{
-				if ((this._CoachID != value))
-				{
-					if (this._ServingCoach.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCoachIDChanging(value);
-					this.SendPropertyChanging();
-					this._CoachID = value;
-					this.SendPropertyChanged("CoachID");
-					this.OnCoachIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShareAmount", DbType="Int")]
-		public System.Nullable<int> ShareAmount
-		{
-			get
-			{
-				return this._ShareAmount;
-			}
-			set
-			{
-				if ((this._ShareAmount != value))
-				{
-					this.OnShareAmountChanging(value);
-					this.SendPropertyChanging();
-					this._ShareAmount = value;
-					this.SendPropertyChanged("ShareAmount");
-					this.OnShareAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_TuitionAchievement", Storage="_ServingCoach", ThisKey="CoachID", OtherKey="CoachID", IsForeignKey=true)]
-		public ServingCoach ServingCoach
-		{
-			get
-			{
-				return this._ServingCoach.Entity;
-			}
-			set
-			{
-				ServingCoach previousValue = this._ServingCoach.Entity;
-				if (((previousValue != value) 
-							|| (this._ServingCoach.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ServingCoach.Entity = null;
-						previousValue.TuitionAchievement.Remove(this);
-					}
-					this._ServingCoach.Entity = value;
-					if ((value != null))
-					{
-						value.TuitionAchievement.Add(this);
-						this._CoachID = value.CoachID;
-					}
-					else
-					{
-						this._CoachID = default(int);
-					}
-					this.SendPropertyChanged("ServingCoach");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TuitionInstallment_TuitionAchievement", Storage="_TuitionInstallment", ThisKey="InstallmentID", OtherKey="InstallmentID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public TuitionInstallment TuitionInstallment
-		{
-			get
-			{
-				return this._TuitionInstallment.Entity;
-			}
-			set
-			{
-				TuitionInstallment previousValue = this._TuitionInstallment.Entity;
-				if (((previousValue != value) 
-							|| (this._TuitionInstallment.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._TuitionInstallment.Entity = null;
-						previousValue.TuitionAchievement.Remove(this);
-					}
-					this._TuitionInstallment.Entity = value;
-					if ((value != null))
-					{
-						value.TuitionAchievement.Add(this);
-						this._InstallmentID = value.InstallmentID;
-					}
-					else
-					{
-						this._InstallmentID = default(int);
-					}
-					this.SendPropertyChanged("TuitionInstallment");
 				}
 			}
 		}
@@ -24049,8 +23857,6 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<System.DateTime> _PayoffDate;
 		
-		private EntitySet<TuitionAchievement> _TuitionAchievement;
-		
 		private EntityRef<IntuitionCharge> _IntuitionCharge;
 		
 		private EntityRef<Payment> _Payment;
@@ -24071,7 +23877,6 @@ namespace WebHome.Models.DataEntity
 		
 		public TuitionInstallment()
 		{
-			this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
 			this._IntuitionCharge = default(EntityRef<IntuitionCharge>);
 			this._Payment = default(EntityRef<Payment>);
 			OnCreated();
@@ -24165,19 +23970,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TuitionInstallment_TuitionAchievement", Storage="_TuitionAchievement", ThisKey="InstallmentID", OtherKey="InstallmentID")]
-		public EntitySet<TuitionAchievement> TuitionAchievement
-		{
-			get
-			{
-				return this._TuitionAchievement;
-			}
-			set
-			{
-				this._TuitionAchievement.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="IntuitionCharge_TuitionInstallment", Storage="_IntuitionCharge", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public IntuitionCharge IntuitionCharge
 		{
@@ -24264,18 +24056,6 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_TuitionAchievement(TuitionAchievement entity)
-		{
-			this.SendPropertyChanging();
-			entity.TuitionInstallment = this;
-		}
-		
-		private void detach_TuitionAchievement(TuitionAchievement entity)
-		{
-			this.SendPropertyChanging();
-			entity.TuitionInstallment = null;
 		}
 	}
 	
@@ -25241,6 +25021,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<VoidPayment> _VoidPayment;
 		
+		private EntitySet<TuitionAchievement> _TuitionAchievement;
+		
 		private EntityRef<InvoiceItem> _InvoiceItem;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -25278,6 +25060,7 @@ namespace WebHome.Models.DataEntity
 			this._PaymentTransaction = default(EntityRef<PaymentTransaction>);
 			this._PaymentAudit = default(EntityRef<PaymentAudit>);
 			this._VoidPayment = default(EntityRef<VoidPayment>);
+			this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
 			this._InvoiceItem = default(EntityRef<InvoiceItem>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
@@ -25621,6 +25404,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_TuitionAchievement", Storage="_TuitionAchievement", ThisKey="PaymentID", OtherKey="InstallmentID")]
+		public EntitySet<TuitionAchievement> TuitionAchievement
+		{
+			get
+			{
+				return this._TuitionAchievement;
+			}
+			set
+			{
+				this._TuitionAchievement.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_Payment", Storage="_InvoiceItem", ThisKey="InvoiceID", OtherKey="InvoiceID", IsForeignKey=true)]
 		public InvoiceItem InvoiceItem
 		{
@@ -25741,6 +25537,18 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_TuitionAchievement(TuitionAchievement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = this;
+		}
+		
+		private void detach_TuitionAchievement(TuitionAchievement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = null;
 		}
 	}
 	
@@ -33493,6 +33301,198 @@ namespace WebHome.Models.DataEntity
 						this._VoidID = default(int);
 					}
 					this.SendPropertyChanged("VoidPayment");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TuitionAchievement")]
+	public partial class TuitionAchievement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _InstallmentID;
+		
+		private int _CoachID;
+		
+		private System.Nullable<int> _ShareAmount;
+		
+		private EntityRef<Payment> _Payment;
+		
+		private EntityRef<ServingCoach> _ServingCoach;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnInstallmentIDChanging(int value);
+    partial void OnInstallmentIDChanged();
+    partial void OnCoachIDChanging(int value);
+    partial void OnCoachIDChanged();
+    partial void OnShareAmountChanging(System.Nullable<int> value);
+    partial void OnShareAmountChanged();
+    #endregion
+		
+		public TuitionAchievement()
+		{
+			this._Payment = default(EntityRef<Payment>);
+			this._ServingCoach = default(EntityRef<ServingCoach>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InstallmentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int InstallmentID
+		{
+			get
+			{
+				return this._InstallmentID;
+			}
+			set
+			{
+				if ((this._InstallmentID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInstallmentIDChanging(value);
+					this.SendPropertyChanging();
+					this._InstallmentID = value;
+					this.SendPropertyChanged("InstallmentID");
+					this.OnInstallmentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoachID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int CoachID
+		{
+			get
+			{
+				return this._CoachID;
+			}
+			set
+			{
+				if ((this._CoachID != value))
+				{
+					if (this._ServingCoach.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCoachIDChanging(value);
+					this.SendPropertyChanging();
+					this._CoachID = value;
+					this.SendPropertyChanged("CoachID");
+					this.OnCoachIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShareAmount", DbType="Int")]
+		public System.Nullable<int> ShareAmount
+		{
+			get
+			{
+				return this._ShareAmount;
+			}
+			set
+			{
+				if ((this._ShareAmount != value))
+				{
+					this.OnShareAmountChanging(value);
+					this.SendPropertyChanging();
+					this._ShareAmount = value;
+					this.SendPropertyChanged("ShareAmount");
+					this.OnShareAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_TuitionAchievement", Storage="_Payment", ThisKey="InstallmentID", OtherKey="PaymentID", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.TuitionAchievement.Remove(this);
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.TuitionAchievement.Add(this);
+						this._InstallmentID = value.PaymentID;
+					}
+					else
+					{
+						this._InstallmentID = default(int);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ServingCoach_TuitionAchievement", Storage="_ServingCoach", ThisKey="CoachID", OtherKey="CoachID", IsForeignKey=true)]
+		public ServingCoach ServingCoach
+		{
+			get
+			{
+				return this._ServingCoach.Entity;
+			}
+			set
+			{
+				ServingCoach previousValue = this._ServingCoach.Entity;
+				if (((previousValue != value) 
+							|| (this._ServingCoach.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ServingCoach.Entity = null;
+						previousValue.TuitionAchievement.Remove(this);
+					}
+					this._ServingCoach.Entity = value;
+					if ((value != null))
+					{
+						value.TuitionAchievement.Add(this);
+						this._CoachID = value.CoachID;
+					}
+					else
+					{
+						this._CoachID = default(int);
+					}
+					this.SendPropertyChanged("ServingCoach");
 				}
 			}
 		}

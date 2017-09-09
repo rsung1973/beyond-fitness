@@ -29,7 +29,7 @@
                             var $form = $('#<%= _dialog %> form');
                             clearErrors();
                             showLoading();
-                            $.post('<%= Url.Action("InquirePayment","Payment") %>', $form.serializeObject(), function (data) {
+                            $.post('<%= Url.Action("ListPaymentByInvoice","Payment") %>', $form.serializeObject(), function (data) {
                                 hideLoading();
                                 $('#queryResult').html(data);
                             });
@@ -46,7 +46,7 @@
             <fieldset>
                 <section>
                     <label class="label">備註</label>
-                    <textarea class="form-control" placeholder="請輸入備註" rows="3"></textarea>
+                    <textarea class="form-control" name="Remark" placeholder="請輸入備註" rows="3"></textarea>
                 </section>
             </fieldset>
         </form>
@@ -59,8 +59,8 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  作廢收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
-                "class": "btn bg-color-red",
+                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                "class": "btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');
                     if ($form.find('input[name="VoidID"]').length == 0) {
@@ -75,7 +75,7 @@
                                 hideLoading();
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
-                                        alert('作廢收款資料已送交審核!!');
+                                        alert(data.message);
                                         <%--$('#<%= _dialog %>').dialog('close');--%>
                                         showLoading();
                                         window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';

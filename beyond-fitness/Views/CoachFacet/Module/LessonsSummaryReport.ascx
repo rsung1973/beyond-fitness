@@ -12,7 +12,7 @@
 <table class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th data-class="expand">項目</th>
+            <th data-class="expand">一般項目</th>
             <th class="text-center">教練已完成</th>
             <th data-hide="phone" class="text-center">教練未完成</th>
             <th data-hide="phone" class="text-center">學員已完成</th>
@@ -23,9 +23,9 @@
         <% var items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
                   || l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除);  %>
         <tr>
-            <td>P.T session<%= reportCount(items.Count(),"") %></td>
-            <td class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
-            <td class="text-center">
+            <td nowrap="noWrap">P.T session<%= reportCount(items.Count(),"") %></td>
+            <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
+            <td nowrap="noWrap" class="text-center">
                 <%  var listItems = coachToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -36,7 +36,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = learnerMarkAttended(items);
                     if (listItems.Count() > 0)
                     {
@@ -54,7 +54,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = learnerToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -68,9 +68,9 @@
         </tr>
         <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練);  %>
         <tr>
-            <td>P.I session<%= reportCount(items.Count(),"") %></td>
-            <td class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
-            <td class="text-center">
+            <td nowrap="noWrap">P.I session<%= reportCount(items.Count(),"") %></td>
+            <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = coachToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -81,7 +81,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = learnerMarkAttended(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -92,7 +92,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = learnerToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -106,9 +106,9 @@
         </tr>
         <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程);  %>
         <tr>
-            <td>體驗課程<%= reportCount(items.Count(),"") %></td>
-            <td class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
-            <td class="text-center">
+            <td nowrap="noWrap">體驗課程<%= reportCount(items.Count(),"") %></td>
+            <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
+            <td nowrap="noWrap" class="text-center">
             <%  listItems = coachToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -119,7 +119,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = learnerMarkAttended(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -130,7 +130,7 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
             <%  listItems = learnerToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -144,9 +144,9 @@
         </tr>
         <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);  %>
         <tr>
-            <td>內部訓練<%= reportCount(items.Count(),"") %></td>
-            <td class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
-            <td class="text-center">
+            <td nowrap="noWrap">內部訓練<%= reportCount(items.Count(),"") %></td>
+            <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
+            <td nowrap="noWrap" class="text-center">
                 <%  listItems = coachToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
@@ -157,8 +157,8 @@
                         --
                 <%  } %>
             </td>
-            <td class="text-center">--</td>
-            <td class="text-center">--</td>
+            <td nowrap="noWrap" class="text-center">--</td>
+            <td nowrap="noWrap" class="text-center">--</td>
         </tr>
         <%  
             IQueryable<QuestionnaireRequest> questionnaireItems = models.GetTable<QuestionnaireRequest>();
@@ -173,11 +173,11 @@
             }
             %>
         <tr>
-            <td>階段性調整計劃<%= reportCount(questionnaireItems.Count(),"") %></td>
-            <td class="text-center">--</td>
-            <td class="text-center">--</td>
-            <td class="text-center"><a href="javascript:showQuestionnaire(true,'待辦事項：階段性調整計劃(學員已完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>q.PDQTask.Any()).Count()) %></u></a></td>
-            <td class="text-center"><a href="javascript:showQuestionnaire(false,'待辦事項：階段性調整計劃(學員未完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>!q.PDQTask.Any()).Count()) %></u></a></td>
+            <td nowrap="noWrap">階段性調整計劃<%= reportCount(questionnaireItems.Count(),"") %></td>
+            <td nowrap="noWrap" class="text-center">--</td>
+            <td nowrap="noWrap" class="text-center">--</td>
+            <td nowrap="noWrap" class="text-center"><a href="javascript:showQuestionnaire(true,'待辦事項：階段性調整計劃(學員已完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>q.PDQTask.Any()).Count()) %></u></a></td>
+            <td nowrap="noWrap" class="text-center"><a href="javascript:showQuestionnaire(false,'待辦事項：階段性調整計劃(學員未完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>!q.PDQTask.Any()).Count()) %></u></a></td>
         </tr>
     </tbody>
 </table>

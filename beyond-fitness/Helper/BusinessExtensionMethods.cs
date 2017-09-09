@@ -1008,6 +1008,27 @@ namespace WebHome.Helper
             return items;
         }
 
+        public static IQueryable<VoidPayment> GetVoidPaymentToEditByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile profile)
+            where TEntity : class, new()
+        {
+            IQueryable<VoidPayment> items;
+            if (profile.IsAssistant())
+            {
+                items = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.草稿);
+            }
+            else if (profile.IsManager() || profile.IsViceManager())
+            {
+                items = models.GetTable<VoidPayment>().Where(p => false);
+            }
+            else
+            {
+                items = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.草稿)
+                        .Where(p => p.HandlerID == profile.UID);
+            }
+
+            return items;
+        }
+
 
     }
 }

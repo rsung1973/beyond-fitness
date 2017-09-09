@@ -12,7 +12,7 @@
 <table class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th></th>
+            <th>合約項目</th>
             <th class="text-center">草稿</th>
             <%--<th class="text-center">待確認</th>--%>
             <th class="text-center">待客戶簽名</th>
@@ -21,14 +21,14 @@
     </thead>
     <tbody>
         <tr>
-            <td><%  var items = models.GetApplyingContractByAgent(_model);
+            <td nowrap="noWrap"><%  var items = models.GetApplyingContractByAgent(_model);
                     var editingItems = models.GetContractInEditingByAgent(_model);
                     var toConfirmItems = models.GetContractToConfirmByAgent(_model);
                     var toSignItems = models.GetContractToSignByAgent(_model);
                     //var toAllowItems = models.GetContractToAllowByAgent(_model);
                 %>
                 新合約(<%= editingItems.Count() + toSignItems.Count() + toConfirmItems.Count() %>)</td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  
                     if (editingItems.Count() > 0)
                     {   %>
@@ -50,7 +50,7 @@
                     --
                 <%  } %>
             </td>--%>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  
                     if (toSignItems.Count() > 0)
                     {   %>
@@ -61,7 +61,7 @@
                     --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  
                     if (toConfirmItems.Count() > 0)
                     {   %>
@@ -74,12 +74,12 @@
             </td>
         </tr>
         <tr>
-            <td><%  var revisions = models.GetApplyingAmendmentByAgent(_model);
+            <td nowrap="noWrap"><%  var revisions = models.GetApplyingAmendmentByAgent(_model);
                     var toConfirmRevisions = models.GetAmendmentToConfirmByAgent(_model);
                     var toSignRevisions = models.GetAmendmentToSignByAgent(_model);
                      %>
                 服務申請(<%= toSignRevisions.Count() + toConfirmRevisions.Count() %>)</td>
-            <td class="text-center">--</td>
+            <td nowrap="noWrap" class="text-center">--</td>
             <%--<td class="text-center">
                 <%  revisions = models.GetAmendmentToAllowByAgent(_model);
                     if (revisions.Count() > 0)
@@ -91,7 +91,7 @@
                     --
                 <%  } %>            
             </td>--%>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  
                     if (toSignRevisions.Count() > 0)
                     {   %>
@@ -102,7 +102,7 @@
                     --
                 <%  } %>
             </td>
-            <td class="text-center">
+            <td nowrap="noWrap" class="text-center">
                 <%  
                     if (toConfirmRevisions.Count() > 0)
                     {   %>

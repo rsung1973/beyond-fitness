@@ -742,6 +742,7 @@
     <Content Include="img\sa-dark.png" />
     <Content Include="img\sa-default.png" />
     <Content Include="img\saturation.png" />
+    <Content Include="img\seal.png" />
     <Content Include="img\select2-spinner.gif" />
     <Content Include="img\slider\bg1.jpg" />
     <Content Include="img\slider\bg10.jpg" />
@@ -1592,6 +1593,7 @@
     <Content Include="Views\CourseContract\Module\ContractAmendment.ascx" />
     <Content Include="Views\CourseContract\Module\ContractAmendmentTodoList.ascx" />
     <Content Include="Views\CourseContract\Module\CourseContractOtherAmendmentView.ascx" />
+    <Content Include="Views\CourseContract\Module\CourseContractSummaryCoachView.ascx" />
     <Content Include="Views\CourseContract\Module\CourseContractTerminationView.ascx" />
     <Content Include="Views\CourseContract\Module\CourseContractTransferenceView.ascx" />
     <Content Include="Views\CourseContract\Module\CourseContractMigrationView.ascx" />
@@ -1916,10 +1918,12 @@
     <Content Include="Views\MyTest\Test01.aspx" />
     <Content Include="Views\MyTest\TestPopup.aspx" />
     <Content Include="Views\Payment\Module\ApproveToVoidPayment.ascx" />
+    <Content Include="Views\Payment\Module\ContractQueryList.ascx" />
+    <Content Include="Views\Payment\Module\PaymentAuditSummaryCoachView.ascx" />
+    <Content Include="Views\Payment\Module\PaymentCoachAchievement.ascx" />
+    <Content Include="Views\Payment\Module\PaymentAchievementList.ascx" />
     <Content Include="Views\Payment\Module\PaymentTodoList.ascx" />
     <Content Include="Views\Payment\Module\PaymentAuditSummary.ascx" />
-    <Content Include="Views\Payment\Module\EditPaymentForContract - Copy %282%29.ascx" />
-    <Content Include="Views\Payment\Module\EditPaymentForProduct.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForShopping.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForPISession.ascx" />
     <Content Include="Views\Payment\Module\PaymentCancellationList.ascx" />
@@ -1927,8 +1931,16 @@
     <Content Include="Views\Payment\Module\EditPaymentForContract.ascx" />
     <Content Include="Views\Payment\Module\PaymentQueryList.ascx" />
     <Content Include="Views\Payment\Module\AuditPayment.ascx" />
+    <Content Include="Views\Payment\Module\AchievementIndex.ascx" />
+    <Content Include="Views\Payment\Module\QueryIndex.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentAchievement.ascx" />
+    <Content Include="Views\Payment\Module\ApplyPaymentAchievement.ascx" />
+    <Content Include="Views\Payment\Module\VoidPaymentEditingView.ascx" />
     <Content Include="Views\Payment\Module\VoidPaymentApprovalView.ascx" />
     <Content Include="Views\Payment\Module\VoidPayment.ascx" />
+    <Content Include="Views\Payment\AchievementIndex.aspx" />
+    <Content Include="Views\Payment\QueryIndex.aspx" />
+    <Content Include="Views\Sample\DataTableNoSearch.ascx" />
     <Content Include="Views\SystemInfo\MerchandiseOptions.ascx" />
     <Content Include="Views\Payment\Module\UnpaidPISession.ascx" />
     <Content Include="Views\Payment\PaymentIndex.aspx" />
@@ -1994,6 +2006,7 @@
     <Content Include="Views\SiteAction\Navigation - Copy.ascx" />
     <Content Include="Views\SiteAction\Navigation.ascx" />
     <Content Include="Views\SystemInfo\ContractTypeOptions.ascx" />
+    <Content Include="Views\SystemInfo\AllStaffOptions.ascx" />
     <Content Include="Views\SystemInfo\ServingCoachOptions.ascx" />
     <Content Include="Views\SystemInfo\BranchStoreText.ascx" />
     <Content Include="Views\SystemInfo\ConfigureAll.aspx" />

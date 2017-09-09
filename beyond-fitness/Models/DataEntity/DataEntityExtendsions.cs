@@ -34,13 +34,26 @@ namespace WebHome.Models.DataEntity
 
         public static int RemainedLessonCount(this RegisterLesson item)
         {
-            return item.Lessons
-                    - item.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/);
+            //return item.Lessons
+            //        - item.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/);
+            return item.Lessons - (item.AttendedLessons ?? 0)
+                    - (item.RegisterGroupID.HasValue ? item.GroupingLesson.LessonTime.Count : item.LessonTime.Count);
         }
+
+        public static int RemainedLessonCount(this CourseContract item)
+        {
+            return item.RegisterLessonContract.Count > 0 ? item.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : item.Lessons.Value;
+        }
+
 
         public static String FullName(this UserProfile item)
         {
             return item.Nickname==null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
+        }
+
+        public static String ContractNo(this CourseContract contract)
+        {
+            return contract.ContractNo != null ? String.Format("{0}-{1:00}", contract.ContractNo, contract.SequenceNo) : "--";
         }
 
     }

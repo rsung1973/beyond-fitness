@@ -355,6 +355,9 @@
                                           <li>
                                              <a href="#mystudentlist_tab" data-toggle="tab">學員清單</a>
                                           </li>
+                                          <li>
+                                             <a href="#contractlist_tab" data-toggle="tab">合約到期(前)清單</a>
+                                          </li>
                                           <li class="active">
                                              <a href="#birthdaylist_tab" data-toggle="tab">生日提醒</a>
                                           </li>
@@ -547,6 +550,53 @@
                                                 <!-- end widget div -->
                                              </div>
                                              <!-- end widget -->
+                                          </div>
+                                          <div class="tab-pane fade" id="contractlist_tab">
+                                             <!-- Widget ID (each widget will need unique ID)-->
+                                             <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+                                                <header class="bg-color-red">
+                                                   <span class="widget-icon"> <i class="fa fa-exclamation-triangle"></i> </span>
+                                                   <h2>尚有15張合約即將過期，5張已過期!</h2>
+                                                </header>
+                                                <!-- widget div-->
+                                                <div>
+                                                   <!-- widget content -->
+                                                   <div class="widget-body txt-color-white padding-5">
+                                                      <!-- content -->
+                                                      <table id="list_dt" class="table table-striped table-bordered table-hover" width="100%">
+                                                         <thead>
+                                                            <tr>
+                                                               <th>合約編號</th>
+                                                               <th class="text-center">學員</th>
+                                                               <th class="text-center">體能顧問</th>
+                                                               <th class="text-center">到期日</th>
+                                                               <th class="text-center">是否過期</th>
+                                                            </tr>
+                                                         </thead>
+                                                         <tbody>
+                                                            <tr>
+                                                               <td>CPA201701010001-00</td>
+                                                               <td class="text-center">劉思琳（加菲）</td>
+                                                               <td class="text-center">黃政浩（比爾）</td>
+                                                               <td class="text-center">2017/09/10</td> 
+                                                               <td class="text-center">是</td>
+                                                            </tr> 
+                                                             <tr>
+                                                               <td>CPA201701010001-00</td>
+                                                               <td class="text-center">劉思琳（加菲）</td>
+                                                               <td class="text-center">黃政浩（比爾）</td>
+                                                               <td class="text-center">2017/09/10</td> 
+                                                               <td  class="text-center">--</td>
+                                                            </tr> 
+                                                         </tbody>
+                                                      </table>  
+                                                      <!-- end content -->                                                                                                        
+                                                   </div>
+                                                   <!-- end widget content -->
+                                                </div>
+                                                <!-- end widget div -->
+                                             </div>
+                                             <!-- end widget -->                                               
                                           </div>
                                           <div class="tab-pane fade" id="mystudentlist_tab">
                                              <!-- Widget ID (each widget will need unique ID)-->
@@ -806,7 +856,7 @@
                         <th>時間</th>
                         <th>類別</th>
                         <th>學員</th>
-                        <th data-hide="phone">教練</th>
+                        <th data-hide="phone">體能顧問</th>
                         <th data-hide="phone">目前狀態</th>
                      </tr>
                   </thead>
@@ -815,9 +865,9 @@
                         <td>2016/02/03</td>
                         <td>7:00~8:00</td>
                         <td>一般課程</td>
-                        <td>張大哥</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>                        
+                        <td noWrap="noWrap">張大哥</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">                        
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
                            已完成課程
@@ -827,9 +877,9 @@
                         <td>2016/02/03</td>
                         <td>8:00~9:00</td>
                         <td>自主訓練</td>
-                        <td>劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>
+                        <td noWrap="noWrap">劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程(學員已打卡)
                         </td>
@@ -838,8 +888,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -850,9 +900,9 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程(學員已打卡)
                         </td>
@@ -861,8 +911,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -873,8 +923,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -885,8 +935,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -897,8 +947,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程
@@ -908,20 +958,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
-                           已完成課程
-                        </td>
-                     </tr>
-                     <tr>
-                        <td>2016/02/03</td>
-                        <td>14:00~15:00</td>
-                        <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -932,8 +970,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -944,8 +982,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -956,8 +994,8 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
@@ -968,9 +1006,21 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">
+                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           已完成課程
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>2016/02/03</td>
+                        <td>14:00~15:00</td>
+                        <td>一般課程</td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
                            已完成課程
@@ -980,9 +1030,9 @@
                         <td>2016/02/03</td>
                         <td>14:00~15:00</td>
                         <td>一般課程</td>
-                        <td>宋胖子/劉加菲</td>
-                        <td>邱鈺烘 Jack Chu</td>
-                        <td>
+                        <td noWrap="noWrap">宋胖子/劉加菲</td>
+                        <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
+                        <td noWrap="noWrap">
                            <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
                             <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
                            已完成課程
@@ -1009,10 +1059,10 @@
                         <form action="classlist.html" class="smart-form" autofocus>
                            <fieldset>
                               <div class="row">
-                                 <section class="col col-6">
+                                 <section class="col col-4">
                                     <label class="label">請選擇課程類別</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="0">一般課程</option>
                                           <option value="1">自主訓練</option>
                                           <option value="2">內部訓練</option>
@@ -1021,10 +1071,10 @@
                                        <i class="icon-append fa fa-clock-o"></i>
                                     </label>
                                  </section>
-                                 <section class="col col-6">
+                                 <section class="col col-4">
                                     <label class="label">請選擇開始時間</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="0">07:00</option>
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
@@ -1032,24 +1082,10 @@
                                        <i class="icon-append fa fa-clock-o"></i>
                                     </label>
                                  </section>
-                              </div>
-                           </fieldset>
-                           <fieldset>
-                              <div class="row">
-                                 <section class="col col-6">
-                                    <label class="label">請選擇上課長度</label>
-                                    <label class="select">
-                                       <select class="input-lg">
-                                          <option value="1">60分鐘</option>
-                                          <option value="2">90分鐘</option>
-                                       </select>
-                                       <i class="icon-append fa fa-file-word-o"></i>
-                                    </label>
-                                 </section>
-                                 <section class="col col-6">
+                                 <section class="col col-4">
                                     <label class="label">請選擇上課地點</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="1">小巨蛋</option>
                                           <option value="2">１０１</option>
                                        </select>
@@ -1059,14 +1095,15 @@
                               </div>
                            </fieldset>
                            <fieldset>
+                               <label class="label">依學員姓名(暱稱)查詢</label>
                                  <div class="row">
-                                    <section class="col col-8"> 
+                                    <section class="col col-10"> 
                                           <label class="input">
                                                 <i class="icon-append fa fa-search"></i>
-                                                <input type="text" name="name" maxlength="20" id="searchStudentInput" placeholder="請輸入學員姓名">
+                                                <input type="text" name="name" maxlength="20" id="searchStudentInput" placeholder="請輸入學員姓名或暱稱">
                                           </label>
                                        </section>
-                                    <section class="col col-4">   
+                                    <section class="col col-2">   
                                        <button class="btn bg-color-blue btn-sm" type="button">查詢</button>
                                     </section>
                                  </div>
@@ -1156,7 +1193,7 @@
                                  <section class="col col-6">
                                     <label class="label">請選擇個人行程類別</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="0">會議</option>
                                           <option value="1">團練</option>
                                           <option value="2">休假</option>
@@ -1168,7 +1205,7 @@
                                  <section class="col col-6">
                                     <label class="label">請選擇地點</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="1">小巨蛋</option>
                                           <option value="2">１０１</option>
                                        </select>
@@ -1190,7 +1227,7 @@
                                  <section class="col col-6">
                                     <label class="label">請選擇開始時間</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="0">07:00</option>
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
@@ -1201,7 +1238,7 @@
                                  <section class="col col-6">
                                     <label class="label">請選擇結束時間</label>
                                     <label class="select">
-                                       <select class="input-lg">
+                                       <select>
                                           <option value="0">07:00</option>
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
@@ -1873,10 +1910,10 @@
                    </thead>
                    <tbody>
                       <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
+                         <td noWrap="noWrap">黃比爾</td>
+                         <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
-                         <td>                              
+                         <td noWrap="noWrap">                              
                             <a href="#" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>&nbsp;&nbsp;          
                              <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>           
                             1對1
@@ -1901,10 +1938,10 @@
                    </thead>
                    <tbody>
                       <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
+                         <td noWrap="noWrap">黃比爾</td>
+                         <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
-                         <td>                              
+                         <td noWrap="noWrap">                              
                             <a href="contractapprove.html" target="_blank" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
                              1對1
                          </td>
@@ -1928,10 +1965,10 @@
                    </thead>
                    <tbody>
                       <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
+                         <td noWrap="noWrap">黃比爾</td>
+                         <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
-                         <td>                              
+                         <td noWrap="noWrap">                              
                             <a href="contractsign.html" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i> </a>           
                              1對1
                          </td>
@@ -2082,10 +2119,10 @@
                    </thead>
                    <tbody>
                       <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
+                         <td noWrap="noWrap">黃比爾</td>
+                         <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
-                         <td>                              
+                         <td noWrap="noWrap">                              
                             <a href="#" class="btn btn-circle bg-color-yellow applyContractDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>&nbsp;&nbsp;          
                              <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>           
                             展延
@@ -2110,10 +2147,10 @@
                    </thead>
                    <tbody>
                       <tr>
-                         <td>黃比爾</td>
-                         <td>宋胖子</td>
+                         <td noWrap="noWrap">黃比爾</td>
+                         <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
-                         <td>                              
+                         <td noWrap="noWrap">                              
                             <a href="contract_extend.html" target="_blank" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
                              展延
                          </td>
@@ -2382,7 +2419,7 @@
                                         <th data-hide="phone">發票狀態</th>
                                         <th data-hide="phone,tablet">買受人統編</th>
                                         <th data-hide="phone,tablet">合約編號</th>
-                                        <th data-hide="phone,tablet">功能</th>
+                                        <th>功能</th>
                                      </tr>
                                   </thead>
                                   <tbody>

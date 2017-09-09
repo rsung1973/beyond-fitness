@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.1.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+      <SnippetType>SurroundsWith</SnippetType>
+    </SnippetTypes>
+    <Title>form.ajaxSubmit</Title>
+    <Author>my</Author>
+    <Description>form.ajaxSubmit</Description>
+    <HelpUrl>
+    </HelpUrl>
+    <Shortcut>global.delete</Shortcut>
+  </Header>
+  <Snippet>
+    <Declarations>
+    </Declarations>
+    <Code Language="javascript" Delimiter="$"><![CDATA[            if (confirm("請再次確認收款資料正確?")) {
+	clearErrors();
+	var $$form = $$('#<%= _dialog %> form');
+	$$form.ajaxSubmit({
+		beforeSubmit: function () {
+			showLoading();
+		},
+		success: function (data) {
+			hideLoading();
+			if ($$.isPlainObject(data)) {
+				if (data.result) {
+					alert('收款資料已送交審核!!');
+					<%--$$('#<%= _dialog %>').dialog('close');--%>
+					showLoading();
+					window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';
+				} else {
+					alert(data.message);
+				}
+			} else {
+				$$(data).appendTo($$('body')).remove();
+			}
+		}
+	});
+}]]></Code>
+  </Snippet>
+</CodeSnippet>

@@ -12,13 +12,13 @@
     <div class="col-md-12">
         <div class="well no-padding well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>體能顧問聘請服務合約</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
                     <%  if (_model.ContractNo != null)
                         { %>
                     <tbody>
                         <tr>
-                            <td colspan="3">合約編號：<%= _model.ContractNo %></td>
+                            <td colspan="3">合約編號：<%= _model.ContractNo() %></td>
                         </tr>
                     </tbody>
                     <%  } %>
@@ -179,7 +179,7 @@
     <div class="col-md-12">
         <div class="well padding-5 well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>Beyond Fitness訓練特約條款</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 13px">
                     <tr>
                         <td>本場館為超越體能顧問有限公司 (以下簡稱本公司)負責經營管理並提供各項體能顧問服務，學員權利義務均以本合約與特約條款之規定為準，相關內容應於申請時詳加閱讀，並同意遵守以維護場館之環境品質。<br />
@@ -318,7 +318,7 @@
     <div class="col-md-12">
         <div class="well padding-5 well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>附表-學員名單</b></h2>
-            <div class="bs-example bs-example-type">
+            <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
                     <tr>
                         <td>本人同意並授權以下人員得使用本人與超越體能顧問有限公司購買之體能顧問服務課程，任一人員(含本人)使用體能顧問服務，皆需計入體能顧問服務次數內，並應共同遵守合約及特約條款之規定。</td>

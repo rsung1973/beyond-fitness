@@ -15,18 +15,21 @@
     <a href="#" title="收款管理"><i class="fa fa-lg fa-fw fa-usd"></i><span class="menu-item-parent">收款管理</span></a>
     <ul>
         <li>
-            <a href="<%= Url.Action("paymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
+            <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
         </li>
+        <%  if(_userProfile.IsAssistant() || _userProfile.IsManager())
+            { %>
         <li>
-            <a href="sharebenefit.html" title="業績分潤設定"><i class="fa fa-lg fa-fw fa-trophy"></i>業績分潤設定</a>
+            <a href="<%= Url.Action("AchievementIndex","Payment") %>" title="業績分潤設定"><i class="fa fa-lg fa-fw fa-trophy"></i>業績分潤設定</a>
         </li>
+        <%  } %>
         <!--
                         <li>
                             <a href="paychecklist.html" title="轉帳收款勾記"><i class="fa fa-lg fa-fw fa-check-square-o"></i> 轉帳收款勾記</a>
                         </li>
 -->
         <li>
-            <a href="paymentlist.html" title="收款/作廢紀錄查詢"><i class="fa fa-lg fa-fw fa-search"></i>收款/作廢紀錄查詢</a>
+            <a href="<%= Url.Action("QueryIndex","Payment") %>" title="收款/作廢紀錄查詢"><i class="fa fa-lg fa-fw fa-search"></i>收款/作廢紀錄查詢</a>
         </li>
     </ul>
 </li>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>DeleteDataItem</Title>
+      <Author>Windows 使用者</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>
+      </Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>CourseContract</ID>
+          <ToolTip>CourseContract</ToolTip>
+          <Default>CourseContract</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>contractID</ID>
+          <ToolTip>contractID</ToolTip>
+          <Default>contractID</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[        [CoachOrAssistantAuthorize]
+        public ActionResult DeleteCourseContract(int $contractID$)
+        {
+            try
+            {
+                var item = models.DeleteAny<$CourseContract$>(d => d.ContractID == $contractID$);
+                if (item != null)
+                {
+                    models.ExecuteCommand(@"
+                        DELETE FROM UserProfile
+                        FROM     UserProfile INNER JOIN
+                                       UserRole ON UserProfile.UID = UserRole.UID
+                        WHERE   (UserRole.RoleID = 11) AND (UserProfile.UID NOT IN
+                           (SELECT  UID
+                           FROM     CourseContractMember))");
+
+                    return Json(new { result = true });
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return Json(new { result = false });
+        }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

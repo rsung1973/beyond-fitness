@@ -18,7 +18,7 @@
                         <label class="label">合約名稱</label>
                         <label class="select">
                             <select name="ContractType">
-                                <%  foreach (var item in models.GetTable<CourseContractType>().Where(c => c.TypeID < 4))
+                                <%  foreach (var item in models.GetTable<CourseContractType>().Where(c => c.TypeID < 5))
                                     { %>
                                 <option value="<%= item.TypeID %>"><%= item.TypeName %></option>
                                 <%  } %>
@@ -304,7 +304,7 @@
                                 <%-- alert(data.status == 1202 ? '合約資料待店長審核，請至行事曆待辦事項點選待簽名連結！' : '合約資料待客戶簽名，請至行事曆待辦事項點選待簽名連結！' );--%>
                                 //window.open('<%= Url.Action("ContractSignatureView", "CourseContract") %>' + '?contractID=' + data.contractID, '_blank', 'fullscreen=yes');
                                 showLoading();
-                                window.location.href='<%= Url.Action("Index", "CoachFacet") %>';
+                                window.location.href='<%= Url.Action("Index", "CoachFacet",new { showTodoTab = true }) %>';
                             } else {
                                 $(data).appendTo($('body'));
                             }

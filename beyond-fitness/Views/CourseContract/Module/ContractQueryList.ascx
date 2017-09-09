@@ -17,6 +17,7 @@
             <th>學員姓名</th>
             <th data-hide="phone">生效日期</th>
             <th>合約名稱</th>
+            <th data-hide="phone">剩餘/購買堂數</th>
             <th data-hide="phone">服務項目</th>
             <th data-hide="phone">狀態</th>
             <th data-hide="phone">功能</th>        
@@ -26,7 +27,7 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.ContractNo %></td>
+            <td><%= item.ContractNo() %></td>
             <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
             <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
@@ -41,14 +42,17 @@
             </td>
             <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
             <td><%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)</td>
+            <td><%= item.RemainedLessonCount() %>/<%= item.Lessons %></td>
             <td><%  var revision = item.CourseContractRevision; %>
                 <%= revision==null ? "新合約" : revision.Reason %></td>
-            <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>
+            <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %>
+                <%= item.Expiration.Value<DateTime.Today ? "(*)" : null %>
+            </td>
             <td nowrap="noWrap">
                 <%  if(revision==null)
                     {   %>
                     <a onclick="$global.viewContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-                    <%  if (item.Status > (int)Naming.CourseContractStatus.待審核)
+                    <%  if (item.Status > (int)Naming.CourseContractStatus.待審核 && item.ContractID>999)
                         { %>
                     <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
                     <%  }
@@ -87,7 +91,7 @@
         };
 
         $('#<%= _tableId %>').dataTable({
-            "bPaginate": false,
+            "bPaginate": true,
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,

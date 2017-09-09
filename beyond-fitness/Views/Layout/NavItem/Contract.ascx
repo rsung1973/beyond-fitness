@@ -23,9 +23,12 @@
         <li>
             <a href="<%= Url.Action("ContractIndex","CourseContract") %>" title="合約查詢"><i class="fa fa-lg fa-fw fa-search"></i>合約查詢</a>
         </li>
+        <%  if(_userProfile.IsAssistant())
+            { %>
         <li>
             <a href="<%= Url.Action("PriceIndex","LessonPrice") %>" title="體能顧問服務費用維護"><i class="fa fa-lg fa-fw fa-tasks"></i>體能顧問服務價目維護</a>
         </li>
+        <%  } %>
     </ul>
 </li>
 <%  } %>

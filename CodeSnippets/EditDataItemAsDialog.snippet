@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>EditDataItemAsDialog</Title>
+      <Author>Windows 使用者</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>
+      </Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>DataItem</ID>
+          <ToolTip>DataItem</ToolTip>
+          <Default>DataItem</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>DataEntityViewModel</ID>
+          <ToolTip>DataEntityViewModel</ToolTip>
+          <Default>DataEntityViewModel</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[        [CoachOrAssistantAuthorize]
+        public ActionResult Edit$DataItem$($DataEntityViewModel$ viewModel)
+        {
+            var item = models.GetTable<Payment>().Where(c => c.PaymentID == viewModel.PaymentID).FirstOrDefault();
+            if (item != null)
+            {
+                viewModel.PayoffAmount = item.PayoffAmount;
+                viewModel.PayoffDate = item.PayoffDate;
+                viewModel.Status = item.Status;
+                viewModel.HandlerID = item.HandlerID;
+                viewModel.PaymentType = item.PaymentType;
+                viewModel.InvoiceID = item.InvoiceID;
+                viewModel.TransactionType = item.TransactionType;
+                viewModel.BuyerReceiptNo = item.InvoiceItem.InvoiceBuyer.IsB2C() ? null : item.InvoiceItem.InvoiceBuyer.ReceiptNo;
+                viewModel.Remark = item.Remark;
+                viewModel.InvoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No;
+            }
+
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/Payment/Module/EditPaymentForContract.ascx", item);
+        }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

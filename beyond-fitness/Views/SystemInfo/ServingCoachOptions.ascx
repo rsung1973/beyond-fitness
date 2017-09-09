@@ -10,7 +10,7 @@
 
 <% foreach (var item in _model)
     { %>
-<option value="<%= item.CoachID %>"><%= item.UserProfile.RealName %></option>
+<option value="<%= item.CoachID %>"><%= item.UserProfile.FullName() %></option>
 <%  } %>
 
 

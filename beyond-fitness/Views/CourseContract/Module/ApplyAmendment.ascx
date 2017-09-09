@@ -71,15 +71,15 @@
                 <section>
                     <%  if (_viewModel.Reason == "展延")
                         {   %>
-                    <label class="label label-info">原合約編號 <%= _model.ContractNo %> 使用截止日為 <%= String.Format("{0:yyyy/MM/dd}",_model.Expiration) %> 展延至 <span id="expiration"><%= String.Format("{0:yyyy/MM/dd}",_model.Expiration.Value.AddMonths(3)) %></span> 止。</label>
+                    <label class="label label-info">原合約編號 <%= _model.ContractNo() %> 使用截止日為 <%= String.Format("{0:yyyy/MM/dd}",_model.Expiration) %> 展延至 <span id="expiration"><%= String.Format("{0:yyyy/MM/dd}",_model.Expiration.Value.AddMonths(3)) %></span> 止。</label>
                     <%  }
                         else if (_viewModel.Reason == "轉點")
                         {   %>
-                    <label class="label label-info">原合約編號 <%= _model.ContractNo %> 上課地點為 <%= _model.LessonPriceType.BranchStore.BranchName %> 轉點至 <span id="location"></span>。</label>
+                    <label class="label label-info">原合約編號 <%= _model.ContractNo() %> 上課地點為 <%= _model.LessonPriceType.BranchStore.BranchName %> 轉點至 <span id="location"></span>。</label>
                     <%  }
                         else if (_viewModel.Reason == "轉讓")
                         {   %>
-                    <label class="label label-info">原合約編號 <%= _model.ContractNo %> 剩餘上課堂數：<%= _model.RegisterLessonContract.Count>0 ? _model.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : _model.Lessons %>堂<span id="transference"></span>。</label>
+                    <label class="label label-info">原合約編號 <%= _model.ContractNo() %> 剩餘上課堂數：<%= _model.RegisterLessonContract.Count>0 ? _model.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : _model.Lessons %>堂<span id="transference"></span>。</label>
                     <%  } %>
                     <label class="label">備註</label>
                     <textarea class="form-control" placeholder="請輸入備註" rows="3" name="Remark"></textarea>

@@ -27,7 +27,7 @@
                    -->
         <header>
             <span class="widget-icon"><i class="fa fa-table"></i></span>
-            <h2>所屬教練列表</h2>
+            <h2>所屬體能顧問列表</h2>
             <div class="widget-toolbar">
                 <a onclick="$global.assignAdvisor();" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i>新增教練</a>
             </div>

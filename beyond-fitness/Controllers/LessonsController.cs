@@ -786,18 +786,18 @@ namespace WebHome.Controllers
                 AdvisorID = viewModel.CoachID,
                 GroupingLesson = new GroupingLesson { }
             };
-            var installment = new TuitionInstallment
-            {
-                PayoffDate = viewModel.ClassDate,
-                PayoffAmount = priceType.ListPrice
-            };
-            installment.TuitionAchievement.Add(new TuitionAchievement
-            {
-                CoachID = lesson.AdvisorID.Value,
-                ShareAmount = installment.PayoffAmount
-            });
+            //var installment = new TuitionInstallment
+            //{
+            //    PayoffDate = viewModel.ClassDate,
+            //    PayoffAmount = priceType.ListPrice
+            //};
+            //installment.TuitionAchievement.Add(new TuitionAchievement
+            //{
+            //    CoachID = lesson.AdvisorID.Value,
+            //    ShareAmount = installment.PayoffAmount
+            //});
 
-            lesson.IntuitionCharge.TuitionInstallment.Add(installment);
+            //lesson.IntuitionCharge.TuitionInstallment.Add(installment);
             models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
             models.SubmitChanges();
 

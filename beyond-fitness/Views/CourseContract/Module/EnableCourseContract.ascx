@@ -32,7 +32,7 @@
                             alert('合約已生效!!');
                             window.open(data.pdf, '_blank', 'fullscreen=yes');
                             showLoading();
-                            window.location.href = '<%= Url.Action("Index","CoachFacet") %>';
+                            window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
                         } else {
                             $(data).appendTo($('body')).remove();
                         }

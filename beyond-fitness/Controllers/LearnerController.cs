@@ -54,18 +54,42 @@ namespace WebHome.Controllers
                 hasCondition = true;
             }
 
-            viewModel.IDNo = viewModel.IDNo.GetEfficientString();
-            if (viewModel.IDNo != null)
+            if (!hasCondition)
             {
-                queryExpr = queryExpr.Or(c => c.UserProfileExtension.IDNo.StartsWith(viewModel.IDNo));
-                hasCondition = true;
+                viewModel.IDNo = viewModel.IDNo.GetEfficientString();
+                if (viewModel.IDNo != null)
+                {
+                    queryExpr = queryExpr.Or(c => c.UserProfileExtension.IDNo.StartsWith(viewModel.IDNo));
+                    hasCondition = true;
+                }
             }
 
-            viewModel.Phone = viewModel.Phone.GetEfficientString();
-            if (viewModel.Phone != null)
+            if (!hasCondition)
             {
-                queryExpr = queryExpr.Or(c => c.Phone == viewModel.Phone);
-                hasCondition = true;
+                viewModel.Phone = viewModel.Phone.GetEfficientString();
+                if (viewModel.Phone != null)
+                {
+                    queryExpr = queryExpr.Or(c => c.Phone == viewModel.Phone);
+                    hasCondition = true;
+                }
+            }
+
+            if (!hasCondition)
+            {
+                if (viewModel.UID.HasValue)
+                {
+                    queryExpr = queryExpr.Or(c => c.UID == viewModel.UID);
+                    hasCondition = true;
+                }
+            }
+
+            if(!hasCondition)
+            {
+                if(viewModel.CoachID.HasValue)
+                {
+                    queryExpr = queryExpr.Or(c => c.LearnerFitnessAdvisor.Any(a => a.CoachID == viewModel.CoachID));
+                    hasCondition = true;
+                }
             }
 
             if (hasCondition)
@@ -116,6 +140,7 @@ namespace WebHome.Controllers
             UserProfile item;
             item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
 
+            viewModel.CurrentTrial = 1;
             if (item != null)
             {
                 viewModel.Gender = item.UserProfileExtension.Gender;
@@ -127,10 +152,12 @@ namespace WebHome.Controllers
                 viewModel.Phone = item.Phone;
                 viewModel.Birthday = item.Birthday;
                 viewModel.AthleticLevel = item.UserProfileExtension.AthleticLevel;
+                viewModel.CurrentTrial = item.UserProfileExtension.CurrentTrial;
                 viewModel.RealName = item.RealName;
                 viewModel.Nickname = item.Nickname;
                 viewModel.Address = item.Address;
                 viewModel.Nickname = item.Nickname;
+                viewModel.UID = item.UID;
 
             }
 

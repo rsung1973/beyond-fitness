@@ -179,9 +179,9 @@
         });
     }
 
-    function showVoidPaymentToEdit(status) {
+    function showVoidPaymentToEdit(transactionType) {
         showLoading();
-        $.post('<%= Url.Action("ContractAmendmentTodoList","CourseContract") %>', { 'status': status }, function (data) {
+        $.post('<%= Url.Action("EditToVoidPayment","Payment") %>', { 'transactionType': transactionType }, function (data) {
             hideLoading();
             $(data).appendTo($('body'));
         });
@@ -205,23 +205,7 @@
 
         _auditItems = models.GetPaymentToAuditByAgent(profile);
         _voidItemsToConfirm = models.GetVoidPaymentToApproveByAgent(profile);
-        if (profile.IsAssistant())
-        {
-            _editingVoidItems = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.草稿);
-        }
-        else if (profile.IsManager() || profile.IsViceManager())
-        {
-            var payment = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
-                .SelectMany(b => b.PaymentTransaction)
-                .Select(p => p.Payment);
-
-            _editingVoidItems = models.GetTable<VoidPayment>().Where(p => false);
-        }
-        else
-        {
-            _editingVoidItems = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.草稿)
-                    .Where(p => p.HandlerID == profile.UID);
-        }
+        _editingVoidItems = models.GetVoidPaymentToEditByAgent(profile);
     }
 
 </script>

@@ -31,7 +31,7 @@ namespace WebHome.Models.ViewModel
         public DateTime? ValidFrom { get; set; }
         public DateTime? Expiration { get; set; }
         public int? OwnerID { get; set; }
-        public int? SequenceNo { get; set; }
+        public int? SequenceNo { get; set; } = 0;
         public int? Lessons { get; set; }
         public int? PriceID { get; set; }
         public String Remark { get; set; }
@@ -106,6 +106,8 @@ namespace WebHome.Models.ViewModel
     public class LearnerQueryViewModel : LearnerViewModel
     {
         public String IDNo { get; set; }
+        public int? UID { get; set; }
+        public int? CoachID { get; set; }
     }
 
     public class PaymentViewModel
@@ -128,6 +130,18 @@ namespace WebHome.Models.ViewModel
         public int? ProductID { get; set; }
         public int? ProductCount { get; set; } = 1;
         public int?[] VoidID { get; set; }
+        public bool? Drawback { get; set; }
+        public int? ShareAmount { get; set; }
+        public int? CoachID { get; set; }
+    }
+
+    public class PaymentQueryViewModel : PaymentViewModel
+    {
+        public string UserName { get; set; }
+        public int? BranchID { get; set; }
+        public bool? IsCancelled { get; set; }
+        public DateTime? PayoffDateFrom { get; set; }
+        public DateTime? PayoffDateTo { get; set; }
 
     }
 }
