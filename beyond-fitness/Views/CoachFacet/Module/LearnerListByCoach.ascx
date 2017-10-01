@@ -22,7 +22,7 @@
                 {
                     var profile = item;%>
                     <div class="user" title="<%= profile.PID %>">
-                        <a href="<%= Url.Action("ShowLearner","Member", new { id = item.UID }) %>">
+                        <a onclick="$global.editLearner(<%= item.UID %>);">
                             <%  profile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %><i class="fa fa-bell text-warning"> <%= profile.FullName() %></i></a>
                         <div class="email">
                             <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
@@ -33,7 +33,7 @@
                 {
                     var profile = item;%>
             <div class="user" title="<%= profile.PID %>">
-                <a href="<%= Url.Action("ShowLearner","Member", new { id = item.UID }) %>">
+                <a onclick="$global.editLearner(<%= item.UID %>);">
                     <%  profile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %> <%= profile.FullName() %></a>
                 <div class="email">
                     <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
@@ -46,6 +46,19 @@
     </div>
     <!-- end widget div -->
 </div>
+<script>
+    $(function () {
+        if (!$global.editLearner) {
+            $global.editLearner = function (uid) {
+                startLoading();
+                $.post('<%= Url.Action("EditLearner","Learner") %>', { 'uid': uid }, function (data) {
+                    hideLoading();
+                    $(data).appendTo($('body'));
+                });
+            };
+        }
+    });
+</script>
 
 <script runat="server">
 

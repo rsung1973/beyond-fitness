@@ -269,7 +269,7 @@
                                             </label>
                                          </section> 
                                          <section class="col col-xs-12 col-sm-6 col-md-3">
-                                            <label class="label">或依學員姓名查詢</label>
+                                            <label class="label">或依學員姓名(暱稱)查詢</label>
                                               <label class="input input-group" >
                                                 <i class="icon-append fa fa-user"></i>
                                                 <input type="text" name="studentname" class="form-control input" maxlength="20" placeholder="請輸入學員姓名">
@@ -312,7 +312,7 @@
                                             </label>
                                          </section>
                                          <section class="col col-6">
-                                            <label class="label">合約狀態</label>
+                                            <label class="label">合約狀態（狀態後<i class="fa fa-asterisk"></i> 表示合約已過期）</label>
                                             <label class="select">
                                                <select class="input">
                                                   <option value="0">全部</option>
@@ -341,9 +341,12 @@
                                         </section>
                                      </div>
                                   </fieldset>
-                                  <footer>
+                                  <footer>                                     
                                      <button type="submit" name="submit" class="btn btn-primary">
                                      送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                     </button>
+                                      <button type="reset" name="cancle" class="btn btn-default">
+                                     清除 <i class="fa fa-undo" aria-hidden="true"></i>
                                      </button>
                                   </footer>
                                </form>
@@ -389,6 +392,7 @@
                            <!-- end widget edit box -->
                            <!-- widget content -->
                            <div class="widget-body bg-color-darken txt-color-white no-padding">
+                              <label class="label">合約狀態（狀態後<i class="fa fa-asterisk"></i> 表示合約已過期）</label>
                               <table id="dt_contract" class="table table-striped table-bordered table-hover" width="100%">
                                   <thead>
                                      <tr>
@@ -399,6 +403,7 @@
                                         <th data-hide="phone">生效日期</th>
                                         <th>合約名稱</th>
                                         <th data-hide="phone">購買/剩餘堂數</th>
+                                        <th data-hide="phone">合約總金額</th> 
                                         <th data-hide="phone">申請項目</th>
                                         <th data-hide="phone">狀態</th>
                                         <th data-hide="phone">功能</th>
@@ -413,6 +418,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對1</td>
                                         <td>75/25</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>草稿</td>
                                         <td noWrap="noWrap">
@@ -428,6 +434,7 @@
                                         <td>1對1</td>
                                         <td>新合約</td>
                                         <td>50/44</td>
+                                        <td class="text-right">10,500</td>
                                         <td>待審核</td>
                                         <td noWrap="noWrap">
                                             <a href="#" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a> &nbsp;&nbsp;
@@ -441,6 +448,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對1</td>
                                         <td>75/25</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap">
@@ -455,6 +463,7 @@
                                         <td>2017/03/05</td>
                                         <td>1對1</td>
                                         <td>75/25</td>
+                                        <td class="text-right">10,500</td>
                                         <td>展延</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap">
@@ -469,6 +478,7 @@
                                         <td>2017/04/05</td>
                                         <td>1對1</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>轉點</td>
                                         <td>草稿</td>
                                         <td noWrap="noWrap">
@@ -484,6 +494,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對1</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>草稿</td>
                                         <td noWrap="noWrap">
@@ -498,6 +509,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對2</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>待審核</td>
                                         <td noWrap="noWrap">
@@ -512,6 +524,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對2</td>
                                         <td>75/75</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap"> 
@@ -526,6 +539,7 @@
                                         <td>2017/03/05</td>
                                         <td>1對1</td>
                                         <td>75/50</td>
+                                        <td class="text-right">10,500</td>
                                         <td>轉點</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap">
@@ -540,6 +554,7 @@
                                         <td>2017/04/05</td>
                                         <td>1對1</td>
                                         <td>75/24</td>
+                                        <td class="text-right">10,500</td>
                                         <td>轉讓</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap">
@@ -554,6 +569,7 @@
                                         <td>2017/04/05</td>
                                         <td>1對1</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>待審核</td>
                                         <td noWrap="noWrap">
@@ -568,6 +584,7 @@
                                         <td>2017/01/05</td>
                                         <td>家庭</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>已生效</td>
                                         <td noWrap="noWrap">
@@ -582,6 +599,7 @@
                                         <td>2017/01/05</td>
                                         <td>1對1(家庭共享)</td>
                                         <td>75/--</td>
+                                        <td class="text-right">10,500</td>
                                         <td>新合約</td>
                                         <td>待審核</td>
                                         <td noWrap="noWrap">

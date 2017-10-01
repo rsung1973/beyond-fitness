@@ -74,13 +74,15 @@
             return regexpr.test(value);
         }, "資料格式錯誤!!");
 
+<%  if(ViewBag.ScrollUp != false)
+    {   %>
         $.scrollUp({
             //animation: 'slide',
             //activeOverlay: '#00FFFF',
             scrollText: '',
             scrollImg: true,
         });
-
+<%  }   %>
     });
 
     $.fn.serializeObject = function () {
@@ -97,6 +99,29 @@
             }
         });
         return o;
+    };
+
+    $.fn.launchDownload = function (url) {
+
+        var data = this.serializeObject();
+
+        var form = $('<form></form>').attr('action', url).attr('method', 'post');//.attr('target', '_blank');
+
+        Object.keys(data).forEach(function (key) {
+            var value = data[key];
+
+            if (value instanceof Array) {
+                value.forEach(function (v) {
+                    form.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', v));
+                });
+            } else {
+                form.append($("<input></input>").attr('type', 'hidden').attr('name', key).attr('value', value));
+            }
+
+        });
+
+        //send request
+        form.appendTo('body').submit().remove();
     };
 
 

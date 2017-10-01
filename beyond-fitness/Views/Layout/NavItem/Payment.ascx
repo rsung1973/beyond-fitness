@@ -8,15 +8,17 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%  if (_userProfile != null
-        && (_userProfile.IsCoach() || _userProfile.IsAssistant()))
+<%  if (_userProfile != null)
     { %>
 <li>
     <a href="#" title="收款管理"><i class="fa fa-lg fa-fw fa-usd"></i><span class="menu-item-parent">收款管理</span></a>
     <ul>
-        <li>
-            <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
-        </li>
+        <%  if (_userProfile.IsCoach() || _userProfile.IsAssistant())
+            { %>
+                <li>
+                    <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
+                </li>
+        <%  } %>
         <%  if(_userProfile.IsAssistant() || _userProfile.IsManager())
             { %>
         <li>
@@ -28,9 +30,15 @@
                             <a href="paychecklist.html" title="轉帳收款勾記"><i class="fa fa-lg fa-fw fa-check-square-o"></i> 轉帳收款勾記</a>
                         </li>
 -->
+        <%  if (_userProfile.IsAssistant() || _userProfile.IsManager() || _userProfile.IsCoach() || _userProfile.IsAccounting() || _userProfile.IsViceManager())
+            { %>
         <li>
-            <a href="<%= Url.Action("QueryIndex","Payment") %>" title="收款/作廢紀錄查詢"><i class="fa fa-lg fa-fw fa-search"></i>收款/作廢紀錄查詢</a>
+            <a href="<%= Url.Action("QueryIndex", "Payment") %>" title="收款/作廢紀錄查詢"><i class="fa fa-lg fa-fw fa-search"></i>收款/作廢紀錄查詢</a>
         </li>
+        <li>
+            <a href="<%= Url.Action("ReceivableIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>應收帳款催收表</a>
+        </li>
+        <%  } %>
     </ul>
 </li>
 <%  } %>

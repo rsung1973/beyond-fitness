@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<h5><a href="<%= Url.Action("PDQ","Member",new { id = _model.UID }) %>"><u>修改PAQ&PDQ ...</u></a></h5>
+<h5><a onclick="$global.editPDQ(<%= _model.UID %>);"><u>修改PAQ&PDQ ...</u></a></h5>
 <div class="alert alert-warning">
     <%  foreach (var pdq in _pdqConclusion)
                 { %>
@@ -27,6 +27,22 @@
         <i class="fa fa-check-circle"></i>訓練水準 - <%= _model.PDQUserAssessment!=null && _model.PDQUserAssessment.TrainingLevelAboutPDQ!=null ? _model.PDQUserAssessment.TrainingLevelAboutPDQ.TrainingLevel : null %>
     </strong>
 </div>
+<script>
+    $(function () {
+        if (!$global.editPDQ) {
+            $global.editPDQDone = function () {
+                window.location.reload();
+            };
+            $global.editPDQ = function (uid) {
+                showLoading();
+                $.post('<%= Url.Action("PDQ","Learner") %>', { 'uid': uid }, function (data) {
+                    hideLoading();
+                    $(data).appendTo($('body'));
+                });
+            };
+        }
+    });
+</script>
 
 <script runat="server">
 

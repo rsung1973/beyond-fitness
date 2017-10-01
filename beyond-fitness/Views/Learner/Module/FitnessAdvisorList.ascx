@@ -11,7 +11,7 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>教練姓名</th>
+            <th><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>體能顧問姓名</th>
             <th>功能</th>
         </tr>
     </thead>

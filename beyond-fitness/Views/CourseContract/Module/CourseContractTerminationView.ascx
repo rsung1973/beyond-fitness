@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="well no-padding well-light" style="width: 23cm; height: 32cm">
+        <div class="well no-padding well-light" style="width: 23cm; height: 30cm">
             <h2 class="text-center"><b>學員服務申請表</b></h2>
             <div class="<%= Request["pdf"]=="1" ? "bs-example bs-example-type seal" : "bs-example bs-example-type" %>">
                 <table class="table" style="font-size: 16px">
@@ -19,7 +19,7 @@
                             <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
-                            <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
+                            <td>姓名：<%= _contract.ContractOwner.RealName %></td>
                             <td>聯絡電話：<%= _contract.ContractOwner.Phone %></td>
                         </tr>
                     </tbody>
@@ -40,8 +40,12 @@
                         <tr>
                         <tr>
                             <td colspan="2">
-                                <%  var original = _model.SourceContract; %>
-                            申請內容：原合約編號 <%= original.ContractNo() %> 剩餘上課堂數：<%= original.RegisterLessonContract.Count>0 ? original.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : original.Lessons %>堂，確定於 <%= String.Format("{0:yyyy/MM/dd}",_signatureDate) %> 終止服務。</td>
+                                <%  var original = _model.SourceContract;
+                                    var remained = original.RemainedLessonCount();
+                                    var refund = original.TotalPaidAmount() - (original.Lessons - original.RemainedLessonCount()) * _contract.CourseContractExtension.SettlementPrice * _contract.CourseContractType.GroupingMemberCount * _contract.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100; %>
+                            申請內容：原合約編號 <%= original.ContractNo() %> 原購買堂數：<%= original.Lessons %>堂 / <%= String.Format("{0:##,###,###,###}",original.LessonPriceType.ListPrice) %>元，
+                                終止時全部堂數以單堂 / <%= String.Format("{0:##,###,###,###}",_contract.CourseContractExtension.SettlementPrice) %>元 計價，
+                                並扣除剩餘上課堂數：<%= remained %>堂，計算退款差額 <%= String.Format("{0:##,###,###,###}",refund) %>元，確定於 <%= String.Format("{0:yyyy/MM/dd}",_signatureDate) %> 終止服務。</td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2"><%= _contract.Remark %></td>
@@ -62,14 +66,14 @@
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);  %>
                         </td>
                         <td></td>
-                        <td>簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>主管簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：
                             <%  ViewBag.SignatureName = "GuardianSignature";
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner); %>
                         </td>
-                        <td>體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"/></td>
+                        <td>簽約體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"/></td>
                     </tr>
                 </table>
             </div>

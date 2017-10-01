@@ -13,16 +13,20 @@
     <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
         <thead>
             <tr>
+                <th data-class="expand">分店</th>
                 <th data-hide="phone">體能顧問</th>
-                <th data-class="expand">學員</th>
+                <th>學員</th>
                 <th>編輯日期</th>
                 <th>合約名稱</th>
+                <th>購買堂數</th>
+                <th>合約總金額</th>
             </tr>
         </thead>
         <tbody>
             <%  foreach (var item in _model)
                 { %>
             <tr>
+                <td nowrap="noWrap"><%= item.CourseContractExtension.BranchStore.BranchName %></td>
                 <td nowrap="noWrap"><%= item.ServingCoach.UserProfile.FullName() %></td>
                 <td nowrap="noWrap">
                     <%  if (item.CourseContractType.IsGroup==true)
@@ -51,11 +55,13 @@
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
-                    <%--<a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                    <%--<a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>--%>
                     <a onclick="$global.openToEnableContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
                     <%  } %>
                     <%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)
                 </td>
+                <td class="text-right"><%= item.Lessons %></td>
+                <td class="text-right"><%= String.Format("{0:##,###,###,###}", item.TotalCost) %></td>
             </tr>
             <%  } %>
         </tbody>
@@ -88,14 +94,21 @@
             };
 
             $('#<%= _tableId %>').dataTable({
-                "sDom": "",
+                //"bPaginate": false,
+                "pageLength": 30,
+                "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+                "searching": true,
+                "ordering": true,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                         "t" +
+                         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
                 "autoWidth": true,
-                "bPaginate": false,
-                "order": [],
+                "paging": true,
+                "info": true,
+                "order": [[3, "desc"]],
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
-                "info": true,
                 "preDrawCallback": function () {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_<%= _tableId %>) {

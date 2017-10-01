@@ -14,7 +14,7 @@
             <section class="col col-6">
                 <label class="label">請選擇個人行程類別</label>
                 <label class="select">
-                    <select name="Title" class="input-lg">
+                    <select name="Title">
                         <option <%= _viewModel.Title=="會議" ? "selected": null %>>會議</option>
                         <option <%= _viewModel.Title=="團練" ? "selected": null %>>團練</option>
                         <option <%= String.IsNullOrEmpty(_viewModel.Title) ? "selected": null %> value="">其他</option>
@@ -25,7 +25,7 @@
             <section class="col col-6">
                 <label class="label">請選擇地點</label>
                 <label class="select">
-                    <select class="input-lg" name="BranchID">
+                    <select name="BranchID">
                         <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                         <option value="" <%= !_viewModel.BranchID.HasValue ? "selected": null %>>其他</option>
                     </select>
@@ -48,14 +48,14 @@
             <section class="col col-6">
                 <label class="label">請選擇開始時間</label>
                 <label class="input">
-                    <input type="text" name="StartDate" class="form-control input-lg date input_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.StartDate) %>" placeholder="請選擇開始時間" />
+                    <input type="text" name="StartDate" class="form-control date input_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.StartDate) %>" placeholder="請選擇開始時間" />
                     <i class="icon-append fa fa-clock-o"></i>
                 </label>
             </section>
             <section class="col col-6">
                 <label class="label">請選擇結束時間</label>
                 <label class="input">
-                    <input type="text" name="EndDate" class="form-control input-lg date input_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.EndDate) %>" placeholder="請選擇結束時間" />
+                    <input type="text" name="EndDate" class="form-control date input_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.EndDate) %>" placeholder="請選擇結束時間" />
                     <i class="icon-append fa fa-clock-o"></i>
                 </label>
             </section>

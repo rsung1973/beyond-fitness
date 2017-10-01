@@ -22,7 +22,7 @@ namespace WebHome.Models.DataEntity
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitnessProd")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitnessProd4")]
 	public partial class BFDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -366,10 +366,46 @@ namespace WebHome.Models.DataEntity
     partial void InsertTuitionAchievement(TuitionAchievement instance);
     partial void UpdateTuitionAchievement(TuitionAchievement instance);
     partial void DeleteTuitionAchievement(TuitionAchievement instance);
+    partial void InsertCourseContractExtension(CourseContractExtension instance);
+    partial void UpdateCourseContractExtension(CourseContractExtension instance);
+    partial void DeleteCourseContractExtension(CourseContractExtension instance);
+    partial void InsertSettlement(Settlement instance);
+    partial void UpdateSettlement(Settlement instance);
+    partial void DeleteSettlement(Settlement instance);
+    partial void InsertContractTrustTrack(ContractTrustTrack instance);
+    partial void UpdateContractTrustTrack(ContractTrustTrack instance);
+    partial void DeleteContractTrustTrack(ContractTrustTrack instance);
+    partial void InsertCourseContractTrust(CourseContractTrust instance);
+    partial void UpdateCourseContractTrust(CourseContractTrust instance);
+    partial void DeleteCourseContractTrust(CourseContractTrust instance);
+    partial void InsertContractTrustSettlement(ContractTrustSettlement instance);
+    partial void UpdateContractTrustSettlement(ContractTrustSettlement instance);
+    partial void DeleteContractTrustSettlement(ContractTrustSettlement instance);
+    partial void InsertEnterpriseCoursePayment(EnterpriseCoursePayment instance);
+    partial void UpdateEnterpriseCoursePayment(EnterpriseCoursePayment instance);
+    partial void DeleteEnterpriseCoursePayment(EnterpriseCoursePayment instance);
+    partial void InsertLessonTimeSettlement(LessonTimeSettlement instance);
+    partial void UpdateLessonTimeSettlement(LessonTimeSettlement instance);
+    partial void DeleteLessonTimeSettlement(LessonTimeSettlement instance);
+    partial void InsertEnterpriseCourseContent(EnterpriseCourseContent instance);
+    partial void UpdateEnterpriseCourseContent(EnterpriseCourseContent instance);
+    partial void DeleteEnterpriseCourseContent(EnterpriseCourseContent instance);
+    partial void InsertEnterpriseCourseContract(EnterpriseCourseContract instance);
+    partial void UpdateEnterpriseCourseContract(EnterpriseCourseContract instance);
+    partial void DeleteEnterpriseCourseContract(EnterpriseCourseContract instance);
+    partial void InsertEnterpriseLessonType(EnterpriseLessonType instance);
+    partial void UpdateEnterpriseLessonType(EnterpriseLessonType instance);
+    partial void DeleteEnterpriseLessonType(EnterpriseLessonType instance);
+    partial void InsertRegisterLessonEnterprise(RegisterLessonEnterprise instance);
+    partial void UpdateRegisterLessonEnterprise(RegisterLessonEnterprise instance);
+    partial void DeleteRegisterLessonEnterprise(RegisterLessonEnterprise instance);
+    partial void InsertEnterpriseCourseMember(EnterpriseCourseMember instance);
+    partial void UpdateEnterpriseCourseMember(EnterpriseCourseMember instance);
+    partial void DeleteEnterpriseCourseMember(EnterpriseCourseMember instance);
     #endregion
 		
 		public BFDataContext() : 
-				base(global::WebHome.Properties.Settings.Default.BFDbConnection, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["WebHome.Properties.Settings.BFDbConnection"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -1299,6 +1335,102 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<TuitionAchievement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<CourseContractExtension> CourseContractExtension
+		{
+			get
+			{
+				return this.GetTable<CourseContractExtension>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Settlement> Settlement
+		{
+			get
+			{
+				return this.GetTable<Settlement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ContractTrustTrack> ContractTrustTrack
+		{
+			get
+			{
+				return this.GetTable<ContractTrustTrack>();
+			}
+		}
+		
+		public System.Data.Linq.Table<CourseContractTrust> CourseContractTrust
+		{
+			get
+			{
+				return this.GetTable<CourseContractTrust>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ContractTrustSettlement> ContractTrustSettlement
+		{
+			get
+			{
+				return this.GetTable<ContractTrustSettlement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EnterpriseCoursePayment> EnterpriseCoursePayment
+		{
+			get
+			{
+				return this.GetTable<EnterpriseCoursePayment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<LessonTimeSettlement> LessonTimeSettlement
+		{
+			get
+			{
+				return this.GetTable<LessonTimeSettlement>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EnterpriseCourseContent> EnterpriseCourseContent
+		{
+			get
+			{
+				return this.GetTable<EnterpriseCourseContent>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EnterpriseCourseContract> EnterpriseCourseContract
+		{
+			get
+			{
+				return this.GetTable<EnterpriseCourseContract>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EnterpriseLessonType> EnterpriseLessonType
+		{
+			get
+			{
+				return this.GetTable<EnterpriseLessonType>();
+			}
+		}
+		
+		public System.Data.Linq.Table<RegisterLessonEnterprise> RegisterLessonEnterprise
+		{
+			get
+			{
+				return this.GetTable<RegisterLessonEnterprise>();
+			}
+		}
+		
+		public System.Data.Linq.Table<EnterpriseCourseMember> EnterpriseCourseMember
+		{
+			get
+			{
+				return this.GetTable<EnterpriseCourseMember>();
 			}
 		}
 	}
@@ -3191,6 +3323,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
+		private EntitySet<EnterpriseCourseMember> _EnterpriseCourseMember;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3203,6 +3337,7 @@ namespace WebHome.Models.DataEntity
 		{
 			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
+			this._EnterpriseCourseMember = new EntitySet<EnterpriseCourseMember>(new Action<EnterpriseCourseMember>(this.attach_EnterpriseCourseMember), new Action<EnterpriseCourseMember>(this.detach_EnterpriseCourseMember));
 			OnCreated();
 		}
 		
@@ -3252,6 +3387,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_EnterpriseCourseMember", Storage="_EnterpriseCourseMember", ThisKey="GroupID", OtherKey="GroupID")]
+		public EntitySet<EnterpriseCourseMember> EnterpriseCourseMember
+		{
+			get
+			{
+				return this._EnterpriseCourseMember;
+			}
+			set
+			{
+				this._EnterpriseCourseMember.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -3291,6 +3439,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_RegisterLesson(RegisterLesson entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = null;
+		}
+		
+		private void attach_EnterpriseCourseMember(EnterpriseCourseMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.GroupingLesson = this;
+		}
+		
+		private void detach_EnterpriseCourseMember(EnterpriseCourseMember entity)
 		{
 			this.SendPropertyChanging();
 			entity.GroupingLesson = null;
@@ -3337,6 +3497,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<LessonFitnessAssessment> _LessonFitnessAssessment;
 		
+		private EntitySet<ContractTrustTrack> _ContractTrustTrack;
+		
+		private EntityRef<LessonTimeSettlement> _LessonTimeSettlement;
+		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
 		private EntityRef<ServingCoach> _ServingCoach;
@@ -3381,6 +3545,8 @@ namespace WebHome.Models.DataEntity
 			this._LessonPlan = default(EntityRef<LessonPlan>);
 			this._LessonFeedBack = new EntitySet<LessonFeedBack>(new Action<LessonFeedBack>(this.attach_LessonFeedBack), new Action<LessonFeedBack>(this.detach_LessonFeedBack));
 			this._LessonFitnessAssessment = new EntitySet<LessonFitnessAssessment>(new Action<LessonFitnessAssessment>(this.attach_LessonFitnessAssessment), new Action<LessonFitnessAssessment>(this.detach_LessonFitnessAssessment));
+			this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
+			this._LessonTimeSettlement = default(EntityRef<LessonTimeSettlement>);
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
 			this._ServingCoach1 = default(EntityRef<ServingCoach>);
@@ -3757,6 +3923,48 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_ContractTrustTrack", Storage="_ContractTrustTrack", ThisKey="LessonID", OtherKey="LessonID")]
+		public EntitySet<ContractTrustTrack> ContractTrustTrack
+		{
+			get
+			{
+				return this._ContractTrustTrack;
+			}
+			set
+			{
+				this._ContractTrustTrack.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonTimeSettlement", Storage="_LessonTimeSettlement", ThisKey="LessonID", OtherKey="LessonID", IsUnique=true, IsForeignKey=false)]
+		public LessonTimeSettlement LessonTimeSettlement
+		{
+			get
+			{
+				return this._LessonTimeSettlement.Entity;
+			}
+			set
+			{
+				LessonTimeSettlement previousValue = this._LessonTimeSettlement.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTimeSettlement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTimeSettlement.Entity = null;
+						previousValue.LessonTime = null;
+					}
+					this._LessonTimeSettlement.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTime = this;
+					}
+					this.SendPropertyChanged("LessonTimeSettlement");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_LessonTime", Storage="_GroupingLesson", ThisKey="GroupID", OtherKey="GroupID", IsForeignKey=true)]
 		public GroupingLesson GroupingLesson
 		{
@@ -3990,6 +4198,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_LessonFitnessAssessment(LessonFitnessAssessment entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = null;
+		}
+		
+		private void attach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.LessonTime = this;
+		}
+		
+		private void detach_ContractTrustTrack(ContractTrustTrack entity)
 		{
 			this.SendPropertyChanging();
 			entity.LessonTime = null;
@@ -5237,6 +5457,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<VoidPaymentLevel> _VoidPaymentLevel;
 		
+		private EntitySet<EnterpriseCourseMember> _EnterpriseCourseMember;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -5326,6 +5548,7 @@ namespace WebHome.Models.DataEntity
 			this._PaymentAudit = new EntitySet<PaymentAudit>(new Action<PaymentAudit>(this.attach_PaymentAudit), new Action<PaymentAudit>(this.detach_PaymentAudit));
 			this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
 			this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
+			this._EnterpriseCourseMember = new EntitySet<EnterpriseCourseMember>(new Action<EnterpriseCourseMember>(this.attach_EnterpriseCourseMember), new Action<EnterpriseCourseMember>(this.detach_EnterpriseCourseMember));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6232,6 +6455,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_EnterpriseCourseMember", Storage="_EnterpriseCourseMember", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<EnterpriseCourseMember> EnterpriseCourseMember
+		{
+			get
+			{
+				return this._EnterpriseCourseMember;
+			}
+			set
+			{
+				this._EnterpriseCourseMember.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -6767,6 +7003,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_VoidPaymentLevel(VoidPaymentLevel entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_EnterpriseCourseMember(EnterpriseCourseMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_EnterpriseCourseMember(EnterpriseCourseMember entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -7824,6 +8072,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<RegisterLessonContract> _RegisterLessonContract;
 		
+		private EntityRef<RegisterLessonEnterprise> _RegisterLessonEnterprise;
+		
 		private EntityRef<GroupingLesson> _GroupingLesson;
 		
 		private EntityRef<GroupingLessonDiscount> _GroupingLessonDiscount;
@@ -7874,6 +8124,7 @@ namespace WebHome.Models.DataEntity
 			this._LessonFeedBack = new EntitySet<LessonFeedBack>(new Action<LessonFeedBack>(this.attach_LessonFeedBack), new Action<LessonFeedBack>(this.detach_LessonFeedBack));
 			this._QuestionnaireRequest = new EntitySet<QuestionnaireRequest>(new Action<QuestionnaireRequest>(this.attach_QuestionnaireRequest), new Action<QuestionnaireRequest>(this.detach_QuestionnaireRequest));
 			this._RegisterLessonContract = default(EntityRef<RegisterLessonContract>);
+			this._RegisterLessonEnterprise = default(EntityRef<RegisterLessonEnterprise>);
 			this._GroupingLesson = default(EntityRef<GroupingLesson>);
 			this._GroupingLessonDiscount = default(EntityRef<GroupingLessonDiscount>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
@@ -8238,6 +8489,35 @@ namespace WebHome.Models.DataEntity
 						value.RegisterLesson = this;
 					}
 					this.SendPropertyChanged("RegisterLessonContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_RegisterLessonEnterprise", Storage="_RegisterLessonEnterprise", ThisKey="RegisterID", OtherKey="RegisterID", IsUnique=true, IsForeignKey=false)]
+		public RegisterLessonEnterprise RegisterLessonEnterprise
+		{
+			get
+			{
+				return this._RegisterLessonEnterprise.Entity;
+			}
+			set
+			{
+				RegisterLessonEnterprise previousValue = this._RegisterLessonEnterprise.Entity;
+				if (((previousValue != value) 
+							|| (this._RegisterLessonEnterprise.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RegisterLessonEnterprise.Entity = null;
+						previousValue.RegisterLesson = null;
+					}
+					this._RegisterLessonEnterprise.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLesson = this;
+					}
+					this.SendPropertyChanged("RegisterLessonEnterprise");
 				}
 			}
 		}
@@ -18619,6 +18899,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<CoachRating> _CoachRating;
 		
+		private EntitySet<LessonTimeSettlement> _LessonTimeSettlement;
+		
 		private EntityRef<LevelExpression> _LevelExpression;
 		
     #region Extensibility Method Definitions
@@ -18639,6 +18921,7 @@ namespace WebHome.Models.DataEntity
 		{
 			this._ServingCoach = new EntitySet<ServingCoach>(new Action<ServingCoach>(this.attach_ServingCoach), new Action<ServingCoach>(this.detach_ServingCoach));
 			this._CoachRating = new EntitySet<CoachRating>(new Action<CoachRating>(this.attach_CoachRating), new Action<CoachRating>(this.detach_CoachRating));
+			this._LessonTimeSettlement = new EntitySet<LessonTimeSettlement>(new Action<LessonTimeSettlement>(this.attach_LessonTimeSettlement), new Action<LessonTimeSettlement>(this.detach_LessonTimeSettlement));
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
 		}
@@ -18753,6 +19036,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProfessionalLevel_LessonTimeSettlement", Storage="_LessonTimeSettlement", ThisKey="LevelID", OtherKey="ProfessionalLevelID")]
+		public EntitySet<LessonTimeSettlement> LessonTimeSettlement
+		{
+			get
+			{
+				return this._LessonTimeSettlement;
+			}
+			set
+			{
+				this._LessonTimeSettlement.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LevelExpression_ProfessionalLevel", Storage="_LevelExpression", ThisKey="CategoryID", OtherKey="LevelID", IsForeignKey=true)]
 		public LevelExpression LevelExpression
 		{
@@ -18826,6 +19122,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_CoachRating(CoachRating entity)
+		{
+			this.SendPropertyChanging();
+			entity.ProfessionalLevel = null;
+		}
+		
+		private void attach_LessonTimeSettlement(LessonTimeSettlement entity)
+		{
+			this.SendPropertyChanging();
+			entity.ProfessionalLevel = this;
+		}
+		
+		private void detach_LessonTimeSettlement(LessonTimeSettlement entity)
 		{
 			this.SendPropertyChanging();
 			entity.ProfessionalLevel = null;
@@ -21316,6 +21624,14 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<ContractPayment> _ContractPayment;
 		
+		private EntityRef<CourseContractExtension> _CourseContractExtension;
+		
+		private EntitySet<ContractTrustTrack> _ContractTrustTrack;
+		
+		private EntityRef<CourseContractTrust> _CourseContractTrust;
+		
+		private EntitySet<ContractTrustSettlement> _ContractTrustSettlement;
+		
 		private EntityRef<LessonPriceType> _LessonPriceType;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -21376,6 +21692,10 @@ namespace WebHome.Models.DataEntity
 			this._CourseContractRevision = default(EntityRef<CourseContractRevision>);
 			this._RevisionList = new EntitySet<CourseContractRevision>(new Action<CourseContractRevision>(this.attach_RevisionList), new Action<CourseContractRevision>(this.detach_RevisionList));
 			this._ContractPayment = new EntitySet<ContractPayment>(new Action<ContractPayment>(this.attach_ContractPayment), new Action<ContractPayment>(this.detach_ContractPayment));
+			this._CourseContractExtension = default(EntityRef<CourseContractExtension>);
+			this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
+			this._CourseContractTrust = default(EntityRef<CourseContractTrust>);
+			this._ContractTrustSettlement = new EntitySet<ContractTrustSettlement>(new Action<ContractTrustSettlement>(this.attach_ContractTrustSettlement), new Action<ContractTrustSettlement>(this.detach_ContractTrustSettlement));
 			this._LessonPriceType = default(EntityRef<LessonPriceType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
@@ -21843,6 +22163,90 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_CourseContractExtension", Storage="_CourseContractExtension", ThisKey="ContractID", OtherKey="ContractID", IsUnique=true, IsForeignKey=false)]
+		public CourseContractExtension CourseContractExtension
+		{
+			get
+			{
+				return this._CourseContractExtension.Entity;
+			}
+			set
+			{
+				CourseContractExtension previousValue = this._CourseContractExtension.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContractExtension.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContractExtension.Entity = null;
+						previousValue.CourseContract = null;
+					}
+					this._CourseContractExtension.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContract = this;
+					}
+					this.SendPropertyChanged("CourseContractExtension");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractTrustTrack", Storage="_ContractTrustTrack", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<ContractTrustTrack> ContractTrustTrack
+		{
+			get
+			{
+				return this._ContractTrustTrack;
+			}
+			set
+			{
+				this._ContractTrustTrack.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_CourseContractTrust", Storage="_CourseContractTrust", ThisKey="ContractID", OtherKey="ContractID", IsUnique=true, IsForeignKey=false)]
+		public CourseContractTrust CourseContractTrust
+		{
+			get
+			{
+				return this._CourseContractTrust.Entity;
+			}
+			set
+			{
+				CourseContractTrust previousValue = this._CourseContractTrust.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContractTrust.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContractTrust.Entity = null;
+						previousValue.CourseContract = null;
+					}
+					this._CourseContractTrust.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContract = this;
+					}
+					this.SendPropertyChanged("CourseContractTrust");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractTrustSettlement", Storage="_ContractTrustSettlement", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<ContractTrustSettlement> ContractTrustSettlement
+		{
+			get
+			{
+				return this._ContractTrustSettlement;
+			}
+			set
+			{
+				this._ContractTrustSettlement.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonPriceType_CourseContract", Storage="_LessonPriceType", ThisKey="PriceID", OtherKey="PriceID", IsForeignKey=true)]
 		public LessonPriceType LessonPriceType
 		{
@@ -22122,6 +22526,30 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_ContractPayment(ContractPayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = null;
+		}
+		
+		private void attach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = this;
+		}
+		
+		private void detach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = null;
+		}
+		
+		private void attach_ContractTrustSettlement(ContractTrustSettlement entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = this;
+		}
+		
+		private void detach_ContractTrustSettlement(ContractTrustSettlement entity)
 		{
 			this.SendPropertyChanging();
 			entity.CourseContract = null;
@@ -22537,6 +22965,8 @@ namespace WebHome.Models.DataEntity
 		
 		private string _Reason;
 		
+		private EntitySet<CourseContractExtension> _CourseContractExtension;
+		
 		private EntityRef<CourseContract> _CourseContract;
 		
 		private EntityRef<CourseContract> _SourceContract;
@@ -22557,6 +22987,7 @@ namespace WebHome.Models.DataEntity
 		
 		public CourseContractRevision()
 		{
+			this._CourseContractExtension = new EntitySet<CourseContractExtension>(new Action<CourseContractExtension>(this.attach_CourseContractExtension), new Action<CourseContractExtension>(this.detach_CourseContractExtension));
 			this._CourseContract = default(EntityRef<CourseContract>);
 			this._SourceContract = default(EntityRef<CourseContract>);
 			OnCreated();
@@ -22650,6 +23081,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContractRevision_CourseContractExtension", Storage="_CourseContractExtension", ThisKey="RevisionID", OtherKey="RevisionTrackingID")]
+		public EntitySet<CourseContractExtension> CourseContractExtension
+		{
+			get
+			{
+				return this._CourseContractExtension;
+			}
+			set
+			{
+				this._CourseContractExtension.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_CourseContractRevision", Storage="_CourseContract", ThisKey="RevisionID", OtherKey="ContractID", IsForeignKey=true)]
 		public CourseContract CourseContract
 		{
@@ -22737,6 +23181,18 @@ namespace WebHome.Models.DataEntity
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+		
+		private void attach_CourseContractExtension(CourseContractExtension entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContractRevision = this;
+		}
+		
+		private void detach_CourseContractExtension(CourseContractExtension entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContractRevision = null;
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BranchStore")]
@@ -22764,6 +23220,10 @@ namespace WebHome.Models.DataEntity
 		private EntitySet<LessonPriceType> _LessonPriceType;
 		
 		private EntitySet<PaymentTransaction> _PaymentTransaction;
+		
+		private EntitySet<CourseContractExtension> _CourseContractExtension;
+		
+		private EntitySet<EnterpriseCourseContract> _EnterpriseCourseContract;
 		
 		private EntityRef<UserProfile> _Manager;
 		
@@ -22793,6 +23253,8 @@ namespace WebHome.Models.DataEntity
 			this._CoachWorkplace = new EntitySet<CoachWorkplace>(new Action<CoachWorkplace>(this.attach_CoachWorkplace), new Action<CoachWorkplace>(this.detach_CoachWorkplace));
 			this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
 			this._PaymentTransaction = new EntitySet<PaymentTransaction>(new Action<PaymentTransaction>(this.attach_PaymentTransaction), new Action<PaymentTransaction>(this.detach_PaymentTransaction));
+			this._CourseContractExtension = new EntitySet<CourseContractExtension>(new Action<CourseContractExtension>(this.attach_CourseContractExtension), new Action<CourseContractExtension>(this.detach_CourseContractExtension));
+			this._EnterpriseCourseContract = new EntitySet<EnterpriseCourseContract>(new Action<EnterpriseCourseContract>(this.attach_EnterpriseCourseContract), new Action<EnterpriseCourseContract>(this.detach_EnterpriseCourseContract));
 			this._Manager = default(EntityRef<UserProfile>);
 			this._ViceManager = default(EntityRef<UserProfile>);
 			this._Organization = default(EntityRef<Organization>);
@@ -22966,6 +23428,32 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._PaymentTransaction.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_CourseContractExtension", Storage="_CourseContractExtension", ThisKey="BranchID", OtherKey="BranchID")]
+		public EntitySet<CourseContractExtension> CourseContractExtension
+		{
+			get
+			{
+				return this._CourseContractExtension;
+			}
+			set
+			{
+				this._CourseContractExtension.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_EnterpriseCourseContract", Storage="_EnterpriseCourseContract", ThisKey="BranchID", OtherKey="BranchID")]
+		public EntitySet<EnterpriseCourseContract> EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract;
+			}
+			set
+			{
+				this._EnterpriseCourseContract.Assign(value);
 			}
 		}
 		
@@ -23158,6 +23646,30 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_PaymentTransaction(PaymentTransaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = null;
+		}
+		
+		private void attach_CourseContractExtension(CourseContractExtension entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = this;
+		}
+		
+		private void detach_CourseContractExtension(CourseContractExtension entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = null;
+		}
+		
+		private void attach_EnterpriseCourseContract(EnterpriseCourseContract entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = this;
+		}
+		
+		private void detach_EnterpriseCourseContract(EnterpriseCourseContract entity)
 		{
 			this.SendPropertyChanging();
 			entity.BranchStore = null;
@@ -25023,6 +25535,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<TuitionAchievement> _TuitionAchievement;
 		
+		private EntitySet<ContractTrustTrack> _ContractTrustTrack;
+		
+		private EntityRef<EnterpriseCoursePayment> _EnterpriseCoursePayment;
+		
 		private EntityRef<InvoiceItem> _InvoiceItem;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -25061,6 +25577,8 @@ namespace WebHome.Models.DataEntity
 			this._PaymentAudit = default(EntityRef<PaymentAudit>);
 			this._VoidPayment = default(EntityRef<VoidPayment>);
 			this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
+			this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
+			this._EnterpriseCoursePayment = default(EntityRef<EnterpriseCoursePayment>);
 			this._InvoiceItem = default(EntityRef<InvoiceItem>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile = default(EntityRef<UserProfile>);
@@ -25417,6 +25935,48 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_ContractTrustTrack", Storage="_ContractTrustTrack", ThisKey="PaymentID", OtherKey="PaymentID")]
+		public EntitySet<ContractTrustTrack> ContractTrustTrack
+		{
+			get
+			{
+				return this._ContractTrustTrack;
+			}
+			set
+			{
+				this._ContractTrustTrack.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_EnterpriseCoursePayment", Storage="_EnterpriseCoursePayment", ThisKey="PaymentID", OtherKey="PaymentID", IsUnique=true, IsForeignKey=false)]
+		public EnterpriseCoursePayment EnterpriseCoursePayment
+		{
+			get
+			{
+				return this._EnterpriseCoursePayment.Entity;
+			}
+			set
+			{
+				EnterpriseCoursePayment previousValue = this._EnterpriseCoursePayment.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCoursePayment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCoursePayment.Entity = null;
+						previousValue.Payment = null;
+					}
+					this._EnterpriseCoursePayment.Entity = value;
+					if ((value != null))
+					{
+						value.Payment = this;
+					}
+					this.SendPropertyChanged("EnterpriseCoursePayment");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_Payment", Storage="_InvoiceItem", ThisKey="InvoiceID", OtherKey="InvoiceID", IsForeignKey=true)]
 		public InvoiceItem InvoiceItem
 		{
@@ -25546,6 +26106,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_TuitionAchievement(TuitionAchievement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = null;
+		}
+		
+		private void attach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.Payment = this;
+		}
+		
+		private void detach_ContractTrustTrack(ContractTrustTrack entity)
 		{
 			this.SendPropertyChanging();
 			entity.Payment = null;
@@ -27362,6 +27934,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<InvoiceSeller> _InvoiceSeller;
 		
+		private EntitySet<EnterpriseCourseContract> _EnterpriseCourseContract;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -27422,6 +27996,7 @@ namespace WebHome.Models.DataEntity
 			this._InvoiceBuyer = new EntitySet<InvoiceBuyer>(new Action<InvoiceBuyer>(this.attach_InvoiceBuyer), new Action<InvoiceBuyer>(this.detach_InvoiceBuyer));
 			this._InvoiceAllowanceSeller = new EntitySet<InvoiceAllowanceSeller>(new Action<InvoiceAllowanceSeller>(this.attach_InvoiceAllowanceSeller), new Action<InvoiceAllowanceSeller>(this.detach_InvoiceAllowanceSeller));
 			this._InvoiceSeller = new EntitySet<InvoiceSeller>(new Action<InvoiceSeller>(this.attach_InvoiceSeller), new Action<InvoiceSeller>(this.detach_InvoiceSeller));
+			this._EnterpriseCourseContract = new EntitySet<EnterpriseCourseContract>(new Action<EnterpriseCourseContract>(this.attach_EnterpriseCourseContract), new Action<EnterpriseCourseContract>(this.detach_EnterpriseCourseContract));
 			OnCreated();
 		}
 		
@@ -27979,6 +28554,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_EnterpriseCourseContract", Storage="_EnterpriseCourseContract", ThisKey="CompanyID", OtherKey="CompanyID")]
+		public EntitySet<EnterpriseCourseContract> EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract;
+			}
+			set
+			{
+				this._EnterpriseCourseContract.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -28054,6 +28642,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_InvoiceSeller(InvoiceSeller entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_EnterpriseCourseContract(EnterpriseCourseContract entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_EnterpriseCourseContract(EnterpriseCourseContract entity)
 		{
 			this.SendPropertyChanging();
 			entity.Organization = null;
@@ -33493,6 +34093,2919 @@ namespace WebHome.Models.DataEntity
 						this._CoachID = default(int);
 					}
 					this.SendPropertyChanged("ServingCoach");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CourseContractExtension")]
+	public partial class CourseContractExtension : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _BranchID;
+		
+		private System.Nullable<int> _RevisionTrackingID;
+		
+		private System.Nullable<int> _SettlementPrice;
+		
+		private EntityRef<BranchStore> _BranchStore;
+		
+		private EntityRef<CourseContract> _CourseContract;
+		
+		private EntityRef<CourseContractRevision> _CourseContractRevision;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnBranchIDChanging(int value);
+    partial void OnBranchIDChanged();
+    partial void OnRevisionTrackingIDChanging(System.Nullable<int> value);
+    partial void OnRevisionTrackingIDChanged();
+    partial void OnSettlementPriceChanging(System.Nullable<int> value);
+    partial void OnSettlementPriceChanged();
+    #endregion
+		
+		public CourseContractExtension()
+		{
+			this._BranchStore = default(EntityRef<BranchStore>);
+			this._CourseContract = default(EntityRef<CourseContract>);
+			this._CourseContractRevision = default(EntityRef<CourseContractRevision>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._CourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchID", DbType="Int NOT NULL")]
+		public int BranchID
+		{
+			get
+			{
+				return this._BranchID;
+			}
+			set
+			{
+				if ((this._BranchID != value))
+				{
+					if (this._BranchStore.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIDChanging(value);
+					this.SendPropertyChanging();
+					this._BranchID = value;
+					this.SendPropertyChanged("BranchID");
+					this.OnBranchIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RevisionTrackingID", DbType="Int")]
+		public System.Nullable<int> RevisionTrackingID
+		{
+			get
+			{
+				return this._RevisionTrackingID;
+			}
+			set
+			{
+				if ((this._RevisionTrackingID != value))
+				{
+					if (this._CourseContractRevision.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRevisionTrackingIDChanging(value);
+					this.SendPropertyChanging();
+					this._RevisionTrackingID = value;
+					this.SendPropertyChanged("RevisionTrackingID");
+					this.OnRevisionTrackingIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementPrice", DbType="Int")]
+		public System.Nullable<int> SettlementPrice
+		{
+			get
+			{
+				return this._SettlementPrice;
+			}
+			set
+			{
+				if ((this._SettlementPrice != value))
+				{
+					this.OnSettlementPriceChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementPrice = value;
+					this.SendPropertyChanged("SettlementPrice");
+					this.OnSettlementPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_CourseContractExtension", Storage="_BranchStore", ThisKey="BranchID", OtherKey="BranchID", IsForeignKey=true)]
+		public BranchStore BranchStore
+		{
+			get
+			{
+				return this._BranchStore.Entity;
+			}
+			set
+			{
+				BranchStore previousValue = this._BranchStore.Entity;
+				if (((previousValue != value) 
+							|| (this._BranchStore.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BranchStore.Entity = null;
+						previousValue.CourseContractExtension.Remove(this);
+					}
+					this._BranchStore.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContractExtension.Add(this);
+						this._BranchID = value.BranchID;
+					}
+					else
+					{
+						this._BranchID = default(int);
+					}
+					this.SendPropertyChanged("BranchStore");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_CourseContractExtension", Storage="_CourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CourseContract CourseContract
+		{
+			get
+			{
+				return this._CourseContract.Entity;
+			}
+			set
+			{
+				CourseContract previousValue = this._CourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContract.Entity = null;
+						previousValue.CourseContractExtension = null;
+					}
+					this._CourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContractExtension = this;
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("CourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContractRevision_CourseContractExtension", Storage="_CourseContractRevision", ThisKey="RevisionTrackingID", OtherKey="RevisionID", IsForeignKey=true)]
+		public CourseContractRevision CourseContractRevision
+		{
+			get
+			{
+				return this._CourseContractRevision.Entity;
+			}
+			set
+			{
+				CourseContractRevision previousValue = this._CourseContractRevision.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContractRevision.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContractRevision.Entity = null;
+						previousValue.CourseContractExtension.Remove(this);
+					}
+					this._CourseContractRevision.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContractExtension.Add(this);
+						this._RevisionTrackingID = value.RevisionID;
+					}
+					else
+					{
+						this._RevisionTrackingID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("CourseContractRevision");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Settlement")]
+	public partial class Settlement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _SettlementID;
+		
+		private System.DateTime _SettlementDate;
+		
+		private System.DateTime _StartDate;
+		
+		private System.DateTime _EndExclusiveDate;
+		
+		private EntitySet<ContractTrustTrack> _ContractTrustTrack;
+		
+		private EntitySet<ContractTrustSettlement> _ContractTrustSettlement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnSettlementIDChanging(int value);
+    partial void OnSettlementIDChanged();
+    partial void OnSettlementDateChanging(System.DateTime value);
+    partial void OnSettlementDateChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndExclusiveDateChanging(System.DateTime value);
+    partial void OnEndExclusiveDateChanged();
+    #endregion
+		
+		public Settlement()
+		{
+			this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
+			this._ContractTrustSettlement = new EntitySet<ContractTrustSettlement>(new Action<ContractTrustSettlement>(this.attach_ContractTrustSettlement), new Action<ContractTrustSettlement>(this.detach_ContractTrustSettlement));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementDate", DbType="DateTime NOT NULL")]
+		public System.DateTime SettlementDate
+		{
+			get
+			{
+				return this._SettlementDate;
+			}
+			set
+			{
+				if ((this._SettlementDate != value))
+				{
+					this.OnSettlementDateChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementDate = value;
+					this.SendPropertyChanged("SettlementDate");
+					this.OnSettlementDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime NOT NULL")]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndExclusiveDate", DbType="DateTime NOT NULL")]
+		public System.DateTime EndExclusiveDate
+		{
+			get
+			{
+				return this._EndExclusiveDate;
+			}
+			set
+			{
+				if ((this._EndExclusiveDate != value))
+				{
+					this.OnEndExclusiveDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndExclusiveDate = value;
+					this.SendPropertyChanged("EndExclusiveDate");
+					this.OnEndExclusiveDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_ContractTrustTrack", Storage="_ContractTrustTrack", ThisKey="SettlementID", OtherKey="SettlementID")]
+		public EntitySet<ContractTrustTrack> ContractTrustTrack
+		{
+			get
+			{
+				return this._ContractTrustTrack;
+			}
+			set
+			{
+				this._ContractTrustTrack.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_ContractTrustSettlement", Storage="_ContractTrustSettlement", ThisKey="SettlementID", OtherKey="SettlementID")]
+		public EntitySet<ContractTrustSettlement> ContractTrustSettlement
+		{
+			get
+			{
+				return this._ContractTrustSettlement;
+			}
+			set
+			{
+				this._ContractTrustSettlement.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = this;
+		}
+		
+		private void detach_ContractTrustTrack(ContractTrustTrack entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = null;
+		}
+		
+		private void attach_ContractTrustSettlement(ContractTrustSettlement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = this;
+		}
+		
+		private void detach_ContractTrustSettlement(ContractTrustSettlement entity)
+		{
+			this.SendPropertyChanging();
+			entity.Settlement = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ContractTrustTrack")]
+	public partial class ContractTrustTrack : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TrustID;
+		
+		private int _ContractID;
+		
+		private System.DateTime _EventDate;
+		
+		private string _TrustType;
+		
+		private System.Nullable<int> _SettlementID;
+		
+		private System.Nullable<int> _LessonID;
+		
+		private System.Nullable<int> _PaymentID;
+		
+		private EntityRef<CourseContract> _CourseContract;
+		
+		private EntityRef<LessonTime> _LessonTime;
+		
+		private EntityRef<Payment> _Payment;
+		
+		private EntityRef<Settlement> _Settlement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTrustIDChanging(int value);
+    partial void OnTrustIDChanged();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnEventDateChanging(System.DateTime value);
+    partial void OnEventDateChanged();
+    partial void OnTrustTypeChanging(string value);
+    partial void OnTrustTypeChanged();
+    partial void OnSettlementIDChanging(System.Nullable<int> value);
+    partial void OnSettlementIDChanged();
+    partial void OnLessonIDChanging(System.Nullable<int> value);
+    partial void OnLessonIDChanged();
+    partial void OnPaymentIDChanging(System.Nullable<int> value);
+    partial void OnPaymentIDChanged();
+    #endregion
+		
+		public ContractTrustTrack()
+		{
+			this._CourseContract = default(EntityRef<CourseContract>);
+			this._LessonTime = default(EntityRef<LessonTime>);
+			this._Payment = default(EntityRef<Payment>);
+			this._Settlement = default(EntityRef<Settlement>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrustID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int TrustID
+		{
+			get
+			{
+				return this._TrustID;
+			}
+			set
+			{
+				if ((this._TrustID != value))
+				{
+					this.OnTrustIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrustID = value;
+					this.SendPropertyChanged("TrustID");
+					this.OnTrustIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL")]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._CourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventDate", DbType="DateTime NOT NULL")]
+		public System.DateTime EventDate
+		{
+			get
+			{
+				return this._EventDate;
+			}
+			set
+			{
+				if ((this._EventDate != value))
+				{
+					this.OnEventDateChanging(value);
+					this.SendPropertyChanging();
+					this._EventDate = value;
+					this.SendPropertyChanged("EventDate");
+					this.OnEventDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrustType", DbType="NVarChar(8) NOT NULL", CanBeNull=false)]
+		public string TrustType
+		{
+			get
+			{
+				return this._TrustType;
+			}
+			set
+			{
+				if ((this._TrustType != value))
+				{
+					this.OnTrustTypeChanging(value);
+					this.SendPropertyChanging();
+					this._TrustType = value;
+					this.SendPropertyChanged("TrustType");
+					this.OnTrustTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", DbType="Int")]
+		public System.Nullable<int> SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					if (this._Settlement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int")]
+		public System.Nullable<int> LessonID
+		{
+			get
+			{
+				return this._LessonID;
+			}
+			set
+			{
+				if ((this._LessonID != value))
+				{
+					if (this._LessonTime.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLessonIDChanging(value);
+					this.SendPropertyChanging();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentID", DbType="Int")]
+		public System.Nullable<int> PaymentID
+		{
+			get
+			{
+				return this._PaymentID;
+			}
+			set
+			{
+				if ((this._PaymentID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPaymentIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentID = value;
+					this.SendPropertyChanged("PaymentID");
+					this.OnPaymentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractTrustTrack", Storage="_CourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true)]
+		public CourseContract CourseContract
+		{
+			get
+			{
+				return this._CourseContract.Entity;
+			}
+			set
+			{
+				CourseContract previousValue = this._CourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContract.Entity = null;
+						previousValue.ContractTrustTrack.Remove(this);
+					}
+					this._CourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustTrack.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("CourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_ContractTrustTrack", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public LessonTime LessonTime
+		{
+			get
+			{
+				return this._LessonTime.Entity;
+			}
+			set
+			{
+				LessonTime previousValue = this._LessonTime.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTime.Entity = null;
+						previousValue.ContractTrustTrack.Remove(this);
+					}
+					this._LessonTime.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustTrack.Add(this);
+						this._LessonID = value.LessonID;
+					}
+					else
+					{
+						this._LessonID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("LessonTime");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_ContractTrustTrack", Storage="_Payment", ThisKey="PaymentID", OtherKey="PaymentID", IsForeignKey=true)]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.ContractTrustTrack.Remove(this);
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustTrack.Add(this);
+						this._PaymentID = value.PaymentID;
+					}
+					else
+					{
+						this._PaymentID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_ContractTrustTrack", Storage="_Settlement", ThisKey="SettlementID", OtherKey="SettlementID", IsForeignKey=true)]
+		public Settlement Settlement
+		{
+			get
+			{
+				return this._Settlement.Entity;
+			}
+			set
+			{
+				Settlement previousValue = this._Settlement.Entity;
+				if (((previousValue != value) 
+							|| (this._Settlement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Settlement.Entity = null;
+						previousValue.ContractTrustTrack.Remove(this);
+					}
+					this._Settlement.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustTrack.Add(this);
+						this._SettlementID = value.SettlementID;
+					}
+					else
+					{
+						this._SettlementID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("Settlement");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CourseContractTrust")]
+	public partial class CourseContractTrust : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _CurrentSettlement;
+		
+		private EntityRef<CourseContract> _CourseContract;
+		
+		private EntityRef<ContractTrustSettlement> _ContractTrustSettlement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnCurrentSettlementChanging(int value);
+    partial void OnCurrentSettlementChanged();
+    #endregion
+		
+		public CourseContractTrust()
+		{
+			this._CourseContract = default(EntityRef<CourseContract>);
+			this._ContractTrustSettlement = default(EntityRef<ContractTrustSettlement>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if ((this._CourseContract.HasLoadedOrAssignedValue || this._ContractTrustSettlement.HasLoadedOrAssignedValue))
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CurrentSettlement", DbType="Int NOT NULL")]
+		public int CurrentSettlement
+		{
+			get
+			{
+				return this._CurrentSettlement;
+			}
+			set
+			{
+				if ((this._CurrentSettlement != value))
+				{
+					if (this._ContractTrustSettlement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCurrentSettlementChanging(value);
+					this.SendPropertyChanging();
+					this._CurrentSettlement = value;
+					this.SendPropertyChanged("CurrentSettlement");
+					this.OnCurrentSettlementChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_CourseContractTrust", Storage="_CourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CourseContract CourseContract
+		{
+			get
+			{
+				return this._CourseContract.Entity;
+			}
+			set
+			{
+				CourseContract previousValue = this._CourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContract.Entity = null;
+						previousValue.CourseContractTrust = null;
+					}
+					this._CourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContractTrust = this;
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("CourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContractTrustSettlement_CourseContractTrust", Storage="_ContractTrustSettlement", ThisKey="ContractID,CurrentSettlement", OtherKey="ContractID,SettlementID", IsForeignKey=true)]
+		public ContractTrustSettlement ContractTrustSettlement
+		{
+			get
+			{
+				return this._ContractTrustSettlement.Entity;
+			}
+			set
+			{
+				ContractTrustSettlement previousValue = this._ContractTrustSettlement.Entity;
+				if (((previousValue != value) 
+							|| (this._ContractTrustSettlement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ContractTrustSettlement.Entity = null;
+						previousValue.CourseContractTrust.Remove(this);
+					}
+					this._ContractTrustSettlement.Entity = value;
+					if ((value != null))
+					{
+						value.CourseContractTrust.Add(this);
+						this._ContractID = value.ContractID;
+						this._CurrentSettlement = value.SettlementID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+						this._CurrentSettlement = default(int);
+					}
+					this.SendPropertyChanged("ContractTrustSettlement");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ContractTrustSettlement")]
+	public partial class ContractTrustSettlement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _SettlementID;
+		
+		private int _TotalTrustAmount;
+		
+		private int _InitialTrustAmount;
+		
+		private EntitySet<CourseContractTrust> _CourseContractTrust;
+		
+		private EntityRef<CourseContract> _CourseContract;
+		
+		private EntityRef<Settlement> _Settlement;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnSettlementIDChanging(int value);
+    partial void OnSettlementIDChanged();
+    partial void OnTotalTrustAmountChanging(int value);
+    partial void OnTotalTrustAmountChanged();
+    partial void OnInitialTrustAmountChanging(int value);
+    partial void OnInitialTrustAmountChanged();
+    #endregion
+		
+		public ContractTrustSettlement()
+		{
+			this._CourseContractTrust = new EntitySet<CourseContractTrust>(new Action<CourseContractTrust>(this.attach_CourseContractTrust), new Action<CourseContractTrust>(this.detach_CourseContractTrust));
+			this._CourseContract = default(EntityRef<CourseContract>);
+			this._Settlement = default(EntityRef<Settlement>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._CourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int SettlementID
+		{
+			get
+			{
+				return this._SettlementID;
+			}
+			set
+			{
+				if ((this._SettlementID != value))
+				{
+					if (this._Settlement.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSettlementIDChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementID = value;
+					this.SendPropertyChanged("SettlementID");
+					this.OnSettlementIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalTrustAmount", DbType="Int NOT NULL")]
+		public int TotalTrustAmount
+		{
+			get
+			{
+				return this._TotalTrustAmount;
+			}
+			set
+			{
+				if ((this._TotalTrustAmount != value))
+				{
+					this.OnTotalTrustAmountChanging(value);
+					this.SendPropertyChanging();
+					this._TotalTrustAmount = value;
+					this.SendPropertyChanged("TotalTrustAmount");
+					this.OnTotalTrustAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InitialTrustAmount", DbType="Int NOT NULL")]
+		public int InitialTrustAmount
+		{
+			get
+			{
+				return this._InitialTrustAmount;
+			}
+			set
+			{
+				if ((this._InitialTrustAmount != value))
+				{
+					this.OnInitialTrustAmountChanging(value);
+					this.SendPropertyChanging();
+					this._InitialTrustAmount = value;
+					this.SendPropertyChanged("InitialTrustAmount");
+					this.OnInitialTrustAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ContractTrustSettlement_CourseContractTrust", Storage="_CourseContractTrust", ThisKey="ContractID,SettlementID", OtherKey="ContractID,CurrentSettlement")]
+		public EntitySet<CourseContractTrust> CourseContractTrust
+		{
+			get
+			{
+				return this._CourseContractTrust;
+			}
+			set
+			{
+				this._CourseContractTrust.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractTrustSettlement", Storage="_CourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true)]
+		public CourseContract CourseContract
+		{
+			get
+			{
+				return this._CourseContract.Entity;
+			}
+			set
+			{
+				CourseContract previousValue = this._CourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContract.Entity = null;
+						previousValue.ContractTrustSettlement.Remove(this);
+					}
+					this._CourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustSettlement.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("CourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Settlement_ContractTrustSettlement", Storage="_Settlement", ThisKey="SettlementID", OtherKey="SettlementID", IsForeignKey=true)]
+		public Settlement Settlement
+		{
+			get
+			{
+				return this._Settlement.Entity;
+			}
+			set
+			{
+				Settlement previousValue = this._Settlement.Entity;
+				if (((previousValue != value) 
+							|| (this._Settlement.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Settlement.Entity = null;
+						previousValue.ContractTrustSettlement.Remove(this);
+					}
+					this._Settlement.Entity = value;
+					if ((value != null))
+					{
+						value.ContractTrustSettlement.Add(this);
+						this._SettlementID = value.SettlementID;
+					}
+					else
+					{
+						this._SettlementID = default(int);
+					}
+					this.SendPropertyChanged("Settlement");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_CourseContractTrust(CourseContractTrust entity)
+		{
+			this.SendPropertyChanging();
+			entity.ContractTrustSettlement = this;
+		}
+		
+		private void detach_CourseContractTrust(CourseContractTrust entity)
+		{
+			this.SendPropertyChanging();
+			entity.ContractTrustSettlement = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EnterpriseCoursePayment")]
+	public partial class EnterpriseCoursePayment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _PaymentID;
+		
+		private int _ContractID;
+		
+		private EntityRef<Payment> _Payment;
+		
+		private EntityRef<EnterpriseCourseContract> _EnterpriseCourseContract;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnPaymentIDChanging(int value);
+    partial void OnPaymentIDChanged();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    #endregion
+		
+		public EnterpriseCoursePayment()
+		{
+			this._Payment = default(EntityRef<Payment>);
+			this._EnterpriseCourseContract = default(EntityRef<EnterpriseCourseContract>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaymentID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int PaymentID
+		{
+			get
+			{
+				return this._PaymentID;
+			}
+			set
+			{
+				if ((this._PaymentID != value))
+				{
+					if (this._Payment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPaymentIDChanging(value);
+					this.SendPropertyChanging();
+					this._PaymentID = value;
+					this.SendPropertyChanged("PaymentID");
+					this.OnPaymentIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL")]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._EnterpriseCourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Payment_EnterpriseCoursePayment", Storage="_Payment", ThisKey="PaymentID", OtherKey="PaymentID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Payment Payment
+		{
+			get
+			{
+				return this._Payment.Entity;
+			}
+			set
+			{
+				Payment previousValue = this._Payment.Entity;
+				if (((previousValue != value) 
+							|| (this._Payment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Payment.Entity = null;
+						previousValue.EnterpriseCoursePayment = null;
+					}
+					this._Payment.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCoursePayment = this;
+						this._PaymentID = value.PaymentID;
+					}
+					else
+					{
+						this._PaymentID = default(int);
+					}
+					this.SendPropertyChanged("Payment");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCoursePayment", Storage="_EnterpriseCourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true)]
+		public EnterpriseCourseContract EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract.Entity;
+			}
+			set
+			{
+				EnterpriseCourseContract previousValue = this._EnterpriseCourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCourseContract.Entity = null;
+						previousValue.EnterpriseCoursePayment.Remove(this);
+					}
+					this._EnterpriseCourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCoursePayment.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("EnterpriseCourseContract");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.LessonTimeSettlement")]
+	public partial class LessonTimeSettlement : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LessonID;
+		
+		private int _ProfessionalLevelID;
+		
+		private EntityRef<LessonTime> _LessonTime;
+		
+		private EntityRef<ProfessionalLevel> _ProfessionalLevel;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLessonIDChanging(int value);
+    partial void OnLessonIDChanged();
+    partial void OnProfessionalLevelIDChanging(int value);
+    partial void OnProfessionalLevelIDChanged();
+    #endregion
+		
+		public LessonTimeSettlement()
+		{
+			this._LessonTime = default(EntityRef<LessonTime>);
+			this._ProfessionalLevel = default(EntityRef<ProfessionalLevel>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LessonID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int LessonID
+		{
+			get
+			{
+				return this._LessonID;
+			}
+			set
+			{
+				if ((this._LessonID != value))
+				{
+					if (this._LessonTime.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLessonIDChanging(value);
+					this.SendPropertyChanging();
+					this._LessonID = value;
+					this.SendPropertyChanged("LessonID");
+					this.OnLessonIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProfessionalLevelID", DbType="Int NOT NULL")]
+		public int ProfessionalLevelID
+		{
+			get
+			{
+				return this._ProfessionalLevelID;
+			}
+			set
+			{
+				if ((this._ProfessionalLevelID != value))
+				{
+					if (this._ProfessionalLevel.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnProfessionalLevelIDChanging(value);
+					this.SendPropertyChanging();
+					this._ProfessionalLevelID = value;
+					this.SendPropertyChanged("ProfessionalLevelID");
+					this.OnProfessionalLevelIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LessonTime_LessonTimeSettlement", Storage="_LessonTime", ThisKey="LessonID", OtherKey="LessonID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public LessonTime LessonTime
+		{
+			get
+			{
+				return this._LessonTime.Entity;
+			}
+			set
+			{
+				LessonTime previousValue = this._LessonTime.Entity;
+				if (((previousValue != value) 
+							|| (this._LessonTime.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._LessonTime.Entity = null;
+						previousValue.LessonTimeSettlement = null;
+					}
+					this._LessonTime.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTimeSettlement = this;
+						this._LessonID = value.LessonID;
+					}
+					else
+					{
+						this._LessonID = default(int);
+					}
+					this.SendPropertyChanged("LessonTime");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ProfessionalLevel_LessonTimeSettlement", Storage="_ProfessionalLevel", ThisKey="ProfessionalLevelID", OtherKey="LevelID", IsForeignKey=true)]
+		public ProfessionalLevel ProfessionalLevel
+		{
+			get
+			{
+				return this._ProfessionalLevel.Entity;
+			}
+			set
+			{
+				ProfessionalLevel previousValue = this._ProfessionalLevel.Entity;
+				if (((previousValue != value) 
+							|| (this._ProfessionalLevel.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ProfessionalLevel.Entity = null;
+						previousValue.LessonTimeSettlement.Remove(this);
+					}
+					this._ProfessionalLevel.Entity = value;
+					if ((value != null))
+					{
+						value.LessonTimeSettlement.Add(this);
+						this._ProfessionalLevelID = value.LevelID;
+					}
+					else
+					{
+						this._ProfessionalLevelID = default(int);
+					}
+					this.SendPropertyChanged("ProfessionalLevel");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EnterpriseCourseContent")]
+	public partial class EnterpriseCourseContent : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _TypeID;
+		
+		private System.Nullable<int> _Lessons;
+		
+		private System.Nullable<int> _ListPrice;
+		
+		private System.Nullable<int> _DurationInMinutes;
+		
+		private EntitySet<RegisterLessonEnterprise> _RegisterLessonEnterprise;
+		
+		private EntityRef<EnterpriseCourseContract> _EnterpriseCourseContract;
+		
+		private EntityRef<EnterpriseLessonType> _EnterpriseLessonType;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnTypeIDChanging(int value);
+    partial void OnTypeIDChanged();
+    partial void OnLessonsChanging(System.Nullable<int> value);
+    partial void OnLessonsChanged();
+    partial void OnListPriceChanging(System.Nullable<int> value);
+    partial void OnListPriceChanged();
+    partial void OnDurationInMinutesChanging(System.Nullable<int> value);
+    partial void OnDurationInMinutesChanged();
+    #endregion
+		
+		public EnterpriseCourseContent()
+		{
+			this._RegisterLessonEnterprise = new EntitySet<RegisterLessonEnterprise>(new Action<RegisterLessonEnterprise>(this.attach_RegisterLessonEnterprise), new Action<RegisterLessonEnterprise>(this.detach_RegisterLessonEnterprise));
+			this._EnterpriseCourseContract = default(EntityRef<EnterpriseCourseContract>);
+			this._EnterpriseLessonType = default(EntityRef<EnterpriseLessonType>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._EnterpriseCourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					if (this._EnterpriseLessonType.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Lessons", DbType="Int")]
+		public System.Nullable<int> Lessons
+		{
+			get
+			{
+				return this._Lessons;
+			}
+			set
+			{
+				if ((this._Lessons != value))
+				{
+					this.OnLessonsChanging(value);
+					this.SendPropertyChanging();
+					this._Lessons = value;
+					this.SendPropertyChanged("Lessons");
+					this.OnLessonsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ListPrice", DbType="Int")]
+		public System.Nullable<int> ListPrice
+		{
+			get
+			{
+				return this._ListPrice;
+			}
+			set
+			{
+				if ((this._ListPrice != value))
+				{
+					this.OnListPriceChanging(value);
+					this.SendPropertyChanging();
+					this._ListPrice = value;
+					this.SendPropertyChanged("ListPrice");
+					this.OnListPriceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DurationInMinutes", DbType="Int")]
+		public System.Nullable<int> DurationInMinutes
+		{
+			get
+			{
+				return this._DurationInMinutes;
+			}
+			set
+			{
+				if ((this._DurationInMinutes != value))
+				{
+					this.OnDurationInMinutesChanging(value);
+					this.SendPropertyChanging();
+					this._DurationInMinutes = value;
+					this.SendPropertyChanged("DurationInMinutes");
+					this.OnDurationInMinutesChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContent_RegisterLessonEnterprise", Storage="_RegisterLessonEnterprise", ThisKey="ContractID,TypeID", OtherKey="ContractID,TypeID")]
+		public EntitySet<RegisterLessonEnterprise> RegisterLessonEnterprise
+		{
+			get
+			{
+				return this._RegisterLessonEnterprise;
+			}
+			set
+			{
+				this._RegisterLessonEnterprise.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCourseContent", Storage="_EnterpriseCourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public EnterpriseCourseContract EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract.Entity;
+			}
+			set
+			{
+				EnterpriseCourseContract previousValue = this._EnterpriseCourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCourseContract.Entity = null;
+						previousValue.EnterpriseCourseContent.Remove(this);
+					}
+					this._EnterpriseCourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseContent.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("EnterpriseCourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseLessonType_EnterpriseCourseContent", Storage="_EnterpriseLessonType", ThisKey="TypeID", OtherKey="TypeID", IsForeignKey=true)]
+		public EnterpriseLessonType EnterpriseLessonType
+		{
+			get
+			{
+				return this._EnterpriseLessonType.Entity;
+			}
+			set
+			{
+				EnterpriseLessonType previousValue = this._EnterpriseLessonType.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseLessonType.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseLessonType.Entity = null;
+						previousValue.EnterpriseCourseContent.Remove(this);
+					}
+					this._EnterpriseLessonType.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseContent.Add(this);
+						this._TypeID = value.TypeID;
+					}
+					else
+					{
+						this._TypeID = default(int);
+					}
+					this.SendPropertyChanged("EnterpriseLessonType");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RegisterLessonEnterprise(RegisterLessonEnterprise entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContent = this;
+		}
+		
+		private void detach_RegisterLessonEnterprise(RegisterLessonEnterprise entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContent = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EnterpriseCourseContract")]
+	public partial class EnterpriseCourseContract : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _CompanyID;
+		
+		private string _Remark;
+		
+		private string _Subject;
+		
+		private string _ContractNo;
+		
+		private System.Nullable<int> _TotalCost;
+		
+		private System.Nullable<int> _BranchID;
+		
+		private System.Nullable<System.DateTime> _ValidFrom;
+		
+		private System.Nullable<System.DateTime> _Expiration;
+		
+		private int _GroupingMemberCount;
+		
+		private EntitySet<EnterpriseCoursePayment> _EnterpriseCoursePayment;
+		
+		private EntitySet<EnterpriseCourseContent> _EnterpriseCourseContent;
+		
+		private EntitySet<RegisterLessonEnterprise> _RegisterLessonEnterprise;
+		
+		private EntitySet<EnterpriseCourseMember> _EnterpriseCourseMember;
+		
+		private EntityRef<BranchStore> _BranchStore;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnCompanyIDChanging(int value);
+    partial void OnCompanyIDChanged();
+    partial void OnRemarkChanging(string value);
+    partial void OnRemarkChanged();
+    partial void OnSubjectChanging(string value);
+    partial void OnSubjectChanged();
+    partial void OnContractNoChanging(string value);
+    partial void OnContractNoChanged();
+    partial void OnTotalCostChanging(System.Nullable<int> value);
+    partial void OnTotalCostChanged();
+    partial void OnBranchIDChanging(System.Nullable<int> value);
+    partial void OnBranchIDChanged();
+    partial void OnValidFromChanging(System.Nullable<System.DateTime> value);
+    partial void OnValidFromChanged();
+    partial void OnExpirationChanging(System.Nullable<System.DateTime> value);
+    partial void OnExpirationChanged();
+    partial void OnGroupingMemberCountChanging(int value);
+    partial void OnGroupingMemberCountChanged();
+    #endregion
+		
+		public EnterpriseCourseContract()
+		{
+			this._EnterpriseCoursePayment = new EntitySet<EnterpriseCoursePayment>(new Action<EnterpriseCoursePayment>(this.attach_EnterpriseCoursePayment), new Action<EnterpriseCoursePayment>(this.detach_EnterpriseCoursePayment));
+			this._EnterpriseCourseContent = new EntitySet<EnterpriseCourseContent>(new Action<EnterpriseCourseContent>(this.attach_EnterpriseCourseContent), new Action<EnterpriseCourseContent>(this.detach_EnterpriseCourseContent));
+			this._RegisterLessonEnterprise = new EntitySet<RegisterLessonEnterprise>(new Action<RegisterLessonEnterprise>(this.attach_RegisterLessonEnterprise), new Action<RegisterLessonEnterprise>(this.detach_RegisterLessonEnterprise));
+			this._EnterpriseCourseMember = new EntitySet<EnterpriseCourseMember>(new Action<EnterpriseCourseMember>(this.attach_EnterpriseCourseMember), new Action<EnterpriseCourseMember>(this.detach_EnterpriseCourseMember));
+			this._BranchStore = default(EntityRef<BranchStore>);
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL")]
+		public int CompanyID
+		{
+			get
+			{
+				return this._CompanyID;
+			}
+			set
+			{
+				if ((this._CompanyID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyIDChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyID = value;
+					this.SendPropertyChanged("CompanyID");
+					this.OnCompanyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(64)")]
+		public string Remark
+		{
+			get
+			{
+				return this._Remark;
+			}
+			set
+			{
+				if ((this._Remark != value))
+				{
+					this.OnRemarkChanging(value);
+					this.SendPropertyChanging();
+					this._Remark = value;
+					this.SendPropertyChanged("Remark");
+					this.OnRemarkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subject", DbType="NVarChar(8)")]
+		public string Subject
+		{
+			get
+			{
+				return this._Subject;
+			}
+			set
+			{
+				if ((this._Subject != value))
+				{
+					this.OnSubjectChanging(value);
+					this.SendPropertyChanging();
+					this._Subject = value;
+					this.SendPropertyChanged("Subject");
+					this.OnSubjectChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractNo", DbType="NVarChar(64)")]
+		public string ContractNo
+		{
+			get
+			{
+				return this._ContractNo;
+			}
+			set
+			{
+				if ((this._ContractNo != value))
+				{
+					this.OnContractNoChanging(value);
+					this.SendPropertyChanging();
+					this._ContractNo = value;
+					this.SendPropertyChanged("ContractNo");
+					this.OnContractNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalCost", DbType="Int")]
+		public System.Nullable<int> TotalCost
+		{
+			get
+			{
+				return this._TotalCost;
+			}
+			set
+			{
+				if ((this._TotalCost != value))
+				{
+					this.OnTotalCostChanging(value);
+					this.SendPropertyChanging();
+					this._TotalCost = value;
+					this.SendPropertyChanged("TotalCost");
+					this.OnTotalCostChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchID", DbType="Int")]
+		public System.Nullable<int> BranchID
+		{
+			get
+			{
+				return this._BranchID;
+			}
+			set
+			{
+				if ((this._BranchID != value))
+				{
+					if (this._BranchStore.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIDChanging(value);
+					this.SendPropertyChanging();
+					this._BranchID = value;
+					this.SendPropertyChanged("BranchID");
+					this.OnBranchIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ValidFrom", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ValidFrom
+		{
+			get
+			{
+				return this._ValidFrom;
+			}
+			set
+			{
+				if ((this._ValidFrom != value))
+				{
+					this.OnValidFromChanging(value);
+					this.SendPropertyChanging();
+					this._ValidFrom = value;
+					this.SendPropertyChanged("ValidFrom");
+					this.OnValidFromChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Expiration", DbType="DateTime")]
+		public System.Nullable<System.DateTime> Expiration
+		{
+			get
+			{
+				return this._Expiration;
+			}
+			set
+			{
+				if ((this._Expiration != value))
+				{
+					this.OnExpirationChanging(value);
+					this.SendPropertyChanging();
+					this._Expiration = value;
+					this.SendPropertyChanged("Expiration");
+					this.OnExpirationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupingMemberCount", DbType="Int NOT NULL")]
+		public int GroupingMemberCount
+		{
+			get
+			{
+				return this._GroupingMemberCount;
+			}
+			set
+			{
+				if ((this._GroupingMemberCount != value))
+				{
+					this.OnGroupingMemberCountChanging(value);
+					this.SendPropertyChanging();
+					this._GroupingMemberCount = value;
+					this.SendPropertyChanged("GroupingMemberCount");
+					this.OnGroupingMemberCountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCoursePayment", Storage="_EnterpriseCoursePayment", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<EnterpriseCoursePayment> EnterpriseCoursePayment
+		{
+			get
+			{
+				return this._EnterpriseCoursePayment;
+			}
+			set
+			{
+				this._EnterpriseCoursePayment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCourseContent", Storage="_EnterpriseCourseContent", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<EnterpriseCourseContent> EnterpriseCourseContent
+		{
+			get
+			{
+				return this._EnterpriseCourseContent;
+			}
+			set
+			{
+				this._EnterpriseCourseContent.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_RegisterLessonEnterprise", Storage="_RegisterLessonEnterprise", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<RegisterLessonEnterprise> RegisterLessonEnterprise
+		{
+			get
+			{
+				return this._RegisterLessonEnterprise;
+			}
+			set
+			{
+				this._RegisterLessonEnterprise.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCourseMember", Storage="_EnterpriseCourseMember", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<EnterpriseCourseMember> EnterpriseCourseMember
+		{
+			get
+			{
+				return this._EnterpriseCourseMember;
+			}
+			set
+			{
+				this._EnterpriseCourseMember.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_EnterpriseCourseContract", Storage="_BranchStore", ThisKey="BranchID", OtherKey="BranchID", IsForeignKey=true)]
+		public BranchStore BranchStore
+		{
+			get
+			{
+				return this._BranchStore.Entity;
+			}
+			set
+			{
+				BranchStore previousValue = this._BranchStore.Entity;
+				if (((previousValue != value) 
+							|| (this._BranchStore.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BranchStore.Entity = null;
+						previousValue.EnterpriseCourseContract.Remove(this);
+					}
+					this._BranchStore.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseContract.Add(this);
+						this._BranchID = value.BranchID;
+					}
+					else
+					{
+						this._BranchID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("BranchStore");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_EnterpriseCourseContract", Storage="_Organization", ThisKey="CompanyID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.EnterpriseCourseContract.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseContract.Add(this);
+						this._CompanyID = value.CompanyID;
+					}
+					else
+					{
+						this._CompanyID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EnterpriseCoursePayment(EnterpriseCoursePayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = this;
+		}
+		
+		private void detach_EnterpriseCoursePayment(EnterpriseCoursePayment entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = null;
+		}
+		
+		private void attach_EnterpriseCourseContent(EnterpriseCourseContent entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = this;
+		}
+		
+		private void detach_EnterpriseCourseContent(EnterpriseCourseContent entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = null;
+		}
+		
+		private void attach_RegisterLessonEnterprise(RegisterLessonEnterprise entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = this;
+		}
+		
+		private void detach_RegisterLessonEnterprise(RegisterLessonEnterprise entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = null;
+		}
+		
+		private void attach_EnterpriseCourseMember(EnterpriseCourseMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = this;
+		}
+		
+		private void detach_EnterpriseCourseMember(EnterpriseCourseMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseCourseContract = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EnterpriseLessonType")]
+	public partial class EnterpriseLessonType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TypeID;
+		
+		private System.Nullable<int> _Status;
+		
+		private string _Description;
+		
+		private EntitySet<EnterpriseCourseContent> _EnterpriseCourseContent;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTypeIDChanging(int value);
+    partial void OnTypeIDChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public EnterpriseLessonType()
+		{
+			this._EnterpriseCourseContent = new EntitySet<EnterpriseCourseContent>(new Action<EnterpriseCourseContent>(this.attach_EnterpriseCourseContent), new Action<EnterpriseCourseContent>(this.detach_EnterpriseCourseContent));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(64)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseLessonType_EnterpriseCourseContent", Storage="_EnterpriseCourseContent", ThisKey="TypeID", OtherKey="TypeID")]
+		public EntitySet<EnterpriseCourseContent> EnterpriseCourseContent
+		{
+			get
+			{
+				return this._EnterpriseCourseContent;
+			}
+			set
+			{
+				this._EnterpriseCourseContent.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EnterpriseCourseContent(EnterpriseCourseContent entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseLessonType = this;
+		}
+		
+		private void detach_EnterpriseCourseContent(EnterpriseCourseContent entity)
+		{
+			this.SendPropertyChanging();
+			entity.EnterpriseLessonType = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RegisterLessonEnterprise")]
+	public partial class RegisterLessonEnterprise : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _RegisterID;
+		
+		private System.Nullable<int> _ContractID;
+		
+		private System.Nullable<int> _TypeID;
+		
+		private EntityRef<EnterpriseCourseContent> _EnterpriseCourseContent;
+		
+		private EntityRef<EnterpriseCourseContract> _EnterpriseCourseContract;
+		
+		private EntityRef<RegisterLesson> _RegisterLesson;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRegisterIDChanging(int value);
+    partial void OnRegisterIDChanged();
+    partial void OnContractIDChanging(System.Nullable<int> value);
+    partial void OnContractIDChanged();
+    partial void OnTypeIDChanging(System.Nullable<int> value);
+    partial void OnTypeIDChanged();
+    #endregion
+		
+		public RegisterLessonEnterprise()
+		{
+			this._EnterpriseCourseContent = default(EntityRef<EnterpriseCourseContent>);
+			this._EnterpriseCourseContract = default(EntityRef<EnterpriseCourseContract>);
+			this._RegisterLesson = default(EntityRef<RegisterLesson>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegisterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int RegisterID
+		{
+			get
+			{
+				return this._RegisterID;
+			}
+			set
+			{
+				if ((this._RegisterID != value))
+				{
+					if (this._RegisterLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRegisterIDChanging(value);
+					this.SendPropertyChanging();
+					this._RegisterID = value;
+					this.SendPropertyChanged("RegisterID");
+					this.OnRegisterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int")]
+		public System.Nullable<int> ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if ((this._EnterpriseCourseContent.HasLoadedOrAssignedValue || this._EnterpriseCourseContract.HasLoadedOrAssignedValue))
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int")]
+		public System.Nullable<int> TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					if (this._EnterpriseCourseContent.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContent_RegisterLessonEnterprise", Storage="_EnterpriseCourseContent", ThisKey="ContractID,TypeID", OtherKey="ContractID,TypeID", IsForeignKey=true)]
+		public EnterpriseCourseContent EnterpriseCourseContent
+		{
+			get
+			{
+				return this._EnterpriseCourseContent.Entity;
+			}
+			set
+			{
+				EnterpriseCourseContent previousValue = this._EnterpriseCourseContent.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCourseContent.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCourseContent.Entity = null;
+						previousValue.RegisterLessonEnterprise.Remove(this);
+					}
+					this._EnterpriseCourseContent.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLessonEnterprise.Add(this);
+						this._ContractID = value.ContractID;
+						this._TypeID = value.TypeID;
+					}
+					else
+					{
+						this._ContractID = default(Nullable<int>);
+						this._TypeID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("EnterpriseCourseContent");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_RegisterLessonEnterprise", Storage="_EnterpriseCourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public EnterpriseCourseContract EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract.Entity;
+			}
+			set
+			{
+				EnterpriseCourseContract previousValue = this._EnterpriseCourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCourseContract.Entity = null;
+						previousValue.RegisterLessonEnterprise.Remove(this);
+					}
+					this._EnterpriseCourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLessonEnterprise.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("EnterpriseCourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RegisterLesson_RegisterLessonEnterprise", Storage="_RegisterLesson", ThisKey="RegisterID", OtherKey="RegisterID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public RegisterLesson RegisterLesson
+		{
+			get
+			{
+				return this._RegisterLesson.Entity;
+			}
+			set
+			{
+				RegisterLesson previousValue = this._RegisterLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RegisterLesson.Entity = null;
+						previousValue.RegisterLessonEnterprise = null;
+					}
+					this._RegisterLesson.Entity = value;
+					if ((value != null))
+					{
+						value.RegisterLessonEnterprise = this;
+						this._RegisterID = value.RegisterID;
+					}
+					else
+					{
+						this._RegisterID = default(int);
+					}
+					this.SendPropertyChanged("RegisterLesson");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.EnterpriseCourseMember")]
+	public partial class EnterpriseCourseMember : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private int _UID;
+		
+		private System.Nullable<int> _GroupID;
+		
+		private EntityRef<EnterpriseCourseContract> _EnterpriseCourseContract;
+		
+		private EntityRef<GroupingLesson> _GroupingLesson;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    partial void OnGroupIDChanging(System.Nullable<int> value);
+    partial void OnGroupIDChanged();
+    #endregion
+		
+		public EnterpriseCourseMember()
+		{
+			this._EnterpriseCourseContract = default(EntityRef<EnterpriseCourseContract>);
+			this._GroupingLesson = default(EntityRef<GroupingLesson>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._EnterpriseCourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupID", DbType="Int")]
+		public System.Nullable<int> GroupID
+		{
+			get
+			{
+				return this._GroupID;
+			}
+			set
+			{
+				if ((this._GroupID != value))
+				{
+					if (this._GroupingLesson.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnGroupIDChanging(value);
+					this.SendPropertyChanging();
+					this._GroupID = value;
+					this.SendPropertyChanged("GroupID");
+					this.OnGroupIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="EnterpriseCourseContract_EnterpriseCourseMember", Storage="_EnterpriseCourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public EnterpriseCourseContract EnterpriseCourseContract
+		{
+			get
+			{
+				return this._EnterpriseCourseContract.Entity;
+			}
+			set
+			{
+				EnterpriseCourseContract previousValue = this._EnterpriseCourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._EnterpriseCourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EnterpriseCourseContract.Entity = null;
+						previousValue.EnterpriseCourseMember.Remove(this);
+					}
+					this._EnterpriseCourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseMember.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("EnterpriseCourseContract");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="GroupingLesson_EnterpriseCourseMember", Storage="_GroupingLesson", ThisKey="GroupID", OtherKey="GroupID", IsForeignKey=true)]
+		public GroupingLesson GroupingLesson
+		{
+			get
+			{
+				return this._GroupingLesson.Entity;
+			}
+			set
+			{
+				GroupingLesson previousValue = this._GroupingLesson.Entity;
+				if (((previousValue != value) 
+							|| (this._GroupingLesson.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._GroupingLesson.Entity = null;
+						previousValue.EnterpriseCourseMember.Remove(this);
+					}
+					this._GroupingLesson.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseMember.Add(this);
+						this._GroupID = value.GroupID;
+					}
+					else
+					{
+						this._GroupID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("GroupingLesson");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_EnterpriseCourseMember", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.EnterpriseCourseMember.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.EnterpriseCourseMember.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
 				}
 			}
 		}

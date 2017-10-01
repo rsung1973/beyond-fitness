@@ -34,10 +34,10 @@
         <div class="info">
             <a class="informer informer-one">
                 <span>
-                <% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
+                <% var totalLessons = _currentLessons.Sum(c => (int?)c.Lessons); %>
                     <font color="red"><%= totalLessons
                     - _currentLessons.Sum(c=>c.AttendedLessons)
-                    - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %></font> / <%= totalLessons %>
+                    - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %></font> / <%= totalLessons %>
 
                 </span>
 <%--                <span>
@@ -48,13 +48,13 @@
             <a href="#" class="informer informer-two" onclick="checkBonus(<%= _model.UID %>);">
                 <span class="fa fa-gift">&nbsp;&nbsp;<b><u><%= _model.BonusPoint(models) ?? 0 %></u></b></span>
             </a>
-            <a href="<%= Url.Action("EditLearner","Member",new { id = _model.UID }) %>" class="informer informer-three">
+            <a onclick="$global.editLearner(<%= _model.UID %>);" class="informer informer-three">
                 <span class="fa fa-birthday-cake fa-2x">&nbsp;<u><%= _model.YearsOld() %></u></span>
             </a>
             <a href="#" class="informer informer-four" onclick="showLearnerAssessment(<%= _model.UID %>,<%= _item.LessonID %>);">
                 <u><span class="fa fa-line-chart fa-2x"></span></u>
             </a>
-            <a href="<%= Url.Action("EditLearner","Member",new { id = _model.UID }) %>">
+            <a onclick="$global.editLearner(<%= _model.UID %>);">
                 <%  _model.RenderUserPicture(Writer, new { @class = "img-circle img-thumbnail", @style = "width:100px" }); %>
 
             </a>

@@ -42,18 +42,18 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
-                        <form action="<%= Url.Action("InquirePayment","Payment") %>" method="post" class="smart-form">
+                        <form id="queryForm" action="<%= Url.Action("InquirePayment","Payment") %>" method="post" class="smart-form">
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">依收款人查詢</label>
                                         <label class="select">
                                             <select class="input" name="HandlerID">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsAccounting())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant())
+                                                <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
@@ -83,7 +83,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號">
                                         </label>
                                     </section>
-                                <%  if (_profile.IsAssistant())
+                                <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>
@@ -179,14 +179,14 @@
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
-                                            <input type="text" name="PayoffDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom) %>" />
+                                            <input type="text" name="PayoffDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢收款迄日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="PayoffDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom.AddMonths(1).AddDays(-1)) %>" />
+                                            <input type="text" name="PayoffDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
                                     </section>
                                 </div>
@@ -194,6 +194,9 @@
                             <footer>
                                 <button onclick="inquirePayment();" type="button" name="submit" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                                <button type="reset" name="cancel" class="btn btn-default">
+                                    清除 <i class="fa fa-undo" aria-hidden="true"></i>
                                 </button>
                             </footer>
                         </form>
@@ -230,7 +233,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>收款清單</h2>
                     <div class="widget-toolbar">
-                        <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
+                        <a id="btnDownload" onclick="downloadPayment();" style="display:none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
                     </div>
                 </header>
                 <!-- widget div-->
@@ -258,6 +261,7 @@
     function inquirePayment() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
+        $('#btnDownload').css('display', 'none');
         $form.ajaxSubmit({
             beforeSubmit: function () {
                 showLoading();
@@ -268,6 +272,10 @@
                     .append($(data));
             }
         });
+    }
+
+    function downloadPayment() {
+        $('#queryForm').launchDownload('<%= Url.Action("CreatePaymentQueryXlsx","Payment") %>');
     }
 </script>
 

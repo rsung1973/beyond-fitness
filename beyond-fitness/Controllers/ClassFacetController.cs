@@ -74,7 +74,7 @@ namespace WebHome.Controllers
                 LessonID = item.LessonID,
                 ClassDate = item.ClassTime.Value,
                 CoachID = item.AttendingCoach.Value,
-                Duration = item.DurationInMinutes.Value,
+                //Duration = item.DurationInMinutes.Value,
                 TrainingBySelf = item.TrainingBySelf,
                 BranchID = item.BranchID.Value
             };
@@ -95,13 +95,24 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/JsAlert.ascx", model: "修改上課時間資料不存在!!");
             }
 
+            if (item.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "課程資料已信託，不可修改!!");
+            }
+
             LessonTime timeItem = new LessonTime
             {
                 InvitedCoach = item.InvitedCoach,
                 AttendingCoach = item.AttendingCoach,
                 ClassTime = viewModel.ClassDate,
-                DurationInMinutes = viewModel.Duration
+                DurationInMinutes = item.DurationInMinutes
             };
+
+            if (models.GetTable<Settlement>().Any(s => s.StartDate <= viewModel.ClassDate && s.EndExclusiveDate > viewModel.ClassDate))
+            {
+                ViewBag.Message = "修改上課時間(" + String.Format("{0:yyyy/MM/dd}", viewModel.ClassDate) + "已信託結算!!";
+                return View("~/Views/Shared/MessageView.ascx");
+            }
 
             var users = models.CheckOverlappingBooking(timeItem, item);
             if (users.Count() > 0)

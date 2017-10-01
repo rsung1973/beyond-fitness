@@ -25,7 +25,7 @@
 
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
-    <%  Html.RenderPartial("~/Views/CoachFacet/Module/WidgeGrid.ascx",_model); %>
+    <%  Html.RenderPartial("~/Views/CoachFacet/Module/WidgetGrid.ascx",_model); %>
     <script>
         $(function () {
             $global.viewModel = <%= JsonConvert.SerializeObject(_viewModel) %>;

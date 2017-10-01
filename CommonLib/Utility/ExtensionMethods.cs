@@ -1033,7 +1033,10 @@ namespace Utility
 
         public static void ConvertHtmlToPDF(this String htmlFile, String pdfFile, double timeOutInMinute)
         {
-            PlugInHelper.GetPdfUtility().ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute);
+            lock (typeof(ExtensionMethods))
+            {
+                PlugInHelper.GetPdfUtility().ConvertHtmlToPDF(htmlFile, pdfFile, timeOutInMinute);
+            }
         }
 
         public static String InsteadOfNullOrEmpty(this String source, String replacement)

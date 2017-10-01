@@ -19,7 +19,7 @@
                             <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
-                            <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
+                            <td>姓名：<%= _contract.ContractOwner.RealName %></td>
                             <td>聯絡電話：<%= _contract.ContractOwner.Phone %></td>
                         </tr>
                     </tbody>
@@ -41,7 +41,12 @@
                         <tr>
                             <td colspan="2">
                                 <%  var original = _model.SourceContract; %>
-                                申請內容：原合約編號 <%= original.ContractNo() %> 上課地點為 <%= original.LessonPriceType.BranchStore.BranchName %> 轉點至 <%= _contract.LessonPriceType.BranchStore.BranchName %><%= _contract.LessonPriceType.BranchID==2 ? "，轉換至費用較高之場所依同方案價格計算補足差額" : null %>。</td>
+                                申請內容：原合約編號 <%= original.ContractNo() %> 上課地點為 <%= original.CourseContractExtension.BranchStore.BranchName %> 轉點至 <%= _contract.CourseContractExtension.BranchStore.BranchName %>
+                                <%  if (_contract.LessonPriceType.ListPrice > _model.SourceContract.LessonPriceType.ListPrice)
+                                    {   %>
+                                        ，剩餘<%= _model.SourceContract.RemainedLessonCount() %>堂(<%= _model.SourceContract.LessonPriceType.ListPrice %>元)轉換至費用較高之場所依同方案價格(<%= _model.CourseContract.LessonPriceType.ListPrice %>元)計算補足差額(<%= String.Format("{0:##,###,###,###}",_model.SourceContract.RemainedLessonCount()*(_contract.LessonPriceType.ListPrice-_model.SourceContract.LessonPriceType.ListPrice)) %>元）。
+                                <%  } %>
+                            </td>
                         </tr>
                         <tr style="height: 16cm">
                             <td colspan="2">說明：<%= _contract.Remark %></td>
@@ -62,14 +67,14 @@
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);  %>
                         </td>
                         <td></td>
-                        <td>簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>主管簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：
                             <%  ViewBag.SignatureName = "GuardianSignature";
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner); %>
                         </td>
-                        <td>體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link" /></td>
+                        <td>簽約體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link" /></td>
                     </tr>
                 </table>
             </div>

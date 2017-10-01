@@ -14,7 +14,7 @@
     <div class="col-sm-12">
         <span class="font-md">最新一份階段性調整計劃已於 <%= String.Format("{0:yyyy/MM/dd}", _item.PDQTask.First().TaskDate) %> 回填！</span>
         <br />
-        <span><a href="<%= Url.Action("ShowLearner","Member",new { id = _model.UID }) %>"><u>更多階段性調整計劃 ...</u></a></span>
+        <span><a onclick="$global.editLearner(<%= _model.UID %>);"><u>更多階段性調整計劃 ...</u></a></span>
     </div>
     <%  foreach (var item in _item.PDQTask.OrderBy(t => t.PDQQuestion.QuestionNo))
         { %>

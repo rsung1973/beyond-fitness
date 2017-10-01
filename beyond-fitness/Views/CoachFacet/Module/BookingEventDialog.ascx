@@ -115,10 +115,13 @@
 
     bool couldBeCancelled()
     {
-        if (_profile.IsAssistant() || _profile.IsAuthorizedSysAdmin())
-            return true;
-        if (_model.LessonAttendance == null && !_model.LessonPlan.CommitAttendance.HasValue && _model.ClassTime.Value >= DateTime.Today.AddDays(-3))
-            return true;
+        if (!_model.ContractTrustTrack.Any(s => s.SettlementID.HasValue))
+        {
+            if (_profile.IsAssistant() || _profile.IsAuthorizedSysAdmin())
+                return true;
+            if (_model.LessonAttendance == null && !_model.LessonPlan.CommitAttendance.HasValue && _model.ClassTime.Value >= DateTime.Today.AddDays(-3))
+                return true;
+        }
         return false;
     }
 

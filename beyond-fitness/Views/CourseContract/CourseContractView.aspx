@@ -98,6 +98,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (CourseContract)this.Model;
+        ViewBag.ScrollUp = false;
     }
 
 </script>

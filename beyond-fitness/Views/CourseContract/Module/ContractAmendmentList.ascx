@@ -22,33 +22,35 @@
     <tbody>
         <%  foreach (var item in _model)
             { %>
-        <td><%= item.CourseContract.ContractNo + "-" + String.Format("{0:00}",item.RevisionNo) %></td>
-        <td><%= item.CourseContract.ServingCoach.UserProfile.FullName() %></td>
-        <td><%= String.Format("{0:yyyy/MM/dd}",item.CourseContract.ContractDate) %></td>
-        <td><%= item.Reason %></td>
-        <td><%= (Naming.CourseContractStatus)item.CourseContract.Status %></td>
-        <td nowrap="noWrap">
-            <%  if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待確認)
-                { %>
-            <%--<a onclick="$global.openToApproveAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
-            <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-            <%  }
-                else if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待簽名)
-                { %>
-            <%--<a onclick="$global.openToSignAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
-            <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-            <%  }
-                else if(item.CourseContract.Status == (int)Naming.CourseContractStatus.待審核)
-                {   %>
-            <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-            <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-            <%--<a onclick="$global.enableAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>--%>
-            <%  }
-                else
-                {  %>
-            <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-            <%  } %>
-        </td>
+        <tr>
+            <td nowrap="noWrap"><%= item.CourseContract.ContractNo + "-" + String.Format("{0:00}",item.RevisionNo) %></td>
+            <td nowrap="noWrap"><%= item.CourseContract.ServingCoach.UserProfile.FullName() %></td>
+            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.CourseContract.ContractDate) %></td>
+            <td nowrap="noWrap"><%= item.Reason %></td>
+            <td nowrap="noWrap"><%= (Naming.CourseContractStatus)item.CourseContract.Status %></td>
+            <td nowrap="noWrap">
+                <%  if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待確認)
+                    { %>
+                <%--<a onclick="$global.openToApproveAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
+                <%  }
+                    else if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待簽名)
+                    { %>
+                <%--<a onclick="$global.openToSignAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
+                <%  }
+                    else if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待審核)
+                    {   %>
+                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
+                <%--<a onclick="$global.enableAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>--%>
+                <%  }
+                    else
+                    {  %>
+                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                <%  } %>
+            </td>
+        </tr>
         <%  } %>
     </tbody>
 </table>

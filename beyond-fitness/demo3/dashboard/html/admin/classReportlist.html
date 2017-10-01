@@ -252,60 +252,60 @@
                         <div class="widget-body bg-color-darken txt-color-white no-padding">
                            <form action="contact.html" method="post" id="search-form" class="smart-form">
                               <fieldset>
-                                 <div class="row">
-                                     <section class="col col-6">
-                                        <label class="label">請選擇教練</label>
-                                        <label class="select">
-                                           <select class="input-lg">
-                                              <option value="0">請選擇教練</option>
-                                              <option value="1">Alexandra</option>
-                                              <option value="2">Alice</option>
-                                              <option value="3">Anastasia</option>
-                                              <option value="4">Avelina</option>
-                                           </select>
-                                           <i class="icon-append fa fa-file-word-o"></i>
-                                        </label>
-                                     </section> 
-                                     <section class="col col-6">
-                                        <label class="label">請選擇上課地點</label>
-                                        <label class="select">
-                                           <select class="input-lg">
-                                              <option value="0">全部</option>
-                                              <option value="1">南京小巨蛋</option>
-                                              <option value="2">Enhanced 101</option>
-                                           </select>
-                                           <i class="icon-append fa fa-file-word-o"></i>
-                                        </label>
-                                     </section> 
-                                  </div>
-                                 <div class="row">
-                                    <section class="col col-6">
-                                       <label class="label">請選擇查詢起日</label>
-                                       <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                                       <i class="icon-append fa fa-calendar"></i>
-                                       <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入查詢起日" readonly="readonly">
-                                       </label>
-                                    </section>
-                                    <section class="col col-6">
-                                       <label class="label">請選擇查詢迄日</label>
-                                       <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                                       <i class="icon-append fa fa-calendar"></i>
-                                       <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入查詢迄日" readonly="readonly">
-                                       </label>
-                                    </section>
-                                 </div>
-                              </fieldset>
+                                     <div class="row">
+                                         <section class="col col-xs-12 col-sm-6 col-md-6">
+                                            <label class="label">依體能顧問查詢</label>
+                                            <label class="select">
+                                               <select class="input">
+                                                  <option value="0">全部</option>
+                                                  <option value="1">Alexandra</option>
+                                                  <option value="2">Alice</option>
+                                                  <option value="3">Anastasia</option>
+                                                  <option value="4">Avelina</option>
+                                               </select>
+                                               <i class="icon-append fa fa-file-word-o"></i>
+                                            </label>
+                                         </section>
+                                         <section class="col col-xs-12 col-sm-6 col-md-6">
+                                            <label class="label">或依分店查詢</label>
+                                            <label class="select">
+                                               <select class="input">
+                                                  <option value="0">全部</option>
+                                                  <option value="1">南京小巨蛋</option>
+                                                  <option value="2">Enhanced 101</option>
+                                               </select>
+                                               <i class="icon-append fa fa-file-word-o"></i>
+                                            </label>
+                                         </section>
+                                      </div>
+                                  </fieldset>
+                              <fieldset>
+                                  <label class="label"><i class="fa fa-tags"></i> 更多查詢條件</label>
+                                     <div class="row">
+                                        <section class="col col-6">
+                                           <label class="label">請選擇查詢查詢起日</label>
+                                           <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                           <i class="icon-append fa fa-calendar"></i>
+                                           <input type="text" name="queryday" id="queryday" class="form-control input" placeholder="請輸入查詢起日" readonly="readonly">
+                                           </label>
+                                        </section>
+                                        <section class="col col-6">
+                                           <label class="label">請選擇查詢查詢迄日</label>
+                                           <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                           <i class="icon-append fa fa-calendar"></i>
+                                           <input type="text" name="queryday" id="queryday" class="form-control input" placeholder="請輸入查詢迄日" readonly="readonly">
+                                           </label>
+                                        </section>
+                                     </div>
+                                  </fieldset>
                               <footer>
                                  <button type="submit" name="submit" class="btn btn-primary">
                                  送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                  </button>
+                                  <button type="reset" name="cancle" class="btn btn-default">
+                                     清除 <i class="fa fa-undo" aria-hidden="true"></i>
+                                     </button>
                               </footer>
-                              <div class="message">
-                                 <i class="fa fa-check fa-lg"></i>
-                                 <p>
-                                    Your comment was successfully added!
-                                 </p>
-                              </div>
                            </form>
                         </div>
                         <!-- end widget content -->
@@ -336,6 +336,9 @@
                      <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                         <h2>上課統計表 - 人員 (2016/07/01~2016/07/31)</h2>
+                        <div class="widget-toolbar">
+                               <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i> 下載檔案</a>
+                            </div>
                      </header>
                      <!-- widget div-->
                      <div>
@@ -360,27 +363,27 @@
                               <tbody>
                                  <tr>
                                     <td>黃比爾</td>
-                                    <td>67</td>
-                                    <td>94500</td>
-                                    <td>Level4</td>
-                                    <td>33075</td>
-                                    <td><a href="#" class="btn bg-color-blueLight classlistDialog_link">檢視明細</a></td>
+                                    <td class="text-right">67</td>
+                                    <td noWrap="noWrap" class="text-right">94,500</td>
+                                    <td class="text-center">Level4</td>
+                                    <td noWrap="noWrap" class="text-right">33,075</td>
+                                    <td noWrap="noWrap"><a href="#" class="btn btn-circle bg-color-blueLight classlistDialog_link "><i class="fa fa-eye"></i></a></td>
                                  </tr>
                                  <tr>
                                     <td>邱鈺烘</td>
-                                    <td>102</td>
-                                    <td>144600</td>
-                                    <td>Level3</td>
-                                    <td>28902</td>
-                                    <td><a href="#" class="btn bg-color-blueLight classlistDialog_link">檢視明細</a></td>
+                                    <td class="text-right">102</td>
+                                    <td noWrap="noWrap" class="text-right">144,600</td>
+                                    <td class="text-center">Level3</td>
+                                    <td noWrap="noWrap" class="text-right">28,902</td>
+                                    <td noWrap="noWrap"><a href="#" class="btn btn-circle bg-color-blueLight classlistDialog_link "><i class="fa fa-eye"></i></a></td>
                                  </tr>
                               </tbody>
                               <tfoot>
                                   <td>總計</td>
-                                  <td>200</td>
-                                  <td>4608780</td>
+                                  <td class="text-right">200</td>
+                                  <td noWrap="noWrap" class="text-right">4608,780</td>
                                   <td>--</td>
-                                  <td>2608780</td>
+                                  <td noWrap="noWrap" class="text-right">2608,780</td>
                                   <td></td>
                                </tfoot>
                            </table>
@@ -412,6 +415,9 @@
                      <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                         <h2>業績統計表 - 人員 (2016/07/01~2016/07/31)</h2>
+                        <div class="widget-toolbar">
+                               <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i> 下載檔案</a>
+                            </div>
                      </header>
                      <!-- widget div-->
                      <div>
@@ -432,19 +438,19 @@
                               </thead>
                               <tbody>
                                  <tr>
-                                    <td>黃比爾</td>
-                                    <td>10500</td>
-                                    <td><a href="#" class="btn bg-color-blueLight paylistDialog_link">檢視明細</a></td>
+                                    <td noWrap="noWrap">黃比爾</td>
+                                    <td noWrap="noWrap" class="text-right">10,500</td>
+                                    <td noWrap="noWrap"><a href="#" class="btn btn-circle bg-color-blueLight bg-color-blueLight paylistDialog_link"><i class="fa fa-eye"></i></a></td>
                                  </tr>
                                  <tr>
-                                    <td>邱鈺烘</td>
-                                    <td>35000</td>
-                                    <td><a href="#" class="btn bg-color-blueLight paylistDialog_link">檢視明細</a></td>
+                                    <td noWrap="noWrap">邱鈺烘</td>
+                                    <td noWrap="noWrap" class="text-right">35,000</td>
+                                    <td noWrap="noWrap"><a href="#" class="btn btn-circle bg-color-blueLight  bg-color-blueLight paylistDialog_link"><i class="fa fa-eye"></i></a></td>
                                  </tr>
                               </tbody>
                                <tfoot>
                                   <td>總計</td>
-                                  <td>4608780</td>
+                                  <td class="text-right">4,608,780</td>
                                   <td></td>
                                </tfoot>
                            </table>
@@ -460,87 +466,64 @@
             <!-- ui-dialog -->
             <div id="paylistDialog" title="付款明細" class="bg-color-darken">
                <!-- content -->
-               <table id="paylist_dt" class="table table-striped table-bordered table-hover" width="100%">
-                  <thead>
-                     <tr>
-                        <th data-class="expand">學員姓名</th>
-                        <th data-hide="phone">課程類型</th>
-                        <th data-hide="phone">團體課程</th>
-                        <th>付款時間</th>
-                        <th>付款金額</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td>張大哥</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>2017/02/05</td>
-                        <td>12,000</td>
-                     </tr>
-                     <tr>
-                        <td>劉加菲</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>2017/02/05</td>
-                        <td>10,000</td>
-                     </tr>
-                     <tr>
-                        <td>宋小胖</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>2017/02/05</td>
-                        <td>2,000</td>
-                     </tr>
-                  </tbody>
-               </table>
+                <table id="paylist_dt" class="table table-striped table-bordered table-hover" width="100%">
+                   <thead>
+                      <tr>
+                         <th data-class="expand">發票號碼</th>
+                         <th>分店</th>
+                         <th data-hide="phone">收款人</th>
+                         <th>學員</th>
+                         <th>收款/作廢日期</th>
+                         <th>金額</th>
+                         <th data-hide="phone">收款方式</th>
+                         <th data-hide="phone">發票類型</th>
+                         <th data-hide="phone">發票狀態</th>
+                         <th data-hide="phone">合約編號</th>
+                         <th data-hide="phone">狀態</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td>AU00000003</td>
+                         <td>小巨蛋</td>
+                         <td>黃政浩 Bill</td>
+                         <td>宋胖子</td>
+                         <td>2017/01/05</td>
+                         <td class="text-right">1,500</td>
+                         <td>現金</td>
+                         <td>電子</td>
+                         <td>未作廢</td>
+                         <td noWrap="noWrap">--</td>
+                         <td>已生效</td>
+                      </tr>
+                   </tbody>
+                </table>                
                <!-- end content -->  
             </div>
             <!-- dialog-message -->   
             <!-- ui-dialog -->
             <div id="classlistDialog" title="上課明細" class="bg-color-darken">
                <!-- content -->
-               <table id="classlist_dt" class="table table-striped table-bordered table-hover" width="100%">
-                  <thead>
-                     <tr>
-                        <th data-class="expand">學員姓名</th>
-                        <th data-hide="phone">課程類型</th>
-                        <th data-hide="phone">團體課程</th>
-                        <th>付款方式</th>
-                        <th>半價計算</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td>張大哥</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>信用卡(教練自行吸收)</td>
-                        <td>是(學員尚未完成)</td>
-                     </tr>
-                     <tr>
-                        <td>張大哥</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>信用卡(教練自行吸收)</td>
-                        <td>是(教練尚未完成)</td>
-                     </tr>
-                     <tr>
-                        <td>張大哥</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>信用卡(教練自行吸收)</td>
-                        <td>--</td>
-                     </tr>
-                     <tr>
-                        <td>張大哥</td>
-                        <td>50堂-1 小時(2015) 1400</td>
-                        <td>否</td>
-                        <td>信用卡(教練自行吸收)</td>
-                         <td>--</td>
-                     </tr>
-                  </tbody>
-               </table>
+                <table id="paylist_dt" class="table table-striped table-bordered table-hover" width="100%">
+                   <thead>
+                      <tr>
+                         <th data-class="expand">合約編號</th>
+                         <th>分店</th>
+                         <th>學員</th>
+                         <th>合約名稱</th>
+                         <th data-hide="phone">半價計算堂數</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td noWrap="noWrap">CPA201608121117-00</td>
+                         <td noWrap="noWrap">南京小巨蛋</td>
+                         <td noWrap="noWrap">鄭胖子</td>
+                         <td  >1對1體能顧問課程(60分鐘)</td>
+                         <td>否</td>
+                      </tr>
+                   </tbody>
+                </table>               
                <!-- end content -->              
             </div>
             <!-- dialog-message -->                 

@@ -92,9 +92,9 @@
                             <label class="radio">
                                 <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.二聯式 %>" <%= _viewModel.InvoiceType!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
                                 <i></i>紙本</label>
-                            <label class="radio">
+                            <%--<label class="radio">
                                 <input type="radio" disabled="disabled" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>" <%= _viewModel.InvoiceType==Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
-                                <i></i>電子</label>
+                                <i></i>電子</label>--%>
                         </div>
                     </section>
                 </div>
@@ -141,7 +141,7 @@
             <fieldset>
                 <section>
                     <label class="label">備註</label>
-                    <textarea class="form-control" placeholder="請輸入備註" rows="3"><%= _viewModel.Remark %></textarea>
+                    <textarea class="form-control" name="Remark" placeholder="請輸入備註" rows="3"><%= _viewModel.Remark %></textarea>
                 </section>
             </fieldset>
         </form>
@@ -149,7 +149,7 @@
     <script>
         $('#<%= _dialog %>').dialog({
             //autoOpen: false,
-            width: "auto",
+            width: "100%",
             resizable: true,
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",

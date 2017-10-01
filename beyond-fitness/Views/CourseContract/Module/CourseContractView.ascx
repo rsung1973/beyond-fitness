@@ -65,7 +65,10 @@
                             <td>上課場所：<%= _model.LessonPriceType.BranchStore.BranchName %></td>
                         </tr>
                         <tr>
-                            <td>單堂原價：<%= _model.LessonPriceType.SeriesID.HasValue ? String.Format("{0:##,###,###,###}",_model.LessonPriceType.CurrentPriceSeries.LessonPriceType.ListPrice) : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人</td>
+                            <td>單堂原價：<% LessonPriceType originalPrice = null; %>
+                                <%= (originalPrice =_model.OriginalSeriesPrice())!=null 
+                                                ? String.Format("{0:##,###,###,###}",originalPrice.ListPrice) 
+                                                : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人</td>
                             <td>購買堂數：<%= _model.Lessons %></td>
                             <td>課程單價：<%= String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人 
                                 <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核 && Request["pdf"]!="1")
@@ -80,8 +83,8 @@
                         <tr>
                             <td colspan="3">顧問服務使用期限：自 <%= String.Format("{0:yyyy/MM/dd}",_model.ValidFrom) %> 起，至 <%= String.Format("{0:yyyy/MM/dd}",_model.Expiration) %> 止。</td>
                         </tr>
-                        <tr style="height: <%= _model.CourseContractType.IsGroup==true ? "1cm" : "5cm" %>">
-                            <td colspan="3">備註：<%= _model.Remark %></td>
+                        <tr>
+                            <td colspan="3" style="height: <%= _model.CourseContractType.IsGroup==true ? "1cm" : "5cm" %>">備註：<%= _model.Remark %></td>
                         </tr>
                     </tbody>
                 </table>
@@ -155,7 +158,9 @@
                             <%  if (_model.Status > (int)Naming.CourseContractStatus.待簽名)
                                 { %>
                             主管簽核代表：
-                            <img src="<%= _model.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link">
+                            <img src="<%= _model.Status==(int)Naming.CourseContractStatus.待審核 && Request["pdf"]!="1"
+                                    ? Context.GetUser().LoadInstance(models).UserProfileExtension.Signature
+                                    : _model.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link">
                             <%  } %>
                         </td>
                     </tr>

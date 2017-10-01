@@ -13,9 +13,12 @@
     <a href="#" title="報表管理"><i class="fa fa-lg fa-fw fa-calculator"></i><span class="menu-item-parent">報表管理</span></a>
     <ul>
         <li>
-            <a href="<%= Url.Action("CoachAchievement", "Report") %>"><i class="fa fa-fw fa-trophy"></i>業績統計表</a>
+            <a href="<%= Url.Action("AchievementIndex", "Accounting") %>"><i class="fa fa-fw fa-trophy"></i>業績統計表</a>
         </li>
-        <%  Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile); %>
+<%--        <li>
+            <a href="<%= Url.Action("ReceivableIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>應收帳款催收表</a>
+        </li>--%>
+        <%--<%  Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile); %>--%>
         <li>
             <a href="<%= Url.Action("BonusAwardList","Report") %>"><i class="fa fa-fw fa-gift"></i>點數兌換</a>
         </li>

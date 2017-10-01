@@ -233,7 +233,7 @@ namespace WebHome.Controllers
                     return url.Action("Index", "CoachFacet");
 
                 case Naming.RoleID.Accounting:
-                    return url.Action("StaffAchievement", "Report");
+                    return url.Action("TrustIndex", "Accounting");
 
                 case Naming.RoleID.FreeAgent:
                     return url.Action("FreeAgent", "Account");

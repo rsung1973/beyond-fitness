@@ -40,7 +40,8 @@ namespace WebHome.Controllers
         {
             IQueryable<UserProfile> items = models.EntityList
                          .Join(models.GetTable<UserRole>()
-                                 .Where(r => r.RoleID == (int)Naming.RoleID.Learner),
+                                 .Where(r => r.RoleID == (int)Naming.RoleID.Learner
+                                    || r.RoleID == (int)Naming.RoleID.Preliminary),
                              u => u.UID, r => r.UID, (u, r) => u);
 
             Expression<Func<UserProfile, bool>> queryExpr = u => false;

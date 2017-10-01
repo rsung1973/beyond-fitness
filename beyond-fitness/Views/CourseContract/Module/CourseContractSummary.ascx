@@ -74,8 +74,9 @@
             </td>
         </tr>
         <tr>
-            <td nowrap="noWrap"><%  var revisions = models.GetApplyingAmendmentByAgent(_model);
-                    var toConfirmRevisions = models.GetAmendmentToConfirmByAgent(_model);
+            <td nowrap="noWrap">
+                <%  var revisions = models.GetApplyingAmendmentByAgent(_model);
+                    var toConfirmRevisions = models.GetAmendmentToAllowByAgent(_model);
                     var toSignRevisions = models.GetAmendmentToSignByAgent(_model);
                      %>
                 服務申請(<%= toSignRevisions.Count() + toConfirmRevisions.Count() %>)</td>
@@ -106,7 +107,7 @@
                 <%  
                     if (toConfirmRevisions.Count() > 0)
                     {   %>
-                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待審核 %>);"><u>(<%= toConfirmRevisions.Count() %>)</u></a>
+                <a onclick="showAmendmentTodoList(<%= (int)Naming.CourseContractStatus.待確認 %>);"><u>(<%= toConfirmRevisions.Count() %>)</u></a>
                 <%  }
                     else
                     { %>

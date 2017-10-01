@@ -163,7 +163,7 @@
         _last = _model.OrderByDescending(r => r.AssessmentID).First();
     }
 
-    decimal? filterZero(decimal decVal)
+    decimal? filterZero(decimal? decVal)
     {
         return decVal > 0 ? decVal : (decimal?)null;
     }

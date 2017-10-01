@@ -10,10 +10,25 @@
 
 <%  if (_userProfile.IsAssistant())
     { %>
-<li>
+<%--<li>
     <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/ConfigureAll") %>" title="基本資料"><i class="fa fa-lg fa-fw fa-database"></i><span class="menu-item-parent">基本資料</span></a>
-</li>
+</li>--%>
 <%  } %>
+
+<li>
+    <a href=""><i class="fa fa-lg fa-fw fa-tasks"></i>體能顧問服務費</a>
+    <ul>
+        <li>
+            <a href="../../../front-end/pricing-arena.html" target="_blank"><i class="fa fa-fw fa-th-list"></i>南京小巨蛋</a>
+        </li>
+        <li>
+            <a href="../../../front-end/pricing-101.html" target="_blank"><i class="fa fa-fw fa-th-list"></i>Enhanced 101</a>
+        </li>
+        <li>
+            <a href="../../../front-end/pricing-sogo.html" target="_blank"><i class="fa fa-fw fa-th-list"></i>忠孝</a>
+        </li>
+    </ul>
+</li>
 
 <script runat="server">
 

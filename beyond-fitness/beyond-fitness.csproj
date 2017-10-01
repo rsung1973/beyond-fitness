@@ -43,6 +43,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.88.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.88.0\lib\net452\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -51,6 +63,14 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -68,6 +88,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -1439,6 +1460,7 @@
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
     <Content Include="Scripts\jquery.min.map" />
+    <Content Include="packages.config" />
     <None Include="Scripts\jquery-3.0.0.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -1461,6 +1483,24 @@
     <Content Include="sound\voice_alert.mp3" />
     <Content Include="sound\voice_off.mp3" />
     <Content Include="sound\voice_on.mp3" />
+    <Content Include="Views\Accounting\Module\ContractTrustSummaryList.ascx" />
+    <Content Include="Views\Accounting\Module\ContractTrustList.ascx" />
+    <Content Include="Views\Accounting\Module\ContractTrustTrackList.ascx" />
+    <Content Include="Views\Accounting\Module\ContractPaymentList.ascx" />
+    <Content Include="Views\Accounting\Module\TrustWidgetGrid.ascx" />
+    <Content Include="Views\Accounting\Module\PaymentItemList.ascx" />
+    <Content Include="Views\Accounting\TrustIndex.aspx" />
+    <Content Include="Views\Accounting\Module\AccountsReceivableList.ascx" />
+    <Content Include="Views\Accounting\Module\AchievementWidgetGrid.ascx" />
+    <Content Include="Views\Accounting\Module\TuitionAchievementDetails.ascx" />
+    <Content Include="Views\Accounting\Module\AttendanceAchievementDetails.ascx" />
+    <Content Include="Views\Accounting\Module\TuitionAchievementItemList.ascx" />
+    <Content Include="Views\Accounting\Module\LessonAttendanceAchievementList.ascx" />
+    <Content Include="Views\Accounting\Module\ReceivableWidgetGrid.ascx" />
+    <Content Include="Views\Accounting\AchievementIndex.aspx" />
+    <Content Include="Views\Accounting\Module\AttendanceAchievementList.ascx" />
+    <Content Include="Views\Accounting\Module\TuitionAchievementList.ascx" />
+    <Content Include="Views\Accounting\ReceivableIndex.aspx" />
     <Content Include="Views\Account\AlertTimeout.aspx" />
     <Content Include="Views\Account\Coach.aspx" />
     <Content Include="Views\Account\CompleteEditMySelf.aspx" />
@@ -1564,6 +1604,7 @@
     <Content Include="Views\CoachFacet\Module\MyCalendar.ascx" />
     <Content Include="Views\CoachFacet\Module\CoachToday.ascx" />
     <Content Include="Views\CoachFacet\Module\QueryAttendee.ascx" />
+    <Content Include="Views\CoachFacet\Module\ExpiringContractList.ascx" />
     <Content Include="Views\CoachFacet\Module\UserEventDialog.ascx" />
     <Content Include="Views\CoachFacet\Module\LessonCommentItem.ascx" />
     <Content Include="Views\CoachFacet\Module\LessonCommentList.ascx" />
@@ -1600,7 +1641,7 @@
     <Content Include="Views\CourseContract\Module\CourseContractExtensionView.ascx" />
     <Content Include="Views\CourseContract\Module\EnableCourseContract.ascx" />
     <Content Include="Views\CourseContract\Module\ConfirmSignature.ascx" />
-    <Content Include="Views\CourseContract\Module\Sample.ascx" />
+    <Content Include="Views\CourseContract\Module\CourseContractDataItem.ascx" />
     <Content Include="Views\CourseContract\Module\SignCourseContract.ascx" />
     <Content Include="Views\CourseContract\Module\ApproveCourseContract.ascx" />
     <Content Include="Views\CourseContract\Module\SignaturePanel.ascx" />
@@ -1617,8 +1658,20 @@
     <Content Include="Views\CourseContract\Module\EditCourseContract.ascx" />
     <Content Include="Views\CourseContract\Module\EditContractMember.ascx" />
     <Content Include="Views\CourseContract\Module\ApplyQuery.ascx" />
-    <Content Include="Views\CourseContract\Module\WidgeGrid.ascx" />
+    <Content Include="Views\CourseContract\Module\WidgetGrid.ascx" />
     <Content Include="Views\CourseContract\CourseContractView.aspx" />
+    <Content Include="Views\EnterpriseProgram\Module\AttendeeSelector.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\EditEnterpriseContract.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\ApplyProgramDataItem.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\PaymentItemList.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\EnterpriseProgramList.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\MemberItemList.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\ProgramWidgetGrid.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\EditProgramDataItem.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\EnterpriseProgramMemberList.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\MemberSelector.ascx" />
+    <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
+    <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
     <Content Include="Views\Layout\NavItem\Payment.ascx" />
     <Content Include="Views\Layout\NavItem\Contract.ascx" />
     <Content Include="Views\Learner\Index.aspx" />
@@ -1630,12 +1683,12 @@
     <Content Include="Views\Learner\Module\PDQ.ascx" />
     <Content Include="Views\Learner\Module\ListFitnessAdvisor.ascx" />
     <Content Include="Views\Learner\Module\AssignFitnessAdvisor.ascx" />
-    <Content Include="Views\Learner\Module\WidgeGrid.ascx" />
+    <Content Include="Views\Learner\Module\WidgetGrid.ascx" />
     <Content Include="Views\LessonPrice\Module\EditPriceSeries.ascx" />
     <Content Include="Views\LessonPrice\Module\ProjectCourseList.ascx" />
     <Content Include="Views\LessonPrice\Module\PriceSeriesList.ascx" />
     <Content Include="Views\LessonPrice\Module\EditProjectCourse.ascx" />
-    <Content Include="Views\LessonPrice\Module\WidgeGrid.ascx" />
+    <Content Include="Views\LessonPrice\Module\WidgetGrid.ascx" />
     <Content Include="Views\LessonPrice\PriceIndex.aspx" />
     <Content Include="Views\Lessons\MyCalendar.ascx" />
     <Content Include="Views\CoachFacet\Module\CoachCalendar.ascx" />
@@ -1643,7 +1696,7 @@
     <Content Include="Views\CoachFacet\Module\BookingEventDialog.ascx" />
     <Content Include="Views\CoachFacet\Module\BookingByCoach.ascx" />
     <Content Include="Views\CoachFacet\Module\EditCoachEvent.ascx" />
-    <Content Include="Views\CoachFacet\Module\WidgeGrid.ascx" />
+    <Content Include="Views\CoachFacet\Module\WidgetGrid.ascx" />
     <Content Include="Views\Error\Http404.aspx" />
     <Content Include="Views\Error\Http500.aspx" />
     <Content Include="Views\FitnessDiagnosis\Module\DiagnoseByLearner.ascx" />
@@ -1919,6 +1972,7 @@
     <Content Include="Views\MyTest\TestPopup.aspx" />
     <Content Include="Views\Payment\Module\ApproveToVoidPayment.ascx" />
     <Content Include="Views\Payment\Module\ContractQueryList.ascx" />
+    <Content Include="Views\Payment\Module\EditPaymentForEnterprise.ascx" />
     <Content Include="Views\Payment\Module\PaymentAuditSummaryCoachView.ascx" />
     <Content Include="Views\Payment\Module\PaymentCoachAchievement.ascx" />
     <Content Include="Views\Payment\Module\PaymentAchievementList.ascx" />
@@ -1944,7 +1998,7 @@
     <Content Include="Views\SystemInfo\MerchandiseOptions.ascx" />
     <Content Include="Views\Payment\Module\UnpaidPISession.ascx" />
     <Content Include="Views\Payment\PaymentIndex.aspx" />
-    <Content Include="Views\Payment\Module\WidgeGrid.ascx" />
+    <Content Include="Views\Payment\Module\WidgetGrid.ascx" />
     <Content Include="Views\Report\Module\BonusAwardList.ascx" />
     <Content Include="Views\Report\Module\LessonTuitionPaymentList.ascx" />
     <Content Include="Views\Report\Module\LessonAttendanceList.ascx" />
@@ -2014,7 +2068,9 @@
     <Content Include="Views\SystemInfo\LessonPriceTypeList.ascx" />
     <Content Include="Views\SystemInfo\BranchStoreOptions.ascx" />
     <Content Include="Views\web.config" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="_test\CommonCode.txt" />
     <Content Include="_test\PageToken.ascx" />
     <Content Include="_test\Test02.aspx" />
@@ -2029,11 +2085,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountingController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\ClassFacetController.cs" />
     <Compile Include="Controllers\CourseContractController.cs" />
+    <Compile Include="Controllers\EnterpriseProgramController.cs" />
     <Compile Include="Controllers\FitnessDiagnosisController.cs" />
     <Compile Include="Controllers\LearnerController.cs" />
     <Compile Include="Controllers\LearnerFacetController.cs" />
@@ -2062,6 +2120,8 @@
     <Compile Include="Helper\Jobs\ReviewProfessionalLevelEachQuarter.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Helper\MvcExtensions.cs" />
+    <Compile Include="Helper\QueryExtensionMethods.cs" />
+    <Compile Include="Helper\TaskExtensionMethods.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
       <DependentUpon>BF.dbml</DependentUpon>
       <DesignTime>True</DesignTime>

@@ -57,7 +57,8 @@ namespace WebHome.Models.Locale
             自由教練預約 = 1004,
             內部訓練 = 1005,
             體驗課程 = 1006,
-            點數兌換課程 = 1007
+            點數兌換課程 = 1007,
+            團體學員課程 = 1008
         }
 
         public enum LessonPriceFeature
@@ -117,7 +118,10 @@ namespace WebHome.Models.Locale
             "訪客",
             "財務助理",
             "經理",
-            "行政助理"
+            "行政助理",
+            "店長",
+            "副店長",
+            "體驗學員",
         };
 
         public enum LessonStatus
@@ -188,6 +192,10 @@ namespace WebHome.Models.Locale
             待簽名 = 1203,
             待審核 = 1204,
             已生效 = 1205,
+            已完成 = 1206,
+            已終止 = 1207,
+            已轉讓 = 1208,
+            已轉點 = 1209,
         }
 
         public enum VoidPaymentStatus
@@ -204,7 +212,10 @@ namespace WebHome.Models.Locale
             體能顧問費 = 1,
             自主訓練 = 2,
             飲品 = 3,
-            運動商品 = 4
+            運動商品 = 4,
+            合約轉讓沖銷 = 5,
+            合約轉點沖銷 = 6,
+            合約終止沖銷 = 7,
         }
 
         public enum MerchandiseStatus
@@ -226,6 +237,16 @@ namespace WebHome.Models.Locale
             一般稅額計算之電子發票 = 7,
             特種稅額計算之電子發票 = 8,
         }
+
+        public enum TrustType
+        {
+            B = 1,
+            T,
+            N,
+            S,
+            X
+        }
+
 
     }
 }

@@ -11,7 +11,7 @@
 <%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID != (int)Naming.RoleID.Learner)
     { %>
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" title="我的總覽 "><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-tachometer fa-stack-1x "></i></span> 課程總覽</a>
+    <a href="<%= Url.Action("Index","CoachFacet") %>" title="行事曆"><span class="fa-stack fa-lg "><i class="fa fa-square-o fa-stack-2x "></i><i class="fa fa-tachometer fa-stack-1x "></i></span> 行事曆</a>
 </li>
 <%  } %>
 

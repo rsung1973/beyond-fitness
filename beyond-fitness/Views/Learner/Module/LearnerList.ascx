@@ -15,7 +15,7 @@
             <th data-hide="phone"><i class="fa fa-fw fa-phone text-muted hidden-md hidden-sm hidden-xs"></i>聯絡電話</th>
             <th data-hide="phone"><i class="fa fa-fw fa-envelope text-muted hidden-md hidden-sm hidden-xs"></i>Email Address</th>
             <th data-hide="phone">編號</th>
-            <th data-hide="phone">剩餘/購買堂數</th>
+            <%--<th data-hide="phone">剩餘/購買堂數</th>--%>
             <th>狀態</th>
             <th>功能</th>
         </tr>
@@ -27,8 +27,8 @@
             <td><%= item.FullName() %></td>
             <td><%= item.Phone %></td>
             <td><%= item.LevelID == (int)Naming.MemberStatus.尚未註冊 || item.UserProfileExtension.CurrentTrial==1 ? "--" : item.PID %></td>
-            <td><%= item.UserProfileExtension.CurrentTrial==1 ? "--" : item.MemberCode %></td>
-            <td><%  if(item.UserProfileExtension.CurrentTrial==1)
+            <td><%= item.UserProfileExtension.CurrentTrial==1 ? "體驗學員" : item.MemberCode %></td>
+            <%--<td><%  if(item.UserProfileExtension.CurrentTrial==1)
                     {
                         Writer.Write("體驗學員");
                     }
@@ -43,7 +43,7 @@
                         Writer.Write(totalLessons - attended);  %> / 
                     <%  
                         Writer.Write(totalLessons);
-                    }   %></td>
+                    }   %></td>--%>
             <td><%= item.UserProfileExtension.CurrentTrial==1 ? "--" : ((Naming.MemberStatus)item.LevelID).ToString() %></td>
             <td nowrap="noWrap">
                 <a onclick="$global.editLearner(<%= item.UID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
@@ -55,14 +55,17 @@
                 <a onclick="$global.listAdvisor(<%= item.UID %>);" class="btn btn-circle bg-color-blueLight"><i class="fa fa-fw fa fa-lg fa-address-book-o" aria-hidden="true"></i></a>&nbsp;&nbsp;   
                         <%  } %>
                 <%  } %>
-                <%  if (item.LevelID == (int)Naming.MemberStatus.已註冊 || item.LevelID == (int)Naming.MemberStatus.尚未註冊 )
-                    { %>
+                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                    {
+                        if (item.LevelID == (int)Naming.MemberStatus.已註冊 || item.LevelID == (int)Naming.MemberStatus.尚未註冊)
+                        { %>
                         <a onclick="$global.deleteLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
-                <%  }
-                    else
-                    { %>
+                <%      }
+                        else
+                        { %>
                         <a onclick="$global.enableLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square" aria-hidden="true"></i></a>
-                <%  } %>
+                <%      }
+                    } %>
             </td>
         </tr>
         <%  } %>

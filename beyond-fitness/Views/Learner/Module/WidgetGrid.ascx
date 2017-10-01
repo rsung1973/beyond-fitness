@@ -62,6 +62,14 @@
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
                                                     } %>                                            
                                             </select>
+                                            <%  if (_profile.IsCoach())
+                                                { %>
+                                            <script>
+                                                $(function () {
+                                                    $('select[name="CoachID"]').val('<%= _profile.UID %>');
+                                                });
+                                            </script>
+                                            <%  } %>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
                                     </section>
@@ -142,6 +150,9 @@
                                 <button type="button" onclick="inquireLearner();" name="submit" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                 </button>
+                                <button type="reset" name="cancel" class="btn btn-default">
+                                    清除 <i class="fa fa-undo" aria-hidden="true"></i>
+                                </button>
                             </footer>
                         </form>
                     </div>
@@ -189,6 +200,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div id="learnerList" class="widget-body bg-color-darken txt-color-white no-padding">
+                        <%  Html.RenderPartial("~/Views/Learner/Module/LearnerList.ascx", models.GetTable<UserProfile>().Where(u => false)); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -236,6 +248,8 @@
         };
 
         $global.deleteLearner = function (uid) {
+            var event = event || window.event;
+            var $tr = $(event.target).closest('tr');
             if (confirm('確定刪除此學員資料?')) {
                 startLoading();
                 $.post('<%= Url.Action("DeleteLearner","Learner") %>', { 'uid': uid }, function (data) {
@@ -245,6 +259,7 @@
                             if (data.message) {
                                 alert(data.message);
                             } else {
+                                $tr.remove();
                                 alert('資料已刪除!!');
                             }
                             inquireLearner();
@@ -281,7 +296,7 @@
 
 
         $global.editPDQ = function (uid) {
-            startLoading();
+            showLoading();
             $.post('<%= Url.Action("PDQ","Learner") %>', { 'uid': uid }, function (data) {
                 hideLoading();
                 $(data).appendTo($('body'));

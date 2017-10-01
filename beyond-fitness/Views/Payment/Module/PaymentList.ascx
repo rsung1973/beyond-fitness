@@ -8,6 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
+<label class="label label-warning">狀態後<i class="fa fa-asterisk"></i> 表示主管尚未對帳</label>
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
@@ -15,14 +16,15 @@
             <th>分店</th>
             <th data-hide="phone">收款人</th>
             <th>學員</th>
-            <th>收款日期</th>
+            <th>收款/作廢日期</th>
             <th data-hide="phone">收款品項</th>
-            <th>金額</th>
+            <th>收款金額</th>
             <th data-hide="phone">收款方式</th>
             <th data-hide="phone">發票類型</th>
             <th data-hide="phone">發票狀態</th>
             <th data-hide="phone,tablet">買受人統編</th>
             <th data-hide="phone,tablet">合約編號</th>
+            <th data-hide="phone,tablet">合約總金額</th>
             <th data-hide="phone">狀態</th>
         </tr>
     </thead>
@@ -31,39 +33,39 @@
             { %>
         <tr>
             <td nowrap="noWrap"><%  if (item.InvoiceID.HasValue)
-                    {   %>
+                                    {   %>
                         <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
                 <%  } %>
             </td>
-            <td nowrap="noWrap"><%= item.PaymentTransaction.BranchStore.BranchName %></td>
-            <td nowrap="noWrap"><%= item.UserProfile.FullName() %></td>
-            <td nowrap="noWrap"><%= item.TuitionInstallment!=null
+            <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
+            <td ><%= item.UserProfile.FullName() %></td>
+            <td ><%= item.TuitionInstallment != null
                         ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                        : item.ContractPayment!=null
+                        : item.ContractPayment != null
                             ? item.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--" %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
+            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.PayoffDate) %></td>
             <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
-                <%  if(item.TransactionType==(int)Naming.PaymentTransactionType.運動商品
-                        || item.TransactionType==(int)Naming.PaymentTransactionType.飲品)
+                <%  if (item.TransactionType == (int)Naming.PaymentTransactionType.運動商品
+    || item.TransactionType == (int)Naming.PaymentTransactionType.飲品)
                     { %>
-                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p=>p.MerchandiseWindow.ProductName)) %>)
+                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)) %>)
                 <%  } %>
             </td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,###}",item.PayoffAmount) %></td>
+            <td nowrap="noWrap" class="text-right"><%= item.PayoffAmount >= 0 ? String.Format("{0:##,###,###,###}", item.PayoffAmount) : String.Format("({0:##,###,###,###})", -item.PayoffAmount) %></td>
             <td><%= item.PaymentType %></td>
             <td><%= item.InvoiceID.HasValue
-                        ? item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                        ? item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
                             ? "電子發票"
-                            : "紙本" 
+                            : "紙本"
                         : "--" %></td>
             <td><%= item.VoidPayment == null
                         ? "已開立"
-                        : item.VoidPayment.Status==(int)Naming.CourseContractStatus.已生效
+                        : item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
                             ? "已作廢"
                             : "已開立" %></td>
-            <td><%= item.InvoiceID.HasValue 
-                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo 
+            <td><%= item.InvoiceID.HasValue
+                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo
                         : "--" %></td>
             <td nowrap="noWrap">
                 <%  if (item.ContractPayment != null)
@@ -71,50 +73,61 @@
                         <%= item.ContractPayment.CourseContract.ContractNo() %>
                 <%  } %>
             </td>
-            <td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit.AuditorID.HasValue ? "":"(*)" %></td>
+            <td nowrap="noWrap" class="text-right">
+                <%  if (item.ContractPayment != null)
+                    { %>
+                <%= String.Format("{0:##,###,###,###}", item.ContractPayment.CourseContract.TotalCost) %>
+                <%  }
+                    else
+                    { %>
+                --
+                <%  } %>
+            </td>
+            <td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit.AuditorID.HasValue ? "" : "(*)" %></td>
         </tr>
-        <%  if (item.VoidPayment != null && ViewBag.ShowFooter!=false)
+        <%  if (item.VoidPayment != null && ViewBag.ShowFooter != false)
             { %>
         <tr>
             <td nowrap="noWrap"><%  if (item.InvoiceID.HasValue)
-                    {   %>
+                                    {   %>
                 <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
                 <%  } %>
             </td>
             <td nowrap="noWrap"><%= item.PaymentTransaction.BranchStore.BranchName %></td>
             <td nowrap="noWrap"><%= item.UserProfile.FullName() %></td>
-            <td nowrap="noWrap"><%= item.TuitionInstallment!=null
-                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                        : item.ContractPayment!=null
-                            ? item.ContractPayment.CourseContract.ContractOwner.FullName()
-                            : "--" %></td>
-            <td nowrap="noWrap"><%= item.VoidPayment.Status==(int)Naming.CourseContractStatus.已生效 ? String.Format("{0:yyyy/MM/dd}",item.VoidPayment.VoidDate) : "--" %></td>
+            <td nowrap="noWrap"><%= item.TuitionInstallment != null
+                            ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                            : item.ContractPayment != null
+                                ? item.ContractPayment.CourseContract.ContractOwner.FullName()
+                                : "--" %></td>
+            <td nowrap="noWrap"><%= item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效 ? String.Format("{0:yyyy/MM/dd}", item.VoidPayment.VoidDate) : "--" %></td>
             <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
-                <%  if(item.TransactionType==(int)Naming.PaymentTransactionType.運動商品
-                        || item.TransactionType==(int)Naming.PaymentTransactionType.飲品)
+                <%  if (item.TransactionType == (int)Naming.PaymentTransactionType.運動商品
+        || item.TransactionType == (int)Naming.PaymentTransactionType.飲品)
                     { %>
-                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p=>p.MerchandiseWindow.ProductName)) %>)
+                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)) %>)
                 <%  } %>
             </td>
-            <td nowrap="noWrap" class="text-right">(<%= String.Format("{0:##,###,###,###}",item.PayoffAmount) %>)</td>
+            <td nowrap="noWrap" class="text-right">(<%= String.Format("{0:##,###,###,###}", item.PayoffAmount) %>)</td>
             <td><%= item.PaymentType %></td>
             <td><%= item.InvoiceID.HasValue
-                        ? item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
-                            ? "電子發票"
-                            : "紙本" 
-                        : "--" %></td>
-            <td><%= item.VoidPayment.Status==(int)Naming.CourseContractStatus.已生效
-                        ? "已作廢"
-                        : "--" %></td>
-            <td><%= item.InvoiceID.HasValue 
-                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo 
-                        : "--" %></td>
+                            ? item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                                ? "電子發票"
+                                : "紙本"
+                            : "--" %></td>
+            <td><%= item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                            ? "已作廢"
+                            : "--" %></td>
+            <td><%= item.InvoiceID.HasValue
+                            ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo
+                            : "--" %></td>
             <td nowrap="noWrap">
                 <%  if (item.ContractPayment != null)
                     { %>
                 <%= item.ContractPayment.CourseContract.ContractNo() %>
                 <%  } %>
             </td>
+            <td>--</td>
             <td><%= (Naming.VoidPaymentStatus)item.VoidPayment.Status %>(作廢)</td>
         </tr>
             <%  } %>
@@ -129,39 +142,39 @@
                     && p.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效);
                 var voidCount = voidItems.Count(); %>
             <td class="text-right" colspan="6">已生效現金收款總計：</td>
-            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="現金").Sum(p=>p.PayoffAmount)) %></td>
-            <td class="text-right" colspan="2">已生效現金作廢總計：</td>
+            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="現金").Sum(p=>p.PayoffAmount)-(voidItems.Where(p => p.PaymentType == "現金").Sum(p => p.PayoffAmount) ?? 0)) %></td>
+            <%--<td class="text-right" colspan="2">已生效現金作廢總計：</td>
             <td class="text-right">
                 <%  if (voidCount > 0)
                     { %>
                 (<%= String.Format("{0:##,###,###,###}", voidItems.Where(p => p.PaymentType == "現金").Sum(p => p.PayoffAmount)) %>)
                 <%  } %>
-            </td>
-            <td colspan="3"></td>
+            </td>--%>
+            <td colspan="5"></td>
         </tr>
         <tr>
             <td class="text-right" colspan="6">已生效刷卡收款總計：</td>
-            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="刷卡").Sum(p=>p.PayoffAmount)) %></td>
-            <td class="text-right" colspan="2">已生效刷卡作廢總計：</td>
+            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="刷卡").Sum(p=>p.PayoffAmount)-(voidItems.Where(p => p.PaymentType == "刷卡").Sum(p => p.PayoffAmount) ?? 0)) %></td>
+<%--            <td class="text-right" colspan="2">已生效刷卡作廢總計：</td>
             <td class="text-right">
                 <%  if (voidCount > 0)
                     { %>
                 (<%= String.Format("{0:##,###,###,###}", voidItems.Where(p => p.PaymentType == "刷卡").Sum(p => p.PayoffAmount)) %>)
                 <%  } %>
-            </td>
-            <td colspan="3"></td>
+            </td>--%>
+            <td colspan="5"></td>
         </tr>
         <tr>
             <td class="text-right" colspan="6">已生效轉帳收款總計：</td>
-            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="轉帳").Sum(p=>p.PayoffAmount)) %></td>
-            <td class="text-right" colspan="2">已生效轉帳作廢總計：</td>
+            <td class="text-right"><%= String.Format("{0:##,###,###,###}",items.Where(p=>p.PaymentType=="轉帳").Sum(p=>p.PayoffAmount)-(voidItems.Where(p => p.PaymentType == "轉帳").Sum(p => p.PayoffAmount) ?? 0)) %></td>
+<%--            <td class="text-right" colspan="2">已生效轉帳作廢總計：</td>
             <td class="text-right">
                 <%  if (voidCount > 0)
                     { %>
                 (<%= String.Format("{0:##,###,###,###}", voidItems.Where(p => p.PaymentType == "轉帳").Sum(p => p.PayoffAmount)) %>)
                 <%  } %>
-            </td>
-            <td colspan="3"></td>
+            </td>--%>
+            <td colspan="5"></td>
         </tr>
     </tfoot>
     <%  } %>
@@ -206,6 +219,12 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
+
+<%  if(_model.Count()>0)
+    {  %>
+        $('#btnDownload').css('display', 'inline');
+<%  }  %>
+
     });
 </script>
 
@@ -221,7 +240,7 @@
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<Payment>)this.Model;
+        _model = ((IQueryable<Payment>)this.Model).Where(p => p.TransactionType.HasValue);
     }
 
 </script>

@@ -12,23 +12,32 @@
     <form class="smart-form" id="bookingForm" autofocus>
         <fieldset>
             <div class="row">
-                <section class="col col-6">
+                <section class="col col-4">
                     <label class="label">體能顧問</label>
                     <label class="select">
                         <% Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "CoachID", Name = "CoachID", DefaultValue = _viewModel.CoachID }); %>
                         <i class="icon-append fa fa-user"></i>
                     </label>
                 </section>
-                <section class="col col-6">
+                <section class="col col-4">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
                         <i class="icon-append fa fa-calendar"></i>
-                        <input type="text" name="ClassDate" id="classDate" class="form-control input-lg date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.ClassDate) %>" placeholder="請輸入上課開始時間" />
+                        <input type="text" name="ClassDate" id="classDate" class="form-control date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.ClassDate) %>" placeholder="請輸入上課開始時間" />
+                    </label>
+                </section>
+                <section class="col col-4">
+                    <label class="label">請選擇上課地點</label>
+                    <label class="select">
+                        <select name="BranchID">
+                            <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
+                        </select>
+                        <i class="icon-append fa fa-file-word-o"></i>
                     </label>
                 </section>
             </div>
         </fieldset>
-        <fieldset>
+        <%--<fieldset>
             <div class="row">
                 <section class="col col-6">
                     <label class="label">請選擇上課長度</label>
@@ -40,17 +49,8 @@
                         <i class="icon-append fa fa-file-word-o"></i>
                     </label>
                 </section>
-                <section class="col col-6">
-                    <label class="label">請選擇上課地點</label>
-                    <label class="select">
-                        <select class="input-lg" name="BranchID">
-                            <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
-                        </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
-                    </label>
-                </section>
             </div>
-        </fieldset>
+        </fieldset>--%>
         <input type="hidden" name="LessonID" value="<%= _viewModel.LessonID %>" />
     </form>
     <script>
@@ -99,7 +99,8 @@
             startView: 1,
             minView: 0,
             minuteStep: 30,
-            forceParse: 0
+            forceParse: 0,
+            startDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>'
         });
     </script>
 </div>

@@ -538,7 +538,7 @@ namespace WebHome.Controllers
             }
             else
             {
-                if(fitnessAssessment.LessonTime.LessonAttendance!=null)
+                if(fitnessAssessment.LessonTime.LessonAttendance!=null && !fitnessAssessment.LessonTime.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
                 {
                     models.ExecuteCommand("delete LessonAttendance where LessonID={0}", fitnessAssessment.LessonID);
                 }
@@ -803,7 +803,10 @@ namespace WebHome.Controllers
                                         WHERE   (LessonFitnessAssessmentReport.AssessmentID = {0}) AND (FitnessAssessmentGroup.MajorID = {1})", assessmentID, itemID);
 
                 var fitnessAssessment = models.GetTable<LessonFitnessAssessment>().Where(f => f.AssessmentID == assessmentID).First();
-                if (!models.IsAttendanceOverdue(fitnessAssessment.LessonTime) && !models.CouldMarkToAttendLesson(fitnessAssessment.LessonTime) && fitnessAssessment.LessonTime.LessonAttendance != null)
+                if (!models.IsAttendanceOverdue(fitnessAssessment.LessonTime)
+                    && !models.CouldMarkToAttendLesson(fitnessAssessment.LessonTime)
+                    && fitnessAssessment.LessonTime.LessonAttendance != null
+                    && !fitnessAssessment.LessonTime.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
                 {
                     models.ExecuteCommand("delete LessonAttendance where LessonID={0}", fitnessAssessment.LessonID);
                 }

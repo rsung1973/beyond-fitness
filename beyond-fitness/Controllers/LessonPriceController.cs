@@ -219,7 +219,8 @@ namespace WebHome.Controllers
                 item = new LessonPriceType
                 {
                     PriceID = models.GetTable<LessonPriceType>().Select(p => p.PriceID).Max() + 1,
-                    Status = (int)Naming.LessonSeriesStatus.已啟用
+                    Status = (int)Naming.LessonSeriesStatus.已啟用,
+                    LowerLimit = 999
                 };
                 models.GetTable<LessonPriceType>().InsertOnSubmit(item);
             }

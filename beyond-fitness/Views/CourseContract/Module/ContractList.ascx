@@ -16,6 +16,8 @@
             <th>學員</th>
             <th data-hide="phone">編輯日期</th>
             <th>合約名稱</th>
+            <th>購買堂數</th>
+            <th>合約總金額</th>
             <th data-hide="phone"></th>
         </tr>
     </thead>
@@ -23,7 +25,7 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
+            <td><%= item.CourseContractExtension.BranchStore.BranchName %></td>
             <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
                 <%  if (item.CourseContractType.IsGroup==true)
@@ -37,6 +39,8 @@
             </td>
             <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
             <td><%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)</td>
+            <td class="text-right"><%= item.Lessons %></td>
+            <td class="text-right"><%= String.Format("{0:##,###,###,###}", item.TotalCost) %></td>
             <td nowrap="noWrap">
                 <a onclick="editContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
                 <a onclick="deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>

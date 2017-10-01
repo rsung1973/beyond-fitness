@@ -56,6 +56,18 @@
                 $(data).appendTo($('body'));
             });
         }
+
+        $(function () {
+            if (!$global.editLearner) {
+                $global.editLearner = function (uid) {
+                    startLoading();
+                    $.post('<%= Url.Action("EditLearner","Learner") %>', { 'uid': uid }, function (data) {
+                        hideLoading();
+                        $(data).appendTo($('body'));
+                    });
+                };
+            }
+        });
     </script>
     <% Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
 </asp:Content>

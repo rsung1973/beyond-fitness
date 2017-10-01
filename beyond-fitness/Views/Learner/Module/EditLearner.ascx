@@ -211,7 +211,9 @@
                         success: function (data) {
                             if ($.isPlainObject(data)) {
                                 if (data.result) {
-                                    $global.renderLearnerList(data.UID);
+                                    if ($global.renderLearnerList) {
+                                        $global.renderLearnerList(data.UID);
+                                    }
                                     $('#<%= _dialog %>').dialog('close');
                                 } else {
                                     alert(data.message);

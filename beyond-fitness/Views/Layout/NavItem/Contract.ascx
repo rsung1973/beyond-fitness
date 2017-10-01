@@ -26,6 +26,9 @@
         <%  if(_userProfile.IsAssistant())
             { %>
         <li>
+            <a href="<%= Url.Action("ProgramIndex","EnterpriseProgram") %>" title="企業合作方案"><i class="fa fa-lg fa-fw fa-handshake-o"></i>企業合作方案</a>
+        </li>
+        <li>
             <a href="<%= Url.Action("PriceIndex","LessonPrice") %>" title="體能顧問服務費用維護"><i class="fa fa-lg fa-fw fa-tasks"></i>體能顧問服務價目維護</a>
         </li>
         <%  } %>

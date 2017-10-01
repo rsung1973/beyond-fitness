@@ -41,18 +41,18 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
-                        <form action="<%= Url.Action("InquireContract","CourseContract") %>" method="post" class="smart-form">
+                        <form action="<%= Url.Action("InquireAccountsReceivable","Accounting") %>" method="post" id="queryForm" class="smart-form">
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">依體能顧問查詢</label>
                                         <label class="select">
                                             <select name="FitnessConsultant" class="input">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsAccounting())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant())
+                                                <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
@@ -82,7 +82,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號" />
                                         </label>
                                     </section>
-                                    <%  if (_profile.IsAssistant())
+                                    <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>
@@ -103,54 +103,12 @@
                                     }   %>
                                 </div>
                             </fieldset>
-                            <fieldset>
-                                <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <label class="label">合約類型</label>
-                                        <label class="select">
-                                            <select class="input" name="ContractType">
-                                                <option value="">全部</option>
-                                                <%  Html.RenderPartial("~/Views/SystemInfo/ContractTypeOptions.ascx", model: null);                     %>
-                                            </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
-                                        </label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <label class="label">合約狀態</label>
-                                        <label class="select">
-                                            <select class="input" name="Status">
-                                                <option value="">全部</option>
-                                                <option value="1201">草稿</option>
-                                                <%--<option value="1202">待確認</option>--%>
-                                                <option value="1203">待客戶簽名</option>
-                                                <option value="1204">待審核</option>
-                                                <option value="1205">已生效</option>
-                                            </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
-                                        </label>
-                                    </section>
-                                </div>
-                                <div class="row">
-                                    <section class="col col-6">
-                                        <label class="label">請選擇查詢合約起日</label>
-                                        <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="ContractDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起日" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.ContractDateFrom) %>' />
-                                        </label>
-                                    </section>
-                                    <section class="col col-6">
-                                        <label class="label">請選擇查詢合約迄日</label>
-                                        <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="ContractDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.ContractDateTo) %>' />
-                                        </label>
-                                    </section>
-                                </div>
-                            </fieldset>
                             <footer>
-                                <button onclick="inquireContract();" type="button" name="btnSend" class="btn btn-primary">
+                                <button onclick="inquireAccounts();" type="button" name="btnSend" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                                <button type="reset" name="cancel" class="btn btn-default">
+                                    清除 <i class="fa fa-undo" aria-hidden="true"></i>
                                 </button>
                             </footer>
                         </form>
@@ -185,7 +143,10 @@
                            -->
                 <header>
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
-                    <h2>合約列表</h2>
+                    <h2>應收帳款催收表</h2>
+                    <div class="widget-toolbar">
+                        <a id="btnDownload" onclick="downloadAccounts();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
+                    </div>
                 </header>
                 <!-- widget div-->
                 <div>
@@ -195,7 +156,8 @@
                     </div>
                     <!-- end widget edit box -->
                     <!-- widget content -->
-                    <div class="widget-body bg-color-darken txt-color-white no-padding" id="contractList">
+                    <div class="widget-body bg-color-darken txt-color-white no-padding" id="accountsList">
+                        <%  Html.RenderPartial("~/Views/Accounting/Module/AccountsReceivableList.ascx", models.GetTable<CourseContract>().Where(c => false)); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -207,21 +169,29 @@
     </div>
     <!-- end row -->
 </section>
+
 <script>
-    function inquireContract() {
+    function inquireAccounts() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
+        $('#btnDownload').css('display', 'none');
+
         $form.ajaxSubmit({
             beforeSubmit: function () {
                 showLoading();
             },
             success: function (data) {
                 hideLoading();
-                $('#contractList').empty()
+                $('#accountsList').empty()
                     .append($(data));
             }
         });
     }
+
+    function downloadAccounts() {
+        $('#queryForm').launchDownload('<%= Url.Action("CreateAccountsReveivableXlsx","Accounting") %>');
+    }
+
 </script>
 
 <script runat="server">

@@ -44,6 +44,7 @@ namespace WebHome.Models.ViewModel
         public int? MonthExtension { get; set; }
         public int? RevisionID { get; set; }
         public bool? Drawback { get; set; }
+        public int? SettlementPrice { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -133,6 +134,7 @@ namespace WebHome.Models.ViewModel
         public bool? Drawback { get; set; }
         public int? ShareAmount { get; set; }
         public int? CoachID { get; set; }
+        public int? ContractID { get; set; }
     }
 
     public class PaymentQueryViewModel : PaymentViewModel
@@ -143,5 +145,76 @@ namespace WebHome.Models.ViewModel
         public DateTime? PayoffDateFrom { get; set; }
         public DateTime? PayoffDateTo { get; set; }
 
+    }
+
+    public class AchievementQueryViewModel
+    {
+        public AchievementQueryViewModel()
+        {
+            AchievementDateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            AchievementDateTo = AchievementDateFrom;
+            AchievementYearMonthTo = AchievementYearMonthFrom = String.Format("{0:yyyy/MM}", AchievementDateFrom);
+        }
+        public int? BranchID { get; set; }
+        public int? CoachID { get; set; }
+        public DateTime? AchievementDateFrom { get; set; }
+        public DateTime? AchievementDateTo { get; set; }
+        public String AchievementYearMonthFrom { get; set; }
+        public String AchievementYearMonthTo { get; set; }
+
+    }
+
+    public class TrustQueryViewModel
+    {
+        public TrustQueryViewModel()
+        {
+            TrustDateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            TrustDateTo = TrustDateFrom;
+            TrustYearMonth = String.Format("{0:yyyy/MM}", TrustDateFrom);
+        }
+        public int? BranchID { get; set; }
+        public String TrustType { get; set; }
+        public DateTime? TrustDateFrom { get; set; }
+        public DateTime? TrustDateTo { get; set; }
+        public String TrustYearMonth { get; set; }
+
+    }
+
+    public class EnterpriseContractViewModel
+    {
+        public int? ContractID { get; set; }
+        public DateTime? ContractDate { get; set; }
+        public String Subject { get; set; }
+        public String Remark { get; set; }
+        public int[] UID { get; set; }
+
+        public int? CompanyID { get; set; }
+        public String CompanyName { get; set; }
+        public String ReceiptNo { get; set; }
+        public int?[] EnterprisePriceID { get; set; }
+        public int?[] EnterpriseLessons { get; set; }
+        public int?[] EnterpriseDurationInMinutes { get; set; }
+        public int?[] EnterpriseListPrice { get; set; }
+        public int? TotalCost { get; set; }
+        public int? BranchID { get; set; }
+        public DateTime? ValidFrom { get; set; }
+        public DateTime? Expiration { get; set; }
+    }
+
+    public class EnterpriseProgramItemViewModel
+    {
+        public int? PriceID { get; set; }
+        public int? Lessons { get; set; }
+        public int? ContractType { get; set; }
+        public int? DurationInMinutes { get; set; }
+        public int? ListPrice { get; set; }
+        public String Description { get; set; }
+    }
+
+    public class EnterpriseGroupMemberViewModel
+    {
+        public int? ContractID { get; set; }
+        public int? GroupUID { get; set; }
+        public int? UID { get; set; }
     }
 }

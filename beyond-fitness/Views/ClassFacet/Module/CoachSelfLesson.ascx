@@ -17,7 +17,7 @@
             <a href="#" class="informer informer-two" onclick="showLearnerAssessment(<%= _model.UID %>,<%= _item.LessonID %>);">
                 <u><span class="fa fa-line-chart"></span></u>
             </a>
-            <a href="<%= Url.Action("EditLearner","Member",new { id = _model.UID }) %>">
+            <a onclick="$global.editLearner(<%= _model.UID %>);">
                 <%  _model.RenderUserPicture(Writer, new { @class = "img-circle img-thumbnail", @style = "width:100px" }); %>
 
             </a>

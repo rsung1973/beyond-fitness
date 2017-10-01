@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Linq;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using System.Web.Security;
 using Newtonsoft.Json;
 
 using CommonLib.MvcExtension;
+using CommonLib.DataAccess;
 using Utility;
 using WebHome.Helper;
 using WebHome.Models.DataEntity;
@@ -27,6 +29,38 @@ using WebHome.Properties;
 
 namespace WebHome.Controllers
 {
+    //class CheckContractPayment
+    //{
+    //    private static CheckContractPayment _instance = new CheckContractPayment();
+    //    private Dictionary<int, long> _recentPayment;
+    //    private CheckContractPayment()
+    //    {
+    //        _recentPayment = new Dictionary<int, long>();
+    //    }
+
+    //    public static bool IsPayoffRecently(int contractID)
+    //    {
+    //        lock(_instance)
+    //        {
+    //            var result = false;
+    //            var ticks = DateTime.Now.Ticks;
+    //            if(_instance._recentPayment.ContainsKey(contractID))
+    //            {
+    //                if((ticks-_instance._recentPayment[contractID])<60*10000000L)
+    //                {
+    //                    result = true;
+    //                }
+    //                _instance._recentPayment[contractID] = ticks;
+    //            }
+    //            else
+    //            {
+    //                _instance._recentPayment.Add(contractID, ticks);
+    //            }
+    //            return result;
+    //        }
+    //    }
+    //}
+
     [Authorize]
     public class PaymentController : SampleController<UserProfile>
     {
@@ -137,6 +171,15 @@ namespace WebHome.Controllers
                 {
                     ModelState.AddModelError("ContractNo", "合約編號錯誤!!");
                 }
+                //else if (contract.ContractPayment.Any(p => p.Payment.PayoffDate > DateTime.Now.AddMinutes(-1)))
+                //{
+                //    ModelState.AddModelError("ContractNo", "本合約一分鐘內重複收款，請再確認!!");
+                //}
+
+                //else if(CheckContractPayment.IsPayoffRecently(contract.ContractID))
+                //{
+                //    ModelState.AddModelError("ContractNo", "本合約一分鐘內重複收款，請再確認!!");
+                //}
             }
 
             if (!viewModel.PayoffDate.HasValue)
@@ -156,8 +199,7 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("SellerID", "請選擇分店!!");
             }
 
-            if (contract!=null && contract.ContractPayment.Where(p => p.Payment.VoidPayment == null)
-                .Sum(p => p.Payment.PayoffAmount) + viewModel.PayoffAmount > contract.TotalCost)
+            if (contract!=null && contract.TotalPaidAmount() + viewModel.PayoffAmount > contract.TotalCost)
             {
                 ModelState.AddModelError("PayoffAmount", "含本次收款金額已大於總收費金額!!");
             }
@@ -185,12 +227,20 @@ namespace WebHome.Controllers
                     };
                     models.GetTable<Payment>().InsertOnSubmit(item);
                     item.InvoiceItem = invoice;
+
+                    models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                    {
+                        ContractID = contract.ContractID,
+                        EventDate = viewModel.PayoffDate.Value,
+                        Payment = item,
+                        TrustType = Naming.TrustType.B.ToString()
+                    });
                 }
 
                 preparePayment(viewModel, profile, item);
 
                 item.ContractPayment.ContractID = contract.ContractID;
-                item.PaymentTransaction.BranchID = contract.LessonPriceType.BranchID.Value;
+                item.PaymentTransaction.BranchID = contract.CourseContractExtension.BranchID;
 
                 models.SubmitChanges();
 
@@ -202,6 +252,87 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = ex.Message });
             }
         }
+
+        [CoachOrAssistantAuthorize]
+        public ActionResult EditPaymentForEnterprise(PaymentViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditPaymentForContract(viewModel);
+            result.ViewName = "~/Views/Payment/Module/EditPaymentForEnterprise.ascx";
+            return result;
+        }
+
+        public ActionResult CommitPaymentForEnterprise(PaymentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            EnterpriseCourseContract contract = models.GetTable<EnterpriseCourseContract>().Where(t => t.ContractID == viewModel.ContractID).FirstOrDefault();
+            if (contract == null)
+            {
+                return View("~/Shared/JsAlert.ascx", model: "資料錯誤!!");
+            }
+
+            if (!viewModel.PayoffDate.HasValue)
+            {
+                ModelState.AddModelError("PayoffDate", "請選擇收款日期!!");
+            }
+
+            var invoice = checkInvoiceNo(viewModel);
+
+            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
+            {
+                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
+            }
+
+            if (!viewModel.SellerID.HasValue)
+            {
+                ModelState.AddModelError("SellerID", "請選擇分店!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            try
+            {
+                Payment item = models.GetTable<Payment>()
+                    .Where(p => p.PaymentID == viewModel.PaymentID).FirstOrDefault();
+
+                if (item == null)
+                {
+                    item = new Payment
+                    {
+                        Status = (int)Naming.CourseContractStatus.已生效,
+                        EnterpriseCoursePayment = new EnterpriseCoursePayment
+                        {
+                            ContractID = contract.ContractID
+                        },
+                        PaymentTransaction = new PaymentTransaction
+                        { },
+                        PaymentAudit = new Models.DataEntity.PaymentAudit { }
+                    };
+                    models.GetTable<Payment>().InsertOnSubmit(item);
+                    item.InvoiceItem = invoice;
+
+                }
+
+                preparePayment(viewModel, profile, item);
+
+                item.PaymentTransaction.BranchID = viewModel.SellerID.Value;
+
+                models.SubmitChanges();
+
+                return Json(new { result = true });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message });
+            }
+        }
+
 
         private void preparePayment(PaymentViewModel viewModel, UserProfile profile, Payment item)
         {
@@ -440,7 +571,9 @@ namespace WebHome.Controllers
         public ActionResult ListUnpaidPISession(int? branchID)
         {
             var profile = HttpContext.GetUser();
-            var items = models.GetTable<LessonTime>().Where(r => r.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練)
+            var items = models.GetTable<LessonTime>()
+                .Where(r => r.ClassTime < DateTime.Today.AddDays(1))
+                .Where(r => r.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(r => r.RegisterLesson.IntuitionCharge.TuitionInstallment.Count == 0
                     || !r.RegisterLesson.IntuitionCharge.TuitionInstallment.Any(t => t.Payment.VoidPayment == null || t.Payment.VoidPayment.Status != (int)Naming.CourseContractStatus.已生效));
 
@@ -455,7 +588,7 @@ namespace WebHome.Controllers
         public ActionResult PaymentAuditSummary()
         {
             var profile = HttpContext.GetUser();
-            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager())
+            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager() || profile.IsAccounting())
             {
                 return View("~/Views/Payment/Module/PaymentAuditSummary.ascx");
             }
@@ -467,7 +600,7 @@ namespace WebHome.Controllers
 
         public ActionResult ListPaymentByInvoice(PaymentViewModel viewModel)
         {
-            IQueryable<Payment> items = models.GetTable<Payment>();
+            IQueryable<Payment> items = models.GetTable<Payment>().Where(p => p.TransactionType.HasValue);
             if (viewModel.InvoiceNo == null || !Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
             {
                 ModelState.AddModelError("InvoiceNo", "請輸入正確發票號碼!!");
@@ -813,6 +946,7 @@ namespace WebHome.Controllers
         public ActionResult InquirePayment(PaymentQueryViewModel viewModel)
         {
             IQueryable<Payment> items = models.GetTable<Payment>()
+                .Where(p=>p.TransactionType.HasValue)
                 .Where(p => p.Status.HasValue);
 
             var profile = HttpContext.GetUser();
@@ -870,7 +1004,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant())
+                if (profile.IsAssistant() || profile.IsAccounting())
                 {
 
                 }
@@ -950,6 +1084,194 @@ namespace WebHome.Controllers
 
         }
 
+        class _PaymentItem
+        {
+            public int Direction { get; set; }
+            public Payment Item { get; set; }
+        }
+
+        public ActionResult CreatePaymentQueryXlsx(PaymentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquirePayment(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+            var voidItems = items.Join(models.GetTable<VoidPayment>(), p => p.PaymentID, v => v.VoidID, (p, v) => p);
+
+            var details = items.ToArray().Select(p => new _PaymentItem { Direction = 1, Item = p })
+                    .Concat(voidItems.ToArray().Select(p => new _PaymentItem { Direction = -1, Item = p }))
+                .OrderByDescending(i => i.Item.PayoffDate)
+                .ThenBy(i => i.Item.PaymentID)
+                .Select(i => new
+                {
+                    發票號碼 = i.Item.InvoiceItem.TrackCode + i.Item.InvoiceItem.No,
+                    分店 = i.Item.PaymentTransaction.BranchStore.BranchName,
+                    收款人 = i.Item.UserProfile.FullName(),
+                    學員 = i.Item.TuitionInstallment != null
+                        ? i.Item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : i.Item.ContractPayment != null
+                            ? i.Item.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : "--",
+                    收款日期 = String.Format("{0:yyyy/MM/dd}", i.Item.PayoffDate),
+                    收款品項 = String.Concat(((Naming.PaymentTransactionType)i.Item.TransactionType).ToString(),
+                            i.Item.TransactionType == (int)Naming.PaymentTransactionType.運動商品 || i.Item.TransactionType == (int)Naming.PaymentTransactionType.飲品
+                                ? String.Format("({0})", String.Join("、", i.Item.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)))
+                                : null),
+                    金額 = i.Direction > 0
+                        ? i.Item.PayoffAmount >= 0 ? i.Item.PayoffAmount : -i.Item.PayoffAmount
+                        : i.Item.PayoffAmount,
+                    收款方式 = i.Item.PaymentType,
+                    發票類型 = i.Item.InvoiceID.HasValue
+                        ? i.Item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                            ? "電子發票"
+                            : "紙本"
+                        : "--",
+                    發票狀態 = i.Direction > 0
+                        ? i.Item.VoidPayment == null
+                            ? "已開立"
+                            : i.Item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                                ? "已作廢"
+                                : "已開立"
+                        : i.Item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                            ? "已作廢"
+                            : "--",
+                    買受人統編 = i.Item.InvoiceID.HasValue
+                        ? i.Item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : i.Item.InvoiceItem.InvoiceBuyer.ReceiptNo
+                        : "--",
+                    合約編號 = i.Item.ContractPayment != null
+                        ? i.Item.ContractPayment.CourseContract.ContractNo()
+                        : "--",
+                    合約總金額 = i.Item.ContractPayment != null
+                        ? i.Item.ContractPayment.CourseContract.TotalCost
+                        : (int?)null,
+                    狀態 = i.Direction > 0
+                        ? String.Concat((Naming.CourseContractStatus)i.Item.Status, i.Item.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
+                        : String.Concat((Naming.VoidPaymentStatus)i.Item.VoidPayment.Status, "(作廢)"),
+                    備註 = i.Direction > 0 ? i.Item.Remark : i.Item.VoidPayment.Remark
+                });
+
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("PaymentDetails.xlsx")));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = details.ToDataTable();
+                table.TableName = "收款資料明細";
+                ds.Tables.Add(table);
+
+                foreach (var r in table.Select("買受人統編 = '0000000000'"))
+                {
+                    r["買受人統編"] = "";
+                }
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult GetPaymentQuery(PaymentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquirePayment(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+
+            var details = items.OrderByDescending(i => i.PayoffDate).ToArray()
+                .Select(i => new
+                {
+                    //i.InvoiceItem.TrackCode,
+                    //i.InvoiceItem.No,
+                    //i.PaymentTransaction.BranchStore.BranchName,
+                    發票號碼 = i.InvoiceItem.TrackCode + i.InvoiceItem.No,
+                    分店 = i.PaymentTransaction.BranchStore.BranchName,
+                    收款人 = i.UserProfile.FullName(),
+                    學員 = i.TuitionInstallment != null
+                        ? i.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : i.ContractPayment != null
+                            ? i.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : "--",
+                    收款日期 = String.Format("{0:yyyy/MM/dd}", i.PayoffDate),
+                    收款品項 = String.Concat(((Naming.PaymentTransactionType)i.TransactionType).ToString(),
+                            i.TransactionType == (int)Naming.PaymentTransactionType.運動商品 || i.TransactionType == (int)Naming.PaymentTransactionType.飲品
+                                ? String.Format("({0})", String.Join("、", i.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)))
+                                : null),
+                    金額 =  i.PayoffAmount,
+                    收款方式 = i.PaymentType,
+                    發票類型 = i.InvoiceID.HasValue
+                        ? i.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                            ? "電子發票"
+                            : "紙本"
+                        : "--",
+                    發票狀態 = i.VoidPayment == null
+                        ? "已開立"
+                        : i.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                            ? "已作廢"
+                            : "已開立",
+                    買受人統編 = i.InvoiceID.HasValue
+                        ? i.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : i.InvoiceItem.InvoiceBuyer.ReceiptNo
+                        : "--",
+                    合約編號 = i.ContractPayment != null
+                        ? i.ContractPayment.CourseContract.ContractNo()
+                        : null,
+                    狀態 = String.Concat((Naming.CourseContractStatus)i.Status, i.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
+                });
+
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "message/rfc822";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("收款資料明細.xml")));
+
+            using (DataSet ds = new DataSet())
+            {
+                var table = details.ToDataTable();
+                table.TableName = "收款資料明細";
+                ds.Tables.Add(table);
+                ds.WriteXml(Response.OutputStream);
+            }
+
+            //using (DataSet ds = new DataSet())
+            //{
+            //    DataTable table = new DataTable("收款資料明細");
+            //    ds.Tables.Add(table);
+            //    table.Columns.Add("發票號碼");
+            //    table.Columns.Add("分店");
+            //    table.Columns.Add("收款人");
+            //    table.Columns.Add("學員");
+            //    table.Columns.Add("收款日期");
+            //    table.Columns.Add("收款品項");
+            //    table.Columns.Add("金額");
+            //    table.Columns.Add("收款方式");
+            //    table.Columns.Add("發票類型");
+            //    table.Columns.Add("發票狀態");
+            //    table.Columns.Add("買受人統編");
+            //    table.Columns.Add("合約編號");
+            //    table.Columns.Add("狀態");
+
+
+            //    DataSource.GetDataSetResult(details, table);
+            //    foreach (var r in table.Select("買受人統編 = '0000000000'"))
+            //    {
+            //        r["買受人統編"] = "";
+            //    }
+
+            //    using (var xls = ds.ConvertToExcel())
+            //    {
+            //        xls.SaveAs(Response.OutputStream);
+            //    }
+            //}
+
+            return new EmptyResult();
+        }
+
+
         public ActionResult InquirePaymentForAchievement(PaymentQueryViewModel viewModel)
         {
             IQueryable<Payment> items = models.GetTable<Payment>()
@@ -1014,7 +1336,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant())
+                if (profile.IsAssistant() || profile.IsAccounting())
                 {
 
                 }
@@ -1035,6 +1357,11 @@ namespace WebHome.Controllers
             if (hasConditon)
             {
                 items = items.Where(queryExpr);
+            }
+
+            if(viewModel.TransactionType.HasValue)
+            {
+                items = items.Where(c => c.TransactionType == viewModel.TransactionType);
             }
 
             if (viewModel.PayoffDateFrom.HasValue)
@@ -1090,6 +1417,25 @@ namespace WebHome.Controllers
                 Logger.Error(ex);
             }
             return Json(new { result = false,message = "資料錯誤!!" });
+        }
+
+        [CoachOrAssistantAuthorize]
+        public ActionResult DeleteEnterprisePayment(PaymentViewModel viewModel)
+        {
+            try
+            {
+                var item = models.DeleteAny<Payment>(d => d.PaymentID == viewModel.PaymentID 
+                    && d.EnterpriseCoursePayment.ContractID == viewModel.ContractID);
+                if (item != null)
+                {
+                    return Json(new { result = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return Json(new { result = false, message = "資料錯誤!!" });
         }
 
 

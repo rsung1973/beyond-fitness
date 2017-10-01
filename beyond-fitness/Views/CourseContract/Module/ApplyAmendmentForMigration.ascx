@@ -13,38 +13,39 @@
     <section class="col col-6">
         <label class="label">上課地點</label>
         <label class="select">
-            <select name="BranchID">
-                <%  ViewBag.IntentStore = models.GetTable<BranchStore>().Where(b => b.BranchID != _model.LessonPriceType.BranchID)
+            <select name="BranchID" id="<%= _branchID %>">
+                <%  ViewBag.IntentStore = models.GetTable<BranchStore>()
+                        //.Where(b => b.BranchID != _model.CourseContractExtension.BranchID)
+                        .Where(b => b.BranchID == 2)
                         .Select(b => b.BranchID).ToArray();
                     Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: -1); %>
             </select>
             <i class="icon-append fa fa-at"></i>
         </label>
         <script>
-            $('select[name="BranchID"]').on('change', function (evt) {
+            $('#<%= _branchID %>').on('change', function (evt) {
                 loadPriceList();
-                locationInfo();
             });
         </script>
     </section>
     <section class="col col-6">
-        <label class="label">課程單價 <span class="label-warning"><i class="fa fa-info-circle"></i>原購買堂數：75堂</span></label>
+        <label class="label">課程單價 <span class="label-warning"><i class="fa fa-info-circle"></i>原購買堂數：<%= _model.Lessons %>堂 / <%= _model.LessonPriceType.ListPrice %>元</span></label>
         <label class="select">
-            <select name="PriceID">
+            <select name="PriceID" id="<%= _priceID %>">
             </select>
             <i class="icon-append fa fa-at"></i>
         </label>
         <script>
             var $priceList;
             function loadPriceList() {
-                $.post('<%= Url.Action("ListLessonPrice","CourseContract") %>',{ 'branchID':$('select[name="BranchID"]').val(), 'duration':$('select[name="DurationInMinutes"]').val(),'feature': $global.useLearnerDiscount ? '<%= (int?)Naming.LessonPriceFeature.舊會員續約 %>':null },function(data) {
+                $.post('<%= Url.Action("ListLessonPrice","CourseContract") %>',{ 'branchID':$('#<%= _branchID %>').val(), 'duration':'<%= _model.LessonPriceType.DurationInMinutes %>','feature': $global.useLearnerDiscount ? '<%= (int?)Naming.LessonPriceFeature.舊會員續約 %>':null },function(data) {
                     $('select[name="PriceID"]').empty()
                     .html('<option value="">請選擇</option>')
                     .append($(data));
                     //$('input[name="Lessons"]').val('');
                     $priceList = [];
                     //$('#singlePrice').text('');
-                    $('select[name="PriceID"] option[lowerLimit]').each(function(idx,element) {
+                    $('#<%= _priceID %> option[lowerLimit]').each(function(idx,element) {
                         var $opt = $(this);
                         if($opt.attr('lowerLimit')!='') {
                             $priceList.push({
@@ -70,12 +71,23 @@
                 });
             }
 
+            $('#<%= _priceID %>').on('change', function (evt) {
+                locationInfo();
+            });
+
+
             function locationInfo() {
-                var branchID = $('select[name="BranchID"]').val();
-                var $option = $('select[name="BranchID"] option:selected');
+                var branchID = $('#<%= _branchID %>').val();
+                var $option = $('#<%= _branchID %> option:selected');
+                var remained = <%= _model.RemainedLessonCount() %>;
+                var currPrice = <%= _model.LessonPriceType.ListPrice %> ;
+                var $optPrice = $('#<%= _priceID %> option:selected');
+                var newPrice = parseInt(($optPrice.attr('listPrice')+'').replace(',',''));
                 $('#location').text($option.text());
-                if($option.attr('value')=='2') {
-                    $('#location').text($('#location').text()+'，轉換至費用較高之場所依同方案價格計算補足差額');
+                if($option.attr('value')=='2' && newPrice>currPrice) {
+                    var amt = remained * (newPrice-currPrice);
+                    $('#location').text($('#location').text()+'，剩餘' + remained 
+                        + '堂(' + currPrice + '元)轉換至費用較高之場所依同方案價格(' + newPrice + '元)計算補足差額(' + amt + '元）。');
                 }
             }
 
@@ -111,6 +123,8 @@
     ModelSource<UserProfile> models;
     CourseContractViewModel _viewModel;
     String _dialog = "amendment" + DateTime.Now.Ticks;
+    String _priceID = "priceID" + DateTime.Now.Ticks;
+    String _branchID = "branchID" + DateTime.Now.Ticks;
     CourseContract _model;
     bool _useLearnerDiscount;
 

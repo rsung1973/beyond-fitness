@@ -9,12 +9,13 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
+<label class="label label-warning">狀態後<i class="fa fa-asterisk"></i> 表示主管尚未對帳</label>
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
             <%--<th data-class="expand">發票號碼</th>--%>
             <th>分店</th>
-            <th data-hide="phone">收款人</th>
+            <th data-class="expand">收款人</th>
             <th>學員</th>
             <th>收款日期</th>
             <th data-hide="phone">收款品項</th>
@@ -23,7 +24,7 @@
             <%--<th data-hide="phone">發票類型</th>--%>
             <%--<th data-hide="phone">發票狀態</th>--%>
             <th data-hide="phone,tablet">買受人統編</th>
-            <th data-hide="phone,tablet">合約編號</th>
+            <th data-hide="phone">合約編號</th>
             <th>業績分潤</th>
             <th>功能</th>
         </tr>
@@ -42,14 +43,14 @@
                 <%      }
                     } %>
             </td>--%>
-            <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
-            <td><%= item.UserProfile.RealName %></td>
-            <td><%= item.TuitionInstallment!=null
+            <td nowrap="noWrap"><%= item.PaymentTransaction.BranchStore.BranchName %></td>
+            <td nowrap="noWrap"><%= item.UserProfile.FullName() %></td>
+            <td nowrap="noWrap"><%= item.TuitionInstallment!=null
                         ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
                         : item.ContractPayment!=null
                             ? item.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--" %></td>
-            <td><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
+            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
             <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
                 <%  if(item.TransactionType==(int)Naming.PaymentTransactionType.運動商品
                         || item.TransactionType==(int)Naming.PaymentTransactionType.飲品)
@@ -57,7 +58,7 @@
                 (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p=>p.MerchandiseWindow.ProductName)) %>)
                 <%  } %>
             </td>
-            <td><%= String.Format("{0:##,###,###,###}",item.PayoffAmount) %></td>
+            <td class="text-right"><%= String.Format("{0:##,###,###,###}",item.PayoffAmount) %></td>
             <td><%= item.PaymentType %></td>
             <%--<td><%= item.InvoiceID.HasValue
                         ? item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
@@ -77,10 +78,10 @@
                 <%= item.ContractPayment.CourseContract.ContractNo() %>
                 <%  } %>
             </td>
-            <td>
+            <td nowrap="noWrap">
                 <%= String.Join("<br/>", item.TuitionAchievement.Select(a=> String.Format("{0} 【${1:##,###,###,###}】",a.ServingCoach.UserProfile.RealName,a.ShareAmount)))   %>
             </td>
-            <td nowrap="noWrap">
+            <td>
                 <a onclick="$global.editAchievement(<%= item.PaymentID %>);" class="btn btn-circle bg-color-yellow" id="modifyBenefitDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
             </td>
         </tr>
@@ -102,18 +103,18 @@
         };
 
         $('#<%= _tableId %>').dataTable({
-            //"bPaginate": false,
-            //"pageLength": 30,
-            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            "bPaginate": true,
+            "pageLength": 30,
+            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "searching": false,
             "ordering": true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                      "t" +
                      "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
-            "paging": false,
+            "paging": true,
             "info": true,
-            "order": [3],
+            "order": [[3,"desc"]],
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
             },

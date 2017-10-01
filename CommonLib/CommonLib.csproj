@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\DataAccessLayerDataSource.cs" />
+    <Compile Include="DataAccess\ExtensionMethods.cs" />
     <Compile Include="DataAccess\GenericManager.cs" />
     <Compile Include="DataAccess\LinqDataSource.cs" />
     <Compile Include="DataAccess\LinqToSqlDataSource.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Utility\CipherDecipher.cs" />
     <Compile Include="Utility\CodingHelper.cs" />
     <Compile Include="Utility\CsvSerializer.cs" />
+    <Compile Include="Utility\DailySequence.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\LogTraceListener.cs" />

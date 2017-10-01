@@ -205,7 +205,7 @@ namespace WebHome.Models.ViewModel
         {
             ClassDate = DateTime.Today;
             //ClassTime = new TimeSpan(8, 0, 0);
-            Duration = 60;
+            //Duration = 60;
         }
 
         [Display(Name = "學員姓名")]
@@ -223,9 +223,9 @@ namespace WebHome.Models.ViewModel
         //[Display(Name = "上課時段")]
         //public TimeSpan ClassTime { get; set; }
 
-        [Required]
-        [Display(Name = "上課時間")]
-        public int Duration { get; set; }
+        //[Required]
+        //[Display(Name = "上課時間")]
+        //public int Duration { get; set; }
 
         public int? UID { get; set; }
 

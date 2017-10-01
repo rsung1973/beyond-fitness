@@ -64,6 +64,9 @@
                                 <button onclick="inquireContract();" type="button" name="btnSend" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                 </button>
+                                <button type="reset" name="cancel" class="btn btn-default">
+                                    清除 <i class="fa fa-undo" aria-hidden="true"></i>
+                                </button>
                             </footer>
                         </form>
                     </div>
@@ -108,6 +111,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="contractList">
+                        <%  Html.RenderPartial("~/Views/CourseContract/Module/ContractQueryAmendmentList.ascx", models.GetTable<CourseContract>().Where(f => false)); %>
                     </div>
                     <!-- end widget content -->
                 </div>

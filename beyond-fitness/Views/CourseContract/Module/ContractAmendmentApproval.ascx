@@ -11,7 +11,7 @@
 
 <div id="contractAction" class="row text-center">
     <button type="button" name="btnReject" class="btn bg-color-red" onclick="rejectSignature();">
-        退件 <i class='fa fa-times' aria-hidden='true'></i>
+        刪除 <i class='fa fa-trash-o' aria-hidden='true'></i>
     </button>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="approveContract();">
         確認審核 <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -25,7 +25,7 @@
             if (data.result) {
                 done = true;
                 $('#contractAction').remove();
-                alert('合約核准!!');
+                alert('服務已審核!!');
                 window.close();
             } else {
                 $(data).appendTo($('body')).remove();
@@ -34,14 +34,14 @@
     }
 
     function rejectSignature() {
-        if (confirm('確定退件?')) {
+        if (confirm('確定刪除?')) {
             showLoading();
             $.post('<%= Url.Action("DeleteCourseContract","CourseContract",new { _model.CourseContract.ContractID }) %>', {}, function (data) {
                 hideLoading();
                 if (data.result) {
                     done = true;
                     $('#contractAction').remove();
-                    alert('合約已退件!!');
+                    alert('服務已刪除!!');
                     window.close();
                 } else {
                     $(data).appendTo($('body')).remove();

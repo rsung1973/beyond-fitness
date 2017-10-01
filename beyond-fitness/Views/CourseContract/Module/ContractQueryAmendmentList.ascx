@@ -8,6 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
+<label class="label label-warning">合約狀態（狀態後<i class="fa fa-asterisk"></i> 表示合約已過期）</label>
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
@@ -27,29 +28,38 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.ContractNo + "-" + String.Format("{0:00}",item.SequenceNo) %></td>
-            <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
-            <td><%= item.ServingCoach.UserProfile.FullName() %></td>
-            <td>
+            <td nowrap="noWrap"><%= item.ContractNo + "-" + String.Format("{0:00}",item.SequenceNo) %></td>
+            <td nowrap="noWrap"><%= item.LessonPriceType.BranchStore.BranchName %></td>
+            <td nowrap="noWrap"><%= item.ServingCoach.UserProfile.FullName() %></td>
+            <td nowrap="noWrap">
                 <%  if (item.CourseContractType.IsGroup==true)
                     { %>
-                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
+                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName())) %>
                 <%  }
                     else
                     { %>
                 <%= item.ContractOwner.FullName() %>
                 <%  } %>
             </td>
-            <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
+            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
             <td><%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)</td>
-            <td><%= item.RemainedLessonCount() %>/<%= item.Lessons %></td>
+            <td><%  var remainedCount = item.RemainedLessonCount(); %>
+                <%= remainedCount %>/<%= item.Lessons %></td>
             <td>新合約</td>
-            <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>
-            <td nowrap="noWrap">
-                <a onclick="$global.listAmendment(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow contractHistoryDialog_link"><i class="fa fa-fw fa fa-lg fa-list-ol" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                <%  if(item.ContractID>999)
+            <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %>
+                <%  if (item.Expiration.HasValue && item.Expiration.Value < DateTime.Today)
                     { %>
-                <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                (*)
+                <%  } %>
+            </td>
+            <td nowrap="noWrap">
+                <%  if (remainedCount > 0)
+                    { %>
+                <a onclick="$global.listAmendment(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow contractHistoryDialog_link"><i class="fa fa-fw fa fa-lg fa-list-ol" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  } %>
+                <%  if(item.ContractID>1028)
+                    { %>
+                <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
                 <%  } %>
             </td>
         </tr>
@@ -75,7 +85,7 @@
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
-            "order": [],
+            "order": [[4,"desc"]],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",

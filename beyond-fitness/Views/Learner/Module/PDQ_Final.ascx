@@ -156,7 +156,9 @@
                         if (data.result) {
                             $('#<%= _dialog %>').dialog('close');
                             if (next) {
-
+                                if ($global.editPDQDone) {
+                                    $global.editPDQDone();
+                                }
                             }
                             else {
                                 $.post('<%= Url.Action("PDQ","Learner",new { uid=_model.UID,groupID=5 }) %>', {}, function (data) {

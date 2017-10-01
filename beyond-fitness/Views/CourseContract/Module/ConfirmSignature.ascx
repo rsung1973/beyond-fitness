@@ -54,9 +54,12 @@
         </style>
 
 <div id="contractAction" class="row text-center">
+    <%  if (!_model.CourseContractExtension.RevisionTrackingID.HasValue)
+        { %>
     <button type="button" name="btnReject" class="btn bg-color-red" onclick="rejectSignature();">
         退件 <i class='fa fa-times' aria-hidden='true'></i>
     </button>
+    <%  } %>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="confirmSignature();">
         確定 <i class="fa fa-send" aria-hidden="true"></i>
     </button>

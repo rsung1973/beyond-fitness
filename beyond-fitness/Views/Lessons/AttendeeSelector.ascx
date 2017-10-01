@@ -14,22 +14,29 @@
             <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
         <%  foreach (var item in _items)
             {
-                var lessonCount = item.Lessons - (item.AttendedLessons ?? 0) - (item.RegisterGroupID.HasValue ? item.GroupingLesson.LessonTime.Count : item.LessonTime.Count);
+                var contract = item.RegisterLessonContract.CourseContract;
+                var lessonCount = contract.RemainedLessonCount();
                 bool pdqStatus = completePDQ(item);
-                bool paymentStatus = hasPayment(item);
                 bool groupComplete = item.GroupingMemberCount == item.GroupingLesson.RegisterLesson.Count ? true : false;
                 bool questionnaireStatus = item.QuestionnaireRequest.Any(q => q.Status!=(int)Naming.IncommingMessageStatus.拒答 && q.PDQTask.Count == 0);
                 var pastReserved = item.LessonTime.Count(l => l.ClassTime < DateTime.Today.AddDays(1) && l.LessonAttendance == null);
                 var incomingReserved = item.LessonTime.Count(l => l.ClassTime >= DateTime.Today);
+
+                var validContract = contract.Expiration.Value >= DateTime.Today;
+                var bookingCount = contract.CourseContractType.ContractCode == "CFA"
+                        ? contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count())
+                        : item.GroupingLesson.LessonTime.Count;
+                var totalPaid = contract.TotalPaidAmount();
+                var payoffStatus = contract.TotalCost / contract.Lessons * bookingCount < totalPaid;
+
                 %>
-                <label class="<%= lessonCount>0 && pdqStatus && paymentStatus && groupComplete && !questionnaireStatus ? "radio" : "radio state-disabled" %>">
-                <input type="radio" name="registerID" value="<%= item.RegisterID %>" <%= lessonCount>0 && pdqStatus && paymentStatus && groupComplete && !questionnaireStatus ? null : "disabled" %> />
+                <label class="<%= lessonCount>0 && pdqStatus && groupComplete && !questionnaireStatus && validContract && payoffStatus ? "radio" : "radio state-disabled" %>">
+                <input type="radio" name="registerID" value="<%= item.RegisterID %>" <%= lessonCount>0 && pdqStatus && groupComplete && !questionnaireStatus && validContract && payoffStatus ? null : "disabled" %> />
                 <i></i>
                     <%  if (item.RegisterLessonContract != null)
-                        {
-                            var contract = item.RegisterLessonContract.CourseContract;   %>
+                        {   %>
                             <%= String.Join("｜", contract.CourseContractMember.Select(m=>m.UserProfile).ToArray()
-                                     .Select(u=>u.FullName())) %>【<%= contract.CourseContractType.TypeName %>(<%= contract.LessonPriceType.DurationInMinutes %>分鐘)】/ 剩餘<%= lessonCount %>堂
+                                     .Select(u=>u.UID==item.UID ? "<b class='text-warning'>"+u.FullName()+"</b>" : u.FullName())) %> / <%= contract.CourseContractExtension.BranchStore.BranchName %> /【<%= contract.CourseContractType.TypeName %>(<%= contract.LessonPriceType.DurationInMinutes %>分鐘)】/ 剩餘<%= lessonCount %>堂 / 購買<%= contract.Lessons %>堂
                             <%  if (pastReserved > 0)
                                 {   %>
                                     （已預約未完成上課<%= pastReserved %>堂）   
@@ -64,38 +71,32 @@
                     <%  if (!pdqStatus)
                         { %>
                     <span class="label label-danger">
-                        <li class="fa fa-exclamation-triangle"></li> PDQ尚未登打或登打不完全!!!</span>
+                        <li class="fa fa-exclamation-triangle"></li> PDQ尚未登打或登打不完全！</span>
                     <%  }
-                        if (!paymentStatus)
-                        {
-                            if(item.GroupingMemberCount>1)
-                            {
-                                foreach(var r in item.GroupingLesson.RegisterLesson)
-                                {
-                                    if (r.IntuitionCharge == null || r.IntuitionCharge.TuitionInstallment.Count() == 0)
-                                    {%>
-                                        <span class="label label-danger">
-                                            <li class="fa fa-exclamation-triangle"></li> <%= r.UserProfile.FullName() %>未有付款紀錄!!!</span>
-                        <%  
-                                    }
-                                }
-                            }
-                            else
-                            {   %>
-                                <span class="label label-danger">
-                                    <li class="fa fa-exclamation-triangle"></li> 未有付款紀錄!!!</span>
-                    <%      }
-                        }
                         if (!groupComplete)
                         { %>
                     <span class="label label-danger">
-                        <li class="fa fa-exclamation-triangle"></li> 請設定團體學員!!!</span>
+                        <li class="fa fa-exclamation-triangle"></li> 請設定團體學員！</span>
                     <%  }
                         if (questionnaireStatus)
                         { %>
-                    <span class="label label-warning">
+                    <span class="label label-danger">
                         <li class="fa fa-exclamation-triangle"></li>
                         階段性調整計劃未填寫，請通知學員登入系統完成階段性調整計劃。
+                    </span>
+                    <%  }
+                        if (!validContract)
+                        { %>
+                    <span class="label label-danger">
+                        <li class="fa fa-exclamation-triangle"></li>
+                        合約尚未生效或已過期！
+                    </span>
+                    <%  }
+                        if (!payoffStatus)
+                        { %>
+                    <span class="label label-danger">
+                        <li class="fa fa-exclamation-triangle"></li>
+                        合約繳款餘額不足！（未繳清：<%= String.Format("{0:##,###,###,###}",contract.TotalCost-totalPaid) %>元）
                     </span>
                     <%  } %>
                 </label>
@@ -104,7 +105,7 @@
         }
         else
         { %>
-            <span>查無相符條件的上課資料!!</span>
+            <span>查無相符條件的上課資料！</span>
     <%  } %>
 
 

@@ -49,15 +49,15 @@
                                         <label class="label">依收款人查詢</label>
                                         <label class="select">
                                             <select class="input" name="HandlerID">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsAccounting())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant())
+                                                <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
-                                                    else if (_profile.IsManager() || _profile.IsViceManager())
+                                                    else if (_profile.IsManager())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", _profile.GetServingCoachInSameStore(models));
                                                     }
@@ -83,7 +83,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號">
                                         </label>
                                     </section>
-                                    <%  if (_profile.IsAssistant())
+                                    <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>
@@ -107,7 +107,18 @@
                             <fieldset>
                                 <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
                                 <div class="row">
-                                    <section class="col col-6">
+                                    <section class="col col-4">
+                                        <label class="label">收款品項</label>
+                                        <label class="select">
+                                            <select name="TransactionType" class="input">
+                                                <option value="">全部</option>
+                                                <option value="1" selected>體能顧問服務費</option>
+                                                <option value="2">自主訓練</option>
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-4">
                                         <label class="label">請選擇查詢收款起日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
@@ -115,7 +126,7 @@
                                             <input type="text" name="PayoffDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom) %>" />
                                         </label>
                                     </section>
-                                    <section class="col col-6">
+                                    <section class="col col-4">
                                         <label class="label">請選擇查詢收款迄日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
@@ -127,6 +138,9 @@
                             <footer>
                                 <button onclick="inquirePayment();" type="button" name="submit" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                                <button type="reset" name="cancel" class="btn btn-default">
+                                    清除 <i class="fa fa-undo" aria-hidden="true"></i>
                                 </button>
                             </footer>
                         </form>

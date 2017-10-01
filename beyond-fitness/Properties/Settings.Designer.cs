@@ -43,17 +43,6 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=Tr" +
-            "ue")]
-        public string BFDbConnection {
-            get {
-                return ((string)(this["BFDbConnection"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("20160")]
         public int UserTimeoutInMinutes {
             get {
@@ -85,6 +74,26 @@ namespace WebHome.Properties {
         public string CreateContractPdf {
             get {
                 return ((string)(this["CreateContractPdf"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd4;Integrated Security=T" +
+            "rue")]
+        public string BFDbConnection {
+            get {
+                return ((string)(this["BFDbConnection"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2083")]
+        public int DefaultCoach {
+            get {
+                return ((int)(this["DefaultCoach"]));
             }
         }
     }

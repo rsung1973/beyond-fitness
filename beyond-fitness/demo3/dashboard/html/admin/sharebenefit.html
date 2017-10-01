@@ -298,14 +298,26 @@
                                   <fieldset>
                                      <label class="label"><i class="fa fa-tags"></i> 更多查詢條件</label>
                                      <div class="row">
-                                        <section class="col col-6">
+                                        <section class="col col-4">
+                                            <label class="label">收款品項</label>
+                                            <label class="select">
+                                               <select class="input">
+                                                  <option value="0">全部</option>
+                                                  <option value="1">體能顧問服務費</option>
+                                                  <option value="2">自主訓練</option>
+                                                  <option value="3">店內販賣商品</option>
+                                               </select>
+                                               <i class="icon-append fa fa-file-word-o"></i>
+                                            </label>
+                                         </section>
+                                        <section class="col col-4">
                                            <label class="label">請選擇查詢收款起日</label>
                                            <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
                                            <i class="icon-append fa fa-calendar"></i>
                                            <input type="text" name="queryday" id="queryday" class="form-control input" placeholder="請輸入查詢起日" readonly="readonly">
                                            </label>
                                         </section>
-                                        <section class="col col-6">
+                                        <section class="col col-4">
                                            <label class="label">請選擇查詢收款迄日</label>
                                            <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
                                            <i class="icon-append fa fa-calendar"></i>
@@ -317,6 +329,9 @@
                                   <footer>
                                      <button type="submit" name="submit" class="btn btn-primary">
                                      送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                     </button>
+                                      <button type="reset" name="cancle" class="btn btn-default">
+                                     清除 <i class="fa fa-undo" aria-hidden="true"></i>
                                      </button>
                                   </footer>
                                </form>

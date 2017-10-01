@@ -29,7 +29,7 @@
     <%  }  %>
 <%  if (ViewBag.EnableNew==true)
     {   %>
-<label class="radio">
+<%--<label class="radio">
     <input type="radio" name="searchNameRadio">
     <i></i>立即新增體驗學員
 </label>
@@ -56,7 +56,7 @@
             <i class="icon-append fa fa-file-word-o"></i>
         </label>
     </section>
-</div>
+</div>--%>
 
 <%  } %>
 <script runat="server">

@@ -11,7 +11,9 @@
 
 <nav>
     <ul>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Payment.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/AccountingReport.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/SystemInfo.ascx", _userProfile); %>
         <li>
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Logout") %>" title="登出"><i class="fa fa-lg fa-fw fa-sign-out"></i><span class="menu-item-parent">登出</span></a>
         </li>

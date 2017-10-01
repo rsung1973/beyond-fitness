@@ -144,18 +144,21 @@
 <% } %>
 <script runat="server">
 
+    ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     IQueryable<UserProfile> _items;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        models = (ModelSource<UserProfile>)this.Model;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        int[] roleID = new int[] {(int)Naming.RoleID.Accounting,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Coach,
+            (int)Naming.RoleID.Manager,(int)Naming.RoleID.Officer,(int)Naming.RoleID.ViceManager};
 
         _items = models.EntityList  //.Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted)
             .Join(models.GetTable<UserRole>()
-                .Where(r => r.RoleID != (int)Naming.RoleID.Learner
-                    && r.RoleID != (int)Naming.RoleID.Administrator),
+                .Where(r => roleID.Contains(r.RoleID)),
             u => u.UID, r => r.UID, (u, r) => u);
     }
 

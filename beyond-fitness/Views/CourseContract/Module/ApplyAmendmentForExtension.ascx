@@ -9,14 +9,14 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
-<section class="col col-6">
+<section class="col col-4">
     <label class="label">展延時間</label>
     <label class="select">
         <select name="MonthExtension">
             <option value="3">3個月</option>
-            <option value="6">6個月</option>
+            <%--<option value="6">6個月</option>
             <option value="9">9個月</option>
-            <option value="12">12個月</option>
+            <option value="12">12個月</option>--%>
         </select>
         <i class="icon-append fa fa-clock-o"></i>
     </label>

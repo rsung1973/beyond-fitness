@@ -127,7 +127,11 @@
                         </label>
                     </section>
                     <section class="col col-6">
-                        <label class="label">上課時間長度 <span class="label-info"><i class="fa fa-info-circle "></i>單堂原價：<span id="singlePrice"><%= _model!=null && _model.LessonPriceType.SeriesID.HasValue ? String.Format("{0:##,###,###,###}",_model.LessonPriceType.CurrentPriceSeries.LessonPriceType.ListPrice) : null %></span></span>
+                        <label class="label">上課時間長度 <span class="label-info"><i class="fa fa-info-circle "></i>單堂原價：<span id="singlePrice">
+                            <%  LessonPriceType originalPrice; %>
+                            <%= _model!=null && (originalPrice =_model.OriginalSeriesPrice())!=null 
+                                    ? String.Format("{0:##,###,###,###}",originalPrice.ListPrice) 
+                                    : null %></span></span>
                         </label>
                         <label class="select">
                             <select name="DurationInMinutes">

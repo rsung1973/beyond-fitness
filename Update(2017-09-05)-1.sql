@@ -66,20 +66,20 @@ ALTER TABLE [dbo].[BranchStore]
 
 
 GO
-PRINT N'Altering [dbo].[LessonPriceType]...';
+--PRINT N'Altering [dbo].[LessonPriceType]...';
 
 
-GO
-ALTER TABLE [dbo].[LessonPriceType]
-    ADD [LowerLimit]        INT NULL,
-        [UpperBound]        INT NULL,
-        [BranchID]          INT NULL,
-        [DiscountedPrice]   INT NULL,
-        [DurationInMinutes] INT NULL,
-        [SeriesID]          INT NULL;
+--GO
+--ALTER TABLE [dbo].[LessonPriceType]
+--    ADD [LowerLimit]        INT NULL,
+--        [UpperBound]        INT NULL,
+--        [BranchID]          INT NULL,
+--        [DiscountedPrice]   INT NULL,
+--        [DurationInMinutes] INT NULL,
+--        [SeriesID]          INT NULL;
 
 
-GO
+--GO
 PRINT N'Starting rebuilding table [dbo].[TuitionInstallment]...';
 
 
@@ -678,70 +678,70 @@ CREATE TABLE [dbo].[InvoiceWinningNumber] (
 
 
 GO
-PRINT N'Creating [dbo].[LessonPriceProperty]...';
+--PRINT N'Creating [dbo].[LessonPriceProperty]...';
+
+
+--GO
+--CREATE TABLE [dbo].[LessonPriceProperty] (
+--    [PriceID]    INT NOT NULL,
+--    [PropertyID] INT NOT NULL,
+--    CONSTRAINT [PK_LessonPriceProperty] PRIMARY KEY CLUSTERED ([PriceID] ASC, [PropertyID] ASC)
+--);
 
 
 GO
-CREATE TABLE [dbo].[LessonPriceProperty] (
-    [PriceID]    INT NOT NULL,
-    [PropertyID] INT NOT NULL,
-    CONSTRAINT [PK_LessonPriceProperty] PRIMARY KEY CLUSTERED ([PriceID] ASC, [PropertyID] ASC)
-);
+--PRINT N'Creating [dbo].[LessonPriceSeries]...';
+
+
+--GO
+--CREATE TABLE [dbo].[LessonPriceSeries] (
+--    [PriceID]  INT NOT NULL,
+--    [Year]     INT NULL,
+--    [PeriodNo] INT NULL,
+--    [Status]   INT NULL,
+--    CONSTRAINT [PK_LessonPriceSeries] PRIMARY KEY CLUSTERED ([PriceID] ASC)
+--);
 
 
 GO
-PRINT N'Creating [dbo].[LessonPriceSeries]...';
+--PRINT N'Creating [dbo].[MerchandiseTransaction]...';
 
 
-GO
-CREATE TABLE [dbo].[LessonPriceSeries] (
-    [PriceID]  INT NOT NULL,
-    [Year]     INT NULL,
-    [PeriodNo] INT NULL,
-    [Status]   INT NULL,
-    CONSTRAINT [PK_LessonPriceSeries] PRIMARY KEY CLUSTERED ([PriceID] ASC)
-);
+--GO
+--CREATE TABLE [dbo].[MerchandiseTransaction] (
+--    [TransactionID] INT NOT NULL,
+--    [ProductID]     INT NOT NULL,
+--    CONSTRAINT [PK_MerchandiseTransaction] PRIMARY KEY CLUSTERED ([TransactionID] ASC, [ProductID] ASC)
+--);
 
 
-GO
-PRINT N'Creating [dbo].[MerchandiseTransaction]...';
+--GO
+--PRINT N'Creating [dbo].[MerchandiseTransactionType]...';
 
 
-GO
-CREATE TABLE [dbo].[MerchandiseTransaction] (
-    [TransactionID] INT NOT NULL,
-    [ProductID]     INT NOT NULL,
-    CONSTRAINT [PK_MerchandiseTransaction] PRIMARY KEY CLUSTERED ([TransactionID] ASC, [ProductID] ASC)
-);
+--GO
+--CREATE TABLE [dbo].[MerchandiseTransactionType] (
+--    [TransactionID]   INT           NOT NULL,
+--    [TransactionType] NVARCHAR (16) NULL,
+--    CONSTRAINT [PK_MerchandiseTransactionType] PRIMARY KEY CLUSTERED ([TransactionID] ASC)
+--);
 
 
-GO
-PRINT N'Creating [dbo].[MerchandiseTransactionType]...';
+--GO
+--PRINT N'Creating [dbo].[MerchandiseWindow]...';
 
 
-GO
-CREATE TABLE [dbo].[MerchandiseTransactionType] (
-    [TransactionID]   INT           NOT NULL,
-    [TransactionType] NVARCHAR (16) NULL,
-    CONSTRAINT [PK_MerchandiseTransactionType] PRIMARY KEY CLUSTERED ([TransactionID] ASC)
-);
+--GO
+--CREATE TABLE [dbo].[MerchandiseWindow] (
+--    [ProductID]   INT           IDENTITY (1, 1) NOT NULL,
+--    [ProductName] NVARCHAR (32) NOT NULL,
+--    [UnitPrice]   INT           NULL,
+--    [Status]      INT           NULL,
+--    CONSTRAINT [PK_MerchandiseWindow] PRIMARY KEY CLUSTERED ([ProductID] ASC)
+--);
 
 
-GO
-PRINT N'Creating [dbo].[MerchandiseWindow]...';
-
-
-GO
-CREATE TABLE [dbo].[MerchandiseWindow] (
-    [ProductID]   INT           IDENTITY (1, 1) NOT NULL,
-    [ProductName] NVARCHAR (32) NOT NULL,
-    [UnitPrice]   INT           NULL,
-    [Status]      INT           NULL,
-    CONSTRAINT [PK_MerchandiseWindow] PRIMARY KEY CLUSTERED ([ProductID] ASC)
-);
-
-
-GO
+--GO
 PRINT N'Creating [dbo].[Organization]...';
 
 
@@ -2302,3 +2302,1219 @@ PRINT N'Update complete.';
 
 
 GO
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonTime SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.Payment SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonAttendance SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.Settlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.ContractTrustTrack
+	(
+	TrustID int NOT NULL IDENTITY (1, 1),
+	ContractID int NOT NULL,
+	EventDate datetime NOT NULL,
+	TrustType nvarchar(8) NOT NULL,
+	SettlementID int NULL,
+	LessonID int NULL,
+	PaymentID int NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	PK_ContractTrustTrack PRIMARY KEY CLUSTERED 
+	(
+	TrustID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+
+GO
+
+CREATE TABLE [dbo].[Settlement](
+	[SettlementID] [int] IDENTITY(1,1) NOT NULL,
+	[SettlementDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_Settlement] PRIMARY KEY CLUSTERED 
+(
+	[SettlementID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+go
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_Settlement FOREIGN KEY
+	(
+	SettlementID
+	) REFERENCES dbo.Settlement
+	(
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_Payment FOREIGN KEY
+	(
+	PaymentID
+	) REFERENCES dbo.Payment
+	(
+	PaymentID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_LessonTime FOREIGN KEY
+	(
+	LessonID
+	) REFERENCES dbo.LessonTime
+	(
+	LessonID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.Settlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.ContractTrustSettlement
+	(
+	ContractID int NOT NULL,
+	SettlementID int NOT NULL,
+	TotalTrustAmount int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.ContractTrustSettlement ADD CONSTRAINT
+	PK_ContractTrustSettlement PRIMARY KEY CLUSTERED 
+	(
+	ContractID,
+	SettlementID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.ContractTrustSettlement ADD CONSTRAINT
+	FK_ContractTrustSettlement_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.ContractTrustSettlement ADD CONSTRAINT
+	FK_ContractTrustSettlement_Settlement FOREIGN KEY
+	(
+	SettlementID
+	) REFERENCES dbo.Settlement
+	(
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.ContractTrustSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.CourseContractTrust
+	(
+	ContractID int NOT NULL,
+	CurrentSettlement int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.CourseContractTrust ADD CONSTRAINT
+	PK_CourseContractTrust PRIMARY KEY CLUSTERED 
+	(
+	ContractID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.CourseContractTrust ADD CONSTRAINT
+	FK_CourseContractTrust_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.CourseContractTrust ADD CONSTRAINT
+	FK_CourseContractTrust_ContractTrustSettlement FOREIGN KEY
+	(
+	ContractID,
+	CurrentSettlement
+	) REFERENCES dbo.ContractTrustSettlement
+	(
+	ContractID,
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.CourseContractTrust SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustSettlement ADD
+	InitialTrustAmount int NOT NULL CONSTRAINT DF_ContractTrustSettlement_InitialTrustAmount DEFAULT 0
+GO
+ALTER TABLE dbo.ContractTrustSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonTimeSettlement
+	DROP CONSTRAINT FK_LessonTimeSettlement_Settlement
+GO
+ALTER TABLE dbo.ContractTrustTrack
+	DROP CONSTRAINT FK_ContractTrustTrack_Settlement
+GO
+ALTER TABLE dbo.ContractTrustSettlement
+	DROP CONSTRAINT FK_ContractTrustSettlement_Settlement
+GO
+ALTER TABLE dbo.Settlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustSettlement ADD CONSTRAINT
+	FK_ContractTrustSettlement_Settlement FOREIGN KEY
+	(
+	SettlementID
+	) REFERENCES dbo.Settlement
+	(
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ContractTrustSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_Settlement FOREIGN KEY
+	(
+	SettlementID
+	) REFERENCES dbo.Settlement
+	(
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonTimeSettlement ADD CONSTRAINT
+	FK_LessonTimeSettlement_Settlement FOREIGN KEY
+	(
+	SettlementID
+	) REFERENCES dbo.Settlement
+	(
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.LessonTimeSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContractTrust
+	DROP CONSTRAINT FK_CourseContractTrust_ContractTrustSettlement
+GO
+ALTER TABLE dbo.ContractTrustSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContractTrust ADD CONSTRAINT
+	FK_CourseContractTrust_ContractTrustSettlement FOREIGN KEY
+	(
+	ContractID,
+	CurrentSettlement
+	) REFERENCES dbo.ContractTrustSettlement
+	(
+	ContractID,
+	SettlementID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.CourseContractTrust SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+alter TABLE [dbo].[Settlement]
+	add 
+	[StartDate] [datetime] NOT NULL,
+	[EndExclusiveDate] [datetime] NOT NULL
+GO
+
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContractType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonPriceType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.Organization SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.EnterpriseCourseContract
+	(
+	ContractID int NOT NULL,
+	CompanyID int NOT NULL
+	)  ON [PRIMARY]
+GO
+DECLARE @v sql_variant 
+SET @v = N'•D¡‰'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'dbo', N'TABLE', N'EnterpriseCourseContract', N'COLUMN', N'CompanyID'
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	PK_EnterpriseCourseContract PRIMARY KEY CLUSTERED 
+	(
+	ContractID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	FK_EnterpriseCourseContract_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	FK_EnterpriseCourseContract_Organization FOREIGN KEY
+	(
+	CompanyID
+	) REFERENCES dbo.Organization
+	(
+	CompanyID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.EnterpriseCourseContent
+	(
+	ContractID int NOT NULL,
+	PriceID int NOT NULL,
+	Lessons int NULL,
+	ContractType int NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	PK_EnterpriseCourseContent PRIMARY KEY CLUSTERED 
+	(
+	ContractID,
+	PriceID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	FK_EnterpriseCourseContent_EnterpriseCourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.EnterpriseCourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	FK_EnterpriseCourseContent_LessonPriceType FOREIGN KEY
+	(
+	PriceID
+	) REFERENCES dbo.LessonPriceType
+	(
+	PriceID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	FK_EnterpriseCourseContent_CourseContractType FOREIGN KEY
+	(
+	ContractType
+	) REFERENCES dbo.CourseContractType
+	(
+	TypeID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract
+	DROP CONSTRAINT FK_EnterpriseCourseContract_Organization
+GO
+ALTER TABLE dbo.Organization SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract
+	DROP CONSTRAINT FK_EnterpriseCourseContract_CourseContract
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Tmp_EnterpriseCourseContract
+	(
+	ContractID int NOT NULL IDENTITY (1, 1),
+	CompanyID int NOT NULL,
+	Remark nvarchar(64) NULL,
+	Subject nvarchar(64) NULL,
+	ContractNo nvarchar(64) NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Tmp_EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+DECLARE @v sql_variant 
+SET @v = N'•D¡‰'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'dbo', N'TABLE', N'Tmp_EnterpriseCourseContract', N'COLUMN', N'CompanyID'
+GO
+SET IDENTITY_INSERT dbo.Tmp_EnterpriseCourseContract OFF
+GO
+IF EXISTS(SELECT * FROM dbo.EnterpriseCourseContract)
+	 EXEC('INSERT INTO dbo.Tmp_EnterpriseCourseContract (CompanyID)
+		SELECT CompanyID FROM dbo.EnterpriseCourseContract WITH (HOLDLOCK TABLOCKX)')
+GO
+ALTER TABLE dbo.EnterpriseCourseContent
+	DROP CONSTRAINT FK_EnterpriseCourseContent_EnterpriseCourseContract
+GO
+DROP TABLE dbo.EnterpriseCourseContract
+GO
+EXECUTE sp_rename N'dbo.Tmp_EnterpriseCourseContract', N'EnterpriseCourseContract', 'OBJECT' 
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	PK_EnterpriseCourseContract_1 PRIMARY KEY CLUSTERED 
+	(
+	ContractID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	FK_EnterpriseCourseContract_Organization FOREIGN KEY
+	(
+	CompanyID
+	) REFERENCES dbo.Organization
+	(
+	CompanyID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	FK_EnterpriseCourseContent_EnterpriseCourseContract1 FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.EnterpriseCourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.UserProfile SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.EnterpriseCourseMember
+	(
+	ContractID int NOT NULL,
+	UID int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD CONSTRAINT
+	PK_EnterpriseCourseMember PRIMARY KEY CLUSTERED 
+	(
+	ContractID,
+	UID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD CONSTRAINT
+	FK_EnterpriseCourseMember_EnterpriseCourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.EnterpriseCourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD CONSTRAINT
+	FK_EnterpriseCourseMember_UserProfile FOREIGN KEY
+	(
+	UID
+	) REFERENCES dbo.UserProfile
+	(
+	UID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseMember SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD
+	TotalCost int NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLesson SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.Payment SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.RegisterLessonEnterprise
+	(
+	RegisterID int NOT NULL,
+	ContractID int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD CONSTRAINT
+	PK_RegisterLessonEnterprise PRIMARY KEY CLUSTERED 
+	(
+	RegisterID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD CONSTRAINT
+	FK_RegisterLessonEnterprise_RegisterLesson FOREIGN KEY
+	(
+	RegisterID
+	) REFERENCES dbo.RegisterLesson
+	(
+	RegisterID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD CONSTRAINT
+	FK_RegisterLessonEnterprise_EnterpriseCourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.EnterpriseCourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.EnterpriseCoursePayment
+	(
+	PaymentID int NOT NULL,
+	ContractID int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.EnterpriseCoursePayment ADD CONSTRAINT
+	PK_EnterpriseCoursePayment PRIMARY KEY CLUSTERED 
+	(
+	PaymentID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseCoursePayment ADD CONSTRAINT
+	FK_EnterpriseCoursePayment_EnterpriseCourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.EnterpriseCourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCoursePayment ADD CONSTRAINT
+	FK_EnterpriseCoursePayment_Payment FOREIGN KEY
+	(
+	PaymentID
+	) REFERENCES dbo.Payment
+	(
+	PaymentID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.EnterpriseCoursePayment SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonTimeSettlement
+	DROP CONSTRAINT FK_LessonTimeSettlement_Settlement
+GO
+ALTER TABLE dbo.Settlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.LessonTimeSettlement
+	DROP COLUMN SettlementID
+GO
+ALTER TABLE dbo.LessonTimeSettlement SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractPayment
+	DROP CONSTRAINT FK_ContractPayment_CourseContract
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractPayment WITH NOCHECK ADD CONSTRAINT
+	FK_ContractPayment_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ContractPayment SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustTrack
+	DROP CONSTRAINT FK_ContractTrustTrack_CourseContract
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+DELETE FROM ContractTrustSettlement
+WHERE   (ContractID NOT IN
+                   (SELECT  ContractID
+                   FROM     CourseContract))
+go
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.BranchStore SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD
+	BranchID int NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD CONSTRAINT
+	FK_EnterpriseCourseContract_BranchStore FOREIGN KEY
+	(
+	BranchID
+	) REFERENCES dbo.BranchStore
+	(
+	BranchID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent
+	DROP CONSTRAINT FK_EnterpriseCourseContent_CourseContractType
+GO
+ALTER TABLE dbo.CourseContractType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent
+	DROP COLUMN ContractType
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.EnterpriseLessonType
+	(
+	TypeID int NOT NULL,
+	Status int NULL,
+	Description nvarchar(64) NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.EnterpriseLessonType ADD CONSTRAINT
+	PK_EnterpriseLessonType PRIMARY KEY CLUSTERED 
+	(
+	TypeID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.EnterpriseLessonType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD
+	TypeID int NULL
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD CONSTRAINT
+	FK_RegisterLessonEnterprise_EnterpriseLessonType FOREIGN KEY
+	(
+	TypeID
+	) REFERENCES dbo.EnterpriseLessonType
+	(
+	TypeID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+EXECUTE sp_rename N'dbo.EnterpriseCourseContent.PriceID', N'Tmp_TypeID', 'COLUMN' 
+GO
+EXECUTE sp_rename N'dbo.EnterpriseCourseContent.Tmp_TypeID', N'TypeID', 'COLUMN' 
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD
+	ListPrice int NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD CONSTRAINT
+	FK_EnterpriseCourseContent_EnterpriseLessonType FOREIGN KEY
+	(
+	TypeID
+	) REFERENCES dbo.EnterpriseLessonType
+	(
+	TypeID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent ADD
+	DurationInMinutes int NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent
+	DROP CONSTRAINT FK_EnterpriseCourseContent_LessonPriceType
+GO
+ALTER TABLE dbo.LessonPriceType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise
+	DROP CONSTRAINT FK_RegisterLessonEnterprise_EnterpriseLessonType
+GO
+ALTER TABLE dbo.EnterpriseLessonType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContent SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise ADD CONSTRAINT
+	FK_RegisterLessonEnterprise_EnterpriseCourseContent FOREIGN KEY
+	(
+	ContractID,
+	TypeID
+	) REFERENCES dbo.EnterpriseCourseContent
+	(
+	ContractID,
+	TypeID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.RegisterLessonEnterprise SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD
+	ValidFrom datetime NULL,
+	Expiration datetime NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.GroupingLesson SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseContract ADD
+	GroupingMemberCount int NOT NULL CONSTRAINT DF_EnterpriseCourseContract_GroupingMemberCount DEFAULT 1
+GO
+ALTER TABLE dbo.EnterpriseCourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD
+	GroupID int NULL
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD CONSTRAINT
+	FK_EnterpriseCourseMember_GroupingLesson FOREIGN KEY
+	(
+	GroupID
+	) REFERENCES dbo.GroupingLesson
+	(
+	GroupID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseMember SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseMember
+	DROP CONSTRAINT FK_EnterpriseCourseMember_GroupingLesson
+GO
+ALTER TABLE dbo.GroupingLesson SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.EnterpriseCourseMember ADD CONSTRAINT
+	FK_EnterpriseCourseMember_GroupingLesson FOREIGN KEY
+	(
+	GroupID
+	) REFERENCES dbo.GroupingLesson
+	(
+	GroupID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  SET NULL 
+	
+GO
+ALTER TABLE dbo.EnterpriseCourseMember SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLessonContract
+	DROP CONSTRAINT FK_RegisterLessonContract_CourseContract
+GO
+ALTER TABLE dbo.CourseContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.RegisterLessonContract WITH NOCHECK ADD CONSTRAINT
+	FK_RegisterLessonContract_CourseContract FOREIGN KEY
+	(
+	ContractID
+	) REFERENCES dbo.CourseContract
+	(
+	ContractID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.RegisterLessonContract SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustTrack
+	DROP CONSTRAINT FK_ContractTrustTrack_Payment
+GO
+ALTER TABLE dbo.Payment SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+ALTER TABLE dbo.ContractTrustTrack ADD CONSTRAINT
+	FK_ContractTrustTrack_Payment FOREIGN KEY
+	(
+	PaymentID
+	) REFERENCES dbo.Payment
+	(
+	PaymentID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  CASCADE 
+	
+GO
+ALTER TABLE dbo.ContractTrustTrack SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT

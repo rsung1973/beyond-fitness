@@ -40,9 +40,15 @@ namespace WebHome.Models.DataEntity
                     - (item.RegisterGroupID.HasValue ? item.GroupingLesson.LessonTime.Count : item.LessonTime.Count);
         }
 
-        public static int RemainedLessonCount(this CourseContract item)
+        public static int? RemainedLessonCount(this CourseContract item)
         {
-            return item.RegisterLessonContract.Count > 0 ? item.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount() : item.Lessons.Value;
+            return item.RegisterLessonContract.Count > 0
+                    ? item.CourseContractType.ContractCode == "CFA"
+                        ? item.Lessons
+                            - item.RegisterLessonContract.Sum(c => c.RegisterLesson.LessonTime.Count())
+                            - item.RegisterLessonContract.Sum(c => c.RegisterLesson.AttendedLessons)
+                        : item.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount()
+                    : item.Lessons.Value;
         }
 
 
@@ -54,6 +60,24 @@ namespace WebHome.Models.DataEntity
         public static String ContractNo(this CourseContract contract)
         {
             return contract.ContractNo != null ? String.Format("{0}-{1:00}", contract.ContractNo, contract.SequenceNo) : "--";
+        }
+
+        public static int? TotalPaidAmount(this CourseContract contract)
+        {
+            return contract.ContractPayment
+                .Select(c => c.Payment)
+                .Where(p => p.VoidPayment == null && p.TransactionType==(int)Naming.PaymentTransactionType.體能顧問費)
+                .Sum(c => c.PayoffAmount);
+        }
+
+        public static LessonPriceType OriginalSeriesPrice(this CourseContract item)
+        {
+            return item.LessonPriceType.SeriesID.HasValue
+                ? item.LessonPriceType
+                    .CurrentPriceSeries.AllLessonPrice
+                        .Where(p => p.DurationInMinutes == item.LessonPriceType.DurationInMinutes)
+                        .OrderBy(p => p.LowerLimit).FirstOrDefault()
+                : null;
         }
 
     }

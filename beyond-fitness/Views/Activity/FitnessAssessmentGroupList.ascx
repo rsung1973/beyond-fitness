@@ -100,7 +100,7 @@
     ModelSource<UserProfile> models;
     String _tableId;
     LessonFitnessAssessmentReport _model;
-    IQueryable<LessonFitnessAssessmentReport> _items;
+    IEnumerable<LessonFitnessAssessmentReport> _items;
 
     protected override void OnInit(EventArgs e)
     {

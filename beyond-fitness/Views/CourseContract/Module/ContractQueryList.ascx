@@ -8,16 +8,18 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
+<label class="label label-warning">合約狀態（狀態後<i class="fa fa-asterisk"></i> 表示合約已過期）</label>
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th data-class="expand">編號</th>
+            <th data-class="expand">合約編號</th>
             <th>分店</th>
             <th data-hide="phone">體能顧問</th>
             <th>學員姓名</th>
             <th data-hide="phone">生效日期</th>
             <th>合約名稱</th>
             <th data-hide="phone">剩餘/購買堂數</th>
+            <th data-hide="phone">合約總金額</th>
             <th data-hide="phone">服務項目</th>
             <th data-hide="phone">狀態</th>
             <th data-hide="phone">功能</th>        
@@ -25,55 +27,13 @@
     </thead>
     <tbody>
         <%  foreach (var item in _model)
-            { %>
-        <tr>
-            <td><%= item.ContractNo() %></td>
-            <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
-            <td><%= item.ServingCoach.UserProfile.FullName() %></td>
-            <td>
-                <%  if (item.CourseContractType.IsGroup==true)
-                    { %>
-                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
-                <%  }
-                    else
-                    { %>
-                <%= item.ContractOwner.FullName() %>
-                <%  } %>
-            </td>
-            <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
-            <td><%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)</td>
-            <td><%= item.RemainedLessonCount() %>/<%= item.Lessons %></td>
-            <td><%  var revision = item.CourseContractRevision; %>
-                <%= revision==null ? "新合約" : revision.Reason %></td>
-            <td><%= ((Naming.CourseContractStatus)item.Status).ToString() %>
-                <%= item.Expiration.Value<DateTime.Today ? "(*)" : null %>
-            </td>
-            <td nowrap="noWrap">
-                <%  if(revision==null)
-                    {   %>
-                    <a onclick="$global.viewContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-                    <%  if (item.Status > (int)Naming.CourseContractStatus.待審核 && item.ContractID>999)
-                        { %>
-                    <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
-                    <%  }
-                        else
-                        { %>
-                    <%  }
-                    }
-                    else
-                    {
-                        if (item.Status > (int)Naming.CourseContractStatus.待審核)
-                        { %>
-                    <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { revision.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-                    <%  }
-                        else
-                        { %>
-                    <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { revision.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-                    <%  }
-                    }   %>
-            </td>
-        </tr>
-        <%  } %>
+            {
+                Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.ascx", item);
+                foreach(var r in item.RevisionList)
+                {
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.ascx", r.CourseContract);
+                }
+            } %>
     </tbody>
 </table>
 
@@ -95,7 +55,7 @@
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
-            "order": [],
+            "order": [[0,"desc"]],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
@@ -124,6 +84,12 @@
                 $(data).appendTo($('body'));
             });
         };
+
+<%  if(_model.Count()>0)
+    {  %>
+        $('#btnDownloadContract').css('display', 'inline');
+<%  }  %>
+
     });
 </script>
 

@@ -19,7 +19,7 @@
                             <td colspan="2">合約編號：<%= _contract.ContractNo() %></td>
                         </tr>
                         <tr>
-                            <td>姓名：<%= _contract.ContractOwner.FullName() %></td>
+                            <td>姓名：<%= _contract.ContractOwner.RealName %></td>
                             <td>聯絡電話：<%= _contract.ContractOwner.Phone %></td>
                         </tr>
                     </tbody>
@@ -62,14 +62,14 @@
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);  %>
                         </td>
                         <td></td>
-                        <td>簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>主管簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：
                             <%  ViewBag.SignatureName = "GuardianSignature";
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner); %>
                         </td>
-                        <td>體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"/></td>
+                        <td>簽約體能顧問：<img src="<%= _contract.ServingCoach.UserProfile.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"/></td>
                     </tr>
                 </table>
             </div>

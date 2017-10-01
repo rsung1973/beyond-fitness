@@ -9,16 +9,38 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
+<div id="<%= _dialog %>" title="上課明細" class="bg-color-darken">
+    <!-- content -->
+    <%  Html.RenderPartial("~/Views/Accounting/Module/AttendanceAchievementDetails.ascx", _model); %>
+    <!-- end content -->
+    <script>
+        $('#<%= _dialog %>').dialog({
+            //autoOpen: false,
+            resizable: true,
+            modal: true,
+            width: "auto",
+            height: "auto",
+            title: "<h4 class='modal-title'><i class='fa-fw fa fa-table'></i>  上課明細：<%= _model.First().AsAttendingCoach.UserProfile.FullName() %></h4>",
+            close: function () {
+                $('#<%= _dialog %>').remove();
+            }
+        });
+    </script>
+</div>
+
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
+    String _dialog = "attendance" + DateTime.Now.Ticks;
+    IQueryable<LessonTime> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<LessonTime>)this.Model;
     }
 
 </script>

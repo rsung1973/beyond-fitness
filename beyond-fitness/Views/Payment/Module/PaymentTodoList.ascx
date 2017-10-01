@@ -116,17 +116,17 @@
 
         $('#<%= _tableId %>').dataTable({
             //"bPaginate": false,
-            //"pageLength": 30,
-            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-            "searching": false,
+            "pageLength": 30,
+            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            "searching": true,
             "ordering": true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                      "t" +
                      "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
-            "paging": false,
+            "paging": true,
             "info": true,
-            "order": [3],
+            "order": [[4,"desc"]],
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
             },

@@ -159,6 +159,18 @@
             forceParse: 0
         });
 
+        $('.form_month').datetimepicker({
+            language: 'zh-TW',
+            weekStart: 0,
+            todayBtn: 0,
+            clearBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 3,
+            minView: 3,
+            forceParse: 0
+        });
+
         $('.input_time').datetimepicker({
             language: 'zh-TW',
             weekStart: 0,

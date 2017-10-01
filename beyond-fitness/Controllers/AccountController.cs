@@ -504,7 +504,7 @@ namespace WebHome.Controllers
                     return RedirectToAction("Index", "CoachFacet");
 
                 case Naming.RoleID.Accounting:
-                    return RedirectToAction("StaffAchievement", "Report");
+                    return RedirectToAction("TrustIndex", "Accounting");
 
                 case Naming.RoleID.FreeAgent:
                     if (isJson)

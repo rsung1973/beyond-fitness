@@ -28,7 +28,7 @@
 
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
-    <%  Html.RenderPartial("~/Views/LessonPrice/Module/WidgeGrid.ascx"); %>
+    <%  Html.RenderPartial("~/Views/LessonPrice/Module/WidgetGrid.ascx"); %>
     <%  Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx"); %>
 </asp:Content>
 

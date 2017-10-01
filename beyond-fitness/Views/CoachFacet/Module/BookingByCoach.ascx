@@ -23,14 +23,15 @@
     <form class="smart-form" id="bookingForm" autofocus>
         <fieldset>
             <div class="row">
-                <section class="col col-6">
+                <section class="col col-4">
                     <label class="label">請選擇課程類別</label>
                     <label class="select">
-                        <select class="input-lg" id="lessonType">
+                        <select id="lessonType">
                             <option value="0">P.T session</option>
                             <option value="1">P.I session</option>
                             <option value="2">內部訓練</option>
                             <option value="3">體驗課程</option>
+                            <option value="4">企業方案</option>
                         </select>
                         <script>
                             $('#lessonType').on('change', function (evt) {
@@ -39,8 +40,7 @@
                                 $('input[name="userName"]').val('');
                                 $('#attendeeSelector').empty();
 
-                                switch(lessonType)
-                                {
+                                switch (lessonType) {
                                     case '0':
                                         $('.part0').css('display', 'block');
                                         break;
@@ -51,6 +51,7 @@
                                         $('.part0').css('display', 'none');
                                         break;
                                     case '3':
+                                    case '4':
                                         $('.part0').css('display', 'block');
                                         break;
 
@@ -63,18 +64,14 @@
                         <i class="icon-append fa fa-clock-o"></i>
                     </label>
                 </section>
-                <section class="col col-6">
+                <section class="col col-4">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
                         <i class="icon-append fa fa-calendar"></i>
-                        <input type="text" name="ClassDate" id="classDate" class="form-control input-lg date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.LessonDate) %>" placeholder="請輸入上課開始時間" />
+                        <input type="text" name="ClassDate" id="classDate" class="form-control input date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.LessonDate) %>" placeholder="請輸入上課開始時間" />
                     </label>
-                </section>
-            </div>
-        </fieldset>
-        <fieldset>
-            <div class="row">
-                <section class="col col-6">
+                </section>                
+<%--                <section class="col col-6">
                     <label class="label">請選擇上課長度</label>
                     <label class="select">
                         <select name="Duration" class="input-lg">
@@ -83,11 +80,11 @@
                         </select>
                         <i class="icon-append fa fa-file-word-o"></i>
                     </label>
-                </section>
-                <section class="col col-6">
+                </section>--%>
+                <section class="col col-4">
                     <label class="label">請選擇上課地點</label>
                     <label class="select">
-                        <select class="input-lg" name="BranchID">
+                        <select name="BranchID">
                             <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                         </select>
                         <i class="icon-append fa fa-file-word-o"></i>
@@ -96,12 +93,12 @@
             </div>
         </fieldset>
         <fieldset class="part0">
+            <label class="label">依學員姓名(暱稱)查詢</label>
             <div class="row">
-                <section class="col col-8">
-                    <%--<label class="label">請選擇上課學員</label>--%>
+                <section class="col col-10">
                     <label class="input">
                         <i class="icon-prepend fa fa-search"></i>
-                        <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名" />
+                        <input type="text" name="userName" maxlength="20" placeholder="請輸入學員姓名(暱稱)" />
                         <script>
                             $('#btnAttendeeQuery').on('click', function (evt) {
                                 var userName = $('input[name="userName"]').val();
@@ -121,12 +118,16 @@
                                     $('#attendeeSelector').load('<%= Url.Action("TrialLearnerSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
                                         hideLoading();
                                     });
+                                } else if ($('#lessonType').val() == '4') {
+                                    $('#attendeeSelector').load('<%= Url.Action("AttendeeSelector","EnterpriseProgram") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
                                 }
                             });
                         </script>
                     </label>
                 </section>
-                <section class="col col-4">
+                <section class="col col-2">
                     <button id="btnAttendeeQuery" class="btn bg-color-blue btn-sm" type="button">查詢</button>
                 </section>
             </div>
@@ -153,7 +154,7 @@
                         });
                         break;
                     case '1':
-                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize()+'&trainingBySelf=1', function (data) {
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize() + '&trainingBySelf=1', function (data) {
                             if (data.result) {
                                 smartAlert(data.message);
                                 callback();
@@ -182,6 +183,16 @@
                             }
                         });
                         break;
+                    case '4':
+                        $.post('<%= Url.Action("CommitBookingByCoach","EnterpriseProgram") %>', $('#bookingForm').serialize(), function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
 
                 }
             };
@@ -197,7 +208,8 @@
             startView: 1,
             minView: 0,
             minuteStep: 30,
-            forceParse: 0
+            forceParse: 0,
+            startDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>'
         });
     </script>
                 </div>

@@ -171,27 +171,31 @@ namespace WebHome.Controllers
             }
             else
             {
-
-                LessonAttendance attendance = model.LessonTime.LessonAttendance;
-                if (attendance == null)
+                if (model.LessonTime.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
                 {
-                    attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
-                    attendance.CompleteDate = DateTime.Now;
                     models.SubmitChanges();
-                    foreach (var r in model.LessonTime.GroupingLesson.RegisterLesson)
-                    {
-                        models.CheckLearnerQuestionnaireRequest(r);
-                    }
                 }
                 else
                 {
-                    attendance.CompleteDate = DateTime.Now;
-                    models.SubmitChanges();
-                }
 
-                var timeItem = model.LessonTime;
-                if (timeItem.RegisterLesson.GroupingMemberCount > 1)
-                {
+                    LessonAttendance attendance = model.LessonTime.LessonAttendance;
+                    if (attendance == null)
+                    {
+                        attendance = model.LessonTime.LessonAttendance = new LessonAttendance { };
+                        attendance.CompleteDate = DateTime.Now;
+                        models.SubmitChanges();
+                        foreach (var r in model.LessonTime.GroupingLesson.RegisterLesson)
+                        {
+                            models.CheckLearnerQuestionnaireRequest(r);
+                        }
+                    }
+                    else
+                    {
+                        attendance.CompleteDate = DateTime.Now;
+                        models.SubmitChanges();
+                    }
+
+                    var timeItem = model.LessonTime;
                     var group = timeItem.GroupingLesson;
                     var lesson = group.RegisterLesson.First();
                     if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= group.LessonTime.Count(t => t.LessonAttendance != null))
@@ -200,15 +204,6 @@ namespace WebHome.Controllers
                         {
                             r.Attended = (int)Naming.LessonStatus.課程結束;
                         }
-                        models.SubmitChanges();
-                    }
-                }
-                else
-                {
-                    var lesson = timeItem.RegisterLesson;
-                    if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.LessonTime.Count(t => t.LessonAttendance != null))
-                    {
-                        lesson.Attended = (int)Naming.LessonStatus.課程結束;
                         models.SubmitChanges();
                     }
                 }

@@ -49,6 +49,9 @@
                                         <li>
                                             <a href="#mystudentlist_tab" data-toggle="tab">學員清單</a>
                                         </li>
+                                        <li>
+                                            <a href="#contractlist_tab" data-toggle="tab">合約到期(前)清單</a>
+                                        </li>
                                         <li class="">
                                             <a href="#birthdaylist_tab" data-toggle="tab">生日提醒</a>
                                         </li>
@@ -71,6 +74,11 @@
                                                 { %>
                                             <%  Html.RenderPartial("~/Views/CoachFacet/Module/LearnerListByCoach.ascx",_coach); %>
                                             <%  } %>
+                                            <!-- end widget -->
+                                        </div>
+                                        <div class="tab-pane fade" id="contractlist_tab">
+                                            <!-- Widget ID (each widget will need unique ID)-->
+                                            <%  Html.RenderPartial("~/Views/CoachFacet/Module/ExpiringContractList.ascx", _model); %>
                                             <!-- end widget -->
                                         </div>
                                         <div class="tab-pane fade" id="birthdaylist_tab">

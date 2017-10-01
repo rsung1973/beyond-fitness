@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.1.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+      <SnippetType>SurroundsWith</SnippetType>
+    </SnippetTypes>
+    <Title>RenderPartial</Title>
+    <Author>my</Author>
+    <Description>RenderPartial</Description>
+    <HelpUrl>
+    </HelpUrl>
+    <Shortcut>RenderPartial</Shortcut>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal Editable="true">
+        <ID>Accounting</ID>
+        <ToolTip>Accounting</ToolTip>
+        <Default>Accounting</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>AttendanceAchievementDetails</ID>
+        <ToolTip>AttendanceAchievementDetails</ToolTip>
+        <Default>AttendanceAchievementDetails</Default>
+        <Function>
+        </Function>
+      </Literal>
+    </Declarations>
+    <Code Language="HTML" Delimiter="$"><![CDATA[<%  Html.RenderPartial("~/Views/$Accounting$/Module/$AttendanceAchievementDetails$.ascx", _model); %>]]></Code>
+  </Snippet>
+</CodeSnippet>

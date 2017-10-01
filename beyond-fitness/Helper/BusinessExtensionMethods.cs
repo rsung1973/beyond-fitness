@@ -18,12 +18,15 @@ namespace WebHome.Helper
         public static void AttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item)
                     where TEntity : class, new()
         {
-            LessonAttendance attendance = item.LessonAttendance;
-            if (attendance == null)
-                attendance = item.LessonAttendance = new LessonAttendance { };
-            attendance.CompleteDate = DateTime.Now;
+            if (!item.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
+            {
+                LessonAttendance attendance = item.LessonAttendance;
+                if (attendance == null)
+                    attendance = item.LessonAttendance = new LessonAttendance { };
+                attendance.CompleteDate = DateTime.Now;
 
-            models.SubmitChanges();
+                models.SubmitChanges();
+            }
 
             var lesson = item.RegisterLesson;
             if (lesson.Lessons - (lesson.AttendedLessons ?? 0) <= lesson.GroupingLesson.LessonTime.Count(t => t.LessonAttendance != null))
@@ -511,17 +514,32 @@ namespace WebHome.Helper
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
                         .Where(r => r.IntuitionCharge != null);
 
-            Utility.Logger.Debug(
-            String.Join("\r\n", lessons.Select(r => r.RegisterID + "\t"
-                + r.IntuitionCharge.Payment + "\t"
-                + r.IntuitionCharge.FeeShared + "\t"
-                + r.LessonPriceType.CoachPayoff + "\t"
-                + r.LessonPriceType.CoachPayoffCreditCard + "\t"
-                + r.GroupingLessonDiscount.PercentageOfDiscount + "\t"
-                )));
+            //Utility.Logger.Debug(
+            //String.Join("\r\n", lessons.Select(r => r.RegisterID + "\t"
+            //    + r.IntuitionCharge.Payment + "\t"
+            //    + r.IntuitionCharge.FeeShared + "\t"
+            //    + r.LessonPriceType.CoachPayoff + "\t"
+            //    + r.LessonPriceType.CoachPayoffCreditCard + "\t"
+            //    + r.GroupingLessonDiscount.PercentageOfDiscount + "\t"
+            //    )));
+
 
             var fullAchievement = lessons.Where(r => r.IntuitionCharge.Payment == "Cash" || r.IntuitionCharge.FeeShared == 0).Sum(l => l.LessonPriceType.CoachPayoff * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
                 + lessons.Where(r => r.IntuitionCharge.Payment == "CreditCard" && r.IntuitionCharge.FeeShared == 1).Sum(l => l.LessonPriceType.CoachPayoffCreditCard * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
+
+            //if (items.First().AttendingCoach == 2089)
+            //{
+            //    Utility.Logger.Debug(items.First().AttendingCoach + "=>" + lessons.Sum(l => l.LessonPriceType.ListPrice * l.GroupingLessonDiscount.PercentageOfDiscount / 100) + ":" + fullAchievement);
+            //    foreach(var t in lessons.Where(r => r.IntuitionCharge.Payment == "Cash" || r.IntuitionCharge.FeeShared == 0))
+            //    {
+            //        Utility.Logger.Debug(t.LessonPriceType.PriceID + ":" + t.LessonPriceType.ListPrice + ":CoachPayoff:" + t.LessonPriceType.CoachPayoff);
+            //    }
+            //    foreach (var t in lessons.Where(r => r.IntuitionCharge.Payment == "CreditCard" && r.IntuitionCharge.FeeShared == 1))
+            //    {
+            //        Utility.Logger.Debug(t.LessonPriceType.PriceID + ":" + t.LessonPriceType.ListPrice + ":CoachPayoffCreditCard:" + t.LessonPriceType.CoachPayoffCreditCard);
+            //    }
+
+            //}
 
             lessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
                 .Select(l => l.GroupingLesson)
@@ -533,6 +551,39 @@ namespace WebHome.Helper
 
             return (fullAchievement ?? 0) + (halfAchievement ?? 0);
         }
+
+        public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<LessonTime> items, out int shares)
+            where TEntity : class, new()
+        {
+            shares = 0;
+            var lessons = items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+                .Select(l => l.GroupingLesson)
+                        .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+
+            var fullAchievement = lessons
+                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
+
+            lessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+                .Select(l => l.GroupingLesson)
+                        .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+
+            var halfAchievement = lessons
+                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) / 2;
+
+            shares = ((int?)items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+                .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) ?? 0)
+                + ((int?)items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+                .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) / 2 ?? 0);
+
+            return (fullAchievement ?? 0) + (halfAchievement ?? 0);
+        }
+
 
         public static IQueryable<TuitionAchievement> GetTuitionAchievement<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month)
             where TEntity : class, new()
@@ -731,7 +782,7 @@ namespace WebHome.Helper
             {
                 return models.GetTable<CourseContract>()
                     .Where(c => c.CourseContractRevision == null)
-                    .Where(c => (c.AgentID == agent.UID || c.FitnessConsultant==agent.UID) && c.Status == (int)Naming.CourseContractStatus.草稿);
+                    .Where(c => (c.AgentID == agent.UID || c.FitnessConsultant == agent.UID) && c.Status == (int)Naming.CourseContractStatus.草稿);
             }
         }
 
@@ -760,14 +811,14 @@ namespace WebHome.Helper
             return items;
         }
 
-        public static IQueryable<CourseContract> FilterByBranchStoreManager<TEntity>(this ModelSource<TEntity> models,IQueryable<CourseContract> items, UserProfile agent)
+        public static IQueryable<CourseContract> FilterByBranchStoreManager<TEntity>(this ModelSource<TEntity> models, IQueryable<CourseContract> items, UserProfile agent)
             where TEntity : class, new()
         {
-            return items.Join(models.GetTable<LessonPriceType>()
+            return items.Join(models.GetTable<CourseContractExtension>()
                     .Join(models.GetTable<BranchStore>()
                             .Where(b => b.ManagerID == agent.UID || b.ViceManagerID == agent.UID),
                         p => p.BranchID, b => b.BranchID, (p, b) => p),
-                c => c.PriceID, p => p.PriceID, (c, p) => c);
+                c => c.ContractID, p => p.ContractID, (c, p) => c);
         }
 
         public static IQueryable<CourseContract> GetContractToAllowByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile agent)
@@ -799,7 +850,7 @@ namespace WebHome.Helper
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
-                    r => r.RevisionID, c => c.ContractID, (r, c) => r);
+                    r => r.OriginalContract, c => c.ContractID, (r, c) => r);
             }
             else if (agent.IsAssistant())
             {
@@ -860,7 +911,7 @@ namespace WebHome.Helper
             if (agent.IsManager() || agent.IsViceManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
-                    r => r.RevisionID, c => c.ContractID, (r, c) => r);
+                    r => r.OriginalContract, c => c.ContractID, (r, c) => r);
             }
             else if (agent.IsAssistant())
             {
@@ -884,9 +935,14 @@ namespace WebHome.Helper
             var items = models.GetTable<CourseContract>()
                 .Where(c => c.CourseContractRevision == null)
                 .Where(c => c.Status == (int)Naming.CourseContractStatus.待審核);
-            if (agent.IsManager() || agent.IsViceManager())
+            if (agent.IsManager())
             {
                 items = models.FilterByBranchStoreManager(items, agent);
+            }
+            else if (agent.IsViceManager())
+            {
+                items = models.FilterByBranchStoreManager(items, agent)
+                    .Where(c => c.AgentID != agent.UID);
             }
             else if (agent.IsAssistant())
             {
@@ -904,10 +960,16 @@ namespace WebHome.Helper
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待審核);
-            if (agent.IsManager() || agent.IsViceManager())
+            if (agent.IsManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
-                    r => r.RevisionID, c => c.ContractID, (r, c) => r);
+                    r => r.OriginalContract, c => c.ContractID, (r, c) => r);
+            }
+            else if (agent.IsViceManager())
+            {
+                items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent)
+                        .Where(c => c.AgentID != agent.UID),
+                    r => r.OriginalContract, c => c.ContractID, (r, c) => r);
             }
             else if (agent.IsAssistant())
             {
@@ -936,7 +998,7 @@ namespace WebHome.Helper
             String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.CourseContract.ContractNo + ".pdf");
             if (createNew == true || !File.Exists(pdfFile))
             {
-                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment") + "?revisionID=" + item.RevisionID;
+                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment") + "?pdf=1&revisionID=" + item.RevisionID;
                 viewUrl.ConvertHtmlToPDF(pdfFile, 20);
             }
             return pdfFile;
@@ -1027,6 +1089,228 @@ namespace WebHome.Helper
             }
 
             return items;
+        }
+
+        public static CourseContract InitiateCourseContract<TEntity>(this ModelSource<TEntity> models, CourseContractViewModel viewModel, UserProfile profile, LessonPriceType lessonPrice)
+            where TEntity : class, new()
+        {
+            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
+            if (item == null)
+            {
+                item = new CourseContract
+                {
+                    //AgentID = profile.UID,  //lessonPrice.BranchStore.ManagerID.Value,
+                    CourseContractExtension = new Models.DataEntity.CourseContractExtension
+                    {
+                        BranchID = lessonPrice.BranchID.Value
+                    }
+                };
+                models.GetTable<CourseContract>().InsertOnSubmit(item);
+            }
+
+            item.AgentID = profile.UID;
+            item.Status = (int)Naming.CourseContractStatus.待簽名;  //  (int)checkInitialStatus(viewModel, profile);
+            item.CourseContractLevel.Add(new CourseContractLevel
+            {
+                LevelDate = DateTime.Now,
+                ExecutorID = profile.UID,
+                LevelID = item.Status
+            });
+
+            item.ContractType = viewModel.ContractType.Value;
+            item.ContractDate = DateTime.Now;
+            item.Subject = viewModel.Subject;
+            item.ValidFrom = DateTime.Today;
+            item.Expiration = DateTime.Today.AddMonths(18);
+            item.OwnerID = viewModel.OwnerID.Value;
+            item.SequenceNo = 0;// viewModel.SequenceNo;
+            item.Lessons = viewModel.Lessons;
+            item.PriceID = viewModel.PriceID.Value;
+            item.Remark = viewModel.Remark;
+            item.FitnessConsultant = viewModel.FitnessConsultant.Value;
+            //item.Status = viewModel.Status;
+            if (viewModel.UID != null && viewModel.UID.Length > 0)
+            {
+                models.DeleteAllOnSubmit<CourseContractMember>(m => m.ContractID == item.ContractID);
+                item.CourseContractMember.AddRange(viewModel.UID.Select(u => new CourseContractMember
+                {
+                    UID = u
+                }));
+            }
+            models.SubmitChanges();
+
+            item.TotalCost = item.Lessons * item.LessonPriceType.ListPrice;
+            if (item.CourseContractType.GroupingLessonDiscount != null)
+            {
+                item.TotalCost = item.TotalCost * item.CourseContractType.GroupingLessonDiscount.GroupingMemberCount * item.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+            }
+            models.SubmitChanges();
+
+            foreach (var uid in viewModel.UID)
+            {
+                models.ExecuteCommand("update UserProfileExtension set CurrentTrial = null where UID = {0}", uid);
+            }
+
+            return item;
+        }
+
+        public static LessonPriceType CurrentTrialLessonPrice<TEntity>(this ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.體驗課程).FirstOrDefault();
+        }
+
+        public static LessonPriceType CurrentPISessionPrice<TEntity>(this ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.自主訓練).FirstOrDefault();
+        }
+
+        public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate,DateTime endExclusiveDate)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<ContractTrustTrack>().Where(t => t.EventDate >= startDate && t.EventDate < endExclusiveDate)
+                    .Where(t => !t.SettlementID.HasValue);
+
+            if(items.Count()>0)
+            {
+                Settlement settlement = new Settlement
+                {
+                    SettlementDate = DateTime.Now,
+                    StartDate = startDate,
+                    EndExclusiveDate = endExclusiveDate
+                };
+                models.GetTable<Settlement>().InsertOnSubmit(settlement);
+                models.SubmitChanges();
+
+                models.ExecuteCommand(@"INSERT INTO ContractTrustSettlement
+                       (ContractID, SettlementID, TotalTrustAmount, InitialTrustAmount)
+                        SELECT  s.ContractID, {0}, t.TotalTrustAmount, t.TotalTrustAmount
+                        FROM     (SELECT  a.ContractID, MAX(a.SettlementID) AS SettlementID
+                        FROM     ContractTrustSettlement AS a INNER JOIN
+                                       CourseContract AS b ON a.ContractID = b.ContractID
+                        WHERE   (b.Status = {1})
+                        GROUP BY a.ContractID) AS s INNER JOIN ContractTrustSettlement AS t 
+                            ON s.ContractID = t.ContractID AND s.SettlementID = t.SettlementID",
+                    settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+
+                models.ExecuteCommand(@"UPDATE CourseContractTrust
+                        SET        CurrentSettlement = {0}
+                        FROM     CourseContractTrust INNER JOIN
+                                       CourseContract ON CourseContractTrust.ContractID = CourseContract.ContractID
+                        WHERE   (CourseContract.Status = {1})", settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+
+                models.ExecuteCommand(@"INSERT INTO CourseContractTrust
+                                           (ContractID, CurrentSettlement)
+                            SELECT  a.ContractID, b.SettlementID
+                            FROM     CourseContract AS a INNER JOIN
+                                           ContractTrustSettlement AS b ON a.ContractID = b.ContractID
+                            WHERE   (b.SettlementID = {0}) AND (a.ContractID NOT IN
+                                               (SELECT  ContractID
+                                               FROM     CourseContractTrust)) AND (a.Status = {1})", 
+                    settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+
+                foreach (var item in items.GroupBy(t => t.ContractID))
+                {
+                    var contract = models.GetTable<CourseContract>().Where(t => t.ContractID == item.Key).First();
+                    ContractTrustSettlement contractTrustSettlement;
+
+                    if (contract.CourseContractTrust == null)
+                    {
+                        contract.CourseContractTrust = new CourseContractTrust
+                        {
+                            CurrentSettlement = settlement.SettlementID
+                        };
+                        contractTrustSettlement = new ContractTrustSettlement
+                        {
+                            ContractID = contract.ContractID,
+                            SettlementID = settlement.SettlementID,
+                            InitialTrustAmount = 0,
+                            TotalTrustAmount = 0
+                        };
+
+                        models.GetTable<ContractTrustSettlement>().InsertOnSubmit(contractTrustSettlement);
+                    }
+                    else
+                    {
+                        var currentTrustSettlement = contract.CourseContractTrust.ContractTrustSettlement;
+                        if(currentTrustSettlement.SettlementID!=settlement.SettlementID)
+                        {
+                            contractTrustSettlement = new ContractTrustSettlement
+                            {
+                                ContractID = contract.ContractID,
+                                SettlementID = settlement.SettlementID,
+                                InitialTrustAmount = currentTrustSettlement.TotalTrustAmount,
+                                TotalTrustAmount = currentTrustSettlement.TotalTrustAmount
+                            };
+
+                            models.GetTable<ContractTrustSettlement>().InsertOnSubmit(contractTrustSettlement);
+                        }
+                        else
+                        {
+                            contractTrustSettlement = currentTrustSettlement;
+                        }
+                    }
+
+                    foreach (var trust in item)
+                    {
+                        trust.SettlementID = settlement.SettlementID;
+                        switch (trust.TrustType)
+                        {
+                            case "B":
+                            case "T":
+                                contractTrustSettlement.TotalTrustAmount += trust.Payment.PayoffAmount ?? 0;
+                                break;
+
+                            case "N":
+                                var lesson = trust.LessonTime.RegisterLesson;
+                                contractTrustSettlement.TotalTrustAmount -= (lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
+                                break;
+
+                            case "X":
+                            case "S":
+                                contractTrustSettlement.TotalTrustAmount -= trust.Payment.PayoffAmount ?? 0;
+                                break;
+                        }
+                    }
+
+                    models.SubmitChanges();
+                }
+
+            }
+        }
+
+        public static IEnumerable<UserProfile> CheckOverlapedBooking<TEntity>(this ModelSource<TEntity> models, LessonTime timeItem, RegisterLesson lesson, LessonTime source = null)
+            where TEntity : class, new()
+        {
+            int durationHours = (timeItem.ClassTime.Value.Minute + timeItem.DurationInMinutes.Value + 59) / 60;
+            IQueryable<LessonTimeExpansion> items;
+            if (source == null)
+            {
+                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+                    && t.Hour >= timeItem.ClassTime.Value.Hour
+                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours));
+            }
+            else
+            {
+                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+                    && t.Hour >= timeItem.ClassTime.Value.Hour
+                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours)
+                    && t.LessonID != source.LessonID);
+            }
+
+            if (lesson.GroupingMemberCount > 1)
+            {
+                return items.Select(t => t.RegisterLesson)
+                    .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterGroupID == lesson.RegisterGroupID),
+                        t => t.UID, l => l.UID, (t, l) => l)
+                    .Select(l => l.UserProfile);
+            }
+            else
+            {
+                return items.Select(t => t.RegisterLesson.UserProfile)
+                    .Where(u => u.UID == lesson.UID);
+            }
         }
 
 

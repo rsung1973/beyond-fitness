@@ -570,7 +570,6 @@
                                                                <th class="text-center">學員</th>
                                                                <th class="text-center">體能顧問</th>
                                                                <th class="text-center">到期日</th>
-                                                               <th class="text-center">是否過期</th>
                                                             </tr>
                                                          </thead>
                                                          <tbody>
@@ -579,14 +578,12 @@
                                                                <td class="text-center">劉思琳（加菲）</td>
                                                                <td class="text-center">黃政浩（比爾）</td>
                                                                <td class="text-center">2017/09/10</td> 
-                                                               <td class="text-center">是</td>
                                                             </tr> 
                                                              <tr>
                                                                <td>CPA201701010001-00</td>
                                                                <td class="text-center">劉思琳（加菲）</td>
                                                                <td class="text-center">黃政浩（比爾）</td>
                                                                <td class="text-center">2017/09/10</td> 
-                                                               <td  class="text-center">--</td>
                                                             </tr> 
                                                          </tbody>
                                                       </table>  
@@ -1107,7 +1104,7 @@
                                        <button class="btn bg-color-blue btn-sm" type="button">查詢</button>
                                     </section>
                                  </div>
-                                 <div class="row" id="searchStudentResult" style="display: none">
+                                 <div class="row" id="searchStudentResult">
                                     <section class="col col-12">
                                        <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
                                        <label class="radio state-disabled">
@@ -1141,9 +1138,14 @@
                                           </span>
                                        </label>
                                        <label class="radio">
+                                          <input type="radio" name="searchNameRadio" disabled="disabled">
+                                          <i></i>劉麗珍(駱媽媽)｜駱哥哥｜駱妹妹｜駱弟弟【1對1體能顧問課程-家庭共享(60分鐘)】/ 剩餘33堂 / 購買110堂 （已預約未完成上課2堂）                                                                                    
+                                       </label>
+ <!--                                      <label class="radio">
                                           <input type="radio" name="searchNameRadio">
                                           <i></i>立即新增體驗學員
                                        </label>
+
                                        <div class="row"> 
                                           <section class="col col-4">
                                              <label class="label">請輸入體驗學員姓名</label>
@@ -1167,8 +1169,9 @@
                                                 <i class="icon-append fa fa-file-word-o"></i>
                                              </label>
                                           </section>                                                            
-                                       </div>                              
+                                       </div>  -->                            
                                     </section>
+<!--
                                     <section  class="col col-12">
                                        <div class="inline-group">
                                           <label class="radio">
@@ -1182,8 +1185,10 @@
                                              <i></i>陳小瓦</label>
                                        </div>
                                     </section>
+-->
                                  </div>
                            </fieldset>
+
                         </form>                           
                      </div>
                      <div class="tab-pane fade" id="selfevent_tab">

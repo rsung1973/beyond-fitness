@@ -43,7 +43,32 @@
                     <li>
                         <a href="javascript:selectInspectedCoach(null,'全部');">全部</a>
                     </li>
-                    <%  if (_model.IsAssistant())
+                    <%  if (_model.IsAssistant() || _model.IsManager() || _model.IsViceManager())
+                        {
+                            IQueryable<ServingCoach> items;
+                            if(_model.IsManager() || _model.IsViceManager())
+                            {
+                                items = _model.GetServingCoachInSameStore(models);
+                            }
+                            else
+                            {
+                                items = models.GetTable<ServingCoach>();
+                            }
+                            foreach (var item in items)
+                            { %>
+                    <li>
+                        <a href="javascript:selectInspectedCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.FullName() %>');"><%= item.UserProfile.FullName() %></a>
+                    </li>
+                    <%      }
+                        }
+                        else
+                        {   %>
+                    <li>
+                        <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
+                    </li>
+                    <%  } %>
+
+<%--                    <%  if (_model.IsAssistant())
                         {
                             var items = models.GetTable<ServingCoach>();
                             foreach (var item in items)
@@ -58,7 +83,7 @@
                     <li>
                         <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
                     </li>
-                    <%  } %>
+                    <%  } %>--%>
                 </ul>
             </div>
         </div>

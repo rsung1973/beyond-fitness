@@ -45,7 +45,7 @@
 
                                     <!-- Divider -->
                                     <div class="hr1" style="margin-bottom: 10px;"></div>
-                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>" class="btn-system btn-small">繼續新增教練 <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
+                                    <p><a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddCoach") %>" class="btn-system btn-small">繼續新增體能顧問 <i class="fa fa-user-plus" aria-hidden="true"></i></a></p>
                                 </div>
                             </div>
                         </div>

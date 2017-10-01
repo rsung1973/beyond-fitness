@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="<%= _dialog %>" title="待辦事項：服務申請(<%= ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)" class="bg-color-darken">
+<div id="<%= _dialog %>" title="待辦事項：服務申請(<%= _viewModel.Status==(int)Naming.CourseContractStatus.待確認 ? "待審核" : ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)" class="bg-color-darken">
     <!-- content -->
     <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
         <thead>
@@ -26,24 +26,24 @@
             <tr>
                 <td><%= item.ServingCoach.UserProfile.FullName() %></td>
                 <td>
-                    <%  if (item.CourseContractType.IsGroup==true)
+                    <%  if (r.SourceContract.CourseContractType.IsGroup==true)
                         { %>
-                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
+                <%= String.Join("/",r.SourceContract.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName())) %>
                     <%  }
                         else
                         { %>
-                <%= item.ContractOwner.FullName() %>
+                <%= r.SourceContract.ContractOwner.FullName() %>
                     <%  } %>
                 </td>
                 <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
                 <td>
                     <%  if(_viewModel.Status == (int)Naming.CourseContractStatus.待確認)
                         {   %>
-                    <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待簽名)
                         {   %>
-                    <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
@@ -65,7 +65,7 @@
             modal: true,
             width: "auto",
             height: "auto",
-            title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：新合約(<%= ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)</h4>",
+            title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：服務申請(<%= _viewModel.Status==(int)Naming.CourseContractStatus.待確認 ? "待審核" : ((Naming.CourseContractStatus?)_viewModel.Status).ToString() %>)</h4>",
             close: function () {
                 $('#<%= _dialog %>').remove();
             }
@@ -84,11 +84,18 @@
             };
 
             $('#<%= _tableId %>').dataTable({
-                "sDom": "",
-                "autoWidth": true,
+                //"bPaginate": false,
                 "pageLength": 30,
                 "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-                "order": [],
+                "searching": true,
+                "ordering": true,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                         "t" +
+                         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "autoWidth": true,
+                "paging": true,
+                "info": true,
+                "order": [[3, "desc"]],
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
