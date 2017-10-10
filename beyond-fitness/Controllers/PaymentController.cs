@@ -240,7 +240,7 @@ namespace WebHome.Controllers
                 preparePayment(viewModel, profile, item);
 
                 item.ContractPayment.ContractID = contract.ContractID;
-                item.PaymentTransaction.BranchID = contract.CourseContractExtension.BranchID;
+                item.PaymentTransaction.BranchID = viewModel.SellerID.Value;
 
                 models.SubmitChanges();
 
@@ -528,10 +528,10 @@ namespace WebHome.Controllers
                     trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
                     no = viewModel.InvoiceNo.Substring(2);
                     var invoice = models.GetTable<InvoiceItem>().Where(i => i.TrackCode == trackCode && i.No == no).FirstOrDefault();
-                    if (invoice != null && invoice.Payment.Any(p => p.VoidPayment != null))
-                    {
-                        ModelState.AddModelError("InvoiceNo", "發票號碼重複!!");
-                    }
+                    //if (invoice != null && invoice.Payment.Any(p => p.VoidPayment != null))
+                    //{
+                    //    ModelState.AddModelError("InvoiceNo", "發票號碼重複!!");
+                    //}
                     return invoice;
                 }
             }
@@ -704,7 +704,8 @@ namespace WebHome.Controllers
             var profile = HttpContext.GetUser();
 
             var items = models.GetTable<Payment>().Where(v => v.PaymentID == viewModel.PaymentID)
-                            .Join(models.GetTable<Payment>(), p => p.InvoiceID, v => v.InvoiceID, (p, v) => v);
+                            .Join(models.GetTable<Payment>(), p => p.InvoiceID, v => v.InvoiceID, (p, v) => v)
+                            .Where(p => p.VoidPayment != null);
             var item = items.Select(p => p.VoidPayment).FirstOrDefault();
 
             if (item != null)
@@ -728,9 +729,15 @@ namespace WebHome.Controllers
         public ActionResult ExecuteVoidPaymentStatus(PaymentViewModel viewModel)
         {
             var profile = HttpContext.GetUser();
+
+            if (profile == null)
+            {
+                return View("~/Shared/JsAlert.ascx", model: "連線已中斷，請重新登入!!");
+            }
+
             var items = models.GetTable<Payment>().Where(v => v.PaymentID == viewModel.PaymentID)
                             .Join(models.GetTable<Payment>(), p => p.InvoiceID, v => v.InvoiceID, (p, v) => v)
-                        .Select(p => p.VoidPayment);
+                        .Join(models.GetTable<VoidPayment>(), p => p.PaymentID, v => v.VoidID, (p, v) => v);
 
             if (items.Count() > 0)
             {
@@ -867,6 +874,16 @@ namespace WebHome.Controllers
                 if (items.Count>0)
                 {
                     models.SubmitChanges();
+
+                    foreach(var v in items)
+                    {
+                        if(!v.Payment.PaymentAudit.AuditorID.HasValue)
+                        {
+                            v.Payment.PaymentAudit.AuditorID = Settings.Default.DefaultCoach;
+                            v.Payment.PaymentAudit.AuditDate = DateTime.Now;
+                            models.SubmitChanges();
+                        }
+                    }
 
                     if (profile.IsManager())
                     {
@@ -1154,7 +1171,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("PaymentDetails.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("PaymentDetails.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -1227,7 +1244,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "message/rfc822";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("收款資料明細.xml")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("收款資料明細.xml"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -1278,7 +1295,7 @@ namespace WebHome.Controllers
                 .Where(p => p.Status.HasValue)
                 .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.自主訓練
                     || p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費)
-                .Where(c => c.InvoiceItem.InvoiceCancellation == null);
+                .Where(c => c.VoidPayment == null);
 
             
             var profile = HttpContext.GetUser();

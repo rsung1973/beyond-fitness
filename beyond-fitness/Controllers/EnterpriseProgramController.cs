@@ -359,7 +359,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("EnterpriseCourse.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("EnterpriseCourse.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -393,7 +393,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("EnterpriseCourseSummary.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("EnterpriseCourseSummary.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -477,6 +477,7 @@ namespace WebHome.Controllers
 
         private void checkMemberLesson(EnterpriseCourseMember profile)
         {
+            var priceType = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.LessonPriceStatus.企業合作方案).FirstOrDefault();
             foreach (var course in profile.EnterpriseCourseContract.EnterpriseCourseContent)
             {
                 RegisterLesson lesson = course.RegisterLessonEnterprise
@@ -497,6 +498,7 @@ namespace WebHome.Controllers
                             FeeShared = 0,
                             ByInstallments = 1
                         },
+                        LessonPriceType = priceType,
                         AdvisorID = Settings.Default.DefaultCoach,
                         AttendedLessons = 0,
                         UID = profile.UID

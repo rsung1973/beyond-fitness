@@ -193,7 +193,7 @@
                     <%  }
                         else if (_viewModel.Reason == "轉點")
                         {   %>
-                    <label class="label label-info">原合約編號 <%= _model.ContractNo() %> 上課地點為 <%= _model.LessonPriceType.BranchStore.BranchName %> 轉點至 <span id="location"></span>。</label>
+                    <label class="label label-info">原合約編號 <%= _model.ContractNo() %> 上課地點為 <%= _model.CourseContractExtension.BranchStore.BranchName %> 轉點至 <span id="location"></span>。</label>
                     <%  }
                         else if (_viewModel.Reason == "轉讓")
                         {   %>

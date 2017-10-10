@@ -33,7 +33,7 @@
                 {   %>
         <tr>
             <td nowrap="noWrap"><%= item.ContractNo() %></td>
-            <td><%= item.LessonPriceType.BranchStore.BranchName %></td>
+            <td><%= item.CourseContractExtension.BranchStore.BranchName %></td>
             <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
                 <%  if (item.CourseContractType.IsGroup == true)

@@ -11,43 +11,32 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th data-class="expand">合約編號</th>
-            <th>分店</th>
-            <th data-hide="phone">體能顧問</th>
-            <th>學員姓名</th>
-            <th data-hide="phone">生效日期</th>
-            <th>合約名稱</th>
-            <th data-hide="phone">剩餘/購買堂數</th>
-            <th data-hide="phone">合約總金額</th>
-            <th data-hide="phone">已收金額</th>
-            <th data-hide="phone">服務項目</th>
-            <th data-hide="phone">狀態</th>
+            <th data-class="expand">分店</th>
+            <th>發票年度</th>
+            <th>發票期別</th>
+            <th>字軌</th>
+            <th data-hide="phone">發票開始號碼（起）</th>
+            <th data-hide="phone">發票結束號碼（迄）</th>
+            <th data-hide="phone">功能</th>
         </tr>
     </thead>
     <tbody>
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td nowrap="noWrap"><%= item.ContractNo + "-" + String.Format("{0:00}",item.SequenceNo) %></td>
-            <td ><%= item.CourseContractExtension.BranchStore.BranchName %></td>
-            <td ><%= item.ServingCoach.UserProfile.FullName() %></td>
-            <td >
-                <%  if (item.CourseContractType.IsGroup==true)
+            <td><%= item.InvoiceTrackCodeAssignment.Organization.BranchStore.BranchName %></td>
+            <td><%= item.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year %></td>
+            <td><%= String.Format("{0:00}",item.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2-1) %>-<%= String.Format("{0:00}",item.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo*2) %>月</td>
+            <td><%= item.InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode %></td>
+            <td><%= String.Format("{0:00000000}", item.StartNo) %></td>
+            <td><%= String.Format("{0:00000000}", item.EndNo) %></td>
+            <td nowrap="noWrap">
+                <%  if (item.InvoiceNoAssignment.Count == 0)
                     { %>
-                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
-                <%  }
-                    else
-                    { %>
-                <%= item.ContractOwner.FullName() %>
+                <a onclick="editInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <a onclick="deleteInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
                 <%  } %>
             </td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
-            <td><%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)</td>
-            <td><%= item.RemainedLessonCount() %>/<%= item.Lessons %></td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,###}",item.TotalCost) %></td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,###}",item.TotalPaidAmount()) %></td>
-            <td>新合約</td>
-            <td nowrap="noWrap"><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>
         </tr>
         <%  } %>
     </tbody>
@@ -67,12 +56,13 @@
         };
 
         $('#<%= _tableId %>').dataTable({
-            "bPaginate": false,
+            //"bPaginate": false,
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
-            "order": [],
-            "sDom": "",
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
@@ -90,15 +80,6 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
-
-        $global.listAmendment = function (contractID) {
-            showLoading();
-            $.post('<%= Url.Action("ListAmendment","CourseContract") %>', { 'contractID': contractID }, function (data) {
-                hideLoading();
-                $(data).appendTo($('body'));
-            });
-        };
-
     });
 </script>
 
@@ -106,15 +87,15 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    String _tableId = "dt_contract" + DateTime.Now.Ticks;
-    IQueryable<CourseContract> _model;
+    String _tableId = "trackCodeNo" + DateTime.Now.Ticks;
+    IQueryable<InvoiceNoInterval> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<CourseContract>)this.Model;
+        _model = (IQueryable<InvoiceNoInterval>)this.Model;
     }
 
 </script>

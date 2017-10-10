@@ -25,7 +25,7 @@
             <%--<th data-hide="phone">發票狀態</th>--%>
             <th data-hide="phone,tablet">買受人統編</th>
             <th data-hide="phone,tablet">合約編號</th>
-            <th data-hide="phone">狀態</th>
+            <%--<th data-hide="phone">狀態</th>--%>
         </tr>
     </thead>
     <tbody>
@@ -74,7 +74,7 @@
                 <%= item.ContractPayment.CourseContract.ContractNo() %>
                 <%  } %>
             </td>
-            <td nowrap="noWrap"><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>
+            <%--<td nowrap="noWrap"><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>--%>
         </tr>
         <%  } %>
     </tbody>

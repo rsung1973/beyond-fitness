@@ -29,7 +29,7 @@
             { %>
         <tr>
             <td nowrap="noWrap"><%= item.ContractNo + "-" + String.Format("{0:00}",item.SequenceNo) %></td>
-            <td nowrap="noWrap"><%= item.LessonPriceType.BranchStore.BranchName %></td>
+            <td nowrap="noWrap"><%= item.CourseContractExtension.BranchStore.BranchName %></td>
             <td nowrap="noWrap"><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td nowrap="noWrap">
                 <%  if (item.CourseContractType.IsGroup==true)
@@ -57,7 +57,7 @@
                     { %>
                 <a onclick="$global.listAmendment(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow contractHistoryDialog_link"><i class="fa fa-fw fa fa-lg fa-list-ol" aria-hidden="true"></i></a>&nbsp;&nbsp;
                 <%  } %>
-                <%  if(item.ContractID>1028)
+                <%  if(item.ContractID>1045)
                     { %>
                 <a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
                 <%  } %>

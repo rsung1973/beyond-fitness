@@ -70,7 +70,7 @@
                 success: function (data) {
                     elmt.append(fileUpload);
                     if (data.result) {
-                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
+                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID + "?stretch=true");
                     } else {
                         smartAlert(data.message);
                     }

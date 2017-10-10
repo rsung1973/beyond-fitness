@@ -43,7 +43,7 @@
                     <ItemTemplate>
                         <div class="row">
                             <div class="col-md-4">
-                                <img runat="server" class="img-responsive" alt="img" src='<%# Item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+Item.Attachment.AttachmentID.ToString() : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>' />
+                                <img runat="server" class="img-responsive" alt="img" src='<%# Item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+Item.Attachment.AttachmentID.ToString()+"?stretch=true" : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>' />
                                 <ul class="list-inline padding-10">
                                     <li>
                                         <i class="fa fa-calendar"></i>

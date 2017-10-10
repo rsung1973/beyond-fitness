@@ -129,7 +129,7 @@ namespace WebHome.Controllers
                 .Select(item => new
                 {
                     合約編號 = item.ContractNo(),
-                    分店 = item.LessonPriceType.BranchStore.BranchName,
+                    分店 = item.CourseContractExtension.BranchStore.BranchName,
                     簽約體能顧問 = item.ServingCoach.UserProfile.FullName(),
                     學員 = item.CourseContractType.IsGroup == true
                         ? String.Join("/", item.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
@@ -152,7 +152,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("AccountsReceivable.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("AccountsReceivable.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -257,7 +257,8 @@ namespace WebHome.Controllers
         public ActionResult InquireTuitionAchievement(AchievementQueryViewModel viewModel)
         {
 
-            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>();
+            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
+                .Where(t => t.Payment.VoidPayment == null);
 
             var profile = HttpContext.GetUser();
 
@@ -489,7 +490,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("TrustReport.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("TrustReport.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -516,7 +517,7 @@ namespace WebHome.Controllers
                 入會契約編號 = contract.ContractNo(),
                 買受人證號 = contract.ContractOwner.UserProfileExtension.IDNo,
                 姓名 = contract.ContractOwner.RealName,
-                通訊地址 = contract.ContractOwner.Address,
+                通訊地址 = contract.ContractOwner.Address(),
                 電話 = contract.ContractOwner.Phone,
                 轉出買受人証號 = null,
                 當期信託金額 = null,
@@ -575,7 +576,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("AchievementReport.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("AchievementReport.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -613,6 +614,7 @@ namespace WebHome.Controllers
             table.Columns.Add(new DataColumn("分店", typeof(String)));
             table.Columns.Add(new DataColumn("學員", typeof(String)));
             table.Columns.Add(new DataColumn("合約名稱", typeof(String)));
+            table.Columns.Add(new DataColumn("課程單價", typeof(int)));
             table.Columns.Add(new DataColumn("全價計算堂數", typeof(int)));
             table.Columns.Add(new DataColumn("半價計算堂數", typeof(int)));
 
@@ -631,7 +633,7 @@ namespace WebHome.Controllers
                 var r = table.NewRow();
                 r[0] = contract.ContractNo();
                 r[1] = coach.UserProfile.FullName();
-                r[2] = contract.LessonPriceType.BranchStore.BranchName;
+                r[2] = contract.CourseContractExtension.BranchStore.BranchName;
 
                 if (contract.CourseContractType.IsGroup == true)
                 {
@@ -644,10 +646,11 @@ namespace WebHome.Controllers
 
                 r[4] = contract.CourseContractType.TypeName
                     + " (" + contract.LessonPriceType.DurationInMinutes + " 分鐘)";
+                r[5] = contract.LessonPriceType.ListPrice;
 
                 var halfCount = item.Count(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue);
-                r[5] = item.Count() - halfCount;
-                r[6] = halfCount;
+                r[6] = item.Count() - halfCount;
+                r[7] = halfCount;
                 table.Rows.Add(r);
             }
 
@@ -681,10 +684,10 @@ namespace WebHome.Controllers
                 }
 
                 r[4] = contract.Subject;
-
+                r[5] = contract.EnterpriseCourseContent.OrderByDescending(c => c.ListPrice).First().ListPrice;
                 var halfCount = item.Count(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue);
-                r[5] = item.Count() - halfCount;
-                r[6] = halfCount;
+                r[6] = item.Count() - halfCount;
+                r[7] = halfCount;
                 table.Rows.Add(r);
             }
 
@@ -700,10 +703,10 @@ namespace WebHome.Controllers
 
                 r[4] = item.RegisterLesson.LessonPriceType.Description
                     + " (" + item.RegisterLesson.LessonPriceType.DurationInMinutes + " 分鐘)";
-
+                r[5] = item.RegisterLesson.LessonPriceType.ListPrice;
                 var halfCount = item.LessonAttendance == null || item.LessonPlan.CommitAttendance.HasValue ? 1 : 0;
-                r[5] = 1 - halfCount;
-                r[6] = halfCount;
+                r[6] = 1 - halfCount;
+                r[7] = halfCount;
                 table.Rows.Add(r);
             }
 

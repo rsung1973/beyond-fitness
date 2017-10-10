@@ -55,7 +55,7 @@
             <td nowrap="noWrap"><%= item.UserProfileExtension.EmergencyContactPerson %></td>
             <td><%= item.UserProfileExtension.EmergencyContactPhone %></td>
             <td><%= item.UserProfileExtension.Relationship %></td>
-            <td><%= item.Address %></td>
+            <td><%= item.Address() %></td>
         </tr>
         <%  } %>
     </tbody>

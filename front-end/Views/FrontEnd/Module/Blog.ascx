@@ -18,7 +18,7 @@
             case 0: %>
 <article class="post post--table <%= String.Join(" ",item.ArticleCategory.Select(t=>t.Category)) %>">
     <a class="image-container image-container--max post__link-area" href="single-post.html?id=<%= item.DocID %>">
-        <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
+        <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() + "?stretch=true" : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
     </a>
     <div class="post__detail">
         <a class="post__link" href="single-post.html?id=<%= item.DocID %>">
@@ -52,7 +52,7 @@
         case 2: %>
 <article class="post post--table blue button <%= String.Join(" ",item.ArticleCategory.Select(t=>t.Category)) %>">
     <a class="image-container image-container--max post__link-area" href="single-post.html?id=<%= item.DocID %>">
-        <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
+        <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() + "?stretch=true" : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
     </a>
     <div class="post__detail">
         <a class="post__link" href="single-post.html?id=<%= item.DocID %>">

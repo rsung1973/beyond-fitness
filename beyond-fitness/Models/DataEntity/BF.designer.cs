@@ -22,7 +22,7 @@ namespace WebHome.Models.DataEntity
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitnessProd4")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="BeyondFitnessProd")]
 	public partial class BFDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -402,6 +402,18 @@ namespace WebHome.Models.DataEntity
     partial void InsertEnterpriseCourseMember(EnterpriseCourseMember instance);
     partial void UpdateEnterpriseCourseMember(EnterpriseCourseMember instance);
     partial void DeleteEnterpriseCourseMember(EnterpriseCourseMember instance);
+    partial void InsertInvoiceTrackCode(InvoiceTrackCode instance);
+    partial void UpdateInvoiceTrackCode(InvoiceTrackCode instance);
+    partial void DeleteInvoiceTrackCode(InvoiceTrackCode instance);
+    partial void InsertInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void UpdateInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void DeleteInvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment instance);
+    partial void InsertInvoiceNoAssignment(InvoiceNoAssignment instance);
+    partial void UpdateInvoiceNoAssignment(InvoiceNoAssignment instance);
+    partial void DeleteInvoiceNoAssignment(InvoiceNoAssignment instance);
+    partial void InsertInvoiceNoInterval(InvoiceNoInterval instance);
+    partial void UpdateInvoiceNoInterval(InvoiceNoInterval instance);
+    partial void DeleteInvoiceNoInterval(InvoiceNoInterval instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1431,6 +1443,38 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<EnterpriseCourseMember>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoiceTrackCode> InvoiceTrackCode
+		{
+			get
+			{
+				return this.GetTable<InvoiceTrackCode>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				return this.GetTable<InvoiceTrackCodeAssignment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoiceNoAssignment> InvoiceNoAssignment
+		{
+			get
+			{
+				return this.GetTable<InvoiceNoAssignment>();
+			}
+		}
+		
+		public System.Data.Linq.Table<InvoiceNoInterval> InvoiceNoInterval
+		{
+			get
+			{
+				return this.GetTable<InvoiceNoInterval>();
 			}
 		}
 	}
@@ -24639,6 +24683,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<InvoiceAmountType> _InvoiceAmountType;
 		
+		private EntityRef<InvoiceNoAssignment> _InvoiceNoAssignment;
+		
 		private EntityRef<Document> _Document;
 		
 		private EntityRef<Organization> _Organization;
@@ -24704,6 +24750,7 @@ namespace WebHome.Models.DataEntity
 			this._InvoiceDetails = new EntitySet<InvoiceDetails>(new Action<InvoiceDetails>(this.attach_InvoiceDetails), new Action<InvoiceDetails>(this.detach_InvoiceDetails));
 			this._InvoiceSeller = default(EntityRef<InvoiceSeller>);
 			this._InvoiceAmountType = default(EntityRef<InvoiceAmountType>);
+			this._InvoiceNoAssignment = default(EntityRef<InvoiceNoAssignment>);
 			this._Document = default(EntityRef<Document>);
 			this._Organization = default(EntityRef<Organization>);
 			OnCreated();
@@ -25382,6 +25429,35 @@ namespace WebHome.Models.DataEntity
 						value.InvoiceItem = this;
 					}
 					this.SendPropertyChanged("InvoiceAmountType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_InvoiceNoAssignment", Storage="_InvoiceNoAssignment", ThisKey="InvoiceID", OtherKey="InvoiceID", IsUnique=true, IsForeignKey=false)]
+		public InvoiceNoAssignment InvoiceNoAssignment
+		{
+			get
+			{
+				return this._InvoiceNoAssignment.Entity;
+			}
+			set
+			{
+				InvoiceNoAssignment previousValue = this._InvoiceNoAssignment.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceNoAssignment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceNoAssignment.Entity = null;
+						previousValue.InvoiceItem = null;
+					}
+					this._InvoiceNoAssignment.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceItem = this;
+					}
+					this.SendPropertyChanged("InvoiceNoAssignment");
 				}
 			}
 		}
@@ -27936,6 +28012,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<EnterpriseCourseContract> _EnterpriseCourseContract;
 		
+		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -27997,6 +28075,7 @@ namespace WebHome.Models.DataEntity
 			this._InvoiceAllowanceSeller = new EntitySet<InvoiceAllowanceSeller>(new Action<InvoiceAllowanceSeller>(this.attach_InvoiceAllowanceSeller), new Action<InvoiceAllowanceSeller>(this.detach_InvoiceAllowanceSeller));
 			this._InvoiceSeller = new EntitySet<InvoiceSeller>(new Action<InvoiceSeller>(this.attach_InvoiceSeller), new Action<InvoiceSeller>(this.detach_InvoiceSeller));
 			this._EnterpriseCourseContract = new EntitySet<EnterpriseCourseContract>(new Action<EnterpriseCourseContract>(this.attach_EnterpriseCourseContract), new Action<EnterpriseCourseContract>(this.detach_EnterpriseCourseContract));
+			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
 			OnCreated();
 		}
 		
@@ -28567,6 +28646,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignment", ThisKey="CompanyID", OtherKey="SellerID")]
+		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				return this._InvoiceTrackCodeAssignment;
+			}
+			set
+			{
+				this._InvoiceTrackCodeAssignment.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -28654,6 +28746,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_EnterpriseCourseContract(EnterpriseCourseContract entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = null;
+		}
+		
+		private void attach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.Organization = this;
+		}
+		
+		private void detach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
 		{
 			this.SendPropertyChanging();
 			entity.Organization = null;
@@ -37028,6 +37132,789 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceTrackCode")]
+	public partial class InvoiceTrackCode : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TrackID;
+		
+		private string _TrackCode;
+		
+		private short _Year;
+		
+		private short _PeriodNo;
+		
+		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTrackIDChanging(int value);
+    partial void OnTrackIDChanged();
+    partial void OnTrackCodeChanging(string value);
+    partial void OnTrackCodeChanged();
+    partial void OnYearChanging(short value);
+    partial void OnYearChanged();
+    partial void OnPeriodNoChanging(short value);
+    partial void OnPeriodNoChanged();
+    #endregion
+		
+		public InvoiceTrackCode()
+		{
+			this._InvoiceTrackCodeAssignment = new EntitySet<InvoiceTrackCodeAssignment>(new Action<InvoiceTrackCodeAssignment>(this.attach_InvoiceTrackCodeAssignment), new Action<InvoiceTrackCodeAssignment>(this.detach_InvoiceTrackCodeAssignment));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int TrackID
+		{
+			get
+			{
+				return this._TrackID;
+			}
+			set
+			{
+				if ((this._TrackID != value))
+				{
+					this.OnTrackIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrackID = value;
+					this.SendPropertyChanged("TrackID");
+					this.OnTrackIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackCode", DbType="NVarChar(2) NOT NULL", CanBeNull=false)]
+		public string TrackCode
+		{
+			get
+			{
+				return this._TrackCode;
+			}
+			set
+			{
+				if ((this._TrackCode != value))
+				{
+					this.OnTrackCodeChanging(value);
+					this.SendPropertyChanging();
+					this._TrackCode = value;
+					this.SendPropertyChanged("TrackCode");
+					this.OnTrackCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Year", DbType="SmallInt NOT NULL")]
+		public short Year
+		{
+			get
+			{
+				return this._Year;
+			}
+			set
+			{
+				if ((this._Year != value))
+				{
+					this.OnYearChanging(value);
+					this.SendPropertyChanging();
+					this._Year = value;
+					this.SendPropertyChanged("Year");
+					this.OnYearChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PeriodNo", DbType="SmallInt NOT NULL")]
+		public short PeriodNo
+		{
+			get
+			{
+				return this._PeriodNo;
+			}
+			set
+			{
+				if ((this._PeriodNo != value))
+				{
+					this.OnPeriodNoChanging(value);
+					this.SendPropertyChanging();
+					this._PeriodNo = value;
+					this.SendPropertyChanged("PeriodNo");
+					this.OnPeriodNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID", OtherKey="TrackID")]
+		public EntitySet<InvoiceTrackCodeAssignment> InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				return this._InvoiceTrackCodeAssignment;
+			}
+			set
+			{
+				this._InvoiceTrackCodeAssignment.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCode = this;
+		}
+		
+		private void detach_InvoiceTrackCodeAssignment(InvoiceTrackCodeAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCode = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceTrackCodeAssignment")]
+	public partial class InvoiceTrackCodeAssignment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _TrackID;
+		
+		private int _SellerID;
+		
+		private EntitySet<InvoiceNoInterval> _InvoiceNoInterval;
+		
+		private EntityRef<InvoiceTrackCode> _InvoiceTrackCode;
+		
+		private EntityRef<Organization> _Organization;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnTrackIDChanging(int value);
+    partial void OnTrackIDChanged();
+    partial void OnSellerIDChanging(int value);
+    partial void OnSellerIDChanged();
+    #endregion
+		
+		public InvoiceTrackCodeAssignment()
+		{
+			this._InvoiceNoInterval = new EntitySet<InvoiceNoInterval>(new Action<InvoiceNoInterval>(this.attach_InvoiceNoInterval), new Action<InvoiceNoInterval>(this.detach_InvoiceNoInterval));
+			this._InvoiceTrackCode = default(EntityRef<InvoiceTrackCode>);
+			this._Organization = default(EntityRef<Organization>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int TrackID
+		{
+			get
+			{
+				return this._TrackID;
+			}
+			set
+			{
+				if ((this._TrackID != value))
+				{
+					if (this._InvoiceTrackCode.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTrackIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrackID = value;
+					this.SendPropertyChanged("TrackID");
+					this.OnTrackIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellerID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int SellerID
+		{
+			get
+			{
+				return this._SellerID;
+			}
+			set
+			{
+				if ((this._SellerID != value))
+				{
+					if (this._Organization.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSellerIDChanging(value);
+					this.SendPropertyChanging();
+					this._SellerID = value;
+					this.SendPropertyChanged("SellerID");
+					this.OnSellerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceNoInterval", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID")]
+		public EntitySet<InvoiceNoInterval> InvoiceNoInterval
+		{
+			get
+			{
+				return this._InvoiceNoInterval;
+			}
+			set
+			{
+				this._InvoiceNoInterval.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCode_InvoiceTrackCodeAssignment", Storage="_InvoiceTrackCode", ThisKey="TrackID", OtherKey="TrackID", IsForeignKey=true)]
+		public InvoiceTrackCode InvoiceTrackCode
+		{
+			get
+			{
+				return this._InvoiceTrackCode.Entity;
+			}
+			set
+			{
+				InvoiceTrackCode previousValue = this._InvoiceTrackCode.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceTrackCode.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceTrackCode.Entity = null;
+						previousValue.InvoiceTrackCodeAssignment.Remove(this);
+					}
+					this._InvoiceTrackCode.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceTrackCodeAssignment.Add(this);
+						this._TrackID = value.TrackID;
+					}
+					else
+					{
+						this._TrackID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceTrackCode");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Organization_InvoiceTrackCodeAssignment", Storage="_Organization", ThisKey="SellerID", OtherKey="CompanyID", IsForeignKey=true)]
+		public Organization Organization
+		{
+			get
+			{
+				return this._Organization.Entity;
+			}
+			set
+			{
+				Organization previousValue = this._Organization.Entity;
+				if (((previousValue != value) 
+							|| (this._Organization.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Organization.Entity = null;
+						previousValue.InvoiceTrackCodeAssignment.Remove(this);
+					}
+					this._Organization.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceTrackCodeAssignment.Add(this);
+						this._SellerID = value.CompanyID;
+					}
+					else
+					{
+						this._SellerID = default(int);
+					}
+					this.SendPropertyChanged("Organization");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_InvoiceNoInterval(InvoiceNoInterval entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = this;
+		}
+		
+		private void detach_InvoiceNoInterval(InvoiceNoInterval entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceTrackCodeAssignment = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceNoAssignment")]
+	public partial class InvoiceNoAssignment : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _InvoiceID;
+		
+		private System.Nullable<int> _IntervalID;
+		
+		private System.Nullable<int> _InvoiceNo;
+		
+		private EntityRef<InvoiceItem> _InvoiceItem;
+		
+		private EntityRef<InvoiceNoInterval> _InvoiceNoInterval;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnInvoiceIDChanging(int value);
+    partial void OnInvoiceIDChanged();
+    partial void OnIntervalIDChanging(System.Nullable<int> value);
+    partial void OnIntervalIDChanged();
+    partial void OnInvoiceNoChanging(System.Nullable<int> value);
+    partial void OnInvoiceNoChanged();
+    #endregion
+		
+		public InvoiceNoAssignment()
+		{
+			this._InvoiceItem = default(EntityRef<InvoiceItem>);
+			this._InvoiceNoInterval = default(EntityRef<InvoiceNoInterval>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int InvoiceID
+		{
+			get
+			{
+				return this._InvoiceID;
+			}
+			set
+			{
+				if ((this._InvoiceID != value))
+				{
+					if (this._InvoiceItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnInvoiceIDChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceID = value;
+					this.SendPropertyChanged("InvoiceID");
+					this.OnInvoiceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IntervalID", DbType="Int")]
+		public System.Nullable<int> IntervalID
+		{
+			get
+			{
+				return this._IntervalID;
+			}
+			set
+			{
+				if ((this._IntervalID != value))
+				{
+					if (this._InvoiceNoInterval.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIntervalIDChanging(value);
+					this.SendPropertyChanging();
+					this._IntervalID = value;
+					this.SendPropertyChanged("IntervalID");
+					this.OnIntervalIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceNo", DbType="Int")]
+		public System.Nullable<int> InvoiceNo
+		{
+			get
+			{
+				return this._InvoiceNo;
+			}
+			set
+			{
+				if ((this._InvoiceNo != value))
+				{
+					this.OnInvoiceNoChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceNo = value;
+					this.SendPropertyChanged("InvoiceNo");
+					this.OnInvoiceNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceItem_InvoiceNoAssignment", Storage="_InvoiceItem", ThisKey="InvoiceID", OtherKey="InvoiceID", IsForeignKey=true)]
+		public InvoiceItem InvoiceItem
+		{
+			get
+			{
+				return this._InvoiceItem.Entity;
+			}
+			set
+			{
+				InvoiceItem previousValue = this._InvoiceItem.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceItem.Entity = null;
+						previousValue.InvoiceNoAssignment = null;
+					}
+					this._InvoiceItem.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceNoAssignment = this;
+						this._InvoiceID = value.InvoiceID;
+					}
+					else
+					{
+						this._InvoiceID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceItem");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceNoInterval_InvoiceNoAssignment", Storage="_InvoiceNoInterval", ThisKey="IntervalID", OtherKey="IntervalID", IsForeignKey=true)]
+		public InvoiceNoInterval InvoiceNoInterval
+		{
+			get
+			{
+				return this._InvoiceNoInterval.Entity;
+			}
+			set
+			{
+				InvoiceNoInterval previousValue = this._InvoiceNoInterval.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceNoInterval.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceNoInterval.Entity = null;
+						previousValue.InvoiceNoAssignment.Remove(this);
+					}
+					this._InvoiceNoInterval.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceNoAssignment.Add(this);
+						this._IntervalID = value.IntervalID;
+					}
+					else
+					{
+						this._IntervalID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("InvoiceNoInterval");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.InvoiceNoInterval")]
+	public partial class InvoiceNoInterval : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _IntervalID;
+		
+		private int _TrackID;
+		
+		private int _SellerID;
+		
+		private int _StartNo;
+		
+		private int _EndNo;
+		
+		private EntitySet<InvoiceNoAssignment> _InvoiceNoAssignment;
+		
+		private EntityRef<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIntervalIDChanging(int value);
+    partial void OnIntervalIDChanged();
+    partial void OnTrackIDChanging(int value);
+    partial void OnTrackIDChanged();
+    partial void OnSellerIDChanging(int value);
+    partial void OnSellerIDChanged();
+    partial void OnStartNoChanging(int value);
+    partial void OnStartNoChanged();
+    partial void OnEndNoChanging(int value);
+    partial void OnEndNoChanged();
+    #endregion
+		
+		public InvoiceNoInterval()
+		{
+			this._InvoiceNoAssignment = new EntitySet<InvoiceNoAssignment>(new Action<InvoiceNoAssignment>(this.attach_InvoiceNoAssignment), new Action<InvoiceNoAssignment>(this.detach_InvoiceNoAssignment));
+			this._InvoiceTrackCodeAssignment = default(EntityRef<InvoiceTrackCodeAssignment>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IntervalID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int IntervalID
+		{
+			get
+			{
+				return this._IntervalID;
+			}
+			set
+			{
+				if ((this._IntervalID != value))
+				{
+					this.OnIntervalIDChanging(value);
+					this.SendPropertyChanging();
+					this._IntervalID = value;
+					this.SendPropertyChanged("IntervalID");
+					this.OnIntervalIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TrackID", DbType="Int NOT NULL")]
+		public int TrackID
+		{
+			get
+			{
+				return this._TrackID;
+			}
+			set
+			{
+				if ((this._TrackID != value))
+				{
+					if (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTrackIDChanging(value);
+					this.SendPropertyChanging();
+					this._TrackID = value;
+					this.SendPropertyChanged("TrackID");
+					this.OnTrackIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellerID", DbType="Int NOT NULL")]
+		public int SellerID
+		{
+			get
+			{
+				return this._SellerID;
+			}
+			set
+			{
+				if ((this._SellerID != value))
+				{
+					if (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSellerIDChanging(value);
+					this.SendPropertyChanging();
+					this._SellerID = value;
+					this.SendPropertyChanged("SellerID");
+					this.OnSellerIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartNo", DbType="Int NOT NULL")]
+		public int StartNo
+		{
+			get
+			{
+				return this._StartNo;
+			}
+			set
+			{
+				if ((this._StartNo != value))
+				{
+					this.OnStartNoChanging(value);
+					this.SendPropertyChanging();
+					this._StartNo = value;
+					this.SendPropertyChanged("StartNo");
+					this.OnStartNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndNo", DbType="Int NOT NULL")]
+		public int EndNo
+		{
+			get
+			{
+				return this._EndNo;
+			}
+			set
+			{
+				if ((this._EndNo != value))
+				{
+					this.OnEndNoChanging(value);
+					this.SendPropertyChanging();
+					this._EndNo = value;
+					this.SendPropertyChanged("EndNo");
+					this.OnEndNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceNoInterval_InvoiceNoAssignment", Storage="_InvoiceNoAssignment", ThisKey="IntervalID", OtherKey="IntervalID")]
+		public EntitySet<InvoiceNoAssignment> InvoiceNoAssignment
+		{
+			get
+			{
+				return this._InvoiceNoAssignment;
+			}
+			set
+			{
+				this._InvoiceNoAssignment.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="InvoiceTrackCodeAssignment_InvoiceNoInterval", Storage="_InvoiceTrackCodeAssignment", ThisKey="TrackID,SellerID", OtherKey="TrackID,SellerID", IsForeignKey=true)]
+		public InvoiceTrackCodeAssignment InvoiceTrackCodeAssignment
+		{
+			get
+			{
+				return this._InvoiceTrackCodeAssignment.Entity;
+			}
+			set
+			{
+				InvoiceTrackCodeAssignment previousValue = this._InvoiceTrackCodeAssignment.Entity;
+				if (((previousValue != value) 
+							|| (this._InvoiceTrackCodeAssignment.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._InvoiceTrackCodeAssignment.Entity = null;
+						previousValue.InvoiceNoInterval.Remove(this);
+					}
+					this._InvoiceTrackCodeAssignment.Entity = value;
+					if ((value != null))
+					{
+						value.InvoiceNoInterval.Add(this);
+						this._TrackID = value.TrackID;
+						this._SellerID = value.SellerID;
+					}
+					else
+					{
+						this._TrackID = default(int);
+						this._SellerID = default(int);
+					}
+					this.SendPropertyChanged("InvoiceTrackCodeAssignment");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_InvoiceNoAssignment(InvoiceNoAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceNoInterval = this;
+		}
+		
+		private void detach_InvoiceNoAssignment(InvoiceNoAssignment entity)
+		{
+			this.SendPropertyChanging();
+			entity.InvoiceNoInterval = null;
 		}
 	}
 }

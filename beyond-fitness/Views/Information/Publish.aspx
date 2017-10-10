@@ -129,7 +129,8 @@
                                                             <a onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="deletedata"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除</a>
                                                         </li>
                                                         <li>
-                                                            <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+Item.DocID) %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>
+                                                            <%--<a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+Item.DocID) %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>--%>
+                                                            <a href="<%# "../../../front-end/single-post.html?id=" + Item.DocID %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>
                                                         </li>
                                                     </ul>
                                                 </div>

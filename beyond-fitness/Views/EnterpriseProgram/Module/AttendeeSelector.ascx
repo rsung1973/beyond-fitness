@@ -77,7 +77,7 @@
     {
         return lesson.UserProfile.PDQTask
             .Select(t => t.PDQQuestion)
-            .Where(q => q.PDQQuestionExtension == null).Count() >= 36;
+            .Where(q => q.PDQQuestionExtension == null).Count() >= 20;
     }
 
 </script>

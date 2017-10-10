@@ -21,7 +21,7 @@
             <th data-hide="phone">發票類型</th>
             <th data-hide="phone">發票狀態</th>
             <th data-hide="phone">合約編號</th>
-            <th data-hide="phone">狀態</th>
+            <%--<th data-hide="phone">狀態</th>--%>
         </tr>
     </thead>
     <tbody>
@@ -69,7 +69,7 @@
                         <%= (Naming.PaymentTransactionType)item.TransactionType %>
                         <%  } %>
                     </td>
-                    <td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit.AuditorID.HasValue ? "":"(*)" %></td>
+                    <%--<td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit.AuditorID.HasValue ? "":"(*)" %></td>--%>
                 </tr>
         <%  } %>
     </tbody>

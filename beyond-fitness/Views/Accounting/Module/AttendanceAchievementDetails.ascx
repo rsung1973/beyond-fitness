@@ -26,7 +26,7 @@
                 CourseContract contract = models.GetTable<CourseContract>().Where(u => u.ContractID == item.Key.ContractID).First(); %>
                 <tr>
                     <td nowrap="noWrap"><%= contract.ContractNo + "-" + String.Format("{0:00}",contract.SequenceNo) %></td>
-                    <td nowrap="noWrap"><%= contract.LessonPriceType.BranchStore.BranchName %></td>
+                    <td nowrap="noWrap"><%= contract.CourseContractExtension.BranchStore.BranchName %></td>
                     <td nowrap="noWrap">
                         <%  if (contract.CourseContractType.IsGroup==true)
                             { %>

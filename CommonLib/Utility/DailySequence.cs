@@ -50,7 +50,7 @@ namespace Utility
             if(_dailyTimer<DateTime.Now.Ticks)
             {
                 _dailyTimer = DateTime.Today.AddDays(1).Ticks;
-                _sequence = 0;
+                _sequence = 1;
             }
             else
             {

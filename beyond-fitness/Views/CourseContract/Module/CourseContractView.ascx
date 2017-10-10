@@ -52,7 +52,7 @@
                             <td>緊急聯絡電話：<%= m.UserProfile.UserProfileExtension.EmergencyContactPhone %></td>
                         </tr>
                         <tr>
-                            <td colspan="3">地址：<%= m.UserProfile.Address %></td>
+                            <td colspan="3">地址：<%= m.UserProfile.Address() %></td>
                         </tr>
                         <%  } %>
                         <tr style="height: 1cm; border-width: 1px; border-top-style: dashed;">
@@ -62,7 +62,7 @@
                     <tbody>
                         <tr>
                             <td colspan="2">名稱：<%= _model.CourseContractType.TypeName %>(<%= _model.LessonPriceType.DurationInMinutes %>分鐘)</td>
-                            <td>上課場所：<%= _model.LessonPriceType.BranchStore.BranchName %></td>
+                            <td>上課場所：<%= _model.CourseContractExtension.BranchStore.BranchName %></td>
                         </tr>
                         <tr>
                             <td>單堂原價：<% LessonPriceType originalPrice = null; %>
@@ -84,7 +84,7 @@
                             <td colspan="3">顧問服務使用期限：自 <%= String.Format("{0:yyyy/MM/dd}",_model.ValidFrom) %> 起，至 <%= String.Format("{0:yyyy/MM/dd}",_model.Expiration) %> 止。</td>
                         </tr>
                         <tr>
-                            <td colspan="3" style="height: <%= _model.CourseContractType.IsGroup==true ? "1cm" : "5cm" %>">備註：<%= _model.Remark %></td>
+                            <td colspan="3" style="height: <%= _model.CourseContractType.IsGroup==true ? "1cm" : "2cm" %>">備註：<%= _model.Remark %></td>
                         </tr>
                     </tbody>
                 </table>

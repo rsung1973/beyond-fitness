@@ -31,7 +31,8 @@
         <%  foreach (var item in _model.GroupBy(t => t.ContractID))
             {
                 var contract = models.GetTable<CourseContract>().Where(c => c.ContractID == item.Key).First();
-                var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();%>
+                var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();
+                var initialTrustAmount = settlement.InitialTrustAmount; %>
             <%  var amt = item.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount);
                 if (amt.HasValue && amt > 0)
                 { %>
@@ -41,7 +42,7 @@
                 <td><%= contract.ContractNo() %></td>
                 <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
                 <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address %></td>
+                <td><%= contract.ContractOwner.Address() %></td>
                 <td><%= contract.ContractOwner.Phone %></td>
                 <td><%--<%  if (item.TrustType == Naming.TrustType.T.ToString())
                         {   %>
@@ -49,10 +50,10 @@
                     <%  } %>--%>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  settlement.InitialTrustAmount += amt.Value; %>
+                    <%  initialTrustAmount += amt.Value; %>
                     <%= String.Format("{0:##,###,###,##0}", amt)   %>
                 </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", settlement.InitialTrustAmount)   %></td>
+                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
                 <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
@@ -68,16 +69,16 @@
                 <td><%= contract.ContractNo() %></td>
                 <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
                 <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address %></td>
+                <td><%= contract.ContractOwner.Address() %></td>
                 <td><%= contract.ContractOwner.Phone %></td>
                 <td>
                     <%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  settlement.InitialTrustAmount += amt.Value; %>
+                    <%  initialTrustAmount += amt.Value; %>
                     <%= String.Format("{0:##,###,###,##0}", amt)   %>
                 </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", settlement.InitialTrustAmount)   %></td>
+                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
                 <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
@@ -94,15 +95,15 @@
             <td><%= contract.ContractNo() %></td>
             <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
             <td><%= contract.ContractOwner.RealName %></td>
-            <td><%= contract.ContractOwner.Address %></td>
+            <td><%= contract.ContractOwner.Address() %></td>
             <td><%= contract.ContractOwner.Phone %></td>
             <td>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  settlement.InitialTrustAmount -= amt.Value; %>
+                <%  initialTrustAmount -= amt.Value; %>
                 <%= String.Format("({0:##,###,###,##0})", amt)   %>
             </td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", settlement.InitialTrustAmount)   %></td>
+            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
             <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
             <td nowrap="noWrap"></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
@@ -118,16 +119,16 @@
                 <td><%= contract.ContractNo() %></td>
                 <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
                 <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address %></td>
+                <td><%= contract.ContractOwner.Address() %></td>
                 <td><%= contract.ContractOwner.Phone %></td>
                 <td>
                     <%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  settlement.InitialTrustAmount -= amt.Value; %>
+                    <%  initialTrustAmount -= amt.Value; %>
                     <%= String.Format("({0:##,###,###,##0})", amt)   %>
                 </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", settlement.InitialTrustAmount)   %></td>
+                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
                 <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
@@ -143,16 +144,16 @@
                 <td><%= contract.ContractNo() %></td>
                 <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
                 <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address %></td>
+                <td><%= contract.ContractOwner.Address() %></td>
                 <td><%= contract.ContractOwner.Phone %></td>
                 <td>
                     <%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  settlement.InitialTrustAmount -= amt.Value; %>
+                    <%  initialTrustAmount -= amt.Value; %>
                     <%= String.Format("({0:##,###,###,##0})", amt)   %>
                 </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", settlement.InitialTrustAmount)   %></td>
+                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
                 <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>

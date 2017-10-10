@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitnessProd4" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd4;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="WebHome.Properties.Settings.BFDbConnection" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitnessProd" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="WebHome.Properties.Settings.BFDbConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.UserRoleDefinition" Member="UserRoleDefinitions">
     <Type Name="UserRoleDefinition">
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -1070,6 +1070,7 @@
       <Association Name="InvoiceItem_InvoiceDetails" Member="InvoiceDetails" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceDetails" />
       <Association Name="InvoiceItem_InvoiceSeller" Member="InvoiceSeller" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceSeller" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceAmountType" Member="InvoiceAmountType" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceAmountType" Cardinality="One" />
+      <Association Name="InvoiceItem_InvoiceNoAssignment" Member="InvoiceNoAssignment" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceNoAssignment" Cardinality="One" />
       <Association Name="Document_InvoiceItem" Member="Document" ThisKey="InvoiceID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
       <Association Name="Organization_InvoiceItem" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
@@ -1208,6 +1209,7 @@
       <Association Name="Organization_InvoiceAllowanceSeller" Member="InvoiceAllowanceSeller" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceAllowanceSeller" />
       <Association Name="Organization_InvoiceSeller" Member="InvoiceSeller" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceSeller" />
       <Association Name="Organization_EnterpriseCourseContract" Member="EnterpriseCourseContract" ThisKey="CompanyID" OtherKey="CompanyID" Type="EnterpriseCourseContract" />
+      <Association Name="Organization_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="CompanyID" OtherKey="SellerID" Type="InvoiceTrackCodeAssignment" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceCarrier" Member="InvoiceCarrier">
@@ -1593,6 +1595,44 @@
       <Association Name="EnterpriseCourseContract_EnterpriseCourseMember" Member="EnterpriseCourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="EnterpriseCourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="GroupingLesson_EnterpriseCourseMember" Member="GroupingLesson" ThisKey="GroupID" OtherKey="GroupID" Type="GroupingLesson" IsForeignKey="true" />
       <Association Name="UserProfile_EnterpriseCourseMember" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceTrackCode" Member="InvoiceTrackCode">
+    <Type Name="InvoiceTrackCode">
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCodeAssignment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment">
+    <Type Name="InvoiceTrackCodeAssignment">
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SellerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceNoInterval" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceNoInterval" />
+      <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCode" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCode" IsForeignKey="true" />
+      <Association Name="Organization_InvoiceTrackCodeAssignment" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceNoAssignment" Member="InvoiceNoAssignment">
+    <Type Name="InvoiceNoAssignment">
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IntervalID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InvoiceNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceItem_InvoiceNoAssignment" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
+      <Association Name="InvoiceNoInterval_InvoiceNoAssignment" Member="InvoiceNoInterval" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoInterval" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceNoInterval" Member="InvoiceNoInterval">
+    <Type Name="InvoiceNoInterval">
+      <Column Name="IntervalID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SellerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StartNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="InvoiceNoInterval_InvoiceNoAssignment" Member="InvoiceNoAssignment" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoAssignment" />
+      <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceTrackCodeAssignment" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

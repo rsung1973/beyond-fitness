@@ -233,6 +233,8 @@
             todayHighlight: 1,
             startView: 2,
             minView: 2,
+            startDate: '<%= String.Format("{0:yyyy-MM-01}",DateTime.Today) %>',
+            endDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>',
             forceParse: 0
         });
 

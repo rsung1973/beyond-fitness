@@ -297,7 +297,7 @@ namespace WebHome.Controllers
             else
             {
                 items = models.GetTable<RegisterLesson>()
-                    .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                    .Where(r => r.RegisterLessonContract != null)
                     .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
                         && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName)))
                     .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
@@ -532,6 +532,7 @@ namespace WebHome.Controllers
                 InvitedCoach = item.InvitedCoach,
                 AttendingCoach = item.AttendingCoach,
                 ClassTime = viewModel.ClassTimeStart,
+                DurationInMinutes = item.DurationInMinutes
                 //DurationInMinutes = (int)(viewModel.ClassTimeEnd.Value - viewModel.ClassTimeStart.Value).TotalMinutes
             };
 
@@ -645,8 +646,12 @@ namespace WebHome.Controllers
             switch (query)
             {
                 case Naming.LessonQueryType.一般課程:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
-                        || l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除);
+                    int[] scope = new int[] {
+                        (int)Naming.LessonPriceStatus.一般課程,
+                        (int)Naming.LessonPriceStatus.企業合作方案,
+                        (int)Naming.LessonPriceStatus.已刪除,
+                        (int)Naming.LessonPriceStatus.點數兌換課程 };
+                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value));
                     break;
                 case Naming.LessonQueryType.自主訓練:
                     items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練);

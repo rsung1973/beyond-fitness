@@ -20,11 +20,13 @@
                 <%  }   %>
                 <span class="from font-md text-warning"><%= _model.RegisterLesson.GroupingMemberCount>1
                                                                 ? "團體課程"
-                                                                : _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除 || _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
-                                                                    ? "P.T session"
-                                                                    : _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
-                                                                        ? "P.I session"
-                                                                        :((Naming.LessonPriceStatus)_model.RegisterLesson.LessonPriceType.Status).ToString() %>：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></span>
+                                                                : _model.RegisterLesson.RegisterLessonEnterprise !=null
+                                                                    ? _model.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Description
+                                                                    :   _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除 || _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
+                                                                            ? "P.T session"
+                                                                            : _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
+                                                                                ? "P.I session"
+                                                                                :((Naming.LessonPriceStatus)_model.RegisterLesson.LessonPriceType.Status).ToString() %>：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></span>
             </div>
         </div>
     </div>
@@ -36,8 +38,8 @@
             height: "auto",
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-calendar'></i>  行事曆</h4>",
             buttons: [
-    <%  if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-        {   
+    <%  //if (_model.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
+        {
             var expansion = _model.LessonTimeExpansion.First();%>
             {
                 html: "<i class='fa fa-edit'></i>&nbsp;編輯",

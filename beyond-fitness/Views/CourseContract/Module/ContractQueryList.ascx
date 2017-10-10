@@ -20,6 +20,7 @@
             <th>合約名稱</th>
             <th data-hide="phone">剩餘/購買堂數</th>
             <th data-hide="phone">合約總金額</th>
+            <th data-hide="phone">已收金額</th>
             <th data-hide="phone">服務項目</th>
             <th data-hide="phone">狀態</th>
             <th data-hide="phone">功能</th>        

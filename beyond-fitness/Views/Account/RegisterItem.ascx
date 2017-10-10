@@ -36,10 +36,14 @@
                 <input type="text" placeholder="請選擇圖片" readonly="" />
             </div>
         </div>
+        <%  if(_profile!=null 
+                && (_profile.IsAssistant() || _profile.IsCoach() || _profile.IsManager() || _profile.IsViceManager()))
+            { %>
         <div class="col col-6">
             <label>合約簽名檔</label>
             <div><% Html.RenderAction("UserSignature", "Account", new { _model.UID }); %></div>
         </div>
+        <%  } %>
     </div>
 </fieldset>
 
@@ -68,7 +72,7 @@
                 success: function (data) {
                     elmt.append(fileUpload);
                     if (data.result) {
-                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID);
+                        $('#profileImg').prop('src', '<%= VirtualPathUtility.ToAbsolute("~/Information/GetResource/") %>' + data.pictureID + "?stretch=true");
                     } else {
                         smartAlert(data.message);
                     }
@@ -92,6 +96,7 @@
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
     RegisterViewModel _model;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -99,6 +104,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (RegisterViewModel)this.Model;
+        _profile = models.GetTable<UserProfile>().Where(u => u.UID == _model.UID).FirstOrDefault();
     }
 
 

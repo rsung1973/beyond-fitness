@@ -35,7 +35,13 @@
         <%  } %>
     </td>
     <td nowrap="noWrap" class="text-right"><%= _model.Status<=(int)Naming.CourseContractStatus.已生效 ? String.Format("{0:##,###,###,###}",_model.TotalCost) : "--" %></td>
-    <td><%  var revision = _model.CourseContractRevision; %>
+    <td nowrap="noWrap" class="text-right"><%  var revision = _model.CourseContractRevision; %>
+        <%  if(revision==null)
+            { %>
+        <%= String.Format("{0:##,###,###,###}",_model.TotalPaidAmount()) %>
+        <%  } %>
+    </td>
+    <td>
         <%= revision==null ? "新合約" : revision.Reason %></td>
     <td nowrap="noWrap"><%= ((Naming.CourseContractStatus)_model.Status).ToString() %>
         <%= _model.Expiration.HasValue && _model.Expiration.Value<DateTime.Today ? "(*)" : null %>
@@ -44,7 +50,7 @@
         <%  if(revision==null)
                     {   %>
         <a onclick="$global.viewContract(<%= _model.ContractID %>);" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-        <%  if (_model.Status > (int)Naming.CourseContractStatus.待審核 && _model.ContractID>1028)
+        <%  if (_model.Status > (int)Naming.CourseContractStatus.待審核 && _model.ContractID>1045)
                         { %>
         <a href="<%= Url.Action("GetContractPdf","CourseContract",new { _model.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
         <%  }

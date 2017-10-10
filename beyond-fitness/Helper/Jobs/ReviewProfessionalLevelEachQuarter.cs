@@ -35,7 +35,7 @@ namespace WebHome.Helper.Jobs
 
         public DateTime GetScheduleToNextTurn(DateTime current)
         {
-            DateTime quarterStart = (new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 16)).AddMonths(3);
+            DateTime quarterStart = (new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1)).AddMonths(3);
             return quarterStart;
         }
     }

@@ -159,10 +159,10 @@ namespace WebHome.Controllers
                 viewModel.Address = item.Address;
                 viewModel.Nickname = item.Nickname;
                 viewModel.UID = item.UID;
-
+                viewModel.Email = item.PID;
             }
 
-            return View("~/Views/Learner/Module/EditLearner.ascx");
+            return View("~/Views/Learner/Module/EditLearner.ascx", item);
         }
 
         [CoachOrAssistantAuthorize]

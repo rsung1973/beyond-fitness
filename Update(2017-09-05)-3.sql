@@ -50,7 +50,7 @@ SELECT  InstallmentID,ISNull(
 FROM     TuitionInstallment
 go
 UPDATE Payment
-SET        Status = 1205, HandlerID = RegisterLesson.AdvisorID, InvoiceID = 2215
+SET        Status = 1205, HandlerID = RegisterLesson.AdvisorID, InvoiceID = 2218
 FROM     Payment INNER JOIN
                TuitionInstallment ON Payment.PaymentID = TuitionInstallment.InstallmentID INNER JOIN
                RegisterLesson ON TuitionInstallment.RegisterID = RegisterLesson.RegisterID
@@ -236,59 +236,88 @@ go
 -- copy EnterpriseLessonType
 -- copy EnterpriseCourseContent
 go
-insert into RegisterLessonEnterprise (RegisterID,ContractID)
-values
-(	7835	,	1	),
-(	7837	,	1	),
-(	7838	,	1	),
-(	7839	,	1	),
-(	7840	,	1	),
-(	7909	,	1	),
-(	7911	,	1	),
-(	7919	,	1	),
-(	7928	,	1	),
-(	7929	,	1	),
-(	7930	,	1	),
-(	7936	,	1	),
-(	7941	,	1	),
-(	8080	,	1	),
-(	7980	,	1	),
-(	8004	,	1	),
-(	8054	,	1	),
-(	8055	,	1	),
-(	8165	,	1	),
-(	8178	,	1	),
-(	8179	,	1	),
-(	8181	,	1	),
-(	8183	,	1	),
-(	8192	,	1	),
-(	8220	,	1	),
-(	8225	,	1	),
-(	8262	,	1	),
-(	8287	,	1	),
-(	8335	,	1	),
-(	8480	,	1	),
-(	8693	,	1	)
+--insert into RegisterLessonEnterprise (RegisterID,ContractID)
+--values
+--(	7835	,	1	),
+--(	7837	,	1	),
+--(	7838	,	1	),
+--(	7839	,	1	),
+--(	7840	,	1	),
+--(	7909	,	1	),
+--(	7911	,	1	),
+--(	7919	,	1	),
+--(	7928	,	1	),
+--(	7929	,	1	),
+--(	7930	,	1	),
+--(	7936	,	1	),
+--(	7941	,	1	),
+--(	8080	,	1	),
+--(	7980	,	1	),
+--(	8004	,	1	),
+--(	8054	,	1	),
+--(	8055	,	1	),
+--(	8165	,	1	),
+--(	8178	,	1	),
+--(	8179	,	1	),
+--(	8181	,	1	),
+--(	8183	,	1	),
+--(	8192	,	1	),
+--(	8220	,	1	),
+--(	8225	,	1	),
+--(	8262	,	1	),
+--(	8287	,	1	),
+--(	8335	,	1	),
+--(	8480	,	1	),
+--(	8693	,	1	)
 
 go
 
-insert into RegisterLessonEnterprise (RegisterID,ContractID)
-values
-(	7843	,	2	),
-(	7844	,	2	),
-(	7845	,	2	),
-(	7846	,	2	),
-(	7847	,	2	),
-(	7848	,	2	),
-(	7853	,	2	),
-(	7854	,	2	),
-(	8039	,	2	),
-(	8040	,	2	),
-(	7910	,	2	),
-(	8038	,	2	),
-(	8041	,	2	),
-(	8042	,	2	)
+--insert into RegisterLessonEnterprise (RegisterID,ContractID)
+--values
+--(	7843	,	2	),
+--(	7844	,	2	),
+--(	7845	,	2	),
+--(	7846	,	2	),
+--(	7847	,	2	),
+--(	7848	,	2	),
+--(	7853	,	2	),
+--(	7854	,	2	),
+--(	8039	,	2	),
+--(	8040	,	2	),
+--(	7910	,	2	),
+--(	8038	,	2	),
+--(	8041	,	2	),
+--(	8042	,	2	)
 go
+INSERT INTO RegisterLessonEnterprise
+               (RegisterID, ContractID, TypeID)
+SELECT  RegisterLesson.RegisterID, 1 , 2 
+FROM     RegisterLesson INNER JOIN
+               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+WHERE   (LessonPriceType.PriceID IN (52)) AND (RegisterLesson.GroupingMemberCount = 1)
+go
+INSERT INTO RegisterLessonEnterprise
+               (RegisterID, ContractID, TypeID)
+SELECT  RegisterLesson.RegisterID, 2 , 3 
+FROM     RegisterLesson INNER JOIN
+               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+WHERE   (LessonPriceType.PriceID IN (52)) AND (RegisterLesson.GroupingMemberCount = 2)
+go
+INSERT INTO RegisterLessonEnterprise
+               (RegisterID, ContractID, TypeID)
+SELECT  RegisterLesson.RegisterID, 4 , 2 
+FROM     RegisterLesson INNER JOIN
+               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+WHERE   (LessonPriceType.PriceID IN (69)) AND (RegisterLesson.GroupingMemberCount = 1)
+go
+INSERT INTO RegisterLessonEnterprise
+               (RegisterID, ContractID, TypeID)
+SELECT  RegisterLesson.RegisterID, 3 , 2 
+FROM     RegisterLesson INNER JOIN
+               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+WHERE   (LessonPriceType.PriceID IN (73)) AND (RegisterLesson.GroupingMemberCount = 1)
+go
+
 INSERT INTO EnterpriseCourseMember
                (ContractID, UID)
 SELECT  RegisterLessonEnterprise.ContractID, RegisterLesson.UID
@@ -301,27 +330,27 @@ FROM     RegisterLessonEnterprise INNER JOIN
                RegisterLessonContract ON RegisterLesson.RegisterID = RegisterLessonContract.RegisterID INNER JOIN
                CourseContract ON RegisterLessonContract.ContractID = CourseContract.ContractID
 go
-INSERT INTO EnterpriseCourseContent
-               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
-SELECT  ContractID, TypeID, 1 AS Expr1, 0 AS Expr2, 60 AS Expr3
-FROM     RegisterLessonEnterprise
-WHERE   (TypeID = 1)
-GROUP BY ContractID, TypeID
-go
-INSERT INTO EnterpriseCourseContent
-               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
-SELECT  ContractID, TypeID, 6 AS Expr1, 300 AS Expr2, 60 AS Expr3
-FROM     RegisterLessonEnterprise
-WHERE   (TypeID = 4)
-GROUP BY ContractID, TypeID
-go
-INSERT INTO EnterpriseCourseContent
-               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
-SELECT  ContractID, TypeID, 6 AS Expr1, 1400 AS Expr2, 60 AS Expr3
-FROM     RegisterLessonEnterprise
-WHERE   (TypeID in (2,3))
-GROUP BY ContractID, TypeID
-go
+--INSERT INTO EnterpriseCourseContent
+--               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
+--SELECT  ContractID, TypeID, 1 AS Expr1, 0 AS Expr2, 60 AS Expr3
+--FROM     RegisterLessonEnterprise
+--WHERE   (TypeID = 1)
+--GROUP BY ContractID, TypeID
+--go
+--INSERT INTO EnterpriseCourseContent
+--               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
+--SELECT  ContractID, TypeID, 6 AS Expr1, 300 AS Expr2, 60 AS Expr3
+--FROM     RegisterLessonEnterprise
+--WHERE   (TypeID = 4)
+--GROUP BY ContractID, TypeID
+--go
+--INSERT INTO EnterpriseCourseContent
+--               (ContractID, TypeID, Lessons, ListPrice, DurationInMinutes)
+--SELECT  ContractID, TypeID, 6 AS Expr1, 1400 AS Expr2, 60 AS Expr3
+--FROM     RegisterLessonEnterprise
+--WHERE   (TypeID in (2,3))
+--GROUP BY ContractID, TypeID
+--go
 INSERT INTO RegisterLessonEnterprise
                (RegisterID, ContractID)
 SELECT  r.RegisterID,  RegisterLessonEnterprise.ContractID
@@ -345,20 +374,20 @@ FROM     RegisterLessonEnterprise INNER JOIN
                LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
 WHERE   (LessonPriceType.Status = 103)
 go
-UPDATE RegisterLessonEnterprise
-SET        TypeID = 2
-FROM     RegisterLessonEnterprise INNER JOIN
-               RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID INNER JOIN
-               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
-WHERE   (RegisterLessonEnterprise.TypeID IS NULL) AND (RegisterLesson.GroupingMemberCount = 1)
-go
-UPDATE RegisterLessonEnterprise
-SET        TypeID = 3
-FROM     RegisterLessonEnterprise INNER JOIN
-               RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID INNER JOIN
-               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
-WHERE   (RegisterLessonEnterprise.TypeID IS NULL) AND (RegisterLesson.GroupingMemberCount = 2)
-go
+--UPDATE RegisterLessonEnterprise
+--SET        TypeID = 2
+--FROM     RegisterLessonEnterprise INNER JOIN
+--               RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID INNER JOIN
+--               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+--WHERE   (RegisterLessonEnterprise.TypeID IS NULL) AND (RegisterLesson.GroupingMemberCount = 1)
+--go
+--UPDATE RegisterLessonEnterprise
+--SET        TypeID = 3
+--FROM     RegisterLessonEnterprise INNER JOIN
+--               RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID INNER JOIN
+--               LessonPriceType ON RegisterLesson.ClassLevel = LessonPriceType.PriceID
+--WHERE   (RegisterLessonEnterprise.TypeID IS NULL) AND (RegisterLesson.GroupingMemberCount = 2)
+--go
 
 
 UPDATE LessonTime
@@ -388,3 +417,16 @@ FROM     RegisterLessonEnterprise INNER JOIN
                RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID
 WHERE   (RegisterLesson.RegisterGroupID IS NOT NULL) AND (RegisterLessonEnterprise.TypeID = 4)
 go
+UPDATE RegisterLesson
+SET        Lessons = CourseContract.Lessons
+FROM     CourseContract INNER JOIN
+               RegisterLessonContract ON CourseContract.ContractID = RegisterLessonContract.ContractID INNER JOIN
+               RegisterLesson ON RegisterLessonContract.RegisterID = RegisterLesson.RegisterID
+WHERE   (CourseContract.ContractType = 2)
+go
+UPDATE RegisterLesson
+SET        ClassLevel = 92
+FROM     RegisterLessonEnterprise INNER JOIN
+               RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID
+go
+

@@ -112,7 +112,7 @@
                         <label class="label">收款金額</label>
                         <label class="input">
                             <i class="icon-append fa fa-usd"></i>
-                            <input type="number" name="PayoffAmount" maxlength="10" placeholder="請輸入收款金額" value="300" readonly="readonly" />
+                            <input type="number" name="PayoffAmount" maxlength="10" placeholder="請輸入收款金額" value="300" />
                         </label>
                     </section>
                 </div>
@@ -202,6 +202,8 @@
             todayHighlight: 1,
             startView: 2,
             minView: 2,
+            startDate: '<%= String.Format("{0:yyyy-MM-01}",DateTime.Today) %>',
+            endDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>',
             forceParse: 0
         });
 

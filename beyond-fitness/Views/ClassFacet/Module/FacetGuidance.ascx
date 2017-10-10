@@ -21,11 +21,13 @@
         <%  } %>
     </ul>
     <div class="widget-toolbar">
-        <%  if (!_model.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
+        <%  if (!_model.ContractTrustTrack.Any(t => t.SettlementID.HasValue) && _model.LessonAttendance==null)
             {   %>
         <a onclick="rebookingByCoach();" class="btn bg-color-yellow" id="modifyBookingDialog_link">修改時間</a>
         <%  } %>
-        <%  if ((_model.TrainingBySelf==1 && _model.ClassTime<DateTime.Today.AddDays(1)) && _model.LessonAttendance == null)
+        <%  if ((_model.RegisterLesson.RegisterLessonEnterprise!=null 
+                && _model.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status==(int)Naming.LessonPriceStatus.自主訓練 
+                && _model.ClassTime<DateTime.Today.AddDays(1)) && _model.LessonAttendance == null)
             { %>
         <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>完成</a>
         <%  } %>

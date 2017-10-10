@@ -22,10 +22,10 @@
                 <input type="radio" name="rbTitleImg" value="<%# Item.AttachmentID %>" />
                 <i></i>設成主題圖片
             </label>
-            <img width="60" src="<%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) %>" />  
+            <img width="60" src="<%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) + "?stretch=true" %>" />  
              <a  onclick="javascript:deleteResource(<%# Item.AttachmentID %>)" class="btn btn-primary"><i class="fa fa-fw fa-trash-o"></i> 刪除</a>
             <label  class="label" class="form-md">
-                ( <%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) %> )               
+                ( <%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID + "?stretch=true") %> )               
             </label>
             
         </ItemTemplate>
@@ -46,7 +46,7 @@
 
     ModelSource<UserProfile> models;
     Article _item;
-    IQueryable<Attachment> _attachment;
+    IEnumerable<Attachment> _attachment;
 
     protected override void OnInit(EventArgs e)
     {

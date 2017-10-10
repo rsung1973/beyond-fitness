@@ -189,9 +189,17 @@ namespace WebHome.Helper
                     var cookie = context.Request.Cookies["loginToken"];
                     if (cookie != null && !String.IsNullOrEmpty(cookie.Value))
                     {
-                        FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                        //Logger.Debug("Has loginToken:" + ticket.Name);
-                        profile = ticket.Name.getLoginUser();
+                        try
+                        {
+                            FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                            //Logger.Debug("Has loginToken:" + ticket.Name);
+                            profile = ticket.Name.getLoginUser();
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                            profile = null;
+                        }
                     }
                 }
                 context.SetCacheValue("userProfile", profile);
@@ -231,9 +239,17 @@ namespace WebHome.Helper
                     var cookie = context.Request.Cookies["loginToken"];
                     if (cookie != null && !String.IsNullOrEmpty(cookie.Value))
                     {
-                        FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                        //Logger.Debug("Has loginToken:" + ticket.Name);
-                        profile = ticket.Name.getLoginUser();
+                        try
+                        {
+                            FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                            //Logger.Debug("Has loginToken:" + ticket.Name);
+                            profile = ticket.Name.getLoginUser();
+                        }
+                        catch(Exception ex)
+                        {
+                            Logger.Error(ex);
+                            profile = null;
+                        }
                     }
                 }
                 context.SetCacheValue("userProfile", profile);

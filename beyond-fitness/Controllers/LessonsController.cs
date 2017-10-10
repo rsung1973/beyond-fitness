@@ -333,231 +333,231 @@ namespace WebHome.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult BookingByCoach(LessonTimeViewModel viewModel)
-        {
-            UserProfile item = HttpContext.GetUser();
-            if (item == null)
-            {
-                return Redirect(FormsAuthentication.LoginUrl);
-            }
+        //[HttpPost]
+        //public ActionResult BookingByCoach(LessonTimeViewModel viewModel)
+        //{
+        //    UserProfile item = HttpContext.GetUser();
+        //    if (item == null)
+        //    {
+        //        return Redirect(FormsAuthentication.LoginUrl);
+        //    }
 
-            ViewBag.ViewModel = viewModel;
+        //    ViewBag.ViewModel = viewModel;
 
-            if (!this.ModelState.IsValid)
-            {
-                ViewBag.ModelState = this.ModelState;
-                return View(item);
-            }
+        //    if (!this.ModelState.IsValid)
+        //    {
+        //        ViewBag.ModelState = this.ModelState;
+        //        return View(item);
+        //    }
 
-            var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
-            if (coach == null)
-            {
-                ViewBag.Message = "未指定體能顧問!!";
-                return View(item);
-            }
+        //    var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
+        //    if (coach == null)
+        //    {
+        //        ViewBag.Message = "未指定體能顧問!!";
+        //        return View(item);
+        //    }
 
-            if(coach.UserProfile.IsFreeAgent())
-            {
-                var result = bookingByFreeAgent(viewModel, coach);
-                if(result!=null)
-                {
-                    return result;
-                } 
-                else
-                {
-                    return this.TransferToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
-                }
-            }
-
-
-            RegisterLesson lesson;
-            LessonPriceType priceType;
-
-            if (viewModel.TrainingBySelf == 1)
-            {
-                if (!viewModel.UID.HasValue)
-                {
-                    this.ModelState.AddModelError("queryAttendee", "請選擇上課學員!!");
-                    ViewBag.ModelState = this.ModelState;
-                    return View(item);
-                }
-
-                priceType = models.CurrentPISessionPrice();
-
-                lesson = new RegisterLesson
-                {
-                    UID = viewModel.UID.Value,
-                    RegisterDate = DateTime.Now,
-                    GroupingMemberCount = 1,
-                    Lessons = 1,
-                    ClassLevel = priceType != null ? priceType.PriceID : (int?)null,
-                    IntuitionCharge = new IntuitionCharge
-                    {
-                        ByInstallments = 1,
-                        Payment = "Cash",
-                        FeeShared = 0
-                    },
-                    AdvisorID = viewModel.CoachID,
-                    GroupingLesson = new GroupingLesson { }
-                };
-
-                //var installment = new TuitionInstallment
-                //{
-                //    PayoffDate = viewModel.ClassDate,
-                //    PayoffAmount = priceType.ListPrice
-                //};
-                //installment.TuitionAchievement.Add(new TuitionAchievement
-                //{
-                //    CoachID = lesson.AdvisorID.Value,
-                //    ShareAmount = installment.PayoffAmount
-                //});
-
-                //lesson.IntuitionCharge.TuitionInstallment.Add(installment);
-                models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
-                models.SubmitChanges();
-            }
-            else
-            {
-                lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
-                if (lesson == null)
-                {
-                    ViewBag.Message = "學員未購買課程!!";
-                    return View(item);
-                }
-                priceType = lesson.LessonPriceType;
-
-                if (lesson.Attended == (int)Naming.LessonStatus.課程結束)
-                {
-                    ViewBag.Message = "學員課程已結束!!";
-                    return View(item);
-                }
-
-                if (lesson.LessonTime.Count + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
-                {
-                    ViewBag.Message = "學員上課堂數已滿!!";
-                    return View(item);
-                }
-            }
+        //    if(coach.UserProfile.IsFreeAgent())
+        //    {
+        //        var result = bookingByFreeAgent(viewModel, coach);
+        //        if(result!=null)
+        //        {
+        //            return result;
+        //        } 
+        //        else
+        //        {
+        //            return this.TransferToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
+        //        }
+        //    }
 
 
-            LessonTime timeItem = new LessonTime
-            {
-                InvitedCoach = viewModel.CoachID,
-                AttendingCoach = viewModel.CoachID,
-                //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
-                ClassTime = viewModel.ClassDate,
-                DurationInMinutes = priceType.DurationInMinutes,
-                TrainingBySelf = viewModel.TrainingBySelf,
-                RegisterID = lesson.RegisterID,
-                LessonPlan = new LessonPlan
-                {
+        //    RegisterLesson lesson;
+        //    LessonPriceType priceType;
 
-                },
-                BranchID = viewModel.BranchID,
-                LessonTimeSettlement = new LessonTimeSettlement
-                {
-                    ProfessionalLevelID = coach.LevelID.Value
-                }
-            };
+        //    if (viewModel.TrainingBySelf == 1)
+        //    {
+        //        if (!viewModel.UID.HasValue)
+        //        {
+        //            this.ModelState.AddModelError("queryAttendee", "請選擇上課學員!!");
+        //            ViewBag.ModelState = this.ModelState;
+        //            return View(item);
+        //        }
 
-            if (viewModel.TrainingBySelf == 1)
-            {
-                timeItem.GroupID = lesson.RegisterGroupID;
-            }
-            else
-            {
-                var users = models.CheckOverlapedBooking(timeItem, lesson);
-                if (users.Count() > 0)
-                {
-                    ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
-                    return View(item);
-                }
-                if (lesson.GroupingMemberCount > 1)
-                {
-                    timeItem.GroupID = lesson.RegisterGroupID;
-                    timeItem.LessonFitnessAssessment.AddRange(
-                        lesson.GroupingLesson.RegisterLesson.Select(
-                            r => new LessonFitnessAssessment
-                            {
-                                UID = r.UID
-                            }));
-                }
-                else
-                {
-                    timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
-                    {
-                        UID = lesson.UID
-                    });
-                    if (!lesson.RegisterGroupID.HasValue)
-                    {
-                        timeItem.GroupingLesson = lesson.GroupingLesson = new GroupingLesson { };
-                    }
-                    else
-                    {
-                        timeItem.GroupID = lesson.RegisterGroupID;
-                    }
-                }
+        //        priceType = models.CurrentPISessionPrice();
 
-                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
-                {
-                    ContractID = lesson.RegisterLessonContract.ContractID,
-                    EventDate = timeItem.ClassTime.Value,
-                    LessonTime = timeItem,
-                    TrustType = Naming.TrustType.N.ToString()
-                });
+        //        lesson = new RegisterLesson
+        //        {
+        //            UID = viewModel.UID.Value,
+        //            RegisterDate = DateTime.Now,
+        //            GroupingMemberCount = 1,
+        //            Lessons = 1,
+        //            ClassLevel = priceType != null ? priceType.PriceID : (int?)null,
+        //            IntuitionCharge = new IntuitionCharge
+        //            {
+        //                ByInstallments = 1,
+        //                Payment = "Cash",
+        //                FeeShared = 0
+        //            },
+        //            AdvisorID = viewModel.CoachID,
+        //            GroupingLesson = new GroupingLesson { }
+        //        };
 
-            }
+        //        //var installment = new TuitionInstallment
+        //        //{
+        //        //    PayoffDate = viewModel.ClassDate,
+        //        //    PayoffAmount = priceType.ListPrice
+        //        //};
+        //        //installment.TuitionAchievement.Add(new TuitionAchievement
+        //        //{
+        //        //    CoachID = lesson.AdvisorID.Value,
+        //        //    ShareAmount = installment.PayoffAmount
+        //        //});
 
-            models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
-            //models.SubmitChanges();
+        //        //lesson.IntuitionCharge.TuitionInstallment.Add(installment);
+        //        models.GetTable<RegisterLesson>().InsertOnSubmit(lesson);
+        //        models.SubmitChanges();
+        //    }
+        //    else
+        //    {
+        //        lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
+        //        if (lesson == null)
+        //        {
+        //            ViewBag.Message = "學員未購買課程!!";
+        //            return View(item);
+        //        }
+        //        priceType = lesson.LessonPriceType;
 
-            var timeExpansion = models.GetTable<LessonTimeExpansion>();
-            if (lesson.GroupingMemberCount > 1)
-            {
-                for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
-                {
-                    foreach (var regles in lesson.GroupingLesson.RegisterLesson)
-                    {
-                        timeExpansion.InsertOnSubmit(new LessonTimeExpansion
-                        {
-                            ClassDate = timeItem.ClassTime.Value.Date,
-                            //LessonID = timeItem.LessonID,
-                            LessonTime = timeItem,
-                            Hour = timeItem.ClassTime.Value.Hour + i,
-                            RegisterID = regles.RegisterID
-                        });
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
-                {
-                    timeExpansion.InsertOnSubmit(new LessonTimeExpansion
-                    {
-                        ClassDate = timeItem.ClassTime.Value.Date,
-                        //LessonID = timeItem.LessonID,
-                        LessonTime = timeItem,
-                        Hour = timeItem.ClassTime.Value.Hour + i,
-                        RegisterID = lesson.RegisterID
-                    });
-                }
-            }
+        //        if (lesson.Attended == (int)Naming.LessonStatus.課程結束)
+        //        {
+        //            ViewBag.Message = "學員課程已結束!!";
+        //            return View(item);
+        //        }
 
-            try
-            {
-                models.SubmitChanges();
-            }
-            catch(Exception ex)
-            {
-                Logger.Error(ex);
-                ViewBag.Message = "預約未完成，請重新預約!!";
-                return View(item);
-            }
+        //        if (lesson.LessonTime.Count + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+        //        {
+        //            ViewBag.Message = "學員上課堂數已滿!!";
+        //            return View(item);
+        //        }
+        //    }
 
-            return RedirectToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
-        }
+
+        //    LessonTime timeItem = new LessonTime
+        //    {
+        //        InvitedCoach = viewModel.CoachID,
+        //        AttendingCoach = viewModel.CoachID,
+        //        //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
+        //        ClassTime = viewModel.ClassDate,
+        //        DurationInMinutes = priceType.DurationInMinutes,
+        //        TrainingBySelf = viewModel.TrainingBySelf,
+        //        RegisterID = lesson.RegisterID,
+        //        LessonPlan = new LessonPlan
+        //        {
+
+        //        },
+        //        BranchID = viewModel.BranchID,
+        //        LessonTimeSettlement = new LessonTimeSettlement
+        //        {
+        //            ProfessionalLevelID = coach.LevelID.Value
+        //        }
+        //    };
+
+        //    if (viewModel.TrainingBySelf == 1)
+        //    {
+        //        timeItem.GroupID = lesson.RegisterGroupID;
+        //    }
+        //    else
+        //    {
+        //        var users = models.CheckOverlapedBooking(timeItem, lesson);
+        //        if (users.Count() > 0)
+        //        {
+        //            ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
+        //            return View(item);
+        //        }
+        //        if (lesson.GroupingMemberCount > 1)
+        //        {
+        //            timeItem.GroupID = lesson.RegisterGroupID;
+        //            timeItem.LessonFitnessAssessment.AddRange(
+        //                lesson.GroupingLesson.RegisterLesson.Select(
+        //                    r => new LessonFitnessAssessment
+        //                    {
+        //                        UID = r.UID
+        //                    }));
+        //        }
+        //        else
+        //        {
+        //            timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
+        //            {
+        //                UID = lesson.UID
+        //            });
+        //            if (!lesson.RegisterGroupID.HasValue)
+        //            {
+        //                timeItem.GroupingLesson = lesson.GroupingLesson = new GroupingLesson { };
+        //            }
+        //            else
+        //            {
+        //                timeItem.GroupID = lesson.RegisterGroupID;
+        //            }
+        //        }
+
+        //        models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+        //        {
+        //            ContractID = lesson.RegisterLessonContract.ContractID,
+        //            EventDate = timeItem.ClassTime.Value,
+        //            LessonTime = timeItem,
+        //            TrustType = Naming.TrustType.N.ToString()
+        //        });
+
+        //    }
+
+        //    models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
+        //    //models.SubmitChanges();
+
+        //    var timeExpansion = models.GetTable<LessonTimeExpansion>();
+        //    if (lesson.GroupingMemberCount > 1)
+        //    {
+        //        for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
+        //        {
+        //            foreach (var regles in lesson.GroupingLesson.RegisterLesson)
+        //            {
+        //                timeExpansion.InsertOnSubmit(new LessonTimeExpansion
+        //                {
+        //                    ClassDate = timeItem.ClassTime.Value.Date,
+        //                    //LessonID = timeItem.LessonID,
+        //                    LessonTime = timeItem,
+        //                    Hour = timeItem.ClassTime.Value.Hour + i,
+        //                    RegisterID = regles.RegisterID
+        //                });
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
+        //        {
+        //            timeExpansion.InsertOnSubmit(new LessonTimeExpansion
+        //            {
+        //                ClassDate = timeItem.ClassTime.Value.Date,
+        //                //LessonID = timeItem.LessonID,
+        //                LessonTime = timeItem,
+        //                Hour = timeItem.ClassTime.Value.Hour + i,
+        //                RegisterID = lesson.RegisterID
+        //            });
+        //        }
+        //    }
+
+        //    try
+        //    {
+        //        models.SubmitChanges();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //        ViewBag.Message = "預約未完成，請重新預約!!";
+        //        return View(item);
+        //    }
+
+        //    return RedirectToAction("Coach", "Account", new { lessonDate = viewModel.ClassDate, message = "上課時間預約完成!!" });
+        //}
 
         public ActionResult CommitBookingByCoach(LessonTimeViewModel viewModel)
         {
@@ -580,19 +580,19 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/MessageView.ascx", model: "未指定體能顧問!!");
             }
 
-            if (coach.UserProfile.IsFreeAgent())
-            {
-                var result = bookingByFreeAgent(viewModel, coach);
-                if (result != null)
-                {
-                    ((ViewResult)result).ViewName = "~/Views/Shared/MessageView.ascx";
-                    return result;
-                }
-                else
-                {
-                    return Json(new { result = true, message = "上課時間預約完成!!" });
-                }
-            }
+            //if (coach.UserProfile.IsFreeAgent())
+            //{
+            //    var result = bookingByFreeAgent(viewModel, coach);
+            //    if (result != null)
+            //    {
+            //        ((ViewResult)result).ViewName = "~/Views/Shared/MessageView.ascx";
+            //        return result;
+            //    }
+            //    else
+            //    {
+            //        return Json(new { result = true, message = "上課時間預約完成!!" });
+            //    }
+            //}
 
 
             RegisterLesson lesson;
@@ -655,21 +655,21 @@ namespace WebHome.Controllers
                     return View("~/Views/Shared/MessageView.ascx", model: "學員課程已結束!!");
                 }
 
-                var lessonCount = lesson.GroupingLesson.LessonTime.Count;
-                if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
-                {
-                    return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
-                }
-
                 var contract = lesson.RegisterLessonContract.CourseContract;
                 if (contract.Expiration.Value < DateTime.Today)
                 {
                     return View("~/Views/Shared/MessageView.ascx", model: "學員合約已過期!!");
                 }
 
+                var lessonCount = lesson.GroupingLesson.LessonTime.Count;
                 if (contract.CourseContractType.ContractCode == "CFA")
                 {
                     lessonCount = contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count());
+                }
+
+                if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+                {
+                    return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
                 }
 
                 if (contract.TotalCost / contract.Lessons * lessonCount > contract.ContractPayment.Sum(c => c.Payment.PayoffAmount))
@@ -1071,7 +1071,7 @@ namespace WebHome.Controllers
             else
             {
                 items = models.GetTable<RegisterLesson>()
-                    .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                    .Where(r => r.RegisterLessonContract != null)
                     .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
                         && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName)))
                     .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)

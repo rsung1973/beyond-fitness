@@ -151,8 +151,10 @@
                 $form.ajaxForm({
                     url: "<%= Url.Action("UpdatePDQ","Learner",new { _model.UID }) %>",
                     beforeSubmit: function () {
+                        showLoading();
                     },
                     success: function (data) {
+                        hideLoading();
                         if (data.result) {
                             $('#<%= _dialog %>').dialog('close');
                             if (next) {

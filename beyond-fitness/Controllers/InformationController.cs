@@ -340,7 +340,7 @@ namespace WebHome.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult GetResource(int id, bool? stretch = true)
+        public ActionResult GetResource(int id, bool? stretch = false)
         {
             var item = models.GetTable<Attachment>().Where(a => a.AttachmentID == id).FirstOrDefault();
             if (item != null)

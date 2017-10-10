@@ -340,13 +340,17 @@ namespace WebHome.Controllers
             if(item.Status==(int)Naming.LessonSeriesStatus.已啟用)
             {
                 models.ExecuteCommand(@"UPDATE LessonPriceSeries
-                        SET Status = 0
-                        WHERE (PriceID <> {0}) AND(Year = {1})", item.PriceID, item.Year);
+                        SET        Status = 0
+                        FROM     LessonPriceSeries INNER JOIN
+                                       LessonPriceType ON LessonPriceSeries.PriceID = LessonPriceType.PriceID
+                        WHERE   (LessonPriceSeries.PriceID <> {0}) AND (LessonPriceSeries.Year = {1}) 
+                                AND (LessonPriceType.BranchID = {2})", item.PriceID, item.Year, item.LessonPriceType.BranchID);
                 models.ExecuteCommand(@"UPDATE LessonPriceType
                         SET        Status = 0
                         FROM     LessonPriceSeries INNER JOIN
                                        LessonPriceType ON LessonPriceSeries.PriceID = LessonPriceType.SeriesID
-                        WHERE   (LessonPriceSeries.PriceID <> {0}) AND (LessonPriceSeries.Year = {1})",item.PriceID,item.Year);
+                        WHERE   (LessonPriceSeries.PriceID <> {0}) AND (LessonPriceSeries.Year = {1})
+                                AND (LessonPriceType.BranchID = {2})", item.PriceID, item.Year, item.LessonPriceType.BranchID);
             }
 
             return Json(new { result = true });

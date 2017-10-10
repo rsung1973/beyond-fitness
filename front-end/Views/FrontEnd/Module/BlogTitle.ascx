@@ -15,7 +15,7 @@
     <article class="post post--latest">
         <h3 class="not-visible">Latest post</h3>
         <a class="post__images" href="single-post.html?id=<%= item.DocID %>">
-            <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
+            <img src="<%= item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+item.Attachment.AttachmentID.ToString() + "?stretch=true" : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>" alt="">
         </a>
         <a class="post__text" href="single-post.html?id=<%= item.DocID %>">《<%= item.Title %>》 </a>
         <time datetime="<%= item.Document.DocDate.ToString("yyyy-MM-dd") %>" class="post__date"><%= item.Document.DocDate.ToString("MMM d, yyyy") %></time>

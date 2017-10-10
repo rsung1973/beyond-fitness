@@ -72,7 +72,7 @@ namespace WebHome.Controllers
                 viewModel.FitnessConsultant = item.FitnessConsultant;
                 viewModel.Status = item.Status;
                 viewModel.UID = item.CourseContractMember.Select(m => m.UID).ToArray();
-                viewModel.BranchID = item.LessonPriceType.BranchID;
+                viewModel.BranchID = item.CourseContractExtension.BranchID;
             }
 
             ViewBag.ViewModel = viewModel;
@@ -289,6 +289,19 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("AthleticLevel", "請選擇是否為運動員!!");
             }
 
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            viewModel.Email = viewModel.Email.GetEfficientString();
+            if (viewModel.Email != null && item != null && item.LevelID == (int)Naming.MemberStatus.已註冊)
+            {
+                if (item.PID != viewModel.Email && models.EntityList.Any(u => u.PID == viewModel.Email))
+                {
+                    ModelState.AddModelError("PID", "您的Email已經是註冊使用者!!");
+                }
+                else
+                {
+                    item.PID = viewModel.Email;
+                }
+            }
 
             if (!ModelState.IsValid)
             {
@@ -296,7 +309,6 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/ReportInputError.ascx");
             }
 
-            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
             if (item == null)
             {
                 item = models.CreateLearner(viewModel, Naming.RoleID.Preliminary);
@@ -902,7 +914,17 @@ namespace WebHome.Controllers
                 item.EffectiveDate = DateTime.Now;
                 models.SubmitChanges();
 
-                markContractNo(item);
+                do
+                {
+                    try
+                    {
+                        markContractNo(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                } while (item.ContractNo == null);
 
                 String pdfFile = null;
 
@@ -1528,7 +1550,7 @@ namespace WebHome.Controllers
             Response.ClearHeaders();
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("ContractDetails.xlsx")));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("ContractDetails.xlsx"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {

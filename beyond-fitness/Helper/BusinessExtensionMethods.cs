@@ -236,26 +236,28 @@ namespace WebHome.Helper
             return items;
         }
 
-        public static IEnumerable<CalendarEvent> ToFullCalendarEventWeekView(this IEnumerable<LessonTime> dataItems)
+        public static IEnumerable<CalendarEvent> ToFullCalendarEventWeekView(this IQueryable<LessonTime> sourceItems)
         {
             var today = DateTime.Today;
 
             IEnumerable<CalendarEvent> items;
+
+            IQueryable<LessonTime> dataItems = sourceItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise!=null);
             items = dataItems
-                    .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
                     .Select(g => new CalendarEvent
                     {
                         id = g.LessonID.ToString(),
                         lessonID = g.LessonID,
-                        title = g.AsAttendingCoach.UserProfile.RealName,
+                        title = String.Join("、", g.GroupingLesson.RegisterLesson.Select(r => r.UserProfile.RealName)),
                         start = String.Format("{0:O}", g.ClassTime),
                         end = String.Format("{0:O}", g.ClassTime.Value.AddMinutes(g.DurationInMinutes.Value)),
                         //description = "自由教練",
                         allDay = false,
-                        className = new string[] { "event", "bg-color-yellow" },
+                        className = g.LessonAttendance==null ? new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-grayDark" },
                         editable = g.LessonAttendance == null,
                     });
 
+            dataItems = sourceItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
             items = items.Concat(dataItems
                 .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.正常
@@ -638,7 +640,7 @@ namespace WebHome.Helper
             var attendanceCount = models.GetLessonAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
             var tuition = models.GetTuitionAchievement(item.CoachID, quarterStart, ref quarterEnd, null);
             var summary = tuition.Sum(t => t.ShareAmount) ?? 0;
-            bool qualifiedCert = item.CoachCertificate.Count(c => c.Expiration >= DateTime.Today) >= 2;
+            bool qualifiedCert = item.CoachCertificate.Count(c => c.Expiration >= quarterStart) >= 2;
 
             CoachRating ratingItem = new CoachRating
             {

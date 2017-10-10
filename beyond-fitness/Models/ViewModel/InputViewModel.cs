@@ -217,4 +217,15 @@ namespace WebHome.Models.ViewModel
         public int? GroupUID { get; set; }
         public int? UID { get; set; }
     }
+
+    public class InvoiceNoViewModel
+    {
+        public int? BranchID { get; set; }
+        public short? Year { get; set; }
+        public short? PeriodNo { get; set; }
+        public int? IntervalID { get; set; }
+        public String TrackCode { get; set; }
+        public int? StartNo { get; set; }
+        public int? EndNo { get; set; }
+    }
 }

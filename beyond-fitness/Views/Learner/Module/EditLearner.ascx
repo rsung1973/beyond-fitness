@@ -103,6 +103,18 @@
                         <%  } %>
                     </section>
                 </div>
+                <%  if (_model != null && _model.LevelID == (int)Naming.MemberStatus.已註冊)
+                    { %>
+                <div class="row">
+                    <section class="col col-10">
+                        <label class="label">E-mail</label>
+                        <label class="input">
+                            <i class="icon-append fa fa-at"></i>
+                            <input type="text" name="Email" value="<%= _viewModel.Email %>" maxlength="100" placeholder="請輸入E-mail" />
+                        </label>
+                    </section>
+                </div>
+                <%  } %>
                 <div class="row">
                     <section class="col col-4">
                         <label class="label">居住地址</label>
@@ -252,6 +264,7 @@
     ModelSource<UserProfile> models;
     String _dialog = "contractMember" + DateTime.Now.Ticks;
     ContractMemberViewModel _viewModel;
+    UserProfile _model;
 
     protected override void OnInit(EventArgs e)
     {
@@ -259,6 +272,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _viewModel = (ContractMemberViewModel)ViewBag.ViewModel;
+        _model = (UserProfile)this.Model;
     }
 
 </script>

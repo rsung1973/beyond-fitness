@@ -56,7 +56,7 @@ namespace WebHome.Helper
             writer.WriteLine(
                 String.Concat("<img id=\"", tagId,
                 "\" src=\"",
-                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
+                pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID + "?stretch=true" : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"),
                 "\" />"));
         }
 
@@ -76,7 +76,7 @@ namespace WebHome.Helper
                 }
             }
 
-            writer.AddAttribute("src", pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"));
+            writer.AddAttribute("src", pictureID.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + pictureID + "?stretch=true" : VirtualPathUtility.ToAbsolute("~/img/avatars/male.png"));
             writer.RenderBeginTag(HtmlTextWriterTag.Img);
             writer.RenderEndTag();
 

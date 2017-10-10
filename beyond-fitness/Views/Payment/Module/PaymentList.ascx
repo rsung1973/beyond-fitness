@@ -83,7 +83,7 @@
                 --
                 <%  } %>
             </td>
-            <td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit.AuditorID.HasValue ? "" : "(*)" %></td>
+            <td><%= (Naming.CourseContractStatus)item.Status %><%= item.PaymentAudit!=null && item.PaymentAudit.AuditorID.HasValue ? "" : "(*)" %></td>
         </tr>
         <%  if (item.VoidPayment != null && ViewBag.ShowFooter != false)
             { %>

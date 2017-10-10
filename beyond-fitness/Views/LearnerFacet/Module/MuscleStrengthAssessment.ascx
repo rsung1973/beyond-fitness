@@ -30,7 +30,7 @@
             new
             {
                 period = String.Format("{0:yyyy-MM-dd}", g.ClassTime),
-                energy = _profile.Birthday.HasValue && g.Item16 != null && g.Item17 != null ? filterZero((int)((g.Item17.TotalAssessment - g.Item16.TotalAssessment) / (206.9m - (0.67m * (DateTime.Today.Year - _profile.Birthday.Value.Year)) - g.Item16.TotalAssessment) * 100 + 0.5m)) : null,
+                energy = _profile.Birthday.HasValue && g.Item16 != null && g.Item17 != null ? filterZero((g.Item17.TotalAssessment - g.Item16.TotalAssessment) / (206.9m - (0.67m * (DateTime.Today.Year - _profile.Birthday.Value.Year) - g.Item16.TotalAssessment) * 100 + 0.5m)) : null,
                 strength = g.Item52 != null ? filterZero(g.Item52.TotalAssessment) : null
             }).ToArray();
 
@@ -85,7 +85,7 @@
         return decVal > 0 ? decVal : (decimal?)null;
     }
 
-    int? filterZero(int intVal)
+    int? filterZero(int? intVal)
     {
         return intVal > 0 ? intVal : (int?)null;
     }

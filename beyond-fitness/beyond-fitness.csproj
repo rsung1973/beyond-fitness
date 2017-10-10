@@ -836,6 +836,7 @@
     <Content Include="js\app.config.js" />
     <Content Include="js\app.min.js" />
     <Content Include="js\bootstrap-datetimepicker.js" />
+    <Content Include="js\bootstrap\bootstrap.min.js" />
     <Content Include="js\contact.js" />
     <Content Include="js\count-to.js" />
     <Content Include="js\jquery-2.1.4.min.js" />
@@ -871,6 +872,7 @@
     <Content Include="js\moment.js" />
     <Content Include="js\nivo-lightbox.js" />
     <Content Include="js\nivo-lightbox.min.js" />
+    <Content Include="js\notification\SmartNotification.min.js" />
     <Content Include="js\owl.carousel.js" />
     <Content Include="js\owl.carousel.min.js" />
     <Content Include="js\plugin\bootstrap-datetimepicker\bootstrap-datetimepicker.js" />
@@ -1672,6 +1674,10 @@
     <Content Include="Views\EnterpriseProgram\Module\MemberSelector.ascx" />
     <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
     <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
+    <Content Include="Views\Invoice\Module\EditInvoiceNoInterval.ascx" />
+    <Content Include="Views\Invoice\Module\TrackCodeNoList.ascx" />
+    <Content Include="Views\Invoice\Module\TrackCodeNoWidgetGrid.ascx" />
+    <Content Include="Views\Invoice\InvoiceNoIndex.aspx" />
     <Content Include="Views\Layout\NavItem\Payment.ascx" />
     <Content Include="Views\Layout\NavItem\Contract.ascx" />
     <Content Include="Views\Learner\Index.aspx" />
@@ -2093,6 +2099,7 @@
     <Compile Include="Controllers\CourseContractController.cs" />
     <Compile Include="Controllers\EnterpriseProgramController.cs" />
     <Compile Include="Controllers\FitnessDiagnosisController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\LearnerController.cs" />
     <Compile Include="Controllers\LearnerFacetController.cs" />
     <Compile Include="Controllers\CoachFacetController.cs" />

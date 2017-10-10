@@ -57,6 +57,12 @@ namespace WebHome.Models.DataEntity
             return item.Nickname==null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
         }
 
+        public static String Address(this UserProfile item)
+        {
+            return item.UserProfileExtension.AdministrativeArea + item.Address;
+        }
+
+
         public static String ContractNo(this CourseContract contract)
         {
             return contract.ContractNo != null ? String.Format("{0}-{1:00}", contract.ContractNo, contract.SequenceNo) : "--";

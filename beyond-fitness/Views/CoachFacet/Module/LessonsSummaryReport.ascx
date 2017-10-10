@@ -20,8 +20,12 @@
         </tr>
     </thead>
     <tbody>
-        <% var items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
-                  || l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除);  %>
+        <%  int[] scope = new int[] {
+                (int)Naming.LessonPriceStatus.一般課程,
+                (int)Naming.LessonPriceStatus.企業合作方案,
+                (int)Naming.LessonPriceStatus.已刪除,
+                (int)Naming.LessonPriceStatus.點數兌換課程 };
+            var items = _model.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value));  %>
         <tr>
             <td nowrap="noWrap">P.T session<%= reportCount(items.Count(),"") %></td>
             <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>

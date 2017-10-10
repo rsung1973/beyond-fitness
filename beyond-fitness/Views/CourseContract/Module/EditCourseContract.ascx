@@ -139,6 +139,12 @@
                                 <option value="90">90分鐘</option>
                             </select>
                             <i class="icon-append fa fa-clock-o"></i>
+                            <%  if (_model != null)
+                                { %>
+                            <script>
+                                $('#<%= _dialog %> select[name="DurationInMinutes"]').val('<%= _model.LessonPriceType.DurationInMinutes %>');
+                            </script>
+                            <%  } %>
                             <script>
                                 $('#<%= _dialog %> select[name="DurationInMinutes"]').on('change',function(evt) {
                                     loadPriceList();
