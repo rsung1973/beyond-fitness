@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Text.RegularExpressions;
+using Utility;
+using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 
@@ -22,12 +26,11 @@ namespace WebHome.Models.ViewModel
 
         protected InvoiceItem _newItem;
         protected Organization _seller;
-        protected InvoicePurchaseOrder _order;
         protected InvoiceBuyer _buyer;
         protected InvoiceCarrier _carrier;
         protected InvoiceDonation _donation;
         protected IEnumerable<InvoiceProductItem> _productItems;
-
+      
 
         public InvoiceViewModelValidator(ModelSource<TEntity> mgr, Organization owner)
         {
@@ -58,11 +61,6 @@ namespace WebHome.Models.ViewModel
                 return ex;
             }
 
-            if ((ex = checkDataNumber()) != null)
-            {
-                return ex;
-            }
-
             if ((ex = checkAmount()) != null)
             {
                 return ex;
@@ -74,7 +72,7 @@ namespace WebHome.Models.ViewModel
                 return ex;
             }
 
-            if (!String.IsNullOrEmpty(_invItem.CarrierType) && (ex = checkPublicCarrier()) != null)
+            if(!String.IsNullOrEmpty(_invItem.CarrierType) && (ex = checkPublicCarrier()) != null)
             {
                 return ex;
             }
@@ -101,10 +99,10 @@ namespace WebHome.Models.ViewModel
                 Document = new Document
                 {
                     DocDate = DateTime.Now,
-                    DocType = (int)Naming.DocumentTypeDefinition.E_Invoice
+                    DocType = (int)Naming.DocumentTypeDefinition.E_Invoice,
                 },
                 DonateMark = _donation == null ? "0" : "1",
-                InvoiceType = _invItem.InvoiceType,
+                InvoiceType = (byte)_invItem.InvoiceType,
                 SellerID = _seller.CompanyID,
                 CustomsClearanceMark = _invItem.CustomsClearanceMark,
                 InvoiceSeller = new InvoiceSeller
@@ -129,19 +127,14 @@ namespace WebHome.Models.ViewModel
                     SalesAmount = _invItem.SalesAmount,
                     TaxAmount = _invItem.TaxAmount,
                     TaxRate = _invItem.TaxRate,
-                    TaxType = _invItem.TaxType,
-                    TotalAmount = _invItem.TotalAmount,
-                    TotalAmountInChinese = Utility.ValueValidity.MoneyShow(_invItem.TotalAmount),
+                    TaxType = (byte)_invItem.TaxType,
+                    TotalAmount = _invItem.PayoffAmount,
+                    TotalAmountInChinese = Utility.ValueValidity.MoneyShow(_invItem.PayoffAmount),
                 },
                 InvoiceCarrier = _carrier,
                 InvoiceDonation = _donation,
                 PrintMark = _carrier == null ? "Y" : "N",
             };
-
-            if (_order != null)
-            {
-                _newItem.InvoicePurchaseOrder = _order;
-            }
 
             _newItem.InvoiceDetails.AddRange(_productItems.Select(p => new InvoiceDetails
             {
@@ -154,7 +147,7 @@ namespace WebHome.Models.ViewModel
                 {
                     if (!trackNoMgr.ApplyInvoiceDate(_invItem.InvoiceDate.Value) || !trackNoMgr.CheckInvoiceNo(_newItem))
                     {
-                        return new Exception(String.Format(MessageResources.AlertNullTrackNoInterval, _seller.ReceiptNo));
+                        return new Exception(String.Format("未設定發票字軌或發票號碼已用完，發票開立人統編：{0}", _seller.ReceiptNo));
                     }
                     else
                     {
@@ -170,32 +163,6 @@ namespace WebHome.Models.ViewModel
             return null;
         }
 
-        protected virtual Exception checkDataNumber()
-        {
-            _order = null;
-            if (String.IsNullOrEmpty(_invItem.DataNumber))
-            {
-                return null;
-            }
-
-
-            if (_mgr.GetTable<InvoicePurchaseOrder>().Any(d => d.OrderNo == _invItem.DataNumber
-                && d.InvoiceItem.SellerID == _seller.CompanyID))
-            {
-                return new Exception(String.Format(MessageResources.AlertDataNumberDuplicated, _invItem.DataNumber));
-            }
-
-
-            _order = new InvoicePurchaseOrder
-            {
-                OrderNo = _invItem.DataNumber
-            };
-
-            return null;
-        }
-
-
-
         protected virtual Exception checkBusiness()
         {
             _seller = _mgr.GetTable<Organization>().Where(o => o.CompanyID == _invItem.SellerID).FirstOrDefault();
@@ -205,28 +172,22 @@ namespace WebHome.Models.ViewModel
             }
             if (_seller == null)
             {
-                return new Exception(String.Format(MessageResources.AlertInvalidSeller, _invItem.SellerReceiptNo));
+                return new Exception(String.Format("營業人資料錯誤，統一編號:{0}", _invItem.SellerReceiptNo));
             }
 
-            if (_seller.CompanyID != _owner.CompanyID && !_mgr.GetTable<InvoiceIssuerAgent>().Any(a => a.AgentID == _owner.CompanyID && a.IssuerID == _seller.CompanyID))
+            if (String.IsNullOrEmpty(_invItem.BuyerReceiptNo))
             {
-                return new Exception(String.Format(MessageResources.InvalidSellerOrAgent, _invItem.SellerReceiptNo, _owner.ReceiptNo));
+                _invItem.BuyerReceiptNo = "0000000000";
             }
-
-            if (_seller.OrganizationStatus.CurrentLevel == (int)Naming.MemberStatusDefinition.Mark_To_Delete)
-            {
-                return new Exception(String.Format("開立人已註記停用,開立人統一編號:{0}，TAG:<SellerId />", _invItem.SellerReceiptNo));
-            }
-
-            if (!String.IsNullOrEmpty(_invItem.BuyerReceiptNo) && _invItem.BuyerReceiptNo != "0000000000")
+            else if (_invItem.BuyerReceiptNo != "0000000000")
             {
                 if (!Regex.IsMatch(_invItem.BuyerReceiptNo, "^[0-9]{8}$"))
                 {
-                    return new Exception(String.Format(MessageResources.InvalidBuyerId, _invItem.BuyerReceiptNo));
+                    return new Exception(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo));
                 }
                 else if (!_invItem.BuyerReceiptNo.CheckRegno())
                 {
-                    return new Exception(String.Format(MessageResources.InvalidReceiptNo, _invItem.BuyerReceiptNo));
+                    return new Exception(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo));
                 }
             }
 
@@ -236,7 +197,7 @@ namespace WebHome.Models.ViewModel
             }
             else if (!Regex.IsMatch(_invItem.RandomNo, "^[0-9]{4}$"))
             {
-                return new Exception(String.Format(MessageResources.InvalidRandomNumber, _invItem.RandomNo));
+                return new Exception(String.Format("交易隨機碼應由4位數值構成，上傳資料：{0}", _invItem.RandomNo));
             }
 
             return checkBusinessDetails();
@@ -254,22 +215,22 @@ namespace WebHome.Models.ViewModel
                 if (checkPublicCarrierId(_invItem.CarrierId1))
                 {
                     _carrier = new InvoiceCarrier
-                    {
-                        CarrierType = _invItem.CarrierType,
-                        CarrierNo = _invItem.CarrierId1,
-                        CarrierNo2 = _invItem.CarrierId1
-                    };
+                        {
+                            CarrierType = _invItem.CarrierType,
+                            CarrierNo = _invItem.CarrierId1,
+                            CarrierNo2 = _invItem.CarrierId1
+                        };
 
                     return null;
                 }
                 else if (checkPublicCarrierId(_invItem.CarrierId2))
                 {
                     _carrier = new InvoiceCarrier
-                    {
-                        CarrierType = _invItem.CarrierType,
-                        CarrierNo = _invItem.CarrierId2,
-                        CarrierNo2 = _invItem.CarrierId2
-                    };
+                        {
+                            CarrierType = _invItem.CarrierType,
+                            CarrierNo = _invItem.CarrierId2,
+                            CarrierNo2 = _invItem.CarrierId2
+                        };
 
                     return null;
                 }
@@ -300,7 +261,7 @@ namespace WebHome.Models.ViewModel
                 }
             }
 
-            return new Exception(String.Format(MessageResources.InvalidPublicCarrierType, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+            return new Exception(String.Format("載具類別為非共通性載具，傳送資料：{0}", _invItem.CarrierType));
         }
 
         protected virtual Exception checkBusinessDetails()
@@ -317,54 +278,6 @@ namespace WebHome.Models.ViewModel
                 EMail = _invItem.EMail
             };
 
-            if (_seller.MasterRelation.Count > 0)
-            {
-                Organization buyer = null;
-                OrganizationBranch branch = null;
-
-                if (!String.IsNullOrEmpty(_invItem.BuyerReceiptNo) || !String.IsNullOrEmpty(_invItem.CustomerID))
-                {
-                    var buyerItems = _seller.MasterRelation.Select(r => r.Counterpart);
-                    if (!String.IsNullOrEmpty(_invItem.BuyerReceiptNo))
-                        buyerItems = buyerItems.Where(r => r.ReceiptNo == _invItem.BuyerReceiptNo);
-
-                    var branchItems = buyerItems.SelectMany(b => b.OrganizationBranch);
-                    if (!String.IsNullOrEmpty(_invItem.CustomerID))
-                        branchItems = branchItems.Where(b => b.BranchNo == _invItem.CustomerID);
-                    //else
-                    //    branchItems = branchItems.Where(b => false);
-
-                    branch = branchItems.FirstOrDefault();
-                    buyer = branch != null ? branch.Organization : buyerItems.FirstOrDefault();
-                }
-
-                if (buyer != null)
-                {
-                    _invItem.Counterpart = true;
-                    _buyer.BuyerID = buyer.CompanyID;
-                    _buyer.ReceiptNo = buyer.ReceiptNo;
-                    _buyer.CustomerName = _buyer.ContactName = buyer.CompanyName;
-                    _buyer.Phone = buyer.Phone;
-                    _buyer.Address = buyer.Addr;
-                    _buyer.EMail = buyer.ContactEmail;
-
-                    if (branch != null)
-                    {
-                        _invItem.BuyerReceiptNo = buyer.ReceiptNo;
-                        _buyer.CustomerID = branch.BranchNo;
-                        _buyer.CustomerName = _buyer.ContactName = branch.BranchName;
-                        _buyer.Phone = branch.Phone;
-                        _buyer.Address = branch.Addr;
-                        _buyer.EMail = branch.ContactEmail;
-                    }
-
-                    if (!_buyer.IsB2C())
-                    {
-                        _buyer.Name = _buyer.CustomerName;
-                    }
-                }
-            }
-
             return null;
         }
 
@@ -375,47 +288,47 @@ namespace WebHome.Models.ViewModel
             //應稅銷售額
             if (!_invItem.SalesAmount.HasValue || _invItem.SalesAmount < 0 || decimal.Floor(_invItem.SalesAmount.Value) != _invItem.SalesAmount.Value)
             {
-                return new Exception(String.Format(MessageResources.InvalidSellingPrice, _invItem.SalesAmount));
+                return new Exception(String.Format("應稅銷售額合計(新台幣)不可為負數且為整數，上傳資料：{0}", _invItem.SalesAmount));
             }
 
 
             if (!_invItem.TaxAmount.HasValue || _invItem.TaxAmount < 0 || decimal.Floor(_invItem.TaxAmount.Value) != _invItem.TaxAmount.Value)
             {
-                return new Exception(String.Format(MessageResources.InvalidTaxAmount, _invItem.TaxAmount));
+                return new Exception(String.Format("營業稅額不可為負數且為整數，上傳資料：{0}", _invItem.TaxAmount));
             }
 
-            if (!_invItem.TotalAmount.HasValue || _invItem.TotalAmount < 0 || decimal.Floor(_invItem.TotalAmount.Value) != _invItem.TotalAmount.Value)
+            if (!_invItem.PayoffAmount.HasValue || _invItem.PayoffAmount < 0 || decimal.Floor(_invItem.PayoffAmount.Value) != _invItem.PayoffAmount.Value)
             {
-                return new Exception(String.Format(MessageResources.InvalidTotalAmount, _invItem.TotalAmount));
+                return new Exception(String.Format("總金額不可為負數且為整數，上傳資料：{0}", _invItem.PayoffAmount));
             }
 
             //課稅別
             if (!Enum.IsDefined(typeof(Naming.TaxTypeDefinition), (int)_invItem.TaxType))
             {
-                return new Exception(String.Format(MessageResources.InvalidTaxType, _invItem.TaxType));
+                return new Exception(String.Format("課稅別格式錯誤，上傳資料：{0}", _invItem.TaxType));
             }
 
             if (_invItem.TaxRate < 0m)
             {
-                return new Exception(String.Format(MessageResources.InvalidTaxRate, _invItem.TaxRate));
+                return new Exception(String.Format("稅率格式錯誤，上傳資料：{0}", _invItem.TaxRate));
             }
 
-            if (_invItem.TaxType == (byte)Naming.TaxTypeDefinition.零稅率)
+            if (_invItem.TaxType == Naming.TaxTypeDefinition.零稅率)
             {
                 if (String.IsNullOrEmpty(_invItem.CustomsClearanceMark))
                 {
-                    return new Exception(String.Format(MessageResources.AlertClearanceMarkZeroTax, _invItem.CustomsClearanceMark));
+                    return new Exception(String.Format("若為零稅率發票，通關方式註記(CustomsClearanceMark)為必填欄位，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
                 else if (_invItem.CustomsClearanceMark != "1" && _invItem.CustomsClearanceMark != "2")
                 {
-                    return new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark));
+                    return new Exception(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
             }
             else if (!String.IsNullOrEmpty(_invItem.CustomsClearanceMark))
             {
                 if (_invItem.CustomsClearanceMark != "1" && _invItem.CustomsClearanceMark != "2")
                 {
-                    return new Exception(String.Format(MessageResources.AlertClearanceMarkExport, _invItem.CustomsClearanceMark));
+                    return new Exception(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
             }
 
@@ -427,7 +340,7 @@ namespace WebHome.Models.ViewModel
         {
             if (_invItem.Brief == null || _invItem.Brief.Length == 0)
             {
-                return new Exception(MessageResources.InvalidInvoiceDetails);
+                return new Exception("無發票品項明細");
             }
 
             short seqNo = 0;
@@ -439,7 +352,7 @@ namespace WebHome.Models.ViewModel
                 Piece = _invItem.Piece[seqNo],
                 UnitCost = _invItem.UnitCost[seqNo],
                 Remark = _invItem.ItemRemark[seqNo],
-                TaxType = _invItem.TaxType,
+                TaxType = (byte)_invItem.TaxType,
                 No = (seqNo++)
             }).ToList();
 
@@ -448,24 +361,24 @@ namespace WebHome.Models.ViewModel
             {
                 if (String.IsNullOrEmpty(product.InvoiceProduct.Brief) || product.InvoiceProduct.Brief.Length > 256)
                 {
-                    return new Exception(String.Format(MessageResources.InvalidProductDescription, product.InvoiceProduct.Brief));
+                    return new Exception(String.Format("品項名稱不可空白長度不得大於256，傳送資料：{0}", product.InvoiceProduct.Brief));
                 }
 
 
                 if (!String.IsNullOrEmpty(product.PieceUnit) && product.PieceUnit.Length > 6)
                 {
-                    return new Exception(String.Format(MessageResources.InvalidPieceUnit, product.PieceUnit));
+                    return new Exception(String.Format("單位格式錯誤，傳送資料：{0}", product.PieceUnit));
                 }
 
 
                 if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
                 {
-                    return new Exception(String.Format(MessageResources.InvalidUnitPrice, product.UnitCost));
+                    return new Exception(String.Format("單價資料格式錯誤，傳送資料：{0}", product.UnitCost));
                 }
 
                 if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
                 {
-                    return new Exception(String.Format(MessageResources.InvalidCostAmount, product.CostAmount));
+                    return new Exception(String.Format("金額格式錯誤，傳送資料：{0}", product.CostAmount));
                 }
 
             }
@@ -477,15 +390,13 @@ namespace WebHome.Models.ViewModel
 
             if (_invItem.DonateMark != "0" && _invItem.DonateMark != "1")
             {
-                return new Exception(String.Format(MessageResources.InvalidDonationMark, _invItem.DonateMark));
+                return new Exception(String.Format("捐贈註記錯誤，上傳資料：{0}", _invItem.DonateMark));
             }
 
-
-            if (!__InvoiceTypeList.Contains(String.Format("{0:00}", _invItem.InvoiceType)))
-            {
-                return new Exception(String.Format(MessageResources.InvalidInvoiceType, _invItem.InvoiceType));
-            }
-
+            //if(!__InvoiceTypeList.Contains(String.Format("{0:00}",_invItem.InvoiceType)))
+            //{
+            //    return new Exception(String.Format("發票類別格式錯誤，請依發票種類填寫相應代號\"01\"-\"06\"，上傳資料：{0}", _invItem.InvoiceType));
+            //}
 
             return null;
         }
@@ -495,12 +406,12 @@ namespace WebHome.Models.ViewModel
 
             if (String.IsNullOrEmpty(_invItem.CarrierType))
             {
-                return new Exception(MessageResources.AlertInvoiceCarrierComplete);
+                return new Exception("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
             }
             else
             {
                 if (_invItem.CarrierType.Length > 6 || (_invItem.CarrierId1 != null && _invItem.CarrierId1.Length > 64) || (_invItem.CarrierId2 != null && _invItem.CarrierId2.Length > 64))
-                    return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                    return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                 _carrier = new InvoiceCarrier
                 {
@@ -510,7 +421,7 @@ namespace WebHome.Models.ViewModel
                 if (!String.IsNullOrEmpty(_invItem.CarrierId1))
                 {
                     if (_invItem.CarrierId1.Length > 64)
-                        return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                        return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                     _carrier.CarrierNo = _invItem.CarrierId1;
                 }
@@ -518,7 +429,7 @@ namespace WebHome.Models.ViewModel
                 if (!String.IsNullOrEmpty(_invItem.CarrierId2))
                 {
                     if (_invItem.CarrierId2.Length > 64)
-                        return new Exception(String.Format(MessageResources.AlertInvoiceCarrierLength, _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                        return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                     _carrier.CarrierNo2 = _invItem.CarrierId2;
                 }
@@ -527,7 +438,7 @@ namespace WebHome.Models.ViewModel
                 {
                     if (_carrier.CarrierNo2 == null)
                     {
-                        return new Exception(MessageResources.AlertInvoiceCarrierComplete);
+                        return new Exception("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
                     }
                     else
                     {
@@ -545,5 +456,4 @@ namespace WebHome.Models.ViewModel
         }
 
     }
-
 }

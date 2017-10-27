@@ -37,6 +37,7 @@ namespace WebHome.Models.ViewModel
         public String Remark { get; set; }
         public int? FitnessConsultant { get; set; }
         public int? Status { get; set; }
+        public Naming.CourseContractStatus? FromStatus { get; set; }
         public int[] UID { get; set; }
         public int? BranchID { get; set; }
         public int? AgentID { get; set; }
@@ -111,10 +112,10 @@ namespace WebHome.Models.ViewModel
         public int? CoachID { get; set; }
     }
 
-    public class PaymentViewModel
+    public class PaymentViewModel : InvoiceViewModel
     {
         public int? PaymentID { get; set; }
-        public int? PayoffAmount { get; set; }
+        //public int? PayoffAmount { get; set; }
         public DateTime? PayoffDate { get; set; } = DateTime.Today;
         public int? Status { get; set; }
         public int? HandlerID { get; set; }
@@ -122,11 +123,11 @@ namespace WebHome.Models.ViewModel
         public int? InvoiceID { get; set; }
         public int? TransactionType { get; set; }
         public String ContractNo { get; set; }
-        public Naming.InvoiceTypeDefinition? InvoiceType { get; set; } = Naming.InvoiceTypeDefinition.二聯式;
-        public string BuyerReceiptNo { get; set; }
+        //public Naming.InvoiceTypeDefinition? InvoiceType { get; set; } = Naming.InvoiceTypeDefinition.二聯式;
+        //public string BuyerReceiptNo { get; set; }
         public string InvoiceNo { get; set; }
-        public string Remark { get; set; }
-        public int? SellerID { get; set; }
+        //public string Remark { get; set; }
+        //public int? SellerID { get; set; }
         public int? RegisterID { get; set; }
         public int? ProductID { get; set; }
         public int? ProductCount { get; set; } = 1;
@@ -135,6 +136,7 @@ namespace WebHome.Models.ViewModel
         public int? ShareAmount { get; set; }
         public int? CoachID { get; set; }
         public int? ContractID { get; set; }
+        public bool? InvoiceNow { get; set; }
     }
 
     public class PaymentQueryViewModel : PaymentViewModel
@@ -227,5 +229,18 @@ namespace WebHome.Models.ViewModel
         public String TrackCode { get; set; }
         public int? StartNo { get; set; }
         public int? EndNo { get; set; }
+    }
+
+    public class InvoiceQueryViewModel
+    {
+        public int? HandlerID { get; set; }
+        public bool? IsPrinted { get; set; }
+        public int? BranchID { get; set; }
+        public DateTime? InvoiceDateFrom { get; set; }
+        public DateTime? InvoiceDateTo { get; set; }
+        public String InvoiceNo { get; set; }
+        public int?[] InvoiceID { get; set; }
+        public int? UID { get; set; }
+
     }
 }

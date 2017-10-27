@@ -29,8 +29,9 @@
                         <select id="lessonType">
                             <option value="0">P.T session</option>
                             <option value="1">P.I session</option>
-                            <option value="2">內部訓練</option>
                             <option value="3">體驗課程</option>
+                            <option value="5">點數兌換課程</option>
+                            <option value="2">內部訓練</option>
                             <option value="4">企業方案</option>
                         </select>
                         <script>
@@ -52,6 +53,7 @@
                                         break;
                                     case '3':
                                     case '4':
+                                    case '5':
                                         $('.part0').css('display', 'block');
                                         break;
 
@@ -122,6 +124,10 @@
                                     $('#attendeeSelector').load('<%= Url.Action("AttendeeSelector","EnterpriseProgram") %>', { 'userName': userName }, function (data) {
                                         hideLoading();
                                     });
+                                } else if ($('#lessonType').val() == '5') {
+                                    $('#attendeeSelector').load('<%= Url.Action("BonusLessonSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
                                 }
                             });
                         </script>
@@ -185,6 +191,16 @@
                         break;
                     case '4':
                         $.post('<%= Url.Action("CommitBookingByCoach","EnterpriseProgram") %>', $('#bookingForm').serialize(), function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+                    case '5':
+                        $.post('<%= Url.Action("CommitBonusLesson","Lessons") %>', $('#bookingForm').serialize(), function (data) {
                             if (data.result) {
                                 smartAlert(data.message);
                                 callback();

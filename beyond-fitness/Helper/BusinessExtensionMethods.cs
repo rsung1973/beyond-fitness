@@ -138,19 +138,21 @@ namespace WebHome.Helper
             var today = DateTime.Today;
 
             IEnumerable<CalendarEvent> items;
-            items = dataItems
-                    .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
+
+            items = dataItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null)
                     .GroupBy(t => t.ClassTime.Value.Date)
                     .Select(g => new CalendarEvent
                     {
-                        id = "freeAgent",
+                        id = "course",
                         title = g.Count().ToString(),
                         start = g.Key.ToString("yyyy-MM-dd"),
-                        description = "自由教練",
+                        description = "企業方案",
                         allDay = true,
-                        className = g.Key < today ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-grayDark" },
-                        icon = /*g.Key < today ? "fa-check" :*/ "fa-tags"
+                        className = g.Key < today ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-yellow" },
+                        icon = /*g.Key < today ? "fa-check" :*/ "fa-clock-o"
                     });
+
+            dataItems = dataItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
 
             items = items.Concat(dataItems
                 .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
@@ -1001,6 +1003,34 @@ namespace WebHome.Helper
             if (createNew == true || !File.Exists(pdfFile))
             {
                 String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment") + "?pdf=1&revisionID=" + item.RevisionID;
+                viewUrl.ConvertHtmlToPDF(pdfFile, 20);
+            }
+            return pdfFile;
+        }
+
+        public static String CreateInvoicePDF(this InvoiceItem item, bool createNew = false)
+        {
+            String storePath = Path.Combine(GlobalDefinition.InvoicePdfPath, item.InvoiceDate.Value.Year.ToString());
+            if (!Directory.Exists(storePath))
+                Directory.CreateDirectory(storePath);
+            String pdfFile = Path.Combine(storePath, item.TrackCode + item.No + ".pdf");
+            if (createNew == true || !File.Exists(pdfFile))
+            {
+                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/PrintInvoice") + "?invoiceID=" + item.InvoiceID;
+                viewUrl.ConvertHtmlToPDF(pdfFile, 20);
+            }
+            return pdfFile;
+        }
+
+        public static String CreateQueuedInvoicePDF(this UserProfile item)
+        {
+            String storePath = Path.Combine(GlobalDefinition.InvoicePdfPath, DateTime.Today.ToString("yyyy-MM-dd"));
+            if (!Directory.Exists(storePath))
+                Directory.CreateDirectory(storePath);
+            String pdfFile = Path.Combine(storePath, item.UID + "-" + DateTime.Now.Ticks + ".pdf");
+            if (!File.Exists(pdfFile))
+            {
+                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/PrintInvoice") + "?uid=" + item.UID + "&t=" + DateTime.Now.Ticks;
                 viewUrl.ConvertHtmlToPDF(pdfFile, 20);
             }
             return pdfFile;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using WebHome.Models.Locale;
 
@@ -52,9 +53,22 @@ namespace WebHome.Models.DataEntity
         }
 
 
-        public static String FullName(this UserProfile item)
+        public static String FullName(this UserProfile item, bool mask = false)
         {
-            return item.Nickname==null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
+            if(mask)
+            {
+                return item.Nickname == null ? item.RealName.MaskedName() : item.RealName.MaskedName() + "(" + item.Nickname + ")";
+            }
+            return item.Nickname == null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
+        }
+
+        public static String MaskedName(this String name)
+        {
+            if (name == null || name.Length < 2)
+                return name;
+            StringBuilder sb = new StringBuilder(name);
+            sb[1] = '○';
+            return sb.ToString();
         }
 
         public static String Address(this UserProfile item)
@@ -84,6 +98,20 @@ namespace WebHome.Models.DataEntity
                         .Where(p => p.DurationInMinutes == item.LessonPriceType.DurationInMinutes)
                         .OrderBy(p => p.LowerLimit).FirstOrDefault()
                 : null;
+        }
+
+        public static String LessonTypeStatus(this int? status)
+        {
+            switch(status)
+            {
+                case (int)Naming.LessonPriceStatus.自主訓練:
+                    return "P.I.session";
+                case (int)Naming.LessonPriceStatus.一般課程:
+                case (int)Naming.LessonPriceStatus.已刪除:
+                    return "P.T.session";
+                default:
+                    return ((Naming.LessonPriceStatus)status).ToString();
+            }
         }
 
     }

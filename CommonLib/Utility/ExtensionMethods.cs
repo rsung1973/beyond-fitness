@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -892,6 +893,22 @@ namespace Utility
                 objGraphics.DrawString(strSource, SystemFonts.DefaultFont, Brushes.Black, 5, BarCodeHeight + 2);
             return objBitmap;
         }
+
+        public static String GetCode39ImageSrc(this string code, bool printCode,float dpi)
+        {
+            using (Bitmap img = code.GetCode39(printCode))
+            {
+                using (MemoryStream buffer = new MemoryStream())
+                {
+                    img.SetResolution(dpi, dpi);
+                    img.Save(buffer, ImageFormat.Png);
+                    StringBuilder sb = new StringBuilder("data:image/png;base64,");
+                    sb.Append(Convert.ToBase64String(buffer.ToArray()));
+                    return sb.ToString();
+                }
+            }
+        }
+
 
         public static void CheckStoredPath(this String fullPath)
         {

@@ -248,6 +248,13 @@ namespace WebHome.Models.Locale
             X
         }
 
-
+        public enum TaxTypeDefinition
+        {
+            應稅 = 1,
+            零稅率 = 2,
+            免稅 = 3,
+            特種稅率 = 4,
+            混合稅率 = 9
+        }
     }
 }

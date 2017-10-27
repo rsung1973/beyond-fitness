@@ -38,7 +38,7 @@
 
     function rejectSignature() {
         showLoading();
-        $.post('<%= Url.Action("ExecuteContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.草稿 , Drawback=true }) %>', {}, function (data) {
+        $.post('<%= Url.Action("ExecuteContractStatus","CourseContract",new { _model.ContractID, Status = (int)Naming.CourseContractStatus.草稿 ,FromStatus = (int)Naming.CourseContractStatus.待審核,  Drawback=true }) %>', {}, function (data) {
             hideLoading();
             if (data.result) {
                 done = true;

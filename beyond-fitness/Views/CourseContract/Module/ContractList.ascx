@@ -30,7 +30,7 @@
             <td>
                 <%  if (item.CourseContractType.IsGroup==true)
                     { %>
-                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile.RealName)) %>
+                <%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName())) %>
                 <%  }
                     else
                     { %>

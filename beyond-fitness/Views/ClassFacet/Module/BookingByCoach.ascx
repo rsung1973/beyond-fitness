@@ -75,13 +75,23 @@
                 <section id="attendeeSelector" class="col col-12">
                     <%
                         var items = models.GetTable<RegisterLesson>()
-                            .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                            .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
-                                && l.UID == _viewModel.UID)
-                            .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
-                            .OrderBy(l => l.ClassLevel).ThenBy(l => l.Lessons);
+                           .Where(r => r.RegisterLessonContract != null)
+                           .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
+                               && l.UID == _viewModel.UID)
+                           .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
+                           .Where(l => l.RegisterGroupID.HasValue);
 
-                        Html.RenderPartial("~/Views/Lessons/AttendeeSelector.ascx", items);
+                        Html.RenderPartial("~/Views/Lessons/Module/CourseContractAttendeeSelector.ascx", items);
+
+                        items = models.GetTable<RegisterLesson>()
+                            .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
+                                && (l.UID == _viewModel.UID))
+                            .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
+                            .Where(l => l.RegisterGroupID.HasValue)
+                            .Join(models.GetTable<RegisterLessonEnterprise>(), r => r.RegisterID, t => t.RegisterID, (r, t) => r);
+
+                        Html.RenderPartial("~/Views/EnterpriseProgram/Module/EnterpriseAttendeeSelector.ascx", items);
+
                      %>
                 </section>
             </div>

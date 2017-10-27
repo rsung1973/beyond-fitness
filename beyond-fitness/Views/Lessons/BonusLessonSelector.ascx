@@ -12,8 +12,24 @@
     <% if (_items != null && _items.Count() > 0)
         {   %>
             <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
-    <%
-            Html.RenderPartial("~/Views/EnterpriseProgram/Module/EnterpriseAttendeeSelector.ascx", _items);
+        <%  foreach (var item in _items)
+            {
+                bool pdqStatus = completePDQ(item);
+
+                %>
+                <label class="<%= pdqStatus ? "radio" : "radio state-disabled" %>">
+                <input type="radio" name="registerID" value="<%= item.RegisterID %>" <%= pdqStatus ? null : "disabled" %> />
+                <i></i>
+                        <%= item.UserProfile.FullName() %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
+                            <li class="fa fa-child"></li>
+                    <%  if (!pdqStatus)
+                        { %>
+                    <span class="label label-danger">
+                        <li class="fa fa-exclamation-triangle"></li> PDQ尚未登打或登打不完全！</span>
+                    <%  }   %>
+                </label>
+
+    <%      }
         }
         else
         { %>
@@ -34,5 +50,13 @@
         _items = (IQueryable<RegisterLesson>)this.Model;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     }
+
+    bool completePDQ(RegisterLesson lesson)
+    {
+        return lesson.UserProfile.PDQTask
+            .Select(t => t.PDQQuestion)
+            .Where(q => q.PDQQuestionExtension == null).Count() >= 20;
+    }
+
 
 </script>

@@ -7,9 +7,7 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<%@ Import Namespace="Newtonsoft.Json" %>
 
-<label class="label">依您輸入的發票號碼，搜尋結果如下：</label>
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
@@ -22,10 +20,11 @@
             <th>金額</th>
             <th data-hide="phone">收款方式</th>
             <th data-hide="phone">發票類型</th>
-            <%--<th data-hide="phone">發票狀態</th>--%>
+            <th data-hide="phone">發票狀態</th>
             <th data-hide="phone,tablet">買受人統編</th>
             <th data-hide="phone,tablet">合約編號</th>
-            <%--<th data-hide="phone">狀態</th>--%>
+            <th data-hide="phone">列印次數</th>
+            <th>功能</th>
         </tr>
     </thead>
     <tbody>
@@ -33,50 +32,59 @@
             { %>
         <tr>
             <td nowrap="noWrap"><%  if (item.InvoiceID.HasValue)
-                    {   %>
-                <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
-                        <input type="hidden" name="VoidID" value="<%= item.PaymentID %>" />
-                <%      
-                    } %>
-            </td>
-            <td nowrap="noWrap"><%= item.PaymentTransaction.BranchStore.BranchName %></td>
-            <td nowrap="noWrap"><%= item.UserProfile.FullName() %></td>
-            <td nowrap="noWrap"><%= item.TuitionInstallment!=null
-                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                        : item.ContractPayment!=null
-                            ? item.ContractPayment.CourseContract.CourseContractType.IsGroup == true
-                                ? String.Join("/",item.ContractPayment.CourseContract.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName()))
-                                : item.ContractPayment.CourseContract.ContractOwner.FullName()
-                            : "--" %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
-            <td nowrap="noWrap"><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
-                <%  if(item.TransactionType==(int)Naming.PaymentTransactionType.運動商品
-                        || item.TransactionType==(int)Naming.PaymentTransactionType.飲品)
-                    { %>
-                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p=>p.MerchandiseWindow.ProductName)) %>)
+                                    {   %>
+                        <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
                 <%  } %>
             </td>
-            <td nowrap="noWrap"><%= String.Format("{0:##,###,###,###}",item.PayoffAmount) %></td>
-            <td nowrap="noWrap"><%= item.PaymentType %></td>
-            <td nowrap="noWrap"><%= item.InvoiceID.HasValue
-                        ? item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+            <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
+            <td ><%= item.UserProfile.FullName() %></td>
+            <td ><%= item.TuitionInstallment != null
+                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : item.ContractPayment != null
+                            ? item.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : "--" %></td>
+            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.PayoffDate) %></td>
+            <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
+                <%  if (item.TransactionType == (int)Naming.PaymentTransactionType.運動商品
+|| item.TransactionType == (int)Naming.PaymentTransactionType.飲品)
+                    { %>
+                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)) %>)
+                <%  } %>
+            </td>
+            <td nowrap="noWrap" class="text-right"><%= item.PayoffAmount >= 0 ? String.Format("{0:##,###,###,###}", item.PayoffAmount) : String.Format("({0:##,###,###,###})", -item.PayoffAmount) %></td>
+            <td><%= item.PaymentType %></td>
+            <td><%= item.InvoiceID.HasValue
+                        ? item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
                             ? "電子發票"
-                            : "紙本" 
+                            : "紙本"
                         : "--" %></td>
-            <%--<td><%= item.InvoiceID.HasValue 
-                        ? item.InvoiceItem.InvoiceCancellation==null 
-                            ? "已開立" : "已作廢"
-                        : "--" %></td>--%>
-            <td nowrap="noWrap"><%= item.InvoiceID.HasValue 
-                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo 
+            <td><%= item.VoidPayment == null
+                        ? "已開立"
+                        : item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                            ? "已作廢"
+                            : "已開立" %></td>
+            <td><%= item.InvoiceID.HasValue
+                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo
                         : "--" %></td>
             <td nowrap="noWrap">
                 <%  if (item.ContractPayment != null)
                     { %>
-                <%= item.ContractPayment.CourseContract.ContractNo() %>
+                        <%= item.ContractPayment.CourseContract.ContractNo() %>
                 <%  } %>
             </td>
-            <%--<td nowrap="noWrap"><%= ((Naming.CourseContractStatus)item.Status).ToString() %></td>--%>
+            <td nowrap="noWrap" class="text-right">
+                <%  if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    { %>
+                <%= item.InvoiceItem.Document.DocumentPrintLog.Count %>
+                <%  } %>
+            </td>
+            <td>
+                <%  if (item.InvoiceItem.Document.DocumentPrintLog.Count == 0
+                        && item.InvoiceItem.InvoiceType==(byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    { %>
+                <a href="#" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>
+                <%  } %>
+            </td>
         </tr>
         <%  } %>
     </tbody>
@@ -97,17 +105,14 @@
 
         $('#<%= _tableId %>').dataTable({
             //"bPaginate": false,
-            //"pageLength": 30,
-            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-            "searching": false,
+            "pageLength": 30,
+            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
+            "order": [[4, "desc"]],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                     "t" +
-                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
-            "paging": false,
-            "info": true,
-            "order": [3],
             "oLanguage": {
                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
             },
@@ -124,6 +129,12 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
+
+<%  if(_model.Count()>0)
+    {  %>
+        $('#btnDownload').css('display', 'inline');
+<%  }  %>
+
     });
 </script>
 
@@ -131,7 +142,7 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    String _tableId = "paymentList" + DateTime.Now.Ticks;
+    String _tableId = "invoiceList" + DateTime.Now.Ticks;
     IQueryable<Payment> _model;
 
     protected override void OnInit(EventArgs e)
@@ -139,7 +150,8 @@
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<Payment>)this.Model;
+        _model = ((IQueryable<Payment>)this.Model).Where(p => p.TransactionType.HasValue)
+            .OrderBy(p => p.InvoiceID);
     }
 
 </script>

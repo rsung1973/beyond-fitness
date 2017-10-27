@@ -18,16 +18,20 @@
     </thead>
     <tbody>
         <%  foreach (var item in _items.Where(u=>!u.GroupID.HasValue))
-                            {
-                                var profile = item.UserProfile; %>
+            {
+                var profile = item.UserProfile; %>
         <tr>
             <td><%= profile.FullName() %></td>
             <td>
                 <%  if (_model.GroupingMemberCount>1)
-                                    { %>
+                    { %>
                 <a onclick="addGroupMember(<%= _model.ContractID %>,<%= item.UID %>);" class="btn btn-circle btn-primary listAttendantDialog_link"><i class="fa fa-fw fa fa-lg fa-user-plus" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                <%  } %>
-                <%--<a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>--%>
+                <%  } %>
+                <%  if (!item.EnterpriseCourseContract.RegisterLessonEnterprise.Select(t=>t.RegisterLesson)
+                            .Where(r=>r.UID==profile.UID).Any(r => r.GroupingLesson.LessonTime.Count > 0))
+                    { %>
+                <a onclick="removeMember(<%= item.ContractID %>,<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <%  } %>
             </td>
         </tr>
         <%  } %>

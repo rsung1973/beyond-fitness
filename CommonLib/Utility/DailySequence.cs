@@ -50,12 +50,11 @@ namespace Utility
             if(_dailyTimer<DateTime.Now.Ticks)
             {
                 _dailyTimer = DateTime.Today.AddDays(1).Ticks;
-                _sequence = 1;
+                _sequence = 0;
             }
-            else
-            {
-                _sequence++;
-            }
+
+            _sequence++;
+
             try
             {
                 File.WriteAllText(_savedFile, String.Concat(_dailyTimer, "\r\n", _sequence));

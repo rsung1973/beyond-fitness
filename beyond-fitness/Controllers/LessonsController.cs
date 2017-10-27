@@ -21,6 +21,7 @@ using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
 using System.Data.Linq;
 using WebHome.Security.Authorization;
+using System.Data;
 
 namespace WebHome.Controllers
 {
@@ -561,9 +562,22 @@ namespace WebHome.Controllers
 
         public ActionResult CommitBookingByCoach(LessonTimeViewModel viewModel)
         {
+            var lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
+            if (lesson != null)
+            {
+                if (lesson.RegisterLessonEnterprise != null)
+                {
+                    return this.TransferToAction("CommitBookingByCoach", "EnterpriseProgram", viewModel);
+                }
+            }
+            return CommitCourseContractBookingByCoach(viewModel);
+        }
+
+        public ActionResult CommitCourseContractBookingByCoach(LessonTimeViewModel viewModel)
+        {
             ViewBag.ViewModel = viewModel;
 
-            if(viewModel.ClassDate < DateTime.Today)
+            if (viewModel.ClassDate < DateTime.Today)
             {
                 ModelState.AddModelError("ClassDate", "預約時間不可早於今天!!");
             }
@@ -781,6 +795,120 @@ namespace WebHome.Controllers
                         RegisterID = lesson.RegisterID
                     });
                 }
+            }
+
+            try
+            {
+                models.SubmitChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return View("~/Views/Shared/MessageView.ascx", model: "預約未完成，請重新預約!!");
+            }
+
+            return Json(new { result = true, message = "上課時間預約完成!!" });
+        }
+
+        public ActionResult CommitBonusLesson(LessonTimeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if(viewModel.ClassDate < DateTime.Today)
+            {
+                ModelState.AddModelError("ClassDate", "預約時間不可早於今天!!");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
+            if (coach == null)
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "未指定體能顧問!!");
+            }
+
+            RegisterLesson lesson;
+            LessonPriceType priceType;
+
+            lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
+            if (lesson == null)
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "學員未購買課程!!");
+            }
+            priceType = lesson.LessonPriceType;
+
+            if (lesson.Attended == (int)Naming.LessonStatus.課程結束)
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "學員課程已結束!!");
+            }
+
+
+            var lessonCount = lesson.GroupingLesson.LessonTime.Count;
+
+            if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
+            }
+
+            LessonTime timeItem = new LessonTime
+            {
+                InvitedCoach = viewModel.CoachID,
+                AttendingCoach = viewModel.CoachID,
+                //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
+                ClassTime = viewModel.ClassDate,
+                DurationInMinutes = priceType.DurationInMinutes,
+                TrainingBySelf = viewModel.TrainingBySelf,
+                RegisterID = lesson.RegisterID,
+                LessonPlan = new LessonPlan
+                {
+
+                },
+                BranchID = viewModel.BranchID,
+                LessonTimeSettlement = new LessonTimeSettlement
+                {
+                    ProfessionalLevelID = coach.LevelID.Value
+                }
+            };
+
+            var users = models.CheckOverlapedBooking(timeItem, lesson);
+            if (users.Count() > 0)
+            {
+                ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
+                return View("~/Views/Shared/MessageView.ascx");
+            }
+
+            timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
+            {
+                UID = lesson.UID
+            });
+
+            if (!lesson.RegisterGroupID.HasValue)
+            {
+                timeItem.GroupingLesson = lesson.GroupingLesson = new GroupingLesson { };
+            }
+            else
+            {
+                timeItem.GroupID = lesson.RegisterGroupID;
+            }
+
+            models.GetTable<LessonTime>().InsertOnSubmit(timeItem);
+            //models.SubmitChanges();
+
+            var timeExpansion = models.GetTable<LessonTimeExpansion>();
+            for (int i = 0; i <= (timeItem.DurationInMinutes + timeItem.ClassTime.Value.Minute - 1) / 60; i++)
+            {
+                timeExpansion.InsertOnSubmit(new LessonTimeExpansion
+                {
+                    ClassDate = timeItem.ClassTime.Value.Date,
+                    //LessonID = timeItem.LessonID,
+                    LessonTime = timeItem,
+                    Hour = timeItem.ClassTime.Value.Hour + i,
+                    RegisterID = lesson.RegisterID
+                });
             }
 
             try
@@ -1322,6 +1450,7 @@ namespace WebHome.Controllers
 
             var dataItems = models.GetTable<LessonTime>()
                 .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null)
                 .Where(t => t.RegisterLesson.UID == item.UID
                     || t.GroupingLesson.RegisterLesson.Any(r => r.UID == item.UID)).ToList();
 
@@ -1414,8 +1543,81 @@ namespace WebHome.Controllers
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-pink" },  //  g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pink" },
                     icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-magic"
                 }));
+
+            items = items.Concat(buildVipLessonEventsForEnterprise(start, end, learner, item));
+
             return items;
         }
+
+        private IEnumerable<CalendarEvent> buildVipLessonEventsForEnterprise(DateTime start, DateTime end, bool? learner, UserProfile item)
+        {
+            var today = DateTime.Today;
+
+            var dataItems = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1))
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise != null)
+                .Where(t => t.RegisterLesson.UID == item.UID
+                    || t.GroupingLesson.RegisterLesson.Any(r => r.UID == item.UID)).ToList();
+
+
+            var items = dataItems
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status==(int)Naming.LessonPriceStatus.一般課程)
+                .Select(g => new CalendarEvent
+                {
+                    id = "course",
+                    title = "",
+                    start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                    description = "1 對 1",
+                    lessonID = g.LessonID,
+                    allDay = true,
+                    className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },//g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pinkDark" },
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  // "fa -user"
+                });
+
+            items = items.Concat(dataItems
+                .Where(t => t.RegisterLesson.GroupingMemberCount > 1)
+                .Select(g => new CalendarEvent
+                {
+                    id = "course",
+                    title = "",
+                    start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                    description = "1 對 " + g.RegisterLesson.GroupingMemberCount,
+                    lessonID = g.LessonID,
+                    allDay = true,
+                    className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },  //g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-pinkDark" },
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-users"
+                }));
+
+            items = items.Concat(dataItems
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練)
+                .Select(g => new CalendarEvent
+                {
+                    id = "self",
+                    title = "",
+                    start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                    description = "P.I session",
+                    lessonID = g.LessonID,
+                    allDay = true,
+                    className = /*g.ClassTime < today ? new string[] { "event", "bg-color-yellow" } :*/ g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-red" },
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
+                }));
+
+            items = items.Concat(dataItems
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)
+                .Select(g => new CalendarEvent
+                {
+                    id = "trial",
+                    title = "",
+                    start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
+                    description = "體驗課程",
+                    lessonID = g.LessonID,
+                    allDay = true,
+                    className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-pink" },  //  g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pink" },
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-magic"
+                }));
+            return items;
+        }
+
 
         public ActionResult VipEvent(DateTime lessonDate)
         {
@@ -1870,9 +2072,10 @@ namespace WebHome.Controllers
 
 
 
-        private IQueryable<LessonTime> queryBookingLessons(UserProfile profile)
+        private IQueryable<LessonTime> queryBookingLessons(UserProfile profile, DailyBookingQueryViewModel viewModel=null)
         {
-            DailyBookingQueryViewModel viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue(CachingKey.DailyBookingQuery);
+            if (viewModel == null)
+                viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue(CachingKey.DailyBookingQuery);
 
             if(viewModel==null)
             {
@@ -3508,6 +3711,61 @@ namespace WebHome.Controllers
 
             return Json(new { result = true, message = "資料更新完成!!" });
 
+        }
+
+        public ActionResult CreateLessonsQueryXlsx(DailyBookingQueryViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+
+            IQueryable<LessonTime> items = queryBookingLessons(profile, viewModel)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練);
+
+            DataTable table = new DataTable();
+
+            table.Columns.Add(new DataColumn("上課日期", typeof(String)));
+            table.Columns.Add(new DataColumn("上課時間", typeof(String)));
+            table.Columns.Add(new DataColumn("上課地點", typeof(String)));
+            table.Columns.Add(new DataColumn("上課時間長度", typeof(int)));
+            table.Columns.Add(new DataColumn("課程類別", typeof(String)));
+            table.Columns.Add(new DataColumn("體能顧問姓名", typeof(String)));
+            table.Columns.Add(new DataColumn("學員姓名", typeof(String)));
+
+            foreach (var item in items)
+            {
+                var row = table.NewRow();
+                table.Rows.Add(row);
+
+                row["上課日期"] = String.Format("{0:yyyy/MM/dd}",item.ClassTime);
+                row["上課時間"] = String.Format("{0:HH:mm}", item.ClassTime) + "~" + String.Format("{0:HH:mm}", item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value));
+                row["上課地點"] = item.BranchStore.BranchName;
+                row["上課時間長度"] = item.DurationInMinutes;
+                row["課程類別"] = item.RegisterLesson.RegisterLessonEnterprise==null 
+                    ? item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus()
+                    : item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus();
+                row["體能顧問姓名"] = item.AsAttendingCoach.UserProfile.FullName();
+                row["學員姓名"] = String.Join("/", item.GroupingLesson.RegisterLesson.Select(r => r.UserProfile).ToArray().Select(r => r.RealName.MaskedName()));
+            }
+
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("上課統計.xlsx"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                table.TableName = "上課統計";
+                ds.Tables.Add(table);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
         }
 
 

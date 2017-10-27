@@ -34,10 +34,28 @@
         <div class="info">
             <a class="informer informer-one">
                 <span>
-                <% var totalLessons = _currentLessons.Sum(c => (int?)c.Lessons); %>
-                    <font color="red"><%= totalLessons
+                <%  var totalLessons = _currentLessons.Sum(c => (int?)c.Lessons);
+                    var familyLessons =
+                        _currentLessons.Join(models.GetTable<RegisterLessonContract>().Where(c => c.CourseContract.CourseContractType.ContractCode == "CFA"), r => r.RegisterID, c => c.RegisterID, (r, c) => c)
+                            .Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
+                            .Join(models.GetTable<RegisterLesson>(), c => c.RegisterID, r => r.RegisterID, (c, r) => r); %>
+                    <font color="red">
+                        <%  if (familyLessons.Count() > 0)
+                            {
+                                var exceptFamily = _currentLessons.Where(r => r.RegisterLessonContract == null || r.RegisterLessonContract.CourseContract.CourseContractType.ContractCode != "CFA");    %>
+                        <%= totalLessons
+                    - (exceptFamily.Sum(c=>c.AttendedLessons) ?? 0)
+                    - (exceptFamily.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) ?? 0)
+                    - familyLessons.Sum(c=>c.AttendedLessons)
+                    - familyLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %>
+                        <%  }
+                            else
+                            { %>
+                        <%= totalLessons
                     - _currentLessons.Sum(c=>c.AttendedLessons)
-                    - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %></font> / <%= totalLessons %>
+                    - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %>
+                        <%  } %>
+                    </font> / <%= totalLessons %>
 
                 </span>
 <%--                <span>
@@ -78,12 +96,14 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
-         _item = (LessonTime)ViewBag.LessonTime;
+        _item = (LessonTime)ViewBag.LessonTime;
 
         _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
             .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
             .OrderByDescending(r => r.RegisterID);
-        _currentLessons = _items.Where(i => i.Attended != (int)Naming.LessonStatus.課程結束);
+        _currentLessons = _items.Where(i => i.Attended != (int)Naming.LessonStatus.課程結束
+            && (i.RegisterLessonContract == null || (i.RegisterLessonContract != null && i.RegisterLessonContract.CourseContract.Expiration >= DateTime.Today))
+            || (i.RegisterLessonEnterprise != null && i.RegisterLessonEnterprise.EnterpriseCourseContract.Expiration >= DateTime.Today));
     }
 
 </script>

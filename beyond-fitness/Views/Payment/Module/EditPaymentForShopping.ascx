@@ -118,11 +118,24 @@
                             <label class="radio">
                                 <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.二聯式 %>" <%= _viewModel.InvoiceType!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
                                 <i></i>紙本</label>
-                            <%--<label class="radio">
-                                <input type="radio" disabled="disabled" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>" <%= _viewModel.InvoiceType==Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
-                                <i></i>電子</label>--%>
+                            <label class="radio">
+                                <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>" <%= _viewModel.InvoiceType==Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
+                                <i></i>電子</label>
                         </div>
                     </section>
+                    <script>
+                        function initial() {
+                            if ($('#<%= _dialog %> input[name="InvoiceType"][value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>"]').is(':checked')) {
+                                $('.eInvoice-dialog').css('display', 'inline');
+                            } else {
+                                $('.eInvoice-dialog').css('display', 'none');
+                            }
+                        }
+
+                        $('#<%= _dialog %> input[name="InvoiceType"]').on('click', function (evt) {
+                            initial();
+                        });
+                    </script>
                 </div>
                 <div class="row">
                     <section class="col col-6">
@@ -173,6 +186,38 @@
         </form>
     </div>
     <script>
+
+        function commitPayoff(invoiceNow) {
+
+            if (confirm("請再次確認收款資料正確?")) {
+                clearErrors();
+                var $form = $('#<%= _dialog %> form');
+                var formData = $form.serializeObject();
+                formData.InvoiceNow = invoiceNow;
+
+                showLoading();
+                $.post('<%= Url.Action("CommitPaymentForShopping","Payment",new { _viewModel.PaymentID }) %>', formData, function (data) {
+                    hideLoading();
+                    if ($.isPlainObject(data)) {
+                        if (data.result) {
+                            if (invoiceNow) {
+                                window.open('<%= Url.Action("GetInvoicePDF","Invoice") %>' + '?InvoiceID=' + data.InvoiceID);
+                            }
+                            alert('收款資料已生效!!');
+                            <%--$('#<%= _dialog %>').dialog('close');--%>
+                            showLoading();
+                            window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';
+                        } else {
+                            alert(data.message);
+                        }
+                    } else {
+                        $(data).appendTo($('body')).remove();
+                    }
+                });
+            }
+
+        }
+
         $('#<%= _dialog %>').dialog({
             //autoOpen: false,
             width: "auto",
@@ -180,33 +225,16 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",
             buttons: [{
+                html: "<i class='fa fa-qrcode'></i>&nbsp; 確定產生發票",
+                "class": "btn btn-primary eInvoice-dialog",
+                click: function () {
+                    commitPayoff(true);
+                }
+            }, {
                 html: "<i class='fa fa-send'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
-                    if (confirm("請再次確認收款資料正確?")) {
-                        clearErrors();
-                        var $form = $('#<%= _dialog %> form');
-                        $form.ajaxSubmit({
-                            beforeSubmit: function () {
-                                showLoading();
-                            },
-                            success: function (data) {
-                                hideLoading();
-                                if ($.isPlainObject(data)) {
-                                    if (data.result) {
-                                        alert('收款資料已生效!!');
-                                        <%--$('#<%= _dialog %>').dialog('close');--%>
-                                        showLoading();
-                                        window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';
-                                    } else {
-                                        alert(data.message);
-                                    }
-                                } else {
-                                    $(data).appendTo($('body')).remove();
-                                }
-                            }
-                        });
-                    }
+                    commitPayoff(false);
                 }
             }
             <%--, {
@@ -219,6 +247,9 @@
                     }
                 }
             }--%>],
+            open: function (event, ui) {
+                initial();
+            },
             close: function () {
                 $('#<%= _dialog %>').remove();
             }

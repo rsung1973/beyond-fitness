@@ -12,12 +12,29 @@
     <div class="info">
         <a class="informer informer-one">
             <span><font color="red">
-                <%  int? totalLessons = _currentLessons.Sum(c => (int?)c.Lessons);
+                <%  var familyLessons =
+                        _currentLessons.Join(models.GetTable<RegisterLessonContract>().Where(c => c.CourseContract.CourseContractType.ContractCode == "CFA"), r => r.RegisterID, c => c.RegisterID, (r, c) => c)
+                            .Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
+                            .Join(models.GetTable<RegisterLesson>(), c => c.RegisterID, r => r.RegisterID, (c, r) => r);
+                    int? totalLessons = _currentLessons.Sum(c => (int?)c.Lessons);
                     int? attendedLessons = _currentLessons.Sum(c => (int?)c.AttendedLessons);
                     int? attendance = (int?)_currentLessons.Sum(c => (int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/));%>
+                <%  if (familyLessons.Count() > 0)
+                    { 
+                        var exceptFamily = _currentLessons.Where(r => r.RegisterLessonContract == null || r.RegisterLessonContract.CourseContract.CourseContractType.ContractCode != "CFA");    %>
+                <%= totalLessons
+                    - (exceptFamily.Sum(c=>c.AttendedLessons) ?? 0)
+                    - (exceptFamily.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) ?? 0)
+                    - familyLessons.Sum(c=>c.AttendedLessons)
+                    - familyLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %>
+                <%  }
+                    else
+                    { %>
                 <%= totalLessons.HasValue ? totalLessons
                                         - attendedLessons
-                                        - attendance : 0 %></font> / <%= totalLessons ?? 0 %></span>
+                                        - attendance : 0 %>
+                <%  } %>
+                  </font> / <%= totalLessons ?? 0 %></span>
         </a>
         <a href="#" class="informer informer-two" id="bonus_link">
             <span class="fa fa-quora ">&nbsp;&nbsp;<b><u><%= _model.BonusPoint(models) ?? 0 %></u></b></span>

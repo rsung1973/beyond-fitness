@@ -55,11 +55,19 @@
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MessagingToolkit.QRCode, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\MessagingToolkit.QRCode.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\QREncrypter.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -88,6 +96,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.4128.18795, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -839,6 +851,7 @@
     <Content Include="js\bootstrap\bootstrap.min.js" />
     <Content Include="js\contact.js" />
     <Content Include="js\count-to.js" />
+    <Content Include="js\css3-multi-column.js" />
     <Content Include="js\jquery-2.1.4.min.js" />
     <Content Include="js\jquery-migrate-1.2.1.min.js" />
     <Content Include="js\jquery.appear.js" />
@@ -1662,6 +1675,7 @@
     <Content Include="Views\CourseContract\Module\ApplyQuery.ascx" />
     <Content Include="Views\CourseContract\Module\WidgetGrid.ascx" />
     <Content Include="Views\CourseContract\CourseContractView.aspx" />
+    <Content Include="Views\EnterpriseProgram\Module\EnterpriseAttendeeSelector.ascx" />
     <Content Include="Views\EnterpriseProgram\Module\AttendeeSelector.ascx" />
     <Content Include="Views\EnterpriseProgram\Module\EditEnterpriseContract.ascx" />
     <Content Include="Views\EnterpriseProgram\Module\ApplyProgramDataItem.ascx" />
@@ -1675,9 +1689,17 @@
     <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
     <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoInterval.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceBarCode.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceItemList.ascx" />
+    <Content Include="Views\Invoice\Module\InvoicePrintView.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceQRCode.ascx" />
     <Content Include="Views\Invoice\Module\TrackCodeNoList.ascx" />
     <Content Include="Views\Invoice\Module\TrackCodeNoWidgetGrid.ascx" />
     <Content Include="Views\Invoice\InvoiceNoIndex.aspx" />
+    <Content Include="Views\Invoice\Module\PrintInvoiceWidgetGrid.ascx" />
+    <Content Include="Views\Invoice\PrintInvoice.aspx" />
+    <Content Include="Views\Invoice\PrintIndex.aspx" />
+    <Content Include="Views\Layout\NavItem\Invoice.ascx" />
     <Content Include="Views\Layout\NavItem\Payment.ascx" />
     <Content Include="Views\Layout\NavItem\Contract.ascx" />
     <Content Include="Views\Learner\Index.aspx" />
@@ -1696,6 +1718,8 @@
     <Content Include="Views\LessonPrice\Module\EditProjectCourse.ascx" />
     <Content Include="Views\LessonPrice\Module\WidgetGrid.ascx" />
     <Content Include="Views\LessonPrice\PriceIndex.aspx" />
+    <Content Include="Views\Lessons\BonusLessonSelector.ascx" />
+    <Content Include="Views\Lessons\Module\CourseContractAttendeeSelector.ascx" />
     <Content Include="Views\Lessons\MyCalendar.ascx" />
     <Content Include="Views\CoachFacet\Module\CoachCalendar.ascx" />
     <Content Include="Views\CoachFacet\Module\DailyBookingList.ascx" />
@@ -2098,6 +2122,7 @@
     <Compile Include="Controllers\ClassFacetController.cs" />
     <Compile Include="Controllers\CourseContractController.cs" />
     <Compile Include="Controllers\EnterpriseProgramController.cs" />
+    <Compile Include="Controllers\PublishedController.cs" />
     <Compile Include="Controllers\FitnessDiagnosisController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\LearnerController.cs" />
@@ -2129,6 +2154,7 @@
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
     <Compile Include="Helper\TaskExtensionMethods.cs" />
+    <Compile Include="Helper\TrackNoManager.cs" />
     <Compile Include="Models\DataEntity\BF.designer.cs">
       <DependentUpon>BF.dbml</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2139,6 +2165,7 @@
     <Compile Include="Models\Locale\Naming.cs" />
     <Compile Include="Models\Resource\SiteMenuItem.cs" />
     <Compile Include="Models\ViewModel\InvoiceViewModel.cs" />
+    <Compile Include="Models\ViewModel\InvoiceViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\JsonViewModel.cs" />
     <Compile Include="Security\Authorization\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Security\UserProfileManager.cs" />

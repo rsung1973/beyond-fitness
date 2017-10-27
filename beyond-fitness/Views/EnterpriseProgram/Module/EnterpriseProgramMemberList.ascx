@@ -94,6 +94,21 @@
             });
         }
 
+        function removeMember(contractID, uid) {
+            var event = event || window.event;
+            if (confirm('確定刪除此企業方案學員?')) {
+                showLoading();
+                $.post('<%= Url.Action("RemoveMember","EnterpriseProgram") %>', { 'contractID': contractID,'uid':uid }, function (data) {
+                    hideLoading();
+                    if (data.result) {
+                        $(event.target).closest('tr').remove();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+            }
+        }
+
     </script>
 </div>
 

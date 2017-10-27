@@ -39,6 +39,12 @@ namespace WebHome.Controllers
             return View();
         }
 
+        public ActionResult PrintIndex(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
         public ActionResult InquireInvoiceNoInterval(InvoiceNoViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -70,7 +76,8 @@ namespace WebHome.Controllers
             {
                 if(hasCondition)
                 {
-                    items = items.Concat(models.GetTable<InvoiceNoInterval>().Where(t => t.IntervalID == viewModel.IntervalID));
+                    if (!items.Any(i => i.IntervalID == viewModel.IntervalID))
+                        items = items.Concat(models.GetTable<InvoiceNoInterval>().Where(t => t.IntervalID == viewModel.IntervalID));
                 }
                 else
                 {
@@ -250,6 +257,165 @@ namespace WebHome.Controllers
                 Logger.Error(ex);
                 return Json(new { result = false, message = ex.Message });
             }
+
+        }
+
+        public ActionResult InquireInvoice(InvoiceQueryViewModel viewModel)
+        {
+            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>().Where(i => i.TrackCode != null);
+            IQueryable<Payment> paymentItems = models.GetTable<Payment>();
+
+            var profile = HttpContext.GetUser();
+
+            bool hasConditon = false;
+
+            viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
+            if (viewModel.InvoiceNo != null)
+            {
+                if (Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
+                {
+                    String trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
+                    String no = viewModel.InvoiceNo.Substring(2);
+                    items = items.Where(c => c.TrackCode == trackCode
+                        && c.No == no);
+                    hasConditon = true;
+                }
+                else
+                {
+                    ModelState.AddModelError("InvoiceNo", "請輸入正確發票號碼!!");
+                }
+            }
+
+            if (!hasConditon)
+            {
+                if (viewModel.BranchID.HasValue)
+                {
+                    hasConditon = true;
+                    paymentItems = paymentItems.Where(c => c.PaymentTransaction.BranchID == viewModel.BranchID);
+                }
+            }
+
+            if (!hasConditon)
+            {
+                if (viewModel.HandlerID.HasValue)
+                {
+                    hasConditon = true;
+                    paymentItems = paymentItems.Where(c => c.HandlerID == viewModel.HandlerID);
+                }
+            }
+
+            if (!hasConditon)
+            {
+                if (profile.IsAssistant() || profile.IsAccounting())
+                {
+
+                }
+                else if (profile.IsManager() || profile.IsViceManager())
+                {
+                    var branches = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID);
+                    paymentItems = paymentItems
+                            .Join(models.GetTable<PaymentTransaction>()
+                                .Join(branches, p => p.BranchID, b => b.BranchID, (p, b) => p),
+                                c => c.PaymentID, h => h.PaymentID, (c, h) => c);
+                }
+                else if (profile.IsCoach())
+                {
+                    paymentItems = paymentItems.Where(c => c.HandlerID == profile.UID);
+                }
+                else
+                {
+                    items = items.Where(p => false);
+                }
+            }
+
+            if (viewModel.IsPrinted.HasValue)
+            {
+                if (viewModel.IsPrinted == true)
+                {
+                    items = items.Where(i => i.Document.DocumentPrintLog.Count > 0);
+                }
+                else if (viewModel.IsPrinted == false)
+                {
+                    items = items.Where(i => i.Document.DocumentPrintLog.Count == 0);
+                }
+            }
+
+            if (viewModel.InvoiceDateFrom.HasValue)
+                items = items.Where(c => c.InvoiceDate >= viewModel.InvoiceDateFrom);
+
+            if (viewModel.InvoiceDateTo.HasValue)
+                items = items.Where(c => c.InvoiceDate < viewModel.InvoiceDateTo.Value.AddDays(1));
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            paymentItems = paymentItems.Join(items, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+
+            return View("~/Views/Invoice/Module/InvoiceItemList.ascx", paymentItems);
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult PrintInvoice(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var items = models.GetTable<InvoiceItem>().Where(i => false);
+            if (viewModel.InvoiceID != null && viewModel.InvoiceID.Length > 0)
+            {
+                items = models.GetTable<InvoiceItem>().Where(i => viewModel.InvoiceID.Contains(i.InvoiceID));
+            }
+            else if(viewModel.UID.HasValue)
+            {
+                var profile = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+                if (profile != null)
+                {
+                    items = models.GetTable<DocumentPrintQueue>().Where(d => d.UID == viewModel.UID)
+                        .Join(models.GetTable<InvoiceItem>(), d => d.DocID, i => i.InvoiceID, (d, i) => i);
+                }
+            }
+            else
+            {
+                viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
+                if (viewModel.InvoiceNo != null)
+                {
+                    if (Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
+                    {
+                        String trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
+                        String no = viewModel.InvoiceNo.Substring(2);
+                        items = models.GetTable<InvoiceItem>().Where(c => c.TrackCode == trackCode
+                            && c.No == no);
+                    }
+                }
+            }
+            return View(items);
+        }
+
+        public ActionResult GetInvoicePDF(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)PrintInvoice(viewModel);
+            IQueryable<InvoiceItem> items = (IQueryable<InvoiceItem>)result.Model;
+
+            var profile = HttpContext.GetUser();
+            var queue = models.GetTable<DocumentPrintQueue>();
+            foreach (var item in items)
+            {
+                if (!queue.Any(d => d.UID == profile.UID && d.DocID == item.InvoiceID))
+                {
+                    queue.InsertOnSubmit(new DocumentPrintQueue
+                    {
+                        UID = profile.UID,
+                        DocID = item.InvoiceID,
+                        SubmitDate = DateTime.Now
+                    });
+                    models.SubmitChanges();
+                }
+            }
+
+            String pdfFile = profile.CreateQueuedInvoicePDF();
+            return File(pdfFile, "application/octet-stream", Path.GetFileName(pdfFile));
 
         }
 

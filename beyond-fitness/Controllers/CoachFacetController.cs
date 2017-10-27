@@ -308,6 +308,30 @@ namespace WebHome.Controllers
             return View("~/Views/Lessons/AttendeeSelector.ascx", items);
         }
 
+        public ActionResult BonusLessonSelector(String userName)
+        {
+            IEnumerable<RegisterLesson> items;
+            userName = userName.GetEfficientString();
+            if (userName == null)
+            {
+                this.ModelState.AddModelError("userName", "請輸學員名稱!!");
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+            else
+            {
+                items = models.GetTable<RegisterLesson>()
+                    .Where(r => r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.點數兌換課程)
+                    .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
+                        && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName)))
+                    .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
+                    .Where(l => l.RegisterGroupID.HasValue)
+                    .OrderBy(l => l.UID);
+            }
+
+            return View("~/Views/Lessons/BonusLessonSelector.ascx", items);
+        }
+
         public ActionResult TrialLearnerSelector(String userName)
         {
             IEnumerable<UserProfile> items;

@@ -49,7 +49,9 @@
             <td nowrap="noWrap"><%= item.TuitionInstallment!=null
                         ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
                         : item.ContractPayment!=null
-                            ? item.ContractPayment.CourseContract.ContractOwner.FullName()
+                            ? item.ContractPayment.CourseContract.CourseContractType.IsGroup == true
+                                ? String.Join("/",item.ContractPayment.CourseContract.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName()))
+                                : item.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--" %></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}",item.PayoffDate) %></td>
             <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>

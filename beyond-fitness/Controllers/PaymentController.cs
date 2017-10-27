@@ -189,11 +189,6 @@ namespace WebHome.Controllers
 
             var invoice = checkInvoiceNo(viewModel);
 
-            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
-            {
-                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
-            }
-
             if (!viewModel.SellerID.HasValue)
             {
                 ModelState.AddModelError("SellerID", "請選擇分店!!");
@@ -279,11 +274,6 @@ namespace WebHome.Controllers
 
             var invoice = checkInvoiceNo(viewModel);
 
-            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
-            {
-                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
-            }
-
             if (!viewModel.SellerID.HasValue)
             {
                 ModelState.AddModelError("SellerID", "請選擇分店!!");
@@ -333,6 +323,44 @@ namespace WebHome.Controllers
             }
         }
 
+        public ActionResult CommitInvoice(InvoiceViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
+            if (seller == null)
+            {
+                return View("~/Views/SiteAction/Alert.ascx", model: "發票開立人錯誤!!");
+            }
+
+            viewModel.SellerName = seller.CompanyName;
+            viewModel.SellerReceiptNo = seller.ReceiptNo;
+
+            InvoiceViewModelValidator<UserProfile> validator = new InvoiceViewModelValidator<UserProfile>(models, seller);
+            var exception = validator.Validate(viewModel);
+            if (exception != null)
+            {
+                return View("~/Views/SiteAction/Alert.ascx", model: exception.Message);
+            }
+
+            InvoiceItem newItem = validator.InvoiceItem;
+            models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+            models.SubmitChanges();
+
+            viewModel.TrackCode = newItem.TrackCode;
+            viewModel.No = newItem.No;
+
+            if (newItem.InvoiceCarrier != null)
+            {
+                return View("~/Views/InvoiceBusiness/Module/InvoiceCreated.ascx", newItem);
+            }
+            else
+            {
+                return View("PrintInvoice", newItem);
+            }
+            //return Json(new { result = true, printUrl = VirtualPathUtility.ToAbsolute("~/SAM/NewPrintSingleInvoicePOSPage.aspx") + "?invoiceID=" + newItem.InvoiceID });
+
+        }
 
         private void preparePayment(PaymentViewModel viewModel, UserProfile profile, Payment item)
         {
@@ -367,11 +395,6 @@ namespace WebHome.Controllers
             }
 
             var invoice = checkInvoiceNo(viewModel);
-
-            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
-            {
-                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
-            }
 
             if (!viewModel.SellerID.HasValue)
             {
@@ -452,12 +475,22 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("PayoffDate", "請選擇收款日期!!");
             }
 
-            var invoice = checkInvoiceNo(viewModel);
-
-            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
+            var product = models.GetTable<MerchandiseWindow>().Where(c => c.ProductID == viewModel.ProductID).FirstOrDefault();
+            if (product == null)
             {
-                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
+                ModelState.AddModelError("ProductID", "請選擇品項!!");
             }
+            else
+            {
+                viewModel.ItemNo = new string[] { "01" };
+                viewModel.Brief = new string[] { product.ProductName };
+                viewModel.CostAmount = new int?[] { product.UnitPrice * viewModel.ProductCount };
+                viewModel.UnitCost = new int?[] { product.UnitPrice };
+                viewModel.Piece = new int?[] { viewModel.ProductCount };
+                viewModel.ItemRemark = new string[] { viewModel.Remark };
+            }
+
+            var invoice = checkInvoiceNo(viewModel);
 
             if (!viewModel.SellerID.HasValue)
             {
@@ -504,7 +537,7 @@ namespace WebHome.Controllers
 
                 models.SubmitChanges();
 
-                return Json(new { result = true });
+                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID });
             }
             catch (Exception ex)
             {
@@ -515,6 +548,12 @@ namespace WebHome.Controllers
 
         private InvoiceItem checkInvoiceNo(PaymentViewModel viewModel)
         {
+            if (!viewModel.PayoffAmount.HasValue || viewModel.PayoffAmount <= 0)
+            {
+                ModelState.AddModelError("PayoffAmount", "請輸入收款金額!!");
+                return null;
+            }
+
             String trackCode, no;
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
             if (viewModel.InvoiceType != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
@@ -532,10 +571,49 @@ namespace WebHome.Controllers
                     //{
                     //    ModelState.AddModelError("InvoiceNo", "發票號碼重複!!");
                     //}
+                    if(invoice!=null && invoice.InvoiceType==(byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    {
+                        ModelState.AddModelError("InvoiceNo", "發票號碼為已開立之電子發票!!");
+                        return null;
+                    }
                     return invoice;
                 }
             }
+            else
+            {
+                prepareInvoice(viewModel);
+
+                var seller = models.GetTable<Organization>().Where(o => o.CompanyID == viewModel.SellerID).FirstOrDefault();
+                if (seller == null)
+                {
+                    ModelState.AddModelError("SellerID", "發票開立人錯誤!!");
+                    return null;
+                }
+
+                viewModel.SellerName = seller.CompanyName;
+                viewModel.SellerReceiptNo = seller.ReceiptNo;
+
+                InvoiceViewModelValidator<UserProfile> validator = new InvoiceViewModelValidator<UserProfile>(models, seller);
+                var exception = validator.Validate(viewModel);
+                if (exception != null)
+                {
+                    ModelState.AddModelError("PayoffDate", exception.Message);
+                    return null;
+                }
+
+                InvoiceItem newItem = validator.InvoiceItem;
+                models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
+
+                return newItem;
+            }
+
             return null;
+        }
+
+        private void prepareInvoice(PaymentViewModel viewModel)
+        {
+            viewModel.SalesAmount = (int)Math.Round((decimal)viewModel.PayoffAmount / 1.05m);
+            viewModel.TaxAmount = viewModel.PayoffAmount - viewModel.SalesAmount;
         }
 
         protected InvoiceItem createPaperInvoice(PaymentViewModel viewModel)

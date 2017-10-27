@@ -260,6 +260,38 @@ namespace WebHome.Controllers
             return View("~/Views/EnterpriseProgram/Module/MemberSelector.ascx");
         }
 
+        public ActionResult RemoveMember(EnterpriseGroupMemberViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var item = models.GetTable<EnterpriseCourseMember>().Where(m => m.ContractID == viewModel.ContractID
+                && m.UID == viewModel.UID).FirstOrDefault();
+
+            if (item == null)
+                return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                models.ExecuteCommand(@"DELETE FROM RegisterLesson
+                        FROM     EnterpriseCourseContract INNER JOIN
+                                    RegisterLessonEnterprise ON EnterpriseCourseContract.ContractID = RegisterLessonEnterprise.ContractID INNER JOIN
+                                    RegisterLesson ON RegisterLessonEnterprise.RegisterID = RegisterLesson.RegisterID
+                        WHERE   (EnterpriseCourseContract.ContractID = {0}) AND (RegisterLesson.UID = {1})", item.ContractID, item.UID);
+
+                models.DeleteAny<EnterpriseCourseMember>(m => m.ContractID == viewModel.ContractID
+                        && m.UID == viewModel.UID);
+
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+
         [CoachOrAssistantAuthorize]
         public ActionResult CommitMember(EnterpriseGroupMemberViewModel viewModel)
         {
@@ -559,39 +591,39 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("ClassDate", "預約時間不可早於今天!!");
             }
 
-            if (!this.ModelState.IsValid)
-            {
-                ViewBag.ModelState = this.ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
-            }
-
             var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
             if (coach == null)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "未指定體能顧問!!");
+                ModelState.AddModelError("CoachID", "未指定體能顧問!!");
             }
                         
             RegisterLesson lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
             if (lesson == null)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "學員未購買課程!!");
+                ModelState.AddModelError("UID", "學員未購買課程!!");
             }
 
             if (lesson.Attended == (int)Naming.LessonStatus.課程結束)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "學員課程已結束!!");
+                ModelState.AddModelError("UID", "學員課程已結束!!");
             }
 
             var lessonCount = lesson.GroupingLesson.LessonTime.Count;
             if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
+                ModelState.AddModelError("UID", "學員上課堂數已滿!!");
             }
 
             var contract = lesson.RegisterLessonEnterprise.EnterpriseCourseContract;
             if (contract.Expiration.Value < DateTime.Today)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "企業方案合約已過期!!");
+                ModelState.AddModelError("UID", "企業方案合約已過期!!");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
             }
 
             LessonTime timeItem = new LessonTime
@@ -619,8 +651,9 @@ namespace WebHome.Controllers
             var users = models.CheckOverlapedBooking(timeItem, lesson);
             if (users.Count() > 0)
             {
-                ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
-                return View("~/Views/Shared/MessageView.ascx");
+                ModelState.AddModelError("UID", "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!");
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
             }
 
             if (lesson.GroupingMemberCount > 1)

@@ -13,9 +13,17 @@ namespace WebHome.Helper
             ContractPdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "contract");
             if (!Directory.Exists(ContractPdfPath))
                 Directory.CreateDirectory(ContractPdfPath);
+
+            InvoicePdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "invoice");
+            if (!Directory.Exists(InvoicePdfPath))
+                Directory.CreateDirectory(InvoicePdfPath);
+
         }
 
         public static String ContractPdfPath { get; private set; }
+
+        public static String InvoicePdfPath { get; private set; }
+
     }
 
     public enum CachingKey

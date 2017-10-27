@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -8,6 +11,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using CommonLib.DataAccess;
+using MessagingToolkit.QRCode.Codec;
 using Utility;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
@@ -98,5 +102,40 @@ namespace WebHome.Helper
                 }
             });
         }
+
+        public static Bitmap CreateQRCode(this String content, QRCodeEncoder.ENCODE_MODE encoding, int scale, int version, QRCodeEncoder.ERROR_CORRECTION errorCorrect)
+        {
+            if (String.IsNullOrEmpty(content))
+            {
+                return null;
+            }
+
+            QRCodeEncoder qrCodeEncoder = new QRCodeEncoder();
+
+            qrCodeEncoder.QRCodeScale = scale;
+            qrCodeEncoder.QRCodeVersion = version;
+            qrCodeEncoder.QRCodeErrorCorrect = errorCorrect;
+            qrCodeEncoder.CharacterSet = "UTF-8";
+
+            return qrCodeEncoder.Encode(content);
+
+        }
+
+        public static String CreateQRCodeImageSrc(this String content, QRCodeEncoder.ENCODE_MODE encoding = QRCodeEncoder.ENCODE_MODE.BYTE, int scale = 4, int version = 6, QRCodeEncoder.ERROR_CORRECTION errorCorrect = QRCodeEncoder.ERROR_CORRECTION.L,float dpi = 600f)
+        {
+            using (Bitmap img = content.CreateQRCode(encoding, scale, version, errorCorrect))
+            {
+                using (MemoryStream buffer = new MemoryStream())
+                {
+                    img.SetResolution(dpi, dpi);
+                    img.Save(buffer, ImageFormat.Png);
+                    StringBuilder sb = new StringBuilder("data:image/png;base64,");
+                    sb.Append(Convert.ToBase64String(buffer.ToArray()));
+                    return sb.ToString();
+                }
+            }
+        }
+
+
     }
 }

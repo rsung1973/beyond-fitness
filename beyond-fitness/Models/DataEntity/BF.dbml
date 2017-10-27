@@ -22,6 +22,8 @@
       <Association Name="Document_InvoiceAllowance" Member="InvoiceAllowance" ThisKey="DocID" OtherKey="AllowanceID" Type="InvoiceAllowance" Cardinality="One" />
       <Association Name="Document_DerivedDocument" Member="DerivedDocument" ThisKey="DocID" OtherKey="DocID" Type="DerivedDocument" Cardinality="One" />
       <Association Name="Document_DerivedDocument1" Member="AtSource" ThisKey="DocID" OtherKey="SourceID" Type="DerivedDocument" />
+      <Association Name="Document_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintLog" />
+      <Association Name="Document_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintQueue" Cardinality="One" />
       <Association Name="DocumentType_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -234,6 +236,8 @@
       <Association Name="UserProfile_VoidPayment" Member="VoidPayment" ThisKey="UID" OtherKey="HandlerID" Type="VoidPayment" />
       <Association Name="UserProfile_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="UID" OtherKey="ExecutorID" Type="VoidPaymentLevel" />
       <Association Name="UserProfile_EnterpriseCourseMember" Member="EnterpriseCourseMember" ThisKey="UID" OtherKey="UID" Type="EnterpriseCourseMember" />
+      <Association Name="UserProfile_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="UID" OtherKey="UID" Type="DocumentPrintLog" />
+      <Association Name="UserProfile_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="UID" OtherKey="UID" Type="DocumentPrintQueue" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1633,6 +1637,25 @@
       <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="InvoiceNoInterval_InvoiceNoAssignment" Member="InvoiceNoAssignment" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoAssignment" />
       <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceTrackCodeAssignment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DocumentPrintLog" Member="DocumentPrintLog">
+    <Type Name="DocumentPrintLog">
+      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrintDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Document_DocumentPrintLog" Member="Document" ThisKey="DocID" OtherKey="DocID" Type="Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="UserProfile_DocumentPrintLog" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DocumentPrintQueue" Member="DocumentPrintQueue">
+    <Type Name="DocumentPrintQueue">
+      <Column Name="DocID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SubmitDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Document_DocumentPrintQueue" Member="Document" ThisKey="DocID" OtherKey="DocID" Type="Document" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="UserProfile_DocumentPrintQueue" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
 </Database>

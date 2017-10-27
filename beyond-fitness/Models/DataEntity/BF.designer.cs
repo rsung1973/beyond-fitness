@@ -414,6 +414,12 @@ namespace WebHome.Models.DataEntity
     partial void InsertInvoiceNoInterval(InvoiceNoInterval instance);
     partial void UpdateInvoiceNoInterval(InvoiceNoInterval instance);
     partial void DeleteInvoiceNoInterval(InvoiceNoInterval instance);
+    partial void InsertDocumentPrintLog(DocumentPrintLog instance);
+    partial void UpdateDocumentPrintLog(DocumentPrintLog instance);
+    partial void DeleteDocumentPrintLog(DocumentPrintLog instance);
+    partial void InsertDocumentPrintQueue(DocumentPrintQueue instance);
+    partial void UpdateDocumentPrintQueue(DocumentPrintQueue instance);
+    partial void DeleteDocumentPrintQueue(DocumentPrintQueue instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1477,6 +1483,22 @@ namespace WebHome.Models.DataEntity
 				return this.GetTable<InvoiceNoInterval>();
 			}
 		}
+		
+		public System.Data.Linq.Table<DocumentPrintLog> DocumentPrintLog
+		{
+			get
+			{
+				return this.GetTable<DocumentPrintLog>();
+			}
+		}
+		
+		public System.Data.Linq.Table<DocumentPrintQueue> DocumentPrintQueue
+		{
+			get
+			{
+				return this.GetTable<DocumentPrintQueue>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserRoleDefinition")]
@@ -1673,6 +1695,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<DerivedDocument> _AtSource;
 		
+		private EntitySet<DocumentPrintLog> _DocumentPrintLog;
+		
+		private EntityRef<DocumentPrintQueue> _DocumentPrintQueue;
+		
 		private EntityRef<DocumentType> _DocumentType;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -1701,6 +1727,8 @@ namespace WebHome.Models.DataEntity
 			this._InvoiceAllowance = default(EntityRef<InvoiceAllowance>);
 			this._DerivedDocument = default(EntityRef<DerivedDocument>);
 			this._AtSource = new EntitySet<DerivedDocument>(new Action<DerivedDocument>(this.attach_AtSource), new Action<DerivedDocument>(this.detach_AtSource));
+			this._DocumentPrintLog = new EntitySet<DocumentPrintLog>(new Action<DocumentPrintLog>(this.attach_DocumentPrintLog), new Action<DocumentPrintLog>(this.detach_DocumentPrintLog));
+			this._DocumentPrintQueue = default(EntityRef<DocumentPrintQueue>);
 			this._DocumentType = default(EntityRef<DocumentType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
@@ -1956,6 +1984,48 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_DocumentPrintLog", Storage="_DocumentPrintLog", ThisKey="DocID", OtherKey="DocID")]
+		public EntitySet<DocumentPrintLog> DocumentPrintLog
+		{
+			get
+			{
+				return this._DocumentPrintLog;
+			}
+			set
+			{
+				this._DocumentPrintLog.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_DocumentPrintQueue", Storage="_DocumentPrintQueue", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
+		public DocumentPrintQueue DocumentPrintQueue
+		{
+			get
+			{
+				return this._DocumentPrintQueue.Entity;
+			}
+			set
+			{
+				DocumentPrintQueue previousValue = this._DocumentPrintQueue.Entity;
+				if (((previousValue != value) 
+							|| (this._DocumentPrintQueue.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._DocumentPrintQueue.Entity = null;
+						previousValue.Document = null;
+					}
+					this._DocumentPrintQueue.Entity = value;
+					if ((value != null))
+					{
+						value.Document = this;
+					}
+					this.SendPropertyChanged("DocumentPrintQueue");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="DocumentType_Document", Storage="_DocumentType", ThisKey="DocType", OtherKey="TypeID", IsForeignKey=true)]
 		public DocumentType DocumentType
 		{
@@ -2066,6 +2136,18 @@ namespace WebHome.Models.DataEntity
 		{
 			this.SendPropertyChanging();
 			entity.TargetDocument = null;
+		}
+		
+		private void attach_DocumentPrintLog(DocumentPrintLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.Document = this;
+		}
+		
+		private void detach_DocumentPrintLog(DocumentPrintLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.Document = null;
 		}
 	}
 	
@@ -5503,6 +5585,10 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<EnterpriseCourseMember> _EnterpriseCourseMember;
 		
+		private EntitySet<DocumentPrintLog> _DocumentPrintLog;
+		
+		private EntitySet<DocumentPrintQueue> _DocumentPrintQueue;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -5593,6 +5679,8 @@ namespace WebHome.Models.DataEntity
 			this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
 			this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
 			this._EnterpriseCourseMember = new EntitySet<EnterpriseCourseMember>(new Action<EnterpriseCourseMember>(this.attach_EnterpriseCourseMember), new Action<EnterpriseCourseMember>(this.detach_EnterpriseCourseMember));
+			this._DocumentPrintLog = new EntitySet<DocumentPrintLog>(new Action<DocumentPrintLog>(this.attach_DocumentPrintLog), new Action<DocumentPrintLog>(this.detach_DocumentPrintLog));
+			this._DocumentPrintQueue = new EntitySet<DocumentPrintQueue>(new Action<DocumentPrintQueue>(this.attach_DocumentPrintQueue), new Action<DocumentPrintQueue>(this.detach_DocumentPrintQueue));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6512,6 +6600,32 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintLog", Storage="_DocumentPrintLog", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<DocumentPrintLog> DocumentPrintLog
+		{
+			get
+			{
+				return this._DocumentPrintLog;
+			}
+			set
+			{
+				this._DocumentPrintLog.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintQueue", Storage="_DocumentPrintQueue", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<DocumentPrintQueue> DocumentPrintQueue
+		{
+			get
+			{
+				return this._DocumentPrintQueue;
+			}
+			set
+			{
+				this._DocumentPrintQueue.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -7059,6 +7173,30 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_EnterpriseCourseMember(EnterpriseCourseMember entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_DocumentPrintLog(DocumentPrintLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_DocumentPrintLog(DocumentPrintLog entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_DocumentPrintQueue(DocumentPrintQueue entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_DocumentPrintQueue(DocumentPrintQueue entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -37915,6 +38053,414 @@ namespace WebHome.Models.DataEntity
 		{
 			this.SendPropertyChanging();
 			entity.InvoiceNoInterval = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DocumentPrintLog")]
+	public partial class DocumentPrintLog : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _LogID;
+		
+		private int _DocID;
+		
+		private System.DateTime _PrintDate;
+		
+		private int _UID;
+		
+		private EntityRef<Document> _Document;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnLogIDChanging(int value);
+    partial void OnLogIDChanged();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnPrintDateChanging(System.DateTime value);
+    partial void OnPrintDateChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    #endregion
+		
+		public DocumentPrintLog()
+		{
+			this._Document = default(EntityRef<Document>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LogID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int LogID
+		{
+			get
+			{
+				return this._LogID;
+			}
+			set
+			{
+				if ((this._LogID != value))
+				{
+					this.OnLogIDChanging(value);
+					this.SendPropertyChanging();
+					this._LogID = value;
+					this.SendPropertyChanged("LogID");
+					this.OnLogIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL")]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PrintDate", DbType="DateTime NOT NULL")]
+		public System.DateTime PrintDate
+		{
+			get
+			{
+				return this._PrintDate;
+			}
+			set
+			{
+				if ((this._PrintDate != value))
+				{
+					this.OnPrintDateChanging(value);
+					this.SendPropertyChanging();
+					this._PrintDate = value;
+					this.SendPropertyChanged("PrintDate");
+					this.OnPrintDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_DocumentPrintLog", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Document Document
+		{
+			get
+			{
+				return this._Document.Entity;
+			}
+			set
+			{
+				Document previousValue = this._Document.Entity;
+				if (((previousValue != value) 
+							|| (this._Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Document.Entity = null;
+						previousValue.DocumentPrintLog.Remove(this);
+					}
+					this._Document.Entity = value;
+					if ((value != null))
+					{
+						value.DocumentPrintLog.Add(this);
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("Document");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintLog", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.DocumentPrintLog.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.DocumentPrintLog.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.DocumentPrintQueue")]
+	public partial class DocumentPrintQueue : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private System.Nullable<int> _UID;
+		
+		private System.Nullable<System.DateTime> _SubmitDate;
+		
+		private EntityRef<Document> _Document;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnUIDChanging(System.Nullable<int> value);
+    partial void OnUIDChanged();
+    partial void OnSubmitDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnSubmitDateChanged();
+    #endregion
+		
+		public DocumentPrintQueue()
+		{
+			this._Document = default(EntityRef<Document>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int")]
+		public System.Nullable<int> UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SubmitDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> SubmitDate
+		{
+			get
+			{
+				return this._SubmitDate;
+			}
+			set
+			{
+				if ((this._SubmitDate != value))
+				{
+					this.OnSubmitDateChanging(value);
+					this.SendPropertyChanging();
+					this._SubmitDate = value;
+					this.SendPropertyChanged("SubmitDate");
+					this.OnSubmitDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_DocumentPrintQueue", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Document Document
+		{
+			get
+			{
+				return this._Document.Entity;
+			}
+			set
+			{
+				Document previousValue = this._Document.Entity;
+				if (((previousValue != value) 
+							|| (this._Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Document.Entity = null;
+						previousValue.DocumentPrintQueue = null;
+					}
+					this._Document.Entity = value;
+					if ((value != null))
+					{
+						value.DocumentPrintQueue = this;
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("Document");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_DocumentPrintQueue", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.DocumentPrintQueue.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.DocumentPrintQueue.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

@@ -26,12 +26,16 @@
                 { %>
             <tr>
                 <td><%= item.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %></td>
-                <td><%= item.RegisterLesson.GroupingMemberCount>1
-                                                                ? "團體課程"
-                                                                : item.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
-                                                                    ? "個人課程"
-                                                                    : ((Naming.LessonPriceStatus)item.RegisterLesson.LessonPriceType.Status).ToString() %></td>
-                <td><%= String.Join("、",item.GroupingLesson.RegisterLesson.Select(r=>r.UserProfile.RealName)) %></td>
+                <td><%  if(item.RegisterLesson.RegisterLessonEnterprise==null)
+                        { %>
+                            <%= item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus() %>
+                    <%  }
+                        else
+                        { %>
+                            <%= item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus() %>
+                    <%  } %>
+                </td>
+                <td><%= String.Join("/",item.GroupingLesson.RegisterLesson.Select(r=>r.UserProfile.RealName)) %></td>
                 <td><%= item.AsAttendingCoach.UserProfile.FullName() %></td>
                 <td>
                     <%  if (item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)

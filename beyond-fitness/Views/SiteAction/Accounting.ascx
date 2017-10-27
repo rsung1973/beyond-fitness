@@ -12,6 +12,7 @@
 <nav>
     <ul>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Payment.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Invoice.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/AccountingReport.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/SystemInfo.ascx", _userProfile); %>
         <li>

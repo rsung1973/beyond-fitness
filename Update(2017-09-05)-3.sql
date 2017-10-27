@@ -214,6 +214,8 @@ FROM     LessonTime INNER JOIN
                RegisterLesson ON LessonTime.RegisterID = RegisterLesson.RegisterID INNER JOIN
                RegisterLessonContract ON RegisterLesson.RegisterID = RegisterLessonContract.RegisterID
 go
+-- run InitializeTrust
+go
 INSERT INTO ContractTrustTrack
                (ContractID, EventDate, TrustType, SettlementID, PaymentID)
 SELECT  ContractPayment.ContractID, Payment.PayoffDate AS EventDate, 'B' AS Expr2, NULL AS Expr1, Payment.PaymentID
