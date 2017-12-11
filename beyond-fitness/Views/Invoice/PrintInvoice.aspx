@@ -57,9 +57,12 @@
                     font-size: 17pt;
                     line-height: 1;
                     letter-spacing: -1px;
-                    text-align: center;
+                    /*text-align: center;*/
                     padding: 0;
-                    margin: 0;
+                    margin-left: 5px;
+                    margin-top: 0;
+                    margin-right: 0;
+                    margin-bottom: 0;
                 }
 
                 .container .cutfield h3 {
@@ -123,21 +126,22 @@
                     }
 
                 .container .cutfield .code1 {
-                    text-align: center;
+                    /*text-align: center;*/
                     padding: 0;
                     padding-top: 0.2cm;
                     margin: 0;
                 }
 
                 .container .cutfield .code2 {
-                    text-align: center;
+                    /*text-align: center;*/
                     padding: 0;
                     padding-top: 0.3cm;
                     margin: 0;
+                    margin-right: 0.3cm;
                 }
 
                     .container .cutfield .code2 img {
-                        margin: 0 0.6cm 0 0.6cm;
+                        /*margin: 0 0.6cm 0 0.6cm;*/
                         border: none;
                     }
         /*交易明細*/
@@ -256,7 +260,7 @@
     <title>電子發票系統</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 </head>
-<body>
+<body style="width:5.8cm;">
     <script type="text/javascript" src="<%= VirtualPathUtility.ToAbsolute("~/js/css3-multi-column.js") %>"></script>
     <%  foreach (var item in _model)
         {
@@ -296,4 +300,4 @@
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
     }
 
-        </script>
+</script>

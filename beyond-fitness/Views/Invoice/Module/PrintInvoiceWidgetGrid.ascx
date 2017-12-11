@@ -99,22 +99,22 @@
                             <fieldset>
                                 <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
                                 <div class="row">
-                                    <section class="col col-xs-12 col-sm-4 col-md-4">
-                                        <label class="label">請選擇發票起日</label>
+                                    <section class="col col-xs-12 col-sm-3 col-md-3">
+                                        <label class="label">請選擇發票／折讓(作廢)起日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
-                                            <input type="text" name="InvoiceDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
+                                            <input type="text" name="DateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
                                     </section>
-                                    <section class="col col-xs-12 col-sm-4 col-md-4">
-                                        <label class="label">請選擇發票迄日</label>
+                                    <section class="col col-xs-12 col-sm-3 col-md-3">
+                                        <label class="label">請選擇發票／折讓(作廢)迄日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="InvoiceDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
+                                            <input type="text" name="DateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
                                     </section>
-                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                    <section class="col col-xs-12 col-sm-3 col-md-3">
                                         <label class="label">請選擇發票是否已列印</label>
                                         <label class="select">
                                             <select class="input" name="IsPrinted">
@@ -124,6 +124,62 @@
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
+                                    </section>
+                                    <section class="col col-xs-12 col-sm-3 col-md-3">
+                                        <label class="label">請選擇證明聯種類</label>
+                                        <label class="select">
+                                            <select class="input" name="DocType">
+                                                <option value="<%= (int)Naming.DocumentTypeDefinition.E_Invoice %>">電子發票</option>
+                                                <option value="<%= (int)Naming.DocumentTypeDefinition.E_Allowance %>">折讓證明單</option>
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label class="label"><i class="fa fa-tags"></i>印表機選項</label>
+                                <div class="row">
+                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                        <label class="label">分店</label>
+                                        <label class="select">
+                                            <select name="CompanyID">
+                                                <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _profile.ServingCoach!=null && _profile.ServingCoach.CoachWorkplace.Count>0 ? _profile.ServingCoach.CoachWorkplace.First().BranchID : -1); %>
+                                            </select>
+                                            <i class="icon-append fa fa-at"></i>
+                                        </label>
+                                        <script>
+                                            function getPrinterIP() {
+                                                $.post('<%= Url.Action("GetPrinterIP","Invoice") %>', { 'companyID': $('select[name="CompanyID"]').val() }, function (data) {
+                                                    $('input[name="PrinterIP"]').val(data.printerIP);
+                                                });
+                                            }
+                                            $('select[name="CompanyID"]').on('change', function (evt) {
+                                                getPrinterIP();
+                                            });
+                                            $(function () {
+                                                getPrinterIP();
+                                            });
+                                        </script>
+                                    </section>
+                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                        <label class="label">印表機IP</label>
+                                        <label class="input input-group">
+                                            <i class="icon-append fa fa-wifi"></i>
+                                            <input type="text" name="PrinterIP" class="form-control input" maxlength="20" placeholder="請輸入印表機IP"/>
+                                        </label>
+                                        <script>
+                                            function updatePrinterIP() {
+                                                $.post('<%= Url.Action("UpdatePrinterIP","Invoice") %>', { 'companyID': $('select[name="CompanyID"]').val(), 'printerIP': $('input[name="PrinterIP"]').val() }, function (data) {
+                                                    if (data.result) {
+                                                        alert('印表機IP已設定!!');
+                                                    }
+                                                });
+                                            }
+                                            $('input[name="PrinterIP"]').on('change', function (evt) {
+                                                updatePrinterIP();
+                                            });
+                                        </script>
                                     </section>
                                 </div>
                             </fieldset>
@@ -169,7 +225,10 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>收款清單</h2>
                     <div class="widget-toolbar">
+                        <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                            { %>
                         <a id="btnDownload" onclick="printAll();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-print"></i>整批列印</a>
+                        <%  } %>
                     </div>
                 </header>
                 <!-- widget div-->
@@ -181,7 +240,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="invoiceList">
-                        <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceItemList.ascx", models.GetTable<Payment>().Where(p => false)); %>
+                        <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceItemList.ascx", _model); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -210,8 +269,32 @@
         });
     }
 
+    function printInvoice(invoiceID) {
+        var printerIP = $('input[name="PrinterIP"]').val();
+        if (!printerIP || printerIP == '') {
+            alert('請先設定印表機IP!!');
+            return;
+        }
+        $('<form>').launchDownload('<%= Url.Action("LoadInvoiceImage", "Invoice") %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+    }
+
+    function printAllowance(allowanceID) {
+        var printerIP = $('input[name="PrinterIP"]').val();
+        if (!printerIP || printerIP == '') {
+            alert('請先設定印表機IP!!');
+            return;
+        }
+        $('<form>').launchDownload('<%= Url.Action("PrintAllowanceImage", "Invoice") %>', { 'allowanceID': allowanceID, 'printerIP': printerIP }, '_blank');
+    }
+
     function printAll() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreateContractQueryXlsx","CourseContract") %>');
+        <%--$('#queryForm').launchDownload('<%= Url.Action("PrintAll","Invoice") %>');--%>
+        var printerIP = $('input[name="PrinterIP"]').val();
+        if (!printerIP || printerIP == '') {
+            alert('請先設定印表機IP!!');
+            return;
+        }
+        $('#queryForm').launchDownload('<%= Url.Action("PrintAllInvoice","Invoice") %>');
     }
 
 </script>
@@ -222,14 +305,16 @@
     ModelSource<UserProfile> models;
     UserProfile _profile;
     InvoiceQueryViewModel _viewModel;
+    IQueryable<Payment> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _profile = Context.GetUser();
+        _profile = Context.GetUser().LoadInstance(models);
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+        _model = (IQueryable<Payment>)this.Model;
     }
 
 </script>

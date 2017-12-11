@@ -63,10 +63,10 @@
                                         <label class="select">
                                             <select class="input" name="TrustType">
                                                 <option value="">全部</option>
-                                                <option value="T">已預付上課費用（T）</option>
-                                                <option value="B">已預付上課費用（B）</option>
-                                                <option value="N">已實現上課費用（N）</option>
-                                                <option value="S">終止合約（S）</option>
+                                                <option value="B">新增（B）</option>
+                                                <option value="N">返還（N）</option>
+                                                <option value="T">轉入（T）</option>
+                                                <option value="S">終止（S）</option>
                                                 <option value="X">轉讓（X）</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>

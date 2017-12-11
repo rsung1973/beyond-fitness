@@ -13,8 +13,9 @@
 
 <%  if (_qrCode!=null)
     { %>
-        <img style="margin-left: 0.3cm; margin-right: 0.3cm;" alt="" width="60" height="60" src="<%= _qrCode.CreateQRCodeImageSrc() %>" />
-        <img style="margin-left: 0.3cm; margin-right: 0.3cm;" alt="" width="60" height="60" src="<%= "**".CreateQRCodeImageSrc() %>" />
+        <img class="qrcode" alt="" width="<%= (bool?)ViewBag.Canvas==true ? "160" : "80" %>" height="<%= (bool?)ViewBag.Canvas==true ? "160" : "80" %>" src="<%= _qrCode.CreateQRCodeImageSrc() %>" />
+&nbsp;&nbsp;&nbsp;&nbsp;
+        <img class="qrcode" alt="" width="<%= (bool?)ViewBag.Canvas==true ? "160" : "80" %>" height="<%= (bool?)ViewBag.Canvas==true ? "160" : "80" %>" src="<%= "**".CreateQRCodeImageSrc() %>" />
 <%  } %>
 
 <script runat="server">
@@ -57,7 +58,7 @@
         sb.Append(_model.RandomNo);
         sb.Append(String.Format("{0:X8}", (int)_model.InvoiceAmountType.SalesAmount));
         sb.Append(String.Format("{0:X8}", (int)_model.InvoiceAmountType.TotalAmount));
-        sb.Append(_isB2C ? "0000000000" : _model.InvoiceBuyer.ReceiptNo);
+        sb.Append(_isB2C ? "00000000" : _model.InvoiceBuyer.ReceiptNo);
         sb.Append(_model.Organization.ReceiptNo);
         sb.Append(finalEncryData);
         sb.Append(":");

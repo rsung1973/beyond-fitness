@@ -71,7 +71,7 @@
             <td nowrap="noWrap"><%= item.BranchStore.BranchName %></td>
             <td nowrap="noWrap"><%= item.RegisterLesson.UserProfile.FullName() %></td>
             <td><%= item.RegisterLesson.LessonPriceType.Description  %>(<%= item.RegisterLesson.LessonPriceType.DurationInMinutes %>分鐘)</td>
-            <td><%  var halfCount = item.LessonAttendance == null || item.LessonPlan.CommitAttendance.HasValue ? 1 : 0 ; %>
+            <td><%  var halfCount = item.LessonAttendance == null || !item.LessonPlan.CommitAttendance.HasValue ? 1 : 0 ; %>
                 <%= 1-halfCount %> / <%= halfCount %>
             </td>
         </tr>

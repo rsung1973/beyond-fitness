@@ -48,7 +48,7 @@
                                         <label class="label">分店</label>
                                         <label class="select">
                                             <select class="input" name="BranchID">
-                                                <option value="0">全部</option>
+                                                <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", -1); %>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>

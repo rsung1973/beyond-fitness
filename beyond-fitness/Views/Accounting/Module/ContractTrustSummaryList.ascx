@@ -39,16 +39,21 @@
                 <%= totalAmt.HasValue ? String.Format("{0:##,###,###,##0}",totalAmt) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%   totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t=>t.LessonTime.RegisterLesson)
-                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100); %>
+                <%   totalAmt = (item.ContractTrustTrack
+                        .Where(t => t.TrustType == "N")
+                        .Select(t=>t.LessonTime.RegisterLesson)
+                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+                       + (item.ContractTrustTrack.Where(t => t.TrustType == "V")
+                       .Select(t=>t.VoidPayment.Payment)
+                        .Sum(p => p.PayoffAmount) ?? 0); %>
                 <%= totalAmt.HasValue && totalAmt!=0 ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount); %>
+                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount); %>
                 <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount); %>
+                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount); %>
                 <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">

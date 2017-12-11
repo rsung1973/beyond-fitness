@@ -187,6 +187,13 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("PayoffDate", "請選擇收款日期!!");
             }
 
+            viewModel.ItemNo = new string[] { "01" };
+            viewModel.Brief = new string[] { "體能顧問服務費" };
+            viewModel.CostAmount = new int?[] { viewModel.PayoffAmount };
+            viewModel.UnitCost = new int?[] { viewModel.PayoffAmount };
+            viewModel.Piece = new int?[] { 1 };
+            viewModel.ItemRemark = new string[] { viewModel.Remark };
+
             var invoice = checkInvoiceNo(viewModel);
 
             if (!viewModel.SellerID.HasValue)
@@ -238,8 +245,9 @@ namespace WebHome.Controllers
                 item.PaymentTransaction.BranchID = viewModel.SellerID.Value;
 
                 models.SubmitChanges();
+                TaskExtensionMethods.ProcessInvoiceToGov();
 
-                return Json(new { result = true });
+                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType });
             }
             catch (Exception ex)
             {
@@ -394,6 +402,13 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("PayoffDate", "請選擇收款日期!!");
             }
 
+            viewModel.ItemNo = new string[] { "01" };
+            viewModel.Brief = new string[] { "自主訓練費用" };
+            viewModel.CostAmount = new int?[] { viewModel.PayoffAmount };
+            viewModel.UnitCost = new int?[] { viewModel.PayoffAmount };
+            viewModel.Piece = new int?[] { 1 };
+            viewModel.ItemRemark = new string[] { viewModel.Remark };
+
             var invoice = checkInvoiceNo(viewModel);
 
             if (!viewModel.SellerID.HasValue)
@@ -445,8 +460,9 @@ namespace WebHome.Controllers
 
                 models.SubmitChanges();
                 models.AttendLesson(lesson.LessonTime.First());
-                                
-                return Json(new { result = true });
+                TaskExtensionMethods.ProcessInvoiceToGov();
+
+                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType });
             }
             catch (Exception ex)
             {
@@ -536,8 +552,9 @@ namespace WebHome.Controllers
                 preparePayment(viewModel, profile, item);
 
                 models.SubmitChanges();
+                TaskExtensionMethods.ProcessInvoiceToGov();
 
-                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID });
+                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType });
             }
             catch (Exception ex)
             {
@@ -597,11 +614,19 @@ namespace WebHome.Controllers
                 var exception = validator.Validate(viewModel);
                 if (exception != null)
                 {
-                    ModelState.AddModelError("PayoffDate", exception.Message);
+                    if (exception.RequestName == null)
+                    {
+                        ModelState.AddModelError("errorMessage", exception.Message);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(exception.RequestName, exception.Message);
+                    }
                     return null;
                 }
 
                 InvoiceItem newItem = validator.InvoiceItem;
+                newItem.InvoiceItemDispatch = new InvoiceItemDispatch { };
                 models.GetTable<InvoiceItem>().InsertOnSubmit(newItem);
 
                 return newItem;
@@ -844,7 +869,7 @@ namespace WebHome.Controllers
                     {
                         foreach (var item in items)
                         {
-                            withdrawAttendance(item);
+                            withdrawPayment(item);
                         }
                     }
 
@@ -860,7 +885,7 @@ namespace WebHome.Controllers
             return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
         }
 
-        private void withdrawAttendance(VoidPayment item)
+        private void withdrawPayment(VoidPayment item)
         {
             if (item.Payment.TransactionType == (int)Naming.PaymentTransactionType.自主訓練)
             {
@@ -869,6 +894,28 @@ namespace WebHome.Controllers
                             FROM     LessonAttendance INNER JOIN
                                            LessonTime ON LessonAttendance.LessonID = LessonTime.LessonID
                             WHERE   (LessonTime.RegisterID = {0})", item.Payment.TuitionInstallment.IntuitionCharge.RegisterLesson.RegisterID);
+            }
+
+            if (item.Payment.InvoiceItem.InvoiceCancellation != null)
+            {
+                models.ExecuteCommand(@"
+                            DELETE FROM ContractTrustTrack
+                            FROM     ContractTrustTrack INNER JOIN
+                                           Payment ON ContractTrustTrack.PaymentID = Payment.PaymentID INNER JOIN
+                                           VoidPayment ON Payment.PaymentID = VoidPayment.VoidID
+                            WHERE   (ContractTrustTrack.PaymentID = {0})", item.VoidID);
+            }
+            else
+            {
+                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                {
+                    ContractID = item.Payment.ContractPayment.ContractID,
+                    EventDate = item.VoidDate.Value,
+                    VoidID = item.VoidID,
+                    TrustType = Naming.TrustType.V.ToString()
+                });
+
+                models.SubmitChanges();
             }
         }
 
@@ -928,10 +975,7 @@ namespace WebHome.Controllers
                     var item = models.GetTable<Payment>().Where(p => p.PaymentID == v).FirstOrDefault();
                     if (item.VoidPayment == null)
                     {
-                        if (item.InvoiceID.HasValue && item.InvoiceItem.InvoiceCancellation == null)
-                        {
-                            cancelInvoice(item.InvoiceItem);
-                        }
+                        voidPaymentForInvoice(item);
 
                         item.VoidPayment = new Models.DataEntity.VoidPayment
                         {
@@ -967,7 +1011,7 @@ namespace WebHome.Controllers
                     {
                         foreach (var item in items)
                         {
-                            withdrawAttendance(item);
+                            withdrawPayment(item);
                         }
                         return Json(new { result = true, message = "作廢收款資料已生效!!" });
                     }
@@ -982,6 +1026,39 @@ namespace WebHome.Controllers
                 Logger.Error(ex);
                 return Json(new { result = false, message = ex.Message });
             }
+        }
+
+        private void voidPaymentForInvoice(Payment item)
+        {
+            if (item.InvoiceID.HasValue)
+            {
+                if ((item.InvoiceItem.InvoiceDate.Value.Month + 1) / 2 < (DateTime.Today.Month + 1) / 2)
+                {
+                    createAllowance(item);
+                }
+                else
+                {
+                    if (item.InvoiceItem.InvoiceCancellation == null)
+                        cancelInvoice(item.InvoiceItem);
+                }
+            }
+        }
+
+        private InvoiceAllowance createAllowance(Payment item)
+        {
+            PaymentAllowanceValidator<UserProfile> validator = new PaymentAllowanceValidator<UserProfile>(models);
+            var exception = validator.Validate(item);
+            if (exception != null)
+            {
+                ModelState.AddModelError("errorMsg", exception.Message);
+                return null;
+            }
+
+            var newItem = validator.Allowance;
+            newItem.InvoiceAllowanceDispatch = new InvoiceAllowanceDispatch { };
+            models.GetTable<InvoiceAllowance>().InsertOnSubmit(newItem);
+
+            return newItem;
         }
 
         [CoachOrAssistantAuthorize]
@@ -1203,7 +1280,9 @@ namespace WebHome.Controllers
                     學員 = i.Item.TuitionInstallment != null
                         ? i.Item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
                         : i.Item.ContractPayment != null
-                            ? i.Item.ContractPayment.CourseContract.ContractOwner.FullName()
+                            ? i.Item.ContractPayment.CourseContract.CourseContractType.IsGroup == true
+                                ? String.Join("/", i.Item.ContractPayment.CourseContract.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
+                                : i.Item.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--",
                     收款日期 = String.Format("{0:yyyy/MM/dd}", i.Item.PayoffDate),
                     收款品項 = String.Concat(((Naming.PaymentTransactionType)i.Item.TransactionType).ToString(),
@@ -1213,6 +1292,9 @@ namespace WebHome.Controllers
                     金額 = i.Direction > 0
                         ? i.Item.PayoffAmount >= 0 ? i.Item.PayoffAmount : -i.Item.PayoffAmount
                         : i.Item.PayoffAmount,
+                    未稅金額 = i.Direction > 0
+                        ? i.Item.PayoffAmount >= 0 ? Math.Round((decimal)i.Item.PayoffAmount/1.05m) : Math.Round((decimal)-i.Item.PayoffAmount/1.05m)
+                        : Math.Round((decimal)i.Item.PayoffAmount/1.05m),
                     收款方式 = i.Item.PaymentType,
                     發票類型 = i.Item.InvoiceID.HasValue
                         ? i.Item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票

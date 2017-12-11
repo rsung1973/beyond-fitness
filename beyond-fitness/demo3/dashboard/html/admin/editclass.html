@@ -1700,7 +1700,7 @@
                                              <div class="product-deatil" style="min-height: auto;">
                                                    <h5 class="name">
                                                       <a href="#">
-                                                         教練課<span>價值：1800</span>
+                                                         P.T session<span>價值：1800</span>
                                                       </a>
                                                    </h5>
                                                    <p class="price-container">
@@ -1708,6 +1708,37 @@
                                                    </p>
                                                    <span class="tag1"></span> 
                                                    <a href="javascript:void(0);" class="btn bg-color-redLight">兌換</a>
+                                             </div>
+                                          </div>
+                                    </div>
+                                 </div>                                 
+                                 <!-- end product -->
+                              </div>    
+                              
+                              <div class="col-sm-6 col-md-6 col-lg-4">
+                                 <!-- product -->
+                                 <div class="product-content product-wrap clearfix">
+                                    <div class="row">
+                                          <div class="col-md-5 col-sm-6 col-xs-6">
+                                             <div class="product-image" style="min-height: auto;"> 
+                                                <img src="../../img/bonus/bonus_08.jpg" alt="194x228" class="img-responsive"> 
+                                                <span class="tag2 hot">
+                                                   HOT
+                                                </span> 
+                                             </div>
+                                          </div>
+                                          <div class="col-md-7 col-sm-6 col-xs-6">
+                                             <div class="product-deatil" style="min-height: auto;">
+                                                   <h5 class="name">
+                                                      <a href="#">
+                                                         P.T session 禮物包<span>價值：1800</span>
+                                                      </a>
+                                                   </h5>
+                                                   <p class="price-container">
+                                                      <span>20點</span>
+                                                   </p>
+                                                   <span class="tag1"></span> 
+                                                   <a href="javascript:void(0);" class="btn bg-color-redLight" id="stduentsaerchDialog_link">兌換</a>
                                              </div>
                                           </div>
                                     </div>
@@ -2405,7 +2436,48 @@
                   </table>               
             </div>
         </div>
-        <!-- dialog-message -->                 
+        <!-- dialog-message -->  
+            <!-- ui-dialog -->
+            <div id="stduentsaerchDialog" title="送禮物" class="bg-color-darken">
+               <div class="modal-body bg-color-darken txt-color-white no-padding">
+                  <form action="#" class="smart-form" autofocus>             
+                     <div>
+                         <fieldset>
+                             <label class="label">請查詢禮物包要送給誰</label>
+                              <div class="row">
+                                   <section class="col col-8"> 
+                                      <label class="input">
+                                      <i class="icon-append fa fa-search"></i>
+                                      <input type="text" name="name" maxlength="20" id="searchStudentInput" placeholder="請輸入贈與學員姓名或暱稱">
+                                      </label>
+                                   </section>
+                                   <section class="col col-2">   
+                                      <button class="btn bg-color-blue btn-sm" type="button">查詢</button>
+                                   </section>
+                              </div>
+                              <div class="row">
+                               <section class="col col-12">
+                                  <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
+                                  <label class="radio">
+                                     <input type="radio" name="searchNameRadio">
+                                     <i></i>劉加菲
+                                  </label>
+                                  <label class="radio">
+                                     <input type="radio" name="searchNameRadio">
+                                     <i></i>宋小胖
+                                  </label>
+                                  <label class="radio">
+                                     <input type="radio" name="searchNameRadio" disabled="disabled">
+                                     <i></i>陳小瓦                            
+                                  </label>
+                               </section>
+                            </div>
+                         </fieldset>     
+                     </div>
+                  </form>
+               </div>
+            </div>                              
+             <!-- dialog-message -->                 
       </div>
       <!-- END MAIN PANEL -->
       <!-- PAGE FOOTER -->
@@ -2773,7 +2845,28 @@
                height: "auto",    
                title: "<h4 class='modal-title'><i class='fa fa-fw fa-volume-up'></i>  點數兌換</h4>"
             });           
-                           
+                
+             // Dialog click
+             $('#stduentsaerchDialog_link').click(function() {
+               $('#stduentsaerchDialog').dialog('open');
+               return false;
+         
+             });   
+         
+             $('#stduentsaerchDialog').dialog({
+                  autoOpen : false,
+                  width : "600",
+                  resizable : false,
+                  modal : true,
+                  title : "<div class='modal-title'><h4><i class='fa fa-gift'></i> 送禮物</h4></div>",
+                  buttons : [{
+                     html : "<i class='fa fa-send'></i>&nbsp;確定送P.T session禮物包",
+                     "class" : "btn btn-primary",
+                      click : function() {                         
+                         $(this).dialog("close");
+                     }
+                  }]
+             });               
              /*
               * FULL CALENDAR JS
               */

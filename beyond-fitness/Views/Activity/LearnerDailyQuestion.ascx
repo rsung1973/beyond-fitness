@@ -20,7 +20,7 @@
             </div>
             <div class="modal-body bg-color-darken txt-color-white">
                 <div class="panel panel-default bg-color-darken">
-                    <form action="<%= Url.Action("AnswerDailyQuestion","Activity") %>" method="post" id="dailyAns" class="smart-form">
+                    <form action="<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>" method="post" id="dailyAns" class="smart-form">
                         <div class="panel-body status smart-form vote">
                             <div class="who clearfix">
                                 <% _model.UserProfile.RenderUserPicture(Writer, new { @class = "busy" }); %>

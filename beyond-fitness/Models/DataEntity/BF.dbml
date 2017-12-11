@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitnessProd" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="WebHome.Properties.Settings.BFDbConnection" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BeyondFitnessProd2" Class="BFDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=BeyondFitnessProd2;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="WebHome.Properties.Settings.BFDbConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.UserRoleDefinition" Member="UserRoleDefinitions">
     <Type Name="UserRoleDefinition">
       <Column Name="RoleID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -19,11 +19,11 @@
       <Association Name="Document_Attachment" Member="Attachments" ThisKey="DocID" OtherKey="DocID" Type="Attachment" />
       <Association Name="Document_Article" Member="Article" ThisKey="DocID" OtherKey="DocID" Type="Article" Cardinality="One" />
       <Association Name="Document_InvoiceItem" Member="InvoiceItem" ThisKey="DocID" OtherKey="InvoiceID" Type="InvoiceItem" Cardinality="One" />
-      <Association Name="Document_InvoiceAllowance" Member="InvoiceAllowance" ThisKey="DocID" OtherKey="AllowanceID" Type="InvoiceAllowance" Cardinality="One" />
       <Association Name="Document_DerivedDocument" Member="DerivedDocument" ThisKey="DocID" OtherKey="DocID" Type="DerivedDocument" Cardinality="One" />
       <Association Name="Document_DerivedDocument1" Member="AtSource" ThisKey="DocID" OtherKey="SourceID" Type="DerivedDocument" />
       <Association Name="Document_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintLog" />
       <Association Name="Document_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="DocID" OtherKey="DocID" Type="DocumentPrintQueue" Cardinality="One" />
+      <Association Name="Document_InvoiceAllowance" Member="InvoiceAllowance" ThisKey="DocID" OtherKey="AllowanceID" Type="InvoiceAllowance" Cardinality="One" />
       <Association Name="DocumentType_Document" Member="DocumentType" ThisKey="DocType" OtherKey="TypeID" Type="DocumentType" IsForeignKey="true" />
       <Association Name="LevelExpression_Document" Member="LevelExpression" ThisKey="CurrentStep" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
     </Type>
@@ -51,7 +51,6 @@
       <Association Name="LevelExpression_LessonComment" Member="LessonComment" ThisKey="LevelID" OtherKey="Status" Type="LessonComment" />
       <Association Name="LevelExpression_BodyDiagnosis" Member="BodyDiagnosis" ThisKey="LevelID" OtherKey="LevelID" Type="BodyDiagnosis" />
       <Association Name="LevelExpression_ProfessionalLevel" Member="ProfessionalLevel" ThisKey="LevelID" OtherKey="CategoryID" Type="ProfessionalLevel" />
-      <Association Name="LevelExpression_CourseContractLevel" Member="CourseContractLevel" ThisKey="LevelID" OtherKey="LevelID" Type="CourseContractLevel" />
       <Association Name="LevelExpression_LessonPriceSeries" Member="LessonPriceSeries" ThisKey="LevelID" OtherKey="Status" Type="LessonPriceSeries" />
       <Association Name="LevelExpression_LessonPriceType" Member="LessonPriceType" ThisKey="LevelID" OtherKey="Status" Type="LessonPriceType" />
       <Association Name="LevelExpression_CourseContract" Member="CourseContract" ThisKey="LevelID" OtherKey="Status" Type="CourseContract" />
@@ -60,6 +59,7 @@
       <Association Name="LevelExpression_MerchandiseWindow" Member="MerchandiseWindow" ThisKey="LevelID" OtherKey="Status" Type="MerchandiseWindow" />
       <Association Name="LevelExpression_VoidPayment" Member="VoidPayment" ThisKey="LevelID" OtherKey="Status" Type="VoidPayment" />
       <Association Name="LevelExpression_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="LevelID" OtherKey="LevelID" Type="VoidPaymentLevel" />
+      <Association Name="LevelExpression_CourseContractLevel" Member="CourseContractLevel" ThisKey="LevelID" OtherKey="LevelID" Type="CourseContractLevel" />
     </Type>
   </Table>
   <Table Name="dbo.Attachment" Member="Attachments">
@@ -114,8 +114,8 @@
       <Association Name="LessonTime_LessonPlan" Member="LessonPlan" ThisKey="LessonID" OtherKey="LessonID" Type="LessonPlan" Cardinality="One" />
       <Association Name="LessonTime_LessonFeedBack" Member="LessonFeedBack" ThisKey="LessonID" OtherKey="LessonID" Type="LessonFeedBack" />
       <Association Name="LessonTime_LessonFitnessAssessment" Member="LessonFitnessAssessment" ThisKey="LessonID" OtherKey="LessonID" Type="LessonFitnessAssessment" />
-      <Association Name="LessonTime_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="LessonID" OtherKey="LessonID" Type="ContractTrustTrack" />
       <Association Name="LessonTime_LessonTimeSettlement" Member="LessonTimeSettlement" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTimeSettlement" Cardinality="One" />
+      <Association Name="LessonTime_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="LessonID" OtherKey="LessonID" Type="ContractTrustTrack" />
       <Association Name="GroupingLesson_LessonTime" Member="GroupingLesson" ThisKey="GroupID" OtherKey="GroupID" Type="GroupingLesson" IsForeignKey="true" />
       <Association Name="ServingCoach_LessonTime" Member="AsInvitedCoach" Storage="_ServingCoach" ThisKey="InvitedCoach" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
       <Association Name="ServingCoach_LessonTime1" Member="AsAttendingCoach" Storage="_ServingCoach1" ThisKey="AttendingCoach" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
@@ -222,7 +222,6 @@
       <Association Name="UserProfile_BodyDiagnosis1" Member="ConductedBodyDiagnosis" ThisKey="UID" OtherKey="CoachID" Type="BodyDiagnosis" />
       <Association Name="UserProfile_GroupEvent" Member="GroupEvent" ThisKey="UID" OtherKey="UID" Type="GroupEvent" />
       <Association Name="UserProfile_UserEvent" Member="UserEvent" ThisKey="UID" OtherKey="UID" Type="UserEvent" />
-      <Association Name="UserProfile_CourseContractLevel" Member="CourseContractLevel" ThisKey="UID" OtherKey="ExecutorID" Type="CourseContractLevel" />
       <Association Name="UserProfile_UserSignature" Member="UserSignature" ThisKey="UID" OtherKey="UID" Type="UserSignature" />
       <Association Name="UserProfile_CourseContractMember" Member="CourseContractMember" ThisKey="UID" OtherKey="UID" Type="CourseContractMember" />
       <Association Name="UserProfile_CourseContract" Member="CourseContract" ThisKey="UID" OtherKey="OwnerID" Type="CourseContract" />
@@ -238,6 +237,7 @@
       <Association Name="UserProfile_EnterpriseCourseMember" Member="EnterpriseCourseMember" ThisKey="UID" OtherKey="UID" Type="EnterpriseCourseMember" />
       <Association Name="UserProfile_DocumentPrintLog" Member="DocumentPrintLog" ThisKey="UID" OtherKey="UID" Type="DocumentPrintLog" />
       <Association Name="UserProfile_DocumentPrintQueue" Member="DocumentPrintQueue" ThisKey="UID" OtherKey="UID" Type="DocumentPrintQueue" />
+      <Association Name="UserProfile_CourseContractLevel" Member="CourseContractLevel" ThisKey="UID" OtherKey="ExecutorID" Type="CourseContractLevel" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -830,17 +830,6 @@
       <Association Name="ServingCoach_CoachRating" Member="ServingCoach" ThisKey="CoachID" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.CourseContractLevel" Member="CourseContractLevel">
-    <Type Name="CourseContractLevel">
-      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="LevelDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ExecutorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="LevelID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="LevelExpression_CourseContractLevel" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
-      <Association Name="UserProfile_CourseContractLevel" Member="UserProfile" ThisKey="ExecutorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
-      <Association Name="CourseContract_CourseContractLevel" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.UserSignature" Member="UserSignature">
     <Type Name="UserSignature">
       <Column Name="SignatureID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -932,16 +921,16 @@
       <Column Name="ContractNo" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="TotalCost" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="EffectiveDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="CourseContract_CourseContractLevel" Member="CourseContractLevel" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContractLevel" />
       <Association Name="CourseContract_RegisterLessonContract" Member="RegisterLessonContract" ThisKey="ContractID" OtherKey="ContractID" Type="RegisterLessonContract" />
       <Association Name="CourseContract_CourseContractMember" Member="CourseContractMember" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContractMember" />
       <Association Name="CourseContract_CourseContractRevision" Member="CourseContractRevision" ThisKey="ContractID" OtherKey="RevisionID" Type="CourseContractRevision" Cardinality="One" />
       <Association Name="CourseContract_CourseContractRevision1" Member="RevisionList" ThisKey="ContractID" OtherKey="OriginalContract" Type="CourseContractRevision" />
       <Association Name="CourseContract_ContractPayment" Member="ContractPayment" ThisKey="ContractID" OtherKey="ContractID" Type="ContractPayment" />
       <Association Name="CourseContract_CourseContractExtension" Member="CourseContractExtension" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContractExtension" Cardinality="One" />
-      <Association Name="CourseContract_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="ContractID" OtherKey="ContractID" Type="ContractTrustTrack" />
       <Association Name="CourseContract_CourseContractTrust" Member="CourseContractTrust" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContractTrust" Cardinality="One" />
       <Association Name="CourseContract_ContractTrustSettlement" Member="ContractTrustSettlement" ThisKey="ContractID" OtherKey="ContractID" Type="ContractTrustSettlement" />
+      <Association Name="CourseContract_CourseContractLevel" Member="CourseContractLevel" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContractLevel" />
+      <Association Name="CourseContract_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="ContractID" OtherKey="ContractID" Type="ContractTrustTrack" />
       <Association Name="LessonPriceType_CourseContract" Member="LessonPriceType" ThisKey="PriceID" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
       <Association Name="LevelExpression_CourseContract" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="ServingCoach_CourseContract" Member="ServingCoach" ThisKey="FitnessConsultant" OtherKey="CoachID" Type="ServingCoach" IsForeignKey="true" />
@@ -1075,6 +1064,9 @@
       <Association Name="InvoiceItem_InvoiceSeller" Member="InvoiceSeller" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceSeller" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceAmountType" Member="InvoiceAmountType" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceAmountType" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceNoAssignment" Member="InvoiceNoAssignment" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceNoAssignment" Cardinality="One" />
+      <Association Name="InvoiceItem_InvoiceItemDispatch" Member="InvoiceItemDispatch" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItemDispatch" Cardinality="One" />
+      <Association Name="InvoiceItem_InvoiceItemDispatchLog" Member="InvoiceItemDispatchLog" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItemDispatchLog" Cardinality="One" />
+      <Association Name="InvoiceItem_InvoiceAllowance" Member="InvoiceAllowance" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceAllowance" />
       <Association Name="Document_InvoiceItem" Member="Document" ThisKey="InvoiceID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
       <Association Name="Organization_InvoiceItem" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
     </Type>
@@ -1096,8 +1088,8 @@
       <Association Name="Payment_PaymentAudit" Member="PaymentAudit" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentAudit" Cardinality="One" />
       <Association Name="Payment_VoidPayment" Member="VoidPayment" ThisKey="PaymentID" OtherKey="VoidID" Type="VoidPayment" Cardinality="One" />
       <Association Name="Payment_TuitionAchievement" Member="TuitionAchievement" ThisKey="PaymentID" OtherKey="InstallmentID" Type="TuitionAchievement" />
-      <Association Name="Payment_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="PaymentID" OtherKey="PaymentID" Type="ContractTrustTrack" />
       <Association Name="Payment_EnterpriseCoursePayment" Member="EnterpriseCoursePayment" ThisKey="PaymentID" OtherKey="PaymentID" Type="EnterpriseCoursePayment" Cardinality="One" />
+      <Association Name="Payment_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="PaymentID" OtherKey="PaymentID" Type="ContractTrustTrack" />
       <Association Name="InvoiceItem_Payment" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
       <Association Name="LevelExpression_Payment" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_Payment" Member="UserProfile" ThisKey="HandlerID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1111,25 +1103,9 @@
       <Column Name="ReturnTaxDocumentNo" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="Remark" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoiceCancellation_InvoiceCancellationDispatchLog" Member="InvoiceCancellationDispatchLog" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceCancellationDispatchLog" Cardinality="One" />
+      <Association Name="InvoiceCancellation_InvoiceCancellationDispatch" Member="InvoiceCancellationDispatch" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceCancellationDispatch" Cardinality="One" />
       <Association Name="InvoiceItem_InvoiceCancellation" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.InvoiceAllowance" Member="InvoiceAllowance">
-    <Type Name="InvoiceAllowance">
-      <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="AllowanceNumber" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
-      <Column Name="AllowanceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
-      <Column Name="AllowanceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
-      <Column Name="TaxAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
-      <Column Name="InvoiceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SellerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Column Name="BuyerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceBuyer" Member="InvoiceAllowanceBuyer" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceBuyer" Cardinality="One" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceCancellation" Member="InvoiceAllowanceCancellation" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceCancellation" Cardinality="One" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceDetails" Member="InvoiceAllowanceDetails" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceDetails" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceSeller" Member="InvoiceAllowanceSeller" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceSeller" Cardinality="One" />
-      <Association Name="Document_InvoiceAllowance" Member="Document" ThisKey="AllowanceID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceAllowanceBuyer" Member="InvoiceAllowanceBuyer">
@@ -1148,8 +1124,8 @@
       <Column Name="Fax" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="PersonInCharge" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="RoleRemark" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceBuyer" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
       <Association Name="Organization_InvoiceAllowanceBuyer" Member="Organization" ThisKey="BuyerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceBuyer" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceBuyer" Member="InvoiceBuyer">
@@ -1297,8 +1273,8 @@
     <Type Name="InvoiceAllowanceDetails">
       <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="ItemID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceDetails" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
       <Association Name="InvoiceAllowanceItem_InvoiceAllowanceDetails" Member="InvoiceAllowanceItem" ThisKey="ItemID" OtherKey="ItemID" Type="InvoiceAllowanceItem" IsForeignKey="true" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDetails" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceAllowanceItem" Member="InvoiceAllowanceItem">
@@ -1342,8 +1318,8 @@
       <Column Name="Fax" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="PersonInCharge" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="RoleRemark" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Association Name="InvoiceAllowance_InvoiceAllowanceSeller" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
       <Association Name="Organization_InvoiceAllowanceSeller" Member="Organization" ThisKey="SellerID" OtherKey="CompanyID" Type="Organization" IsForeignKey="true" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceSeller" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.InvoiceSeller" Member="InvoiceSeller">
@@ -1445,6 +1421,7 @@
       <Column Name="Remark" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Column Name="Drawback" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="VoidPayment_VoidPaymentLevel" Member="VoidPaymentLevel" ThisKey="VoidID" OtherKey="VoidID" Type="VoidPaymentLevel" />
+      <Association Name="VoidPayment_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="VoidID" OtherKey="VoidID" Type="ContractTrustTrack" />
       <Association Name="LevelExpression_VoidPayment" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="Payment_VoidPayment" Member="Payment" ThisKey="VoidID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
       <Association Name="UserProfile_VoidPayment" Member="UserProfile" ThisKey="HandlerID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1487,23 +1464,8 @@
       <Column Name="SettlementDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="EndExclusiveDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Settlement_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="SettlementID" OtherKey="SettlementID" Type="ContractTrustTrack" />
       <Association Name="Settlement_ContractTrustSettlement" Member="ContractTrustSettlement" ThisKey="SettlementID" OtherKey="SettlementID" Type="ContractTrustSettlement" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ContractTrustTrack" Member="ContractTrustTrack">
-    <Type Name="ContractTrustTrack">
-      <Column Name="TrustID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="TrustType" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
-      <Column Name="SettlementID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="LessonID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PaymentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="CourseContract_ContractTrustTrack" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" />
-      <Association Name="LessonTime_ContractTrustTrack" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" />
-      <Association Name="Payment_ContractTrustTrack" Member="Payment" ThisKey="PaymentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" />
-      <Association Name="Settlement_ContractTrustTrack" Member="Settlement" ThisKey="SettlementID" OtherKey="SettlementID" Type="Settlement" IsForeignKey="true" />
+      <Association Name="Settlement_ContractTrustTrack" Member="ContractTrustTrack" ThisKey="SettlementID" OtherKey="SettlementID" Type="ContractTrustTrack" />
     </Type>
   </Table>
   <Table Name="dbo.CourseContractTrust" Member="CourseContractTrust">
@@ -1636,6 +1598,7 @@
       <Column Name="StartNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="InvoiceNoInterval_InvoiceNoAssignment" Member="InvoiceNoAssignment" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoAssignment" />
+      <Association Name="InvoiceNoInterval_VacantInvoiceNo" Member="VacantInvoiceNo" ThisKey="IntervalID" OtherKey="IntervalID" Type="VacantInvoiceNo" />
       <Association Name="InvoiceTrackCodeAssignment_InvoiceNoInterval" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID,SellerID" OtherKey="TrackID,SellerID" Type="InvoiceTrackCodeAssignment" IsForeignKey="true" />
     </Type>
   </Table>
@@ -1658,4 +1621,149 @@
       <Association Name="UserProfile_DocumentPrintQueue" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" />
     </Type>
   </Table>
+  <Table Name="dbo.InvoiceItemDispatch" Member="InvoiceItemDispatch">
+    <Type Name="InvoiceItemDispatch">
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoiceItem_InvoiceItemDispatch" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceItemDispatchLog" Member="InvoiceItemDispatchLog">
+    <Type Name="InvoiceItemDispatchLog">
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceItem_InvoiceItemDispatchLog" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceCancellationDispatchLog" Member="InvoiceCancellationDispatchLog">
+    <Type Name="InvoiceCancellationDispatchLog">
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceCancellation_InvoiceCancellationDispatchLog" Member="InvoiceCancellation" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceCancellation" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceCancellationDispatch" Member="InvoiceCancellationDispatch">
+    <Type Name="InvoiceCancellationDispatch">
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoiceCancellation_InvoiceCancellationDispatch" Member="InvoiceCancellation" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceCancellation" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VacantInvoiceNo" Member="VacantInvoiceNo">
+    <Type Name="VacantInvoiceNo">
+      <Column Name="VacancyID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IntervalID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PrevID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NextID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo" Member="VacantInvoiceNo2" ThisKey="VacancyID" OtherKey="PrevID" Type="VacantInvoiceNo" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo1" Member="VacantInvoiceNo4" ThisKey="VacancyID" OtherKey="NextID" Type="VacantInvoiceNo" />
+      <Association Name="InvoiceNoInterval_VacantInvoiceNo" Member="InvoiceNoInterval" ThisKey="IntervalID" OtherKey="IntervalID" Type="InvoiceNoInterval" IsForeignKey="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo" Member="VacantInvoiceNo1" ThisKey="PrevID" OtherKey="VacancyID" Type="VacantInvoiceNo" IsForeignKey="true" />
+      <Association Name="VacantInvoiceNo_VacantInvoiceNo1" Member="VacantInvoiceNo3" ThisKey="NextID" OtherKey="VacancyID" Type="VacantInvoiceNo" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CourseContractLevel" Member="CourseContractLevel">
+    <Type Name="CourseContractLevel">
+      <Column Name="LogID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LevelDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ExecutorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LevelID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="CourseContract_CourseContractLevel" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="LevelExpression_CourseContractLevel" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
+      <Association Name="UserProfile_CourseContractLevel" Member="UserProfile" ThisKey="ExecutorID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceAllowance" Member="InvoiceAllowance">
+    <Type Name="InvoiceAllowance">
+      <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AllowanceNumber" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Column Name="AllowanceType" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="AllowanceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotalAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="TaxAmount" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="InvoiceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SellerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="BuyerId" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceBuyer" Member="InvoiceAllowanceBuyer" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceBuyer" Cardinality="One" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceCancellation" Member="InvoiceAllowanceCancellation" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceCancellation" Cardinality="One" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDetails" Member="InvoiceAllowanceDetails" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceDetails" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceSeller" Member="InvoiceAllowanceSeller" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceSeller" Cardinality="One" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDispatch" Member="InvoiceAllowanceDispatch" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceDispatch" Cardinality="One" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDispatchLog" Member="InvoiceAllowanceDispatchLog" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowanceDispatchLog" Cardinality="One" />
+      <Association Name="Document_InvoiceAllowance" Member="Document" ThisKey="AllowanceID" OtherKey="DocID" Type="Document" IsForeignKey="true" />
+      <Association Name="InvoiceItem_InvoiceAllowance" Member="InvoiceItem" ThisKey="InvoiceID" OtherKey="InvoiceID" Type="InvoiceItem" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceAllowanceDispatch" Member="InvoiceAllowanceDispatch">
+    <Type Name="InvoiceAllowanceDispatch">
+      <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDispatch" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoiceAllowanceDispatchLog" Member="InvoiceAllowanceDispatchLog">
+    <Type Name="InvoiceAllowanceDispatchLog">
+      <Column Name="AllowanceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DispatchDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="InvoiceAllowance_InvoiceAllowanceDispatchLog" Member="InvoiceAllowance" ThisKey="AllowanceID" OtherKey="AllowanceID" Type="InvoiceAllowance" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ContractTrustTrack" Member="ContractTrustTrack">
+    <Type Name="ContractTrustTrack">
+      <Column Name="TrustID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrustType" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="SettlementID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LessonID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PaymentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VoidID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="CourseContract_ContractTrustTrack" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="LessonTime_ContractTrustTrack" Member="LessonTime" ThisKey="LessonID" OtherKey="LessonID" Type="LessonTime" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Payment_ContractTrustTrack" Member="Payment" ThisKey="PaymentID" OtherKey="PaymentID" Type="Payment" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Settlement_ContractTrustTrack" Member="Settlement" ThisKey="SettlementID" OtherKey="SettlementID" Type="Settlement" IsForeignKey="true" DeleteRule="SET NULL" />
+      <Association Name="VoidPayment_ContractTrustTrack" Member="VoidPayment" ThisKey="VoidID" OtherKey="VoidID" Type="VoidPayment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.InquireVacantNo" Method="InquireVacantNo">
+    <Parameter Name="SellerID" Parameter="sellerID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Year" Parameter="year" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PeriodNo" Parameter="periodNo" Type="System.Int32" DbType="Int" />
+    <ElementType Name="InquireVacantNoResult">
+      <Column Name="InvoiceNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="StartNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SellerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckNext" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CheckPrev" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.ProcessInvoiceNo" Method="ProcessInvoiceNo">
+    <Parameter Name="SellerID" Parameter="sellerID" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Year" Parameter="year" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PeriodNo" Parameter="periodNo" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InquireAllVacantNo" Method="InquireAllVacantNo">
+    <Parameter Name="Year" Parameter="year" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PeriodNo" Parameter="periodNo" Type="System.Int32" DbType="Int" />
+    <ElementType Name="InquireAllVacantNoResult">
+      <Column Name="InvoiceNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="StartNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EndNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrackID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SellerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckNext" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CheckPrev" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
 </Database>

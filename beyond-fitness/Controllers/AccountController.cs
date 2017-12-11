@@ -389,43 +389,43 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
-        public ActionResult CreateNew()
-        {
+        //[CoachOrAssistantAuthorize]
+        //public ActionResult CreateNew()
+        //{
             
 
-                try
-                {
-                    String memberCode;
+        //        try
+        //        {
+        //            String memberCode;
 
-                    while (true)
-                    {
-                        memberCode = createMemberCode();
-                        if (!models.EntityList.Any(u => u.MemberCode == memberCode))
-                        {
-                            break;
-                        }
-                    }
+        //            while (true)
+        //            {
+        //                memberCode = createMemberCode();
+        //                if (!models.EntityList.Any(u => u.MemberCode == memberCode))
+        //                {
+        //                    break;
+        //                }
+        //            }
 
-                    UserProfile item = new UserProfile
-                    {
-                        PID = memberCode,
-                        MemberCode = memberCode,
-                        LevelID = (int)Naming.MemberStatusDefinition.ReadyToRegister
-                    };
+        //            UserProfile item = new UserProfile
+        //            {
+        //                PID = memberCode,
+        //                MemberCode = memberCode,
+        //                LevelID = (int)Naming.MemberStatusDefinition.ReadyToRegister
+        //            };
 
-                    models.EntityList.InsertOnSubmit(item);
-                    models.SubmitChanges();
-                    return Json(new { result = true, message = "新增完成!!", memberCode = memberCode }, JsonRequestBehavior.AllowGet);
+        //            models.EntityList.InsertOnSubmit(item);
+        //            models.SubmitChanges();
+        //            return Json(new { result = true, message = "新增完成!!", memberCode = memberCode }, JsonRequestBehavior.AllowGet);
 
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex);
-                    return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
-                }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logger.Error(ex);
+        //            return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+        //        }
             
-        }
+        //}
 
         public ActionResult LoginByFB(String accessToken,String userId)
         {

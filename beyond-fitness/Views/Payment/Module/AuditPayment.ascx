@@ -15,6 +15,11 @@
         Html.RenderPartial("~/Views/Payment/Module/PaymentTodoList.ascx", _model); %>
     <!-- end content -->
     <script>
+
+        $(function () {
+            $global.done = false;
+        });
+
         $('#<%= _dialog %>').dialog({
             //autoOpen: false,
             width: "auto",
@@ -23,8 +28,10 @@
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-list-ol'></i>  待辦事項：收款項目-<%= ((Naming.PaymentTransactionType)_viewModel.TransactionType).ToString() %>(待勾記)</h4>",
             close: function () {
                 $('#<%= _dialog %>').remove();
-                showLoading();
-                window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
+                if ($global.done) {
+                    showLoading();
+                    window.location.href = '<%= Url.Action("Index","CoachFacet",new { showTodoTab = true }) %>';
+                }
             }
         });
 

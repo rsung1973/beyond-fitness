@@ -244,7 +244,7 @@ namespace WebHome.Helper
 
             IEnumerable<CalendarEvent> items;
 
-            IQueryable<LessonTime> dataItems = sourceItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise!=null);
+            IQueryable<LessonTime> dataItems = sourceItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
             items = dataItems
                     .Select(g => new CalendarEvent
                     {
@@ -255,7 +255,7 @@ namespace WebHome.Helper
                         end = String.Format("{0:O}", g.ClassTime.Value.AddMinutes(g.DurationInMinutes.Value)),
                         //description = "自由教練",
                         allDay = false,
-                        className = g.LessonAttendance==null ? new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-grayDark" },
+                        className = g.LessonAttendance == null ? new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-grayDark" },
                         editable = g.LessonAttendance == null,
                     });
 
@@ -389,7 +389,7 @@ namespace WebHome.Helper
 
         }
 
-        public static UserProfile CreateLearner<TEntity>(this ModelSource<TEntity> models, LearnerViewModel viewModel, Naming.RoleID role = Naming.RoleID.Learner)
+        public static UserProfile CreateLearner<TEntity>(this ModelSource<TEntity> models, LearnerViewModel viewModel)
                     where TEntity : class, new()
         {
             String memberCode;
@@ -421,7 +421,7 @@ namespace WebHome.Helper
 
             item.UserRole.Add(new UserRole
             {
-                RoleID = (int)role
+                RoleID = viewModel.RoleID.HasValue ? (int)viewModel.RoleID.Value : (int)Naming.RoleID.Preliminary
             });
 
 
@@ -478,6 +478,8 @@ namespace WebHome.Helper
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null
+                    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
 
             if (coachID.HasValue)
@@ -560,28 +562,51 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             shares = 0;
-            var lessons = items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+            var allLessons = items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+
+            var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
+            var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
             var fullAchievement = lessons
                 .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
+                + enterpriseLessons
+                    .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
 
-            lessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+            allLessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
-            var halfAchievement = lessons
-                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) / 2;
+            lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
+            enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
-            shares = ((int?)items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+            var halfAchievement = (lessons
+                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
+                + enterpriseLessons
+                    .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100)) / 2;
+
+            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
+            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+
+            shares = ((int?)courseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
                     * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) ?? 0)
-                + ((int?)items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+                + ((int?)courseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) / 2 ?? 0)
+                + ((int?)enterpriseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) ?? 0)
+                + ((int?)enterpriseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
                     * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) / 2 ?? 0);
 
@@ -1036,6 +1061,21 @@ namespace WebHome.Helper
             return pdfFile;
         }
 
+        public static String CreateQueuedAllowancePDF(this UserProfile item)
+        {
+            String storePath = Path.Combine(GlobalDefinition.InvoicePdfPath, DateTime.Today.ToString("yyyy-MM-dd"));
+            if (!Directory.Exists(storePath))
+                Directory.CreateDirectory(storePath);
+            String pdfFile = Path.Combine(storePath, item.UID + "-Allowance-" + DateTime.Now.Ticks + ".pdf");
+            if (!File.Exists(pdfFile))
+            {
+                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/PrintAllowance") + "?uid=" + item.UID + "&t=" + DateTime.Now.Ticks;
+                viewUrl.ConvertHtmlToPDF(pdfFile, 20);
+            }
+            return pdfFile;
+        }
+
+
         public static bool CheckLearnerDiscount<TEntity>(this ModelSource<TEntity> models, IEnumerable<int> uid)
             where TEntity : class, new()
         {
@@ -1198,13 +1238,13 @@ namespace WebHome.Helper
             return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.自主訓練).FirstOrDefault();
         }
 
-        public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate,DateTime endExclusiveDate)
+        public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate, DateTime endExclusiveDate)
             where TEntity : class, new()
         {
             var items = models.GetTable<ContractTrustTrack>().Where(t => t.EventDate >= startDate && t.EventDate < endExclusiveDate)
                     .Where(t => !t.SettlementID.HasValue);
 
-            if(items.Count()>0)
+            if (items.Count() > 0)
             {
                 Settlement settlement = new Settlement
                 {
@@ -1239,14 +1279,14 @@ namespace WebHome.Helper
                                            ContractTrustSettlement AS b ON a.ContractID = b.ContractID
                             WHERE   (b.SettlementID = {0}) AND (a.ContractID NOT IN
                                                (SELECT  ContractID
-                                               FROM     CourseContractTrust)) AND (a.Status = {1})", 
+                                               FROM     CourseContractTrust)) AND (a.Status = {1})",
                     settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
 
                 foreach (var item in items.GroupBy(t => t.ContractID))
                 {
                     var contract = models.GetTable<CourseContract>().Where(t => t.ContractID == item.Key).First();
                     ContractTrustSettlement contractTrustSettlement;
-
+                    bool toUpdateTrustSettlement = false;
                     if (contract.CourseContractTrust == null)
                     {
                         contract.CourseContractTrust = new CourseContractTrust
@@ -1266,7 +1306,7 @@ namespace WebHome.Helper
                     else
                     {
                         var currentTrustSettlement = contract.CourseContractTrust.ContractTrustSettlement;
-                        if(currentTrustSettlement.SettlementID!=settlement.SettlementID)
+                        if (currentTrustSettlement.SettlementID != settlement.SettlementID)
                         {
                             contractTrustSettlement = new ContractTrustSettlement
                             {
@@ -1277,6 +1317,7 @@ namespace WebHome.Helper
                             };
 
                             models.GetTable<ContractTrustSettlement>().InsertOnSubmit(contractTrustSettlement);
+                            toUpdateTrustSettlement = true;
                         }
                         else
                         {
@@ -1291,6 +1332,8 @@ namespace WebHome.Helper
                         {
                             case "B":
                             case "T":
+                            case "X":
+                            case "S":
                                 contractTrustSettlement.TotalTrustAmount += trust.Payment.PayoffAmount ?? 0;
                                 break;
 
@@ -1298,15 +1341,14 @@ namespace WebHome.Helper
                                 var lesson = trust.LessonTime.RegisterLesson;
                                 contractTrustSettlement.TotalTrustAmount -= (lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
                                 break;
-
-                            case "X":
-                            case "S":
-                                contractTrustSettlement.TotalTrustAmount -= trust.Payment.PayoffAmount ?? 0;
-                                break;
                         }
                     }
 
                     models.SubmitChanges();
+                    if (toUpdateTrustSettlement)
+                    {
+                        models.ExecuteCommand("update CourseContractTrust set CurrentSettlement={0} where ContractID={1}", settlement.SettlementID, contract.ContractID);
+                    }
                 }
 
             }
@@ -1345,6 +1387,15 @@ namespace WebHome.Helper
             }
         }
 
+        public static void ProcessVacantNo<TEntity>(this ModelSource<TEntity> models, int year, int periodNo)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<BranchStore>();
 
+            foreach (var item in items)
+            {
+                models.GetDataContext().ProcessInvoiceNo(item.BranchID, year, periodNo);
+            }
+        }
     }
 }

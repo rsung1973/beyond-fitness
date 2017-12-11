@@ -73,6 +73,17 @@ namespace WebHome.Helper.Jobs
                     Schedule = (new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 16)).AddMonths(3).Add(new TimeSpan(0, 10, 0))
                 });
             }
+
+            if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(CheckInvoiceDispatch).AssemblyQualifiedName))
+            {
+                JobScheduler.AddJob(new JobItem
+                {
+                    AssemblyQualifiedName = typeof(CheckInvoiceDispatch).AssemblyQualifiedName,
+                    Description = "檢查電子發票傳送大平台LOG",
+                    Schedule = DateTime.Today.Add(new TimeSpan(0, 0, 0))
+                });
+            }
+
         }
     }
 }

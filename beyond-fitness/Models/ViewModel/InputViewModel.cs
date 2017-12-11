@@ -236,11 +236,14 @@ namespace WebHome.Models.ViewModel
         public int? HandlerID { get; set; }
         public bool? IsPrinted { get; set; }
         public int? BranchID { get; set; }
-        public DateTime? InvoiceDateFrom { get; set; }
-        public DateTime? InvoiceDateTo { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
         public String InvoiceNo { get; set; }
         public int?[] InvoiceID { get; set; }
         public int? UID { get; set; }
+        public int? DispatchStatus { get; set; }
+        public int?[] AllowanceID { get; set; }
+        public Naming.DocumentTypeDefinition? DocType { get; set; }
 
     }
 }

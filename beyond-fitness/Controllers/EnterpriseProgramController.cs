@@ -600,24 +600,24 @@ namespace WebHome.Controllers
             RegisterLesson lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
             if (lesson == null)
             {
-                ModelState.AddModelError("UID", "學員未購買課程!!");
+                ModelState.AddModelError("RegisterID", "學員未購買課程!!");
             }
 
             if (lesson.Attended == (int)Naming.LessonStatus.課程結束)
             {
-                ModelState.AddModelError("UID", "學員課程已結束!!");
+                ModelState.AddModelError("RegisterID", "學員課程已結束!!");
             }
 
             var lessonCount = lesson.GroupingLesson.LessonTime.Count;
             if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
             {
-                ModelState.AddModelError("UID", "學員上課堂數已滿!!");
+                ModelState.AddModelError("RegisterID", "學員上課堂數已滿!!");
             }
 
             var contract = lesson.RegisterLessonEnterprise.EnterpriseCourseContract;
             if (contract.Expiration.Value < DateTime.Today)
             {
-                ModelState.AddModelError("UID", "企業方案合約已過期!!");
+                ModelState.AddModelError("RegisterID", "企業方案合約已過期!!");
             }
 
             if (!this.ModelState.IsValid)

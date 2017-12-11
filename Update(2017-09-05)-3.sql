@@ -214,6 +214,19 @@ FROM     LessonTime INNER JOIN
                RegisterLesson ON LessonTime.RegisterID = RegisterLesson.RegisterID INNER JOIN
                RegisterLessonContract ON RegisterLesson.RegisterID = RegisterLessonContract.RegisterID
 go
+
+INSERT INTO ContractTrustTrack
+               (ContractID, EventDate, TrustType, SettlementID, VoidID)
+SELECT  ContractPayment.ContractID, VoidPayment.VoidDate AS EventDate, 'V' AS Expr1, NULL AS Expr2, VoidPayment.VoidID
+FROM     Payment INNER JOIN
+               VoidPayment ON Payment.PaymentID = VoidPayment.VoidID INNER JOIN
+               ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID
+WHERE   (NOT EXISTS
+                   (SELECT  NULL AS Expr1
+                   FROM     InvoiceCancellation
+                   WHERE   (InvoiceID = Payment.InvoiceID)))
+go
+
 -- run InitializeTrust
 go
 INSERT INTO ContractTrustTrack
@@ -223,10 +236,39 @@ FROM     Payment INNER JOIN
                TuitionInstallment ON Payment.PaymentID = TuitionInstallment.InstallmentID INNER JOIN
                ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID
 			   go
+INSERT INTO ContractTrustTrack
+               (ContractID, EventDate, TrustType, SettlementID, PaymentID)
+SELECT  ContractPayment.ContractID, Payment.PayoffDate AS EventDate, 'B' AS Expr2, NULL AS Expr1, Payment.PaymentID
+FROM     Payment INNER JOIN
+               ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID INNER JOIN
+               CourseContract ON ContractPayment.ContractID = CourseContract.ContractID
+WHERE   (Payment.TransactionType = 1) AND (CourseContract.EffectiveDate >= '2017/8/1') and Payment.PaymentID 
+	not in (select InstallmentID from  TuitionInstallment)
+			   go
+
+INSERT INTO ContractTrustTrack
+               (ContractID, EventDate, TrustType, SettlementID, PaymentID)
+SELECT  ContractPayment.ContractID, Payment.PayoffDate AS EventDate, 'S' AS Expr2, NULL AS Expr1, Payment.PaymentID
+FROM     Payment INNER JOIN
+               ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID INNER JOIN
+               CourseContract ON ContractPayment.ContractID = CourseContract.ContractID
+WHERE   (Payment.TransactionType = 7) AND (CourseContract.EffectiveDate >= '2017/8/1')
+			   go
+
 DELETE FROM ContractTrustTrack
 FROM     ContractTrustTrack INNER JOIN
                CourseContract ON ContractTrustTrack.ContractID = CourseContract.ContractID
 WHERE   (CourseContract.ContractDate < '2017/8/1')
+go
+
+DELETE FROM ContractTrustTrack
+FROM     ContractTrustTrack INNER JOIN
+               Payment ON ContractTrustTrack.PaymentID = Payment.PaymentID INNER JOIN
+               VoidPayment ON Payment.PaymentID = VoidPayment.VoidID
+WHERE   EXISTS
+                   (SELECT  NULL AS Expr1
+                   FROM     InvoiceCancellation
+                   WHERE   (InvoiceID = Payment.InvoiceID))
 go
 
 Alter TABLE [dbo].[Settlement]

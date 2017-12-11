@@ -145,7 +145,7 @@
                                             <input type="text" name="classDate" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
                                         </label>
                                     </section>
-                                    <section class="col col-4">
+<%--                                    <section class="col col-4">
                                         <label>請選擇上課分鐘數</label>
                                         <label class="select">
                                             <select name="duration" class="input-lg">
@@ -154,7 +154,7 @@
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
-                                    </section>
+                                    </section>--%>
                                     <section class="col col-4">
                                         <label>請選擇上課地點</label>
                                         <label class="select">

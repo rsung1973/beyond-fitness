@@ -23,7 +23,7 @@
         <%= _model.ContractOwner.FullName() %>
         <%  } %>
     </td>
-    <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", _model.ContractDate) %></td>
+    <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", _model.EffectiveDate) %></td>
     <td><%= _model.CourseContractType.TypeName %>(<%= _model.LessonPriceType.DurationInMinutes %>分鐘)</td>
     <td><%  if(_model.SequenceNo==0)
             { %>

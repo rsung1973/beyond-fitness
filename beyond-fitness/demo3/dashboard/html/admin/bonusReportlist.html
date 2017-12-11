@@ -212,165 +212,207 @@
          </div>
          <!-- END RIBBON -->
          <!-- MAIN CONTENT -->
-         <div id="content">
-
-                <div class="row">
-                    <article class="col-sm-12 col-md-12 col-lg-12">
-                        <!-- new widget -->
-                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
-                            <!-- widget options:
-                               usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-                               
-                               data-widget-colorbutton="false"
-                               data-widget-editbutton="false"
-                               data-widget-togglebutton="false"
-                               data-widget-deletebutton="false"
-                               data-widget-fullscreenbutton="false"
-                               data-widget-custombutton="false"
-                               data-widget-collapsed="true"
-                               data-widget-sortable="false"
-                               
-                               -->
-                            <header>
-                                <span class="widget-icon"> <i class="fa fa-search txt-color-white"></i> </span>
-                                <h2> 查詢條件 </h2>
-                                <!-- <div class="widget-toolbar">
-                                  add: non-hidden - to disable auto hide
-                                  
-                                  </div>-->
-                            </header>
-                            <!-- widget div-->
-                            <div>
-                                <!-- widget edit box -->
-                                <div class="jarviswidget-editbox">
-                                    <!-- This area used as dropdown edit box -->
-                                </div>
-                                <!-- end widget edit box -->
-                                <!-- widget content -->
-                                <div class="widget-body bg-color-darken txt-color-white no-padding">
-                                    <form action="contact.html" method="post" id="search-form" class="smart-form">
-                                        <fieldset>
-                                            <div class="row">
-                                                <section class="col col-6">
-                                                    <label class="label">&nbsp;</label>
-                                                    <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入兌換起日" readonly="readonly">
-                                                    </label>
-                                                </section>
-                                                <section class="col col-6">
-                                                    <label class="label">&nbsp;</label>
-                                                    <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                                                        <i class="icon-append fa fa-calendar"></i>
-                                                        <input type="text" name="queryday" id="queryday" class="form-control input-lg" placeholder="請輸入兌換迄日" readonly="readonly">
-                                                    </label>
-                                                </section>
-                                            </div>
-                                        </fieldset>
-                                        <footer>
-                                            <button type="submit" name="submit" class="btn btn-primary">
-                                                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                                </button>
-                                        </footer>
-                                        <div class="message">
-                                            <i class="fa fa-check fa-lg"></i>
-                                            <p>
-                                                Your comment was successfully added!
-                                            </p>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- end widget content -->
-                            </div>
-                            <!-- end widget div -->
+          <div id="content">
+            <!-- widget grid -->
+            <section id="widget-grid" class="">
+               <!-- row -->
+               <div class="row">
+                  <!-- NEW WIDGET START -->
+                  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                     <!-- Widget ID (each widget will need unique ID)-->
+                     <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                        <!-- widget options:
+                           usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                           
+                           data-widget-colorbutton="false"
+                           data-widget-editbutton="false"
+                           data-widget-togglebutton="false"
+                           data-widget-deletebutton="false"
+                           data-widget-fullscreenbutton="false"
+                           data-widget-custombutton="false"
+                           data-widget-collapsed="true"
+                           data-widget-sortable="false"
+                           
+                           -->
+                        <header>
+                           <span class="widget-icon"> <i class="fa fa-search"></i> </span>
+                           <h2>查詢條件</h2>
+                        </header>
+                        <!-- widget div-->
+                        <div>
+                           <!-- widget edit box -->
+                           <div class="jarviswidget-editbox">
+                              <!-- This area used as dropdown edit box -->
+                           </div>
+                           <!-- end widget edit box -->
+                           <!-- widget content -->
+                           <div class="widget-body bg-color-darken txt-color-white no-padding">
+                              <form action="contact.html" method="post" id="search-form" class="smart-form">
+                                  <fieldset>
+                                     <div class="row">
+                                         <section class="col col-xs-12 col-sm-4 col-md-4">
+                                            <label class="label">依體能顧問查詢</label>
+                                            <label class="select">
+                                               <select class="input">
+                                                  <option value="0">全部</option>
+                                                  <option value="1">Alexandra</option>
+                                                  <option value="2">Alice</option>
+                                                  <option value="3">Anastasia</option>
+                                                  <option value="4">Avelina</option>
+                                               </select>
+                                               <i class="icon-append fa fa-file-word-o"></i>
+                                            </label>
+                                         </section> 
+                                         <section class="col col-xs-12 col-sm-4 col-md-4">
+                                            <label class="label">或依學員姓名(暱稱)查詢</label>
+                                              <label class="input input-group" >
+                                                <i class="icon-append fa fa-qrcode"></i>
+                                                <input type="text" name="invoiceno" class="form-control input" maxlength="20" placeholder="請輸入發票號碼">
+                                               </label>
+                                          </section>
+                                         
+                                         <section class="col col-xs-12 col-sm-4 col-md-4">
+                                            <label class="label">或依兌換商品查詢</label>
+                                            <label class="select">
+                                               <select class="input">
+                                                  <option value="0">全部</option>
+                                                  <option value="1">P.T session</option>
+                                                  <option value="2">P.T session禮物包</option>
+                                                  <option value="3">按摩棒</option>
+                                                  <option value="4">帽子</option>
+                                                  <option value="5">T恤</option>
+                                                  <option value="6">短滾筒</option>
+                                                  <option value="7">帽T</option>
+                                                  <option value="8">長滾筒</option>
+                                               </select>
+                                               <i class="icon-append fa fa-gift"></i>
+                                            </label>
+                                         </section>                                       
+                                      </div>       
+                                  </fieldset>
+                                  <fieldset>
+                                     <label class="label"><i class="fa fa-tags"></i> 更多查詢條件</label>
+                                     <div class="row">
+                                        <section class="col col-xs-12 col-sm-6 col-md-6">
+                                           <label class="label">請選擇兌換起日</label>
+                                           <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                           <i class="icon-append fa fa-calendar"></i>
+                                           <input type="text" name="queryday" id="queryday" class="form-control input" placeholder="請輸入查詢起日" readonly="readonly">
+                                           </label>
+                                        </section>
+                                        <section class="col col-xs-12 col-sm-6 col-md-6">
+                                           <label class="label">請選擇兌換迄日</label>
+                                           <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
+                                           <i class="icon-append fa fa-calendar"></i>
+                                           <input type="text" name="queryday" id="queryday" class="form-control input" placeholder="請輸入查詢迄日" readonly="readonly">
+                                           </label>
+                                        </section>
+                                     </div>
+                                  </fieldset>
+                                  <footer>
+                                     <button type="submit" name="submit" class="btn btn-primary">
+                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                     </button>
+                                      <button type="reset" name="cancle" class="btn btn-default">
+                                     清除 <i class="fa fa-undo" aria-hidden="true"></i>
+                                     </button>
+                                  </footer>
+                               </form>
+                           </div>
+                           <!-- end widget content -->
                         </div>
-                        <!-- end widget -->
-                    </article>
-                </div>
+                        <!-- end widget div -->
+                     </div>
+                     <!-- end widget -->
+                  </article>
+                  <!-- WIDGET END -->                   
+               </div>
+               <!-- end row -->
                 <!-- row -->
-                <div class="row">
-
-                    <!-- NEW WIDGET START -->
-                    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                        <!-- Widget ID (each widget will need unique ID)-->
-                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
-                            <!-- widget options:
-                                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-
-                                data-widget-colorbutton="false"
-                                data-widget-editbutton="false"
-                                data-widget-togglebutton="false"
-                                data-widget-deletebutton="false"
-                                data-widget-fullscreenbutton="false"
-                                data-widget-custombutton="false"
-                                data-widget-collapsed="true"
-                                data-widget-sortable="false"
-
-                                -->
-                            <header>
-                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                <h2>兌換列表</h2>
-                            </header>
-
-                            <!-- widget div-->
-                            <div>
-
-                                <!-- widget edit box -->
-                                <div class="jarviswidget-editbox">
-                                    <!-- This area used as dropdown edit box -->
-                                </div>
-                                <!-- end widget edit box -->
-
-                                <!-- widget content -->
-                                <div class="widget-body no-padding">
-
-                                    <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th data-class="expand">時間</th>
-                                                <th>學員姓名</th>
-                                                <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> 兌換人員</th>
-                                                <th>兌換商品</th>
-                                                <th data-hide="phone">商品點數</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>2016/01/11</td>
-                                                <td>劉加菲</td>
-                                                <td>劉加菲</td>
-                                                <td>教練課</td>
-                                                <td>20點</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2016/05/01</td>
-                                                <td>宋小胖</td>
-                                                <td>戴悟修</td>
-                                                <td>帽T</td>
-                                                <td>20點</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- end widget content -->
-
-                            </div>
-                            <!-- end widget div -->
-
+               <div class="row">
+                  <!-- NEW WIDGET START -->
+                  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                     <!-- Widget ID (each widget will need unique ID)-->
+                     <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                        <!-- widget options:
+                           usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                           
+                           data-widget-colorbutton="false"
+                           data-widget-editbutton="false"
+                           data-widget-togglebutton="false"
+                           data-widget-deletebutton="false"
+                           data-widget-fullscreenbutton="false"
+                           data-widget-custombutton="false"
+                           data-widget-collapsed="true"
+                           data-widget-sortable="false"
+                           
+                           -->
+                        <header>
+                           <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                           <h2>兌換清單</h2>
+                        </header>
+                        <!-- widget div-->
+                        <div>
+                           <!-- widget edit box -->
+                           <div class="jarviswidget-editbox">
+                              <!-- This area used as dropdown edit box -->
+                           </div>
+                           <!-- end widget edit box -->
+                           <!-- widget content -->
+                           <div class="widget-body bg-color-darken txt-color-white no-padding">
+                                <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                                   <thead>
+                                      <tr>
+                                         <th data-class="expand">兌換時間</th>
+                                         <th>學員姓名</th>
+                                         <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> 兌換人員</th>
+                                         <th>兌換商品</th>
+                                         <th data-hide="phone">使用日期</th>
+                                         <th data-hide="phone">贈與學員</th>
+                                      </tr>
+                                   </thead>
+                                   <tbody>
+                                      <tr>
+                                         <td>2016/01/11</td>
+                                         <td>劉加菲</td>
+                                         <td>黃比爾</td>
+                                         <td>P.T session</td>
+                                         <td>2017/05/10</td>
+                                         <td>宋胖子</td>
+                                      </tr>
+                                      <tr>
+                                         <td>2016/06/11</td>
+                                         <td>陳小瓦</td>
+                                         <td>陳小瓦</td>
+                                         <td>P.T session</td>
+                                         <td>2017/10/23</td>
+                                         <td>--</td>
+                                      </tr>
+                                      <tr>
+                                         <td>2016/05/01</td>
+                                         <td>宋小胖</td>
+                                         <td>戴悟修</td>
+                                         <td>帽T</td>
+                                         <td>--</td>
+                                         <td>--</td>
+                                      </tr>
+                                   </tbody>
+                                </table>                              
+                           </div>
+                           <!-- end widget content -->
                         </div>
-                        <!-- end widget -->
-                    </article>
-                    <!-- WIDGET END -->
-
-                </div>
-
-                <!-- end row -->
-
-                <!-- end row -->
-
-         
+                        <!-- end widget div -->
+                     </div>
+                     <!-- end widget -->
+                  </article>
+                  <!-- WIDGET END -->                   
+               </div>
+               <!-- end row -->
+            </section>
+            <!-- end widget grid -->                    
          </div>
+         <!-- END MAIN CONTENT -->          
+         <!-- MAIN CONTENT -->
       </div>
       <!-- END MAIN PANEL -->
       <!-- PAGE FOOTER -->

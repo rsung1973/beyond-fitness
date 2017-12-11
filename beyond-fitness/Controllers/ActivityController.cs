@@ -195,7 +195,7 @@ namespace WebHome.Controllers
             return ListDailyQuestion();
         }
 
-        public ActionResult AnswerDailyQuestion(int? suggestionID)
+        public ActionResult AnswerDailyQuestion(int? questionID,int? suggestionID)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
@@ -203,15 +203,27 @@ namespace WebHome.Controllers
                 return Json(new { result = false });
             }
 
-            if (profile.DailyQuestionID == null)
-            {
-                return Json(new { result = false });
-            }
+            //if (profile.DailyQuestionID == null)
+            //{
+            //    return Json(new { result = false });
+            //}
 
-            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == profile.DailyQuestionID).FirstOrDefault();
+            //var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == profile.DailyQuestionID).FirstOrDefault();
+            //if (item == null)
+            //{
+            //    return Json(new { result = false });
+            //}
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == questionID).FirstOrDefault();
             if (item == null)
             {
-                return Json(new { result = false });
+                return Json(new { result = false, message = "回答題目錯誤！！" });
+            }
+
+            if (models.GetTable<PDQTask>().Any(t => t.UID == profile.UID
+                 && t.TaskDate >= DateTime.Today && t.TaskDate < DateTime.Today.AddDays(1)
+                 && t.PDQQuestion.GroupID == 6))
+            {
+                return Json(new { result = false, message = "很抱歉，您今日已答過題嘍！！" });
             }
 
             var taskItem = new PDQTask

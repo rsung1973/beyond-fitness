@@ -1244,6 +1244,7 @@ namespace WebHome.Controllers
                         && u.LevelID != (int)Naming.MemberStatusDefinition.Anonymous)
                     .Where(l => l.RealName.Contains(userName) || l.Nickname.Contains(userName))
                     .Where(l => l.UserRole.Count(r => r.RoleID == (int)Naming.RoleID.Learner) > 0)
+                    .Where(u => u.UserProfileExtension != null && !u.UserProfileExtension.CurrentTrial.HasValue)
                     .OrderBy(l => l.UID);
             }
 
@@ -3741,7 +3742,7 @@ namespace WebHome.Controllers
                 row["上課時間長度"] = item.DurationInMinutes;
                 row["課程類別"] = item.RegisterLesson.RegisterLessonEnterprise==null 
                     ? item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus()
-                    : item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus();
+                    : item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus()+"(企)";
                 row["體能顧問姓名"] = item.AsAttendingCoach.UserProfile.FullName();
                 row["學員姓名"] = String.Join("/", item.GroupingLesson.RegisterLesson.Select(r => r.UserProfile).ToArray().Select(r => r.RealName.MaskedName()));
             }

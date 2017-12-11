@@ -79,9 +79,18 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2083")]
+        public int DefaultCoach {
+            get {
+                return ((int)(this["DefaultCoach"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd4;Integrated Security=T" +
-            "rue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=Tr" +
+            "ue")]
         public string BFDbConnection {
             get {
                 return ((string)(this["BFDbConnection"]));
@@ -90,10 +99,10 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2083")]
-        public int DefaultCoach {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EINVTurnkey\\UpCast\\B2CSTORAGE")]
+        public string EINVTurnKeyPath {
             get {
-                return ((int)(this["DefaultCoach"]));
+                return ((string)(this["EINVTurnKeyPath"]));
             }
         }
     }

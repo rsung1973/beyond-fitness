@@ -101,11 +101,17 @@
         return o;
     };
 
-    $.fn.launchDownload = function (url) {
+    $.fn.launchDownload = function (url, params,target) {
 
         var data = this.serializeObject();
+        if (params) {
+            $.extend(data, params);
+        }
 
         var form = $('<form></form>').attr('action', url).attr('method', 'post');//.attr('target', '_blank');
+        if (target) {
+            form.attr('target', target);
+        }
 
         Object.keys(data).forEach(function (key) {
             var value = data[key];

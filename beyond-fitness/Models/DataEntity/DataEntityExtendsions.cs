@@ -86,7 +86,10 @@ namespace WebHome.Models.DataEntity
         {
             return contract.ContractPayment
                 .Select(c => c.Payment)
-                .Where(p => p.VoidPayment == null && p.TransactionType==(int)Naming.PaymentTransactionType.體能顧問費)
+                .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉讓餘額
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉點餘額)
+                .Where(p => p.VoidPayment == null)
                 .Sum(c => c.PayoffAmount);
         }
 
@@ -107,6 +110,7 @@ namespace WebHome.Models.DataEntity
                 case (int)Naming.LessonPriceStatus.自主訓練:
                     return "P.I.session";
                 case (int)Naming.LessonPriceStatus.一般課程:
+                case (int)Naming.LessonPriceStatus.團體學員課程:
                 case (int)Naming.LessonPriceStatus.已刪除:
                     return "P.T.session";
                 default:

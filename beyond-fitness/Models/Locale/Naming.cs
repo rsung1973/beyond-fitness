@@ -217,6 +217,9 @@ namespace WebHome.Models.Locale
             合約轉讓沖銷 = 5,
             合約轉點沖銷 = 6,
             合約終止沖銷 = 7,
+            合約轉點餘額 = 8,
+            合約轉讓餘額 = 9,
+
         }
 
         public enum MerchandiseStatus
@@ -245,7 +248,8 @@ namespace WebHome.Models.Locale
             T,
             N,
             S,
-            X
+            X,
+            V
         }
 
         public enum TaxTypeDefinition
@@ -256,5 +260,12 @@ namespace WebHome.Models.Locale
             特種稅率 = 4,
             混合稅率 = 9
         }
+
+        public enum GeneralStatus
+        {
+            Failed = 0,
+            Successful = 1
+        }
+            
     }
 }

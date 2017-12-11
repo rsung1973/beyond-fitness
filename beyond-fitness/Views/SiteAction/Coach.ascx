@@ -15,6 +15,7 @@
         <% Html.RenderPartial("~/Views/Layout/NavItem/Members.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Contract.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Payment.ascx", _userProfile); %>
+        <% Html.RenderPartial("~/Views/Layout/NavItem/Invoice.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/CoachReport.ascx", _userProfile); %>
         <% Html.RenderPartial("~/Views/Layout/NavItem/Professional.ascx", _userProfile); %>
 <%--        <li>

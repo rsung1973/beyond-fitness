@@ -16,14 +16,16 @@
         <table>
             <tr>
                 <td>
-                    <div class="cutfield" style="/*width: 5cm;*/ border-top: 0px; border: 0px; font-weight: bold;">
+                    <div class="cutfield" style="/*width: 5cm;*/ border-top: 0px; border: 0px; /*font-weight: bold;*/">
                         <%  if (_seller!=null && _seller.LogoURL != null)
                         { %>
                         <img style="width: 200px; height: auto;" src='<%= WebHome.Properties.Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/" + _seller.LogoURL) %>' />
                         <%      }
                         else
                         { %>
-                        <h3 style="/*width: 4.8cm;*/ padding-top: 0px; font-weight: bold; height: 1.3cm;"><%=_seller.CompanyName  %></h3>
+                            <div style="text-align:left; width:4.4cm">
+                                <h3 style="width: 4.2cm; padding-top: 0px; font-weight: bold; height: 1.3cm;"><%=_seller.CompanyName  %></h3>
+                            </div>
                         <%  } %>
                         <h2>電子發票證明聯</h2>
                         <h2><%= _model.InvoiceDate.Value.Year-1911 %>年<%= (_model.InvoiceDate.Value.Month % 2).Equals(0) ? String.Format("{0:00}-{1:00}", _model.InvoiceDate.Value.Month - 1, _model.InvoiceDate.Value.Month) : String.Format("{0:00}-{1:00}", _model.InvoiceDate.Value.Month, _model.InvoiceDate.Value.Month+1)%>月 </h2>
@@ -39,6 +41,11 @@
                         <div class="code2">
                             <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceQRCode.ascx",_model); %>
                         </div>
+                        <p>
+                            <%= _model.Organization.BranchStore!=null ? _model.Organization.BranchStore.BranchName : null %>
+                            <br />
+                            退貨請憑電子發票證明聯辦理
+                        </p>
                     </div>
                 </td>
 
@@ -46,20 +53,22 @@
         </table>
     </div>
 
-    <div class="listfield" style="border-top: 0px; border-bottom: 0px">
-        <table style="width: 5.7cm; font-size: 8pt; font-weight: bold;">
+    <%--<div class="listfield" style="border-top: 0px; border-bottom: 0px">
+        <table style="width: 4.8cm; font-size: 8pt; font-weight: bold;">
+             <tr>
+                <td colspan="3">
+                            <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">品名</p>
+                </td>
+             </tr>
             <tr>
-                <td style="width: 25%">
-                    <p style="display: inline-block; padding: 2px 0px; margin: 0; font-size: 8pt; line-height: 1.5">品名</p>
-                </td>
-                <td style="width: 25%">
-                    <p style="display: inline-block; padding: 2px 0px; margin: 0; font-size: 8pt; line-height: 1.5">數量</p>
-                </td>
-                <td style="width: 25%">
-                    <p style="display: inline-block; padding: 2px 0px; margin: 0; font-size: 8pt; line-height: 1.5">單價</p>
-                </td>
-                <td style="width: 25%">
-                    <p style="display: inline-block; padding: 2px 0px; margin: 0; font-size: 8pt; line-height: 1.5">小計</p>
+                <td style="width:20%">
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">數量</p>
+                    </td>
+                <td style="width:40%">
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">單價</p>
+                    </td>
+                <td style="width:40%">
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">小計</p>
                 </td>
             </tr>
 
@@ -69,8 +78,10 @@
                     {
                         foreach (var item in product.InvoiceProductItem)
                         {   %>
+        <tr>
+            <td colspan="3" height="15" valign="top"><%= product.Brief %></td>
+        </tr>
             <tr>
-                <td height="15" valign="top"><%= product.Brief %></td>
                 <td align="right" valign="top"><%= String.Format("{0:##,###,###,###}", item.Piece)%></td>
                 <td align="right" valign="top"><%= String.Format("{0:##,###,###,###}", item.UnitCost) %></td>
                 <td align="right" valign="top"><%= String.Format("{0:##,###,###,###}", item.CostAmount)%></td>
@@ -79,7 +90,7 @@
                     }
                 } %>
             <tr>
-                <td colspan="4" style="font-size: 8pt;">
+                <td colspan="3" style="font-size: 8pt;">
 
                     <p style="border-top: 1px dotted #808080;">
                         <span style="font-size: 8pt;">總計：<%=_model.InvoiceDetails.Sum(d=>d.InvoiceProduct.InvoiceProductItem.Count) %>項&nbsp;&nbsp;金額：<%= String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TotalAmount)%></span><br />
@@ -107,13 +118,12 @@
                         免稅銷售額：<%= String.Format("{0:##,###,###,##0}",freeTaxAmt) %><br />
                         稅額：<%= String.Format("{0:##,###,###,##0}",_model.InvoiceAmountType.TaxAmount) %><br />
                         <%  } %>
-                備註：<%= _model.Remark %><br />
-                        退貨請憑電子發票證明聯辦理
+                        備註：<%= String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark))%>
                     </p>
                 </td>
             </tr>
         </table>
-    </div>
+    </div>--%>
 </div>
 <%--<%      if ((bool?)ViewBag.PrintBuyerAddr == true)
         { %>

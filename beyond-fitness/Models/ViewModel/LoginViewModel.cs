@@ -125,7 +125,7 @@ namespace WebHome.Models.ViewModel
 
         public Naming.MemberStatusDefinition? MemberStatus { get; set; }
         public String Address { get; set; }
-
+        public Naming.RoleID? RoleID { get; set; }
     }
 
     public class LessonViewModel

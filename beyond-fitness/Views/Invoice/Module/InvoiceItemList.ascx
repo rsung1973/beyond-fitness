@@ -79,11 +79,16 @@
                 <%  } %>
             </td>
             <td>
-                <%  if (item.InvoiceItem.Document.DocumentPrintLog.Count == 0
-                        && item.InvoiceItem.InvoiceType==(byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
-                    { %>
-                <a href="#" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>
-                <%  } %>
+                <%  if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    {
+                        if (item.InvoiceItem.InvoiceCancellation == null
+                            && (item.InvoiceItem.Document.DocumentPrintLog.Count == 0
+                                || _profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()))
+                        { %>
+                <%--<a href="<%= Url.Action("GetInvoicePDF", "Invoice", new { item.InvoiceID }) %>" target="_blank" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>--%>
+                <a onclick="printInvoice(<%= item.InvoiceID %>);" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>
+                <%      }
+                    } %>
             </td>
         </tr>
         <%  } %>
@@ -108,7 +113,7 @@
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
-            "order": [[4, "desc"]],
+            "order": [[0, "asc"]],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
@@ -144,6 +149,7 @@
     ModelSource<UserProfile> models;
     String _tableId = "invoiceList" + DateTime.Now.Ticks;
     IQueryable<Payment> _model;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -152,6 +158,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = ((IQueryable<Payment>)this.Model).Where(p => p.TransactionType.HasValue)
             .OrderBy(p => p.InvoiceID);
+        _profile = Context.GetUser();
     }
 
 </script>

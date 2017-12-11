@@ -11,7 +11,7 @@
 
 <div id="questionDialog" title="每日問與答" class="bg-color-darken">
     <div class="panel panel-default bg-color-darken">
-        <form action="<%= Url.Action("AnswerDailyQuestion","Activity") %>" method="post" id="dailyAns" class="smart-form">
+        <form action="<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>" method="post" id="dailyAns" class="smart-form">
             <div class="panel-body status smart-form vote">
                 <div class="who clearfix">
                     <% _model.UserProfile.RenderUserPicture(Writer, new { @class = "busy" }); %>
@@ -74,7 +74,33 @@
         });
 
         $('#btnAnswer').on('click', function (evt) {
-            $('#dailyAns').ajaxForm({
+
+            var $ans = $('#dailyAns input:radio[name="suggestionID"]:checked');
+            if ($ans.length == 0) {
+                alert('請選擇!!');
+                return;
+            }
+
+            showLoading();
+            $.post('<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>', { 'suggestionID': $ans.val() }, function (data) {
+                hideLoading();
+                $('#dailyAns footer').remove();
+                if (data.result) {
+                    $('#dailyAns .message').css('display', 'block')
+                    .find('p').text('恭喜你答對囉，可獲得點數' + data.message + '點，集滿一定點數後有意想不到的驚喜喔！');
+                } else {
+                    //$modal.modal('hide');
+                    if (data.message) {
+                        $('#dailyAns .errormessage p').text(data.message);
+                    }
+                    $('#dailyAns .errormessage').css('display', 'block');
+                }
+                $('#questionDialog').scrollTop(300);
+            });
+
+            $('#dailyAns input:radio[name="suggestionID"]').prop('disabled', true);
+                                    
+            <%--            $('#dailyAns').ajaxForm({
                 beforeSubmit: function () {
                     showLoading(true);
                 },
@@ -92,7 +118,8 @@
                 },
                 error: function () {
                 }
-            }).submit();
+            }).submit();    --%>
+
         });
 
         $('#btnDismiss').on('click', function (evt) {

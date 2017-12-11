@@ -192,6 +192,9 @@ namespace WebHome.Controllers
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                .Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
+                    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
                 .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
@@ -369,6 +372,10 @@ namespace WebHome.Controllers
             {
                 hasConditon = true;
                 queryExpr = queryExpr.Or(c => c.TrustType == viewModel.TrustType);
+                if (viewModel.TrustType == Naming.TrustType.N.ToString())
+                {
+                    queryExpr = queryExpr.Or(c => c.TrustType == Naming.TrustType.V.ToString());
+                }
             }
 
             IQueryable<ContractTrustTrack> trackItems = models.GetTable<ContractTrustTrack>();
@@ -407,15 +414,17 @@ namespace WebHome.Controllers
             var summary = settlementItems.ToArray()
                 .Select(item => new
                 {
-                    信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount),
-                    T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount),
-                    B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount),
-                    N_返還 = item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
-                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100),
-                    S_終止 = item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount),
-                    X_轉讓 = item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount),
-                    收_付金額 = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount),
-                    信託期末金額 = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount),
+                    信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount).ToString(),
+                    T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).ToString(),
+                    B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).ToString(),
+                    N_返還 = String.Format("({0})", (item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
+                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+                        + (item.ContractTrustTrack.Where(t => t.TrustType == "V").Select(t => t.VoidPayment.Payment)
+                        .Sum(p => p.PayoffAmount) ?? 0)),
+                    S_終止 = String.Format("({0})", -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount)),
+                    X_轉讓 = String.Format("({0})", -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount)),
+                    收_付金額 = (item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount)).ToString(),
+                    信託期末金額 = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount).ToString(),
                 });
 
             DataTable summaryTable = summary.ToDataTable();
@@ -462,7 +471,19 @@ namespace WebHome.Controllers
                     details.Add(reportItem);
                 }
 
-                amt = item.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount);
+                amt = item.Where(t => t.TrustType == "V").Select(t => t.VoidPayment.Payment)
+                         .Sum(p => p.PayoffAmount);
+                if (amt.HasValue && amt > 0)
+                {
+                    _TrustTrackReportItem reportItem = newReportItem(contract);
+                    reportItem.處理代碼 = "N";
+                    settlement.InitialTrustAmount -= amt.Value;
+                    reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
+                    reportItem.信託餘額 = settlement.InitialTrustAmount;
+                    details.Add(reportItem);
+                }
+
+                amt = -item.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount);
                 if (amt.HasValue && amt > 0)
                 {
                     _TrustTrackReportItem reportItem = newReportItem(contract);
@@ -472,11 +493,12 @@ namespace WebHome.Controllers
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
-                amt = item.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount);
+
+                amt = -item.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount);
                 if (amt.HasValue && amt > 0)
                 {
                     _TrustTrackReportItem reportItem = newReportItem(contract);
-                    reportItem.處理代碼 = "X";
+                    reportItem.處理代碼 = "S";
                     settlement.InitialTrustAmount -= amt.Value;
                     reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;

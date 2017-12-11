@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,6 +20,7 @@ using System.Web.Security;
 using CommonLib.DataAccess;
 using CommonLib.MvcExtension;
 using Newtonsoft.Json;
+using TheArtOfDev.HtmlRenderer.WinForms;
 using Utility;
 using WebHome.Helper;
 using WebHome.Models.DataEntity;
@@ -40,6 +43,23 @@ namespace WebHome.Controllers
         }
 
         public ActionResult PrintIndex(InvoiceQueryViewModel viewModel)
+        {
+            if(String.IsNullOrEmpty(viewModel.InvoiceNo))
+            {
+                viewModel.HandlerID = -1;
+            }
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            return View("PrintIndex",result.Model ?? models.GetTable<Payment>().Where(p => false));
+        }
+
+        public ActionResult TurnkeyIndex(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
+        public ActionResult VacantNoIndex(InvoiceNoViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
             return View();
@@ -260,6 +280,21 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult InquireInvoiceDispatchLog(InvoiceQueryViewModel viewModel)
+        {
+            IQueryable<InvoiceItemDispatchLog> items = models.GetTable<InvoiceItemDispatchLog>();
+
+            if (viewModel.DateFrom.HasValue)
+                items = items.Where(c => c.DispatchDate >= viewModel.DateFrom);
+
+            if (viewModel.DateTo.HasValue)
+                items = items.Where(c => c.DispatchDate < viewModel.DateTo.Value.AddDays(1));
+
+            return View("~/Views/Invoice/Module/InvoiceDispatchLogSummary.ascx", items);
+
+        }
+
+
         public ActionResult InquireInvoice(InvoiceQueryViewModel viewModel)
         {
             IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>().Where(i => i.TrackCode != null);
@@ -284,6 +319,13 @@ namespace WebHome.Controllers
                 {
                     ModelState.AddModelError("InvoiceNo", "請輸入正確發票號碼!!");
                 }
+            }
+
+            if(viewModel.DispatchStatus.HasValue)
+            {
+                items = items
+                    .Join(models.GetTable<InvoiceItemDispatchLog>().Where(d => d.Status == viewModel.DispatchStatus),
+                        i => i.InvoiceID, d => d.InvoiceID, (i, d) => i);
             }
 
             if (!hasConditon)
@@ -340,11 +382,11 @@ namespace WebHome.Controllers
                 }
             }
 
-            if (viewModel.InvoiceDateFrom.HasValue)
-                items = items.Where(c => c.InvoiceDate >= viewModel.InvoiceDateFrom);
+            if (viewModel.DateFrom.HasValue && viewModel.DocType==Naming.DocumentTypeDefinition.E_Invoice)
+                items = items.Where(c => c.InvoiceDate >= viewModel.DateFrom);
 
-            if (viewModel.InvoiceDateTo.HasValue)
-                items = items.Where(c => c.InvoiceDate < viewModel.InvoiceDateTo.Value.AddDays(1));
+            if (viewModel.DateTo.HasValue && viewModel.DocType == Naming.DocumentTypeDefinition.E_Invoice)
+                items = items.Where(c => c.InvoiceDate < viewModel.DateTo.Value.AddDays(1));
 
             if (!ModelState.IsValid)
             {
@@ -352,11 +394,61 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/ReportInputError.ascx");
             }
 
-            paymentItems = paymentItems.Join(items, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+            if (viewModel.DocType == Naming.DocumentTypeDefinition.E_Allowance)
+            {
+                IQueryable<InvoiceAllowance> allowanceItems = models.GetTable<InvoiceAllowance>();
 
-            return View("~/Views/Invoice/Module/InvoiceItemList.ascx", paymentItems);
+                if (viewModel.DateFrom.HasValue)
+                    allowanceItems = allowanceItems.Where(c => c.AllowanceDate >= viewModel.DateFrom);
+
+                if (viewModel.DateTo.HasValue)
+                    allowanceItems = allowanceItems.Where(c => c.AllowanceDate < viewModel.DateTo.Value.AddDays(1));
+
+                items = items.Join(allowanceItems, i => i.InvoiceID, a => a.InvoiceID, (i, a) => i);
+                paymentItems = paymentItems.Join(items, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+
+                return View("~/Views/Invoice/Module/AllowanceItemList.ascx", paymentItems);
+
+            }
+            else
+            {
+                paymentItems = paymentItems.Join(items, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+
+                return View("~/Views/Invoice/Module/InvoiceItemList.ascx", paymentItems);
+            }
 
         }
+
+        public ActionResult InquireInvoiceByDispatch(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            if(result.Model is IQueryable<Payment>)
+            {
+                result.ViewName = "~/Views/Invoice/Module/InvoiceItemSummary.ascx";
+            }
+            return result;
+        }
+
+        public ActionResult PrintAll(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+
+            string pdfFile = createInvoicePDF(items.Select(p => p.InvoiceItem));
+            return File(pdfFile, "application/octet-stream", Path.GetFileName(pdfFile));
+
+        }
+
+        public ActionResult PrintAllInvoice(InvoiceQueryViewModel viewModel, String printerIP)
+        {
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+            ViewBag.PrinterIP = printerIP;
+
+            return View("PrintInvoiceImage", items.Select(p => p.InvoiceItem));
+
+        }
+
 
         [AllowAnonymous]
         public ActionResult PrintInvoice(InvoiceQueryViewModel viewModel)
@@ -393,11 +485,245 @@ namespace WebHome.Controllers
             return View(items);
         }
 
+        [AllowAnonymous]
+        public ActionResult CanvasPrintInvoice(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)PrintInvoice(viewModel);
+            result.ViewName = "CanvasPrintInvoice";
+            return result;
+        }
+
+
+        public ActionResult CanvasDrawInvoice(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)PrintInvoice(viewModel);
+            result.ViewName = "CanvasDrawInvoice";
+            return result;
+        }
+
+        public ActionResult LoadInvoiceImage(InvoiceQueryViewModel viewModel,String printerIP)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)PrintInvoice(viewModel);
+            if (String.IsNullOrEmpty(printerIP))
+            {
+                result.ViewName = "LoadInvoiceImage";
+            }
+            else
+            {
+                ViewBag.PrinterIP = printerIP;
+                result.ViewName = "PrintInvoiceImage";
+            }
+            return result;
+        }
+
+        public ActionResult PrintAllowanceImage(InvoiceQueryViewModel viewModel, String printerIP)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)PrintAllowance(viewModel);
+            result.ViewName = "PrintAllowanceImage";
+            ViewBag.PrinterIP = printerIP;
+            return result;
+        }
+
+
+        public ActionResult DrawInvoice(InvoiceQueryViewModel viewModel)
+        {
+            //HtmlRender.RenderToImage
+            //ViewBag.ViewModel = viewModel;
+            //ViewResult result = (ViewResult)PrintInvoice(viewModel);
+            //result.ViewName = "CanvasDrawInvoice";
+            //return result;
+            String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/CanvasPrintInvoice") + "?" + Request.Params["QUERY_STRING"];
+            using (WebClient client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8;
+                String data = client.DownloadString(viewUrl);
+                using (Image image = HtmlRender.RenderToImage(data))
+                {
+                    Response.Clear();
+                    Response.ContentType = "image/Png";
+                    image.Save(Response.OutputStream, ImageFormat.Png);
+                    //Response.End();
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult DrawAllowance(InvoiceQueryViewModel viewModel)
+        {
+            String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/CanvasPrintAllowance") + "?" + Request.Params["QUERY_STRING"];
+            using (WebClient client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8;
+                String data = client.DownloadString(viewUrl);
+                using (Image image = HtmlRender.RenderToImage(data))
+                {
+                    Response.Clear();
+                    Response.ContentType = "image/Png";
+                    image.Save(Response.OutputStream, ImageFormat.Png);
+                    //Response.End();
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult GetPrinterIP(int? companyID)
+        {
+            var item = models.GetTable<Organization>().Where(o => o.CompanyID == companyID).FirstOrDefault();
+            return Json(new { printerIP = item != null ? item.InvoiceSignature : null }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdatePrinterIP(int? companyID,String printerIP)
+        {
+            var item = models.GetTable<Organization>().Where(o => o.CompanyID == companyID).FirstOrDefault();
+            if(item!=null)
+            {
+                item.InvoiceSignature = printerIP;
+                models.SubmitChanges();
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CaptchaImg(String code)
+        {
+
+            string captcha = code;
+
+            Response.Clear();
+            Response.ContentType = "image/Png";
+            using (Bitmap bmp = new Bitmap(120, 30))
+            {
+                int x1 = 0;
+                int y1 = 0;
+                int x2 = 0;
+                int y2 = 0;
+                int x3 = 0;
+                int y3 = 0;
+                int intNoiseWidth = 25;
+                int intNoiseHeight = 15;
+                Random rdn = new Random();
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+
+                    //設定字型
+                    using (Font font = new Font("Courier New", 16, FontStyle.Bold))
+                    {
+
+                        //設定圖片背景
+                        g.Clear(Color.CadetBlue);
+
+                        //產生雜點
+                        for (int i = 0; i < 100; i++)
+                        {
+                            x1 = rdn.Next(0, bmp.Width);
+                            y1 = rdn.Next(0, bmp.Height);
+                            bmp.SetPixel(x1, y1, Color.DarkGreen);
+                        }
+
+                        using (Pen pen = new Pen(Brushes.Gray))
+                        {
+                            //產生擾亂弧線
+                            for (int i = 0; i < 15; i++)
+                            {
+                                x1 = rdn.Next(bmp.Width - intNoiseWidth);
+                                y1 = rdn.Next(bmp.Height - intNoiseHeight);
+                                x2 = rdn.Next(1, intNoiseWidth);
+                                y2 = rdn.Next(1, intNoiseHeight);
+                                x3 = rdn.Next(0, 45);
+                                y3 = rdn.Next(-270, 270);
+                                g.DrawArc(pen, x1, y1, x2, y2, x3, y3);
+                            }
+                        }
+
+                        //把GenPassword()方法換成你自己的密碼產生器，記得把產生出來的密碼存起來日後才能與user的輸入做比較。
+
+                        g.DrawString(captcha, font, Brushes.Black, 3, 3);
+
+                        MemoryStream ms = new MemoryStream();
+                        bmp.Save(ms, ImageFormat.Png);
+                        byte[] bmpBytes = ms.GetBuffer();
+                        bmp.Dispose();
+                        ms.Close();
+                        Response.BinaryWrite(bmpBytes);
+                        //context.Response.End();
+                    }
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+
+
+        [AllowAnonymous]
+        public ActionResult PrintAllowance(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var items = models.GetTable<InvoiceAllowance>().Where(i => false);
+            if (viewModel.AllowanceID != null && viewModel.AllowanceID.Length > 0)
+            {
+                items = models.GetTable<InvoiceAllowance>().Where(i => viewModel.AllowanceID.Contains(i.AllowanceID));
+            }
+            else if (viewModel.UID.HasValue)
+            {
+                var profile = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+                if (profile != null)
+                {
+                    items = models.GetTable<DocumentPrintQueue>().Where(d => d.UID == viewModel.UID)
+                        .Join(models.GetTable<InvoiceAllowance>(), d => d.DocID, i => i.AllowanceID, (d, i) => i);
+                }
+            }
+            else
+            {
+                viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
+                if (viewModel.InvoiceNo != null)
+                {
+                        items = models.GetTable<InvoiceAllowance>().Where(c => c.AllowanceNumber==viewModel.InvoiceNo);
+                }
+            }
+            return View(items);
+        }
+
+        [AllowAnonymous]
+        public ActionResult CanvasPrintAllowance(InvoiceQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewResult result = (ViewResult)PrintAllowance(viewModel);
+            result.ViewName = "CanvasPrintAllowance";
+            return result;
+        }
+
+
         public ActionResult GetInvoicePDF(InvoiceQueryViewModel viewModel)
         {
             ViewResult result = (ViewResult)PrintInvoice(viewModel);
             IQueryable<InvoiceItem> items = (IQueryable<InvoiceItem>)result.Model;
 
+            string pdfFile = createInvoicePDF(items);
+            return File(pdfFile, "application/pdf");
+            //return File(pdfFile, "application/pdf", Path.GetFileName(pdfFile));
+
+        }
+
+        public ActionResult GetAllowancePDF(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)PrintAllowance(viewModel);
+            IQueryable<InvoiceAllowance> items = (IQueryable<InvoiceAllowance>)result.Model;
+
+            string pdfFile = createAllowancePDF(items);
+            //return File(pdfFile, "application/pdf", Path.GetFileName(pdfFile));
+            return File(pdfFile, "application/pdf");
+
+        }
+
+        private string createInvoicePDF(IQueryable<InvoiceItem> items)
+        {
             var profile = HttpContext.GetUser();
             var queue = models.GetTable<DocumentPrintQueue>();
             foreach (var item in items)
@@ -415,10 +741,66 @@ namespace WebHome.Controllers
             }
 
             String pdfFile = profile.CreateQueuedInvoicePDF();
-            return File(pdfFile, "application/octet-stream", Path.GetFileName(pdfFile));
-
+            return pdfFile;
         }
 
+        private string createAllowancePDF(IQueryable<InvoiceAllowance> items)
+        {
+            var profile = HttpContext.GetUser();
+            var queue = models.GetTable<DocumentPrintQueue>();
+            foreach (var item in items)
+            {
+                if (!queue.Any(d => d.UID == profile.UID && d.DocID == item.InvoiceID))
+                {
+                    queue.InsertOnSubmit(new DocumentPrintQueue
+                    {
+                        UID = profile.UID,
+                        DocID = item.AllowanceID,
+                        SubmitDate = DateTime.Now
+                    });
+                    models.SubmitChanges();
+                }
+            }
+
+            String pdfFile = profile.CreateQueuedAllowancePDF();
+            return pdfFile;
+        }
+
+
+        public ActionResult InquireVacantNo(InvoiceNoViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (!viewModel.Year.HasValue)
+            {
+                ModelState.AddModelError("Year", "請選擇發票年度!!");
+            }
+
+            if (!viewModel.PeriodNo.HasValue)
+            {
+                ModelState.AddModelError("PeriodNo", "請選擇發票期別!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            var items = models.GetTable<BranchStore>();
+
+            models.ProcessVacantNo(viewModel.Year.Value, viewModel.PeriodNo.Value);
+
+            return View("~/Views/Invoice/Module/VacantNoList.ascx", items);
+        }
+
+        public ActionResult DownloadVacantNoCsv(InvoiceNoViewModel viewModel)
+        {
+
+            List<InquireVacantNoResult> items = models.GetDataContext().InquireVacantNo(viewModel.BranchID, viewModel.Year, viewModel.PeriodNo).ToList();
+            return View("~/Views/Invoice/Module/DownloadVacantNoCsv.ascx", items);
+
+        }
 
     }
 }

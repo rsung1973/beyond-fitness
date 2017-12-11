@@ -299,7 +299,8 @@ namespace WebHome.Controllers
                 items = models.GetTable<RegisterLesson>()
                     .Where(r => r.RegisterLessonContract != null)
                     .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
-                        && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName)))
+                        && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName))
+                        && (l.UserProfile.UserProfileExtension != null && !l.UserProfile.UserProfileExtension.CurrentTrial.HasValue))
                     .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
                     .Where(l => l.RegisterGroupID.HasValue)
                     .OrderBy(l => l.UID).ThenBy(l => l.ClassLevel).ThenBy(l => l.Lessons);
@@ -376,6 +377,7 @@ namespace WebHome.Controllers
                         && u.LevelID != (int)Naming.MemberStatusDefinition.Anonymous)
                     .Where(l => l.RealName.Contains(userName) || l.Nickname.Contains(userName))
                     .Where(l => l.UserRole.Count(r => r.RoleID == (int)Naming.RoleID.Learner) > 0)
+                    .Where(l => l.UserProfileExtension != null && !l.UserProfileExtension.CurrentTrial.HasValue)
                     .OrderBy(l => l.UID);
             }
             if (forCalendar == true)
@@ -428,7 +430,8 @@ namespace WebHome.Controllers
                         RealName = newTrialLearner.RealName,
                         Phone = newTrialLearner.Phone.GetEfficientString(),
                         Gender = newTrialLearner.Gender,
-                        CurrentTrial = 1
+                        CurrentTrial = 1,
+                        RoleID = Naming.RoleID.Preliminary
                     });
 
                     if (profile == null)
@@ -672,19 +675,23 @@ namespace WebHome.Controllers
                 case Naming.LessonQueryType.一般課程:
                     int[] scope = new int[] {
                         (int)Naming.LessonPriceStatus.一般課程,
-                        (int)Naming.LessonPriceStatus.企業合作方案,
+                        //(int)Naming.LessonPriceStatus.企業合作方案,
                         (int)Naming.LessonPriceStatus.已刪除,
                         (int)Naming.LessonPriceStatus.點數兌換課程 };
-                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value));
+                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
+                            || (l.RegisterLesson.RegisterLessonEnterprise != null
+                                    && (new int?[] { (int)Naming.LessonPriceStatus.一般課程, (int)Naming.LessonPriceStatus.團體學員課程 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
                     break;
                 case Naming.LessonQueryType.自主訓練:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練);
+                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
+                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
                     break;
                 case Naming.LessonQueryType.內部訓練:
                     items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);
                     break;
                 case Naming.LessonQueryType.體驗課程:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程);
+                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
                     break;
             }
 

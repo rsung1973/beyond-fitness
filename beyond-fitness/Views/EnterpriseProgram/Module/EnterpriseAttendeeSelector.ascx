@@ -10,16 +10,18 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <%  foreach (var item in _items)
-            {
-                bool pdqStatus = completePDQ(item);
-                bool groupComplete = item.GroupingMemberCount == item.GroupingLesson.RegisterLesson.Count || item.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status!=(int)Naming.LessonPriceStatus.團體學員課程  ? true : false;
-                bool questionnaireStatus = item.QuestionnaireRequest.Any(q => q.Status!=(int)Naming.IncommingMessageStatus.拒答 && q.PDQTask.Count == 0);
-                var pastReserved = item.LessonTime.Count(l => l.ClassTime < DateTime.Today.AddDays(1) && l.LessonAttendance == null);
-                var incomingReserved = item.LessonTime.Count(l => l.ClassTime >= DateTime.Today);
-                var lessonCount = item.Lessons - item.GroupingLesson.LessonTime.Count;
+    {
+        var contract = item.RegisterLessonEnterprise.EnterpriseCourseContract;
+        bool expired = contract.Expiration.Value < DateTime.Today;
+        bool pdqStatus = completePDQ(item);
+        bool groupComplete = item.GroupingMemberCount == item.GroupingLesson.RegisterLesson.Count || item.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status!=(int)Naming.LessonPriceStatus.團體學員課程  ? true : false;
+        bool questionnaireStatus = item.QuestionnaireRequest.Any(q => q.Status!=(int)Naming.IncommingMessageStatus.拒答 && q.PDQTask.Count == 0);
+        var pastReserved = item.LessonTime.Count(l => l.ClassTime < DateTime.Today.AddDays(1) && l.LessonAttendance == null);
+        var incomingReserved = item.LessonTime.Count(l => l.ClassTime >= DateTime.Today);
+        var lessonCount = item.Lessons - item.GroupingLesson.LessonTime.Count;
 %>
 <label class="<%= lessonCount>0 && pdqStatus && groupComplete && !questionnaireStatus ? "radio" : "radio state-disabled" %>">
-    <input type="radio" name="registerID" value="<%= item.RegisterID %>" <%= lessonCount>0 && pdqStatus && groupComplete && !questionnaireStatus ? null : "disabled" %> />
+    <input type="radio" name="RegisterID" value="<%= item.RegisterID %>" <%= lessonCount>0 && pdqStatus && groupComplete && !questionnaireStatus && !expired ? null : "disabled" %> />
     <i></i>
 
     <%= String.Join("｜", item.GroupingLesson.RegisterLesson.Select(m=>m.UserProfile).ToArray()
@@ -46,6 +48,13 @@
     <span class="label label-danger">
         <li class="fa fa-exclamation-triangle"></li>
         階段性調整計劃未填寫，請通知學員登入系統完成階段性調整計劃。
+    </span>
+    <%  }
+        if (expired)
+        { %>
+    <span class="label label-danger">
+        <li class="fa fa-exclamation-triangle"></li>
+        企業方案合約已過期!!
     </span>
     <%  } %>
 </label>

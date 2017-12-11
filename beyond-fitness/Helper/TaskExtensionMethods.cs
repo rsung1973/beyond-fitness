@@ -15,6 +15,7 @@ namespace WebHome.Helper
 {
     public static class TaskExtensionMethods
     {
+        private static int __InvoiceBusyCount = 0;
         public static void ProcessContractTranference(this CourseContractRevision item)
         {
             ThreadPool.QueueUserWorkItem(t =>
@@ -112,7 +113,7 @@ namespace WebHome.Helper
                                 Remark = "餘額轉讓",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
-                                TransactionType = (int)Naming.PaymentTransactionType.體能顧問費,
+                                TransactionType = (int)Naming.PaymentTransactionType.合約轉讓餘額,
                                 InvoiceID = balancedPayment.InvoiceID
                             };
                             models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
@@ -217,7 +218,7 @@ namespace WebHome.Helper
                                 },
                                 PaymentTransaction = new PaymentTransaction
                                 {
-                                    BranchID = item.SourceContract.CourseContractExtension.BranchID
+                                    BranchID = item.CourseContract.CourseContractExtension.BranchID
                                 },
                                 PaymentAudit = new Models.DataEntity.PaymentAudit { },
                                 PayoffAmount = balance,
@@ -225,7 +226,7 @@ namespace WebHome.Helper
                                 Remark = "餘額轉點",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
-                                TransactionType = (int)Naming.PaymentTransactionType.體能顧問費,
+                                TransactionType = (int)Naming.PaymentTransactionType.合約轉點餘額,
                                 InvoiceID = balancedPayment.InvoiceID
                             };
                             models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
@@ -311,6 +312,83 @@ namespace WebHome.Helper
             });
         }
 
+        public static void ProcessInvoiceToGov()
+        {
+            if (Interlocked.Increment(ref __InvoiceBusyCount) == 1)
+            {
+                ThreadPool.QueueUserWorkItem(t =>
+                {
+                    try
+                    {
+                        using (var models = new ModelSource<UserProfile>())
+                        {
+                            String C0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0401", "SRC");
+                            if(!Directory.Exists(C0401Outbound))
+                            {
+                                Directory.CreateDirectory(C0401Outbound);
+                            }
 
+                            String C0501Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "SRC");
+                            if (!Directory.Exists(C0501Outbound))
+                            {
+                                Directory.CreateDirectory(C0501Outbound);
+                            }
+
+                            String D0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "SRC");
+                            if (!Directory.Exists(D0401Outbound))
+                            {
+                                Directory.CreateDirectory(D0401Outbound);
+                            }
+
+
+                            do
+                            {
+                                IQueryable<InvoiceItem> items = models.GetTable<InvoiceItemDispatch>()
+                                    .Select(d => d.InvoiceItem);
+                                if (items.Count() > 0)
+                                {
+                                    foreach (var item in items.ToArray())
+                                    {
+                                        String fileName = Path.Combine(C0401Outbound, item.TrackCode + item.No + ".xml");
+                                        item.CreateC0401().ConvertToXml().Save(fileName);
+                                        models.ExecuteCommand("delete InvoiceItemDispatch where InvoiceID={0}", item.InvoiceID);
+                                    }
+                                }
+
+                                var cancelledItems = models.GetTable<InvoiceCancellationDispatch>()
+                                    .Select(d => d.InvoiceCancellation);
+                                if (cancelledItems.Count() > 0)
+                                {
+                                    foreach (var item in cancelledItems.Select(c=>c.InvoiceItem).ToArray())
+                                    {
+                                        String fileName = Path.Combine(C0501Outbound, item.TrackCode + item.No + ".xml");
+                                        item.CreateC0501().ConvertToXml().Save(fileName);
+                                        models.ExecuteCommand("delete InvoiceCancellationDispatch where InvoiceID={0}", item.InvoiceID);
+                                    }
+                                }
+
+                                var allowanceItems = models.GetTable<InvoiceAllowanceDispatch>()
+                                    .Select(d => d.InvoiceAllowance);
+                                if (allowanceItems.Count() > 0)
+                                {
+                                    foreach (var item in allowanceItems.ToArray())
+                                    {
+                                        String fileName = Path.Combine(D0401Outbound, item.AllowanceNumber + ".xml");
+                                        item.CreateD0401().ConvertToXml().Save(fileName);
+                                        models.ExecuteCommand("delete InvoiceAllowanceDispatch where AllowanceID={0}", item.AllowanceID);
+                                    }
+                                }
+
+
+                            } while (Interlocked.Decrement(ref __InvoiceBusyCount) > 0);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                });
+            }
+        }
     }
 }

@@ -47,11 +47,11 @@ namespace WebHome.Models.ViewModel
         }
 
 
-        public virtual Exception Validate(InvoiceViewModel dataItem)
+        public virtual InvoiceException Validate(InvoiceViewModel dataItem)
         {
             _invItem = dataItem;
 
-            Exception ex;
+            InvoiceException ex;
 
             _seller = null;
             _newItem = null;
@@ -92,7 +92,7 @@ namespace WebHome.Models.ViewModel
         }
 
 
-        protected virtual Exception checkInvoice()
+        protected virtual InvoiceException checkInvoice()
         {
             _newItem = new InvoiceItem
             {
@@ -147,7 +147,7 @@ namespace WebHome.Models.ViewModel
                 {
                     if (!trackNoMgr.ApplyInvoiceDate(_invItem.InvoiceDate.Value) || !trackNoMgr.CheckInvoiceNo(_newItem))
                     {
-                        return new Exception(String.Format("未設定發票字軌或發票號碼已用完，發票開立人統編：{0}", _seller.ReceiptNo));
+                        return new InvoiceException(String.Format("未設定發票字軌或發票號碼已用完，發票開立人統編：{0}", _seller.ReceiptNo));
                     }
                     else
                     {
@@ -157,13 +157,13 @@ namespace WebHome.Models.ViewModel
             }
             catch (Exception ex)
             {
-                return ex;
+                return new InvoiceException(null, ex);
             }
 
             return null;
         }
 
-        protected virtual Exception checkBusiness()
+        protected virtual InvoiceException checkBusiness()
         {
             _seller = _mgr.GetTable<Organization>().Where(o => o.CompanyID == _invItem.SellerID).FirstOrDefault();
             if (_seller == null)
@@ -172,7 +172,7 @@ namespace WebHome.Models.ViewModel
             }
             if (_seller == null)
             {
-                return new Exception(String.Format("營業人資料錯誤，統一編號:{0}", _invItem.SellerReceiptNo));
+                return new InvoiceException(String.Format("營業人資料錯誤，統一編號:{0}", _invItem.SellerReceiptNo));
             }
 
             if (String.IsNullOrEmpty(_invItem.BuyerReceiptNo))
@@ -183,11 +183,11 @@ namespace WebHome.Models.ViewModel
             {
                 if (!Regex.IsMatch(_invItem.BuyerReceiptNo, "^[0-9]{8}$"))
                 {
-                    return new Exception(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo));
+                    return new InvoiceException(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo)) { RequestName = "BuyerReceiptNo" };
                 }
                 else if (!_invItem.BuyerReceiptNo.CheckRegno())
                 {
-                    return new Exception(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo));
+                    return new InvoiceException(String.Format("公司統一編號錯誤:{0}", _invItem.BuyerReceiptNo)) { RequestName = "BuyerReceiptNo" };
                 }
             }
 
@@ -197,7 +197,7 @@ namespace WebHome.Models.ViewModel
             }
             else if (!Regex.IsMatch(_invItem.RandomNo, "^[0-9]{4}$"))
             {
-                return new Exception(String.Format("交易隨機碼應由4位數值構成，上傳資料：{0}", _invItem.RandomNo));
+                return new InvoiceException(String.Format("交易隨機碼應由4位數值構成，上傳資料：{0}", _invItem.RandomNo));
             }
 
             return checkBusinessDetails();
@@ -208,7 +208,7 @@ namespace WebHome.Models.ViewModel
             return carrierId != null && carrierId.Length == 8 && carrierId.StartsWith("/");
         }
 
-        protected virtual Exception checkPublicCarrier()
+        protected virtual InvoiceException checkPublicCarrier()
         {
             if (_invItem.CarrierType == __CELLPHONE_BARCODE)
             {
@@ -261,10 +261,10 @@ namespace WebHome.Models.ViewModel
                 }
             }
 
-            return new Exception(String.Format("載具類別為非共通性載具，傳送資料：{0}", _invItem.CarrierType));
+            return new InvoiceException(String.Format("載具類別為非共通性載具，傳送資料：{0}", _invItem.CarrierType));
         }
 
-        protected virtual Exception checkBusinessDetails()
+        protected virtual InvoiceException checkBusinessDetails()
         {
             _buyer = new InvoiceBuyer
             {
@@ -283,52 +283,52 @@ namespace WebHome.Models.ViewModel
 
 
 
-        protected virtual Exception checkAmount()
+        protected virtual InvoiceException checkAmount()
         {
             //應稅銷售額
             if (!_invItem.SalesAmount.HasValue || _invItem.SalesAmount < 0 || decimal.Floor(_invItem.SalesAmount.Value) != _invItem.SalesAmount.Value)
             {
-                return new Exception(String.Format("應稅銷售額合計(新台幣)不可為負數且為整數，上傳資料：{0}", _invItem.SalesAmount));
+                return new InvoiceException(String.Format("應稅銷售額合計(新台幣)不可為負數且為整數，上傳資料：{0}", _invItem.SalesAmount)) { RequestName = "PayoffAmount" };
             }
 
 
             if (!_invItem.TaxAmount.HasValue || _invItem.TaxAmount < 0 || decimal.Floor(_invItem.TaxAmount.Value) != _invItem.TaxAmount.Value)
             {
-                return new Exception(String.Format("營業稅額不可為負數且為整數，上傳資料：{0}", _invItem.TaxAmount));
+                return new InvoiceException(String.Format("營業稅額不可為負數且為整數，上傳資料：{0}", _invItem.TaxAmount)) { RequestName = "PayoffAmount" };
             }
 
             if (!_invItem.PayoffAmount.HasValue || _invItem.PayoffAmount < 0 || decimal.Floor(_invItem.PayoffAmount.Value) != _invItem.PayoffAmount.Value)
             {
-                return new Exception(String.Format("總金額不可為負數且為整數，上傳資料：{0}", _invItem.PayoffAmount));
+                return new InvoiceException(String.Format("總金額不可為負數且為整數，上傳資料：{0}", _invItem.PayoffAmount)) { RequestName = "PayoffAmount" };
             }
 
             //課稅別
             if (!Enum.IsDefined(typeof(Naming.TaxTypeDefinition), (int)_invItem.TaxType))
             {
-                return new Exception(String.Format("課稅別格式錯誤，上傳資料：{0}", _invItem.TaxType));
+                return new InvoiceException(String.Format("課稅別格式錯誤，上傳資料：{0}", _invItem.TaxType));
             }
 
             if (_invItem.TaxRate < 0m)
             {
-                return new Exception(String.Format("稅率格式錯誤，上傳資料：{0}", _invItem.TaxRate));
+                return new InvoiceException(String.Format("稅率格式錯誤，上傳資料：{0}", _invItem.TaxRate));
             }
 
             if (_invItem.TaxType == Naming.TaxTypeDefinition.零稅率)
             {
                 if (String.IsNullOrEmpty(_invItem.CustomsClearanceMark))
                 {
-                    return new Exception(String.Format("若為零稅率發票，通關方式註記(CustomsClearanceMark)為必填欄位，上傳資料：{0}", _invItem.CustomsClearanceMark));
+                    return new InvoiceException(String.Format("若為零稅率發票，通關方式註記(CustomsClearanceMark)為必填欄位，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
                 else if (_invItem.CustomsClearanceMark != "1" && _invItem.CustomsClearanceMark != "2")
                 {
-                    return new Exception(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
+                    return new InvoiceException(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
             }
             else if (!String.IsNullOrEmpty(_invItem.CustomsClearanceMark))
             {
                 if (_invItem.CustomsClearanceMark != "1" && _invItem.CustomsClearanceMark != "2")
                 {
-                    return new Exception(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
+                    return new InvoiceException(String.Format("通關方式註記格式錯誤，限填非經海關出口：\"1\";或經海關出口：\"2\"，上傳資料：{0}", _invItem.CustomsClearanceMark));
                 }
             }
 
@@ -336,11 +336,11 @@ namespace WebHome.Models.ViewModel
         }
 
 
-        protected virtual Exception checkInvoiceProductItems()
+        protected virtual InvoiceException checkInvoiceProductItems()
         {
             if (_invItem.Brief == null || _invItem.Brief.Length == 0)
             {
-                return new Exception("無發票品項明細");
+                return new InvoiceException("無發票品項明細") { RequestName = "ProductID" };
             }
 
             short seqNo = 0;
@@ -361,36 +361,36 @@ namespace WebHome.Models.ViewModel
             {
                 if (String.IsNullOrEmpty(product.InvoiceProduct.Brief) || product.InvoiceProduct.Brief.Length > 256)
                 {
-                    return new Exception(String.Format("品項名稱不可空白長度不得大於256，傳送資料：{0}", product.InvoiceProduct.Brief));
+                    return new InvoiceException(String.Format("品項名稱不可空白長度不得大於256，傳送資料：{0}", product.InvoiceProduct.Brief));
                 }
 
 
                 if (!String.IsNullOrEmpty(product.PieceUnit) && product.PieceUnit.Length > 6)
                 {
-                    return new Exception(String.Format("單位格式錯誤，傳送資料：{0}", product.PieceUnit));
+                    return new InvoiceException(String.Format("單位格式錯誤，傳送資料：{0}", product.PieceUnit));
                 }
 
 
                 if (!Regex.IsMatch(product.UnitCost.ToString(), __DECIMAL_AMOUNT_PATTERN))
                 {
-                    return new Exception(String.Format("單價資料格式錯誤，傳送資料：{0}", product.UnitCost));
+                    return new InvoiceException(String.Format("單價資料格式錯誤，傳送資料：{0}", product.UnitCost));
                 }
 
                 if (!Regex.IsMatch(product.CostAmount.ToString(), __DECIMAL_AMOUNT_PATTERN))
                 {
-                    return new Exception(String.Format("金額格式錯誤，傳送資料：{0}", product.CostAmount));
+                    return new InvoiceException(String.Format("金額格式錯誤，傳送資料：{0}", product.CostAmount));
                 }
 
             }
             return null;
         }
 
-        protected virtual Exception checkMandatoryFields()
+        protected virtual InvoiceException checkMandatoryFields()
         {
 
             if (_invItem.DonateMark != "0" && _invItem.DonateMark != "1")
             {
-                return new Exception(String.Format("捐贈註記錯誤，上傳資料：{0}", _invItem.DonateMark));
+                return new InvoiceException(String.Format("捐贈註記錯誤，上傳資料：{0}", _invItem.DonateMark));
             }
 
             //if(!__InvoiceTypeList.Contains(String.Format("{0:00}",_invItem.InvoiceType)))
@@ -406,12 +406,12 @@ namespace WebHome.Models.ViewModel
 
             if (String.IsNullOrEmpty(_invItem.CarrierType))
             {
-                return new Exception("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
+                return new InvoiceException("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
             }
             else
             {
                 if (_invItem.CarrierType.Length > 6 || (_invItem.CarrierId1 != null && _invItem.CarrierId1.Length > 64) || (_invItem.CarrierId2 != null && _invItem.CarrierId2.Length > 64))
-                    return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                    return new InvoiceException(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                 _carrier = new InvoiceCarrier
                 {
@@ -421,7 +421,7 @@ namespace WebHome.Models.ViewModel
                 if (!String.IsNullOrEmpty(_invItem.CarrierId1))
                 {
                     if (_invItem.CarrierId1.Length > 64)
-                        return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                        return new InvoiceException(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                     _carrier.CarrierNo = _invItem.CarrierId1;
                 }
@@ -429,7 +429,7 @@ namespace WebHome.Models.ViewModel
                 if (!String.IsNullOrEmpty(_invItem.CarrierId2))
                 {
                     if (_invItem.CarrierId2.Length > 64)
-                        return new Exception(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
+                        return new InvoiceException(String.Format("載具類別或顯碼ID、隱碼ID的長度超出限制；載具類別：6碼、顯碼及隱碼ID：64。上傳資料→載具類別 {0}、顯碼ID {1}、隱碼ID {2}。", _invItem.CarrierType, _invItem.CarrierId1, _invItem.CarrierId2));
 
                     _carrier.CarrierNo2 = _invItem.CarrierId2;
                 }
@@ -438,7 +438,7 @@ namespace WebHome.Models.ViewModel
                 {
                     if (_carrier.CarrierNo2 == null)
                     {
-                        return new Exception("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
+                        return new InvoiceException("上傳載具資料不完全，請檢查；1.載具類別、2.顯碼或隱瑪至少填一。");
                     }
                     else
                     {
@@ -455,5 +455,14 @@ namespace WebHome.Models.ViewModel
             return null;
         }
 
+    }
+
+    public class InvoiceException : Exception
+    {
+        public InvoiceException() : base() { }
+        public InvoiceException(string message) : base(message) { }
+        public InvoiceException(string message, Exception innerException) : base(message, innerException) { }
+
+        public String RequestName { get; set; }
     }
 }

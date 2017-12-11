@@ -55,6 +55,14 @@
       <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlRenderer.WinForms, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.WinForms.1.5.0.6\lib\net45\HtmlRenderer.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MessagingToolkit.QRCode, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\MessagingToolkit.QRCode.dll</HintPath>
@@ -89,6 +97,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -1421,6 +1430,10 @@
     <Content Include="js\plugin\selectToUISlider\selectToUISlider.jQuery.min.js" />
     <Content Include="js\plugin\slimscroll\jquery.slimscroll.min.js" />
     <Content Include="js\plugin\sparkline\jquery.sparkline.min.js" />
+    <Content Include="js\plugin\StarWeb\StarBarcodeEncoder.js" />
+    <Content Include="js\plugin\StarWeb\StarWebPrintBuilder.js" />
+    <Content Include="js\plugin\StarWeb\StarWebPrintExtManager.js" />
+    <Content Include="js\plugin\StarWeb\StarWebPrintTrader.js" />
     <Content Include="js\plugin\summernote\summernote.min.js" />
     <Content Include="js\plugin\superbox\superbox.min.js" />
     <Content Include="js\plugin\throttle-denounce\jquery.ba-throttle-debounce.min.js" />
@@ -1439,10 +1452,11 @@
     <Content Include="lockScreen\html5-android-pattern-lockScreen.js" />
     <Content Include="lockScreen\html5-android-pattern-lockScreen.min.js" />
     <Content Include="lockScreen\kinetic-v4.6.js" />
+    <Content Include="Logo.png" />
     <Content Include="Models\DataEntity\BF.dbml">
       <SubType>Designer</SubType>
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>BF.designer.cs</LastGenOutput>
+      <LastGenOutput>BF1.designer.cs</LastGenOutput>
     </Content>
     <Content Include="Module\Common\CommonScriptInclude.ascx" />
     <Content Include="Module\Common\PageTailScriptInclude.ascx" />
@@ -1476,6 +1490,30 @@
     <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
     <Content Include="Scripts\jquery.min.map" />
     <Content Include="packages.config" />
+    <None Include="Models\MIG3_1\C0401.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\C0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\D0401.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\D0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\E0401.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\E0402.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\E0501.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\MIG3_1\GenericType_3.1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-3.0.0.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -1491,6 +1529,8 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\rasterizeHTML-allinone.js" />
+    <Content Include="Scripts\rasterizeHTML.allinone.js" />
     <Content Include="sound\bigbox.mp3" />
     <Content Include="sound\license.txt" />
     <Content Include="sound\messagebox.mp3" />
@@ -1688,15 +1728,34 @@
     <Content Include="Views\EnterpriseProgram\Module\MemberSelector.ascx" />
     <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
     <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
+    <Content Include="Views\Invoice\CanvasPrintAllowance.aspx" />
+    <Content Include="Views\Invoice\PrintAllowanceImage.aspx" />
+    <Content Include="Views\Invoice\PrintInvoiceImage.aspx" />
+    <Content Include="Views\Invoice\LoadInvoiceImage.aspx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoInterval.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceBarCode.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceDispatchLogSummary.ascx" />
+    <Content Include="Views\Invoice\Module\AllowancePrintView.ascx" />
+    <Content Include="Views\Invoice\Module\AllowanceItemList.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceCanvasView.ascx" />
+    <Content Include="Views\Invoice\Module\SimpleInvoiceItemList.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceItemList.ascx" />
     <Content Include="Views\Invoice\Module\InvoicePrintView.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceQRCode.ascx" />
+    <Content Include="Views\Invoice\Module\InvoiceItemSummary.ascx" />
+    <Content Include="Views\Invoice\Module\DownloadVacantNoCsv.ascx" />
+    <Content Include="Views\Invoice\Module\VacantNoList.ascx" />
+    <Content Include="Views\Invoice\Module\VacantNoWidgetGrid.ascx" />
+    <Content Include="Views\Invoice\Module\TurnkeyWidgetGrid.ascx" />
     <Content Include="Views\Invoice\Module\TrackCodeNoList.ascx" />
     <Content Include="Views\Invoice\Module\TrackCodeNoWidgetGrid.ascx" />
     <Content Include="Views\Invoice\InvoiceNoIndex.aspx" />
     <Content Include="Views\Invoice\Module\PrintInvoiceWidgetGrid.ascx" />
+    <Content Include="Views\Invoice\PrintAllowance.aspx" />
+    <Content Include="Views\Invoice\CanvasDrawInvoice.aspx" />
+    <Content Include="Views\Invoice\CanvasPrintInvoice.aspx" />
+    <Content Include="Views\Invoice\VacantNoIndex.aspx" />
+    <Content Include="Views\Invoice\TurnkeyIndex.aspx" />
     <Content Include="Views\Invoice\PrintInvoice.aspx" />
     <Content Include="Views\Invoice\PrintIndex.aspx" />
     <Content Include="Views\Layout\NavItem\Invoice.ascx" />
@@ -2144,26 +2203,51 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\B2CExtensionMethods.cs" />
     <Compile Include="Helper\BusinessExtensionMethods.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\GlobalDefinition.cs" />
     <Compile Include="Helper\InvoiceExtensionMethods.cs" />
     <Compile Include="Helper\Jobs\FreeAgentAutoClockIn.cs" />
+    <Compile Include="Helper\Jobs\CheckInvoiceDispatch.cs" />
     <Compile Include="Helper\Jobs\ReviewProfessionalLevelEachQuarter.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
     <Compile Include="Helper\TaskExtensionMethods.cs" />
     <Compile Include="Helper\TrackNoManager.cs" />
-    <Compile Include="Models\DataEntity\BF.designer.cs">
+    <Compile Include="Models\DataEntity\BF.cs">
       <DependentUpon>BF.dbml</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\DataEntity\BF.designer.cs">
+      <DependentUpon>BF.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntity\DataEntityExtendsions.cs" />
     <Compile Include="Models\DataEntity\ModelSource.cs" />
     <Compile Include="Models\Locale\Naming.cs" />
+    <Compile Include="Models\MIG3_1\C0401.cs">
+      <DependentUpon>C0401.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\C0501.cs">
+      <DependentUpon>C0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\D0401.cs">
+      <DependentUpon>D0401.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\D0501.cs">
+      <DependentUpon>D0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\E0401.cs">
+      <DependentUpon>E0401.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\E0402.cs">
+      <DependentUpon>E0402.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\E0501.cs">
+      <DependentUpon>E0501.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Models\Resource\SiteMenuItem.cs" />
+    <Compile Include="Models\ViewModel\PaymentAllowanceValidator.cs" />
     <Compile Include="Models\ViewModel\InvoiceViewModel.cs" />
     <Compile Include="Models\ViewModel\InvoiceViewModelValidator.cs" />
     <Compile Include="Models\ViewModel\JsonViewModel.cs" />

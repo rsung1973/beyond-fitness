@@ -106,11 +106,15 @@ namespace WebHome.Controllers
                         DELETE FROM UserProfile
                         FROM     UserProfile INNER JOIN
                                        UserRole ON UserProfile.UID = UserRole.UID
-                        WHERE   (UserRole.RoleID = 11) AND (UserProfile.UID NOT IN
-                           (SELECT  UID
-                           FROM     CourseContractMember))");
+                        WHERE   (UserRole.RoleID = 11) 
+                            AND (UserProfile.UID NOT IN
+                               (SELECT  UID
+                               FROM     CourseContractMember))
+                            AND (UserProfile.UID NOT IN
+                               (SELECT  UID
+                               FROM     RegisterLesson))");
 
-            return Json(new { result = true });
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -267,6 +271,12 @@ namespace WebHome.Controllers
                 {
                     ModelState.AddModelError("EmergencyContactPhone", "請輸入緊急聯絡人電話!!");
                 }
+
+                viewModel.RoleID = Naming.RoleID.Learner;
+            }
+            else
+            {
+                viewModel.RoleID = Naming.RoleID.Preliminary;
             }
 
             if (String.IsNullOrEmpty(viewModel.RealName))
@@ -311,7 +321,7 @@ namespace WebHome.Controllers
 
             if (item == null)
             {
-                item = models.CreateLearner(viewModel, Naming.RoleID.Preliminary);
+                item = models.CreateLearner(viewModel);
                 viewModel.UID = item.UID;
             }
 
@@ -333,6 +343,10 @@ namespace WebHome.Controllers
             item.UserProfileExtension.CurrentTrial = viewModel.CurrentTrial;
 
             models.SubmitChanges();
+            if(viewModel.CurrentTrial != 1)
+            {
+                models.ExecuteCommand("update UserRole set RoleID={0} where UID={1} and RoleID={2} ", (int)Naming.RoleID.Learner, item.UID, (int)Naming.RoleID.Preliminary);
+            }
 
             return Json(new
             {
@@ -461,6 +475,7 @@ namespace WebHome.Controllers
                 //        && c.Status >= (int)Naming.CourseContractStatus.待審核);
                 long seqNo = models.ExecuteQuery<long>("select next value for CourseContractNoSeq").First();
                 item.ContractNo = item.CourseContractType.ContractCode + String.Format("{0:yyyyMMdd}", DateTime.Today) + String.Format("{0:0000}", seqNo % 10000);
+                //item.ContractNo = item.CourseContractType.ContractCode + String.Format("{0:yyyyMMdd}", DateTime.Today) + String.Format("{0:0000}", (item.ContractID - 4999) % 10000);
                 models.SubmitChanges();
             }
         }
@@ -790,7 +805,7 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
         }
 
-        private bool executeContractStatus(UserProfile profile, CourseContract item,Naming.CourseContractStatus status,Naming.CourseContractStatus? fromStatus)
+        private bool executeContractStatus(UserProfile profile, CourseContract item, Naming.CourseContractStatus status, Naming.CourseContractStatus? fromStatus, bool updateAgent = true)
         {
             if (fromStatus.HasValue && item.Status != (int)fromStatus)
                 return false;
@@ -802,7 +817,8 @@ namespace WebHome.Controllers
                 LevelID = (int)status
             });
             item.Status = (int)status;
-            item.AgentID = profile.UID;
+            if (updateAgent)
+                item.AgentID = profile.UID;
 
             return true;
 
@@ -1056,7 +1072,7 @@ namespace WebHome.Controllers
 
         private bool enableContractAmendment(UserProfile profile, CourseContractRevision item)
         {
-            if (!executeContractStatus(profile, item.CourseContract, Naming.CourseContractStatus.已生效, Naming.CourseContractStatus.待簽名))
+            if (!executeContractStatus(profile, item.CourseContract, Naming.CourseContractStatus.已生效, Naming.CourseContractStatus.待簽名, false))
                 return false;
 
             models.SubmitChanges();
@@ -1372,7 +1388,7 @@ namespace WebHome.Controllers
             if (viewModel.Reason == "終止")
             {
                 if (!viewModel.SettlementPrice.HasValue)
-                    ModelState.AddModelError("SettlementPrice", "請選擇展延期間!!");
+                    ModelState.AddModelError("SettlementPrice", "請填入課程單價!!");
             }
             else if (viewModel.Reason == "轉讓")
             {

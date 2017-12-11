@@ -156,6 +156,7 @@
                     if (data.result) {
                         alert('收款已勾記!!');
                         $tr.remove();
+                        $global.done = true;
                     } else {
                         alert(data.message);
                     }

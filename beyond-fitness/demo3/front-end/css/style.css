@@ -13090,6 +13090,11 @@ table th[class*="col-"] {
     color: #ffffff;
 }
 
+.price--popular2 {
+    background-color: #85d6de;
+    color: #ffffff;
+}
+
 .price--popular .price-quality,
 .price--popular .price__package,
 .price--popular .price__value {
@@ -13118,6 +13123,10 @@ table th[class*="col-"] {
 
 .price--simple .price__descript {
     color: #ffffff;
+}
+
+.price--simple .price__descript2 {
+    color: #DDDDDD;
 }
 
 .price--simple .price__btn {
@@ -27000,7 +27009,7 @@ html#ecwid_html body#ecwid_body .ecwid-minicart div.ecwid-minicart-clickArea {
     display: none;
 }
 
-.sequence__text.research {
+.sequence__text.introduction {
     display: block;
 }
 
