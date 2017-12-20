@@ -996,6 +996,24 @@
     <Content Include="Views\FrontEnd\About.cshtml" />
     <Content Include="Views\FrontEnd\Contact.cshtml" />
     <Content Include="Views\FrontEnd\Index.cshtml" />
+    <Content Include="images\staff\Bill.png" />
+    <Content Include="images\staff\Bryant.png" />
+    <Content Include="images\staff\Charming.png" />
+    <Content Include="images\staff\Doreen.png" />
+    <Content Include="images\staff\Frank.png" />
+    <Content Include="images\staff\Galai.png" />
+    <Content Include="images\staff\Genie.png" />
+    <Content Include="images\staff\Iron.png" />
+    <Content Include="images\staff\Jack.png" />
+    <Content Include="images\staff\Joei.png" />
+    <Content Include="images\staff\Lucy.png" />
+    <Content Include="images\staff\Peter.png" />
+    <Content Include="images\staff\Sabrina.png" />
+    <Content Include="images\staff\Sam.png" />
+    <Content Include="images\staff\Sammie.png" />
+    <Content Include="images\staff\Shen.png" />
+    <Content Include="images\staff\Ted.png" />
+    <Content Include="images\staff\Vic.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1047,6 +1065,11 @@
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
