@@ -87,7 +87,7 @@
                             <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
                         </label>
                     </section>
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">發票類型</label>
                         <div class="inline-group">
                             <label class="radio">
@@ -104,6 +104,7 @@
                                 $('.eInvoice-dialog').css('display', 'inline');
                                 $('.paper-invoice').css('display', 'none');
                                 $('.eInvoice-disable').prop('disabled', true);
+                                $('#<%= _dialog %> input[name="PayoffDate"]').val('<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>');
                             } else {
                                 $('.eInvoice-dialog').css('display', 'none');
                                 $('.paper-invoice').css('display', 'inline');
@@ -148,8 +149,6 @@
                         </label>
                     </section>
                 </div>
-            </fieldset>
-            <fieldset>
                 <div class="row">
                     <section class="col col-6">
                         <label class="label">買受人統編</label>
@@ -166,10 +165,8 @@
                         </label>
                     </section>
                 </div>
-            </fieldset>
-            <fieldset>
                 <div class="row eInvoice-dialog">
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">載具類型</label>
                         <label class="select">
                             <i class="icon-append fa fa-user"></i>
@@ -180,14 +177,16 @@
                             </select>
                         </label>
                     </section>
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">載具號碼</label>
                         <label class="input">
                             <i class="icon-append fa fa-barcode"></i>
                             <input type="text" name="CarrierId1" maxlength="20" placeholder="請輸入載具號碼" value="<%= _viewModel.CarrierId1 %>" />
                         </label>
                     </section>
-                    <section class="col col-4">
+                </div>
+                <div class="row eInvoice-dialog">
+                    <section class="col col-12">
                         <label class="label">發票捐贈愛心碼</label>
                         <label class="input">
                             <i class="icon-append fa fa-heart"></i>
@@ -195,6 +194,7 @@
                         </label>
                     </section>
                 </div>
+                <input type="hidden" name="errorMessage" />
             </fieldset>
             <fieldset>
                 <section>
@@ -244,7 +244,7 @@
 
         $('#<%= _dialog %>').dialog({
             //autoOpen: false,
-            width: "100%",
+            width: "auto",
             resizable: true,
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",

@@ -48,7 +48,7 @@
         Response.ClearHeaders();
         Response.AddHeader("Cache-control", "max-age=1");
         Response.ContentType = "application/octet-stream";
-        Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("空白發票_" + orgItem.ReceiptNo + "(" + String.Format("{0}{1:00}", item.Year - 1911, item.PeriodNo * 2) + ").csv")));
+        Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}", HttpUtility.UrlEncode("BlankNo_" + orgItem.ReceiptNo + "(" + String.Format("{0}{1:00}", item.Year - 1911, item.PeriodNo * 2) + ").csv")));
 
     }
 

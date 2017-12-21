@@ -94,6 +94,15 @@ namespace WebHome.Models.ViewModel
 
         protected virtual InvoiceException checkInvoice()
         {
+            _invItem.NPOBAN = _invItem.NPOBAN.GetEfficientString();
+            if (_invItem.NPOBAN != null)
+            {
+                _donation = new InvoiceDonation
+                {
+                    AgencyCode = _invItem.NPOBAN
+                };
+            }
+
             _newItem = new InvoiceItem
             {
                 Document = new Document
@@ -140,6 +149,15 @@ namespace WebHome.Models.ViewModel
             {
                 InvoiceProduct = p.InvoiceProduct,
             }));
+
+            if(_newItem.InvoiceBuyer.ReceiptNo!= "0000000000")
+            {
+                _newItem.PrintMark = "Y";
+            }
+            else if (_newItem.InvoiceDonation != null || _newItem.InvoiceCarrier != null)
+            {
+                _newItem.PrintMark = "N";
+            }
 
             try
             {
@@ -210,6 +228,7 @@ namespace WebHome.Models.ViewModel
 
         protected virtual InvoiceException checkPublicCarrier()
         {
+
             if (_invItem.CarrierType == __CELLPHONE_BARCODE)
             {
                 if (checkPublicCarrierId(_invItem.CarrierId1))

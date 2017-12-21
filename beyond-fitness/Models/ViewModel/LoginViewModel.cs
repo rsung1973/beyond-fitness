@@ -164,7 +164,7 @@ namespace WebHome.Models.ViewModel
     {
         public CoachViewModel()
         {
-            CoachRole = (int)Naming.RoleID.Coach;
+            //CoachRole = (int)Naming.RoleID.Coach;
         }
 
         [Required]
@@ -180,7 +180,24 @@ namespace WebHome.Models.ViewModel
         public string Phone { get; set; }
 
         [Display(Name = "體能顧問身份")]
-        public int? CoachRole { get; set; }
+        public int? CoachRole
+        {
+            get
+            {
+                return AuthorizedRole != null && AuthorizedRole.Length > 0 ? AuthorizedRole[0] : null;
+            }
+            set
+            {
+                if(AuthorizedRole != null && AuthorizedRole.Length > 0)
+                {
+                    AuthorizedRole[0] = value;
+                }
+                else
+                {
+                    AuthorizedRole = new int?[] { value };
+                }
+            }
+        }
 
         [Display(Name = "會員編號")]
         public string MemberCode { get; set; }
@@ -192,10 +209,13 @@ namespace WebHome.Models.ViewModel
 
         public int? LevelID { get; set; } 
 
-        public bool? IsCoach { get; set; } = true;
+        public bool? IsCoach { get; set; }
         public int? UID { get; set; }
         public int? BranchID { get; set; }
         public int? LevelCategory { get; set; } = (int)Naming.ProfessionalCategory.新制;
+        public int?[] AuthorizedRole { get; set; }
+        public bool? HasGiftLessons { get; set; }
+        public int? MonthlyGiftLessons { get; set; }
 
     }
 

@@ -24,5 +24,71 @@ namespace WebHome.Helper
         {
             return String.IsNullOrEmpty(buyer.ReceiptNo) || buyer.ReceiptNo == "0000000000";
         }
+
+        public static void ProcessE0402<TEntity>(this ModelSource<TEntity> models, int year, int periodNo,int? branchID)
+            where TEntity : class, new()
+        {
+            IQueryable<BranchStore> items = models.GetTable<BranchStore>();
+            if(branchID.HasValue)
+            {
+                items = items.Where(b => b.BranchID == branchID);
+            }
+
+            foreach (var item in items)
+            {
+                var vacantNoList = models.GetDataContext().InquireVacantNo(item.BranchID, year, periodNo)
+                    .GroupBy(v => v.TrackID);
+                foreach (var v in vacantNoList)
+                {
+                    Models.MIG3_1.E0402.BranchTrackBlank result = models.CreateE0402(v.ToArray());
+                    String fileName = Path.Combine(TaskExtensionMethods.E0402Outbound, result.Main.YearMonth + "-" + result.Main.BranchBan + ".xml");
+                    result.ConvertToXml().Save(fileName);
+                }
+            }
+        }
+
+        public static WebHome.Models.MIG3_1.E0402.BranchTrackBlank CreateE0402<TEntity>(this ModelSource<TEntity> models, InquireVacantNoResult[] items)
+                    where TEntity : class, new()
+        {
+            var v = items[0];
+            var interval = models.GetTable<InvoiceNoInterval>().Where(i => i.SellerID == v.SellerID && i.TrackID == v.TrackID).First();
+            var result = new Models.MIG3_1.E0402.BranchTrackBlank
+            {
+                Main = new Models.MIG3_1.E0402.Main
+                {
+                    BranchBan = interval.InvoiceTrackCodeAssignment.Organization.ReceiptNo,
+                    HeadBan = interval.GroupID.HasValue
+                        ? interval.InvoiceNoIntervalGroup.InvoiceNoInterval.First().InvoiceTrackCodeAssignment.Organization.ReceiptNo
+                        : interval.InvoiceTrackCodeAssignment.Organization.ReceiptNo,
+                    InvoiceTrack = v.TrackCode,
+                    InvoiceType = Models.MIG3_1.E0402.InvoiceTypeEnum.Item07,
+                    YearMonth = String.Format("{0}{1:00}", v.Year - 1911, v.PeriodNo * 2)
+                }
+            };
+
+            List<Models.MIG3_1.E0402.DetailsBranchTrackBlankItem> details = new List<Models.MIG3_1.E0402.DetailsBranchTrackBlankItem>();
+            foreach (var item in items.Where(r => !r.CheckPrev.HasValue))
+            {
+                InquireVacantNoResult tailItem;
+                if (item.CheckNext.HasValue)
+                {
+                    var index = Array.IndexOf(items, item);
+                    tailItem = items[index + 1];
+                }
+                else
+                    tailItem = item;
+
+                details.Add(new Models.MIG3_1.E0402.DetailsBranchTrackBlankItem
+                {
+                    InvoiceBeginNo = String.Format("{0:00000000}", item.InvoiceNo),
+                    InvoiceEndNo = String.Format("{0:00000000}", tailItem.InvoiceNo)
+                });
+
+            }
+
+            result.Details = details.ToArray();
+            return result;
+        }
+
     }
 }

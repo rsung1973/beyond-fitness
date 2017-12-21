@@ -26,7 +26,7 @@
         <%  foreach (var seller in _model)
             {
                 var items = models.GetDataContext().InquireVacantNo(seller.BranchID, _viewModel.Year, _viewModel.PeriodNo).ToList();
-                foreach (var item in items)
+                foreach (var item in items.Where(r=>!r.CheckPrev.HasValue))
                 {
                     InquireVacantNoResult tailItem;
                     if (item.CheckNext.HasValue)
@@ -46,7 +46,10 @@
             <td><%= String.Format("{0:00000000}",item.InvoiceNo) %></td>
             <td><%= String.Format("{0:00000000}",tailItem.InvoiceNo) %></td>
             <td><%= tailItem.InvoiceNo-item.InvoiceNo+1 %></td>
-            <td><a onclick="downloadCsv(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-cloud-download" aria-hidden="true"></i></a></td>
+            <td>
+                <a onclick="downloadCsv(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-cloud-download" aria-hidden="true"></i></a>
+                <a onclick="processE0402(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-excel-o" aria-hidden="true"></i></a>
+            </td>
         </tr>
         <%      }
             } %>

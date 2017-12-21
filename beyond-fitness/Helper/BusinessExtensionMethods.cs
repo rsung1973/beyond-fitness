@@ -658,7 +658,8 @@ namespace WebHome.Helper
             if (item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_1st
                 || item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_2nd
                 || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_1st
-                || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_2nd)
+                || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_2nd
+                || !item.UserProfile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach))
                 return;
 
             DateTime? quarterEnd = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);

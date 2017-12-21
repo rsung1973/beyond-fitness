@@ -37,7 +37,7 @@
                             <td><%= item.Phone %></td>
                             <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>
                             <td><%= item.MemberCode %></td>
-                            <td><%= Naming.RoleName[item.CurrentUserRole.RoleID] %></td>
+                            <td><%= String.Join("<br/>", item.UserRoleAuthorization.Select(r=> Naming.RoleName[r.RoleID])) %></td>
                             <td>
                                 <%  if(!item.IsSysAdmin())
                                     { %>

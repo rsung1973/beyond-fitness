@@ -126,7 +126,8 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>發票號碼清單</h2>
                     <div class="widget-toolbar">
-                        <a onclick="editInterval();" class="btn btn-primary modifyInvoiceNoDialog_link"><i class="fa fa-fw fa-plus"></i>新增發票號碼</a>
+                        <a onclick="downloadInterval();" id="btnDownloadInterval" style="display: none;" class="btn btn-success"><i class="fa fa-fw fa-cloud-download"></i>下載配號檔</a>
+                        <a onclick="editIntervalGroup();" class="btn btn-primary modifyInvoiceNoDialog_link"><i class="fa fa-fw fa-plus"></i>新增發票號碼</a>
                     </div>
                 </header>
                 <!-- widget div-->
@@ -153,13 +154,19 @@
 
 <script>
 
-    function inquireInterval(intervalID) {
+    function inquireInterval(intervalID,groupID) {
         var formData = $('#queryForm').serializeObject();
+        $('#btnDownloadInterval').css('display', 'none');
         formData.IntervalID = intervalID;
+        formData.GroupID = groupID;
         showLoading();
         $('#trackCodeNoList').load('<%= Url.Action("InquireInvoiceNoInterval","Invoice") %>', formData, function (data) {
             hideLoading();
         });
+    }
+
+    function downloadInterval() {
+        $('#queryForm').launchDownload('<%= Url.Action("DownloadInvoiceNoIntervalCsv","Invoice") %>');
     }
 
     function editInterval(intervalID) {
@@ -169,6 +176,15 @@
             $(data).appendTo($('body'));
         });
     }
+
+    function editIntervalGroup(groupID) {
+        showLoading();
+        $.post('<%= Url.Action("EditInvoiceNoIntervalGroup","Invoice") %>', { 'groupID': groupID }, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
+        });
+    }
+
 
     function deleteInterval(intervalID) {
         if (confirm('確定刪除?')) {

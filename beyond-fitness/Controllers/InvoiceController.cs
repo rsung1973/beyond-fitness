@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using TheArtOfDev.HtmlRenderer.WinForms;
 using Utility;
 using WebHome.Helper;
+using WebHome.Helper.Jobs;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
@@ -56,7 +57,7 @@ namespace WebHome.Controllers
         public ActionResult TurnkeyIndex(InvoiceQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View();
+            return View(viewModel);
         }
 
         public ActionResult VacantNoIndex(InvoiceNoViewModel viewModel)
@@ -69,7 +70,8 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
-            IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>();
+            IQueryable<InvoiceNoInterval> items = models.GetTable<InvoiceNoInterval>()
+                .Where(n => n.EndNo >= n.StartNo);
 
             var profile = HttpContext.GetUser();
             bool hasCondition = false;
@@ -103,7 +105,29 @@ namespace WebHome.Controllers
                 {
                     items = items.Where(t => t.IntervalID == viewModel.IntervalID);
                 }
+                hasCondition = true;
             }
+
+            if (viewModel.GroupID.HasValue)
+            {
+                if (hasCondition)
+                {
+                    if (!items.Any(i => i.GroupID == viewModel.GroupID))
+                        items = items.Concat(models.GetTable<InvoiceNoInterval>().Where(t => t.GroupID == viewModel.GroupID));
+                }
+                else
+                {
+                    items = items.Where(t => t.GroupID == viewModel.GroupID);
+                }
+
+                hasCondition = true;
+
+            }
+
+            //if (!hasCondition)
+            //{
+            //    items = items.Where(f => false);
+            //}
 
             return View("~/Views/Invoice/Module/TrackCodeNoList.ascx", items);
         }
@@ -125,16 +149,38 @@ namespace WebHome.Controllers
             return View("~/Views/Invoice/Module/EditInvoiceNoInterval.ascx", item);
         }
 
+        public ActionResult EditInvoiceNoIntervalGroup(InvoiceNoViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.GetTable<InvoiceNoIntervalGroup>().Where(t => t.GroupID == viewModel.GroupID).FirstOrDefault();
+            if (item != null)
+            {
+                var groups = item.InvoiceNoInterval.ToArray();
+                viewModel.BranchID = groups[0].InvoiceTrackCodeAssignment.SellerID;
+                viewModel.StartNo = groups[0].StartNo;
+                viewModel.EndNo = groups[groups.Length-1].EndNo;
+                viewModel.IntervalID = groups[0].IntervalID;
+                viewModel.TrackCode = groups[0].InvoiceTrackCodeAssignment.InvoiceTrackCode.TrackCode;
+                viewModel.Year = groups[0].InvoiceTrackCodeAssignment.InvoiceTrackCode.Year;
+                viewModel.PeriodNo = groups[0].InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo;
+                viewModel.BookletCount = groups.Select(g => (int?)(g.EndNo - g.StartNo + 1) / 50).ToArray();
+                viewModel.BookletBranchID = groups.Select(g => (int?)g.IntervalID).ToArray();
+            }
+            return View("~/Views/Invoice/Module/EditInvoiceNoIntervalGroup.ascx", item);
+        }
+
         public ActionResult DeleteInvoiceNoInterval(InvoiceNoViewModel viewModel)
         {
             try
             {
-                var item = models.DeleteAny<InvoiceNoInterval>(t => t.IntervalID == viewModel.IntervalID);
+                var item = models.GetTable<InvoiceNoInterval>().Where(t => t.IntervalID == viewModel.IntervalID).FirstOrDefault();
                 if (item == null)
                 {
                     return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
                 }
-
+                models.ExecuteCommand(@"delete InvoiceNoInterval where GroupID={0} ", item.GroupID);
+                models.ExecuteCommand(@"delete InvoiceNoInterval where IntervalID={0} ", item.IntervalID);
+                models.ExecuteCommand(@"delete InvoiceNoIntervalGroup where GroupID={0} ", item.GroupID);
                 models.ExecuteCommand(@"DELETE FROM InvoiceTrackCode
                     WHERE   (TrackID NOT IN
                         (SELECT  TrackID
@@ -280,17 +326,170 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult CommitInvoiceNoIntervalGroup(InvoiceNoViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.BookletBranchID == null || viewModel.BookletBranchID.Length < 3 || viewModel.BookletBranchID.Any(c => !c.HasValue))
+            {
+                ModelState.AddModelError("BookletBranchID", "請選擇分店!!");
+            }
+
+            viewModel.TrackCode = viewModel.TrackCode.GetEfficientString();
+            if (viewModel.TrackCode == null || !Regex.IsMatch(viewModel.TrackCode, "[A-Z]{2}"))
+            {
+                ModelState.AddModelError("TrackCode", "字軌錯誤!!");
+            }
+
+            if (!viewModel.Year.HasValue)
+            {
+                ModelState.AddModelError("Year", "請選擇年份!!");
+            }
+
+            if (!viewModel.PeriodNo.HasValue)
+            {
+                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+            }
+
+            var trackCode = models.GetTable<InvoiceTrackCode>()
+                .Where(t => t.TrackCode == viewModel.TrackCode && t.Year == viewModel.Year && t.PeriodNo == viewModel.PeriodNo).FirstOrDefault();
+
+            var table = models.GetTable<InvoiceNoInterval>();
+            var item = table.Where(i => i.IntervalID == viewModel.IntervalID).FirstOrDefault();
+            int? range;
+            if (!viewModel.StartNo.HasValue || !(viewModel.StartNo >= 0 && viewModel.StartNo < 100000000))
+            {
+                ModelState.AddModelError("StartNo", "起號非8位整數!!");
+            }
+            else if (!viewModel.EndNo.HasValue || !(viewModel.EndNo >= 0 && viewModel.EndNo < 100000000))
+            {
+                ModelState.AddModelError("EndNo", "迄號非8位整數!!");
+            }
+            else if (viewModel.EndNo <= viewModel.StartNo || (((range = viewModel.EndNo - viewModel.StartNo + 1)) % 50 != 0))
+            {
+                ModelState.AddModelError("StartNo", "不符號碼大小順序與差距為50之倍數原則!!");
+            }
+            else if (viewModel.BookletCount == null || viewModel.BookletCount.Length < 3 || viewModel.BookletCount.Any(c => !c.HasValue || c < 0))
+            {
+                ModelState.AddModelError("BookletCount", "請輸入有效本數!!");
+            }
+            else if (viewModel.BookletCount.Sum(c => c) > (range / 50))
+            {
+                ModelState.AddModelError("BookletCount", "輸入總本數超過配號區間!!");
+            }
+            else
+            {
+                if (item != null)
+                {
+                    if (item.InvoiceNoAssignment.Count > 0)
+                    {
+                        ModelState.AddModelError("StartNo", "該區間之號碼已經被使用,不可修改!!!!");
+                    }
+                    else if (table.Any(t => t.IntervalID != item.IntervalID && t.TrackID == item.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignment.Count > 0
+                        && t.SellerID == item.SellerID))
+                    {
+                        ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法修改!!");
+                    }
+                    else if (table.Any(t => t.IntervalID != item.IntervalID && t.TrackID == item.TrackID
+                        && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
+                    {
+                        ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                    }
+                }
+                else
+                {
+                    if (trackCode != null)
+                    {
+                        if (table.Any(t => t.TrackID == trackCode.TrackID && t.StartNo >= viewModel.EndNo && t.InvoiceNoAssignment.Count > 0))
+                        {
+                            ModelState.AddModelError("StartNo", "違反序時序號原則該區段無法新增!!");
+                        }
+                        else if (table.Any(t => t.TrackID == trackCode.TrackID
+                            && ((t.EndNo <= viewModel.EndNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.StartNo >= viewModel.StartNo) || (t.StartNo <= viewModel.StartNo && t.EndNo >= viewModel.StartNo) || (t.StartNo <= viewModel.EndNo && t.EndNo >= viewModel.EndNo))))
+                        {
+                            ModelState.AddModelError("StartNo", "系統中已存在重疊的區段!!");
+                        }
+                    }
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            if (item != null)
+            {
+                models.DeleteAllOnSubmit<InvoiceNoInterval>(i => i.GroupID == item.IntervalID);
+            }
+
+            if (trackCode == null)
+            {
+                trackCode = new InvoiceTrackCode
+                {
+                    TrackCode = viewModel.TrackCode,
+                    PeriodNo = viewModel.PeriodNo.Value,
+                    Year = viewModel.Year.Value
+                };
+                models.GetTable<InvoiceTrackCode>().InsertOnSubmit(trackCode);
+            }
+
+            InvoiceNoInterval prevItem = null;
+            for (int i = 0; i < viewModel.BookletBranchID.Length; i++)
+            {
+                var branchID = viewModel.BookletBranchID[i];
+                var bookletCount = viewModel.BookletCount[i];
+
+                var codeAssignment = trackCode.InvoiceTrackCodeAssignment.Where(t => t.SellerID == branchID.Value).FirstOrDefault();
+                if (codeAssignment == null)
+                {
+                    codeAssignment = new InvoiceTrackCodeAssignment
+                    {
+                        SellerID = branchID.Value,
+                        InvoiceTrackCode = trackCode
+                    };
+
+                    trackCode.InvoiceTrackCodeAssignment.Add(codeAssignment);
+                }
+
+                item = new InvoiceNoInterval
+                {
+
+                };
+                if (i == 0)
+                {
+                    item.StartNo = viewModel.StartNo.Value;
+                    item.EndNo = item.StartNo + (bookletCount.Value * 50) - 1;
+                    item.InvoiceNoIntervalGroup = new InvoiceNoIntervalGroup { };
+                }
+                else
+                {
+                    item.StartNo = prevItem.EndNo + 1;
+                    item.EndNo = item.StartNo + (bookletCount.Value * 50) - 1;
+                    item.InvoiceNoIntervalGroup = prevItem.InvoiceNoIntervalGroup;
+                }
+                codeAssignment.InvoiceNoInterval.Add(item);
+                prevItem = item;
+            }
+
+            try
+            {
+                models.SubmitChanges();
+                return Json(new { result = true, item.GroupID });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message });
+            }
+
+        }
+
         public ActionResult InquireInvoiceDispatchLog(InvoiceQueryViewModel viewModel)
         {
-            IQueryable<InvoiceItemDispatchLog> items = models.GetTable<InvoiceItemDispatchLog>();
-
-            if (viewModel.DateFrom.HasValue)
-                items = items.Where(c => c.DispatchDate >= viewModel.DateFrom);
-
-            if (viewModel.DateTo.HasValue)
-                items = items.Where(c => c.DispatchDate < viewModel.DateTo.Value.AddDays(1));
-
-            return View("~/Views/Invoice/Module/InvoiceDispatchLogSummary.ascx", items);
+            return View("~/Views/Invoice/Module/InvoiceDispatchLogSummary.ascx", viewModel);
 
         }
 
@@ -800,6 +999,62 @@ namespace WebHome.Controllers
             List<InquireVacantNoResult> items = models.GetDataContext().InquireVacantNo(viewModel.BranchID, viewModel.Year, viewModel.PeriodNo).ToList();
             return View("~/Views/Invoice/Module/DownloadVacantNoCsv.ascx", items);
 
+        }
+
+        public ActionResult ProcessE0402(InvoiceNoViewModel viewModel)
+        {
+            try
+            {
+                models.ProcessE0402(viewModel.Year.Value, viewModel.PeriodNo.Value, viewModel.BranchID);
+                return Json(new { result = true });
+            }
+            catch(Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message });
+            }
+        }
+
+        public ActionResult DownloadInvoiceNoIntervalCsv(InvoiceNoViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireInvoiceNoInterval(viewModel);
+            return View("~/Views/Invoice/Module/DownloadInvoiceNoIntervalCsv.ascx", result.Model);
+        }
+
+
+
+        public ActionResult CheckInvoiceDispatch()
+        {
+            (new CheckInvoiceDispatch()).DoJob();
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ResetProcessInvoiceToGov()
+        {
+            return Json(new { result = true, initialCount = TaskExtensionMethods.ResetProcessInvoiceToGov() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VoidInvoice(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+
+            if (items.Count() > 0)
+            {
+                String C0701Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0701", "SRC");
+                if (!Directory.Exists(C0701Outbound))
+                {
+                    Directory.CreateDirectory(C0701Outbound);
+                }
+
+                foreach (var item in items.Select(p=>p.InvoiceItem).Where(i=>i.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票).ToArray())
+                {
+                    String fileName = Path.Combine(C0701Outbound, item.TrackCode + item.No + ".xml");
+                    item.CreateC0701().ConvertToXml().Save(fileName);
+                }
+            }
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
     }

@@ -22,7 +22,6 @@
             <th>當期信託金額</th>
             <th>信託餘額</th>
             <th data-hide="phone">契約總價金</th>
-            <th data-hide="phone">交付信託日期</th>
             <th data-hide="phone,tablet">契約起日</th>
             <th data-hide="phone,tablet">契約迄日</th>
         </tr>
@@ -58,7 +57,6 @@
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-                <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
             </tr>  
@@ -83,7 +81,6 @@
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-                <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
             </tr>
@@ -108,7 +105,6 @@
             </td>
             <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
             <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-            <td nowrap="noWrap"></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
         </tr>
@@ -134,7 +130,6 @@
             </td>
             <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
             <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-            <td nowrap="noWrap"></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
         </tr>
@@ -159,7 +154,6 @@
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-                <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
             </tr>
@@ -184,7 +178,6 @@
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount)   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost)   %></td>
-                <td nowrap="noWrap"></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
                 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
             </tr>

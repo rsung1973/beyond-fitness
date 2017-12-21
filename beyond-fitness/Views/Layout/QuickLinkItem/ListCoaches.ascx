@@ -8,7 +8,9 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%  if (_userProfile != null && _userProfile.CurrentUserRole.RoleID!=(int)Naming.RoleID.Learner)
+<%  if (_userProfile != null
+        && (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator
+            || _userProfile.IsAssistant()))
     { %>
 <li>
     <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/ListCoaches") %>" title="員工管理"><span class="fa-stack fa-lg"><i class="fa fa-square-o fa-stack-2x"></i><i class="fa fa-user-secret fa-stack-1x"></i></span> 員工管理</a>

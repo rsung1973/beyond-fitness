@@ -17,10 +17,6 @@
     {
         Html.RenderPartial("~/Views/SiteAction/Coach.ascx", _userProfile);
     }
-    else if (_userProfile.IsLearner())
-    {
-        Html.RenderPartial("~/Views/SiteAction/Learner.ascx", _userProfile);
-    }
     else if (_userProfile.IsFreeAgent())
     {
         Html.RenderPartial("~/Views/SiteAction/FreeAgent.ascx", _userProfile);
@@ -32,6 +28,10 @@
     else if (_userProfile.IsAccounting())
     {
         Html.RenderPartial("~/Views/SiteAction/Accounting.ascx", _userProfile);
+    }
+    else if (_userProfile.IsLearner())
+    {
+        Html.RenderPartial("~/Views/SiteAction/Learner.ascx", _userProfile);
     }
     else
     {

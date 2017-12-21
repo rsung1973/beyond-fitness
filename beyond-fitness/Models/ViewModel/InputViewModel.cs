@@ -229,6 +229,11 @@ namespace WebHome.Models.ViewModel
         public String TrackCode { get; set; }
         public int? StartNo { get; set; }
         public int? EndNo { get; set; }
+        public int?[] BookletCount { get; set; }
+        public int?[] BookletBranchID { get; set; }
+        public int? GroupID { get; set; }
+
+
     }
 
     public class InvoiceQueryViewModel

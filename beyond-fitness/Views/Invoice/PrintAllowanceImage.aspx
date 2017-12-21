@@ -55,7 +55,7 @@
 
             var image = new Image();
 
-            image.src = '<%= VirtualPathUtility.ToAbsolute("~/Invoice/DrawAllowance") %>' + '?AllowanceID=' + id;
+            image.src = '<%= VirtualPathUtility.ToAbsolute("~/Invoice/DrawAllowance") + "?UID=" + _profile.UID %>' + '&AllowanceID=' + id;
 
             image.onload = function () {
                 $canvas.attr('height',image.height);
@@ -199,6 +199,7 @@
     ModelStateDictionary _modelState;
     IQueryable<InvoiceAllowance> _model;
     InvoiceQueryViewModel _viewModel;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -207,6 +208,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (IQueryable<InvoiceAllowance>)this.Model;
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+        _profile = Context.GetUser();
     }
 
 </script>

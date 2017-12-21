@@ -15,6 +15,39 @@ namespace WebHome.Helper
 {
     public static class TaskExtensionMethods
     {
+        static TaskExtensionMethods()
+        {
+            C0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0401", "SRC");
+            C0501Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "SRC");
+            D0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "SRC");
+            E0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyB2P, "E0401", "SRC");
+            E0402Outbound = Path.Combine(Settings.Default.EINVTurnKeyB2P, "E0402", "SRC");
+
+            if (!Directory.Exists(C0401Outbound))
+            {
+                Directory.CreateDirectory(C0401Outbound);
+            }
+
+            if (!Directory.Exists(C0501Outbound))
+            {
+                Directory.CreateDirectory(C0501Outbound);
+            }
+
+            if (!Directory.Exists(D0401Outbound))
+            {
+                Directory.CreateDirectory(D0401Outbound);
+            }
+
+            if (!Directory.Exists(E0401Outbound))
+            {
+                Directory.CreateDirectory(E0401Outbound);
+            }
+            if (!Directory.Exists(E0402Outbound))
+            {
+                Directory.CreateDirectory(E0402Outbound);
+            }
+        }
+
         private static int __InvoiceBusyCount = 0;
         public static void ProcessContractTranference(this CourseContractRevision item)
         {
@@ -29,7 +62,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已轉讓;
-                        foreach(var lesson in item.SourceContract.RegisterLessonContract)
+                        foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
                             lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
                         }
@@ -83,7 +116,7 @@ namespace WebHome.Helper
                                 OwnerID = item.CourseContract.CourseContractMember.First().UID,
                                 Lessons = item.SourceContract.RemainedLessonCount(),
                                 PriceID = item.SourceContract.PriceID,
-                                Remark = String.Concat("原合約編號 ",item.SourceContract.ContractNo(),"剩餘上課堂數：",
+                                Remark = String.Concat("原合約編號 ", item.SourceContract.ContractNo(), "剩餘上課堂數：",
                                         item.SourceContract.RemainedLessonCount(), " 堂，轉讓至此合約"),
                                 FitnessConsultant = item.CourseContract.FitnessConsultant,
                                 UID = item.CourseContract.CourseContractMember.Select(m => m.UID).ToArray(),
@@ -94,7 +127,7 @@ namespace WebHome.Helper
 
                         ///4.回存轉讓餘額
                         ///
-                        if(balancedPayment!=null)
+                        if (balancedPayment != null)
                         {
                             balancedPayment = new Payment
                             {
@@ -197,7 +230,7 @@ namespace WebHome.Helper
                                 Lessons = item.SourceContract.RemainedLessonCount(),
                                 PriceID = item.CourseContract.PriceID,
                                 Remark = String.Concat("原合約編號 ", item.SourceContract.ContractNo(), "剩餘上課堂數：",
-                                        item.SourceContract.RemainedLessonCount(), " 堂(",item.SourceContract.LessonPriceType.ListPrice,"元)，轉點至此合約。"),
+                                        item.SourceContract.RemainedLessonCount(), " 堂(", item.SourceContract.LessonPriceType.ListPrice, "元)，轉點至此合約。"),
                                 FitnessConsultant = item.CourseContract.FitnessConsultant,
                                 UID = item.CourseContract.CourseContractMember.Select(m => m.UID).ToArray(),
 
@@ -262,8 +295,8 @@ namespace WebHome.Helper
                         ///
                         var original = item.SourceContract;
                         var remained = original.RemainedLessonCount();
-                        var balance = original.TotalPaidAmount() - (original.Lessons - original.RemainedLessonCount()) 
-                                * item.CourseContract.CourseContractExtension.SettlementPrice 
+                        var balance = original.TotalPaidAmount() - (original.Lessons - original.RemainedLessonCount())
+                                * item.CourseContract.CourseContractExtension.SettlementPrice
                                 * original.CourseContractType.GroupingMemberCount
                                 * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
                         Payment balancedPayment = null;
@@ -312,6 +345,12 @@ namespace WebHome.Helper
             });
         }
 
+        public readonly static String C0401Outbound ;
+        public readonly static String C0501Outbound ;
+        public readonly static String D0401Outbound;
+        public readonly static String E0401Outbound;
+        public readonly static String E0402Outbound;
+
         public static void ProcessInvoiceToGov()
         {
             if (Interlocked.Increment(ref __InvoiceBusyCount) == 1)
@@ -322,24 +361,6 @@ namespace WebHome.Helper
                     {
                         using (var models = new ModelSource<UserProfile>())
                         {
-                            String C0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0401", "SRC");
-                            if(!Directory.Exists(C0401Outbound))
-                            {
-                                Directory.CreateDirectory(C0401Outbound);
-                            }
-
-                            String C0501Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "SRC");
-                            if (!Directory.Exists(C0501Outbound))
-                            {
-                                Directory.CreateDirectory(C0501Outbound);
-                            }
-
-                            String D0401Outbound = Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "SRC");
-                            if (!Directory.Exists(D0401Outbound))
-                            {
-                                Directory.CreateDirectory(D0401Outbound);
-                            }
-
 
                             do
                             {
@@ -359,7 +380,7 @@ namespace WebHome.Helper
                                     .Select(d => d.InvoiceCancellation);
                                 if (cancelledItems.Count() > 0)
                                 {
-                                    foreach (var item in cancelledItems.Select(c=>c.InvoiceItem).ToArray())
+                                    foreach (var item in cancelledItems.Select(c => c.InvoiceItem).ToArray())
                                     {
                                         String fileName = Path.Combine(C0501Outbound, item.TrackCode + item.No + ".xml");
                                         item.CreateC0501().ConvertToXml().Save(fileName);
@@ -383,12 +404,19 @@ namespace WebHome.Helper
                             } while (Interlocked.Decrement(ref __InvoiceBusyCount) > 0);
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Logger.Error(ex);
                     }
                 });
             }
+        }
+
+        public static int ResetProcessInvoiceToGov()
+        {
+            Interlocked.Exchange(ref __InvoiceBusyCount, 0);
+            ProcessInvoiceToGov();
+            return __InvoiceBusyCount;
         }
     }
 }

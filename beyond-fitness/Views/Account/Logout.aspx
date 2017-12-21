@@ -81,6 +81,7 @@
     {
         base.OnInit(e);
         Context.ClearCache();
-        Response.Redirect("~/Account/Login");
+        //Response.Redirect("~/Account/Login");
+        Response.Redirect("/front-end/index.html");
     }
 </script>

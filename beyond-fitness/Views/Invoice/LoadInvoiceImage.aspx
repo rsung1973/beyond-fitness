@@ -57,7 +57,7 @@
 
             var image = new Image();
 
-            image.src = '<%= VirtualPathUtility.ToAbsolute("~/Invoice/DrawInvoice") %>' + '?InvoiceID=' + id;
+            image.src = '<%= VirtualPathUtility.ToAbsolute("~/Invoice/DrawInvoice") + "?UID=" + _profile.UID %>' + '&InvoiceID=' + id;
 
             image.onload = function () {
                 context.drawImage(image, 0, 0);
@@ -189,6 +189,8 @@
     ModelStateDictionary _modelState;
     IQueryable<InvoiceItem> _model;
     InvoiceQueryViewModel _viewModel;
+    UserProfile _profile;
+
 
     protected override void OnInit(EventArgs e)
     {
@@ -197,6 +199,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (IQueryable<InvoiceItem>)this.Model;
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+        _profile = Context.GetUser();
     }
 
 </script>

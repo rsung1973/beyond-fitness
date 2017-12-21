@@ -8,10 +8,10 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="<%= _dialog %>" title="編輯<%= _viewModel.CoachRole==(int)Naming.RoleID.Coach ? "員工" : "員工" %>資料" class="bg-color-darken">
+<div id="<%= _dialog %>" title="編輯員工資料" class="bg-color-darken">
     <div class="modal-body bg-color-darken txt-color-white no-padding">
         <form action="<%= Url.Action("CommitMember","Member",new { uid = _viewModel.UID }) %>" class="smart-form" method="post" autofocus>
-            <fieldset id="branchStore" style="<%= _viewModel.CoachRole==(int)Naming.RoleID.Coach ? "display:block": "display:none" %>">
+            <fieldset id="branchStore" style="<%= _viewModel.IsCoach==true ? "display:block": "display:none" %>">
                 <section>
                     <label class="label">隸屬分店</label>
                     <label class="select">
@@ -55,34 +55,143 @@
             <fieldset>
                 <section>
                     <label class="label">適用角色</label>
-                    <label class="select">
-                        <select name="CoachRole">
-<%--                            <%  if (_viewModel.CoachRole == (int)Naming.RoleID.Coach)
-                                { %>--%>
-                            <option value="2" <%= _viewModel.CoachRole == (int)Naming.RoleID.Coach ? "selected" : null %>>體能顧問</option>
-<%--                            <%  }
-                                else
-                                { %>--%>
-                            <option value="8" <%= _viewModel.CoachRole == (int)Naming.RoleID.Assistant ? "selected" : null %>>行政助理</option>
-                            <option value="6" <%= _viewModel.CoachRole == (int)Naming.RoleID.Accounting ? "selected" : null %>>財務助理</option>
-<%--                            <%  } %>--%>
-                        </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
-                        <script>
-                            $('select[name="CoachRole"]').on('change', function (evt) {
-                                if ($('select[name="CoachRole"]').val() == '2') {
-                                    $('#coachLevel').css('display', 'block');
-                                    $('#branchStore').css('display', 'block');
-                                } else {
-                                    $('#coachLevel').css('display', 'none');
-                                    $('#branchStore').css('display', 'none');
-                                }
-                            });
-                        </script>
-                    </label>
+                    <div class="col col-4">
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.Officer %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.Officer] %></label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.Coach %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.Coach] %></label>
+                    </div>
+                    <div class="col col-4">
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.Manager %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.Manager] %></label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.Accounting %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.Accounting] %></label>
+                    </div>
+                    <div class="col col-4">
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.ViceManager %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.ViceManager] %></label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="AuthorizedRole" value="<%= (int)Naming.RoleID.Assistant %>">
+                            <i></i><%= Naming.RoleName[(int)Naming.RoleID.Assistant] %></label>
+                    </div>
+                    <script>
+                        $('input:checkbox[name="AuthorizedRole"][value="2"]').on('click', function (evt) {
+                            checkStore($(this));
+                            checkLevel($(this));
+                        });
+
+                        $('input:checkbox[name="AuthorizedRole"][value="9"]').on('click', function (evt) {
+                            checkStore($(this));
+                        });
+
+                        $('input:checkbox[name="AuthorizedRole"][value="10"]').on('click', function (evt) {
+                            checkStore($(this));
+                        });
+
+                        $('input:checkbox[name="AuthorizedRole"][value="8"]').on('click', function (evt) {
+                            checkAssistant($(this));
+                        });
+
+                        function checkStore($item) {
+                            if ($item.is(':checked')) {
+                                $('#branchStore').css('display', 'block');
+                            } else {
+                                $('#branchStore').css('display', 'none');
+                            }
+                        }
+
+                        function checkLevel($item) {
+                            if ($item.is(':checked')) {
+                                $('#coachLevel').css('display', 'block');
+                            } else {
+                                $('#coachLevel').css('display', 'none');
+                            }
+                        }
+
+                        function checkAssistant($item) {
+                            if ($item.is(':checked')) {
+                                $('#forAssistant').css('display', 'block');
+                            } else {
+                                $('#forAssistant').css('display', 'none');
+                            }
+                        }
+
+
+                        $(function () {
+                            var $item;
+
+                            $('#coachLevel').css('display', 'none');
+                            $('#branchStore').css('display', 'none');
+                            $('#forAssistant').css('display', 'none');
+
+                            <%  foreach(var item in _viewModel.AuthorizedRole)
+                                {   %>
+                            $item = $('input:checkbox[name="AuthorizedRole"][value="<%= item %>"]');
+                            $item.prop('checked', true);
+                            <%      if (item == (int)Naming.RoleID.Coach)
+                                    {   %>
+                            checkStore($item);
+                            checkLevel($item);
+                            <%      }
+                                    else if (item == (int)Naming.RoleID.Manager || item==(int)Naming.RoleID.ViceManager)
+                                    {   %>
+                            checkStore($item);
+                            <%      }
+                                    else if (item == (int)Naming.RoleID.Assistant)
+                                    {   %>
+                            checkAssistant($item);
+                            <%      }   %>
+                            <%  }   %>
+                        });
+
+                    </script>
                 </section>
             </fieldset>
-            <fieldset id="coachLevel" style="<%= _viewModel.CoachRole==(int)Naming.RoleID.Coach ? "display:block": "display:none" %>">
+            <fieldset id="forAssistant">
+                <div class="row">
+                    <section class="col col-6">
+                        <label class="label">是否提供員工福利課程</label>
+                        <label class="select">
+                            <select name="HasGiftLessons">
+                                <option value="False" <%= _viewModel.HasGiftLessons!=true ? "selected" : null %>>否</option>
+                                <option value="True" <%= _viewModel.HasGiftLessons==true ? "selected" : null %>>是</option>
+                            </select>
+                            <i class="icon-append fa fa-file-word-o"></i>
+                        </label>
+                        <script>
+                            function checkGiftLessons() {
+                                var $item = $('#<%= _dialog %> select[name="HasGiftLessons"]');
+                                if ($item.val()=='True') {
+                                    $('.giftLessons').css('display', 'block');
+                                } else {
+                                    $('.giftLessons').css('display', 'none');
+                                }
+                            }
+
+                            $('#<%= _dialog %> select[name="HasGiftLessons"]').on('change', function (evt) {
+                                checkGiftLessons();
+                            });
+
+                            $(function () {
+                                checkGiftLessons();
+                            });
+                        </script>
+                    </section>
+                    <section class="col col-6 giftLessons">
+                        <label class="label">每月提供堂數</label>
+                        <label class="input">
+                            <i class="icon-append fa fa-university"></i>
+                            <input type="text" name="MonthlyGiftLessons" value="<%= _viewModel.MonthlyGiftLessons %>" maxlength="2" placeholder="請輸入每月提供堂數" data-mask="99"/>
+                        </label>
+                    </section>
+                </div>
+            </fieldset>
+            <fieldset id="coachLevel">
                 <div class="row">
                     <section class="col col-6">
                         <label class="label">Level適用制度</label>
@@ -152,6 +261,7 @@
                 html: "<i class='fa fa-send'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
+                    clearErrors();
                     showLoading();
                     $('#<%= _dialog %> form').ajaxSubmit({
                         success: function (data) {

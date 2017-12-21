@@ -333,6 +333,42 @@ namespace WebHome.Controllers
             return View("~/Views/Lessons/BonusLessonSelector.ascx", items);
         }
 
+        public ActionResult GiftLessonSelector(String userName)
+        {
+            IEnumerable<RegisterLesson> items;
+            //userName = userName.GetEfficientString();
+            //if (userName == null)
+            //{
+            //    this.ModelState.AddModelError("userName", "請輸學員名稱!!");
+            //    ViewBag.ModelState = this.ModelState;
+            //    return View("~/Views/Shared/ReportInputError.ascx");
+            //}
+            //else
+            //{
+            //    items = models.GetTable<RegisterLesson>()
+            //        .Join(models.GetTable<LessonPriceType>()
+            //                .Join(models.GetTable<IsWelfareGiftLesson>(), p => p.PriceID, w => w.PriceID, (p, w) => p),
+            //            r => r.ClassLevel, p => p.PriceID, (r, p) => r)
+            //        .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束
+            //            && (l.UserProfile.RealName.Contains(userName) || l.UserProfile.Nickname.Contains(userName)))
+            //        .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
+            //        .Where(l => l.RegisterGroupID.HasValue)
+            //        .OrderBy(l => l.UID);
+            //}
+
+            items = models.GetTable<RegisterLesson>()
+                .Join(models.GetTable<LessonPriceType>()
+                        .Join(models.GetTable<IsWelfareGiftLesson>(), p => p.PriceID, w => w.PriceID, (p, w) => p),
+                    r => r.ClassLevel, p => p.PriceID, (r, p) => r)
+                .Where(l => l.Attended != (int)Naming.LessonStatus.課程結束)
+                .Where(l => l.Lessons > l.GroupingLesson.LessonTime.Count)
+                .Where(l => l.RegisterGroupID.HasValue)
+                .OrderBy(l => l.UID);
+
+
+            return View("~/Views/Lessons/GiftLessonSelector.ascx", items);
+        }
+
         public ActionResult TrialLearnerSelector(String userName)
         {
             IEnumerable<UserProfile> items;

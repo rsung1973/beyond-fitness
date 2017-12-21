@@ -29,17 +29,26 @@
         </li>
     </ul>
 </li>
+<%  if (_userProfile.EmployeeWelfare != null && _userProfile.EmployeeWelfare.MonthlyGiftLessons > 0)
+    { %>
+<li>
+    <a href="<%= Url.Action("LearnerIndex", "LearnerFacet") %>" target="_blank"><i class="fa fa-lg fa-fw fa-address-card "></i>學員儀表板</a>
+</li>
+<%  } %>
 
 <script runat="server">
 
     ModelStateDictionary _modelState;
     UserProfile _userProfile;
+    ModelSource<UserProfile> models;
+
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _userProfile = Context.GetUser();
+        _userProfile = Context.GetUser().LoadInstance(models);
     }
 
 </script>

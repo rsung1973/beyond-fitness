@@ -51,7 +51,7 @@
     function renderInvoice(id) {
         $canvas = $('<canvas>').attr('width', 400).attr('height', 760).appendTo($('body'));
         <%--$canvas = $('#invCanvas');  --%>
-        rasterizeHTML.drawURL('<%= Url.Action("CanvasPrintInvoice","Invoice") %>?InvoiceID=' + id, $canvas[0]);
+        rasterizeHTML.drawURL('<%= Url.Action("CanvasPrintInvoice","Invoice",new { _profile.UID }) %>&InvoiceID=' + id, $canvas[0]);
     }
 
     function printCanvas(canvas) {
@@ -174,6 +174,7 @@
     ModelStateDictionary _modelState;
     IQueryable<InvoiceItem> _model;
     InvoiceQueryViewModel _viewModel;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -182,6 +183,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (IQueryable<InvoiceItem>)this.Model;
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+        _profile = Context.GetUser();
     }
 
 </script>

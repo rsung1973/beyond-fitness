@@ -273,9 +273,11 @@ namespace WebHome.Helper
         }
         public static bool IsCoach(this UserProfile profile)
         {
-            return profile != null 
-                && ( profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach 
-                    || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach));
+            return profile != null
+                && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach
+                    || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach 
+                        || r.RoleID == (int)Naming.RoleID.Manager
+                        || r.RoleID == (int)Naming.RoleID.ViceManager));
         }
         public static bool IsAssistant(this UserProfile profile)
         {
@@ -286,7 +288,7 @@ namespace WebHome.Helper
 
         public static bool IsLearner(this UserProfile profile)
         {
-            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner;
+            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Assistant));
         }
 
         public static bool IsAuthorizedSysAdmin(this UserProfile profile)

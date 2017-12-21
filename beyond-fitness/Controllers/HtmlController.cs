@@ -221,12 +221,31 @@ namespace WebHome.Controllers
         private String processLogin(UserProfile item)
         {
             UrlHelper url = new UrlHelper(ControllerContext.RequestContext);
+            if (item.IsAuthorizedSysAdmin())
+            {
+                return url.Action("Index", "CoachFacet");
+            }
+            else if (item.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach || r.RoleID == (int)Naming.RoleID.Manager || r.RoleID == (int)Naming.RoleID.ViceManager))
+            {
+                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
+            }
+            else if(item.IsAssistant())
+            {
+                return url.Action("Index", "CoachFacet");
+            }
+            else if(item.IsAccounting())
+            {
+                return url.Action("TrustIndex", "Accounting");
+            }
+
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
             {
                 case Naming.RoleID.Administrator:
                     return url.Action("Index", "CoachFacet");
 
                 case Naming.RoleID.Coach:
+                case Naming.RoleID.Manager:
+                case Naming.RoleID.ViceManager:
                     return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
 
                 case Naming.RoleID.Assistant:

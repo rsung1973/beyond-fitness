@@ -24,7 +24,7 @@ namespace WebHome.Controllers
     [Authorize]
     public class ReportController : SampleController<UserProfile>
     {
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach, (int)Naming.RoleID.Accounting, (int)Naming.RoleID.Assistant })]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach, (int)Naming.RoleID.Accounting, (int)Naming.RoleID.Assistant,(int)Naming.RoleID.Manager,(int)Naming.RoleID.ViceManager })]
         public ActionResult LearnerPayment(LearnerPaymentViewModel viewModel)
         {
             IQueryable<RegisterLesson> items = models.GetTable<RegisterLesson>().Where(r => false);

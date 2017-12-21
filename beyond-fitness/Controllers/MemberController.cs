@@ -156,6 +156,11 @@ namespace WebHome.Controllers
         [HttpPost]
         public ActionResult CommitCoach(CoachViewModel viewModel)
         {
+            if (viewModel.AuthorizedRole == null || viewModel.AuthorizedRole.Length == 0)
+            {
+                ModelState.AddModelError("AuthorizedRole", "請設定角色!");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
@@ -184,18 +189,31 @@ namespace WebHome.Controllers
                 UserProfileExtension = new UserProfileExtension { }
             };
 
+            models.DeleteAllOnSubmit<UserRole>(r => r.UID == item.UID);
             item.UserRole.Add(new UserRole
             {
                 RoleID = viewModel.CoachRole.Value
             });
 
-            if (viewModel.IsCoach == true)
+            models.DeleteAllOnSubmit<UserRoleAuthorization>(r => r.UID == item.UID);
+            item.UserRoleAuthorization.AddRange(viewModel.AuthorizedRole.Select(r => new UserRoleAuthorization
             {
-                item.ServingCoach = new ServingCoach
+                RoleID = r.Value
+            }));
+
+
+            if (viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Manager)
+                    || viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Coach)
+                    || viewModel.AuthorizedRole.Contains((int)Naming.RoleID.ViceManager))
+            {
+                if(item.ServingCoach==null)
                 {
-                    Description = viewModel.Description,
-                    LevelID = viewModel.LevelID
-                };
+                    item.ServingCoach = new ServingCoach
+                    {
+                    };
+                }
+                item.ServingCoach.Description = viewModel.Description;
+                item.ServingCoach.LevelID = viewModel.LevelID;
             }
 
             models.EntityList.InsertOnSubmit(item);
@@ -251,12 +269,11 @@ namespace WebHome.Controllers
                 }
             }
 
-            if(!viewModel.CoachRole.HasValue)
+            if (viewModel.AuthorizedRole == null || viewModel.AuthorizedRole.Length == 0)
             {
-                ModelState.AddModelError("CoachRole", "請選擇適用角色!!");
+                ModelState.AddModelError("AuthorizedRole", "請選擇適用角色!!");
             }
-
-            if (viewModel.CoachRole == (int)Naming.RoleID.Coach)
+            else if (viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Coach))
             {
                 if (!viewModel.BranchID.HasValue)
                 {
@@ -266,6 +283,19 @@ namespace WebHome.Controllers
                 {
                     ModelState.AddModelError("LevelID", "請選擇Level!!");
                 }
+            }
+            else if (viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Manager)
+                    || viewModel.AuthorizedRole.Contains((int)Naming.RoleID.ViceManager))
+            {
+                if (!viewModel.BranchID.HasValue)
+                {
+                    ModelState.AddModelError("BranchID", "請選擇隸屬分店!!");
+                }
+            }
+
+            if (viewModel.HasGiftLessons == true && (!viewModel.MonthlyGiftLessons.HasValue || viewModel.MonthlyGiftLessons < 0))
+            {
+                ModelState.AddModelError("MonthlyGiftLessons", "請輸入堂數!!");
             }
 
             if (!ModelState.IsValid)
@@ -280,7 +310,22 @@ namespace WebHome.Controllers
                 RoleID = viewModel.CoachRole.Value
             });
 
-            if (viewModel.CoachRole == (int)Naming.RoleID.Coach)
+            models.DeleteAllOnSubmit<UserRoleAuthorization>(r => r.UID == item.UID);
+            item.UserRoleAuthorization.AddRange(viewModel.AuthorizedRole.Select(r => new UserRoleAuthorization
+            {
+                RoleID = r.Value
+            }));
+
+            if (viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Assistant))
+            {
+                if (item.EmployeeWelfare == null)
+                    item.EmployeeWelfare = new EmployeeWelfare { };
+                item.EmployeeWelfare.MonthlyGiftLessons = viewModel.HasGiftLessons == true ? viewModel.MonthlyGiftLessons : null;
+            }
+
+            if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach
+                    || r == (int)Naming.RoleID.Manager
+                    || r == (int)Naming.RoleID.ViceManager))
             {
                 if (item.ServingCoach == null)
                 {
@@ -294,15 +339,19 @@ namespace WebHome.Controllers
                 {
                     BranchID = viewModel.BranchID.Value
                 });
-                if (item.ServingCoach.LevelID != viewModel.LevelID)
+
+                if (viewModel.LevelID.HasValue)
                 {
-                    item.ServingCoach.LevelID = viewModel.LevelID;
-                    item.ServingCoach.CoachRating.Add(new CoachRating
+                    if (item.ServingCoach.LevelID != viewModel.LevelID)
                     {
-                        CoachID = item.ServingCoach.CoachID,
-                        LevelID = viewModel.LevelID.Value,
-                        RatingDate = DateTime.Now
-                    });
+                        item.ServingCoach.LevelID = viewModel.LevelID;
+                        item.ServingCoach.CoachRating.Add(new CoachRating
+                        {
+                            CoachID = item.ServingCoach.CoachID,
+                            LevelID = viewModel.LevelID.Value,
+                            RatingDate = DateTime.Now
+                        });
+                    }
                 }
             }
 
@@ -310,6 +359,7 @@ namespace WebHome.Controllers
             item.Phone = viewModel.Phone;
 
             models.SubmitChanges();
+
             return Json(new { result = true });
 
         }
@@ -588,7 +638,8 @@ namespace WebHome.Controllers
 
             var model = new CoachViewModel
             {
-                CoachRole = item.UserRole[0].RoleID,
+                //CoachRole = item.UserRole[0].RoleID,
+                AuthorizedRole = item.UserRoleAuthorization.Select(r => (int?)r.RoleID).ToArray(),
                 Phone = item.Phone,
                 RealName = item.RealName,
                 MemberCode = item.MemberCode,
@@ -616,10 +667,11 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 viewModel.Birthday = item.Birthday;
-                viewModel.CoachRole = item.UserRole.First().RoleID;
+                viewModel.AuthorizedRole = item.UserRoleAuthorization.Select(r => (int?)r.RoleID).ToArray();
                 viewModel.Phone = item.Phone;
                 viewModel.Email = item.PID;
                 viewModel.RealName = item.RealName;
+                
                 if(item.IsCoach())
                 {
                     viewModel.IsCoach = true;
@@ -633,6 +685,12 @@ namespace WebHome.Controllers
                 else
                 {
                     viewModel.IsCoach = false;
+                }
+
+                if(item.EmployeeWelfare!=null)
+                {
+                    viewModel.HasGiftLessons = item.EmployeeWelfare.MonthlyGiftLessons > 0;
+                    viewModel.MonthlyGiftLessons = item.EmployeeWelfare.MonthlyGiftLessons;
                 }
             }
 

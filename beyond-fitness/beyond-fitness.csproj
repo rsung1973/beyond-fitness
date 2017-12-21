@@ -1496,6 +1496,9 @@
     <None Include="Models\MIG3_1\C0501.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Models\MIG3_1\C0701.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Models\MIG3_1\D0401.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1729,6 +1732,8 @@
     <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
     <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
     <Content Include="Views\Invoice\CanvasPrintAllowance.aspx" />
+    <Content Include="Views\Invoice\Module\DownloadInvoiceNoIntervalCsv.ascx" />
+    <Content Include="Views\Invoice\Module\EditInvoiceNoIntervalGroup.ascx" />
     <Content Include="Views\Invoice\PrintAllowanceImage.aspx" />
     <Content Include="Views\Invoice\PrintInvoiceImage.aspx" />
     <Content Include="Views\Invoice\LoadInvoiceImage.aspx" />
@@ -1777,6 +1782,7 @@
     <Content Include="Views\LessonPrice\Module\EditProjectCourse.ascx" />
     <Content Include="Views\LessonPrice\Module\WidgetGrid.ascx" />
     <Content Include="Views\LessonPrice\PriceIndex.aspx" />
+    <Content Include="Views\Lessons\GiftLessonSelector.ascx" />
     <Content Include="Views\Lessons\BonusLessonSelector.ascx" />
     <Content Include="Views\Lessons\Module\CourseContractAttendeeSelector.ascx" />
     <Content Include="Views\Lessons\MyCalendar.ascx" />
@@ -2180,6 +2186,7 @@
     <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\ClassFacetController.cs" />
     <Compile Include="Controllers\CourseContractController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EnterpriseProgramController.cs" />
     <Compile Include="Controllers\PublishedController.cs" />
     <Compile Include="Controllers\FitnessDiagnosisController.cs" />
@@ -2210,7 +2217,9 @@
     <Compile Include="Helper\InvoiceExtensionMethods.cs" />
     <Compile Include="Helper\Jobs\FreeAgentAutoClockIn.cs" />
     <Compile Include="Helper\Jobs\CheckInvoiceDispatch.cs" />
+    <Compile Include="Helper\Jobs\MonthlyJob.cs" />
     <Compile Include="Helper\Jobs\ReviewProfessionalLevelEachQuarter.cs" />
+    <Compile Include="Helper\LessonAffairsExtensionMethods.cs" />
     <Compile Include="Helper\LoginExtension.cs" />
     <Compile Include="Helper\MvcExtensions.cs" />
     <Compile Include="Helper\QueryExtensionMethods.cs" />
@@ -2230,6 +2239,9 @@
     </Compile>
     <Compile Include="Models\MIG3_1\C0501.cs">
       <DependentUpon>C0501.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MIG3_1\C0701.cs">
+      <DependentUpon>C0701.xsd</DependentUpon>
     </Compile>
     <Compile Include="Models\MIG3_1\D0401.cs">
       <DependentUpon>D0401.xsd</DependentUpon>
@@ -2310,6 +2322,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="img\realestate\thumbs\" />
+    <Folder Include="Views\Employee\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">

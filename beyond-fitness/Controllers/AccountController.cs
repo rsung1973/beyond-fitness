@@ -490,6 +490,30 @@ namespace WebHome.Controllers
 
         }
 
+        public async Task<ActionResult> QuickLogin(LoginViewModel viewModel, string returnUrl)
+        {
+
+            UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
+                && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+
+            if (item == null)
+            {
+                ModelState.AddModelError("pid", "登入資料錯誤!!");
+                ViewBag.ModelState = ModelState;
+                return View("LoginByMail");
+            }
+
+            HttpContext.SignOn(item, viewModel.RememberMe);
+
+            if (!String.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return processLogin(item);
+
+        }
+
         private ActionResult processLogin(UserProfile item,bool isJson = false)
         {
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
@@ -498,6 +522,8 @@ namespace WebHome.Controllers
                     return RedirectToAction("Index", "CoachFacet");
 
                 case Naming.RoleID.Coach:
+                case Naming.RoleID.Manager:
+                case Naming.RoleID.ViceManager:
                     return RedirectToAction("Index", "CoachFacet", new { CoachID = item.UID });
 
                 case Naming.RoleID.Assistant:
@@ -699,7 +725,7 @@ namespace WebHome.Controllers
         }
 
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Coach })]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult Coach(DateTime? lessonDate, DateTime? endQueryDate, int? branchID, bool? hasQuery, String category, String message = null)
         {
             UserProfile item = HttpContext.GetUser();

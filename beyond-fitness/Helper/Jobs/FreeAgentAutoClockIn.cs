@@ -54,15 +54,15 @@ namespace WebHome.Helper.Jobs
             JobScheduler.StartUp();
 
             var jobList = JobScheduler.JobList;
-            if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(FreeAgentAutoClockIn).AssemblyQualifiedName))
-            {
-                JobScheduler.AddJob(new JobItem
-                {
-                    AssemblyQualifiedName = typeof(FreeAgentAutoClockIn).AssemblyQualifiedName,
-                    Description = "自由教練打卡",
-                    Schedule = DateTime.Today.Add(new TimeSpan(0, 0, 0))
-                });
-            }
+            //if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(FreeAgentAutoClockIn).AssemblyQualifiedName))
+            //{
+            //    JobScheduler.AddJob(new JobItem
+            //    {
+            //        AssemblyQualifiedName = typeof(FreeAgentAutoClockIn).AssemblyQualifiedName,
+            //        Description = "自由教練打卡",
+            //        Schedule = DateTime.Today.Add(new TimeSpan(0, 0, 0))
+            //    });
+            //}
 
             if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(ReviewProfessionalLevelEachQuarter).AssemblyQualifiedName))
             {
@@ -80,6 +80,16 @@ namespace WebHome.Helper.Jobs
                 {
                     AssemblyQualifiedName = typeof(CheckInvoiceDispatch).AssemblyQualifiedName,
                     Description = "檢查電子發票傳送大平台LOG",
+                    Schedule = DateTime.Today.Add(new TimeSpan(0, 0, 0))
+                });
+            }
+
+            if (jobList == null || !jobList.Any(j => j.AssemblyQualifiedName == typeof(MonthlyJob).AssemblyQualifiedName))
+            {
+                JobScheduler.AddJob(new JobItem
+                {
+                    AssemblyQualifiedName = typeof(MonthlyJob).AssemblyQualifiedName,
+                    Description = "每月登錄員工福利課",
                     Schedule = DateTime.Today.Add(new TimeSpan(0, 0, 0))
                 });
             }

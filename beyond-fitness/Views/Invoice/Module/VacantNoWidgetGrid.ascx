@@ -163,6 +163,22 @@
         $form.launchDownload('<%= Url.Action("DownloadVacantNoCsv","Invoice") %>', { 'branchID': branchID });
     }
 
+    function processE0402(branchID) {
+        var $form = $('#queryForm');
+        var $formData = $form.serializeObject();
+        $formData.BranchID = branchID;
+
+        showLoading();
+        $.post('<%= Url.Action("ProcessE0402","Invoice") %>', $formData, function (data) {
+            hideLoading();
+            if (data.result) {
+                alert('資料已送出，請檢查Turnkey!!');
+            } else {
+                alert(data.message);
+            }
+        });
+    }
+
 </script>
 
 <script runat="server">

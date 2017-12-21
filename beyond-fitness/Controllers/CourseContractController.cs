@@ -1392,7 +1392,7 @@ namespace WebHome.Controllers
             }
             else if (viewModel.Reason == "轉讓")
             {
-                if (viewModel.UID == null || viewModel.UID.Length > 0)
+                if (viewModel.UID == null || viewModel.UID.Length < 1)
                 {
                     ModelState.AddModelError("UID", "請選擇上課學員!!");
                 }

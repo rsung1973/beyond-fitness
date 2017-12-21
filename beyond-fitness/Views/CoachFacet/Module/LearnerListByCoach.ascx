@@ -75,10 +75,16 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (ServingCoach)this.Model;
 
-        var attendingItems = models.GetTable<LessonTime>().Where(l => l.ClassTime >= DateTime.Today.AddDays(-7))
-                .GroupBy(l => l.GroupID).Select(g => g.OrderByDescending(t => t.ClassTime).First())
-                .Select(l => l.GroupingLesson.RegisterLesson)
-                .SelectMany(r => r.Select(u => u.UserProfile));
+        //var attendingItems = models.GetTable<LessonTime>().Where(l => l.ClassTime >= DateTime.Today.AddDays(-7))
+        //        .GroupBy(l => l.GroupID).Select(g => g.OrderByDescending(t => t.ClassTime).First())
+        //        .Select(l => l.GroupingLesson.RegisterLesson)
+        //        .SelectMany(r => r.Select(u => u.UserProfile));
+
+        var attendingItems = models.GetTable<UserProfile>()
+            .Where(u => u.RegisterLesson
+                .Any(r => r.GroupingLesson.LessonTime
+                    .Any(l => l.ClassTime >= DateTime.Today.AddDays(-7))))
+            .Select(u => u.UID);
 
         //IQueryable<UserProfile> items = models.GetTable<RegisterLesson>()
         //        .Where(u => !u.UserProfile.UserProfileExtension.CurrentTrial.HasValue)
@@ -91,9 +97,11 @@
             .Where(u => u.CoachID == _model.CoachID)
             .Select(u => u.UserProfile);
 
-        _absentItems = items.Except(attendingItems);
+        //_absentItems = items.Except(attendingItems);
+        _absentItems = items.Where(u => !attendingItems.Any(d => u.UID == d));
 
-        _items = items.Except(_absentItems);
+        //_items = items.Except(_absentItems);
+        _items = items.Where(u => attendingItems.Any(d => u.UID == d));
 
     }
 

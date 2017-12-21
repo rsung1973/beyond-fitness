@@ -31,6 +31,11 @@ namespace WebHome.Helper.Jobs
                 checkC0501(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "BAK", DateTime.Today.ToString("yyyyMMdd")), Naming.GeneralStatus.Successful);
                 checkC0501(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "BAK", DateTime.Today.AddDays(-1).ToString("yyyyMMdd")), Naming.GeneralStatus.Successful);
                 checkC0501(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "C0501", "ERR"), Naming.GeneralStatus.Failed);
+
+                checkD0401(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "BAK", DateTime.Today.ToString("yyyyMMdd")), Naming.GeneralStatus.Successful);
+                checkD0401(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "BAK", DateTime.Today.AddDays(-1).ToString("yyyyMMdd")), Naming.GeneralStatus.Successful);
+                checkD0401(models, Path.Combine(Settings.Default.EINVTurnKeyPath, "D0401", "ERR"), Naming.GeneralStatus.Failed);
+
             }
         }
 

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 
 <head>
@@ -11,12 +11,12 @@
     <!-- Mobile Specific Metas-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="telephone=no" name="format-detection">
-    <meta property="og:image" content="http://www.beyond-fitness.tw/front-end/images/feature/demo2.png" />
+    <meta property="og:image" content="https://www.beyond-fitness.com.tw/front-end/images/feature/demo2.png" />
     <!-- Fonts -->
     <!-- Open Sans -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,600,700italic,400,700,800italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400italic,600,700italic,400,700,800italic' rel='stylesheet' type='text/css'>
     <!-- VarelaRound -->
-    <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
     <!-- Icon Font - Font Awesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
     <!-- Stylesheets -->
@@ -44,24 +44,51 @@
     <script src="external/modernizr/modernizr.custom.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]> 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script> 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>       
     <![endif]-->
     <!--[if lte IE 9]>
         <link href="css/ie9.css?v=1" rel="stylesheet" />
     <![endif]-->
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '139380543390363');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" src="https://www.facebook.com/tr?id=139380543390363&ev=PageView&noscript=1" / >
+    </noscript>
+    <!-- End Facebook Pixel Code -->
 </head>
 
 <body class="place-shrink">
     <div class="wrapper" id="top">
-        <header class="header-placement" style=" background-image: url('external/animated-header/img/demo-1-bg.jpg');">
+        <header class="header-placement" style="background-image: url('external/animated-header/img/demo-1-bg.jpg');">
             <div class="content waypoint" data-animate-down="header-up" data-animate-up="header-down">
                 <div class="header-fixed header-down">
                     <div class="container">
                         <!--  Logo  -->
                         <a class="logo" href="index.html">
                             <!-- <img src="images/logo_white.png" alt=""> -->
-                            <svg class="logo__svg" width="32" height="32" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                            <svg class="logo__svg" width="32" height="32" xmlns="https://www.w3.org/2000/svg" xmlns:svg="https://www.w3.org/2000/svg">
                                 <style type="text/css">
                                     .st0{fill:#FFFFFF;}
                                 </style>
@@ -98,11 +125,8 @@
                                         <a class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#reserv">Reservation</a>
-                                    </li>
-                                    <li class="z-nav__item">
                                         <a class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
-                                    </li>                                    
+                                    </li>
                                     <li class="z-nav__item">
                                         <a class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
                                     </li>
@@ -262,7 +286,7 @@
                     <div class="col-sm-6 col-sm-push-6">
                         <div class="service-step__info">
                             <span class="service-step__number">101</span>
-                            <a href="team-101.html"><h2 class="service-step__heading">Enhanced 101 <i class="fa fa-paper-plane-o"></i></h2></a>
+                            <a href="team-101.html"><h2 class="service-step__heading">Enhanced 101 <i class="fa fa-paper-plane-o"></i></i></h2></a>
                             <p class="service-step__descript">位於台北中心信義區高級私人訓練中心；鄰近台北101捷運站 3號出口走路1分鐘即可抵達。<br/><br/>獨立具隱私空間，室內區-五星飯店等級VIP專屬，人數監督，舒適隱密。戶外區-運動草皮結合獨立PU跑道 提高訓練專業化。獨家景觀，仰望國際地標！<br/><br/>獨特隔間衛浴設備、方便輕取置物櫃、吧檯交流空間。專業私人顧問；運動科學數據管理；雲端整合專屬訓練 。</p>
                         </div>
                     </div>
@@ -315,154 +339,8 @@
                 <!-- end row -->                
             </div>
         </section>
-        
-        <div class="divider-brand divider--top-large" id="reserv"></div>
         <!-- end container -->
-        <section class="container">            
-            <!-- end row -->
-            <div class="row">
-                <div class="col-sm-5 col-md-6">
-                    <div class="service-image">
-                        <img src="images/services/main.png" alt="">
-                    </div>
-                </div>
-                <!-- end col -->
-                <div class="col-sm-7 col-md-6">
-                    <div class="service-container">
-                        <!-- Sevrice preview -->
-                        <div class="one-column col-xs-6 col-sm-12 service service--large-present">
-                            <div class="icon icon--animate icon--shape">
-                                <div class="icon__item">
-                                    <i class="livicon" data-name="desktop" data-color="#fff" data-hovercolor="#fff" data-size="42"></i>
-                                </div>
-                            </div>
-                            <a class="service__link" href="single-service.html">
-                                <h3 class="service__heading">Reservation</h3>
-                            </a>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in lacinia quam. Fusce quis nulla tincidunt, interdum magna vitae, viverra est. </p>
-                        </div>
-                        <!-- end sevrice preview -->
-                        <!-- Sevrice preview -->
-                        <div class="one-column col-xs-6 col-sm-12 service service--large-present">
-                            <div class="homer-container">
-                            </div>
-                            <!-- end homer container -->
-                            <div class="icon icon--animate icon--shape homer--icon">
-                                <div class="icon__item">
-                                    <i class="livicon" data-name="cellphone" data-color="#fff" data-hovercolor="#fff" data-size="42"></i>
-                                </div>
-                            </div>
-                            <a class="service__link" href="single-service.html">
-                                <h3 class="service__heading">Introduction</h3>
-                            </a>
-                            <p>Fusce in posuere lorem. Proin eleifend viverra orci, at blandit arcu feugiat mollis. Nunc congue erat ornare metus congue venenatis.</p>
-                        </div>
-                        <!-- end sevrice preview -->
-                        <!-- Sevrice preview -->
-                        <div class="one-column col-xs-6 col-sm-12 service service--large-present">
-                            <div class="icon icon icon--shape">
-                                <i class="icon__item fa fa-superscript"></i>
-                            </div>
-                            <a class="service__link" href="single-service.html">
-                                <h3 class="service__heading">Development</h3>
-                            </a>
-                            <p>Fusce in posuere lorem. Proin eleifend viverra orci, at blandit arcu feugiat mollis. Nunc congue erat ornare metus congue venenatis.</p>
-                        </div>
-                        <!-- end sevrice preview -->
-                    </div>
-                </div>
-                <!-- end col -->
-            </div>
-            <!-- end row -->
-        </section>
 
-        <section class="container">
-            <h2 class="block-title block-title--top-large-m">How BEYOND FITNESS Works</h2>
-            <div class="row">
-                <div class="col-sm-12 one-column">
-                    <div class="sequence sequence--clickable divider--bottom-thin divider--top">
-                        <div class="sequence-wrapper">
-                            <div class="sequence__item sequence__item--active" data-connect="introduction">
-                                <div class="sequence__step">{1}</div>
-                                <div class="sequence__info sequence__info-one">Introduction</div>
-                            </div>
-                            <div class="sequence__separator">
-                                <span class="sequence__divider sequence__color--two"></span>
-                                <span class="sequence__divider sequence__color--two1"></span>
-                                <span class="sequence__divider sequence__color--two2"></span>
-                                <span class="sequence__divider sequence__color--two3"></span>
-                                <span class="sequence__divider sequence__color--one3"></span>
-                                <span class="sequence__divider sequence__color--one2"></span>
-                                <span class="sequence__divider sequence__color--one1"></span>
-                                <span class="sequence__divider sequence__color--one"></span>
-                            </div>
-                            <div class="sequence__item" data-connect="proto">
-                                <div class="sequence__step">{2}</div>
-                                <div class="sequence__info sequence__info-two">Prototyping</div>
-                            </div>
-                            <div class="sequence__separator">
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                            </div>
-                            <div class="sequence__item" data-connect="design">
-                                <div class="sequence__step">{3}</div>
-                                <div class="sequence__info sequence__info-three">Design</div>
-                            </div>
-                            <div class="sequence__separator">
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                            </div>
-                            <div class="sequence__item" data-connect="develop">
-                                <div class="sequence__step">{4}</div>
-                                <div class="sequence__info sequence__info-four">Development</div>
-                            </div>
-                            <div class="sequence__separator">
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                                <span class="sequence__divider"></span>
-                            </div>
-                            <div class="sequence__item" data-connect="result">
-                                <div class="sequence__step">{5}</div>
-                                <div class="sequence__info sequence__info-five">Result</div>
-                            </div>
-                        </div>
-                        <!-- end wrapper -->
-                    </div>
-                </div>
-                <!-- end col -->
-            </div>
-            <div>
-                <p class="sequence__text introduction">
-                    <strong>Introduction,</strong> <br><img src="images/services/Introduction.png" alt="" width="60%">
-                </p>
-                <p class="sequence__text proto">
-                    <img src="images/services/Introduction.png" alt="" width="40%"><Br/>
-                    <strong>basic information</strong> <Br/>
-                    Investment generally results in acquiring an asset, also called an investment. If the asset is available at a price worth investing, it is normally expected
-                </p>
-                <p class="sequence__text design"><strong>Design,</strong> sollicitudin eu fringilla eget, consequat tincidunt purus. Phasellus accumsan mi ultricies lorem feugiat sodales vitae sed turpis. Cras non vehicula mi. Sed non metus nec odio porta posuere. Suspendisse venenatis, enim ut tincidunt porta, elit quam convallis risus, vitae fermentum tellus turpis ut tortor. Mauris non feugiat est, tincidunt venenatis turpis. Curabitur sed pretium sem. Aliquam rhoncus feugiat fringilla. Aliquam faucibus elit ut dui faucibus cursus. Donec nec arcu facilisis, convallis ante ac, elementum lacus. </p>
-                <p class="sequence__text develop"><strong>Development,</strong> sollicitudin eu fringilla eget, consequat tincidunt purus. Phasellus accumsan mi ultricies lorem feugiat sodales vitae sed turpis. Aliquam rhoncus feugiat fringilla. Aliquam faucibus elit ut dui faucibus cursus. Donec nec arcu facilisis, convallis ante ac, elementum lacus. Cras non vehicula mi. Sed non metus nec odio porta posuere. Suspendisse venenatis, enim ut tincidunt porta, elit quam convallis risus, vitae fermentum tellus turpis ut tortor. Mauris non feugiat est, tincidunt venenatis turpis. Curabitur sed pretium sem. </p>
-                <p class="sequence__text result"><strong>Result,</strong> rhoncus feugiat fringilla. Aliquam faucibus elit ut dui faucibus cursus. Donec nec arcu facilisis, convallis ante ac, elementum lacus. Aliquam faucibus elit ut dui faucibus cursus. Donec nec arcu facilisis, convallis ante ac, elementum lacus. Phasellus accumsan mi ultricies lorem feugiat sodales vitae sed turpis. </p>
-            </div>
-        </section>
-        
         <!-- end section show current page and breadcrumb -->
         <section class="container">
             <h2 class="block-title block-title--top-larger" id="support">Q＆A</h2>
@@ -708,7 +586,7 @@
                     <h2 class="block-title block-title--simple block-title--inverse block-title--top-large-s block-title--bottom-l">Contact Us</h2>
                     <!-- Contact information about company -->
                     <address class="contact-info contact-info--primary">
-                        <a href="http://maps.google.com/?q=台北市松山區南京東路四段17號B1" class="contact-info__item" target="_blank">
+                        <a href="https://maps.google.com/?q=台北市松山區南京東路四段17號B1" class="contact-info__item" target="_blank">
                             <i class="fa fa-location-arrow"></i> 小巨蛋：台北市松山區南京東路四段17號B1
                         </a>
                         <a class="contact-info__item" href="tel://+886-2-2715-2733">
@@ -716,7 +594,7 @@
                         </a>
                     </address>
                     <address class="contact-info contact-info--primary">
-                        <a href="http://maps.google.com/?q=台北市信義區信義路五段16號2樓之2" class="contact-info__item" target="_blank">
+                        <a href="https://maps.google.com/?q=台北市信義區信義路五段16號2樓之2" class="contact-info__item" target="_blank">
                             <i class="fa fa-location-arrow"></i> Enhanced 101：台北市信義區信義路五段16號2樓之2
                         </a>                     
                         <a class="contact-info__item" href="tel://+886-2-2720-0530">
@@ -724,7 +602,7 @@
                         </a>
                     </address>
                     <address class="contact-info contact-info--primary">
-                        <a href="http://maps.google.com/?q=台北市大安區大安路一段75巷21號B1" class="contact-info__item" target="_blank">
+                        <a href="https://maps.google.com/?q=台北市大安區大安路一段75巷21號B1" class="contact-info__item" target="_blank">
                             <i class="fa fa-location-arrow"></i> 忠孝：台北市大安區大安路一段75巷21號B1
                         </a>                     
                         <a class="contact-info__item" href="tel://+886-2-2776-9932">
@@ -795,7 +673,7 @@
     <!-- JavaScript-->
     <!-- External-->
     <!-- jQuery 1.10.1-->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script>
     window.jQuery || document.write('<script src="external/jquery/jquery-1.10.1.min.js"><\/script>')
     </script>
@@ -821,9 +699,6 @@
     <script src="external/SmoothScroll/SmoothScroll.js"></script>
     <!-- Event that will trigger when the element is scrolled in to the viewport.-->
     <script src="external/inview/jquery.inview.js"></script>
-    <!-- Livicons -->
-    <script src="external/livicons/livicons-1.3.min.js"></script>
-    <script src="external/livicons/raphael-min.js"></script> 
     <!-- Custom -->
     <script src="js/custom.js"></script>
 
@@ -868,14 +743,25 @@
             }
         });
 
-        sequenceExp();
-        $('#homer').click(function() {
-            $(this).addClass('homer-top');
-            $(this).addClass('homer-visible homer-visible--warning');
-        });
+ 
 
     });
     </script>
 </body>
 
 </html>
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-84335528-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>

@@ -669,28 +669,30 @@ namespace WebHome.Controllers
                     return View("~/Views/Shared/MessageView.ascx", model: "學員課程已結束!!");
                 }
 
-                var contract = lesson.RegisterLessonContract.CourseContract;
-                if (contract.Expiration.Value < DateTime.Today)
+                if (lesson.RegisterLessonContract != null)
                 {
-                    return View("~/Views/Shared/MessageView.ascx", model: "學員合約已過期!!");
-                }
+                    var contract = lesson.RegisterLessonContract.CourseContract;
+                    if (contract.Expiration.Value < DateTime.Today)
+                    {
+                        return View("~/Views/Shared/MessageView.ascx", model: "學員合約已過期!!");
+                    }
 
-                var lessonCount = lesson.GroupingLesson.LessonTime.Count;
-                if (contract.CourseContractType.ContractCode == "CFA")
-                {
-                    lessonCount = contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count());
-                }
+                    var lessonCount = lesson.GroupingLesson.LessonTime.Count;
+                    if (contract.CourseContractType.ContractCode == "CFA")
+                    {
+                        lessonCount = contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count());
+                    }
 
-                if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
-                {
-                    return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
-                }
+                    if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+                    {
+                        return View("~/Views/Shared/MessageView.ascx", model: "學員上課堂數已滿!!");
+                    }
 
-                if (contract.TotalCost / contract.Lessons * lessonCount > contract.ContractPayment.Sum(c => c.Payment.PayoffAmount))
-                {
-                    return View("~/Views/Shared/MessageView.ascx", model: "學員繳款餘額不足!!");
+                    if (contract.TotalCost / contract.Lessons * lessonCount > contract.ContractPayment.Sum(c => c.Payment.PayoffAmount))
+                    {
+                        return View("~/Views/Shared/MessageView.ascx", model: "學員繳款餘額不足!!");
+                    }
                 }
-
             }
 
             LessonTime timeItem = new LessonTime
@@ -751,13 +753,16 @@ namespace WebHome.Controllers
                     }
                 }
 
-                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                if (lesson.RegisterLessonContract != null)
                 {
-                    ContractID = lesson.RegisterLessonContract.ContractID,
-                    EventDate = timeItem.ClassTime.Value,
-                    LessonTime = timeItem,
-                    TrustType = Naming.TrustType.N.ToString()
-                });
+                    models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                    {
+                        ContractID = lesson.RegisterLessonContract.ContractID,
+                        EventDate = timeItem.ClassTime.Value,
+                        LessonTime = timeItem,
+                        TrustType = Naming.TrustType.N.ToString()
+                    });
+                }
 
             }
 

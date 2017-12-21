@@ -10,8 +10,7 @@
 
 <%  if (_userProfile != null
     && (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator
-        || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach
-        || _userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.FreeAgent))
+        || _userProfile.IsCoach()))
     { %>
 <li>
     <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Coach") %>" title="課程管理"><i class="fa fa-lg fa-fw fa-calendar"></i><span class="menu-item-parent">課程管理</span></a>

@@ -112,7 +112,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="dispatchList">
-                        <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceDispatchLogSummary.ascx", models.GetTable<InvoiceItemDispatchLog>().Where(d => false)); %>
+                        <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceDispatchLogSummary.ascx", _viewModel); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -178,6 +178,10 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _profile = Context.GetUser();
         _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+        if (!_viewModel.DateFrom.HasValue)
+            _viewModel.DateFrom = DateTime.Today;
+        if (!_viewModel.DateTo.HasValue)
+            _viewModel.DateTo = DateTime.Today;
     }
 
 </script>

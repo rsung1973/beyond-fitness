@@ -471,6 +471,16 @@ namespace WebHome.Controllers
             }
         }
 
+        public ActionResult TestCommitPaymentForShopping(PaymentViewModel viewModel, int? times)
+        {
+            ActionResult result = new EmptyResult();
+            for (int i = 0; i < (times ?? 1000); i++)
+            {
+                result = CommitPaymentForShopping(viewModel);
+            }
+            return result;
+        }
+
         public ActionResult CommitPaymentForShopping(PaymentViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -554,12 +564,12 @@ namespace WebHome.Controllers
                 models.SubmitChanges();
                 TaskExtensionMethods.ProcessInvoiceToGov();
 
-                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType });
+                return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                return Json(new { result = false, message = ex.Message });
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -904,16 +914,35 @@ namespace WebHome.Controllers
                                            Payment ON ContractTrustTrack.PaymentID = Payment.PaymentID INNER JOIN
                                            VoidPayment ON Payment.PaymentID = VoidPayment.VoidID
                             WHERE   (ContractTrustTrack.PaymentID = {0})", item.VoidID);
+
+                if (item.Payment.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                    && item.Payment.InvoiceItem.InvoiceCancellation.InvoiceCancellationDispatch == null)
+                {
+                    item.Payment.InvoiceItem.InvoiceCancellation.InvoiceCancellationDispatch = new InvoiceCancellationDispatch { };
+                    models.SubmitChanges();
+                }
             }
             else
             {
-                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                InvoiceAllowance allowance;
+                if (item.Payment.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                    && item.Payment.InvoiceItem.InvoiceAllowance.Count>0 
+                    && (allowance = item.Payment.InvoiceItem.InvoiceAllowance.First()).InvoiceAllowanceDispatch == null)
                 {
-                    ContractID = item.Payment.ContractPayment.ContractID,
-                    EventDate = item.VoidDate.Value,
-                    VoidID = item.VoidID,
-                    TrustType = Naming.TrustType.V.ToString()
-                });
+                    allowance.InvoiceAllowanceDispatch = new InvoiceAllowanceDispatch { };
+                    models.SubmitChanges();
+                }
+
+                if (item.Payment.ContractPayment != null)
+                {
+                    models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                    {
+                        ContractID = item.Payment.ContractPayment.ContractID,
+                        EventDate = item.VoidDate.Value,
+                        VoidID = item.VoidID,
+                        TrustType = Naming.TrustType.V.ToString()
+                    });
+                }
 
                 models.SubmitChanges();
             }
@@ -1032,15 +1061,17 @@ namespace WebHome.Controllers
         {
             if (item.InvoiceID.HasValue)
             {
-                if ((item.InvoiceItem.InvoiceDate.Value.Month + 1) / 2 < (DateTime.Today.Month + 1) / 2)
-                {
-                    createAllowance(item);
-                }
-                else
-                {
-                    if (item.InvoiceItem.InvoiceCancellation == null)
-                        cancelInvoice(item.InvoiceItem);
-                }
+                createAllowance(item);
+
+                //if (item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 && (item.InvoiceItem.InvoiceDate.Value.Month + 1) / 2 < (DateTime.Today.Month + 1) / 2)
+                //{
+                //    createAllowance(item);
+                //}
+                //else
+                //{
+                //    if (item.InvoiceItem.InvoiceCancellation == null)
+                //        cancelInvoice(item.InvoiceItem);
+                //}
             }
         }
 
@@ -1098,6 +1129,7 @@ namespace WebHome.Controllers
                 InvoiceItem = invoice,
                 CancellationNo = invoice.TrackCode + invoice.No,
                 Remark = "作廢收款",
+                CancelReason = "作廢收款",
                 //ReturnTaxDocumentNo = invoice.ReturnTaxDocumentNumber,
                 CancelDate = DateTime.Now
             };
@@ -1305,10 +1337,14 @@ namespace WebHome.Controllers
                         ? i.Item.VoidPayment == null
                             ? "已開立"
                             : i.Item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                                ? "已作廢"
+                                ? i.Item.InvoiceItem.InvoiceAllowance.Any()
+                                    ? "已折讓"
+                                    : "已作廢"
                                 : "已開立"
                         : i.Item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? "已作廢"
+                            ? i.Item.InvoiceItem.InvoiceAllowance.Any()
+                                ? "已折讓"
+                                : "已作廢"
                             : "--",
                     買受人統編 = i.Item.InvoiceID.HasValue
                         ? i.Item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : i.Item.InvoiceItem.InvoiceBuyer.ReceiptNo
@@ -1387,7 +1423,9 @@ namespace WebHome.Controllers
                     發票狀態 = i.VoidPayment == null
                         ? "已開立"
                         : i.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? "已作廢"
+                            ? i.InvoiceItem.InvoiceAllowance.Any()
+                                ? "已折讓"
+                                : "已作廢"
                             : "已開立",
                     買受人統編 = i.InvoiceID.HasValue
                         ? i.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : i.InvoiceItem.InvoiceBuyer.ReceiptNo

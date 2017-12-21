@@ -16,7 +16,7 @@
         <li>
             <a href="<%= Url.Action("PrintIndex","Invoice") %>" title="電子發票列印"><i class="fa fa-lg fa-fw fa-print"></i>電子發票列印</a>
         </li>
-        <%  if (_userProfile.IsAccounting() || _userProfile.IsAssistant())
+        <%  if (_userProfile.IsSysAdmin())
             { %>
         <li>
             <a href="<%= Url.Action("VacantNoIndex", "Invoice") %>" title="空白電子發票下載"><i class="fa fa-lg fa-fw fa-cloud-download"></i>空白電子發票下載</a>
@@ -24,6 +24,9 @@
         <li>
             <a href="<%= Url.Action("TurnkeyIndex", "Invoice") %>" title="電子發票上傳紀錄查詢"><i class="fa fa-lg fa-fw fa-cloud-upload"></i>電子發票上傳紀錄查詢</a>
         </li>
+        <%  }
+            if (_userProfile.IsAccounting() || _userProfile.IsAssistant())
+            { %>
         <li>
             <a href="<%= Url.Action("InvoiceNoIndex", "Invoice") %>" title="電子發票號碼維護"><i class="fa fa-lg fa-fw fa-qrcode"></i>電子發票號碼維護</a>
         </li>

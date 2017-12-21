@@ -21,7 +21,7 @@
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Index") %>" title="關於我們"><i class="fa fa-lg fa-fw fa-graduation-cap"></i><span class="menu-item-parent">關於我們</span></a>
         </li>
         <%  }
-            if (!(_userProfile != null && (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Coach || _userProfile.CurrentUserRole.RoleID==(int)Naming.RoleID.Administrator)))
+            if (!(_userProfile != null && (_userProfile.IsCoach() || _userProfile.CurrentUserRole.RoleID==(int)Naming.RoleID.Administrator)))
             { %>
                 <li>
                     <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Professional") %>" title="專業體能訓練"><i class="fa fa-lg fa-fw fa-heartbeat"></i><span class="menu-item-parent">專業訓練</span></a>

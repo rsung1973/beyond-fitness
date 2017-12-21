@@ -61,7 +61,9 @@
             <td><%= item.VoidPayment == null
                         ? "已開立"
                         : item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? "已作廢"
+                            ? item.InvoiceItem.InvoiceAllowance.Any() 
+                                ? "已折讓"
+                                : "已作廢"
                             : "已開立" %></td>
             <td><%= item.InvoiceID.HasValue
                         ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo

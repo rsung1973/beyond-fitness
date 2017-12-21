@@ -33,9 +33,11 @@
                             <option value="5">點數兌換課程</option>
                             <option value="2">內部訓練</option>
                             <option value="4">企業方案</option>
+                            <option value="6">員工福利課程</option>
                         </select>
                         <script>
                             $('#lessonType').on('change', function (evt) {
+                            console.log('debug...');
                                 var lessonType = $(this).val();
 
                                 $('input[name="userName"]').val('');
@@ -55,6 +57,13 @@
                                     case '4':
                                     case '5':
                                         $('.part0').css('display', 'block');
+                                        break;
+                                    case '6':
+                                        $('.part0').css('display', 'none');
+                                        showLoading();
+                                        $('#attendeeSelector').load('<%= Url.Action("GiftLessonSelector","CoachFacet") %>', {}, function (data) {
+                                            hideLoading();
+                                        });
                                         break;
 
                                 }
@@ -128,6 +137,10 @@
                                     $('#attendeeSelector').load('<%= Url.Action("BonusLessonSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
                                         hideLoading();
                                     });
+                                } else if ($('#lessonType').val() == '6') {
+                                    $('#attendeeSelector').load('<%= Url.Action("GiftLessonSelector","CoachFacet") %>', { 'userName': userName }, function (data) {
+                                        hideLoading();
+                                    });
                                 }
                             });
                         </script>
@@ -137,6 +150,8 @@
                     <button id="btnAttendeeQuery" class="btn bg-color-blue btn-sm" type="button">查詢</button>
                 </section>
             </div>
+        </fieldset>
+        <fieldset>
             <div class="row">
                 <section id="attendeeSelector" class="col col-12">
                 </section>
@@ -150,6 +165,7 @@
                 var lessonType = $('#lessonType').val();
                 switch (lessonType) {
                     case '0':
+                    case '6':
                         $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize(), function (data) {
                             if (data.result) {
                                 smartAlert(data.message);

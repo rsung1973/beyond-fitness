@@ -31,7 +31,7 @@
                     else
                     { %>
                 <%= totalLessons.HasValue ? totalLessons
-                                        - attendedLessons
+                                        - (attendedLessons ?? 0)
                                         - attendance : 0 %>
                 <%  } %>
                   </font> / <%= totalLessons ?? 0 %></span>

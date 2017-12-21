@@ -392,6 +392,7 @@ namespace WebHome.Controllers
         {
             public String 處理代碼 { get; set; }
             public String 入會契約編號 { get; set; }
+            public String 契約編號 { get; set; }
             public String 買受人證號 { get; set; }
             public String 姓名 { get; set; }
             public String 通訊地址 { get; set; }
@@ -417,12 +418,12 @@ namespace WebHome.Controllers
                     信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount).ToString(),
                     T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).ToString(),
                     B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).ToString(),
-                    N_返還 = String.Format("({0})", (item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
+                    N_返還 = String.Format("{0}", (item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
                         .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
                         + (item.ContractTrustTrack.Where(t => t.TrustType == "V").Select(t => t.VoidPayment.Payment)
                         .Sum(p => p.PayoffAmount) ?? 0)),
-                    S_終止 = String.Format("({0})", -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount)),
-                    X_轉讓 = String.Format("({0})", -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount)),
+                    S_終止 = String.Format("{0}", -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount)),
+                    X_轉讓 = String.Format("{0}", -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount)),
                     收_付金額 = (item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount)).ToString(),
                     信託期末金額 = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount).ToString(),
                 });
@@ -443,7 +444,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "B";
                     settlement.InitialTrustAmount += amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0:##,###,###,###}", amt);
+                    reportItem.當期信託金額 = String.Format("{0}", amt);
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
@@ -453,7 +454,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "T";
                     settlement.InitialTrustAmount += amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0:##,###,###,###}", amt); ;
+                    reportItem.當期信託金額 = String.Format("{0}", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     reportItem.轉出買受人証號 = contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo;
                     details.Add(reportItem);
@@ -466,7 +467,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
+                    reportItem.當期信託金額 = String.Format("{0}", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
@@ -478,7 +479,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
+                    reportItem.當期信託金額 = String.Format("{0}", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
@@ -489,7 +490,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "X";
                     settlement.InitialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
+                    reportItem.當期信託金額 = String.Format("{0}", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
@@ -500,7 +501,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "S";
                     settlement.InitialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("({0:##,###,###,###})", amt); ;
+                    reportItem.當期信託金額 = String.Format("{0}", amt); ;
                     reportItem.信託餘額 = settlement.InitialTrustAmount;
                     details.Add(reportItem);
                 }
@@ -537,6 +538,7 @@ namespace WebHome.Controllers
             {
                 處理代碼 = null,
                 入會契約編號 = contract.ContractNo(),
+                契約編號 = null,
                 買受人證號 = contract.ContractOwner.UserProfileExtension.IDNo,
                 姓名 = contract.ContractOwner.RealName,
                 通訊地址 = contract.ContractOwner.Address(),
@@ -827,7 +829,9 @@ namespace WebHome.Controllers
                 發票狀態 = item.Payment.VoidPayment == null
                         ? "已開立"
                         : item.Payment.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? "已作廢"
+                            ? item.Payment.InvoiceItem.InvoiceAllowance.Any() 
+                                ? "已折讓"
+                                : "已作廢"
                             : "已開立",
                 合約編號 = item.Payment.ContractPayment != null
                     ? item.Payment.ContractPayment.CourseContract.ContractNo()

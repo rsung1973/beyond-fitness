@@ -261,5 +261,20 @@ namespace WebHome.Helper
             return result;
         }
 
+        public static WebHome.Models.MIG3_1.C0701.VoidInvoice CreateC0701(this InvoiceItem item)
+        {
+            return new WebHome.Models.MIG3_1.C0701.VoidInvoice
+            {
+                VoidInvoiceNumber = item.TrackCode + item.No,
+                InvoiceDate = String.Format("{0:yyyyMMdd}", item.InvoiceDate),
+                BuyerId = item.InvoiceBuyer.ReceiptNo,
+                SellerId = item.InvoiceSeller.ReceiptNo,
+                VoidDate = DateTime.Now.Date.ToString("yyyyMMdd"),
+                VoidTime = DateTime.Now,
+                VoidReason = "註銷重開",
+                Remark = ""
+            };
+        }
+
     }
 }

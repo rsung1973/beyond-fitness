@@ -155,7 +155,7 @@
 
     function bookingByCoach(lessonDate) {
         showLoading();
-        $.post('<%= Url.Action("BookingByCoach","ClassFacet",new { UID = _lesson.UID, CoachID= _lesson.AdvisorID }) %>',{'lessonDate':lessonDate},function(data){
+        $.post('<%= Url.Action("BookingByCoach","ClassFacet",new { UID = _lesson.UID, CoachID= _profile.IsCoach() ? _profile.UID : _lesson.AdvisorID }) %>',{'lessonDate':lessonDate},function(data){
             hideLoading();
             if(data) {
                 var $dialog = $(data);
@@ -194,6 +194,7 @@
     LessonTime _model;
     RegisterLesson _lesson;
     String _tabContent = "tabContent" + DateTime.Now.Ticks;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -209,6 +210,7 @@
         {
             _lesson = _model.GroupingLesson.RegisterLesson.First();
         }
+        _profile = Context.GetUser();
     }
 
 </script>

@@ -61,15 +61,6 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost")]
-        public string HostDomain {
-            get {
-                return ((string)(this["HostDomain"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("~/CourseContract/CreateContractPdf")]
         public string CreateContractPdf {
             get {
@@ -88,9 +79,18 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EINVTurnkey\\UpCast\\B2CSTORAGE")]
+        public string EINVTurnKeyPath {
+            get {
+                return ((string)(this["EINVTurnKeyPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd;Integrated Security=Tr" +
-            "ue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\sqlexpress;Initial Catalog=BeyondFitnessProd2;Integrated Security=T" +
+            "rue")]
         public string BFDbConnection {
             get {
                 return ((string)(this["BFDbConnection"]));
@@ -99,10 +99,19 @@ namespace WebHome.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EINVTurnkey\\UpCast\\B2CSTORAGE")]
-        public string EINVTurnKeyPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://10.0.1.201")]
+        public string HostDomain {
             get {
-                return ((string)(this["EINVTurnKeyPath"]));
+                return ((string)(this["HostDomain"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\EINVTurnkey\\UpCast\\B2PMESSAGE")]
+        public string EINVTurnKeyB2P {
+            get {
+                return ((string)(this["EINVTurnKeyB2P"]));
             }
         }
     }

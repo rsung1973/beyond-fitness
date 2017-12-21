@@ -99,6 +99,7 @@
                                 $('.eInvoice-dialog').css('display', 'inline');
                                 $('.paper-invoice').css('display', 'none');
                                 $('.eInvoice-disable').prop('disabled', true);
+                                $('#<%= _dialog %> input[name="PayoffDate"]').val('<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>');
                             } else {
                                 $('.eInvoice-dialog').css('display', 'none');
                                 $('.paper-invoice').css('display', 'inline');
@@ -120,8 +121,6 @@
                         <%  }   %>
                     </script>
                 </div>
-            </fieldset>
-            <fieldset>
                 <div class="row">
                     <section class="col col-6">
                         <label class="label">收款方式</label>
@@ -129,6 +128,7 @@
                             <select name="PaymentType">
                                 <option value="現金">現金</option>
                                 <option value="刷卡">刷卡</option>
+                                <%--<option value="轉帳">轉帳</option>--%>
                             </select>
                             <i class="icon-append fa fa-file-word-o"></i>
                         </label>
@@ -144,8 +144,6 @@
                         </label>
                     </section>
                 </div>
-            </fieldset>
-            <fieldset>
                 <div class="row">
                     <section class="col col-6">
                         <label class="label">買受人統編</label>
@@ -162,10 +160,8 @@
                         </label>
                     </section>
                 </div>
-             </fieldset>
-            <fieldset>
                 <div class="row eInvoice-dialog">
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">載具類型</label>
                         <label class="select">
                             <i class="icon-append fa fa-user"></i>
@@ -176,14 +172,16 @@
                             </select>
                         </label>
                     </section>
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">載具號碼</label>
                         <label class="input">
                             <i class="icon-append fa fa-barcode"></i>
                             <input type="text" name="CarrierId1" maxlength="20" placeholder="請輸入載具號碼" value="<%= _viewModel.CarrierId1 %>" />
                         </label>
                     </section>
-                    <section class="col col-4">
+                </div>
+                <div class="row eInvoice-dialog">
+                    <section class="col col-12">
                         <label class="label">發票捐贈愛心碼</label>
                         <label class="input">
                             <i class="icon-append fa fa-heart"></i>
@@ -191,6 +189,7 @@
                         </label>
                     </section>
                 </div>
+                <input type="hidden" name="errorMessage" />
             </fieldset>
             <fieldset>
                 <section>
