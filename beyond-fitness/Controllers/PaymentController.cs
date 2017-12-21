@@ -471,13 +471,16 @@ namespace WebHome.Controllers
             }
         }
 
-        public ActionResult TestCommitPaymentForShopping(PaymentViewModel viewModel, int? times)
+        public async Task<ActionResult> TestCommitPaymentForShopping(PaymentViewModel viewModel, int? times)
         {
             ActionResult result = new EmptyResult();
-            for (int i = 0; i < (times ?? 1000); i++)
+            await Task.Run(() =>
             {
-                result = CommitPaymentForShopping(viewModel);
-            }
+                for (int i = 0; i < (times ?? 1000); i++)
+                {
+                    result = CommitPaymentForShopping(viewModel);
+                }
+            });
             return result;
         }
 
@@ -562,6 +565,10 @@ namespace WebHome.Controllers
                 preparePayment(viewModel, profile, item);
 
                 models.SubmitChanges();
+
+                invoice.RandomNo = String.Format("{0:0000}", invoice.InvoiceID % 10000);
+                models.SubmitChanges();
+
                 TaskExtensionMethods.ProcessInvoiceToGov();
 
                 return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType }, JsonRequestBehavior.AllowGet);
