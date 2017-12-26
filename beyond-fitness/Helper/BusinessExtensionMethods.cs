@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -418,6 +419,9 @@ namespace WebHome.Helper
                     CurrentTrial = viewModel.CurrentTrial
                 }
             };
+            if(viewModel.Birthday.HasValue)
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+
 
             item.UserRole.Add(new UserRole
             {
@@ -512,6 +516,46 @@ namespace WebHome.Helper
             return items;
         }
 
+        public static IQueryable<LessonTime> GetPISessionAttendance<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month, int? branchID)
+            where TEntity : class, new()
+        {
+            DateTime? queryDateTo = dateTo;
+
+            var items = models.GetTable<LessonTime>()
+                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練
+                    || (t.RegisterLesson.RegisterLessonEnterprise != null && t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練))
+                .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
+
+            if (coachID.HasValue)
+            {
+                items = items.Where(t => t.AttendingCoach == coachID);
+            }
+
+            if (dateFrom.HasValue)
+            {
+                items = items.Where(t => t.ClassTime >= dateFrom);
+            }
+
+            if (queryDateTo.HasValue)
+            {
+                items = items.Where(t => t.ClassTime < queryDateTo.Value.AddDays(1));
+            }
+            else if (month.HasValue)
+            {
+                queryDateTo = dateFrom.Value.AddMonths(month.Value);
+                items = items.Where(t => t.ClassTime < queryDateTo);
+                queryDateTo = queryDateTo.Value.AddDays(-1);
+                dateTo = queryDateTo;
+            }
+
+            if (branchID.HasValue)
+            {
+                items = items.Where(t => t.BranchID == branchID);
+            }
+
+            return items;
+        }
+
         public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<LessonTime> items)
             where TEntity : class, new()
         {
@@ -562,7 +606,8 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             shares = 0;
-            var allLessons = items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+            var allLessons = items
+                .Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
@@ -596,19 +641,19 @@ namespace WebHome.Helper
             shares = ((int?)courseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) ?? 0)
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)courseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) / 2 ?? 0)
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) / 2 ?? 0)
                 + ((int?)enterpriseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) ?? 0)
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)enterpriseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
                 .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.ProfessionalLevel.GradeIndex / 100) / 2 ?? 0);
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) / 2 ?? 0);
 
             return (fullAchievement ?? 0) + (halfAchievement ?? 0);
         }
@@ -617,36 +662,33 @@ namespace WebHome.Helper
         public static IQueryable<TuitionAchievement> GetTuitionAchievement<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month)
             where TEntity : class, new()
         {
-            IQueryable<TuitionInstallment> installment = models.GetTable<TuitionInstallment>();
-            IQueryable<TuitionAchievement> items;
+            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
+                .Where(t => t.Payment.VoidPayment == null);
+            Expression<Func<TuitionAchievement, bool>> queryExpr = c => true;
 
             DateTime? queryDateTo = dateTo;
 
             if (dateFrom.HasValue)
             {
-                installment = installment.Where(i => i.PayoffDate >= dateFrom);
+                queryExpr = queryExpr.And(i => i.Payment.PayoffDate >= dateFrom);
             }
             if (queryDateTo.HasValue)
             {
-                installment = installment.Where(i => i.PayoffDate < queryDateTo.Value.AddDays(1));
+                queryExpr = queryExpr.And(i => i.Payment.PayoffDate < queryDateTo.Value.AddDays(1));
             }
             else if (month.HasValue)
             {
                 queryDateTo = dateFrom.Value.AddMonths(month.Value);
-                installment = installment.Where(i => i.PayoffDate < queryDateTo);
+                queryExpr = queryExpr.And(i => i.Payment.PayoffDate < queryDateTo);
                 queryDateTo = queryDateTo.Value.AddDays(-1);
                 dateTo = queryDateTo;
             }
 
+            items = items.Where(queryExpr);
+
             if (coachID.HasValue)
             {
-                items = installment.Join(models.GetTable<TuitionAchievement>().Where(c => c.CoachID == coachID),
-                    t => t.InstallmentID, i => i.InstallmentID, (t, i) => i);
-            }
-            else
-            {
-                items = installment.Join(models.GetTable<TuitionAchievement>(),
-                    t => t.InstallmentID, i => i.InstallmentID, (t, i) => i);
+                items = items.Where(t => t.CoachID == coachID);
             }
 
             return items;
@@ -655,17 +697,16 @@ namespace WebHome.Helper
         public static void CheckProfessionalLeve<TEntity>(this ModelSource<TEntity> models, ServingCoach item)
             where TEntity : class, new()
         {
-            if (item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_1st
-                || item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_2nd
-                || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_1st
-                || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_2nd
-                || !item.UserProfile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach))
+            if (!item.LevelID.HasValue || item.ProfessionalLevel.ProfessionalLevelReview == null)
                 return;
 
             DateTime? quarterEnd = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
             DateTime quarterStart = quarterEnd.Value.AddMonths(-3);
 
             var attendanceCount = models.GetLessonAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
+            var PISessionCount = models.GetPISessionAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
+            attendanceCount += ((PISessionCount + 1) / 2);
+
             var tuition = models.GetTuitionAchievement(item.CoachID, quarterStart, ref quarterEnd, null);
             var summary = tuition.Sum(t => t.ShareAmount) ?? 0;
             bool qualifiedCert = item.CoachCertificate.Count(c => c.Expiration >= quarterStart) >= 2;
@@ -679,113 +720,44 @@ namespace WebHome.Helper
             };
             item.CoachRating.Add(ratingItem);
 
-            if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_5_2nd)
+            if (!qualifiedCert)
             {
-                if (!qualifiedCert || attendanceCount < 270 || summary < 390000)
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
-                }
-                else
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_2nd;
+                ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
             }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_5_1st)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 3)
             {
-                if (!qualifiedCert || attendanceCount < 270 || summary < 390000)
+                if (attendanceCount < 95 || summary < 440000)
                 {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
-                }
-                else
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_1st;
-            }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_4_2nd)
-            {
-                if (attendanceCount >= 300 && summary >= 500000)
-                {
-                    if (qualifiedCert)
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_2nd;
-                    else
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
-                }
-                else if (!qualifiedCert || !(attendanceCount >= 240 && summary >= 300000))
-                {
-                    item.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
-                }
-                else
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
-            }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_4_1st)
-            {
-                if (attendanceCount >= 300 && summary >= 500000)
-                {
-                    if (qualifiedCert)
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_1st;
-                    else
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
-                }
-                else if (!qualifiedCert || !(attendanceCount >= 240 && summary >= 300000))
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
-                }
-                else
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
-            }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_3_2nd)
-            {
-                if (attendanceCount >= 240 && summary >= 350000)
-                {
-                    if (qualifiedCert)
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
-                    else
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
-                }
-                else if (qualifiedCert)
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
-                }
-                else
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_2nd;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_3_1st)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 2)
             {
-                if (attendanceCount >= 240 && summary >= 350000)
+                if (attendanceCount >= 105 && summary >= 600000)
                 {
-                    if (qualifiedCert)
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
-                    else
-                        ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
-                else if (qualifiedCert)
+                else if (!(attendanceCount >= 85 && summary >= 330000))
                 {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
-                }
-                else
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_1st;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_2_2nd)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 1)
             {
-                //27.5 % LEVEL3(考取兩張國際證照Beyond認可未過期)
-                if (qualifiedCert)
+                if (attendanceCount >= 95 && summary >= 500000)
                 {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
-                else
+                else if (!(attendanceCount >= 70 && summary >= 250000))
                 {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_2nd;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
-            else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_2_1st)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 0)
             {
-                if (qualifiedCert)
+                if (attendanceCount >= 75 && summary >= 300000)
                 {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
-                }
-                else
-                {
-                    ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_1st;
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
             }
             else
@@ -793,11 +765,157 @@ namespace WebHome.Helper
                 ratingItem.LevelID = item.LevelID.Value;
             }
 
-            item.LevelID = ratingItem.LevelID;
             models.SubmitChanges();
-            //工作滿1.5 年上課抽成 + 1 % .
+            models.ExecuteCommand("update ServingCoach set LevelID={0} where CoachID={1}", ratingItem.LevelID, item.CoachID);
 
         }
+
+        //public static void CheckProfessionalLeve<TEntity>(this ModelSource<TEntity> models, ServingCoach item)
+        //    where TEntity : class, new()
+        //{
+        //    if (item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_1st
+        //        || item.LevelID == (int)Naming.ProfessionLevelDefinition.AFM_2nd
+        //        || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_1st
+        //        || item.LevelID == (int)Naming.ProfessionLevelDefinition.FM_2nd
+        //        || !item.UserProfile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach))
+        //        return;
+
+        //    DateTime? quarterEnd = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
+        //    DateTime quarterStart = quarterEnd.Value.AddMonths(-3);
+
+        //    var attendanceCount = models.GetLessonAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
+        //    var tuition = models.GetTuitionAchievement(item.CoachID, quarterStart, ref quarterEnd, null);
+        //    var summary = tuition.Sum(t => t.ShareAmount) ?? 0;
+        //    bool qualifiedCert = item.CoachCertificate.Count(c => c.Expiration >= quarterStart) >= 2;
+
+        //    CoachRating ratingItem = new CoachRating
+        //    {
+        //        AttendanceCount = attendanceCount,
+        //        CoachID = item.CoachID,
+        //        RatingDate = DateTime.Now,
+        //        TuitionSummary = summary
+        //    };
+        //    item.CoachRating.Add(ratingItem);
+
+        //    if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_5_2nd)
+        //    {
+        //        if (!qualifiedCert || attendanceCount < 270 || summary < 390000)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
+        //        }
+        //        else
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_2nd;
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_5_1st)
+        //    {
+        //        if (!qualifiedCert || attendanceCount < 270 || summary < 390000)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
+        //        }
+        //        else
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_1st;
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_4_2nd)
+        //    {
+        //        if (attendanceCount >= 300 && summary >= 500000)
+        //        {
+        //            if (qualifiedCert)
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_2nd;
+        //            else
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
+        //        }
+        //        else if (!qualifiedCert || !(attendanceCount >= 240 && summary >= 300000))
+        //        {
+        //            item.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
+        //        }
+        //        else
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_4_1st)
+        //    {
+        //        if (attendanceCount >= 300 && summary >= 500000)
+        //        {
+        //            if (qualifiedCert)
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_5_1st;
+        //            else
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
+        //        }
+        //        else if (!qualifiedCert || !(attendanceCount >= 240 && summary >= 300000))
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
+        //        }
+        //        else
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_3_2nd)
+        //    {
+        //        if (attendanceCount >= 240 && summary >= 350000)
+        //        {
+        //            if (qualifiedCert)
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_2nd;
+        //            else
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
+        //        }
+        //        else if (qualifiedCert)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
+        //        }
+        //        else
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_2nd;
+        //        }
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_3_1st)
+        //    {
+        //        if (attendanceCount >= 240 && summary >= 350000)
+        //        {
+        //            if (qualifiedCert)
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_4_1st;
+        //            else
+        //                ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
+        //        }
+        //        else if (qualifiedCert)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
+        //        }
+        //        else
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_1st;
+        //        }
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_2_2nd)
+        //    {
+        //        //27.5 % LEVEL3(考取兩張國際證照Beyond認可未過期)
+        //        if (qualifiedCert)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_2nd;
+        //        }
+        //        else
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_2nd;
+        //        }
+        //    }
+        //    else if (item.LevelID == (int)Naming.ProfessionLevelDefinition.Level_2_1st)
+        //    {
+        //        if (qualifiedCert)
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_3_1st;
+        //        }
+        //        else
+        //        {
+        //            ratingItem.LevelID = (int)Naming.ProfessionLevelDefinition.Level_2_1st;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ratingItem.LevelID = item.LevelID.Value;
+        //    }
+
+        //    item.LevelID = ratingItem.LevelID;
+        //    models.SubmitChanges();
+        //    //工作滿1.5 年上課抽成 + 1 % .
+
+        //}
 
         public static IQueryable<CourseContract> GetContractInEditingByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile agent)
             where TEntity : class, new()

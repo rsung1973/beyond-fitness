@@ -194,17 +194,17 @@
             <fieldset id="coachLevel">
                 <div class="row">
                     <section class="col col-6">
-                        <label class="label">Level適用制度</label>
+                        <label class="label">是否為資深體能顧問</label>
                         <label class="select">
                             <select name="LevelCategory">
-                                <option value="1102" <%= _viewModel.LevelCategory == 1102 ? "selected" : null %>>新制</option>
-                                <option value="1101" <%= _viewModel.LevelCategory == 1101 ? "selected" : null %>>舊制</option>
+                                <option value="1102" <%= _viewModel.LevelCategory == 1105 ? "selected" : null %>>否</option>
+                                <option value="1101" <%= _viewModel.LevelCategory == 1104 ? "selected" : null %>>是</option>
                             </select>
                             <i class="icon-append fa fa-file-word-o"></i>
                         </label>
                     </section>
                     <section class="col col-6">
-                        <label class="label">Level</label>
+                        <label class="label">P.T 級別</label>
                         <label class="select">
                             <select name="LevelID">
                             </select>
@@ -217,14 +217,14 @@
                             function buildLevel(category) {
                                 var $levelID = $('select[name="LevelID"]');
                                 $levelID.find('option').remove();
-                                if (category == '<%= (int)Naming.ProfessionalCategory.新制 %>') {
-                                    <%  foreach(var item in models.GetTable<ProfessionalLevel>().Where(l=>l.CategoryID==(int)Naming.ProfessionalCategory.新制))
-                                        {   %>
+                                if (category == '<%= (int)Naming.ProfessionalCategory.Junior %>') {
+                                    <%  foreach(var item in models.GetTable<ProfessionalLevel>().Where(l=>l.CategoryID==(int)Naming.ProfessionalCategory.Junior))
+                        {   %>
                                     $('<option>').attr('value', '<%= item.LevelID %>').text('<%= item.LevelName %>').appendTo($levelID);
                                     <%  } %>
                                 } else {
-                                    <%  foreach(var item in models.GetTable<ProfessionalLevel>().Where(l=>l.CategoryID==(int)Naming.ProfessionalCategory.舊制))
-                                        {   %>
+                                    <%  foreach(var item in models.GetTable<ProfessionalLevel>().Where(l=>l.CategoryID==(int)Naming.ProfessionalCategory.Senior))
+                        {   %>
                                     $('<option>').attr('value', '<%= item.LevelID %>').text('<%= item.LevelName %>').appendTo($levelID);
                                     <%  } %>
                                 }

@@ -42,7 +42,8 @@
                     </td>
                 </tr>
         <%  } %>
-        <%  var enterprise = _model.Where(t => t.RegisterLesson.RegisterLessonEnterprise != null)
+        <%  var enterprise = _model.Where(t => t.RegisterLesson.RegisterLessonEnterprise != null
+                    && t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .GroupBy(t => new
                 {
                     ContractID = t.RegisterLesson.RegisterLessonEnterprise.ContractID,
@@ -62,7 +63,9 @@
             </td>
         </tr>
         <%  } %>
-        <%  var others = _model.Where(t => t.RegisterLesson.RegisterLessonContract == null && t.RegisterLesson.RegisterLessonEnterprise == null);
+        <%  var others = _model.Where(t => t.RegisterLesson.RegisterLessonContract == null 
+                        && t.RegisterLesson.RegisterLessonEnterprise == null
+                        && t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
             foreach(var item in others)
             {
                  %>
@@ -73,6 +76,28 @@
             <td><%= item.RegisterLesson.LessonPriceType.Description  %>(<%= item.RegisterLesson.LessonPriceType.DurationInMinutes %>分鐘)</td>
             <td><%  var halfCount = item.LessonAttendance == null || !item.LessonPlan.CommitAttendance.HasValue ? 1 : 0 ; %>
                 <%= 1-halfCount %> / <%= halfCount %>
+            </td>
+        </tr>
+        <%  } %>
+        <%  var PISession = _model
+                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練
+                        || (t.RegisterLesson.RegisterLessonEnterprise != null
+                            && t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.DocumentLevelDefinition.自主訓練))
+                .Select(t => new { t.BranchID, t.RegisterLesson.UID, PISession = t })
+                .GroupBy(g => new { g.BranchID, g.UID });
+
+            foreach(var item in PISession)
+            {
+                var branch = models.GetTable<BranchStore>().Where(b => b.BranchID == item.Key.BranchID).First();
+                var profile = models.GetTable<UserProfile>().Where(u => u.UID == item.Key.UID).First();
+                %>
+        <tr>
+            <td nowrap="noWrap">--</td>
+            <td nowrap="noWrap"><%= branch.BranchName %></td>
+            <td nowrap="noWrap"><%= profile.FullName() %></td>
+            <td>P.I. Session</td>
+            <td>
+                <%= (decimal)item.Count() / 2m %>
             </td>
         </tr>
         <%  } %>

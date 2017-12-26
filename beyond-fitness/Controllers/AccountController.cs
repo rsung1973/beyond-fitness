@@ -855,7 +855,10 @@ namespace WebHome.Controllers
 
             item.UserName = viewModel.UserName.GetEfficientString();
             if (viewModel.Birthday.HasValue)
+            {
                 item.Birthday = viewModel.Birthday;
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+            }
 
             if (!this.CreatePassword(viewModel))
                 return View(viewModel);

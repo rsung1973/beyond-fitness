@@ -127,6 +127,9 @@ namespace WebHome.Controllers
                 }
             };
 
+            if(viewModel.Birthday.HasValue)
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+
             item.UserRole.Add(new UserRole
             {
                 RoleID = (int)Naming.RoleID.Learner
@@ -189,6 +192,9 @@ namespace WebHome.Controllers
                 UserProfileExtension = new UserProfileExtension { }
             };
 
+            if(viewModel.Birthday.HasValue)
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+
             models.DeleteAllOnSubmit<UserRole>(r => r.UID == item.UID);
             item.UserRole.Add(new UserRole
             {
@@ -249,6 +255,9 @@ namespace WebHome.Controllers
                     Birthday = viewModel.Birthday,
                     UserProfileExtension = new UserProfileExtension { }
                 };
+
+                if(viewModel.Birthday.HasValue)
+                    item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
                 models.GetTable<UserProfile>().InsertOnSubmit(item);
 
@@ -323,9 +332,11 @@ namespace WebHome.Controllers
                 item.EmployeeWelfare.MonthlyGiftLessons = viewModel.HasGiftLessons == true ? viewModel.MonthlyGiftLessons : null;
             }
 
+            ProfessionalLevel professionLevel = null;
             if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach
                     || r == (int)Naming.RoleID.Manager
-                    || r == (int)Naming.RoleID.ViceManager))
+                    || r == (int)Naming.RoleID.ViceManager
+                    || r == (int)Naming.RoleID.Officer))
             {
                 if (item.ServingCoach == null)
                 {
@@ -340,8 +351,10 @@ namespace WebHome.Controllers
                     BranchID = viewModel.BranchID.Value
                 });
 
-                if (viewModel.LevelID.HasValue)
+                if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach) 
+                    && viewModel.LevelID.HasValue)
                 {
+                    professionLevel = models.GetTable<ProfessionalLevel>().Where(l => l.LevelID == viewModel.LevelID).First();
                     if (item.ServingCoach.LevelID != viewModel.LevelID)
                     {
                         item.ServingCoach.LevelID = viewModel.LevelID;
@@ -353,12 +366,35 @@ namespace WebHome.Controllers
                         });
                     }
                 }
+                else if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Manager))
+                {
+                    professionLevel = item.ServingCoach.ProfessionalLevel = models.GetTable<ProfessionalLevel>().Where(p => p.CategoryID == (int)Naming.ProfessionalCategory.FM).FirstOrDefault();
+                }
+                else if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.ViceManager))
+                {
+                    professionLevel = item.ServingCoach.ProfessionalLevel = models.GetTable<ProfessionalLevel>().Where(p => p.CategoryID == (int)Naming.ProfessionalCategory.AFM).FirstOrDefault();
+                }
+                else if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Officer))
+                {
+                    professionLevel =  item.ServingCoach.ProfessionalLevel = models.GetTable<ProfessionalLevel>().Where(p => p.CategoryID == (int)Naming.ProfessionalCategory.Special).FirstOrDefault();
+                }
+
             }
 
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
 
             models.SubmitChanges();
+
+            if (professionLevel != null)
+            {
+                models.ExecuteCommand(@"UPDATE LessonTimeSettlement
+                    SET        ProfessionalLevelID = {0}, MarkedGradeIndex = {1}
+                    FROM     LessonTime INNER JOIN
+                                   LessonTimeSettlement ON LessonTime.LessonID = LessonTimeSettlement.LessonID
+                    WHERE   (LessonTime.AttendingCoach = {2}) AND (LessonTime.ClassTime >= {3})",
+                        professionLevel.LevelID, professionLevel.GradeIndex, item.UID, new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1));
+            }
 
             return Json(new { result = true });
 
@@ -762,8 +798,12 @@ namespace WebHome.Controllers
 
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
+            item.Birthday = null;
             if (viewModel.Birthday.HasValue)
+            {
                 item.Birthday = viewModel.Birthday;
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+            }
 
             if (viewModel.IsCoach == true)
             {
@@ -851,6 +891,9 @@ namespace WebHome.Controllers
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
             item.Birthday = viewModel.Birthday;
+            item.BirthdateIndex = null;
+            if(viewModel.Birthday.HasValue)
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
             if (!String.IsNullOrEmpty(viewModel.Email))
             {

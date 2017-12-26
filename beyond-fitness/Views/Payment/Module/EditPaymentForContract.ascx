@@ -87,7 +87,7 @@
                             <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
                         </label>
                     </section>
-                    <section class="col col-4">
+                    <section class="col col-6">
                         <label class="label">發票類型</label>
                         <div class="inline-group">
                             <label class="radio">
@@ -101,13 +101,13 @@
                     <script>
                         function initial() {
                             if ($('#<%= _dialog %> input[name="InvoiceType"][value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>"]').is(':checked')) {
-                                $('.eInvoice-dialog').css('display', 'inline');
+                                $('.eInvoice-dialog').css('display', 'block');
                                 $('.paper-invoice').css('display', 'none');
                                 $('.eInvoice-disable').prop('disabled', true);
                                 $('#<%= _dialog %> input[name="PayoffDate"]').val('<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>');
                             } else {
                                 $('.eInvoice-dialog').css('display', 'none');
-                                $('.paper-invoice').css('display', 'inline');
+                                $('.paper-invoice').css('display', 'block');
                                 $('.eInvoice-disable').prop('disabled', false);
                             }
                         }
@@ -170,7 +170,7 @@
             </fieldset>
             <fieldset>
                 <div class="row eInvoice-dialog">
-                    <section class="col col-6">
+                    <section class="col col-4">
                         <label class="label">載具類型</label>
                         <label class="select">
                             <i class="icon-append fa fa-user"></i>

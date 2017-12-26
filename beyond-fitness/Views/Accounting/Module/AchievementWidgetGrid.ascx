@@ -97,19 +97,19 @@
                                 <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">請選擇查詢查詢起月</label>
+                                        <label class="label">請選擇查詢月份</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
                                         </label>
                                     </section>
-                                    <section class="col col-6">
+                                    <%--<section class="col col-6">
                                         <label class="label">請選擇查詢查詢迄月</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="AchievementYearMonthTo" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢迄日" value='<%= _viewModel.AchievementYearMonthTo %>' />
                                         </label>
-                                    </section>
+                                    </section>--%>
                                 </div>
                             </fieldset>
                             <footer>
@@ -236,7 +236,7 @@
         var formData = $form.serializeObject();
         $('#btnDownloadAchievement').css('display', 'none');
         $('#btnDownloadTuition').css('display', 'none');
-
+        clearErrors();
         showLoading();
         var downloadCount = 0;
         $('#achievementList').load('<%= Url.Action("InquireAchievement","Accounting") %>', formData, function (data) {

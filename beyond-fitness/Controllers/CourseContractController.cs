@@ -328,6 +328,14 @@ namespace WebHome.Controllers
             item.RealName = viewModel.RealName;
             item.Phone = viewModel.Phone;
             item.Address = viewModel.Address;
+            if(viewModel.Birthday.HasValue)
+            {
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+            }
+            else
+            {
+                item.BirthdateIndex = null;
+            }
             item.Birthday = viewModel.Birthday;
             item.Nickname = viewModel.Nickname;
             item.UserProfileExtension.Gender = viewModel.Gender;

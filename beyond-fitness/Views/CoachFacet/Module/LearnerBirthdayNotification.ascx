@@ -11,8 +11,7 @@
 <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
     <header class="bg-color-redLight">
         <span class="widget-icon"><i class="fa fa-birthday-cake"></i></span>
-        <h2>今天有<%= models.GetTable<UserProfile>().Where(u => u.Birthday.HasValue
-                        && u.Birthday.Value.DayOfYear == _lessonDate.Value.DayOfYear).Count() %>個學員生日喔!</h2>
+        <h2>今天有<%= _items.Where(u=>u.BirthdateIndex==startDay).Count() %>個學員生日喔!</h2>
     </header>
     <!-- widget div-->
     <div>
@@ -25,13 +24,13 @@
                             <a href="http://line.me/R/msg/text/?｡◕‿◕｡╔ ░ⒽⒶⓅⓅⓎ░ ⒷⒾⓇⓉⒽ ⒹⒶⓎ░ ╗(◕‿◕✿)" target="_blank">
                                 <%  item.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %><%= item.FullName() %>
                                 <div class="email">
-                                <%  if (item.Birthday.Value.DayOfYear == DateTime.Today.DayOfYear)
+                                <%  if (item.BirthdateIndex==startDay)
                                     {   %>
                                     <label class="label bg-color-red">今天生日喔 <i class="fa fa-birthday-cake"></i></label>
                                 <%  }
                                     else
                                     { %>
-                                    <%= String.Format("{0:M/d}",item.Birthday) %>生日喔！
+                                    <%= String.Format("{0:M/d}", item.Birthday) %>生日喔！
                                 <%  } %>    
                                 </div>
                             </a>
@@ -48,20 +47,34 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    DateTime? _lessonDate;
-    IQueryable<UserProfile> _items;
+    List<UserProfile> _items;
+    int startDay, endDay;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _lessonDate = DateTime.Today;   //(DateTime?)this.Model;
 
-        _items = models.GetTable<UserProfile>().Where(u => u.Birthday.HasValue
-                && u.Birthday.Value.DayOfYear >= _lessonDate.Value.DayOfYear
-                && u.Birthday.Value.DayOfYear <= _lessonDate.Value.AddDays(7).DayOfYear)
-            .OrderBy(u => u.Birthday.Value.DayOfYear);
+        startDay = DateTime.Today.Month*100 + DateTime.Today.Day;
+        var endDate = DateTime.Today.AddDays(7);
+        endDay = endDate.Month*100 + endDate.Day;
+        if (startDay < endDay)
+        {
+            _items = models.GetTable<UserProfile>().Where(u => u.BirthdateIndex >= startDay
+                    && u.BirthdateIndex <= endDay)
+                .OrderBy(u => u.BirthdateIndex).ToList();
+        }
+        else
+        {
+            _items = models.GetTable<UserProfile>()
+                    .Where(u => u.BirthdateIndex >= startDay)
+                    .OrderBy(u => u.BirthdateIndex)
+                    .ToList();
+            _items.AddRange(models.GetTable<UserProfile>()
+                        .Where(u => u.BirthdateIndex <= endDay)
+                        .OrderBy(u => u.BirthdateIndex));
+        }
 
     }
 

@@ -187,14 +187,24 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
+            if(String.IsNullOrEmpty(viewModel.AchievementYearMonthFrom))
+            {
+                ModelState.AddModelError("AchievementYearMonthFrom", "請選擇查詢月份");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
             IQueryable<LessonTime> items = models.GetTable<LessonTime>()
                 //.Where(t => t.LessonAttendance != null)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
-                .Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
-                    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-
+                //.Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
+                //    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
                 .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
@@ -246,6 +256,10 @@ namespace WebHome.Controllers
             {
                 viewModel.AchievementDateFrom = DateTime.ParseExact(viewModel.AchievementYearMonthFrom, "yyyy/MM", System.Globalization.CultureInfo.CurrentCulture);
                 items = items.Where(c => c.ClassTime >= viewModel.AchievementDateFrom);
+
+                viewModel.AchievementDateTo = viewModel.AchievementDateFrom;
+                items = items.Where(c => c.ClassTime < viewModel.AchievementDateTo.Value.AddMonths(1));
+
             }
 
             if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthTo))
@@ -317,6 +331,9 @@ namespace WebHome.Controllers
             {
                 viewModel.AchievementDateFrom = DateTime.ParseExact(viewModel.AchievementYearMonthFrom, "yyyy/MM", System.Globalization.CultureInfo.CurrentCulture);
                 items = items.Where(c => c.Payment.PayoffDate >= viewModel.AchievementDateFrom);
+
+                viewModel.AchievementDateTo = viewModel.AchievementDateFrom;
+                items = items.Where(c => c.Payment.PayoffDate < viewModel.AchievementDateTo.Value.AddMonths(1));
             }
 
             if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthTo))
@@ -625,7 +642,11 @@ namespace WebHome.Controllers
                 r[0] = coach.UserProfile.RealName;
                 r[1] = item.Count();
                 int shares;
-                r[2] = models.CalcAchievement(item, out shares);
+                var lessons = item
+                        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                        .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null
+                            || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
+                r[2] = models.CalcAchievement(lessons, out shares);
                 r[3] = coach.ProfessionalLevel.LevelName;
                 r[4] = shares;
                 table.Rows.Add(r);

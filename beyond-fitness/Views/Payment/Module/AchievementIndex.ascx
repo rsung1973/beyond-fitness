@@ -112,8 +112,10 @@
                                         <label class="select">
                                             <select name="TransactionType" class="input">
                                                 <option value="">全部</option>
-                                                <option value="1" selected>體能顧問服務費</option>
+                                                <option value="1">體能顧問服務費</option>
                                                 <option value="2">自主訓練</option>
+                                                <option value="3">飲品</option>
+                                                <option value="4">運動商品</option>
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>

@@ -96,13 +96,13 @@
                     <script>
                         function initial() {
                             if ($('#<%= _dialog %> input[name="InvoiceType"][value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>"]').is(':checked')) {
-                                $('.eInvoice-dialog').css('display', 'inline');
+                                $('.eInvoice-dialog').css('display', 'block');
                                 $('.paper-invoice').css('display', 'none');
                                 $('.eInvoice-disable').prop('disabled', true);
                                 $('#<%= _dialog %> input[name="PayoffDate"]').val('<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>');
                             } else {
                                 $('.eInvoice-dialog').css('display', 'none');
-                                $('.paper-invoice').css('display', 'inline');
+                                $('.paper-invoice').css('display', 'block');
                                 $('.eInvoice-disable').prop('disabled', false);
                             }
                         }

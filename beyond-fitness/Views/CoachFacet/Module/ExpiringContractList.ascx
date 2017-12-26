@@ -62,6 +62,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         var profile = Context.GetUser();
         _items = models.GetTable<CourseContract>()
+            .Where(c => !c.RegisterLessonContract.Any(r => r.RegisterLesson.Attended == (int)Naming.LessonStatus.課程結束))
             .Where(c => c.Expiration < DateTime.Today.AddMonths(1));
         if (profile.IsAssistant())
         {

@@ -641,7 +641,8 @@ namespace WebHome.Controllers
                 BranchID = viewModel.BranchID,
                 LessonTimeSettlement = new LessonTimeSettlement
                 {
-                    ProfessionalLevelID = coach.LevelID.Value
+                    ProfessionalLevelID = coach.LevelID.Value,
+                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
                 }
             };
 

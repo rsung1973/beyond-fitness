@@ -1499,7 +1499,9 @@ namespace WebHome.Controllers
             IQueryable<Payment> items = models.GetTable<Payment>()
                 .Where(p => p.Status.HasValue)
                 .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.自主訓練
-                    || p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費)
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.飲品
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.運動商品)
                 .Where(c => c.VoidPayment == null);
 
             

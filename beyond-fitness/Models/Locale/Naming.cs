@@ -165,7 +165,12 @@ namespace WebHome.Models.Locale
         public enum ProfessionalCategory
         {
             舊制 = 1101,
-            新制 = 1102
+            新制 = 1102,
+            Special = 1103,
+            Senior = 1104,
+            Junior = 1105,
+            FM = 1106,
+            AFM = 1107
         }
 
         public enum ProfessionLevelDefinition

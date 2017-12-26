@@ -168,10 +168,15 @@ namespace WebHome.Controllers
             }
 
             item.UserName = viewModel.UserName.GetEfficientString();
+            item.BirthdateIndex = null;
+            item.Birthday = null;
             if (viewModel.Birthday.HasValue)
+            {
                 item.Birthday = viewModel.Birthday;
+                item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
+            }
 
-            if (!this.CreatePassword(viewModel))
+                if (!this.CreatePassword(viewModel))
             {
                 ViewBag.ModelState = ModelState;
                 return View("~/Views/Shared/ReportInputError.ascx");

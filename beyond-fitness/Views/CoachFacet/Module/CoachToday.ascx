@@ -24,7 +24,15 @@
         </div>
         <div class="col-sm-6">
             <h3><%= _model.UserProfile.FullName() %>
-                <span class="label label-info" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'><%= _items.Count() %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true"><%= _model.ProfessionalLevel.LevelName %> <i class="fa fa-fw fa fa-info-circle"></i></span>
+                <span class="label label-info" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'><%= _items.Count() + ((decimal)_PISession.Count()+1)/2 %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true">
+                    <%= _model.UserProfile.UserRoleAuthorization.Any(r=>r.RoleID==(int)Naming.RoleID.Officer )
+                            ? "CEO"
+                            : _model.UserProfile.UserRoleAuthorization.Any(r=> r.RoleID==(int)Naming.RoleID.Manager)
+                                ? "FM"
+                                : _model.UserProfile.UserRoleAuthorization.Any(r=> r.RoleID==(int)Naming.RoleID.ViceManager)
+                                    ? "AFM"
+                                    : null %>
+                    <%= !(new int[] { (int)Naming.ProfessionalCategory.AFM, (int)Naming.ProfessionalCategory.FM, (int)Naming.ProfessionalCategory.Special }).Contains(_model.ProfessionalLevel.CategoryID.Value) ? _model.ProfessionalLevel.LevelName : null %> <i class="fa fa-fw fa fa-info-circle"></i></span>
                 <%--                                             <span class="label label-success" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>離下一等級的業績尚有１０萬<br/>平均上課數５堂即可晉級</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-info-circle"></i></span>
                                             <span class="label label-warning" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>您目前的業績尚有１０萬<br/>平均上課數５堂未達到</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-exclamation-triangle"></i></span>
                                             <span class="label label-danger" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>您目前的業績已落後１０萬<br/>平均上課數已落後５堂</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-exclamation-triangle"></i></span>--%>
@@ -73,6 +81,7 @@
     ModelSource<UserProfile> models;
     ServingCoach _model;
     IQueryable<LessonTime> _items;
+    IQueryable<LessonTime> _PISession;
     IQueryable<TuitionAchievement> _tuition;
 
     protected override void OnInit(EventArgs e)
@@ -85,6 +94,7 @@
         DateTime quarterStart = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
         DateTime? dateTo = null;
         _items = models.GetLessonAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
+        _PISession = models.GetPISessionAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
         _tuition = models.GetTuitionAchievement(_model.CoachID, quarterStart, ref dateTo, 3);
     }
 

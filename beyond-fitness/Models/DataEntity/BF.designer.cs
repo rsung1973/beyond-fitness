@@ -453,6 +453,9 @@ namespace WebHome.Models.DataEntity
         partial void InsertInvoiceNoIntervalGroup(InvoiceNoIntervalGroup instance);
         partial void UpdateInvoiceNoIntervalGroup(InvoiceNoIntervalGroup instance);
         partial void DeleteInvoiceNoIntervalGroup(InvoiceNoIntervalGroup instance);
+        partial void InsertProfessionalLevelReview(ProfessionalLevelReview instance);
+        partial void UpdateProfessionalLevelReview(ProfessionalLevelReview instance);
+        partial void DeleteProfessionalLevelReview(ProfessionalLevelReview instance);
         #endregion
 
         public BFDataContext() :
@@ -1618,6 +1621,14 @@ namespace WebHome.Models.DataEntity
             get
             {
                 return this.GetTable<InvoiceNoIntervalGroup>();
+            }
+        }
+
+        public System.Data.Linq.Table<ProfessionalLevelReview> ProfessionalLevelReview
+        {
+            get
+            {
+                return this.GetTable<ProfessionalLevelReview>();
             }
         }
 
@@ -5655,6 +5666,8 @@ namespace WebHome.Models.DataEntity
 
         private string _Nickname;
 
+        private System.Nullable<int> _BirthdateIndex;
+
         private EntitySet<UserRole> _UserRole;
 
         private EntitySet<ResetPassword> _ResetPassword;
@@ -5783,6 +5796,8 @@ namespace WebHome.Models.DataEntity
         partial void OnBirthdayChanged();
         partial void OnNicknameChanging(string value);
         partial void OnNicknameChanged();
+        partial void OnBirthdateIndexChanging(System.Nullable<int> value);
+        partial void OnBirthdateIndexChanged();
         #endregion
 
         public UserProfile()
@@ -6225,6 +6240,26 @@ namespace WebHome.Models.DataEntity
                     this._Nickname = value;
                     this.SendPropertyChanged("Nickname");
                     this.OnNicknameChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_BirthdateIndex", DbType = "Int")]
+        public System.Nullable<int> BirthdateIndex
+        {
+            get
+            {
+                return this._BirthdateIndex;
+            }
+            set
+            {
+                if ((this._BirthdateIndex != value))
+                {
+                    this.OnBirthdateIndexChanging(value);
+                    this.SendPropertyChanging();
+                    this._BirthdateIndex = value;
+                    this.SendPropertyChanged("BirthdateIndex");
+                    this.OnBirthdateIndexChanged();
                 }
             }
         }
@@ -19257,6 +19292,12 @@ namespace WebHome.Models.DataEntity
 
         private EntitySet<LessonTimeSettlement> _LessonTimeSettlement;
 
+        private EntityRef<ProfessionalLevelReview> _ProfessionalLevelReview;
+
+        private EntitySet<ProfessionalLevelReview> _PromotingFrom;
+
+        private EntitySet<ProfessionalLevelReview> _DemotingFrom;
+
         private EntityRef<LevelExpression> _LevelExpression;
 
         #region Extensibility Method Definitions
@@ -19278,6 +19319,9 @@ namespace WebHome.Models.DataEntity
             this._ServingCoach = new EntitySet<ServingCoach>(new Action<ServingCoach>(this.attach_ServingCoach), new Action<ServingCoach>(this.detach_ServingCoach));
             this._CoachRating = new EntitySet<CoachRating>(new Action<CoachRating>(this.attach_CoachRating), new Action<CoachRating>(this.detach_CoachRating));
             this._LessonTimeSettlement = new EntitySet<LessonTimeSettlement>(new Action<LessonTimeSettlement>(this.attach_LessonTimeSettlement), new Action<LessonTimeSettlement>(this.detach_LessonTimeSettlement));
+            this._ProfessionalLevelReview = default(EntityRef<ProfessionalLevelReview>);
+            this._PromotingFrom = new EntitySet<ProfessionalLevelReview>(new Action<ProfessionalLevelReview>(this.attach_PromotingFrom), new Action<ProfessionalLevelReview>(this.detach_PromotingFrom));
+            this._DemotingFrom = new EntitySet<ProfessionalLevelReview>(new Action<ProfessionalLevelReview>(this.attach_DemotingFrom), new Action<ProfessionalLevelReview>(this.detach_DemotingFrom));
             this._LevelExpression = default(EntityRef<LevelExpression>);
             OnCreated();
         }
@@ -19405,6 +19449,61 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview", Storage = "_ProfessionalLevelReview", ThisKey = "LevelID", OtherKey = "LevelID", IsUnique = true, IsForeignKey = false)]
+        public ProfessionalLevelReview ProfessionalLevelReview
+        {
+            get
+            {
+                return this._ProfessionalLevelReview.Entity;
+            }
+            set
+            {
+                ProfessionalLevelReview previousValue = this._ProfessionalLevelReview.Entity;
+                if (((previousValue != value)
+                            || (this._ProfessionalLevelReview.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._ProfessionalLevelReview.Entity = null;
+                        previousValue.ProfessionalLevel = null;
+                    }
+                    this._ProfessionalLevelReview.Entity = value;
+                    if ((value != null))
+                    {
+                        value.ProfessionalLevel = this;
+                    }
+                    this.SendPropertyChanged("ProfessionalLevelReview");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview1", Storage = "_PromotingFrom", ThisKey = "LevelID", OtherKey = "PromotionID")]
+        public EntitySet<ProfessionalLevelReview> PromotingFrom
+        {
+            get
+            {
+                return this._PromotingFrom;
+            }
+            set
+            {
+                this._PromotingFrom.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview2", Storage = "_DemotingFrom", ThisKey = "LevelID", OtherKey = "DemotionID")]
+        public EntitySet<ProfessionalLevelReview> DemotingFrom
+        {
+            get
+            {
+                return this._DemotingFrom;
+            }
+            set
+            {
+                this._DemotingFrom.Assign(value);
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_ProfessionalLevel", Storage = "_LevelExpression", ThisKey = "CategoryID", OtherKey = "LevelID", IsForeignKey = true)]
         public LevelExpression LevelExpression
         {
@@ -19493,6 +19592,30 @@ namespace WebHome.Models.DataEntity
         {
             this.SendPropertyChanging();
             entity.ProfessionalLevel = null;
+        }
+
+        private void attach_PromotingFrom(ProfessionalLevelReview entity)
+        {
+            this.SendPropertyChanging();
+            entity.PromotionLevel = this;
+        }
+
+        private void detach_PromotingFrom(ProfessionalLevelReview entity)
+        {
+            this.SendPropertyChanging();
+            entity.PromotionLevel = null;
+        }
+
+        private void attach_DemotingFrom(ProfessionalLevelReview entity)
+        {
+            this.SendPropertyChanging();
+            entity.DemotionLevel = this;
+        }
+
+        private void detach_DemotingFrom(ProfessionalLevelReview entity)
+        {
+            this.SendPropertyChanging();
+            entity.DemotionLevel = null;
         }
     }
 
@@ -35169,6 +35292,8 @@ namespace WebHome.Models.DataEntity
 
         private int _ProfessionalLevelID;
 
+        private System.Nullable<decimal> _MarkedGradeIndex;
+
         private EntityRef<LessonTime> _LessonTime;
 
         private EntityRef<ProfessionalLevel> _ProfessionalLevel;
@@ -35181,6 +35306,8 @@ namespace WebHome.Models.DataEntity
         partial void OnLessonIDChanged();
         partial void OnProfessionalLevelIDChanging(int value);
         partial void OnProfessionalLevelIDChanged();
+        partial void OnMarkedGradeIndexChanging(System.Nullable<decimal> value);
+        partial void OnMarkedGradeIndexChanged();
         #endregion
 
         public LessonTimeSettlement()
@@ -35234,6 +35361,26 @@ namespace WebHome.Models.DataEntity
                     this._ProfessionalLevelID = value;
                     this.SendPropertyChanged("ProfessionalLevelID");
                     this.OnProfessionalLevelIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_MarkedGradeIndex", DbType = "Decimal(18,2)")]
+        public System.Nullable<decimal> MarkedGradeIndex
+        {
+            get
+            {
+                return this._MarkedGradeIndex;
+            }
+            set
+            {
+                if ((this._MarkedGradeIndex != value))
+                {
+                    this.OnMarkedGradeIndexChanging(value);
+                    this.SendPropertyChanging();
+                    this._MarkedGradeIndex = value;
+                    this.SendPropertyChanged("MarkedGradeIndex");
+                    this.OnMarkedGradeIndexChanged();
                 }
             }
         }
@@ -40716,6 +40863,263 @@ namespace WebHome.Models.DataEntity
         {
             this.SendPropertyChanging();
             entity.InvoiceNoIntervalGroup = null;
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.ProfessionalLevelReview")]
+    public partial class ProfessionalLevelReview : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private int _LevelID;
+
+        private System.Nullable<int> _PromotionID;
+
+        private System.Nullable<int> _DemotionID;
+
+        private int _CheckLevel;
+
+        private EntityRef<ProfessionalLevel> _ProfessionalLevel;
+
+        private EntityRef<ProfessionalLevel> _PromotionLevel;
+
+        private EntityRef<ProfessionalLevel> _DemotionLevel;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnLevelIDChanging(int value);
+        partial void OnLevelIDChanged();
+        partial void OnPromotionIDChanging(System.Nullable<int> value);
+        partial void OnPromotionIDChanged();
+        partial void OnDemotionIDChanging(System.Nullable<int> value);
+        partial void OnDemotionIDChanged();
+        partial void OnCheckLevelChanging(int value);
+        partial void OnCheckLevelChanged();
+        #endregion
+
+        public ProfessionalLevelReview()
+        {
+            this._ProfessionalLevel = default(EntityRef<ProfessionalLevel>);
+            this._PromotionLevel = default(EntityRef<ProfessionalLevel>);
+            this._DemotionLevel = default(EntityRef<ProfessionalLevel>);
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_LevelID", DbType = "Int NOT NULL", IsPrimaryKey = true)]
+        public int LevelID
+        {
+            get
+            {
+                return this._LevelID;
+            }
+            set
+            {
+                if ((this._LevelID != value))
+                {
+                    if (this._ProfessionalLevel.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnLevelIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._LevelID = value;
+                    this.SendPropertyChanged("LevelID");
+                    this.OnLevelIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PromotionID", DbType = "Int")]
+        public System.Nullable<int> PromotionID
+        {
+            get
+            {
+                return this._PromotionID;
+            }
+            set
+            {
+                if ((this._PromotionID != value))
+                {
+                    if (this._PromotionLevel.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnPromotionIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._PromotionID = value;
+                    this.SendPropertyChanged("PromotionID");
+                    this.OnPromotionIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_DemotionID", DbType = "Int")]
+        public System.Nullable<int> DemotionID
+        {
+            get
+            {
+                return this._DemotionID;
+            }
+            set
+            {
+                if ((this._DemotionID != value))
+                {
+                    if (this._DemotionLevel.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnDemotionIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._DemotionID = value;
+                    this.SendPropertyChanged("DemotionID");
+                    this.OnDemotionIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CheckLevel", DbType = "Int NOT NULL")]
+        public int CheckLevel
+        {
+            get
+            {
+                return this._CheckLevel;
+            }
+            set
+            {
+                if ((this._CheckLevel != value))
+                {
+                    this.OnCheckLevelChanging(value);
+                    this.SendPropertyChanging();
+                    this._CheckLevel = value;
+                    this.SendPropertyChanged("CheckLevel");
+                    this.OnCheckLevelChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview", Storage = "_ProfessionalLevel", ThisKey = "LevelID", OtherKey = "LevelID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public ProfessionalLevel ProfessionalLevel
+        {
+            get
+            {
+                return this._ProfessionalLevel.Entity;
+            }
+            set
+            {
+                ProfessionalLevel previousValue = this._ProfessionalLevel.Entity;
+                if (((previousValue != value)
+                            || (this._ProfessionalLevel.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._ProfessionalLevel.Entity = null;
+                        previousValue.ProfessionalLevelReview = null;
+                    }
+                    this._ProfessionalLevel.Entity = value;
+                    if ((value != null))
+                    {
+                        value.ProfessionalLevelReview = this;
+                        this._LevelID = value.LevelID;
+                    }
+                    else
+                    {
+                        this._LevelID = default(int);
+                    }
+                    this.SendPropertyChanged("ProfessionalLevel");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview1", Storage = "_PromotionLevel", ThisKey = "PromotionID", OtherKey = "LevelID", IsForeignKey = true)]
+        public ProfessionalLevel PromotionLevel
+        {
+            get
+            {
+                return this._PromotionLevel.Entity;
+            }
+            set
+            {
+                ProfessionalLevel previousValue = this._PromotionLevel.Entity;
+                if (((previousValue != value)
+                            || (this._PromotionLevel.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._PromotionLevel.Entity = null;
+                        previousValue.PromotingFrom.Remove(this);
+                    }
+                    this._PromotionLevel.Entity = value;
+                    if ((value != null))
+                    {
+                        value.PromotingFrom.Add(this);
+                        this._PromotionID = value.LevelID;
+                    }
+                    else
+                    {
+                        this._PromotionID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("PromotionLevel");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ProfessionalLevel_ProfessionalLevelReview2", Storage = "_DemotionLevel", ThisKey = "DemotionID", OtherKey = "LevelID", IsForeignKey = true)]
+        public ProfessionalLevel DemotionLevel
+        {
+            get
+            {
+                return this._DemotionLevel.Entity;
+            }
+            set
+            {
+                ProfessionalLevel previousValue = this._DemotionLevel.Entity;
+                if (((previousValue != value)
+                            || (this._DemotionLevel.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._DemotionLevel.Entity = null;
+                        previousValue.DemotingFrom.Remove(this);
+                    }
+                    this._DemotionLevel.Entity = value;
+                    if ((value != null))
+                    {
+                        value.DemotingFrom.Add(this);
+                        this._DemotionID = value.LevelID;
+                    }
+                    else
+                    {
+                        this._DemotionID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("DemotionLevel");
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 
