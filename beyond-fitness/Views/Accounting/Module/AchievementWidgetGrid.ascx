@@ -48,7 +48,14 @@
                         <form action="" method="post" id="queryForm" class="smart-form">
                             <fieldset>
                                 <div class="row">
-                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                        <label class="label">請選擇查詢月份</label>
+                                        <label class="input input-group">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
+                                        </label>
+                                    </section>                                    
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">依體能顧問查詢</label>
                                         <label class="select">
                                             <select name="CoachID" class="input">
@@ -74,7 +81,7 @@
                                     </section>
                                     <%  if (_profile.IsAssistant() || _profile.IsAccounting())
                                     { %>
-                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">或依分店查詢</label>
                                         <label class="select">
                                             <select name="BranchID">
@@ -93,7 +100,7 @@
                                     }   %>
                                 </div>
                             </fieldset>
-                            <fieldset>
+ <%--                            <fieldset>
                                 <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
                                 <div class="row">
                                     <section class="col col-6">
@@ -103,7 +110,7 @@
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
                                         </label>
                                     </section>
-                                    <%--<section class="col col-6">
+                                   <section class="col col-6">
                                         <label class="label">請選擇查詢查詢迄月</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
