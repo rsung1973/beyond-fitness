@@ -279,9 +279,6 @@ namespace WebHome.Models.DataEntity
         partial void InsertInvoiceItem(InvoiceItem instance);
         partial void UpdateInvoiceItem(InvoiceItem instance);
         partial void DeleteInvoiceItem(InvoiceItem instance);
-        partial void InsertPayment(Payment instance);
-        partial void UpdatePayment(Payment instance);
-        partial void DeletePayment(Payment instance);
         partial void InsertInvoiceCancellation(InvoiceCancellation instance);
         partial void UpdateInvoiceCancellation(InvoiceCancellation instance);
         partial void DeleteInvoiceCancellation(InvoiceCancellation instance);
@@ -456,6 +453,9 @@ namespace WebHome.Models.DataEntity
         partial void InsertProfessionalLevelReview(ProfessionalLevelReview instance);
         partial void UpdateProfessionalLevelReview(ProfessionalLevelReview instance);
         partial void DeleteProfessionalLevelReview(ProfessionalLevelReview instance);
+        partial void InsertPayment(Payment instance);
+        partial void UpdatePayment(Payment instance);
+        partial void DeletePayment(Payment instance);
         #endregion
 
         public BFDataContext() :
@@ -1160,14 +1160,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        public System.Data.Linq.Table<Payment> Payment
-        {
-            get
-            {
-                return this.GetTable<Payment>();
-            }
-        }
-
         public System.Data.Linq.Table<InvoiceCancellation> InvoiceCancellation
         {
             get
@@ -1629,6 +1621,14 @@ namespace WebHome.Models.DataEntity
             get
             {
                 return this.GetTable<ProfessionalLevelReview>();
+            }
+        }
+
+        public System.Data.Linq.Table<Payment> Payment
+        {
+            get
+            {
+                return this.GetTable<Payment>();
             }
         }
 
@@ -2460,8 +2460,6 @@ namespace WebHome.Models.DataEntity
 
         private EntitySet<LessonPriceProperty> _LessonPriceProperty;
 
-        private EntitySet<Payment> _Payment;
-
         private EntitySet<MerchandiseWindow> _MerchandiseWindow;
 
         private EntitySet<VoidPayment> _VoidPayment;
@@ -2469,6 +2467,8 @@ namespace WebHome.Models.DataEntity
         private EntitySet<VoidPaymentLevel> _VoidPaymentLevel;
 
         private EntitySet<CourseContractLevel> _CourseContractLevel;
+
+        private EntitySet<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -2499,11 +2499,11 @@ namespace WebHome.Models.DataEntity
             this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
             this._CourseContract = new EntitySet<CourseContract>(new Action<CourseContract>(this.attach_CourseContract), new Action<CourseContract>(this.detach_CourseContract));
             this._LessonPriceProperty = new EntitySet<LessonPriceProperty>(new Action<LessonPriceProperty>(this.attach_LessonPriceProperty), new Action<LessonPriceProperty>(this.detach_LessonPriceProperty));
-            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._MerchandiseWindow = new EntitySet<MerchandiseWindow>(new Action<MerchandiseWindow>(this.attach_MerchandiseWindow), new Action<MerchandiseWindow>(this.detach_MerchandiseWindow));
             this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
             this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
             this._CourseContractLevel = new EntitySet<CourseContractLevel>(new Action<CourseContractLevel>(this.attach_CourseContractLevel), new Action<CourseContractLevel>(this.detach_CourseContractLevel));
+            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             OnCreated();
         }
 
@@ -2762,19 +2762,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_Payment", Storage = "_Payment", ThisKey = "LevelID", OtherKey = "Status")]
-        public EntitySet<Payment> Payment
-        {
-            get
-            {
-                return this._Payment;
-            }
-            set
-            {
-                this._Payment.Assign(value);
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_MerchandiseWindow", Storage = "_MerchandiseWindow", ThisKey = "LevelID", OtherKey = "Status")]
         public EntitySet<MerchandiseWindow> MerchandiseWindow
         {
@@ -2824,6 +2811,19 @@ namespace WebHome.Models.DataEntity
             set
             {
                 this._CourseContractLevel.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_Payment", Storage = "_Payment", ThisKey = "LevelID", OtherKey = "Status")]
+        public EntitySet<Payment> Payment
+        {
+            get
+            {
+                return this._Payment;
+            }
+            set
+            {
+                this._Payment.Assign(value);
             }
         }
 
@@ -3027,18 +3027,6 @@ namespace WebHome.Models.DataEntity
             entity.LevelExpression = null;
         }
 
-        private void attach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.LevelExpression = this;
-        }
-
-        private void detach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.LevelExpression = null;
-        }
-
         private void attach_MerchandiseWindow(MerchandiseWindow entity)
         {
             this.SendPropertyChanging();
@@ -3082,6 +3070,18 @@ namespace WebHome.Models.DataEntity
         }
 
         private void detach_CourseContractLevel(CourseContractLevel entity)
+        {
+            this.SendPropertyChanging();
+            entity.LevelExpression = null;
+        }
+
+        private void attach_Payment(Payment entity)
+        {
+            this.SendPropertyChanging();
+            entity.LevelExpression = this;
+        }
+
+        private void detach_Payment(Payment entity)
         {
             this.SendPropertyChanging();
             entity.LevelExpression = null;
@@ -5728,8 +5728,6 @@ namespace WebHome.Models.DataEntity
 
         private EntityRef<UserProfileExtension> _UserProfileExtension;
 
-        private EntitySet<Payment> _Payment;
-
         private EntitySet<PaymentAudit> _PaymentAudit;
 
         private EntitySet<VoidPayment> _VoidPayment;
@@ -5745,6 +5743,8 @@ namespace WebHome.Models.DataEntity
         private EntitySet<CourseContractLevel> _CourseContractLevel;
 
         private EntityRef<EmployeeWelfare> _EmployeeWelfare;
+
+        private EntitySet<Payment> _Payment;
 
         private EntityRef<Attachment> _Attachment;
 
@@ -5832,7 +5832,6 @@ namespace WebHome.Models.DataEntity
             this._BranchStoreAsViceManager = new EntitySet<BranchStore>(new Action<BranchStore>(this.attach_BranchStoreAsViceManager), new Action<BranchStore>(this.detach_BranchStoreAsViceManager));
             this._LearnerFitnessAdvisor = new EntitySet<LearnerFitnessAdvisor>(new Action<LearnerFitnessAdvisor>(this.attach_LearnerFitnessAdvisor), new Action<LearnerFitnessAdvisor>(this.detach_LearnerFitnessAdvisor));
             this._UserProfileExtension = default(EntityRef<UserProfileExtension>);
-            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._PaymentAudit = new EntitySet<PaymentAudit>(new Action<PaymentAudit>(this.attach_PaymentAudit), new Action<PaymentAudit>(this.detach_PaymentAudit));
             this._VoidPayment = new EntitySet<VoidPayment>(new Action<VoidPayment>(this.attach_VoidPayment), new Action<VoidPayment>(this.detach_VoidPayment));
             this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
@@ -5841,6 +5840,7 @@ namespace WebHome.Models.DataEntity
             this._DocumentPrintQueue = new EntitySet<DocumentPrintQueue>(new Action<DocumentPrintQueue>(this.attach_DocumentPrintQueue), new Action<DocumentPrintQueue>(this.detach_DocumentPrintQueue));
             this._CourseContractLevel = new EntitySet<CourseContractLevel>(new Action<CourseContractLevel>(this.attach_CourseContractLevel), new Action<CourseContractLevel>(this.detach_CourseContractLevel));
             this._EmployeeWelfare = default(EntityRef<EmployeeWelfare>);
+            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._Attachment = default(EntityRef<Attachment>);
             this._LevelExpression = default(EntityRef<LevelExpression>);
             this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6702,19 +6702,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_Payment", Storage = "_Payment", ThisKey = "UID", OtherKey = "HandlerID")]
-        public EntitySet<Payment> Payment
-        {
-            get
-            {
-                return this._Payment;
-            }
-            set
-            {
-                this._Payment.Assign(value);
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_PaymentAudit", Storage = "_PaymentAudit", ThisKey = "UID", OtherKey = "AuditorID")]
         public EntitySet<PaymentAudit> PaymentAudit
         {
@@ -6832,6 +6819,19 @@ namespace WebHome.Models.DataEntity
                     }
                     this.SendPropertyChanged("EmployeeWelfare");
                 }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_Payment", Storage = "_Payment", ThisKey = "UID", OtherKey = "HandlerID")]
+        public EntitySet<Payment> Payment
+        {
+            get
+            {
+                return this._Payment;
+            }
+            set
+            {
+                this._Payment.Assign(value);
             }
         }
 
@@ -7315,18 +7315,6 @@ namespace WebHome.Models.DataEntity
             entity.UserProfile = null;
         }
 
-        private void attach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.UserProfile = this;
-        }
-
-        private void detach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.UserProfile = null;
-        }
-
         private void attach_PaymentAudit(PaymentAudit entity)
         {
             this.SendPropertyChanging();
@@ -7406,6 +7394,18 @@ namespace WebHome.Models.DataEntity
         }
 
         private void detach_CourseContractLevel(CourseContractLevel entity)
+        {
+            this.SendPropertyChanging();
+            entity.UserProfile = null;
+        }
+
+        private void attach_Payment(Payment entity)
+        {
+            this.SendPropertyChanging();
+            entity.UserProfile = this;
+        }
+
+        private void detach_Payment(Payment entity)
         {
             this.SendPropertyChanging();
             entity.UserProfile = null;
@@ -19286,6 +19286,8 @@ namespace WebHome.Models.DataEntity
 
         private System.Nullable<int> _CategoryID;
 
+        private string _DisplayName;
+
         private EntitySet<ServingCoach> _ServingCoach;
 
         private EntitySet<CoachRating> _CoachRating;
@@ -19312,6 +19314,8 @@ namespace WebHome.Models.DataEntity
         partial void OnGradeIndexChanged();
         partial void OnCategoryIDChanging(System.Nullable<int> value);
         partial void OnCategoryIDChanged();
+        partial void OnDisplayNameChanging(string value);
+        partial void OnDisplayNameChanged();
         #endregion
 
         public ProfessionalLevel()
@@ -19406,6 +19410,26 @@ namespace WebHome.Models.DataEntity
                     this._CategoryID = value;
                     this.SendPropertyChanged("CategoryID");
                     this.OnCategoryIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_DisplayName", DbType = "NVarChar(16)")]
+        public string DisplayName
+        {
+            get
+            {
+                return this._DisplayName;
+            }
+            set
+            {
+                if ((this._DisplayName != value))
+                {
+                    this.OnDisplayNameChanging(value);
+                    this.SendPropertyChanging();
+                    this._DisplayName = value;
+                    this.SendPropertyChanged("DisplayName");
+                    this.OnDisplayNameChanged();
                 }
             }
         }
@@ -24586,7 +24610,7 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractPayment", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true)]
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractPayment", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
         public Payment Payment
         {
             get
@@ -24802,7 +24826,7 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionInstallment", Storage = "_Payment", ThisKey = "InstallmentID", OtherKey = "PaymentID", IsForeignKey = true)]
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionInstallment", Storage = "_Payment", ThisKey = "InstallmentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
         public Payment Payment
         {
             get
@@ -24907,8 +24931,6 @@ namespace WebHome.Models.DataEntity
 
         private string _PrintMark;
 
-        private EntitySet<Payment> _Payment;
-
         private EntityRef<InvoiceCancellation> _InvoiceCancellation;
 
         private EntityRef<InvoiceBuyer> _InvoiceBuyer;
@@ -24932,6 +24954,8 @@ namespace WebHome.Models.DataEntity
         private EntityRef<InvoiceItemDispatchLog> _InvoiceItemDispatchLog;
 
         private EntitySet<InvoiceAllowance> _InvoiceAllowance;
+
+        private EntitySet<Payment> _Payment;
 
         private EntityRef<Document> _Document;
 
@@ -24989,7 +25013,6 @@ namespace WebHome.Models.DataEntity
 
         public InvoiceItem()
         {
-            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._InvoiceCancellation = default(EntityRef<InvoiceCancellation>);
             this._InvoiceBuyer = default(EntityRef<InvoiceBuyer>);
             this._InvoiceCarrier = default(EntityRef<InvoiceCarrier>);
@@ -25002,6 +25025,7 @@ namespace WebHome.Models.DataEntity
             this._InvoiceItemDispatch = default(EntityRef<InvoiceItemDispatch>);
             this._InvoiceItemDispatchLog = default(EntityRef<InvoiceItemDispatchLog>);
             this._InvoiceAllowance = new EntitySet<InvoiceAllowance>(new Action<InvoiceAllowance>(this.attach_InvoiceAllowance), new Action<InvoiceAllowance>(this.detach_InvoiceAllowance));
+            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._Document = default(EntityRef<Document>);
             this._Organization = default(EntityRef<Organization>);
             OnCreated();
@@ -25455,19 +25479,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceItem_Payment", Storage = "_Payment", ThisKey = "InvoiceID", OtherKey = "InvoiceID")]
-        public EntitySet<Payment> Payment
-        {
-            get
-            {
-                return this._Payment;
-            }
-            set
-            {
-                this._Payment.Assign(value);
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceItem_InvoiceCancellation", Storage = "_InvoiceCancellation", ThisKey = "InvoiceID", OtherKey = "InvoiceID", IsUnique = true, IsForeignKey = false)]
         public InvoiceCancellation InvoiceCancellation
         {
@@ -25784,6 +25795,19 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceItem_Payment", Storage = "_Payment", ThisKey = "InvoiceID", OtherKey = "InvoiceID")]
+        public EntitySet<Payment> Payment
+        {
+            get
+            {
+                return this._Payment;
+            }
+            set
+            {
+                this._Payment.Assign(value);
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Document_InvoiceItem", Storage = "_Document", ThisKey = "InvoiceID", OtherKey = "DocID", IsForeignKey = true)]
         public Document Document
         {
@@ -25872,18 +25896,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        private void attach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.InvoiceItem = this;
-        }
-
-        private void detach_Payment(Payment entity)
-        {
-            this.SendPropertyChanging();
-            entity.InvoiceItem = null;
-        }
-
         private void attach_InvoiceDetails(InvoiceDetails entity)
         {
             this.SendPropertyChanging();
@@ -25907,630 +25919,17 @@ namespace WebHome.Models.DataEntity
             this.SendPropertyChanging();
             entity.InvoiceItem = null;
         }
-    }
 
-    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.Payment")]
-    public partial class Payment : INotifyPropertyChanging, INotifyPropertyChanged
-    {
-
-        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-
-        private int _PaymentID;
-
-        private System.Nullable<int> _PayoffAmount;
-
-        private System.Nullable<System.DateTime> _PayoffDate;
-
-        private System.Nullable<int> _Status;
-
-        private System.Nullable<int> _HandlerID;
-
-        private string _PaymentType;
-
-        private System.Nullable<int> _InvoiceID;
-
-        private System.Nullable<int> _TransactionType;
-
-        private string _Remark;
-
-        private EntityRef<ContractPayment> _ContractPayment;
-
-        private EntityRef<TuitionInstallment> _TuitionInstallment;
-
-        private EntityRef<PaymentTransaction> _PaymentTransaction;
-
-        private EntityRef<PaymentAudit> _PaymentAudit;
-
-        private EntityRef<VoidPayment> _VoidPayment;
-
-        private EntitySet<TuitionAchievement> _TuitionAchievement;
-
-        private EntityRef<EnterpriseCoursePayment> _EnterpriseCoursePayment;
-
-        private EntitySet<ContractTrustTrack> _ContractTrustTrack;
-
-        private EntityRef<InvoiceItem> _InvoiceItem;
-
-        private EntityRef<LevelExpression> _LevelExpression;
-
-        private EntityRef<UserProfile> _UserProfile;
-
-        #region Extensibility Method Definitions
-        partial void OnLoaded();
-        partial void OnValidate(System.Data.Linq.ChangeAction action);
-        partial void OnCreated();
-        partial void OnPaymentIDChanging(int value);
-        partial void OnPaymentIDChanged();
-        partial void OnPayoffAmountChanging(System.Nullable<int> value);
-        partial void OnPayoffAmountChanged();
-        partial void OnPayoffDateChanging(System.Nullable<System.DateTime> value);
-        partial void OnPayoffDateChanged();
-        partial void OnStatusChanging(System.Nullable<int> value);
-        partial void OnStatusChanged();
-        partial void OnHandlerIDChanging(System.Nullable<int> value);
-        partial void OnHandlerIDChanged();
-        partial void OnPaymentTypeChanging(string value);
-        partial void OnPaymentTypeChanged();
-        partial void OnInvoiceIDChanging(System.Nullable<int> value);
-        partial void OnInvoiceIDChanged();
-        partial void OnTransactionTypeChanging(System.Nullable<int> value);
-        partial void OnTransactionTypeChanged();
-        partial void OnRemarkChanging(string value);
-        partial void OnRemarkChanged();
-        #endregion
-
-        public Payment()
-        {
-            this._ContractPayment = default(EntityRef<ContractPayment>);
-            this._TuitionInstallment = default(EntityRef<TuitionInstallment>);
-            this._PaymentTransaction = default(EntityRef<PaymentTransaction>);
-            this._PaymentAudit = default(EntityRef<PaymentAudit>);
-            this._VoidPayment = default(EntityRef<VoidPayment>);
-            this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
-            this._EnterpriseCoursePayment = default(EntityRef<EnterpriseCoursePayment>);
-            this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
-            this._InvoiceItem = default(EntityRef<InvoiceItem>);
-            this._LevelExpression = default(EntityRef<LevelExpression>);
-            this._UserProfile = default(EntityRef<UserProfile>);
-            OnCreated();
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PaymentID", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true)]
-        public int PaymentID
-        {
-            get
-            {
-                return this._PaymentID;
-            }
-            set
-            {
-                if ((this._PaymentID != value))
-                {
-                    this.OnPaymentIDChanging(value);
-                    this.SendPropertyChanging();
-                    this._PaymentID = value;
-                    this.SendPropertyChanged("PaymentID");
-                    this.OnPaymentIDChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PayoffAmount", DbType = "Int")]
-        public System.Nullable<int> PayoffAmount
-        {
-            get
-            {
-                return this._PayoffAmount;
-            }
-            set
-            {
-                if ((this._PayoffAmount != value))
-                {
-                    this.OnPayoffAmountChanging(value);
-                    this.SendPropertyChanging();
-                    this._PayoffAmount = value;
-                    this.SendPropertyChanged("PayoffAmount");
-                    this.OnPayoffAmountChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PayoffDate", DbType = "DateTime")]
-        public System.Nullable<System.DateTime> PayoffDate
-        {
-            get
-            {
-                return this._PayoffDate;
-            }
-            set
-            {
-                if ((this._PayoffDate != value))
-                {
-                    this.OnPayoffDateChanging(value);
-                    this.SendPropertyChanging();
-                    this._PayoffDate = value;
-                    this.SendPropertyChanged("PayoffDate");
-                    this.OnPayoffDateChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Status", DbType = "Int")]
-        public System.Nullable<int> Status
-        {
-            get
-            {
-                return this._Status;
-            }
-            set
-            {
-                if ((this._Status != value))
-                {
-                    if (this._LevelExpression.HasLoadedOrAssignedValue)
-                    {
-                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-                    }
-                    this.OnStatusChanging(value);
-                    this.SendPropertyChanging();
-                    this._Status = value;
-                    this.SendPropertyChanged("Status");
-                    this.OnStatusChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_HandlerID", DbType = "Int")]
-        public System.Nullable<int> HandlerID
-        {
-            get
-            {
-                return this._HandlerID;
-            }
-            set
-            {
-                if ((this._HandlerID != value))
-                {
-                    if (this._UserProfile.HasLoadedOrAssignedValue)
-                    {
-                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-                    }
-                    this.OnHandlerIDChanging(value);
-                    this.SendPropertyChanging();
-                    this._HandlerID = value;
-                    this.SendPropertyChanged("HandlerID");
-                    this.OnHandlerIDChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PaymentType", DbType = "NVarChar(32)")]
-        public string PaymentType
-        {
-            get
-            {
-                return this._PaymentType;
-            }
-            set
-            {
-                if ((this._PaymentType != value))
-                {
-                    this.OnPaymentTypeChanging(value);
-                    this.SendPropertyChanging();
-                    this._PaymentType = value;
-                    this.SendPropertyChanged("PaymentType");
-                    this.OnPaymentTypeChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_InvoiceID", DbType = "Int")]
-        public System.Nullable<int> InvoiceID
-        {
-            get
-            {
-                return this._InvoiceID;
-            }
-            set
-            {
-                if ((this._InvoiceID != value))
-                {
-                    if (this._InvoiceItem.HasLoadedOrAssignedValue)
-                    {
-                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-                    }
-                    this.OnInvoiceIDChanging(value);
-                    this.SendPropertyChanging();
-                    this._InvoiceID = value;
-                    this.SendPropertyChanged("InvoiceID");
-                    this.OnInvoiceIDChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TransactionType", DbType = "Int")]
-        public System.Nullable<int> TransactionType
-        {
-            get
-            {
-                return this._TransactionType;
-            }
-            set
-            {
-                if ((this._TransactionType != value))
-                {
-                    this.OnTransactionTypeChanging(value);
-                    this.SendPropertyChanging();
-                    this._TransactionType = value;
-                    this.SendPropertyChanged("TransactionType");
-                    this.OnTransactionTypeChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Remark", DbType = "NVarChar(256)")]
-        public string Remark
-        {
-            get
-            {
-                return this._Remark;
-            }
-            set
-            {
-                if ((this._Remark != value))
-                {
-                    this.OnRemarkChanging(value);
-                    this.SendPropertyChanging();
-                    this._Remark = value;
-                    this.SendPropertyChanged("Remark");
-                    this.OnRemarkChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractPayment", Storage = "_ContractPayment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
-        public ContractPayment ContractPayment
-        {
-            get
-            {
-                return this._ContractPayment.Entity;
-            }
-            set
-            {
-                ContractPayment previousValue = this._ContractPayment.Entity;
-                if (((previousValue != value)
-                            || (this._ContractPayment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._ContractPayment.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._ContractPayment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("ContractPayment");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionInstallment", Storage = "_TuitionInstallment", ThisKey = "PaymentID", OtherKey = "InstallmentID", IsUnique = true, IsForeignKey = false)]
-        public TuitionInstallment TuitionInstallment
-        {
-            get
-            {
-                return this._TuitionInstallment.Entity;
-            }
-            set
-            {
-                TuitionInstallment previousValue = this._TuitionInstallment.Entity;
-                if (((previousValue != value)
-                            || (this._TuitionInstallment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._TuitionInstallment.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._TuitionInstallment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("TuitionInstallment");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentTransaction", Storage = "_PaymentTransaction", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
-        public PaymentTransaction PaymentTransaction
-        {
-            get
-            {
-                return this._PaymentTransaction.Entity;
-            }
-            set
-            {
-                PaymentTransaction previousValue = this._PaymentTransaction.Entity;
-                if (((previousValue != value)
-                            || (this._PaymentTransaction.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._PaymentTransaction.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._PaymentTransaction.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("PaymentTransaction");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentAudit", Storage = "_PaymentAudit", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
-        public PaymentAudit PaymentAudit
-        {
-            get
-            {
-                return this._PaymentAudit.Entity;
-            }
-            set
-            {
-                PaymentAudit previousValue = this._PaymentAudit.Entity;
-                if (((previousValue != value)
-                            || (this._PaymentAudit.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._PaymentAudit.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._PaymentAudit.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("PaymentAudit");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_VoidPayment", Storage = "_VoidPayment", ThisKey = "PaymentID", OtherKey = "VoidID", IsUnique = true, IsForeignKey = false)]
-        public VoidPayment VoidPayment
-        {
-            get
-            {
-                return this._VoidPayment.Entity;
-            }
-            set
-            {
-                VoidPayment previousValue = this._VoidPayment.Entity;
-                if (((previousValue != value)
-                            || (this._VoidPayment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._VoidPayment.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._VoidPayment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("VoidPayment");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionAchievement", Storage = "_TuitionAchievement", ThisKey = "PaymentID", OtherKey = "InstallmentID")]
-        public EntitySet<TuitionAchievement> TuitionAchievement
-        {
-            get
-            {
-                return this._TuitionAchievement;
-            }
-            set
-            {
-                this._TuitionAchievement.Assign(value);
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_EnterpriseCoursePayment", Storage = "_EnterpriseCoursePayment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
-        public EnterpriseCoursePayment EnterpriseCoursePayment
-        {
-            get
-            {
-                return this._EnterpriseCoursePayment.Entity;
-            }
-            set
-            {
-                EnterpriseCoursePayment previousValue = this._EnterpriseCoursePayment.Entity;
-                if (((previousValue != value)
-                            || (this._EnterpriseCoursePayment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._EnterpriseCoursePayment.Entity = null;
-                        previousValue.Payment = null;
-                    }
-                    this._EnterpriseCoursePayment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment = this;
-                    }
-                    this.SendPropertyChanged("EnterpriseCoursePayment");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractTrustTrack", Storage = "_ContractTrustTrack", ThisKey = "PaymentID", OtherKey = "PaymentID")]
-        public EntitySet<ContractTrustTrack> ContractTrustTrack
-        {
-            get
-            {
-                return this._ContractTrustTrack;
-            }
-            set
-            {
-                this._ContractTrustTrack.Assign(value);
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceItem_Payment", Storage = "_InvoiceItem", ThisKey = "InvoiceID", OtherKey = "InvoiceID", IsForeignKey = true)]
-        public InvoiceItem InvoiceItem
-        {
-            get
-            {
-                return this._InvoiceItem.Entity;
-            }
-            set
-            {
-                InvoiceItem previousValue = this._InvoiceItem.Entity;
-                if (((previousValue != value)
-                            || (this._InvoiceItem.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._InvoiceItem.Entity = null;
-                        previousValue.Payment.Remove(this);
-                    }
-                    this._InvoiceItem.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment.Add(this);
-                        this._InvoiceID = value.InvoiceID;
-                    }
-                    else
-                    {
-                        this._InvoiceID = default(Nullable<int>);
-                    }
-                    this.SendPropertyChanged("InvoiceItem");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_Payment", Storage = "_LevelExpression", ThisKey = "Status", OtherKey = "LevelID", IsForeignKey = true)]
-        public LevelExpression LevelExpression
-        {
-            get
-            {
-                return this._LevelExpression.Entity;
-            }
-            set
-            {
-                LevelExpression previousValue = this._LevelExpression.Entity;
-                if (((previousValue != value)
-                            || (this._LevelExpression.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._LevelExpression.Entity = null;
-                        previousValue.Payment.Remove(this);
-                    }
-                    this._LevelExpression.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment.Add(this);
-                        this._Status = value.LevelID;
-                    }
-                    else
-                    {
-                        this._Status = default(Nullable<int>);
-                    }
-                    this.SendPropertyChanged("LevelExpression");
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_Payment", Storage = "_UserProfile", ThisKey = "HandlerID", OtherKey = "UID", IsForeignKey = true)]
-        public UserProfile UserProfile
-        {
-            get
-            {
-                return this._UserProfile.Entity;
-            }
-            set
-            {
-                UserProfile previousValue = this._UserProfile.Entity;
-                if (((previousValue != value)
-                            || (this._UserProfile.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._UserProfile.Entity = null;
-                        previousValue.Payment.Remove(this);
-                    }
-                    this._UserProfile.Entity = value;
-                    if ((value != null))
-                    {
-                        value.Payment.Add(this);
-                        this._HandlerID = value.UID;
-                    }
-                    else
-                    {
-                        this._HandlerID = default(Nullable<int>);
-                    }
-                    this.SendPropertyChanged("UserProfile");
-                }
-            }
-        }
-
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void SendPropertyChanging()
-        {
-            if ((this.PropertyChanging != null))
-            {
-                this.PropertyChanging(this, emptyChangingEventArgs);
-            }
-        }
-
-        protected virtual void SendPropertyChanged(String propertyName)
-        {
-            if ((this.PropertyChanged != null))
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        private void attach_TuitionAchievement(TuitionAchievement entity)
+        private void attach_Payment(Payment entity)
         {
             this.SendPropertyChanging();
-            entity.Payment = this;
+            entity.InvoiceItem = this;
         }
 
-        private void detach_TuitionAchievement(TuitionAchievement entity)
+        private void detach_Payment(Payment entity)
         {
             this.SendPropertyChanging();
-            entity.Payment = null;
-        }
-
-        private void attach_ContractTrustTrack(ContractTrustTrack entity)
-        {
-            this.SendPropertyChanging();
-            entity.Payment = this;
-        }
-
-        private void detach_ContractTrustTrack(ContractTrustTrack entity)
-        {
-            this.SendPropertyChanging();
-            entity.Payment = null;
+            entity.InvoiceItem = null;
         }
     }
 
@@ -32479,7 +31878,7 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentTransaction", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true)]
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentTransaction", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
         public Payment Payment
         {
             get
@@ -33263,9 +32662,9 @@ namespace WebHome.Models.DataEntity
 
         private System.Nullable<System.DateTime> _AuditDate;
 
-        private EntityRef<Payment> _Payment;
-
         private EntityRef<UserProfile> _UserProfile;
+
+        private EntityRef<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -33281,8 +32680,8 @@ namespace WebHome.Models.DataEntity
 
         public PaymentAudit()
         {
-            this._Payment = default(EntityRef<Payment>);
             this._UserProfile = default(EntityRef<UserProfile>);
+            this._Payment = default(EntityRef<Payment>);
             OnCreated();
         }
 
@@ -33354,40 +32753,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentAudit", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true)]
-        public Payment Payment
-        {
-            get
-            {
-                return this._Payment.Entity;
-            }
-            set
-            {
-                Payment previousValue = this._Payment.Entity;
-                if (((previousValue != value)
-                            || (this._Payment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._Payment.Entity = null;
-                        previousValue.PaymentAudit = null;
-                    }
-                    this._Payment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.PaymentAudit = this;
-                        this._PaymentID = value.PaymentID;
-                    }
-                    else
-                    {
-                        this._PaymentID = default(int);
-                    }
-                    this.SendPropertyChanged("Payment");
-                }
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_PaymentAudit", Storage = "_UserProfile", ThisKey = "AuditorID", OtherKey = "UID", IsForeignKey = true)]
         public UserProfile UserProfile
         {
@@ -33418,6 +32783,40 @@ namespace WebHome.Models.DataEntity
                         this._AuditorID = default(Nullable<int>);
                     }
                     this.SendPropertyChanged("UserProfile");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentAudit", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public Payment Payment
+        {
+            get
+            {
+                return this._Payment.Entity;
+            }
+            set
+            {
+                Payment previousValue = this._Payment.Entity;
+                if (((previousValue != value)
+                            || (this._Payment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._Payment.Entity = null;
+                        previousValue.PaymentAudit = null;
+                    }
+                    this._Payment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.PaymentAudit = this;
+                        this._PaymentID = value.PaymentID;
+                    }
+                    else
+                    {
+                        this._PaymentID = default(int);
+                    }
+                    this.SendPropertyChanged("Payment");
                 }
             }
         }
@@ -33467,9 +32866,9 @@ namespace WebHome.Models.DataEntity
 
         private EntityRef<LevelExpression> _LevelExpression;
 
-        private EntityRef<Payment> _Payment;
-
         private EntityRef<UserProfile> _UserProfile;
+
+        private EntityRef<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -33494,8 +32893,8 @@ namespace WebHome.Models.DataEntity
             this._VoidPaymentLevel = new EntitySet<VoidPaymentLevel>(new Action<VoidPaymentLevel>(this.attach_VoidPaymentLevel), new Action<VoidPaymentLevel>(this.detach_VoidPaymentLevel));
             this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
             this._LevelExpression = default(EntityRef<LevelExpression>);
-            this._Payment = default(EntityRef<Payment>);
             this._UserProfile = default(EntityRef<UserProfile>);
+            this._Payment = default(EntityRef<Payment>);
             OnCreated();
         }
 
@@ -33691,40 +33090,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_VoidPayment", Storage = "_Payment", ThisKey = "VoidID", OtherKey = "PaymentID", IsForeignKey = true)]
-        public Payment Payment
-        {
-            get
-            {
-                return this._Payment.Entity;
-            }
-            set
-            {
-                Payment previousValue = this._Payment.Entity;
-                if (((previousValue != value)
-                            || (this._Payment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._Payment.Entity = null;
-                        previousValue.VoidPayment = null;
-                    }
-                    this._Payment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.VoidPayment = this;
-                        this._VoidID = value.PaymentID;
-                    }
-                    else
-                    {
-                        this._VoidID = default(int);
-                    }
-                    this.SendPropertyChanged("Payment");
-                }
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_VoidPayment", Storage = "_UserProfile", ThisKey = "HandlerID", OtherKey = "UID", IsForeignKey = true)]
         public UserProfile UserProfile
         {
@@ -33755,6 +33120,40 @@ namespace WebHome.Models.DataEntity
                         this._HandlerID = default(Nullable<int>);
                     }
                     this.SendPropertyChanged("UserProfile");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_VoidPayment", Storage = "_Payment", ThisKey = "VoidID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public Payment Payment
+        {
+            get
+            {
+                return this._Payment.Entity;
+            }
+            set
+            {
+                Payment previousValue = this._Payment.Entity;
+                if (((previousValue != value)
+                            || (this._Payment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._Payment.Entity = null;
+                        previousValue.VoidPayment = null;
+                    }
+                    this._Payment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.VoidPayment = this;
+                        this._VoidID = value.PaymentID;
+                    }
+                    else
+                    {
+                        this._VoidID = default(int);
+                    }
+                    this.SendPropertyChanged("Payment");
                 }
             }
         }
@@ -34073,9 +33472,9 @@ namespace WebHome.Models.DataEntity
 
         private System.Nullable<int> _ShareAmount;
 
-        private EntityRef<Payment> _Payment;
-
         private EntityRef<ServingCoach> _ServingCoach;
+
+        private EntityRef<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -34091,8 +33490,8 @@ namespace WebHome.Models.DataEntity
 
         public TuitionAchievement()
         {
-            this._Payment = default(EntityRef<Payment>);
             this._ServingCoach = default(EntityRef<ServingCoach>);
+            this._Payment = default(EntityRef<Payment>);
             OnCreated();
         }
 
@@ -34164,40 +33563,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionAchievement", Storage = "_Payment", ThisKey = "InstallmentID", OtherKey = "PaymentID", IsForeignKey = true)]
-        public Payment Payment
-        {
-            get
-            {
-                return this._Payment.Entity;
-            }
-            set
-            {
-                Payment previousValue = this._Payment.Entity;
-                if (((previousValue != value)
-                            || (this._Payment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._Payment.Entity = null;
-                        previousValue.TuitionAchievement.Remove(this);
-                    }
-                    this._Payment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.TuitionAchievement.Add(this);
-                        this._InstallmentID = value.PaymentID;
-                    }
-                    else
-                    {
-                        this._InstallmentID = default(int);
-                    }
-                    this.SendPropertyChanged("Payment");
-                }
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "ServingCoach_TuitionAchievement", Storage = "_ServingCoach", ThisKey = "CoachID", OtherKey = "CoachID", IsForeignKey = true)]
         public ServingCoach ServingCoach
         {
@@ -34228,6 +33593,40 @@ namespace WebHome.Models.DataEntity
                         this._CoachID = default(int);
                     }
                     this.SendPropertyChanged("ServingCoach");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionAchievement", Storage = "_Payment", ThisKey = "InstallmentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public Payment Payment
+        {
+            get
+            {
+                return this._Payment.Entity;
+            }
+            set
+            {
+                Payment previousValue = this._Payment.Entity;
+                if (((previousValue != value)
+                            || (this._Payment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._Payment.Entity = null;
+                        previousValue.TuitionAchievement.Remove(this);
+                    }
+                    this._Payment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.TuitionAchievement.Add(this);
+                        this._InstallmentID = value.PaymentID;
+                    }
+                    else
+                    {
+                        this._InstallmentID = default(int);
+                    }
+                    this.SendPropertyChanged("Payment");
                 }
             }
         }
@@ -35124,9 +34523,9 @@ namespace WebHome.Models.DataEntity
 
         private int _ContractID;
 
-        private EntityRef<Payment> _Payment;
-
         private EntityRef<EnterpriseCourseContract> _EnterpriseCourseContract;
+
+        private EntityRef<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -35140,8 +34539,8 @@ namespace WebHome.Models.DataEntity
 
         public EnterpriseCoursePayment()
         {
-            this._Payment = default(EntityRef<Payment>);
             this._EnterpriseCourseContract = default(EntityRef<EnterpriseCourseContract>);
+            this._Payment = default(EntityRef<Payment>);
             OnCreated();
         }
 
@@ -35193,40 +34592,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_EnterpriseCoursePayment", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
-        public Payment Payment
-        {
-            get
-            {
-                return this._Payment.Entity;
-            }
-            set
-            {
-                Payment previousValue = this._Payment.Entity;
-                if (((previousValue != value)
-                            || (this._Payment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._Payment.Entity = null;
-                        previousValue.EnterpriseCoursePayment = null;
-                    }
-                    this._Payment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.EnterpriseCoursePayment = this;
-                        this._PaymentID = value.PaymentID;
-                    }
-                    else
-                    {
-                        this._PaymentID = default(int);
-                    }
-                    this.SendPropertyChanged("Payment");
-                }
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "EnterpriseCourseContract_EnterpriseCoursePayment", Storage = "_EnterpriseCourseContract", ThisKey = "ContractID", OtherKey = "ContractID", IsForeignKey = true)]
         public EnterpriseCourseContract EnterpriseCourseContract
         {
@@ -35257,6 +34622,40 @@ namespace WebHome.Models.DataEntity
                         this._ContractID = default(int);
                     }
                     this.SendPropertyChanged("EnterpriseCourseContract");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_EnterpriseCoursePayment", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public Payment Payment
+        {
+            get
+            {
+                return this._Payment.Entity;
+            }
+            set
+            {
+                Payment previousValue = this._Payment.Entity;
+                if (((previousValue != value)
+                            || (this._Payment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._Payment.Entity = null;
+                        previousValue.EnterpriseCoursePayment = null;
+                    }
+                    this._Payment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.EnterpriseCoursePayment = this;
+                        this._PaymentID = value.PaymentID;
+                    }
+                    else
+                    {
+                        this._PaymentID = default(int);
+                    }
+                    this.SendPropertyChanged("Payment");
                 }
             }
         }
@@ -38940,6 +38339,8 @@ namespace WebHome.Models.DataEntity
 
         private EntityRef<InvoiceAllowanceDispatchLog> _InvoiceAllowanceDispatchLog;
 
+        private EntitySet<Payment> _Payment;
+
         private EntityRef<Document> _Document;
 
         private EntityRef<InvoiceItem> _InvoiceItem;
@@ -38976,6 +38377,7 @@ namespace WebHome.Models.DataEntity
             this._InvoiceAllowanceSeller = default(EntityRef<InvoiceAllowanceSeller>);
             this._InvoiceAllowanceDispatch = default(EntityRef<InvoiceAllowanceDispatch>);
             this._InvoiceAllowanceDispatchLog = default(EntityRef<InvoiceAllowanceDispatchLog>);
+            this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
             this._Document = default(EntityRef<Document>);
             this._InvoiceItem = default(EntityRef<InvoiceItem>);
             OnCreated();
@@ -39327,6 +38729,19 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceAllowance_Payment", Storage = "_Payment", ThisKey = "AllowanceID", OtherKey = "AllowanceID")]
+        public EntitySet<Payment> Payment
+        {
+            get
+            {
+                return this._Payment;
+            }
+            set
+            {
+                this._Payment.Assign(value);
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Document_InvoiceAllowance", Storage = "_Document", ThisKey = "AllowanceID", OtherKey = "DocID", IsForeignKey = true)]
         public Document Document
         {
@@ -39422,6 +38837,18 @@ namespace WebHome.Models.DataEntity
         }
 
         private void detach_InvoiceAllowanceDetails(InvoiceAllowanceDetails entity)
+        {
+            this.SendPropertyChanging();
+            entity.InvoiceAllowance = null;
+        }
+
+        private void attach_Payment(Payment entity)
+        {
+            this.SendPropertyChanging();
+            entity.InvoiceAllowance = this;
+        }
+
+        private void detach_Payment(Payment entity)
         {
             this.SendPropertyChanging();
             entity.InvoiceAllowance = null;
@@ -39708,11 +39135,11 @@ namespace WebHome.Models.DataEntity
 
         private EntityRef<LessonTime> _LessonTime;
 
-        private EntityRef<Payment> _Payment;
-
         private EntityRef<Settlement> _Settlement;
 
         private EntityRef<VoidPayment> _VoidPayment;
+
+        private EntityRef<Payment> _Payment;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -39740,9 +39167,9 @@ namespace WebHome.Models.DataEntity
         {
             this._CourseContract = default(EntityRef<CourseContract>);
             this._LessonTime = default(EntityRef<LessonTime>);
-            this._Payment = default(EntityRef<Payment>);
             this._Settlement = default(EntityRef<Settlement>);
             this._VoidPayment = default(EntityRef<VoidPayment>);
+            this._Payment = default(EntityRef<Payment>);
             OnCreated();
         }
 
@@ -39994,40 +39421,6 @@ namespace WebHome.Models.DataEntity
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractTrustTrack", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteRule = "CASCADE")]
-        public Payment Payment
-        {
-            get
-            {
-                return this._Payment.Entity;
-            }
-            set
-            {
-                Payment previousValue = this._Payment.Entity;
-                if (((previousValue != value)
-                            || (this._Payment.HasLoadedOrAssignedValue == false)))
-                {
-                    this.SendPropertyChanging();
-                    if ((previousValue != null))
-                    {
-                        this._Payment.Entity = null;
-                        previousValue.ContractTrustTrack.Remove(this);
-                    }
-                    this._Payment.Entity = value;
-                    if ((value != null))
-                    {
-                        value.ContractTrustTrack.Add(this);
-                        this._PaymentID = value.PaymentID;
-                    }
-                    else
-                    {
-                        this._PaymentID = default(Nullable<int>);
-                    }
-                    this.SendPropertyChanged("Payment");
-                }
-            }
-        }
-
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Settlement_ContractTrustTrack", Storage = "_Settlement", ThisKey = "SettlementID", OtherKey = "SettlementID", IsForeignKey = true, DeleteRule = "SET NULL")]
         public Settlement Settlement
         {
@@ -40092,6 +39485,40 @@ namespace WebHome.Models.DataEntity
                         this._VoidID = default(Nullable<int>);
                     }
                     this.SendPropertyChanged("VoidPayment");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractTrustTrack", Storage = "_Payment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsForeignKey = true, DeleteRule = "CASCADE")]
+        public Payment Payment
+        {
+            get
+            {
+                return this._Payment.Entity;
+            }
+            set
+            {
+                Payment previousValue = this._Payment.Entity;
+                if (((previousValue != value)
+                            || (this._Payment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._Payment.Entity = null;
+                        previousValue.ContractTrustTrack.Remove(this);
+                    }
+                    this._Payment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.ContractTrustTrack.Add(this);
+                        this._PaymentID = value.PaymentID;
+                    }
+                    else
+                    {
+                        this._PaymentID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("Payment");
                 }
             }
         }
@@ -41120,6 +40547,696 @@ namespace WebHome.Models.DataEntity
             {
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.Payment")]
+    public partial class Payment : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private int _PaymentID;
+
+        private System.Nullable<int> _PayoffAmount;
+
+        private System.Nullable<System.DateTime> _PayoffDate;
+
+        private System.Nullable<int> _Status;
+
+        private System.Nullable<int> _HandlerID;
+
+        private string _PaymentType;
+
+        private System.Nullable<int> _InvoiceID;
+
+        private System.Nullable<int> _TransactionType;
+
+        private string _Remark;
+
+        private System.Nullable<int> _AllowanceID;
+
+        private EntityRef<ContractPayment> _ContractPayment;
+
+        private EntityRef<TuitionInstallment> _TuitionInstallment;
+
+        private EntityRef<PaymentTransaction> _PaymentTransaction;
+
+        private EntityRef<PaymentAudit> _PaymentAudit;
+
+        private EntityRef<VoidPayment> _VoidPayment;
+
+        private EntitySet<TuitionAchievement> _TuitionAchievement;
+
+        private EntityRef<EnterpriseCoursePayment> _EnterpriseCoursePayment;
+
+        private EntitySet<ContractTrustTrack> _ContractTrustTrack;
+
+        private EntityRef<InvoiceAllowance> _InvoiceAllowance;
+
+        private EntityRef<InvoiceItem> _InvoiceItem;
+
+        private EntityRef<LevelExpression> _LevelExpression;
+
+        private EntityRef<UserProfile> _UserProfile;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnPaymentIDChanging(int value);
+        partial void OnPaymentIDChanged();
+        partial void OnPayoffAmountChanging(System.Nullable<int> value);
+        partial void OnPayoffAmountChanged();
+        partial void OnPayoffDateChanging(System.Nullable<System.DateTime> value);
+        partial void OnPayoffDateChanged();
+        partial void OnStatusChanging(System.Nullable<int> value);
+        partial void OnStatusChanged();
+        partial void OnHandlerIDChanging(System.Nullable<int> value);
+        partial void OnHandlerIDChanged();
+        partial void OnPaymentTypeChanging(string value);
+        partial void OnPaymentTypeChanged();
+        partial void OnInvoiceIDChanging(System.Nullable<int> value);
+        partial void OnInvoiceIDChanged();
+        partial void OnTransactionTypeChanging(System.Nullable<int> value);
+        partial void OnTransactionTypeChanged();
+        partial void OnRemarkChanging(string value);
+        partial void OnRemarkChanged();
+        partial void OnAllowanceIDChanging(System.Nullable<int> value);
+        partial void OnAllowanceIDChanged();
+        #endregion
+
+        public Payment()
+        {
+            this._ContractPayment = default(EntityRef<ContractPayment>);
+            this._TuitionInstallment = default(EntityRef<TuitionInstallment>);
+            this._PaymentTransaction = default(EntityRef<PaymentTransaction>);
+            this._PaymentAudit = default(EntityRef<PaymentAudit>);
+            this._VoidPayment = default(EntityRef<VoidPayment>);
+            this._TuitionAchievement = new EntitySet<TuitionAchievement>(new Action<TuitionAchievement>(this.attach_TuitionAchievement), new Action<TuitionAchievement>(this.detach_TuitionAchievement));
+            this._EnterpriseCoursePayment = default(EntityRef<EnterpriseCoursePayment>);
+            this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
+            this._InvoiceAllowance = default(EntityRef<InvoiceAllowance>);
+            this._InvoiceItem = default(EntityRef<InvoiceItem>);
+            this._LevelExpression = default(EntityRef<LevelExpression>);
+            this._UserProfile = default(EntityRef<UserProfile>);
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PaymentID", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true)]
+        public int PaymentID
+        {
+            get
+            {
+                return this._PaymentID;
+            }
+            set
+            {
+                if ((this._PaymentID != value))
+                {
+                    this.OnPaymentIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._PaymentID = value;
+                    this.SendPropertyChanged("PaymentID");
+                    this.OnPaymentIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PayoffAmount", DbType = "Int")]
+        public System.Nullable<int> PayoffAmount
+        {
+            get
+            {
+                return this._PayoffAmount;
+            }
+            set
+            {
+                if ((this._PayoffAmount != value))
+                {
+                    this.OnPayoffAmountChanging(value);
+                    this.SendPropertyChanging();
+                    this._PayoffAmount = value;
+                    this.SendPropertyChanged("PayoffAmount");
+                    this.OnPayoffAmountChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PayoffDate", DbType = "DateTime")]
+        public System.Nullable<System.DateTime> PayoffDate
+        {
+            get
+            {
+                return this._PayoffDate;
+            }
+            set
+            {
+                if ((this._PayoffDate != value))
+                {
+                    this.OnPayoffDateChanging(value);
+                    this.SendPropertyChanging();
+                    this._PayoffDate = value;
+                    this.SendPropertyChanged("PayoffDate");
+                    this.OnPayoffDateChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Status", DbType = "Int")]
+        public System.Nullable<int> Status
+        {
+            get
+            {
+                return this._Status;
+            }
+            set
+            {
+                if ((this._Status != value))
+                {
+                    if (this._LevelExpression.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnStatusChanging(value);
+                    this.SendPropertyChanging();
+                    this._Status = value;
+                    this.SendPropertyChanged("Status");
+                    this.OnStatusChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_HandlerID", DbType = "Int")]
+        public System.Nullable<int> HandlerID
+        {
+            get
+            {
+                return this._HandlerID;
+            }
+            set
+            {
+                if ((this._HandlerID != value))
+                {
+                    if (this._UserProfile.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnHandlerIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._HandlerID = value;
+                    this.SendPropertyChanged("HandlerID");
+                    this.OnHandlerIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_PaymentType", DbType = "NVarChar(32)")]
+        public string PaymentType
+        {
+            get
+            {
+                return this._PaymentType;
+            }
+            set
+            {
+                if ((this._PaymentType != value))
+                {
+                    this.OnPaymentTypeChanging(value);
+                    this.SendPropertyChanging();
+                    this._PaymentType = value;
+                    this.SendPropertyChanged("PaymentType");
+                    this.OnPaymentTypeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_InvoiceID", DbType = "Int")]
+        public System.Nullable<int> InvoiceID
+        {
+            get
+            {
+                return this._InvoiceID;
+            }
+            set
+            {
+                if ((this._InvoiceID != value))
+                {
+                    if (this._InvoiceItem.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnInvoiceIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._InvoiceID = value;
+                    this.SendPropertyChanged("InvoiceID");
+                    this.OnInvoiceIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TransactionType", DbType = "Int")]
+        public System.Nullable<int> TransactionType
+        {
+            get
+            {
+                return this._TransactionType;
+            }
+            set
+            {
+                if ((this._TransactionType != value))
+                {
+                    this.OnTransactionTypeChanging(value);
+                    this.SendPropertyChanging();
+                    this._TransactionType = value;
+                    this.SendPropertyChanged("TransactionType");
+                    this.OnTransactionTypeChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Remark", DbType = "NVarChar(256)")]
+        public string Remark
+        {
+            get
+            {
+                return this._Remark;
+            }
+            set
+            {
+                if ((this._Remark != value))
+                {
+                    this.OnRemarkChanging(value);
+                    this.SendPropertyChanging();
+                    this._Remark = value;
+                    this.SendPropertyChanged("Remark");
+                    this.OnRemarkChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AllowanceID", DbType = "Int")]
+        public System.Nullable<int> AllowanceID
+        {
+            get
+            {
+                return this._AllowanceID;
+            }
+            set
+            {
+                if ((this._AllowanceID != value))
+                {
+                    if (this._InvoiceAllowance.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnAllowanceIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._AllowanceID = value;
+                    this.SendPropertyChanged("AllowanceID");
+                    this.OnAllowanceIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractPayment", Storage = "_ContractPayment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
+        public ContractPayment ContractPayment
+        {
+            get
+            {
+                return this._ContractPayment.Entity;
+            }
+            set
+            {
+                ContractPayment previousValue = this._ContractPayment.Entity;
+                if (((previousValue != value)
+                            || (this._ContractPayment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._ContractPayment.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._ContractPayment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("ContractPayment");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionInstallment", Storage = "_TuitionInstallment", ThisKey = "PaymentID", OtherKey = "InstallmentID", IsUnique = true, IsForeignKey = false)]
+        public TuitionInstallment TuitionInstallment
+        {
+            get
+            {
+                return this._TuitionInstallment.Entity;
+            }
+            set
+            {
+                TuitionInstallment previousValue = this._TuitionInstallment.Entity;
+                if (((previousValue != value)
+                            || (this._TuitionInstallment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._TuitionInstallment.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._TuitionInstallment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("TuitionInstallment");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentTransaction", Storage = "_PaymentTransaction", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
+        public PaymentTransaction PaymentTransaction
+        {
+            get
+            {
+                return this._PaymentTransaction.Entity;
+            }
+            set
+            {
+                PaymentTransaction previousValue = this._PaymentTransaction.Entity;
+                if (((previousValue != value)
+                            || (this._PaymentTransaction.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._PaymentTransaction.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._PaymentTransaction.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("PaymentTransaction");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_PaymentAudit", Storage = "_PaymentAudit", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
+        public PaymentAudit PaymentAudit
+        {
+            get
+            {
+                return this._PaymentAudit.Entity;
+            }
+            set
+            {
+                PaymentAudit previousValue = this._PaymentAudit.Entity;
+                if (((previousValue != value)
+                            || (this._PaymentAudit.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._PaymentAudit.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._PaymentAudit.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("PaymentAudit");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_VoidPayment", Storage = "_VoidPayment", ThisKey = "PaymentID", OtherKey = "VoidID", IsUnique = true, IsForeignKey = false)]
+        public VoidPayment VoidPayment
+        {
+            get
+            {
+                return this._VoidPayment.Entity;
+            }
+            set
+            {
+                VoidPayment previousValue = this._VoidPayment.Entity;
+                if (((previousValue != value)
+                            || (this._VoidPayment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._VoidPayment.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._VoidPayment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("VoidPayment");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_TuitionAchievement", Storage = "_TuitionAchievement", ThisKey = "PaymentID", OtherKey = "InstallmentID")]
+        public EntitySet<TuitionAchievement> TuitionAchievement
+        {
+            get
+            {
+                return this._TuitionAchievement;
+            }
+            set
+            {
+                this._TuitionAchievement.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_EnterpriseCoursePayment", Storage = "_EnterpriseCoursePayment", ThisKey = "PaymentID", OtherKey = "PaymentID", IsUnique = true, IsForeignKey = false)]
+        public EnterpriseCoursePayment EnterpriseCoursePayment
+        {
+            get
+            {
+                return this._EnterpriseCoursePayment.Entity;
+            }
+            set
+            {
+                EnterpriseCoursePayment previousValue = this._EnterpriseCoursePayment.Entity;
+                if (((previousValue != value)
+                            || (this._EnterpriseCoursePayment.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._EnterpriseCoursePayment.Entity = null;
+                        previousValue.Payment = null;
+                    }
+                    this._EnterpriseCoursePayment.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment = this;
+                    }
+                    this.SendPropertyChanged("EnterpriseCoursePayment");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Payment_ContractTrustTrack", Storage = "_ContractTrustTrack", ThisKey = "PaymentID", OtherKey = "PaymentID")]
+        public EntitySet<ContractTrustTrack> ContractTrustTrack
+        {
+            get
+            {
+                return this._ContractTrustTrack;
+            }
+            set
+            {
+                this._ContractTrustTrack.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceAllowance_Payment", Storage = "_InvoiceAllowance", ThisKey = "AllowanceID", OtherKey = "AllowanceID", IsForeignKey = true, DeleteRule = "SET NULL")]
+        public InvoiceAllowance InvoiceAllowance
+        {
+            get
+            {
+                return this._InvoiceAllowance.Entity;
+            }
+            set
+            {
+                InvoiceAllowance previousValue = this._InvoiceAllowance.Entity;
+                if (((previousValue != value)
+                            || (this._InvoiceAllowance.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._InvoiceAllowance.Entity = null;
+                        previousValue.Payment.Remove(this);
+                    }
+                    this._InvoiceAllowance.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment.Add(this);
+                        this._AllowanceID = value.AllowanceID;
+                    }
+                    else
+                    {
+                        this._AllowanceID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("InvoiceAllowance");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "InvoiceItem_Payment", Storage = "_InvoiceItem", ThisKey = "InvoiceID", OtherKey = "InvoiceID", IsForeignKey = true, DeleteRule = "CASCADE")]
+        public InvoiceItem InvoiceItem
+        {
+            get
+            {
+                return this._InvoiceItem.Entity;
+            }
+            set
+            {
+                InvoiceItem previousValue = this._InvoiceItem.Entity;
+                if (((previousValue != value)
+                            || (this._InvoiceItem.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._InvoiceItem.Entity = null;
+                        previousValue.Payment.Remove(this);
+                    }
+                    this._InvoiceItem.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment.Add(this);
+                        this._InvoiceID = value.InvoiceID;
+                    }
+                    else
+                    {
+                        this._InvoiceID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("InvoiceItem");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LevelExpression_Payment", Storage = "_LevelExpression", ThisKey = "Status", OtherKey = "LevelID", IsForeignKey = true)]
+        public LevelExpression LevelExpression
+        {
+            get
+            {
+                return this._LevelExpression.Entity;
+            }
+            set
+            {
+                LevelExpression previousValue = this._LevelExpression.Entity;
+                if (((previousValue != value)
+                            || (this._LevelExpression.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._LevelExpression.Entity = null;
+                        previousValue.Payment.Remove(this);
+                    }
+                    this._LevelExpression.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment.Add(this);
+                        this._Status = value.LevelID;
+                    }
+                    else
+                    {
+                        this._Status = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("LevelExpression");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "UserProfile_Payment", Storage = "_UserProfile", ThisKey = "HandlerID", OtherKey = "UID", IsForeignKey = true)]
+        public UserProfile UserProfile
+        {
+            get
+            {
+                return this._UserProfile.Entity;
+            }
+            set
+            {
+                UserProfile previousValue = this._UserProfile.Entity;
+                if (((previousValue != value)
+                            || (this._UserProfile.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._UserProfile.Entity = null;
+                        previousValue.Payment.Remove(this);
+                    }
+                    this._UserProfile.Entity = value;
+                    if ((value != null))
+                    {
+                        value.Payment.Add(this);
+                        this._HandlerID = value.UID;
+                    }
+                    else
+                    {
+                        this._HandlerID = default(Nullable<int>);
+                    }
+                    this.SendPropertyChanged("UserProfile");
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void attach_TuitionAchievement(TuitionAchievement entity)
+        {
+            this.SendPropertyChanging();
+            entity.Payment = this;
+        }
+
+        private void detach_TuitionAchievement(TuitionAchievement entity)
+        {
+            this.SendPropertyChanging();
+            entity.Payment = null;
+        }
+
+        private void attach_ContractTrustTrack(ContractTrustTrack entity)
+        {
+            this.SendPropertyChanging();
+            entity.Payment = this;
+        }
+
+        private void detach_ContractTrustTrack(ContractTrustTrack entity)
+        {
+            this.SendPropertyChanging();
+            entity.Payment = null;
         }
     }
 
