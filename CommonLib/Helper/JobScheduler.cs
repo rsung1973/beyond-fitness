@@ -151,6 +151,27 @@ namespace CommonLib.Helper
                 _instance.doJob(item, false);
         }
 
+        public static void LaunchImmediately()
+        {
+            if (_instance != null)
+            {
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    foreach (var item in _instance._jobItems)
+                    {
+                        try
+                        {
+                            _instance.doJob(item);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex);
+                        }
+                    }
+                });
+            }
+        }
+
     }
 
     public class JobItem 

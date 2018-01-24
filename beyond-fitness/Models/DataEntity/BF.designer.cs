@@ -456,6 +456,15 @@ namespace WebHome.Models.DataEntity
         partial void InsertPayment(Payment instance);
         partial void UpdatePayment(Payment instance);
         partial void DeletePayment(Payment instance);
+        partial void InsertAwardingLessonGift(AwardingLessonGift instance);
+        partial void UpdateAwardingLessonGift(AwardingLessonGift instance);
+        partial void DeleteAwardingLessonGift(AwardingLessonGift instance);
+        partial void InsertBonusAwardingIndication(BonusAwardingIndication instance);
+        partial void UpdateBonusAwardingIndication(BonusAwardingIndication instance);
+        partial void DeleteBonusAwardingIndication(BonusAwardingIndication instance);
+        partial void InsertAwardingLesson(AwardingLesson instance);
+        partial void UpdateAwardingLesson(AwardingLesson instance);
+        partial void DeleteAwardingLesson(AwardingLesson instance);
         #endregion
 
         public BFDataContext() :
@@ -1629,6 +1638,30 @@ namespace WebHome.Models.DataEntity
             get
             {
                 return this.GetTable<Payment>();
+            }
+        }
+
+        public System.Data.Linq.Table<AwardingLessonGift> AwardingLessonGift
+        {
+            get
+            {
+                return this.GetTable<AwardingLessonGift>();
+            }
+        }
+
+        public System.Data.Linq.Table<BonusAwardingIndication> BonusAwardingIndication
+        {
+            get
+            {
+                return this.GetTable<BonusAwardingIndication>();
+            }
+        }
+
+        public System.Data.Linq.Table<AwardingLesson> AwardingLesson
+        {
+            get
+            {
+                return this.GetTable<AwardingLesson>();
             }
         }
 
@@ -8465,6 +8498,10 @@ namespace WebHome.Models.DataEntity
 
         private EntityRef<RegisterLessonEnterprise> _RegisterLessonEnterprise;
 
+        private EntitySet<AwardingLessonGift> _AwardingLessonGift;
+
+        private EntitySet<AwardingLesson> _AwardingLesson;
+
         private EntityRef<GroupingLesson> _GroupingLesson;
 
         private EntityRef<GroupingLessonDiscount> _GroupingLessonDiscount;
@@ -8516,6 +8553,8 @@ namespace WebHome.Models.DataEntity
             this._QuestionnaireRequest = new EntitySet<QuestionnaireRequest>(new Action<QuestionnaireRequest>(this.attach_QuestionnaireRequest), new Action<QuestionnaireRequest>(this.detach_QuestionnaireRequest));
             this._RegisterLessonContract = default(EntityRef<RegisterLessonContract>);
             this._RegisterLessonEnterprise = default(EntityRef<RegisterLessonEnterprise>);
+            this._AwardingLessonGift = new EntitySet<AwardingLessonGift>(new Action<AwardingLessonGift>(this.attach_AwardingLessonGift), new Action<AwardingLessonGift>(this.detach_AwardingLessonGift));
+            this._AwardingLesson = new EntitySet<AwardingLesson>(new Action<AwardingLesson>(this.attach_AwardingLesson), new Action<AwardingLesson>(this.detach_AwardingLesson));
             this._GroupingLesson = default(EntityRef<GroupingLesson>);
             this._GroupingLessonDiscount = default(EntityRef<GroupingLessonDiscount>);
             this._LevelExpression = default(EntityRef<LevelExpression>);
@@ -8913,6 +8952,32 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "RegisterLesson_AwardingLessonGift", Storage = "_AwardingLessonGift", ThisKey = "RegisterID", OtherKey = "RegisterID")]
+        public EntitySet<AwardingLessonGift> AwardingLessonGift
+        {
+            get
+            {
+                return this._AwardingLessonGift;
+            }
+            set
+            {
+                this._AwardingLessonGift.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "RegisterLesson_AwardingLesson", Storage = "_AwardingLesson", ThisKey = "RegisterID", OtherKey = "RegisterID")]
+        public EntitySet<AwardingLesson> AwardingLesson
+        {
+            get
+            {
+                return this._AwardingLesson;
+            }
+            set
+            {
+                this._AwardingLesson.Assign(value);
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "GroupingLesson_RegisterLesson", Storage = "_GroupingLesson", ThisKey = "RegisterGroupID", OtherKey = "GroupID", IsForeignKey = true, DeleteRule = "SET NULL")]
         public GroupingLesson GroupingLesson
         {
@@ -9214,6 +9279,30 @@ namespace WebHome.Models.DataEntity
         }
 
         private void detach_QuestionnaireRequest(QuestionnaireRequest entity)
+        {
+            this.SendPropertyChanging();
+            entity.RegisterLesson = null;
+        }
+
+        private void attach_AwardingLessonGift(AwardingLessonGift entity)
+        {
+            this.SendPropertyChanging();
+            entity.RegisterLesson = this;
+        }
+
+        private void detach_AwardingLessonGift(AwardingLessonGift entity)
+        {
+            this.SendPropertyChanging();
+            entity.RegisterLesson = null;
+        }
+
+        private void attach_AwardingLesson(AwardingLesson entity)
+        {
+            this.SendPropertyChanging();
+            entity.RegisterLesson = this;
+        }
+
+        private void detach_AwardingLesson(AwardingLesson entity)
         {
             this.SendPropertyChanging();
             entity.RegisterLesson = null;
@@ -16191,9 +16280,13 @@ namespace WebHome.Models.DataEntity
 
         private System.Nullable<bool> _ExchangeableOnline;
 
+        private System.Nullable<int> _OrderIndex;
+
         private EntitySet<LearnerAward> _LearnerAward;
 
         private EntityRef<BonusAwardingLesson> _BonusAwardingLesson;
+
+        private EntityRef<BonusAwardingIndication> _BonusAwardingIndication;
 
         #region Extensibility Method Definitions
         partial void OnLoaded();
@@ -16211,12 +16304,15 @@ namespace WebHome.Models.DataEntity
         partial void OnPriceChanged();
         partial void OnExchangeableOnlineChanging(System.Nullable<bool> value);
         partial void OnExchangeableOnlineChanged();
+        partial void OnOrderIndexChanging(System.Nullable<int> value);
+        partial void OnOrderIndexChanged();
         #endregion
 
         public BonusAwardingItem()
         {
             this._LearnerAward = new EntitySet<LearnerAward>(new Action<LearnerAward>(this.attach_LearnerAward), new Action<LearnerAward>(this.detach_LearnerAward));
             this._BonusAwardingLesson = default(EntityRef<BonusAwardingLesson>);
+            this._BonusAwardingIndication = default(EntityRef<BonusAwardingIndication>);
             OnCreated();
         }
 
@@ -16340,6 +16436,26 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_OrderIndex", DbType = "Int")]
+        public System.Nullable<int> OrderIndex
+        {
+            get
+            {
+                return this._OrderIndex;
+            }
+            set
+            {
+                if ((this._OrderIndex != value))
+                {
+                    this.OnOrderIndexChanging(value);
+                    this.SendPropertyChanging();
+                    this._OrderIndex = value;
+                    this.SendPropertyChanged("OrderIndex");
+                    this.OnOrderIndexChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "BonusAwardingItem_LearnerAward", Storage = "_LearnerAward", ThisKey = "ItemID", OtherKey = "ItemID")]
         public EntitySet<LearnerAward> LearnerAward
         {
@@ -16378,6 +16494,35 @@ namespace WebHome.Models.DataEntity
                         value.BonusAwardingItem = this;
                     }
                     this.SendPropertyChanged("BonusAwardingLesson");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "BonusAwardingItem_BonusAwardingIndication", Storage = "_BonusAwardingIndication", ThisKey = "ItemID", OtherKey = "ItemID", IsUnique = true, IsForeignKey = false)]
+        public BonusAwardingIndication BonusAwardingIndication
+        {
+            get
+            {
+                return this._BonusAwardingIndication.Entity;
+            }
+            set
+            {
+                BonusAwardingIndication previousValue = this._BonusAwardingIndication.Entity;
+                if (((previousValue != value)
+                            || (this._BonusAwardingIndication.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._BonusAwardingIndication.Entity = null;
+                        previousValue.BonusAwardingItem = null;
+                    }
+                    this._BonusAwardingIndication.Entity = value;
+                    if ((value != null))
+                    {
+                        value.BonusAwardingItem = this;
+                    }
+                    this.SendPropertyChanged("BonusAwardingIndication");
                 }
             }
         }
@@ -16433,6 +16578,10 @@ namespace WebHome.Models.DataEntity
 
         private EntitySet<BonusExchange> _BonusExchange;
 
+        private EntityRef<AwardingLessonGift> _AwardingLessonGift;
+
+        private EntityRef<AwardingLesson> _AwardingLesson;
+
         private EntityRef<BonusAwardingItem> _BonusAwardingItem;
 
         private EntityRef<UserProfile> _UserProfile;
@@ -16458,6 +16607,8 @@ namespace WebHome.Models.DataEntity
         public LearnerAward()
         {
             this._BonusExchange = new EntitySet<BonusExchange>(new Action<BonusExchange>(this.attach_BonusExchange), new Action<BonusExchange>(this.detach_BonusExchange));
+            this._AwardingLessonGift = default(EntityRef<AwardingLessonGift>);
+            this._AwardingLesson = default(EntityRef<AwardingLesson>);
             this._BonusAwardingItem = default(EntityRef<BonusAwardingItem>);
             this._UserProfile = default(EntityRef<UserProfile>);
             this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -16586,6 +16737,64 @@ namespace WebHome.Models.DataEntity
             set
             {
                 this._BonusExchange.Assign(value);
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LearnerAward_AwardingLessonGift", Storage = "_AwardingLessonGift", ThisKey = "AwardID", OtherKey = "AwardID", IsUnique = true, IsForeignKey = false)]
+        public AwardingLessonGift AwardingLessonGift
+        {
+            get
+            {
+                return this._AwardingLessonGift.Entity;
+            }
+            set
+            {
+                AwardingLessonGift previousValue = this._AwardingLessonGift.Entity;
+                if (((previousValue != value)
+                            || (this._AwardingLessonGift.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._AwardingLessonGift.Entity = null;
+                        previousValue.LearnerAward = null;
+                    }
+                    this._AwardingLessonGift.Entity = value;
+                    if ((value != null))
+                    {
+                        value.LearnerAward = this;
+                    }
+                    this.SendPropertyChanged("AwardingLessonGift");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LearnerAward_AwardingLesson", Storage = "_AwardingLesson", ThisKey = "AwardID", OtherKey = "AwardID", IsUnique = true, IsForeignKey = false)]
+        public AwardingLesson AwardingLesson
+        {
+            get
+            {
+                return this._AwardingLesson.Entity;
+            }
+            set
+            {
+                AwardingLesson previousValue = this._AwardingLesson.Entity;
+                if (((previousValue != value)
+                            || (this._AwardingLesson.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._AwardingLesson.Entity = null;
+                        previousValue.LearnerAward = null;
+                    }
+                    this._AwardingLesson.Entity = value;
+                    if ((value != null))
+                    {
+                        value.LearnerAward = this;
+                    }
+                    this.SendPropertyChanged("AwardingLesson");
+                }
             }
         }
 
@@ -41237,6 +41446,469 @@ namespace WebHome.Models.DataEntity
         {
             this.SendPropertyChanging();
             entity.Payment = null;
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.AwardingLessonGift")]
+    public partial class AwardingLessonGift : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private int _AwardID;
+
+        private int _RegisterID;
+
+        private EntityRef<LearnerAward> _LearnerAward;
+
+        private EntityRef<RegisterLesson> _RegisterLesson;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnAwardIDChanging(int value);
+        partial void OnAwardIDChanged();
+        partial void OnRegisterIDChanging(int value);
+        partial void OnRegisterIDChanged();
+        #endregion
+
+        public AwardingLessonGift()
+        {
+            this._LearnerAward = default(EntityRef<LearnerAward>);
+            this._RegisterLesson = default(EntityRef<RegisterLesson>);
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AwardID", DbType = "Int NOT NULL", IsPrimaryKey = true)]
+        public int AwardID
+        {
+            get
+            {
+                return this._AwardID;
+            }
+            set
+            {
+                if ((this._AwardID != value))
+                {
+                    if (this._LearnerAward.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnAwardIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._AwardID = value;
+                    this.SendPropertyChanged("AwardID");
+                    this.OnAwardIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_RegisterID", DbType = "Int NOT NULL")]
+        public int RegisterID
+        {
+            get
+            {
+                return this._RegisterID;
+            }
+            set
+            {
+                if ((this._RegisterID != value))
+                {
+                    if (this._RegisterLesson.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnRegisterIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._RegisterID = value;
+                    this.SendPropertyChanged("RegisterID");
+                    this.OnRegisterIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LearnerAward_AwardingLessonGift", Storage = "_LearnerAward", ThisKey = "AwardID", OtherKey = "AwardID", IsForeignKey = true)]
+        public LearnerAward LearnerAward
+        {
+            get
+            {
+                return this._LearnerAward.Entity;
+            }
+            set
+            {
+                LearnerAward previousValue = this._LearnerAward.Entity;
+                if (((previousValue != value)
+                            || (this._LearnerAward.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._LearnerAward.Entity = null;
+                        previousValue.AwardingLessonGift = null;
+                    }
+                    this._LearnerAward.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AwardingLessonGift = this;
+                        this._AwardID = value.AwardID;
+                    }
+                    else
+                    {
+                        this._AwardID = default(int);
+                    }
+                    this.SendPropertyChanged("LearnerAward");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "RegisterLesson_AwardingLessonGift", Storage = "_RegisterLesson", ThisKey = "RegisterID", OtherKey = "RegisterID", IsForeignKey = true)]
+        public RegisterLesson RegisterLesson
+        {
+            get
+            {
+                return this._RegisterLesson.Entity;
+            }
+            set
+            {
+                RegisterLesson previousValue = this._RegisterLesson.Entity;
+                if (((previousValue != value)
+                            || (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._RegisterLesson.Entity = null;
+                        previousValue.AwardingLessonGift.Remove(this);
+                    }
+                    this._RegisterLesson.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AwardingLessonGift.Add(this);
+                        this._RegisterID = value.RegisterID;
+                    }
+                    else
+                    {
+                        this._RegisterID = default(int);
+                    }
+                    this.SendPropertyChanged("RegisterLesson");
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.BonusAwardingIndication")]
+    public partial class BonusAwardingIndication : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private int _ItemID;
+
+        private string _Indication;
+
+        private EntityRef<BonusAwardingItem> _BonusAwardingItem;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnItemIDChanging(int value);
+        partial void OnItemIDChanged();
+        partial void OnIndicationChanging(string value);
+        partial void OnIndicationChanged();
+        #endregion
+
+        public BonusAwardingIndication()
+        {
+            this._BonusAwardingItem = default(EntityRef<BonusAwardingItem>);
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ItemID", DbType = "Int NOT NULL", IsPrimaryKey = true)]
+        public int ItemID
+        {
+            get
+            {
+                return this._ItemID;
+            }
+            set
+            {
+                if ((this._ItemID != value))
+                {
+                    if (this._BonusAwardingItem.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnItemIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._ItemID = value;
+                    this.SendPropertyChanged("ItemID");
+                    this.OnItemIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Indication", DbType = "NVarChar(32)")]
+        public string Indication
+        {
+            get
+            {
+                return this._Indication;
+            }
+            set
+            {
+                if ((this._Indication != value))
+                {
+                    this.OnIndicationChanging(value);
+                    this.SendPropertyChanging();
+                    this._Indication = value;
+                    this.SendPropertyChanged("Indication");
+                    this.OnIndicationChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "BonusAwardingItem_BonusAwardingIndication", Storage = "_BonusAwardingItem", ThisKey = "ItemID", OtherKey = "ItemID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public BonusAwardingItem BonusAwardingItem
+        {
+            get
+            {
+                return this._BonusAwardingItem.Entity;
+            }
+            set
+            {
+                BonusAwardingItem previousValue = this._BonusAwardingItem.Entity;
+                if (((previousValue != value)
+                            || (this._BonusAwardingItem.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._BonusAwardingItem.Entity = null;
+                        previousValue.BonusAwardingIndication = null;
+                    }
+                    this._BonusAwardingItem.Entity = value;
+                    if ((value != null))
+                    {
+                        value.BonusAwardingIndication = this;
+                        this._ItemID = value.ItemID;
+                    }
+                    else
+                    {
+                        this._ItemID = default(int);
+                    }
+                    this.SendPropertyChanged("BonusAwardingItem");
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.AwardingLesson")]
+    public partial class AwardingLesson : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private int _AwardID;
+
+        private int _RegisterID;
+
+        private EntityRef<LearnerAward> _LearnerAward;
+
+        private EntityRef<RegisterLesson> _RegisterLesson;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnAwardIDChanging(int value);
+        partial void OnAwardIDChanged();
+        partial void OnRegisterIDChanging(int value);
+        partial void OnRegisterIDChanged();
+        #endregion
+
+        public AwardingLesson()
+        {
+            this._LearnerAward = default(EntityRef<LearnerAward>);
+            this._RegisterLesson = default(EntityRef<RegisterLesson>);
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AwardID", DbType = "Int NOT NULL", IsPrimaryKey = true)]
+        public int AwardID
+        {
+            get
+            {
+                return this._AwardID;
+            }
+            set
+            {
+                if ((this._AwardID != value))
+                {
+                    if (this._LearnerAward.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnAwardIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._AwardID = value;
+                    this.SendPropertyChanged("AwardID");
+                    this.OnAwardIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_RegisterID", DbType = "Int NOT NULL")]
+        public int RegisterID
+        {
+            get
+            {
+                return this._RegisterID;
+            }
+            set
+            {
+                if ((this._RegisterID != value))
+                {
+                    if (this._RegisterLesson.HasLoadedOrAssignedValue)
+                    {
+                        throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+                    }
+                    this.OnRegisterIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._RegisterID = value;
+                    this.SendPropertyChanged("RegisterID");
+                    this.OnRegisterIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "LearnerAward_AwardingLesson", Storage = "_LearnerAward", ThisKey = "AwardID", OtherKey = "AwardID", IsForeignKey = true, DeleteOnNull = true, DeleteRule = "CASCADE")]
+        public LearnerAward LearnerAward
+        {
+            get
+            {
+                return this._LearnerAward.Entity;
+            }
+            set
+            {
+                LearnerAward previousValue = this._LearnerAward.Entity;
+                if (((previousValue != value)
+                            || (this._LearnerAward.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._LearnerAward.Entity = null;
+                        previousValue.AwardingLesson = null;
+                    }
+                    this._LearnerAward.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AwardingLesson = this;
+                        this._AwardID = value.AwardID;
+                    }
+                    else
+                    {
+                        this._AwardID = default(int);
+                    }
+                    this.SendPropertyChanged("LearnerAward");
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "RegisterLesson_AwardingLesson", Storage = "_RegisterLesson", ThisKey = "RegisterID", OtherKey = "RegisterID", IsForeignKey = true)]
+        public RegisterLesson RegisterLesson
+        {
+            get
+            {
+                return this._RegisterLesson.Entity;
+            }
+            set
+            {
+                RegisterLesson previousValue = this._RegisterLesson.Entity;
+                if (((previousValue != value)
+                            || (this._RegisterLesson.HasLoadedOrAssignedValue == false)))
+                {
+                    this.SendPropertyChanging();
+                    if ((previousValue != null))
+                    {
+                        this._RegisterLesson.Entity = null;
+                        previousValue.AwardingLesson.Remove(this);
+                    }
+                    this._RegisterLesson.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AwardingLesson.Add(this);
+                        this._RegisterID = value.RegisterID;
+                    }
+                    else
+                    {
+                        this._RegisterID = default(int);
+                    }
+                    this.SendPropertyChanged("RegisterLesson");
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 

@@ -843,7 +843,7 @@ namespace WebHome.Controllers
             lesson = models.GetTable<RegisterLesson>().Where(r => r.RegisterID == viewModel.RegisterID).FirstOrDefault();
             if (lesson == null)
             {
-                return View("~/Views/Shared/MessageView.ascx", model: "學員未購買課程!!");
+                return View("~/Views/Shared/MessageView.ascx", model: "請選擇點數兌換課學員!!");
             }
             priceType = lesson.LessonPriceType;
 

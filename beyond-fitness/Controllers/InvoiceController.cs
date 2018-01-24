@@ -45,7 +45,7 @@ namespace WebHome.Controllers
 
         public ActionResult PrintIndex(InvoiceQueryViewModel viewModel)
         {
-            if(String.IsNullOrEmpty(viewModel.InvoiceNo))
+            if (String.IsNullOrEmpty(viewModel.InvoiceNo) && viewModel.InvoiceID == null)
             {
                 viewModel.HandlerID = -1;
             }
@@ -65,6 +65,13 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             return View();
         }
+
+        public ActionResult TaxCsvIndex(InvoiceNoViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
 
         public ActionResult InquireInvoiceNoInterval(InvoiceNoViewModel viewModel)
         {
@@ -355,7 +362,8 @@ namespace WebHome.Controllers
             var trackCode = models.GetTable<InvoiceTrackCode>()
                 .Where(t => t.TrackCode == viewModel.TrackCode && t.Year == viewModel.Year && t.PeriodNo == viewModel.PeriodNo).FirstOrDefault();
 
-            var table = models.GetTable<InvoiceNoInterval>();
+            var table = models.GetTable<InvoiceNoInterval>()
+                    .Where(n => n.EndNo > n.StartNo);
             var item = table.Where(i => i.IntervalID == viewModel.IntervalID).FirstOrDefault();
             int? range;
             if (!viewModel.StartNo.HasValue || !(viewModel.StartNo >= 0 && viewModel.StartNo < 100000000))
@@ -496,12 +504,17 @@ namespace WebHome.Controllers
 
         public ActionResult InquireInvoice(InvoiceQueryViewModel viewModel)
         {
-            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>().Where(i => i.TrackCode != null);
+            IQueryable<InvoiceItem> items = models.GetTable<InvoiceItem>().Where(i => i.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票);
             IQueryable<Payment> paymentItems = models.GetTable<Payment>();
 
             var profile = HttpContext.GetUser();
 
             bool hasConditon = false;
+
+            if(viewModel.InvoiceID!=null &&viewModel.InvoiceID.Length>0)
+            {
+                items = items.Where(i => viewModel.InvoiceID.Contains(i.InvoiceID));
+            }
 
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
             if (viewModel.InvoiceNo != null)
@@ -718,6 +731,20 @@ namespace WebHome.Controllers
             return result;
         }
 
+        [AllowAnonymous]
+        public ActionResult LoadInvoiceImageByUID(InvoiceQueryViewModel viewModel, String printerIP)
+        {
+            var profile = HttpContext.GetUser();
+            if(profile==null)
+            {
+                profile = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+                if (profile != null)
+                    HttpContext.SignOn(profile);
+            }
+
+            return LoadInvoiceImage(viewModel, printerIP);
+        }
+
         public ActionResult PrintAllowanceImage(InvoiceQueryViewModel viewModel, String printerIP)
         {
             ViewBag.ViewModel = viewModel;
@@ -742,9 +769,12 @@ namespace WebHome.Controllers
                 String data = client.DownloadString(viewUrl);
                 using (Image image = HtmlRender.RenderToImage(data))
                 {
-                    Response.Clear();
-                    Response.ContentType = "image/Png";
-                    image.Save(Response.OutputStream, ImageFormat.Png);
+                    //using (Bitmap bmp = new Bitmap(image, new Size(image.Size.Width * 9 / 10, image.Size.Height * 9 / 10)))
+                    //{
+                        Response.Clear();
+                        Response.ContentType = "image/Png";
+                        image.Save(Response.OutputStream, ImageFormat.Png);
+                    //}
                     //Response.End();
                 }
             }
@@ -1020,6 +1050,56 @@ namespace WebHome.Controllers
             ViewResult result = (ViewResult)InquireInvoiceNoInterval(viewModel);
             return View("~/Views/Invoice/Module/DownloadInvoiceNoIntervalCsv.ascx", result.Model);
         }
+
+        public ActionResult InquireInvoiceMedia(InvoiceNoViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (!viewModel.Year.HasValue)
+            {
+                ModelState.AddModelError("Year", "請選擇年份!!");
+            }
+
+            if (!viewModel.PeriodNo.HasValue)
+            {
+                ModelState.AddModelError("PeriodNo", "請選擇期別!!");
+            }
+
+            if (!viewModel.BranchID.HasValue)
+            {
+                ModelState.AddModelError("BranchID", "請選擇分店!!");
+            }
+
+
+            DateTime startDate = new DateTime((int)viewModel.Year, (int)viewModel.PeriodNo * 2 - 1, 1);
+            DataLoadOptions ops = new DataLoadOptions();
+            ops.LoadWith<InvoiceItem>(i => i.InvoiceBuyer);
+            ops.LoadWith<InvoiceItem>(i => i.InvoiceCancellation);
+            ops.LoadWith<InvoiceItem>(i => i.InvoiceAmountType);
+            ops.LoadWith<InvoiceItem>(i => i.InvoiceSeller);
+            models.GetDataContext().LoadOptions = ops;
+
+            var items = models.GetTable<InvoiceItem>().Where(i => i.SellerID == viewModel.BranchID
+                        && i.InvoiceDate >= startDate
+                        && i.InvoiceDate < startDate.AddMonths(2))
+                    .Where(i => i.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    .OrderBy(i => i.InvoiceID);
+
+            var allowance = models.GetTable<InvoiceAllowance>()
+                    .Where(a => a.InvoiceAllowanceCancellation == null)
+                    .Where(a => a.InvoiceAllowanceSeller.SellerID == viewModel.BranchID)
+                    .Where(a => a.AllowanceDate >= startDate && a.AllowanceDate < startDate.AddMonths(2))
+                    .Join(models.GetTable<Payment>()
+                        .Join(models.GetTable<InvoiceItem>().Where(i => i.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票),
+                            p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
+                        a => a.AllowanceID, p => p.AllowanceID, (a, p) => a);
+
+            ViewBag.AllowanceItems = allowance;
+
+            return View("~/Views/Invoice/Module/InquireInvoiceMedia.ascx", items);
+
+        }
+
 
 
 

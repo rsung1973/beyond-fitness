@@ -58,7 +58,7 @@
                     line-height: 1;
                     letter-spacing: -1px;
                     /*text-align: center;*/
-                    padding: 0;
+                    padding: -10px 0 -10px 0;
                     margin-left: 5px;
                     margin-top: 0;
                     margin-right: 0;
@@ -90,11 +90,17 @@
                     font-size: 26px;
                     line-height: 1.2;
                     padding: 0;
-                    padding-top: 0.1cm;
+                    padding-top: -5px;
                     padding-left: 0.1cm;
+					padding-bottom: -5px;
                     padding-right: 0.2cm;
-                    margin: 0;
+                    margin: 0px 0px 0px 0px;
                 }
+				
+				.container .logo {
+					margin-top: -10px;
+					padding-top: -10px;
+				}
 
                     .container .cutfield p.sign {
                         font-size: 10pt;
@@ -144,6 +150,10 @@
                         border: none;
                     }
         /*交易明細*/
+		.listfield {
+			font-size: 26px;
+		}
+		
         div.listfield {
             /*display:block;*/
             /*width: 720px;*/

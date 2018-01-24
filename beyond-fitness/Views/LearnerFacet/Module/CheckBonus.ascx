@@ -28,10 +28,20 @@
             }
         });
 
-        function exchangeBonus(itemID) {
+        var bonusItemID;
+        function awardingLessonGift(itemID) {
+            bonusItemID = itemID;
+            showLoading();
+            $.post('<%= Url.Action("QueryRecipient","LearnerFacet") %>', {}, function (data) {
+                hideLoading();
+                $(data).appendTo($('body'));
+            });
+        }
+
+        function exchangeBonus(itemID,recipientID) {
             if (confirm('確定兌換?')) {
                 showLoading();
-                $.post('<%= Url.Action("ExchangeBonusPoint","LearnerFacet",new { uid = _model.UID }) %>', { 'itemID': itemID }, function (data) {
+                $.post('<%= Url.Action("ExchangeBonusPoint","LearnerFacet",new { uid = _model.UID }) %>', { 'itemID': itemID,'recipientID':recipientID }, function (data) {
                     hideLoading();
                     if (data.result) {
                         $('#awardDetails').load('<%= Url.Action("CheckBonusAward","LearnerFacet",new { id = _model.UID }) %>', {}, function (d) { });

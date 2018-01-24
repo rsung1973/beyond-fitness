@@ -11,7 +11,7 @@
 
 <style type="text/css">
 
-            div {
+            /*div {
                 margin-top:1em;
                 margin-bottom:1em;
             }
@@ -22,7 +22,7 @@
             select {
                 padding: .5em;
                 margin: .5em;
-            }
+            }*/
 
             #signatureparent {
                 color:darkblue;

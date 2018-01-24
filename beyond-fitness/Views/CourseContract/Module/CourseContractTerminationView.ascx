@@ -66,7 +66,13 @@
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);  %>
                         </td>
                         <td></td>
-                        <td>主管簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td style="vertical-align: middle;">主管簽約代表：
+                            <%  UserProfile contractAgent = (UserProfile)ViewBag.ContractAgent;
+                                if (_contract.Status > (int)Naming.CourseContractStatus.待確認 || contractAgent!=null)
+                                {   %>
+                            <img src="<%= contractAgent!=null ? contractAgent.LoadInstance(models).UserProfileExtension.Signature : _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link">
+                            <%  }   %>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：
@@ -98,14 +104,14 @@
         _model = (CourseContractRevision)this.Model;
         _contract = _model.CourseContract;
         _owner = _contract.CourseContractMember.Where(m => m.UID == _contract.OwnerID).First();
-        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待審核).FirstOrDefault();
+        var item = _contract.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待簽名).FirstOrDefault();
         if (item != null)
         {
             _signatureDate = item.LevelDate;
         }
         else
         {
-            _signatureDate = DateTime.Now;
+            _signatureDate = _contract.EffectiveDate ?? _contract.ContractDate;
         }
     }
 

@@ -18,7 +18,7 @@
             <%  Html.RenderPartial("~/Views/CoachFacet/Module/MyCalendar.ascx",_model); %>
             <!-- end widget -->
         </article>
-        <!-- WIDGET END -->
+        <!-- WIDGET END -->		
         <article class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
@@ -37,10 +37,9 @@
                             { %>
                             <%  Html.RenderPartial("~/Views/CoachFacet/Module/CoachToday.ascx", _coach); %>
                         <%  } %>
-                        </div>
+                        </div>						
                         <div class="row">
                             <div class="col-sm-12">
-                                <hr>
                                 <div class="padding-10">
                                     <ul class="nav nav-tabs tabs-pull-right">
                                         <li>
@@ -94,14 +93,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end row -->
+                        <!-- end row -->					
                     </div>
                     <!-- end widget content -->
                 </div>
                 <!-- end widget div -->
             </div>
             <!-- end widget -->
-        </article>
+        </article>	
     </div>
     <!-- end row -->
 </section>

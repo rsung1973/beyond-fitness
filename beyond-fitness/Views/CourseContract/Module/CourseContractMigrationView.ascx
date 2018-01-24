@@ -67,7 +67,13 @@
                                 Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);  %>
                         </td>
                         <td></td>
-                        <td>主管簽約代表：<img src="<%= _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link"></td>
+                        <td>主管簽約代表：
+                            <%  UserProfile contractAgent = (UserProfile)ViewBag.ContractAgent;
+                                if (_contract.Status > (int)Naming.CourseContractStatus.待確認 || contractAgent!=null)
+                                {   %>
+                            <img src="<%= contractAgent!=null ? contractAgent.LoadInstance(models).UserProfileExtension.Signature : _contract.ContractAgent.UserProfileExtension.Signature %>" width="200px" class="modifySignDialog_link">
+                            <%  }   %>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2">家長/監護人簽名：

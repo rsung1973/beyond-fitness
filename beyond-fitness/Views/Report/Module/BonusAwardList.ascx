@@ -11,22 +11,32 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th data-class="expand">時間</th>
+            <th data-class="expand">兌換時間</th>
             <th>學員姓名</th>
             <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>兌換人員</th>
             <th>兌換商品</th>
-            <th data-hide="phone">商品點數</th>
+            <th data-hide="phone">使用日期</th>
+            <th data-hide="phone">贈與學員</th>
         </tr>
     </thead>
     <tbody>
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td><%= item.AwardDate.ToString("yyyy/MM/dd") %></td>
+            <td><%= String.Format("{0:yyyy/MM/dd}",item.AwardDate) %></td>
             <td><%= item.UserProfile.FullName() %></td>
-            <td><%= item.Actor.FullName() %></td>
+            <td><%= item.Actor.RealName %></td>
             <td><%= item.BonusAwardingItem.ItemName %></td>
-            <td><%= item.BonusAwardingItem.PointValue %>點</td>
+            <td><%= item.BonusAwardingItem.BonusAwardingLesson!=null
+                        ? item.AwardingLesson!=null
+                            ? item.AwardingLesson.RegisterLesson.LessonTime.Count>0
+                                ? String.Format("{0:yyyy/MM/dd}",item.AwardingLesson.RegisterLesson.LessonTime.First().ClassTime) 
+                                : "--" 
+                            : item.AwardingLessonGift.RegisterLesson.LessonTime.Count>0
+                                ? String.Format("{0:yyyy/MM/dd}",item.AwardingLessonGift.RegisterLesson.LessonTime.First().ClassTime)
+                                : "--"
+                        : "--"  %></td>
+            <td><%= item.AwardingLessonGift!=null ? item.AwardingLessonGift.RegisterLesson.UserProfile.FullName() : "--" %></td>
         </tr>
         <%  } %>
     </tbody>
@@ -47,8 +57,8 @@
 
         $('#<%= _tableId %>').dataTable({
             //"bPaginate": false,
-            "pageLength": 10,
-            "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "全部"]],
+            "pageLength": 30,
+            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +

@@ -25,11 +25,11 @@ namespace WebHome.Helper
             return String.IsNullOrEmpty(buyer.ReceiptNo) || buyer.ReceiptNo == "0000000000";
         }
 
-        public static void ProcessE0402<TEntity>(this ModelSource<TEntity> models, int year, int periodNo,int? branchID)
+        public static void ProcessE0402<TEntity>(this ModelSource<TEntity> models, int year, int periodNo, int? branchID)
             where TEntity : class, new()
         {
             IQueryable<BranchStore> items = models.GetTable<BranchStore>();
-            if(branchID.HasValue)
+            if (branchID.HasValue)
             {
                 items = items.Where(b => b.BranchID == branchID);
             }
@@ -90,5 +90,40 @@ namespace WebHome.Helper
             return result;
         }
 
+        public static void CreateAllowanceForContract<TEntity>(this ModelSource<TEntity> models, CourseContract contractItem, int totalAllowanceAmount,DateTime? allowanceDate = null)
+                    where TEntity : class, new()
+        {
+            var paymentItems = contractItem.ContractPayment.Select(p => p.Payment)
+                    .Where(p => p.PayoffAmount > 0)
+                    .Where(p => p.VoidPayment == null)
+                    .Where(p => p.InvoiceID.HasValue)
+                    .OrderByDescending(p => p.PaymentID)
+                    .ToArray();
+            int totalAmt = totalAllowanceAmount;
+            for (int i = 0; totalAmt > 0 && i < paymentItems.Length; i++)
+            {
+                var allowanceAmt = Math.Min(totalAmt, paymentItems[i].PayoffAmount.Value);
+                models.PrepareAllowanceForPayment(paymentItems[i], allowanceAmt, "合約終止沖銷", allowanceDate);
+                totalAmt -= allowanceAmt;
+            }
+        }
+
+        public static InvoiceAllowance PrepareAllowanceForPayment<TEntity>(this ModelSource<TEntity> models, Payment item,decimal? allowanceAmount=null,String remark=null, DateTime? allowanceDate = null)
+                    where TEntity : class, new()
+        {
+            PaymentAllowanceValidator<TEntity> validator = new PaymentAllowanceValidator<TEntity>(models);
+            var exception = validator.Validate(item, allowanceAmount, remark, allowanceDate);
+            if (exception != null)
+            {
+                return null;
+            }
+
+            var newItem = validator.Allowance;
+            if (item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                newItem.InvoiceAllowanceDispatch = new InvoiceAllowanceDispatch { };
+            models.GetTable<InvoiceAllowance>().InsertOnSubmit(newItem);
+
+            return newItem;
+        }
     }
 }

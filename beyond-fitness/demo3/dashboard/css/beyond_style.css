@@ -8,14 +8,18 @@
 	Website: http://ithemeslab.com
 */
 
+/*
 #logo img {
     width: 200px;
     height: auto;
     padding-left: 3px;
 }
+
+
 #header>:first-child, aside {
     width: 250px;
 }
+
 
 #logo {
     display: inline-block;
@@ -23,6 +27,7 @@
     margin-top: 13px;
     margin-left: 9px;
 }
+*/
 
 .error {
     border-color: #ff7676!important;
@@ -82,7 +87,8 @@ body.modal-open {
 
 .profile-pic>img {
     border: 2px solid #fff;
-    /*max-width: 160px !important;*/
+    width: 160px !important;
+    max-width: 160px !important;
 }
 
 /*.chat-body li.message .message-text {
@@ -187,7 +193,7 @@ body.modal-open {
             .block .head-panel .hp-info{margin-left: 20px; position: relative;}
                 .block .head-panel .hp-info:first-child{margin-left: 0px;}
                 .block .head-panel .hp-info.hp-disabled{opacity: 0.5; filter: alpha(opacity=50);}
-                .block .head-panel .hp-info .hp-icon{position: absolute; left: 0px; top: 3px; font-size: 24px;}
+                .block .head-panel .hp-info .hp-icon{position: absolute; left: 0px; top: 3px; font-size: 20px;}
                 .block .head-panel .hp-info .hp-main,
                 .block .head-panel .hp-info .hp-sm{display: block; float: left; margin-left: 27px; clear: both; line-height: 14px;}
                     .block .head-panel .hp-info .hp-main{font-size: 14px; margin-top: 2px;}
@@ -439,4 +445,32 @@ body.modal-open {
   background-image: url("../img/seal.png"); 
   background-repeat: no-repeat; 
   background-position: center center; 
+}
+
+/* timeline */
+
+.timeline{width: 100%; border-left: 10px solid rgba(0,0,0,0.2); margin-left: 10px; float: left; padding-top: 10px;}
+    .timeline .timeline-item{float: left; width: 100%; position: relative; clear: both;}
+        .timeline .timeline-icon{position: absolute; left: -18px; top: 0px; width: 26px; height: 26px; border: 2px solid rgba(255,255,255,0.4); background: #000;
+                                 text-align: center; line-height: 21px;
+                                 -moz-border-radius: 50%; -webkit-border-radius: 50%; border-radius: 50%;}
+            .timeline .timeline-icon [class^='icon-']{font-size: 12px;}
+        .timeline .timeline-info-content{background: rgba(0,0,0,0.2); padding: 8px; position: relative;}
+            .timeline .timeline-info-content:after{right: 100%; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none;}
+            .timeline .timeline-info-content:after{border-color: rgba(0, 0, 0, 0);border-right-color: rgba(0, 0, 0, 0.2); border-width: 6px; top: 8px;}
+                .timeline .timeline-info-content p{margin-bottom: 5px;}
+        
+        .timeline .timeline-info-like{float: left; font-size: 11px;}
+        .timeline .timeline-info-date{font-size: 11px; color: #DDD; text-align: right; margin-top: 3px;}
+        .timeline .timeline-info{margin-left: 20px; margin-bottom: 10px; padding-right: 10px;}
+        .timeline p.timeline-info-title{line-height: 30px; font-size: 12px; margin-bottom: 8px; font-weight: bold;}
+            .timeline p.timeline-info-title img{margin-right: 5px;}
+/* eof timeline */
+
+.editclass-img-thumbnail{
+    border: 3px solid rgba(255,255,255,0.3); 
+    background: none; 
+    padding: 0px;
+    width: 106px;
+    height: 66px;
 }

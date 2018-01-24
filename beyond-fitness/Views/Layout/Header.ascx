@@ -87,18 +87,6 @@
         </div>
         <!-- end logout button -->
 
-        <!-- FB mobile button (this is hidden till mobile view port) -->
-        <div class="btn-header transparent pull-right">
-            <span><a href="https://www.facebook.com/beyond.fitness.pro/" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></span>
-        </div>
-        <!-- end FB mobile button -->
-
-        <!-- fullscreen button -->
-        <div id="fullscreen" class="btn-header transparent pull-right">
-            <span><a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a></span>
-        </div>
-        <!-- end fullscreen button -->
-
         <!-- multiple lang dropdown : find all flags in the flags page -->
         <ul class="header-dropdown-list hidden-xs">
             <li>

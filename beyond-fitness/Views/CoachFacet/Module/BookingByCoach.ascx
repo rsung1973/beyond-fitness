@@ -55,8 +55,14 @@
                                         break;
                                     case '3':
                                     case '4':
-                                    case '5':
                                         $('.part0').css('display', 'block');
+                                        break;
+                                    case '5':
+                                        $('.part0').css('display', 'none');
+                                        showLoading();
+                                        $('#attendeeSelector').load('<%= Url.Action("BonusLessonSelector","CoachFacet") %>', {}, function (data) {
+                                            hideLoading();
+                                        });
                                         break;
                                     case '6':
                                         $('.part0').css('display', 'none');
@@ -163,6 +169,7 @@
         $(function () {
             $global.commitBooking = function (callback) {
                 var lessonType = $('#lessonType').val();
+                clearErrors();
                 switch (lessonType) {
                     case '0':
                     case '6':

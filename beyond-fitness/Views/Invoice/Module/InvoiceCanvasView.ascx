@@ -19,7 +19,7 @@
                     <div class="cutfield" style="/*width: 5cm;*/ border-top: 0px; border: 0px; /*font-weight: bold;*/">
                         <%  if (_seller!=null && _seller.LogoURL != null)
                         { %>
-                        <img style="/*width: 200px;*/ height: auto;" src='<%= WebHome.Properties.Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/" + _seller.LogoURL) + "?" + DateTime.Now.Ticks %>' />
+                        <img class="logo" style="/*width: 200px;*/ height: auto;" src='<%= WebHome.Properties.Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/" + _seller.LogoURL) + "?" + DateTime.Now.Ticks %>' />
                         <%      }
                         else
                         { %>
@@ -52,34 +52,35 @@
             </tr>
         </table>
     </div>
-
-    <%--<div class="listfield" style="border-top: 0px; border-bottom: 0px">
-        <table style="width: 4.8cm; font-size: 8pt; font-weight: bold;">
+    <%  if (!_isB2C)
+        { %>
+    <div class="listfield" style="border-top: 0px; border-bottom: 0px">
+        <table style="font-weight: bold; width: 380px; border-top-style: dashed;">
              <tr>
                 <td colspan="3">
-                            <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">品名</p>
+                            <p style="	display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">品名</p>
                 </td>
              </tr>
             <tr>
                 <td style="width:20%">
-                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">數量</p>
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">數量</p>
                     </td>
                 <td style="width:40%">
-                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">單價</p>
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">單價</p>
                     </td>
                 <td style="width:40%">
-                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;font-size:8pt;line-height: 1.5">小計</p>
+                    <p style="	display: inline-block;padding: 2px 0px;margin: 0;line-height: 1.5">小計</p>
                 </td>
             </tr>
 
-            <%  if (_model.InvoiceDetails.Count>0)
-                {
-                    foreach (var product in _model.InvoiceDetails.Select(d=>d.InvoiceProduct))
-                    {
-                        foreach (var item in product.InvoiceProductItem)
-                        {   %>
+            <%  if (_model.InvoiceDetails.Count > 0)
+              {
+                  foreach (var product in _model.InvoiceDetails.Select(d => d.InvoiceProduct))
+                  {
+                      foreach (var item in product.InvoiceProductItem)
+                      {   %>
         <tr>
-            <td colspan="3" height="15" valign="top"><%= product.Brief %></td>
+            <td colspan="3" valign="top"><%= product.Brief %></td>
         </tr>
             <tr>
                 <td align="right" valign="top"><%= String.Format("{0:##,###,###,###}", item.Piece)%></td>
@@ -87,43 +88,44 @@
                 <td align="right" valign="top"><%= String.Format("{0:##,###,###,###}", item.CostAmount)%></td>
             </tr>
             <%          }
-                    }
-                } %>
+                  }
+              } %>
             <tr>
-                <td colspan="3" style="font-size: 8pt;">
+                <td colspan="3">
 
                     <p style="border-top: 1px dotted #808080;">
-                        <span style="font-size: 8pt;">總計：<%=_model.InvoiceDetails.Sum(d=>d.InvoiceProduct.InvoiceProductItem.Count) %>項&nbsp;&nbsp;金額：<%= String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TotalAmount)%></span><br />
+                        <span>總計：<%=_model.InvoiceDetails.Sum(d => d.InvoiceProduct.InvoiceProductItem.Count) %>項&nbsp;&nbsp;金額：<%= String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TotalAmount)%></span><br />
                         課稅別：<%= (_model.InvoiceAmountType.TaxType == 2 || _model.InvoiceAmountType.TaxType == 3) ? "TZ" : "TX"%><br />
                 <%  if (!_isB2C)
-                    {
-                        decimal? salesAmt = 0;
-                        decimal? zeroTaxAmt = 0;
-                        decimal? freeTaxAmt = 0;
-                        switch ((Naming.TaxTypeDefinition)_model.InvoiceAmountType.TaxType)
-                        {
-                            case Naming.TaxTypeDefinition.應稅:
-                                salesAmt = _model.InvoiceAmountType.SalesAmount;
-                                break;
-                            case Naming.TaxTypeDefinition.零稅率:
-                                zeroTaxAmt = _model.InvoiceAmountType.SalesAmount;
-                                break;
-                            case Naming.TaxTypeDefinition.免稅:
-                                freeTaxAmt = _model.InvoiceAmountType.SalesAmount;
-                                break;
-                        }
+              {
+                  decimal? salesAmt = 0;
+                  decimal? zeroTaxAmt = 0;
+                  decimal? freeTaxAmt = 0;
+                  switch ((Naming.TaxTypeDefinition)_model.InvoiceAmountType.TaxType)
+                  {
+                      case Naming.TaxTypeDefinition.應稅:
+                          salesAmt = _model.InvoiceAmountType.SalesAmount;
+                          break;
+                      case Naming.TaxTypeDefinition.零稅率:
+                          zeroTaxAmt = _model.InvoiceAmountType.SalesAmount;
+                          break;
+                      case Naming.TaxTypeDefinition.免稅:
+                          freeTaxAmt = _model.InvoiceAmountType.SalesAmount;
+                          break;
+                  }
                 %>
-                        應稅銷售額：<%= String.Format("{0:##,###,###,##0}",salesAmt) %><br />
-                        零稅率銷售額：<%= String.Format("{0:##,###,###,##0}",zeroTaxAmt) %><br />
-                        免稅銷售額：<%= String.Format("{0:##,###,###,##0}",freeTaxAmt) %><br />
-                        稅額：<%= String.Format("{0:##,###,###,##0}",_model.InvoiceAmountType.TaxAmount) %><br />
+                        應稅銷售額：<%= String.Format("{0:##,###,###,##0}", salesAmt) %><br />
+                        零稅率銷售額：<%= String.Format("{0:##,###,###,##0}", zeroTaxAmt) %><br />
+                        免稅銷售額：<%= String.Format("{0:##,###,###,##0}", freeTaxAmt) %><br />
+                        稅額：<%= String.Format("{0:##,###,###,##0}", _model.InvoiceAmountType.TaxAmount) %><br />
                         <%  } %>
                         備註：<%= String.Join(";", _model.InvoiceDetails.Select(d => d.InvoiceProduct.InvoiceProductItem.FirstOrDefault().Remark))%>
                     </p>
                 </td>
             </tr>
         </table>
-    </div>--%>
+    </div>
+    <%  } %>
 </div>
 <%--<%      if ((bool?)ViewBag.PrintBuyerAddr == true)
         { %>

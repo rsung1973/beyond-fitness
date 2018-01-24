@@ -78,7 +78,12 @@
                                         alert(data.message);
                                         <%--$('#<%= _dialog %>').dialog('close');--%>
                                         showLoading();
-                                        window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';
+                                        if (data.invoiceID) {
+                                            $('').launchDownload('<%= Url.Action("PrintIndex","Invoice") %>', { 'invoiceID': data.invoiceID,'docType':<%= (int)Naming.DocumentTypeDefinition.E_Allowance %> });
+                                        }
+                                        else {
+                                            window.location.href = '<%= Url.Action("PaymentIndex","Payment") %>';
+                                        }
                                     } else {
                                         alert(data.message);
                                     }

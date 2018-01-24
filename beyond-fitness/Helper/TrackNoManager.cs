@@ -111,7 +111,7 @@ namespace WebHome.Helper
             var intervalItems = this.GetTable<InvoiceNoInterval>().Where(n => n.InvoiceTrackCodeAssignment.SellerID == _sellerID
                 && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year == currentYear
                 && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == currentPeriodNo);
-            return intervalItems.Where(n => n.InvoiceNoAssignment.Count == 0 || n.StartNo + n.InvoiceNoAssignment.Count <= n.EndNo).OrderBy(n=>n.IntervalID).ThenBy(n => n.StartNo).FirstOrDefault();
+            return intervalItems.Where(n => /*n.InvoiceNoAssignment.Count == 0 ||*/ n.StartNo + n.InvoiceNoAssignment.Count <= n.EndNo).OrderBy(n=>n.IntervalID).ThenBy(n => n.StartNo).FirstOrDefault();
         }
 
         public InvoiceNoInterval GetAppliedInterval(DateTime invoiceDate,String trackCode,int invoiceNo)
@@ -133,7 +133,7 @@ namespace WebHome.Helper
             var intervalItems = this.GetTable<InvoiceNoInterval>().Where(n => n.InvoiceTrackCodeAssignment.SellerID == _sellerID
                 && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.Year == currentYear
                 && n.InvoiceTrackCodeAssignment.InvoiceTrackCode.PeriodNo == currentPeriodNo);
-            return intervalItems.Where(n => (n.InvoiceNoAssignment.Count == 0 || n.StartNo + n.InvoiceNoAssignment.Count <= n.EndNo) && n.IntervalID > intervalID).OrderBy(n => n.IntervalID).ThenBy(n => n.StartNo).FirstOrDefault();
+            return intervalItems.Where(n => (/*n.InvoiceNoAssignment.Count == 0 ||*/ n.StartNo + n.InvoiceNoAssignment.Count <= n.EndNo) && n.IntervalID > intervalID).OrderBy(n => n.IntervalID).ThenBy(n => n.StartNo).FirstOrDefault();
         }
     }
 }

@@ -71,7 +71,7 @@ namespace WebHome.Controllers
             return View("~/Views/Shared/JsAlert.ascx", model: "學員資料錯誤!!");
         }
 
-        public ActionResult ExchangeBonusPoint(int uid,int itemID)
+        public ActionResult ExchangeBonusPoint(int uid,int itemID,int? recipientID)
         {
             var profile = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
             if (profile == null)
@@ -116,17 +116,50 @@ namespace WebHome.Controllers
             if (item.BonusAwardingLesson != null)
             {
                 var lesson = models.GetTable<RegisterLesson>().Where(r => r.UID == uid).OrderByDescending(r => r.RegisterID).First();
-                models.GetTable<RegisterLesson>().InsertOnSubmit(new RegisterLesson
+
+                if (item.BonusAwardingIndication != null && item.BonusAwardingIndication.Indication == "AwardingLessonGift")
                 {
-                    RegisterDate = DateTime.Now,
-                    GroupingMemberCount = 1,
-                    ClassLevel = item.BonusAwardingLesson.PriceID,
-                    Lessons = 1,
-                    UID = profile.UID,
-                    AdvisorID = lesson.AdvisorID,
-                    Attended = (int)Naming.LessonStatus.準備上課,
-                    GroupingLesson = new GroupingLesson { }
-                });
+                    if(!recipientID.HasValue)
+                    {
+                        return Json(new { result = false, message = "請選擇受贈學員!!" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    var giftLesson = new RegisterLesson
+                        {
+                            RegisterDate = DateTime.Now,
+                            GroupingMemberCount = 1,
+                            ClassLevel = item.BonusAwardingLesson.PriceID,
+                            Lessons = 1,
+                            UID = recipientID.Value,
+                            AdvisorID = lesson.AdvisorID,
+                            Attended = (int)Naming.LessonStatus.準備上課,
+                            GroupingLesson = new GroupingLesson { }
+                        };
+                    award.AwardingLessonGift = new AwardingLessonGift
+                        {
+                            RegisterLesson = giftLesson
+                        };
+                    models.GetTable<RegisterLesson>().InsertOnSubmit(giftLesson);
+                }
+                else
+                {
+                    var awardLesson = new RegisterLesson
+                    {
+                        RegisterDate = DateTime.Now,
+                        GroupingMemberCount = 1,
+                        ClassLevel = item.BonusAwardingLesson.PriceID,
+                        Lessons = 1,
+                        UID = profile.UID,
+                        AdvisorID = lesson.AdvisorID,
+                        Attended = (int)Naming.LessonStatus.準備上課,
+                        GroupingLesson = new GroupingLesson { }
+                    };
+                    award.AwardingLesson = new AwardingLesson
+                    {
+                        RegisterLesson = awardLesson
+                    };
+                    models.GetTable<RegisterLesson>().InsertOnSubmit(awardLesson);
+                }
             }
 
             models.SubmitChanges();
@@ -319,6 +352,11 @@ namespace WebHome.Controllers
                 return Json(new { result = true },JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult QueryRecipient()
+        {
+            return View("~/Views/LearnerFacet/Module/QueryRecipient.ascx");
         }
 
 

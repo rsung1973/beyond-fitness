@@ -11,7 +11,7 @@
 
     <% if (_items != null && _items.Count() > 0)
         {   %>
-            <label class="label">依您輸入的關鍵字，搜尋結果如下：</label>
+            <label class="label">點數兌換課學員，搜尋結果如下：</label>
         <%  foreach (var item in _items)
             {
                 bool pdqStatus = completePDQ(item);
@@ -22,6 +22,10 @@
                 <i></i>
                         <%= item.UserProfile.FullName() %>「<%= item.Lessons %>堂-<%= item.LessonPriceType.Description %>」
                             <li class="fa fa-child"></li>
+                    <%  if (item.AwardingLessonGift.Count > 0)
+                        { %>
+                    （由<%= item.AwardingLessonGift.First().LearnerAward.UserProfile.FullName() %>贈與禮物包1堂）
+                    <%  } %>
                     <%  if (!pdqStatus)
                         { %>
                     <span class="label label-danger">

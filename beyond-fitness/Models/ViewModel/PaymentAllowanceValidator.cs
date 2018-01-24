@@ -17,6 +17,8 @@ namespace WebHome.Models.ViewModel
         protected ModelSource<TEntity> _mgr;
 
         protected Payment _payment;
+        protected decimal? _totalAllowanceAmount;
+        protected String _remark;
 
         protected InvoiceAllowance _newItem;
         protected Organization _seller;
@@ -37,26 +39,29 @@ namespace WebHome.Models.ViewModel
             }
         }
 
-        public virtual Exception Validate(Payment dataItem)
+        public virtual Exception Validate(Payment dataItem, decimal? totalAllowanceAmount = null, String remark = null, DateTime? allowanceDate = null)
         {
             _payment = dataItem;
+            _totalAllowanceAmount = totalAllowanceAmount ?? _payment.PayoffAmount;
+            _remark = remark;
+            _allowanceDate = allowanceDate ?? DateTime.Now;
 
             Exception ex;
 
             _seller = null;
             _newItem = null;
-            
-            if((ex = CheckBusiness()) != null)
+
+            if ((ex = CheckBusiness()) != null)
             {
                 return ex;
             }
 
-            if((ex = CheckMandatoryFields()) != null)
+            if ((ex = CheckMandatoryFields()) != null)
             {
                 return ex;
             }
 
-            if((ex = CheckAllowanceItem()) != null)
+            if ((ex = CheckAllowanceItem()) != null)
             {
                 return ex;
             }
@@ -73,8 +78,6 @@ namespace WebHome.Models.ViewModel
 
         protected virtual Exception CheckMandatoryFields()
         {
-            _allowanceDate = DateTime.Now;
-
             return null;
         }
 
@@ -95,9 +98,12 @@ namespace WebHome.Models.ViewModel
                     return new Exception("該發票已作廢，不可折讓。");
                 }
 
-                var allowanceItem = new InvoiceAllowanceItem
+            InvoiceAllowanceItem allowanceItem;
+            if (originalInvoice.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+            {
+                allowanceItem = new InvoiceAllowanceItem
                 {
-                    Amount = Math.Round((decimal)_payment.PayoffAmount / 1.05m),
+                    Amount = Math.Round(_totalAllowanceAmount.Value / 1.05m),
                     InvoiceNo = originalInvoice.TrackCode + originalInvoice.No,
                     InvoiceDate = originalInvoice.InvoiceDate,
                     ItemNo = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].ItemNo,
@@ -108,11 +114,32 @@ namespace WebHome.Models.ViewModel
                     TaxType = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType,
                     No = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].No,
                     UnitCost = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].UnitCost,
+                    Remark = _remark,
+                };
+            }
+            else
+            {
+                allowanceItem = new InvoiceAllowanceItem
+                {
+                    Amount = Math.Round(_totalAllowanceAmount.Value / 1.05m),
+                    InvoiceNo = originalInvoice.TrackCode + originalInvoice.No,
+                    InvoiceDate = originalInvoice.InvoiceDate,
+                    //ItemNo = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].ItemNo,
+                    //OriginalSequenceNo = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].No,
+                    //Piece = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].Piece,
+                    //PieceUnit = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].PieceUnit,
+                    //OriginalDescription = originalInvoice.InvoiceDetails[0].InvoiceProduct.Brief,
+                    //TaxType = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].TaxType,
+                    //No = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].No,
+                    //UnitCost = originalInvoice.InvoiceDetails[0].InvoiceProduct.InvoiceProductItem[0].UnitCost,
+                    Remark = _remark,
                 };
 
-            allowanceItem.Tax = _payment.PayoffAmount - allowanceItem.Amount;
+            }
 
-                _productItems.Add(allowanceItem);
+            allowanceItem.Tax = _totalAllowanceAmount - allowanceItem.Amount;
+
+            _productItems.Add(allowanceItem);
             
 
             _newItem = new InvoiceAllowance() 
@@ -158,6 +185,8 @@ namespace WebHome.Models.ViewModel
             {
                 InvoiceAllowanceItem = p,
             }));
+
+            _payment.InvoiceAllowance = _newItem;
 
             return null;
         }

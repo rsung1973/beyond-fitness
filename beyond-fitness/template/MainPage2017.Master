@@ -116,8 +116,8 @@
 		* 'fixed-page-footer' - Fixes footer
 		* 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
 	-->
-<body class="smart-style-5 menu-on-top fixed-header">
-        
+<body class="smart-style-5 menu-on-top">
+       
         <% Html.RenderPartial("~/Views/Layout/_2017/Header.ascx", _userProfile); %>
 
         <!-- Left panel : Navigation area -->
@@ -129,7 +129,7 @@
                     <!-- User image size is adjusted inside CSS, it should stay as it -->
 
                     <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-                        <img runat="server" src="~/img/avatars/male.png" alt="me" class="online" />
+                        <% _userProfile.RenderUserPicture(Writer, new { @class = "online" }); %>
                         <span> <%= _userProfile!=null ? _userProfile.UserName!=null ? _userProfile.UserName : _userProfile.RealName : null %>
                         </span>
                         <i class="fa fa-angle-down"></i>
@@ -200,6 +200,18 @@
         </div>
     </div>
     <!-- END PAGE FOOTER -->
+<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+  Note: These tiles are completely responsive,
+  you can add as many as you like
+  -->
+    <div id="shortcut">
+        <ul>
+            <li>
+                <a href="<%= Url.Action("EditMySelf","Account") %>" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"><span class="iconbox"><i class="fa fa-cog fa-4x"></i><span>Setting </span></span></a>
+            </li>
+        </ul>
+    </div>
+  <!-- END SHORTCUT AREA -->
 </body>
 </html>
 <% Html.RenderPartial("~/Module/Common/PageTailScriptInclude.ascx"); %>

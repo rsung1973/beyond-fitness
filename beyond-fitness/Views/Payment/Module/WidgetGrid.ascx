@@ -45,11 +45,20 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
                         <%  ViewBag.ShowFooter = false;
-                            Html.RenderPartial("~/Views/Payment/Module/PaymentList.ascx", 
-                                models.GetTable<Payment>()
-                                    .Where(p => p.HandlerID == _profile.UID)
-                                    .Where(p=>p.PayoffDate>= DateTime.Today.AddMonths(-3))); %>
-
+                            Html.RenderAction("InquirePayment", "Payment",
+                                new
+                                {
+                                    HandlerID = _profile.UID,
+                                    InvoiceType = (int?)null,
+                                    IsCancelled = false,
+                                    PayoffDateFrom = DateTime.Today.AddMonths(-3)
+                                });
+                            //Html.RenderPartial("~/Views/Payment/Module/PaymentInvoiceList.ascx",
+                            //    models.GetTable<Payment>()
+                            //        .Where(p => p.HandlerID == _profile.UID)
+                            //        .Where(p => p.PayoffDate >= DateTime.Today.AddMonths(-3))
+                            //        .Join(models.GetTable<InvoiceItem>(), p => p.InvoiceID, i => i.InvoiceID, (p, i) => p)); 
+                            %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -95,10 +104,21 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
-                        <%  var items = models.GetTable<Payment>()
-                                .Where(p => p.VoidPayment != null)
-                                .Where(p => p.VoidPayment.HandlerID == _profile.UID);
-                            Html.RenderPartial("~/Views/Payment/Module/PaymentCancellationList.ascx", items);   %>
+                        <%  
+                            Html.RenderAction("InquirePayment", "Payment",
+                                new
+                                {
+                                    HandlerID = _profile.UID,
+                                    InvoiceType = (int?)null,
+                                    IsCancelled = true,
+                                    PayoffDateFrom = DateTime.Today.AddMonths(-3)
+                                });
+
+                            //var items = models.GetTable<Payment>()
+                            //    .Where(p => p.VoidPayment != null)
+                            //    .Where(p => p.VoidPayment.HandlerID == _profile.UID);
+                            //Html.RenderPartial("~/Views/Payment/Module/PaymentCancellationList.ascx", items);   
+                            %>
                     </div>
                     <!-- end widget content -->
                 </div>

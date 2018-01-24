@@ -134,7 +134,7 @@
                                     </section>
                                 </div>
                                 <div class="row">
-                                    <section class="col col-xs-12 col-sm-6 col-md-3">
+                                    <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">發票類型</label>
                                         <label class="select">
                                             <select class="input" name="InvoiceType">
@@ -145,7 +145,7 @@
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
                                     </section>
-                                    <section class="col col-xs-12 col-sm-6 col-md-3">
+                                    <%--<section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">發票狀態</label>
                                         <label class="select">
                                             <select class="input" name="IsCancelled">
@@ -155,15 +155,15 @@
                                             </select>
                                             <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
-                                    </section>
-                                    <section class="col col-xs-12 col-sm-6 col-md-3">
+                                    </section>--%>
+                                    <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">發票號碼</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-qrcode"></i>
                                             <input type="text" name="InvoiceNo" class="form-control input" maxlength="20" placeholder="請輸入發票號碼"/>
                                         </label>
                                     </section>
-                                    <section class="col col-xs-12 col-sm-6 col-md-3">
+                                    <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">買受人統編</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-file-text-o"></i>
@@ -175,7 +175,7 @@
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">請選擇查詢收款起日</label>
+                                        <label class="label">請選擇查詢起日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
@@ -183,7 +183,7 @@
                                         </label>
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">請選擇查詢收款迄日</label>
+                                        <label class="label">請選擇查詢迄日</label>
                                         <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="PayoffDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
@@ -245,7 +245,8 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="paymentList">
-                        <%  Html.RenderPartial("~/Views/Payment/Module/PaymentList.ascx", models.GetTable<Payment>().Where(p => false)); %>
+                        <%  ViewBag.ViewModel = new PaymentQueryViewModel { };
+                            Html.RenderPartial("~/Views/Payment/Module/PaymentInvoiceList.ascx", models.GetTable<Payment>().Where(p => false)); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -275,7 +276,7 @@
     }
 
     function downloadPayment() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreatePaymentQueryXlsx","Payment") %>');
+        $('#queryForm').launchDownload('<%= Url.Action("CreatePaymentInvoiceQueryXlsx","Payment") %>');
     }
 </script>
 

@@ -16,7 +16,7 @@
 <%  } %>
 
 <li>
-    <a href=""><i class="fa fa-lg fa-fw fa-tasks"></i>體能顧問服務費</a>
+    <a href="#"><i class="fa fa-lg fa-fw fa-tasks"></i><span class="menu-item-parent">顧問服務費</span></a>
     <ul>
         <li>
             <a href="../../../front-end/pricing-arena.html" target="_blank"><i class="fa fa-fw fa-th-list"></i>南京小巨蛋</a>
@@ -32,7 +32,7 @@
 <%  if (_userProfile.EmployeeWelfare != null && _userProfile.EmployeeWelfare.MonthlyGiftLessons > 0)
     { %>
 <li>
-    <a href="<%= Url.Action("LearnerIndex", "LearnerFacet") %>" target="_blank"><i class="fa fa-lg fa-fw fa-address-card "></i>學員儀表板</a>
+    <a href="<%= Url.Action("LearnerIndex", "LearnerFacet") %>" target="_blank"><i class="fa fa-lg fa-fw fa-address-card "></i><span class="menu-item-parent">學員儀表板</span></a>
 </li>
 <%  } %>
 

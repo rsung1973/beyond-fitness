@@ -31,13 +31,15 @@
                     {
                         idx++;  %>
                         <tr>
-                            <td><%= item.ServingCoach==null ? "--" : item.ServingCoach.ProfessionalLevel.LevelName %></td>
+                            <td><%= item.ServingCoach==null ? "--" : item.ServingCoach.ProfessionalLevel.DisplayName %></td>
                             <td><%= item.FullName() %></td>
                             <td><%= item.ServingCoach==null ? "--" : String.Join("<br/>",item.ServingCoach.CoachWorkplace.Select(w=>w.BranchStore.BranchName)) %></td>
                             <td><%= item.Phone %></td>
                             <td><%= item.LevelID==(int)Naming.MemberStatusDefinition.ReadyToRegister ? "尚未註冊" :  item.PID %></td>
                             <td><%= item.MemberCode %></td>
-                            <td><%= String.Join("<br/>", item.UserRoleAuthorization.Select(r=> Naming.RoleName[r.RoleID])) %></td>
+                            <td><%= String.Join("<br/>", item.UserRoleAuthorization.Select(r=> Naming.RoleName[r.RoleID])) %>
+                                <%= item.ServingCoach!=null && item.ServingCoach.ProfessionalLevel.CategoryID==(int)Naming.ProfessionalCategory.Senior ? "(資)" : null %>
+                            </td>
                             <td>
                                 <%  if(!item.IsSysAdmin())
                                     { %>

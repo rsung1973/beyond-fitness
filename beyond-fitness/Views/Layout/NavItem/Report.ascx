@@ -19,6 +19,9 @@
         <li>
             <a href="<%= Url.Action("TrustIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>信託請款表</a>
         </li>
+        <li>
+            <a href="<%= Url.Action("TaxCsvIndex", "Invoice") %>"><i class="fa fa-fw fa-download"></i>401申報書下載</a>
+        </li>
 <%--        <li>
             <a href="<%= Url.Action("ReceivableIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>應收帳款催收表</a>
         </li>--%>

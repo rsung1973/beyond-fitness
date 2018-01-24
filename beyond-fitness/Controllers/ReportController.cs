@@ -311,21 +311,47 @@ namespace WebHome.Controllers
         }
 
         [CoachOrAssistantAuthorize]
-        public ActionResult ListBonusAward(DateTime? startDate,DateTime? endDate)
+        public ActionResult ListBonusAward(AwardQueryViewModel viewModel)
         {
-            if(!startDate.HasValue && !endDate.HasValue)
+            ViewBag.ViewModel = viewModel;
+            IQueryable<LearnerAward> items = models.GetTable<LearnerAward>();
+
+            Expression<Func<LearnerAward, bool>> queryExpr = c => false;
+            bool hasConditon = false;
+
+            viewModel.UserName = viewModel.UserName.GetEfficientString();
+            if (viewModel.UserName != null)
             {
-                ModelState.AddModelError("startDate", "請輸入兌換起日");
-                ModelState.AddModelError("endDate", "請輸入兌換迄日");
-                ViewBag.ModelState = this.ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
+                hasConditon = true;
+                queryExpr = queryExpr.Or(c => c.UserProfile.RealName.Contains(viewModel.UserName) || c.UserProfile.Nickname.Contains(viewModel.UserName));
             }
 
-            IQueryable<LearnerAward> items = models.GetTable<LearnerAward>();
-            if (startDate.HasValue)
-                items = items.Where(a => a.AwardDate >= startDate);
-            if (endDate.HasValue)
-                items = items.Where(a => a.AwardDate < endDate.Value.AddDays(1));
+            if(viewModel.ActorID.HasValue)
+            {
+                hasConditon = true;
+                queryExpr = queryExpr.Or(c => c.ActorID == viewModel.ActorID);
+            }
+
+            if (viewModel.ItemID.HasValue)
+            {
+                hasConditon = true;
+                queryExpr = queryExpr.Or(c => c.ItemID == viewModel.ItemID);
+            }
+
+            if(hasConditon)
+            {
+                items = items.Where(queryExpr);
+            }
+
+            if(viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(c => c.AwardDate >= viewModel.DateFrom);
+            }
+
+            if(viewModel.DateTo.HasValue)
+            {
+                items = items.Where(c => c.AwardDate < viewModel.DateTo.Value.AddDays(1));
+            }
 
             return View("~/Views/Report/Module/ListBonusAward.ascx", items);
         }

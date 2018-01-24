@@ -187,6 +187,11 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("PayoffDate", "請選擇收款日期!!");
             }
 
+            if (String.IsNullOrEmpty(viewModel.PaymentType))
+            {
+                ModelState.AddModelError("errorMessage", "請選擇收款方式!!");
+            }
+
             viewModel.ItemNo = new string[] { "01" };
             viewModel.Brief = new string[] { "體能顧問服務費" };
             viewModel.CostAmount = new int?[] { viewModel.PayoffAmount };
@@ -416,6 +421,12 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("SellerID", "請選擇分店!!");
             }
 
+            if (String.IsNullOrEmpty(viewModel.PaymentType))
+            {
+                ModelState.AddModelError("errorMessage", "請選擇收款方式!!");
+            }
+
+
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
@@ -526,6 +537,11 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("SellerID", "請選擇分店!!");
             }
 
+            if (String.IsNullOrEmpty(viewModel.PaymentType))
+            {
+                ModelState.AddModelError("errorMessage", "請選擇收款方式!!");
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
@@ -566,10 +582,20 @@ namespace WebHome.Controllers
 
                 models.SubmitChanges();
 
-                invoice.RandomNo = String.Format("{0:0000}", invoice.InvoiceID % 10000);
-                models.SubmitChanges();
+                //invoice.RandomNo = String.Format("{0:0000}", invoice.InvoiceID % 10000);
+                //models.SubmitChanges();
 
                 TaskExtensionMethods.ProcessInvoiceToGov();
+                
+                //if (invoice.InvoiceCancellation != null && invoice.InvoiceType!=(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                //{
+                //    models.ExecuteCommand(@"DELETE FROM Document
+                //        FROM Document INNER JOIN
+                //            DerivedDocument ON Document.DocID = DerivedDocument.DocID
+                //        WHERE (DerivedDocument.SourceID = {0})", invoice.InvoiceID);
+                //    models.ExecuteCommand(@"delete InvoiceCancellation where InvoiceID = {0}", invoice.InvoiceID);
+                //    models.ExecuteCommand(@"delete Payment where InvoiceID = {0} and PaymentID <> {1}", invoice.InvoiceID, item.PaymentID);
+                //}
 
                 return Json(new { result = true, invoiceNo = item.InvoiceItem.TrackCode + item.InvoiceItem.No, item.InvoiceID, item.InvoiceItem.InvoiceType }, JsonRequestBehavior.AllowGet);
             }
@@ -605,10 +631,18 @@ namespace WebHome.Controllers
                     //{
                     //    ModelState.AddModelError("InvoiceNo", "發票號碼重複!!");
                     //}
-                    if(invoice!=null && invoice.InvoiceType==(byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                    if (invoice != null)
                     {
-                        ModelState.AddModelError("InvoiceNo", "發票號碼為已開立之電子發票!!");
-                        return null;
+                        if (invoice.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
+                        {
+                            ModelState.AddModelError("InvoiceNo", "發票號碼為已開立之電子發票!!");
+                            return null;
+                        }
+                        //else if (invoice.InvoiceCancellation != null)
+                        //{
+                        //    ModelState.AddModelError("InvoiceNo", "該號碼之發票已作廢!!");
+                        //    return null;
+                        //}
                     }
                     return invoice;
                 }
@@ -668,6 +702,7 @@ namespace WebHome.Controllers
                     DocDate = DateTime.Now,
                     DocType = (int)Naming.DocumentTypeDefinition.E_Invoice
                 },
+                InvoiceDate = viewModel.PayoffDate,
                 InvoiceType = (byte)Naming.InvoiceTypeDefinition.二聯式,
                 SellerID = viewModel.SellerID.Value,
                 InvoiceSeller = new InvoiceSeller
@@ -888,6 +923,16 @@ namespace WebHome.Controllers
                         {
                             withdrawPayment(item);
                         }
+
+                        var invForAllowance = items.Select(i => i.Payment).Where(p => p.AllowanceID.HasValue && p.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票);
+                        if (invForAllowance.Count() > 0)
+                        {
+                            return Json(new
+                            {
+                                result = true,
+                                invoiceID = invForAllowance.Select(p => p.InvoiceID).ToArray()
+                            });
+                        }
                     }
 
                     return Json(new { result = true });
@@ -1049,7 +1094,20 @@ namespace WebHome.Controllers
                         {
                             withdrawPayment(item);
                         }
-                        return Json(new { result = true, message = "作廢收款資料已生效!!" });
+
+                        var invForAllowance = items.Select(i => i.Payment).Where(p => p.AllowanceID.HasValue && p.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票);
+                        if (invForAllowance.Count() > 0)
+                        {
+                            return Json(new
+                            {
+                                result = true,
+                                invoiceID = invForAllowance.Select(p => p.InvoiceID).ToArray()
+                            });
+                        }
+                        else
+                        {
+                            return Json(new { result = true, message = "作廢收款資料已生效!!" });
+                        }
                     }
                     return Json(new { result = true, message = "作廢收款資料已送交審核!!" });
                 }
@@ -1068,17 +1126,18 @@ namespace WebHome.Controllers
         {
             if (item.InvoiceID.HasValue)
             {
-                createAllowance(item);
+                //createAllowance(item);
 
-                //if (item.InvoiceItem.InvoiceType==(int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 && (item.InvoiceItem.InvoiceDate.Value.Month + 1) / 2 < (DateTime.Today.Month + 1) / 2)
-                //{
-                //    createAllowance(item);
-                //}
-                //else
-                //{
-                //    if (item.InvoiceItem.InvoiceCancellation == null)
-                //        cancelInvoice(item.InvoiceItem);
-                //}
+                if (item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                    && (item.InvoiceItem.InvoiceDate.Value.Year < DateTime.Today.Year || (item.InvoiceItem.InvoiceDate.Value.Month + 1) / 2 < (DateTime.Today.Month + 1) / 2))
+                {
+                    createAllowance(item);
+                }
+                else
+                {
+                    if (item.InvoiceItem.InvoiceCancellation == null)
+                        cancelInvoice(item.InvoiceItem);
+                }
             }
         }
 
@@ -1156,9 +1215,18 @@ namespace WebHome.Controllers
 
         public ActionResult InquirePayment(PaymentQueryViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
+
             IQueryable<Payment> items = models.GetTable<Payment>()
-                .Where(p=>p.TransactionType.HasValue)
+                .Where(p => p.TransactionType.HasValue)
+                .Where(p => p.PayoffAmount > 0)
                 .Where(p => p.Status.HasValue);
+
+            IQueryable<VoidPayment> voidItems = models.GetTable<VoidPayment>();
+
+            IQueryable<InvoiceItem> invoiceItems = models.GetTable<InvoiceItem>();
+            IQueryable<InvoiceAllowance> allowanceItems = models.GetTable<InvoiceAllowance>();
+            IQueryable<InvoiceCancellation> cancelledItems = models.GetTable<InvoiceCancellation>();
 
             var profile = HttpContext.GetUser();
 
@@ -1210,6 +1278,7 @@ namespace WebHome.Controllers
                 {
                     hasConditon = true;
                     queryExpr = queryExpr.Or(c => c.HandlerID == viewModel.HandlerID);
+                    voidItems = voidItems.Where(v => v.HandlerID == viewModel.HandlerID);
                 }
             }
 
@@ -1230,6 +1299,7 @@ namespace WebHome.Controllers
                 else if (profile.IsCoach())
                 {
                     items = items.Where(p => p.HandlerID == profile.UID);
+                    voidItems = voidItems.Where(v => v.HandlerID == profile.UID);
                 }
                 else
                 {
@@ -1254,44 +1324,116 @@ namespace WebHome.Controllers
             }
 
             if (viewModel.InvoiceType.HasValue)
-                items = items.Where(c => c.InvoiceItem.InvoiceType == (byte)viewModel.InvoiceType);
+            {
+                invoiceItems = invoiceItems.Where(c => c.InvoiceType == (byte)viewModel.InvoiceType);
+            }
 
-            if (viewModel.IsCancelled == true)
-            {
-                if (!viewModel.Status.HasValue || viewModel.Status == (int)Naming.CourseContractStatus.已生效)
-                    items = items.Where(c => c.InvoiceItem.InvoiceCancellation != null);
-                else
-                    items = items.Where(f => false);
-            }
-            else if (viewModel.IsCancelled == false)
-            {
-                if (viewModel.Status.HasValue && viewModel.Status != (int)Naming.CourseContractStatus.已生效)
-                    items = items.Where(f => false);
-                //items = items.Where(c => c.InvoiceItem.InvoiceCancellation == null);
-            }
 
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
             if (viewModel.InvoiceNo != null && Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
             {
                 String trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
                 String no = viewModel.InvoiceNo.Substring(2);
-                items = items.Where(c => c.InvoiceItem.TrackCode == trackCode
-                    && c.InvoiceItem.No == no);
+                invoiceItems = invoiceItems.Where(c => c.TrackCode == trackCode
+                    && c.No == no);
+
+                //allowanceItems = allowanceItems.Where(a => a.AllowanceNumber == viewModel.InvoiceNo);
+                //voidItems = voidItems
+                //    .Join(models.GetTable<Payment>()
+                //        .Join(models.GetTable<InvoiceItem>().Where(i => i.TrackCode == trackCode && i.No == no),
+                //            p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
+                //        v => v.VoidID, p => p.PaymentID, (v, p) => v);
             }
 
             viewModel.BuyerReceiptNo = viewModel.BuyerReceiptNo.GetEfficientString();
             if(viewModel.BuyerReceiptNo!=null)
             {
-                items = items.Where(c => c.InvoiceItem.InvoiceBuyer.ReceiptNo == viewModel.BuyerReceiptNo);
+                invoiceItems = invoiceItems.Where(c => c.InvoiceBuyer.ReceiptNo == viewModel.BuyerReceiptNo);
             }
 
+            Expression<Func<InvoiceItem,bool>> queryInv = f => true;
+            bool dateQuery = false;
+            Expression<Func<Payment, bool>> dateItems = p => true;
             if (viewModel.PayoffDateFrom.HasValue)
-                items = items.Where(c => c.PayoffDate >= viewModel.PayoffDateFrom);
+            {
+                dateQuery = true;
+                dateItems = dateItems.And(p => p.PayoffDate >= viewModel.PayoffDateFrom);
+                //items = items.Where(c => c.PayoffDate >= viewModel.PayoffDateFrom);
+                queryInv = queryInv.And(i => i.InvoiceDate >= viewModel.PayoffDateFrom);
+                //invoiceItems = invoiceItems.Where(i => i.InvoiceDate >= viewModel.PayoffDateFrom);
+                cancelledItems = cancelledItems.Where(i => i.CancelDate >= viewModel.PayoffDateFrom);
+                allowanceItems = allowanceItems.Where(a => a.AllowanceDate >= viewModel.PayoffDateFrom);
+                voidItems = voidItems.Where(v => v.VoidDate >= viewModel.PayoffDateFrom);
+            }
 
             if (viewModel.PayoffDateTo.HasValue)
-                items = items.Where(c => c.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
+            {
+                dateQuery = true;
+                dateItems = dateItems.And(i => i.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
 
-            return View("~/Views/Payment/Module/PaymentList.ascx", items);
+                //items = items.Where(c => c.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                queryInv = queryInv.And(i => i.InvoiceDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                //invoiceItems = invoiceItems.Where(i => i.InvoiceDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                cancelledItems = cancelledItems.Where(i => i.CancelDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                allowanceItems = allowanceItems.Where(a => a.AllowanceDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                voidItems = voidItems.Where(v => v.VoidDate < viewModel.PayoffDateTo.Value.AddDays(1));
+            }
+
+            //var allowanceID = allowanceItems.Select(a => a.AllowanceID);
+
+            //var result = items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p)
+            //    .Concat(items.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p))
+            //    .GroupBy(p => p.PaymentID).Select(g => g.First());
+
+            allowanceItems = allowanceItems
+                .Join(models.GetTable<Payment>()
+                    .Join(invoiceItems, 
+                        p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
+                    a => a.AllowanceID, p => p.AllowanceID, (a, p) => a);
+
+            voidItems = voidItems
+                .Join(models.GetTable<Payment>()
+                    .Join(invoiceItems,
+                        p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
+                    a => a.VoidID, p => p.PaymentID, (a, p) => a);
+
+            IQueryable<Payment> result;
+            if (viewModel.IsCancelled == true)
+            {
+                //queryInv = queryInv.And(i => i.InvoiceCancellation != null);
+                //invoiceItems = invoiceItems.Where(i => i.InvoiceCancellation != null);
+                result = items
+                    .Where(p => p.VoidPayment != null || p.AllowanceID.HasValue)
+                    .Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
+                        || allowanceItems.Select(a => (int?)a.AllowanceID).Contains(p.AllowanceID)
+                        //|| cancelledItems.Select(c => (int?)c.InvoiceID).Contains(p.InvoiceID)
+                        || voidItems.Select(c => c.VoidID).Contains(p.PaymentID));
+
+            }
+            else if (viewModel.IsCancelled == false)
+            {
+                //invoiceItems = invoiceItems.Where(i => i.InvoiceCancellation == null);
+                //queryInv = queryInv.And(i => i.InvoiceCancellation == null);
+
+                result = items
+                    .Where(p => p.VoidPayment == null && !p.AllowanceID.HasValue)
+                    .Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
+                        && !p.AllowanceID.HasValue);
+            }
+            else
+            {
+                result = items.Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
+                    || allowanceItems.Select(a => (int?)a.AllowanceID).Contains(p.AllowanceID)
+                    //|| cancelledItems.Select(c => (int?)c.InvoiceID).Contains(p.InvoiceID)
+                    || voidItems.Select(c => c.VoidID).Contains(p.PaymentID));
+            }
+
+            if(dateQuery)
+            {
+                result = result.Union(items.Where(dateItems));
+            }
+
+            return View("~/Views/Payment/Module/PaymentInvoiceList.ascx", result);
 
         }
 
@@ -1366,6 +1508,101 @@ namespace WebHome.Controllers
                         ? String.Concat((Naming.CourseContractStatus)i.Item.Status, i.Item.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
                         : String.Concat((Naming.VoidPaymentStatus)i.Item.VoidPayment.Status, "(作廢)"),
                     備註 = i.Direction > 0 ? i.Item.Remark : i.Item.VoidPayment.Remark
+                });
+
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("PaymentDetails.xlsx"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                DataTable table = details.ToDataTable();
+                table.TableName = "收款資料明細";
+                ds.Tables.Add(table);
+
+                foreach (var r in table.Select("買受人統編 = '0000000000'"))
+                {
+                    r["買受人統編"] = "";
+                }
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult CreatePaymentInvoiceQueryXlsx(PaymentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquirePayment(viewModel);
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+
+            var details = items
+                .OrderByDescending(i => i.PayoffDate)
+                .ToArray()
+                .Select(i => new
+                {
+                    發票號碼 = i.InvoiceItem.TrackCode + i.InvoiceItem.No,
+                    分店 = i.PaymentTransaction.BranchStore.BranchName,
+                    收款人 = i.UserProfile.FullName(),
+                    學員 = i.TuitionInstallment != null
+                        ? i.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : i.ContractPayment != null
+                            ? i.ContractPayment.CourseContract.CourseContractType.IsGroup == true
+                                ? String.Join("/", i.ContractPayment.CourseContract.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
+                                : i.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : "--",
+                    收款日期 = String.Format("{0:yyyy/MM/dd}", i.PayoffDate),
+                    作廢或折讓日 = i.InvoiceItem.InvoiceCancellation != null && i.VoidPayment != null
+                        ? String.Format("{0:yyyy/MM/dd}", i.InvoiceItem.InvoiceCancellation.CancelDate)
+                        : i.InvoiceAllowance != null
+                            ? String.Format("{0:yyyy/MM/dd}", i.InvoiceAllowance.AllowanceDate)
+                            : "--",
+                    收款品項 = String.Concat(((Naming.PaymentTransactionType)i.TransactionType).ToString(),
+                            i.TransactionType == (int)Naming.PaymentTransactionType.運動商品 || i.TransactionType == (int)Naming.PaymentTransactionType.飲品
+                                ? String.Format("({0})", String.Join("、", i.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)))
+                                : null),
+                    收款金額 = i.PayoffAmount,
+                    收款未稅金額 = Math.Round((decimal)i.PayoffAmount / 1.05m),
+                    作廢或折讓未稅金額 = i.InvoiceItem.InvoiceCancellation != null && i.VoidPayment != null
+                        ? i.PayoffAmount
+                        : i.InvoiceAllowance != null
+                            ? i.InvoiceAllowance.TotalAmount
+                            : null,
+                    收款方式 = i.PaymentType,
+                    發票類型 = i.InvoiceID.HasValue
+                        ? i.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                            ? "電子發票"
+                            : "紙本"
+                        : "--",
+                    發票狀態 = i.InvoiceItem.InvoiceCancellation != null && i.VoidPayment!=null
+                        ? "已作廢"
+                        : i.InvoiceAllowance != null
+                            ? "已折讓"
+                            : "已開立",
+                    買受人統編 = i.InvoiceID.HasValue
+                        ? i.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : i.InvoiceItem.InvoiceBuyer.ReceiptNo
+                        : "--",
+                    合約編號 = i.ContractPayment != null
+                        ? i.ContractPayment.CourseContract.ContractNo()
+                        : "--",
+                    合約總金額 = i.ContractPayment != null
+                        ? i.ContractPayment.CourseContract.TotalCost
+                        : (int?)null,
+                    備註 = i.VoidPayment != null
+                        ? i.VoidPayment.Remark
+                        : i.InvoiceAllowance != null
+                            ? i.InvoiceAllowance.InvoiceAllowanceDetails.First().InvoiceAllowanceItem.Remark
+                            : null,
+                    狀態 = i.VoidPayment == null
+                        ? String.Concat((Naming.CourseContractStatus)i.Status, i.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
+                        : String.Concat((Naming.VoidPaymentStatus)i.VoidPayment.Status, "(作廢)"),
                 });
 
 
@@ -1496,106 +1733,12 @@ namespace WebHome.Controllers
 
         public ActionResult InquirePaymentForAchievement(PaymentQueryViewModel viewModel)
         {
-            IQueryable<Payment> items = models.GetTable<Payment>()
-                .Where(p => p.Status.HasValue)
-                .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.自主訓練
-                    || p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
-                    || p.TransactionType == (int)Naming.PaymentTransactionType.飲品
-                    || p.TransactionType == (int)Naming.PaymentTransactionType.運動商品)
-                .Where(c => c.VoidPayment == null);
+            ViewResult result = (ViewResult)InquirePayment(viewModel);
 
-            
-            var profile = HttpContext.GetUser();
-
-            Expression<Func<Payment, bool>> queryExpr = c => false;
-            bool hasConditon = false;
-
-            viewModel.UserName = viewModel.UserName.GetEfficientString();
-            if (viewModel.UserName != null)
-            {
-                hasConditon = true;
-                queryExpr = queryExpr.Or(c => c.ContractPayment.CourseContract.CourseContractMember.Any(m => m.UserProfile.RealName.Contains(viewModel.UserName) || m.UserProfile.Nickname.Contains(viewModel.UserName)));
-                queryExpr = queryExpr.Or(c => c.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.RealName.Contains(viewModel.UserName));
-                queryExpr = queryExpr.Or(c => c.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.Nickname.Contains(viewModel.UserName));
-            }
-
-            if (!hasConditon)
-            {
-                viewModel.ContractNo = viewModel.ContractNo.GetEfficientString();
-                if (viewModel.ContractNo != null)
-                {
-                    hasConditon = true;
-                    var no = viewModel.ContractNo.Split('-');
-                    int seqNo;
-                    if (no.Length > 1)
-                    {
-                        int.TryParse(no[1], out seqNo);
-                        queryExpr = queryExpr.Or(c => c.ContractPayment.CourseContract.ContractNo.StartsWith(no[0])
-                            && c.ContractPayment.CourseContract.SequenceNo == seqNo);
-                    }
-                    else
-                    {
-                        queryExpr = queryExpr.Or(c => c.ContractPayment.CourseContract.ContractNo.StartsWith(viewModel.ContractNo));
-                    }
-                }
-            }
-
-            if (!hasConditon)
-            {
-                if (viewModel.BranchID.HasValue)
-                {
-                    hasConditon = true;
-                    queryExpr = queryExpr.Or(c => c.PaymentTransaction.BranchID == viewModel.BranchID);
-                }
-            }
-
-            if (!hasConditon)
-            {
-                if (viewModel.HandlerID.HasValue)
-                {
-                    hasConditon = true;
-                    queryExpr = queryExpr.Or(c => c.HandlerID == viewModel.HandlerID);
-                }
-            }
-
-            if (!hasConditon)
-            {
-                if (profile.IsAssistant() || profile.IsAccounting())
-                {
-
-                }
-                else if (profile.IsManager())
-                {
-                    var branches = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID);
-                    items = items
-                        .Join(models.GetTable<PaymentTransaction>()
-                            .Join(branches, p => p.BranchID, b => b.BranchID, (p, b) => p),
-                            c => c.PaymentID, h => h.PaymentID, (c, h) => c);
-                }
-                else
-                {
-                    items = items.Where(p => false);
-                }
-            }
-
-            if (hasConditon)
-            {
-                items = items.Where(queryExpr);
-            }
-
-            if(viewModel.TransactionType.HasValue)
-            {
-                items = items.Where(c => c.TransactionType == viewModel.TransactionType);
-            }
-
-            if (viewModel.PayoffDateFrom.HasValue)
-                items = items.Where(c => c.PayoffDate >= viewModel.PayoffDateFrom);
-
-            if (viewModel.PayoffDateTo.HasValue)
-                items = items.Where(c => c.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
+            IQueryable<Payment> items = (IQueryable<Payment>)result.Model;
+            items = items.Where(p => p.VoidPayment == null);
 
             return View("~/Views/Payment/Module/PaymentAchievementList.ascx", items);
-
         }
 
 
@@ -1694,9 +1837,9 @@ namespace WebHome.Controllers
                     return Json(new { result = false, message = "收款資料錯誤!!" });
                 }
 
-                if (item.TuitionAchievement.Where(t => t.CoachID != viewModel.CoachID).Sum(t => t.ShareAmount) + viewModel.ShareAmount > item.PayoffAmount)
+                if (item.TuitionAchievement.Where(t => t.CoachID != viewModel.CoachID).Sum(t => t.ShareAmount) + viewModel.ShareAmount > item.EffectiveAchievement())
                 {
-                    return Json(new { result = false, message = "所屬體能顧問業績總額大於付款金額!!" });
+                    return Json(new { result = false, message = "所屬體能顧問業績總額大於實收業績金額!!" });
                 }
                 
                 var achievement = item.TuitionAchievement.Where(t => t.CoachID == viewModel.CoachID).FirstOrDefault();

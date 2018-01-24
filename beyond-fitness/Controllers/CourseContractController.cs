@@ -770,8 +770,9 @@ namespace WebHome.Controllers
             {
                 var item = (CourseContractRevision)result.Model;
                 var profile = HttpContext.GetUser();
-                item.CourseContract.AgentID = profile.UID;
-                models.SubmitChanges();
+                //item.CourseContract.AgentID = profile.UID;
+                //models.SubmitChanges();
+                ViewBag.ContractAgent = profile;
                 ViewBag.ContractAction = "~/Views/CourseContract/Module/ContractAmendmentApproval.ascx";
             }
             return result;
@@ -1106,7 +1107,7 @@ namespace WebHome.Controllers
                     item.ProcessContractTranference();
                     break;
                 case "終止":
-                    item.ProcessContractTermination();
+                    item.ProcessContractTermination(profile);
                     break;
             }
 
@@ -1213,8 +1214,8 @@ namespace WebHome.Controllers
 
         public ActionResult InquireContract(CourseContractQueryViewModel viewModel)
         {
-            IQueryable<CourseContract> items = models.GetTable<CourseContract>()
-                .Where(c => c.SequenceNo == 0);
+            IQueryable<CourseContract> items = models.GetTable<CourseContract>();
+                //.Where(c => c.SequenceNo == 0);
 
             var profile = HttpContext.GetUser();
 

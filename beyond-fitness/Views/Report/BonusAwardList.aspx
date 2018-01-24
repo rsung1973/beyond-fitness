@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage2017.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
+
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
@@ -61,18 +62,55 @@
                         <form action="<%= Url.Action("ListBonusAward","Report") %>" method="post" id="search-form" class="smart-form">
                             <fieldset>
                                 <div class="row">
-                                    <section class="col col-6">
-                                        <label class="label">&nbsp;</label>
-                                        <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="startDate" id="startDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入兌換起日" value='' />
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                        <label class="label">依體能顧問查詢</label>
+                                        <label class="select">
+                                            <select name="ActorID" class="input">
+                                                <option value="">全部</option>
+                                                <%  Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>()); %>
+                                            </select>
+                                            <i class="icon-append fa fa-file-word-o"></i>
                                         </label>
                                     </section>
-                                    <section class="col col-6">
-                                        <label class="label">&nbsp;</label>
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                        <label class="label">或依學員姓名(暱稱)查詢</label>
                                         <label class="input input-group">
+                                            <i class="icon-append fa fa-qrcode"></i>
+                                            <input type="text" name="UserName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名"/>
+                                        </label>
+                                    </section>
+
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                        <label class="label">或依兌換商品查詢</label>
+                                        <label class="select">
+                                            <select name="ItemID" class="input">
+                                                <option value="">全部</option>
+                                                <%  foreach (var item in models.GetTable<BonusAwardingItem>().OrderBy(b => b.OrderIndex))
+                                                    { %>
+                                                <option value="<%= item.ItemID %>"><%= item.ItemName %></option>
+                                                <%  } %>                                                
+                                            </select>
+                                            <i class="icon-append fa fa-gift"></i>
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
+                                <div class="row">
+                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                        <label class="label">請選擇兌換起日</label>
+                                        <label class="input">
                                             <i class="icon-append fa fa-calendar"></i>
-                                            <input type="text" name="endDate" id="endDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入兌換迄日" value='' />
+                                            <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
+                                            <input type="text" name="DateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom) %>" />
+                                        </label>
+                                    </section>
+                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                        <label class="label">請選擇兌換迄日</label>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-calendar"></i>
+                                            <input type="text" name="DateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom.AddMonths(1).AddDays(-1)) %>" />
                                         </label>
                                     </section>
                                 </div>
@@ -93,7 +131,6 @@
     </div>
     <!-- row -->
     <div class="row" id="bonusList">
-
     </div>
 
     <script>
@@ -118,12 +155,16 @@
 </asp:Content>
 <script runat="server">
 
+    ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
+    UserProfile _userProfile;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        _userProfile = Context.GetUser();
     }
 
 </script>

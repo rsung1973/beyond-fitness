@@ -240,7 +240,14 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="invoiceList">
-                        <%  Html.RenderPartial("~/Views/Invoice/Module/InvoiceItemList.ascx", _model); %>
+                        <%  if (_viewModel.DocType == Naming.DocumentTypeDefinition.E_Allowance)
+                            {
+                                Html.RenderPartial("~/Views/Invoice/Module/AllowanceItemList.ascx", _model);
+                            }
+                            else
+                            {
+                                Html.RenderPartial("~/Views/Invoice/Module/InvoiceItemList.ascx", _model);
+                            } %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -270,12 +277,14 @@
     }
 
     function printInvoice(invoiceID) {
+        var event = event || window.event;
         var printerIP = $('input[name="PrinterIP"]').val();
         if (!printerIP || printerIP == '') {
             alert('請先設定印表機IP!!');
             return;
         }
         $('<form>').launchDownload('<%= Url.Action("LoadInvoiceImage", "Invoice") %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        $(event.target).closest('a').after('<span>已列印</span>').remove();
     }
 
     function printAllowance(allowanceID) {

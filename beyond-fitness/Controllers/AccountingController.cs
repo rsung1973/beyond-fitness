@@ -630,24 +630,28 @@ namespace WebHome.Controllers
             var details = items.GroupBy(t => new { CoachID = t.AttendingCoach });
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("姓名", typeof(String)));
-            table.Columns.Add(new DataColumn("總終點課數", typeof(int)));
+            table.Columns.Add(new DataColumn("總終點課數", typeof(decimal)));
             table.Columns.Add(new DataColumn("總鐘點費用", typeof(int)));
             table.Columns.Add(new DataColumn("等級", typeof(String)));
             table.Columns.Add(new DataColumn("實際抽成費用", typeof(int)));
 
             foreach (var item in details)
             {
+                var lesson = item.First();
                 var r = table.NewRow();
                 var coach = models.GetTable<ServingCoach>().Where(u => u.CoachID == item.Key.CoachID).First();
                 r[0] = coach.UserProfile.RealName;
-                r[1] = item.Count();
+                r[1] = item.Count() - (decimal)(item
+                                    .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練
+                                        || (t.RegisterLesson.RegisterLessonEnterprise != null
+                                            && t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.DocumentLevelDefinition.自主訓練)).Count()) / 2m;
                 int shares;
                 var lessons = item
                         .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                         .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null
                             || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
                 r[2] = models.CalcAchievement(lessons, out shares);
-                r[3] = coach.ProfessionalLevel.LevelName;
+                r[3] = lesson.LessonTimeSettlement.ProfessionalLevel.LevelName;
                 r[4] = shares;
                 table.Rows.Add(r);
             }
@@ -833,6 +837,7 @@ namespace WebHome.Controllers
                     ? item.Payment.InvoiceItem.TrackCode + item.Payment.InvoiceItem.No : null,
                 分店 = item.Payment.PaymentTransaction.BranchStore.BranchName,
                 收款人 = item.Payment.UserProfile.FullName(),
+                業績所屬體能顧問 = item.ServingCoach.UserProfile.FullName(),
                 學員 = item.Payment.TuitionInstallment != null
                         ? item.Payment.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
                         : item.Payment.ContractPayment != null

@@ -23,7 +23,14 @@
     <script src="<%= basePath + "js/plugin/StarWeb/StarWebPrintTrader.js" %>"></script>
 </head>
 <body>
-    <canvas id="invCanvas" width="440" height="760" style="width:20%;"></canvas>
+    <%  if (_model.Count() > 0 && !_model.First().InvoiceBuyer.IsB2C())
+        { %>
+    <canvas id="invCanvas" width="440" height="1040" style="width:20%;"></canvas>
+    <%  }
+        else
+        { %>
+    <canvas id="invCanvas" width="440" height="690" style="width:20%;"></canvas>
+    <%  } %>
 </body>
 </html>
 <script>

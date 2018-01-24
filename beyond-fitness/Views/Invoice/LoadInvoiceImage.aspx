@@ -83,6 +83,7 @@
 
                 SendCmd += builder.createInitializationElement();
 
+                //SendCmd += builder.createLogoElement({ number: 1, width: 'single', height: 'single' });
                 //var LogoSpace = "\x1b\x4a\x2c";    // 上紙到切紙位置（feed Dots)    
                 //SendCmd += builder.createRawDataElement({ data: encodeEscapeSequence(LogoSpace) });
                 SendCmd += builder.createBitImageElement({ context: context, x: 0, y: 0, width: canvas.width, height: canvas.height });

@@ -1290,7 +1290,19 @@ function initMapLocation() {
           map: map,
           icon: myIcon
     });
-
+    
+    google.maps.event.addListener(arenaMarker, 'click', function() {
+        window.open("http://maps.google.com/?q=台北市松山區南京東路四段17號B1");
+    });
+    
+    google.maps.event.addListener(oneooneMarker, 'click', function() {
+        window.open("http://maps.google.com/?q=台北市信義區信義路五段16號2樓之2");
+    });
+    
+    google.maps.event.addListener(sogoMarker, 'click', function() {
+        window.open("http://maps.google.com/?q=台北市大安區大安路一段75巷21號B1");
+    });
+    
     var bounds = new google.maps.LatLngBounds( );
       bounds.extend(arenaStation);
       bounds.extend(oneooneStation);
@@ -1380,6 +1392,7 @@ function initMapLocation() {
     map.mapTypes.set('map_styles', styled_map);
     map.setMapTypeId('map_styles');
 
+    
     //marker.setIcon('http://google.com/mapfiles/ms/micons/ltblue-dot.png');
 }
 //end function

@@ -716,48 +716,75 @@ namespace WebHome.Helper
                 AttendanceCount = attendanceCount,
                 CoachID = item.CoachID,
                 RatingDate = DateTime.Now,
-                TuitionSummary = summary
+                TuitionSummary = summary,
+                RatingID = item.LevelID.Value
             };
             item.CoachRating.Add(ratingItem);
 
             if (!qualifiedCert)
             {
-                ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
+                if (item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.HasValue)
+                {
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
+                }
+            }
+            else if(item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 4)
+            {
+                if (attendanceCount >= 165 && summary >= 240000)
+                {
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
+                }
+            }
+            else if(item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 5)
+            {
+                if (attendanceCount >= 185 && summary >= 320000)
+                {
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= 165 && summary >= 240000))
+                {
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
+                }
+
             }
             else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 3)
             {
-                if (attendanceCount < 95 || summary < 440000)
+                if (attendanceCount < 280 || summary < 440000)
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
             else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 2)
             {
-                if (attendanceCount >= 105 && summary >= 600000)
+                if (attendanceCount >= 280 && summary >= 500000)
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
-                else if (!(attendanceCount >= 85 && summary >= 330000))
+                else if (!(attendanceCount >= 245 && summary >= 390000))
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
             else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 1)
             {
-                if (attendanceCount >= 95 && summary >= 500000)
+                if (attendanceCount >= 245 && summary >= 440000)
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
-                else if (!(attendanceCount >= 70 && summary >= 250000))
+                else if (!(attendanceCount >= 215 && summary >= 340000))
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
             else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 0)
             {
-                if (attendanceCount >= 75 && summary >= 300000)
+                if (attendanceCount >= 215 && summary >= 380000)
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= 185 && summary >= 290000))
+                {
+                    ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
             else
@@ -995,10 +1022,16 @@ namespace WebHome.Helper
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待確認);
-            if (agent.IsManager() || agent.IsViceManager())
+            if (agent.IsManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
                     r => r.OriginalContract, c => c.ContractID, (r, c) => r);
+            }
+            else if (agent.IsViceManager())
+            {
+                items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
+                                r => r.OriginalContract, c => c.ContractID, (r, c) => r)
+                    .Where(r => r.CourseContract.AgentID != agent.UID);
             }
             else if (agent.IsAssistant())
             {
@@ -1143,7 +1176,7 @@ namespace WebHome.Helper
 
         public static String CreateContractAmendmentPDF(this CourseContractRevision item, bool createNew = false)
         {
-            String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.CourseContract.ContractNo + ".pdf");
+            String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.CourseContract.ContractNo() + ".pdf");
             if (createNew == true || !File.Exists(pdfFile))
             {
                 String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment") + "?pdf=1&revisionID=" + item.RevisionID;

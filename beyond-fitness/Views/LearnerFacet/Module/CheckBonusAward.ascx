@@ -34,7 +34,7 @@
     </div>
     <div class="product-content product-wrap clearfix bg-color-darken">
         <div class="row">
-        <%  foreach (var item in models.GetTable<BonusAwardingItem>())
+        <%  foreach (var item in models.GetTable<BonusAwardingItem>().OrderByDescending(b=>b.OrderIndex))
             {
                 %>
             <div class="col-sm-6 col-md-6 col-lg-4">
@@ -59,9 +59,16 @@
                                 </p>
                                 <span class="tag1"></span>
                             <%  if ((item.ExchangeableOnline == true || _profile.IsAssistant() || _profile.IsAuthorizedSysAdmin() || _profile.IsCoach()) && currentBonusPoint>=item.PointValue)
-                                { %>
+                                {
+                                    if (item.BonusAwardingIndication != null && item.BonusAwardingIndication.Indication == "AwardingLessonGift")
+                                    { %>
+                                    <a href="#" onclick="awardingLessonGift(<%= item.ItemID %>);" class="btn bg-color-red">立即兌換</a>
+                            <%      }
+                                    else
+                                    {   %>
                                     <a href="#" onclick="exchangeBonus(<%= item.ItemID %>);" class="btn bg-color-red">立即兌換</a>
-                            <%  } %>
+                            <%      }
+                                } %>
                             </div>
                         </div>
                     </div>

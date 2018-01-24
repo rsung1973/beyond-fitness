@@ -11,7 +11,7 @@
 
 <div class="col-sm-12">
     <div class="row">
-        <div class="col-sm-3 profile-pic">
+                <div class="col-sm-3 profile-pic">
             <% _model.UserProfile.RenderUserPicture(Writer, "profileImg"); %>
             <div class="padding-10">
                 <h4 class="font-md"><strong>
@@ -22,9 +22,9 @@
                 </h4>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-9">
             <h3><%= _model.UserProfile.FullName() %>
-                <span class="label label-info" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'><%= _items.Count() + ((decimal)_PISession.Count()+1)/2 %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true">
+                <span class="label label-info" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-blueLight font-md'><%= _items.Count() + (decimal)_PISession.Count()/2m %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true">
                     <%= _model.UserProfile.UserRoleAuthorization.Any(r=>r.RoleID==(int)Naming.RoleID.Officer )
                             ? "CEO"
                             : _model.UserProfile.UserRoleAuthorization.Any(r=> r.RoleID==(int)Naming.RoleID.Manager)
@@ -37,7 +37,7 @@
                                             <span class="label label-warning" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>您目前的業績尚有１０萬<br/>平均上課數５堂未達到</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-exclamation-triangle"></i></span>
                                             <span class="label label-danger" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>您目前的業績已落後１０萬<br/>平均上課數已落後５堂</span>" data-html="true">Level 3 <i class="fa fa-fw fa fa-exclamation-triangle"></i></span>--%>
             </h3>
-            <ul class="list-unstyled">
+			<ul class="list-unstyled">
                 <li>
                     <p class="text-muted">
                         <%--                                                    <i class="fa fa-certificate"></i>&nbsp;&nbsp;<a href="#" class="btn bg-color-blue btn-xs">登錄證照</a></a>--%>
@@ -46,7 +46,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-sm-3">
+        <%--<div class="col-sm-3">
             <h1><small>今日上課學員</small></h1>
             <ul class="list-inline friends-list">
                 <%  foreach (var item in items)
@@ -65,7 +65,7 @@
                 <%      }
                                                 } %>
             </ul>
-        </div>
+        </div>--%>
     </div>
     <script>
         $(function () {

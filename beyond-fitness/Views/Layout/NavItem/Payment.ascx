@@ -19,6 +19,9 @@
                     <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
                 </li>
         <%  } %>
+        <li>
+            <a href="<%= Url.Action("PrintIndex","Invoice") %>" title="電子發票列印"><i class="fa fa-lg fa-fw fa-print"></i>電子發票列印</a>
+        </li>
         <%  if(_userProfile.IsAssistant() || _userProfile.IsManager())
             { %>
         <li>

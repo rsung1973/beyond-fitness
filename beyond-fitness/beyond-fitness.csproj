@@ -651,6 +651,7 @@
     <Content Include="img\blogbox\Photo_20160711-01.jpg" />
     <Content Include="img\blogbox\Photo_20160711-02.jpg" />
     <Content Include="img\body.jpg" />
+    <Content Include="img\bonus\bonus_01.jpg" />
     <Content Include="img\bonus\bonus_01.png" />
     <Content Include="img\bonus\bonus_02.JPG" />
     <Content Include="img\bonus\bonus_03.jpg" />
@@ -658,6 +659,7 @@
     <Content Include="img\bonus\bonus_05.JPG" />
     <Content Include="img\bonus\bonus_06.jpg" />
     <Content Include="img\bonus\bonus_07.JPG" />
+    <Content Include="img\bonus\bonus_08.jpg" />
     <Content Include="img\border.png" />
     <Content Include="img\clear.png" />
     <Content Include="img\colorblind-friendly\pt1.png" />
@@ -1292,6 +1294,7 @@
     <Content Include="js\plugin\clockpicker\clockpicker.min.js" />
     <Content Include="js\plugin\colorpicker\bootstrap-colorpicker.min.js" />
     <Content Include="js\plugin\cssemotions\jquery.cssemoticons.min.js" />
+    <Content Include="js\plugin\datatable-responsive\2.2.1\dataTables.responsive.min.js" />
     <Content Include="js\plugin\datatable-responsive\datatables.responsive.min.js" />
     <Content Include="js\plugin\datatables\dataTables.bootstrap.min.js" />
     <Content Include="js\plugin\datatables\dataTables.colReorder.min.js" />
@@ -1732,8 +1735,10 @@
     <Content Include="Views\EnterpriseProgram\Module\EnterpriseContractPaymentList.ascx" />
     <Content Include="Views\EnterpriseProgram\ProgramIndex.aspx" />
     <Content Include="Views\Invoice\CanvasPrintAllowance.aspx" />
+    <Content Include="Views\Invoice\Module\InquireInvoiceMedia.ascx" />
     <Content Include="Views\Invoice\Module\DownloadInvoiceNoIntervalCsv.ascx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoIntervalGroup.ascx" />
+    <Content Include="Views\Invoice\Module\TaxCsvWidgetGrid.ascx" />
     <Content Include="Views\Invoice\PrintAllowanceImage.aspx" />
     <Content Include="Views\Invoice\PrintInvoiceImage.aspx" />
     <Content Include="Views\Invoice\LoadInvoiceImage.aspx" />
@@ -1759,6 +1764,7 @@
     <Content Include="Views\Invoice\PrintAllowance.aspx" />
     <Content Include="Views\Invoice\CanvasDrawInvoice.aspx" />
     <Content Include="Views\Invoice\CanvasPrintInvoice.aspx" />
+    <Content Include="Views\Invoice\TaxCsvIndex.aspx" />
     <Content Include="Views\Invoice\VacantNoIndex.aspx" />
     <Content Include="Views\Invoice\TurnkeyIndex.aspx" />
     <Content Include="Views\Invoice\PrintInvoice.aspx" />
@@ -1766,6 +1772,7 @@
     <Content Include="Views\Layout\NavItem\Invoice.ascx" />
     <Content Include="Views\Layout\NavItem\Payment.ascx" />
     <Content Include="Views\Layout\NavItem\Contract.ascx" />
+    <Content Include="Views\LearnerFacet\Module\QueryRecipient.ascx" />
     <Content Include="Views\Learner\Index.aspx" />
     <Content Include="Views\Learner\Module\FitnessAdvisorList.ascx" />
     <Content Include="Views\Learner\Module\EditLearner.ascx" />
@@ -2061,6 +2068,7 @@
     <Content Include="Views\Member\VipPDQ_1.aspx" />
     <Content Include="Views\MyTest\Module\TestDialog.ascx" />
     <Content Include="Views\MyTest\TestAll.aspx" />
+    <Content Include="Views\MyTest\TestDataTable.aspx" />
     <Content Include="Views\MyTest\TestMaster2017.aspx" />
     <Content Include="Views\MyTest\Index.aspx" />
     <Content Include="Views\MyTest\Test01.aspx" />
@@ -2071,6 +2079,7 @@
     <Content Include="Views\Payment\Module\PaymentAuditSummaryCoachView.ascx" />
     <Content Include="Views\Payment\Module\PaymentCoachAchievement.ascx" />
     <Content Include="Views\Payment\Module\PaymentAchievementList.ascx" />
+    <Content Include="Views\Payment\Module\PaymentInvoiceList.ascx" />
     <Content Include="Views\Payment\Module\PaymentTodoList.ascx" />
     <Content Include="Views\Payment\Module\PaymentAuditSummary.ascx" />
     <Content Include="Views\Payment\Module\EditPaymentForShopping.ascx" />
@@ -2089,6 +2098,10 @@
     <Content Include="Views\Payment\Module\VoidPayment.ascx" />
     <Content Include="Views\Payment\AchievementIndex.aspx" />
     <Content Include="Views\Payment\QueryIndex.aspx" />
+    <Content Include="Views\Payment\Section\PaymentAchievementList\TD.ascx" />
+    <Content Include="Views\Payment\Section\PaymentAchievementList\TH.ascx" />
+    <Content Include="Views\Payment\Section\PaymentInvoiceList\TD.ascx" />
+    <Content Include="Views\Payment\Section\PaymentInvoiceList\TH.ascx" />
     <Content Include="Views\Sample\DataTableNoSearch.ascx" />
     <Content Include="Views\SystemInfo\MerchandiseOptions.ascx" />
     <Content Include="Views\Payment\Module\UnpaidPISession.ascx" />
@@ -2171,6 +2184,7 @@
     <Content Include="_test\Test02.aspx" />
     <Content Include="_test\Test01.aspx" />
     <Content Include="_test\TestBarChart.html" />
+    <Content Include="_test\TestC0701.aspx" />
     <Content Include="_test\TestFB.htm" />
     <Content Include="_test\TestFB01.htm" />
     <Content Include="_test\CheckToken.ashx" />

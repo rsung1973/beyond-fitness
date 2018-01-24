@@ -197,8 +197,8 @@
                         <label class="label">是否為資深體能顧問</label>
                         <label class="select">
                             <select name="LevelCategory">
-                                <option value="1102" <%= _viewModel.LevelCategory == 1105 ? "selected" : null %>>否</option>
-                                <option value="1101" <%= _viewModel.LevelCategory == 1104 ? "selected" : null %>>是</option>
+                                <option value="1105" <%= _viewModel.LevelCategory == 1105 ? "selected" : null %>>否</option>
+                                <option value="1104" <%= _viewModel.LevelCategory == 1104 ? "selected" : null %>>是</option>
                             </select>
                             <i class="icon-append fa fa-file-word-o"></i>
                         </label>

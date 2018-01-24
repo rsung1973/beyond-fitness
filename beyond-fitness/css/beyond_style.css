@@ -7,21 +7,24 @@
 	Author: iThemesLab
 	Website: http://ithemeslab.com
 */
-#logo img {
+/*#logo img {
     width: 200px;
     height: auto;
     padding-left: 3px;
-}
+}*/
+
+/*
 #header>:first-child, aside {
     width: 250px;
 }
+*/
 
-#logo {
+/*#logo {
     display: inline-block;
     width: 210px;
     margin-top: 13px;
     margin-left: 9px;
-}
+}*/
 
 .error {
     border-color: #ff7676!important;

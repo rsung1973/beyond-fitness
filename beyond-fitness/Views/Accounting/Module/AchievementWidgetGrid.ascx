@@ -53,8 +53,9 @@
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
+                                            <input type="hidden" name="AchievementYearMonthTo" value='' />
                                         </label>
-                                    </section>                                    
+                                    </section>
                                     <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">依體能顧問查詢</label>
                                         <label class="select">
@@ -100,7 +101,7 @@
                                     }   %>
                                 </div>
                             </fieldset>
- <%--                            <fieldset>
+                            <%--<fieldset>
                                 <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
                                 <div class="row">
                                     <section class="col col-6">
@@ -108,17 +109,18 @@
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
+                                            <input type="hidden" name="AchievementYearMonthTo" value='' />
                                         </label>
                                     </section>
-                                   <section class="col col-6">
+                                    <section class="col col-6">
                                         <label class="label">請選擇查詢查詢迄月</label>
                                         <label class="input input-group">
                                             <i class="icon-append fa fa-calendar"></i>
                                             <input type="text" name="AchievementYearMonthTo" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢迄日" value='<%= _viewModel.AchievementYearMonthTo %>' />
                                         </label>
-                                    </section>--%>
+                                    </section>
                                 </div>
-                            </fieldset>
+                            </fieldset>--%>
                             <footer>
                                 <button onclick="inquireAchievement();" type="button" name="btnSend" class="btn btn-primary">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>

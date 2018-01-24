@@ -119,7 +119,7 @@ namespace WebHome.Models.ViewModel
         public DateTime? PayoffDate { get; set; } = DateTime.Today;
         public int? Status { get; set; }
         public int? HandlerID { get; set; }
-        public string PaymentType { get; set; } = "現金";
+        public string PaymentType { get; set; } //= "現金";
         public int? InvoiceID { get; set; }
         public int? TransactionType { get; set; }
         public String ContractNo { get; set; }
@@ -251,4 +251,15 @@ namespace WebHome.Models.ViewModel
         public Naming.DocumentTypeDefinition? DocType { get; set; }
 
     }
+
+    public class AwardQueryViewModel
+    {
+        public string UserName { get; set; }
+        public int? ActorID { get; set; }
+        public int? ItemID { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+
+    }
+
 }

@@ -62,6 +62,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已轉讓;
+                        item.CourseContract.EffectiveDate = DateTime.Now;
                         foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
                             lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
@@ -183,6 +184,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已轉點;
+                        item.CourseContract.EffectiveDate = DateTime.Now;
                         foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
                             lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
@@ -274,7 +276,7 @@ namespace WebHome.Helper
             });
         }
 
-        public static void ProcessContractTermination(this CourseContractRevision item)
+        public static void ProcessContractTermination(this CourseContractRevision item,UserProfile handler = null)
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
@@ -287,6 +289,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已終止;
+                        item.CourseContract.EffectiveDate = DateTime.Now;
                         foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
                             lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
@@ -316,7 +319,7 @@ namespace WebHome.Helper
                                 PayoffAmount = -balance,
                                 PayoffDate = DateTime.Today,
                                 Remark = "繳款餘額沖銷",
-                                HandlerID = item.CourseContract.AgentID,
+                                HandlerID = handler!=null ? handler.UID : item.CourseContract.AgentID,
                                 PaymentType = "現金",
                                 TransactionType = (int)Naming.PaymentTransactionType.合約終止沖銷
                             };
@@ -332,6 +335,10 @@ namespace WebHome.Helper
                                 Payment = balancedPayment,
                                 TrustType = Naming.TrustType.S.ToString()
                             });
+
+                            //Logger.Debug("RevisionID: " + item.RevisionID);
+                            //Logger.Debug("balance: " + balance);
+                            models.CreateAllowanceForContract(original, balance.Value);
                         }
 
                         models.SubmitChanges();

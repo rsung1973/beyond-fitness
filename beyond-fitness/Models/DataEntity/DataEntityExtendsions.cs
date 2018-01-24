@@ -118,6 +118,22 @@ namespace WebHome.Models.DataEntity
             }
         }
 
+        public static decimal? EffectiveAchievement(this Payment item)
+        {
+            if (item.VoidPayment != null)
+            {
+                return 0;
+            }
+            else if (item.AllowanceID.HasValue)
+            {
+                return item.PayoffAmount - item.InvoiceAllowance.TotalAmount - item.InvoiceAllowance.TaxAmount;
+            }
+            else
+            {
+                return item.PayoffAmount;
+            }
+        }
+
     }
 
     public partial class UserProfile

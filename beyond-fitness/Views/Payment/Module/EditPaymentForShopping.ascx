@@ -41,13 +41,15 @@
                         <label class="label">分店</label>
                         <label class="select">
                             <select name="SellerID">
-                                <%  BranchStore branch = models.GetTable<BranchStore>().First();
+                                <%  BranchStore branch = null;
                                     if(_profile.IsManager() || _profile.IsViceManager())
                                     {
                                         branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == _profile.UID || b.ViceManagerID == _profile.UID).FirstOrDefault();
                                     }
                                     else if(_profile.IsCoach())
                                     {
+                                        ViewBag.DataItems = models.GetTable<CoachWorkplace>().Where(c => c.CoachID == _profile.UID)
+                                                                .Select(w => w.BranchStore);
                                         branch = models.GetTable<CoachWorkplace>().Where(w => w.CoachID == _profile.UID).Select(w => w.BranchStore).FirstOrDefault();
                                     }
                                     Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: branch != null ? branch.BranchID : -1); %>
@@ -106,14 +108,32 @@
             </fieldset>
             <fieldset>
                 <div class="row">
-                    <section class="col col-6">
-                        <label class="label">收款日期</label>
-                        <label class="input">
-                            <i class="icon-append fa fa-calendar"></i>
-                            <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
-                        </label>
+                    <section class="col col-7">
+                        <label class="label">收款方式</label>
+                        <!--<label class="select">
+                            <select name="PaymentType">
+                                <option value="現金">現金</option>
+                                <option value="刷卡">刷卡</option>
+                                <option value="轉帳">轉帳</option>
+                            </select>
+                            <i class="icon-append fa fa-file-word-o"></i>
+                        </label>-->
+                        <div class="inline-group">
+                            <label class="radio">
+                                <input type="radio" name="PaymentType" value="現金" />
+                                <i></i>現金</label>
+                            <label class="radio">
+                                <input type="radio" name="PaymentType" value="刷卡"/>
+                                <i></i>刷卡</label>
+                            <label class="radio">
+                                <input type="radio" name="PaymentType" value="轉帳"/>
+                                <i></i>轉帳</label>
+                        </div>
+                        <%--<script>
+                            $('#<%= _dialog %> input:radio[name="PaymentType"][value="<%= _viewModel.PaymentType %>"]').prop('checked',true);
+                        </script>--%>
                     </section>
-                    <section class="col col-6">
+                    <section class="col col-5">
                         <label class="label">發票類型</label>
                         <div class="inline-group">
                             <label class="radio">
@@ -155,17 +175,11 @@
             <fieldset>
                 <div class="row">
                     <section class="col col-6">
-                        <label class="label">收款方式</label>
-                        <label class="select">
-                            <select name="PaymentType">
-                                <option value="現金">現金</option>
-                                <option value="刷卡">刷卡</option>
-                            </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                        <label class="label">收款日期</label>
+                        <label class="input">
+                            <i class="icon-append fa fa-calendar"></i>
+                            <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
                         </label>
-                        <script>
-                            $('#<%= _dialog %> select[name="PaymentType"]').val('<%= _viewModel.PaymentType %>');
-                        </script>
                     </section>
                     <section class="col col-6">
                         <label class="label">收款金額</label>
