@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 
 <head>
@@ -52,7 +52,7 @@
     <![endif]-->
     <!-- Facebook Pixel Code -->
     <script>
-        ! function (f, b, e, v, n, t, s) {
+        (function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function () {
                 n.callMethod ?
@@ -68,7 +68,7 @@
             t.src = v;
             s = b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
+        })(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '139380543390363');
         fbq('track', 'PageView');
@@ -118,22 +118,22 @@
                             <div class="z-nav-inner">
                                 <ul class="z-nav__list">
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
+                                        <a onclick="fbq('track', 'CompleteRegistration');" class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
+                                        <a onclick="fbq('track', 'Search');" class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
+                                        <a onclick="fbq('track', 'AddToWishlist');" class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
+                                        <a onclick="fbq('track', 'AddToCart');" class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
+                                        <a onclick="fbq('track', 'ViewContent');" class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
+                                        <a onclick="fbq('track', 'AddToPaymentInfo');" class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
                                     </li>
                                 </ul>
                             </div>
@@ -654,7 +654,7 @@
                                     </div>
                                 </div>
                                 <textarea class="contact__field contact__area" name="contact-message" placeholder="message"></textarea>
-                                <button class="btn btn--decorated btn-warning btn-submit" type="submit">Send Message</button>
+                                <button onclick="fbq('track', 'Purchase');" class="btn btn--decorated btn-warning btn-submit" type="submit">Send Message</button>
                             </form>
                         </div>
                     </div>
