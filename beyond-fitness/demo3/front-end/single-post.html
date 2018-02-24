@@ -51,7 +51,7 @@
     <![endif]-->
     <!-- Facebook Pixel Code -->
     <script>
-        ! function (f, b, e, v, n, t, s) {
+        (function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function () {
                 n.callMethod ?
@@ -67,15 +67,16 @@
             t.src = v;
             s = b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
+        })(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '139380543390363');
         fbq('track', 'PageView');
+        fbq('track', 'ViewContent');
     </script>
     <noscript>
         <img height="1" width="1" src="https://www.facebook.com/tr?id=139380543390363&ev=PageView&noscript=1" / >
     </noscript>
-    <!-- End Facebook Pixel Code -->
+    <!-- End Facebook Pixel Code -->     
 </head>
 
 
@@ -123,23 +124,23 @@
                             </a>
                             <ul class="z-nav__list">
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
+                                        <a onclick="fbq('track', 'CompleteRegistration');" class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
+                                        <a onclick="fbq('track', 'Search');" class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
+                                        <a onclick="fbq('track', 'AddToWishlist');" class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
+                                        <a onclick="fbq('track', 'AddToCart');" class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
+                                        <a onclick="fbq('track', 'ViewContent');" class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="#contact">Contact</a>
-                                    </li>    
+                                        <a onclick="fbq('track', 'AddToPaymentInfo');" class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
+                                    </li>
                                 </ul>
                             <!-- end list menu item -->
                         </nav>
@@ -248,6 +249,14 @@
                                     </a>
                                 </div>
                                 <div class="col-xs-6 col-sm-12 one-column">
+                                    <a href="http://maps.google.com/?q=台北市大安區大安路一段75巷21號B1" class="contact-info__item" target="_blank">
+                                        <i class="fa fa-location-arrow"></i> 忠孝：台北市大安區大安路一段75巷21號B1
+                                    </a>                     
+                                    <a class="contact-info__item" href="tel://+886-2-2776-9932">
+                                        <i class="fa fa-mobile"></i> +886-2-2776-9932
+                                    </a>
+                                </div>
+                                <div class="col-xs-6 col-sm-12 one-column">
                                     <a class="contact-info__item" href="mailto:info@beyond-fitness.tw?subject=Email from website">
                                         <i class="fa fa-envelope"></i> info@beyond-fitness.tw
                                     </a>
@@ -320,19 +329,4 @@
         $('section.container').load('FrontEnd/BlogDetail/' + $.getUrlVar('id'), null, function (data) { });
         $('h3.heading-info:contains("Latest from blog:")').next('div').load('FrontEnd/LastArticles?count=2', null, function (data) { });
     });
-</script>
-<script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-84335528-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function () {
-        var ga = document.createElement('script');
-        ga.type = 'text/javascript';
-        ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(ga, s);
-    })();
-
 </script>

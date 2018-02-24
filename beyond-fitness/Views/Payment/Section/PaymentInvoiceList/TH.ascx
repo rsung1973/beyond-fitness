@@ -14,17 +14,20 @@
 <th data-hide="phone">收款人</th>
 <th>學員</th>
 <th>收款日</th>
+<th data-hide="phone">發票日</th>
 <th data-hide="phone">作廢/折讓日</th>
 <th data-hide="phone">收款品項</th>
-<th>收款金額</th>
-<th data-hide="phone">作廢/折讓含稅</th>
-<th data-hide="phone">折讓未稅</th>
+<th>收款金額</th> 
+<th data-hide="phone">發票金額</th>
+<th data-hide="phone">營業稅</th>
+<th data-hide="phone">作廢/折讓(含稅)</th> 
+<th data-hide="phone,tablet">折讓(未稅)</th> 
 <th data-hide="phone">收款方式</th>
 <th data-hide="phone">發票類型</th>
 <th>發票狀態</th>
 <th data-hide="phone">買受人統編</th>
 <th data-hide="phone">合約編號</th>
-<th data-hide="phone">合約總金額</th>
+<th data-hide="phone">合約總金額</th> 
 <th data-hide="phone">備註</th>
 <th data-hide="phone">狀態</th>
 

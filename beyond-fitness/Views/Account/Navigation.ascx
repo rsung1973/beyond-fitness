@@ -33,6 +33,10 @@
     {
         Html.RenderPartial("~/Views/SiteAction/Learner.ascx", _userProfile);
     }
+    else if (_userProfile.IsServitor())
+    {
+        Html.RenderPartial("~/Views/SiteAction/Servitor.ascx", _userProfile);
+    }
     else
     {
         Html.RenderPartial("~/Views/SiteAction/Guest.ascx", _userProfile);

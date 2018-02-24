@@ -8,10 +8,16 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="calendarView" class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+<div id="calendarView" class="jarviswidget" data-widget-editbutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
     <header>
         <span class="widget-icon"><i class="fa fa-calendar"></i></span>
-        <h2><span id="coachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.FullName() %></span>的行事曆：<span id="branchName"><%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></span></h2>
+        <h2><span id="coachName"><%= _coach==null
+                                        ? _viewModel.CoachID.HasValue
+                                            ? "我"
+                                            : "全部練教" 
+                                        : _coach.CoachID==_model.UID 
+                                            ? "我" 
+                                            : _coach.UserProfile.FullName() %></span>的行事曆：<span id="branchName"><%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></span></h2>
         <div class="widget-toolbar">
 <%--            <div class="btn-group">
                 <button class="btn dropdown-toggle btn-xs bg-color-blue" data-toggle="dropdown">
@@ -42,7 +48,7 @@
                     <%  } %>
                 </ul>
             </div>
-            <div class="btn-group">
+            <%--<div class="btn-group">
                 <button class="btn dropdown-toggle btn-xs bg-color-pinkDark" data-toggle="dropdown">
                     體能顧問 <i class="fa fa-caret-down"></i>
                 </button>
@@ -75,7 +81,11 @@
                             </li>
                     <%  } %>
                 </ul>
-            </div>
+            </div>--%>
+            <%  if (_model.IsAuthorized(new int[] {(int)Naming.RoleID.Administrator,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Officer,(int)Naming.RoleID.Manager }))
+                { %>
+            <a onclick="selectCoachFacet();" class="btn bg-color-pinkDark"><i class="fa fa-fw fa-user-circle"></i> 體能顧問</a>
+            <%  } %>
             <a onclick="queryAttendee();" class="btn bg-color-blueLight" id="stduentsaerchDialog_link"><i class="fa fa-fw fa-search"></i>學員查詢</a>
         </div>
     </header>
@@ -89,15 +99,16 @@
         $global.viewModel.CoachID = coachID;
         $global.viewModel.QueryType = 'default';
         showLoading();
-        //window.location.href = '<%= Url.Action("Index","CoachFacet") %>' + "?" + $.param($global.viewModel);
-        $global.renderFullCalendar();
+        $('').launchDownload('<%= Url.Action("Index","CoachFacet") %>', { 'coachID': coachID });
+<%--        window.location.href = '<%= Url.Action("Index","CoachFacet") %>' + "?" + $.param($global.viewModel);--%>
+<%--        $global.renderFullCalendar();
         if (coachID) {
             $('#coachToday').load('<%= Url.Action("CoachToday","CoachFacet") %>', { 'coachID': coachID }, function (data) {
 
             });
         } else {
             $('#coachToday').empty();
-        }
+        }--%>
     }
 
     function selectBranch(branchID, branchName) {
@@ -109,6 +120,14 @@
     function queryAttendee() {
         showLoading();
         $.post('<%= Url.Action("QueryAttendee","CoachFacet") %>', {}, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
+        });
+    }
+
+    function selectCoachFacet() {
+        showLoading();
+        $.post('<%= Url.Action("SelectCoachFacet","CoachFacet") %>', {}, function (data) {
             hideLoading();
             $(data).appendTo($('body'));
         });

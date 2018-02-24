@@ -19,14 +19,14 @@
         <!-- widget content -->
         <div class="widget-body txt-color-white padding-5">
             <!-- content -->
-            <table id="list_dt" class="table table-striped table-bordered table-hover" width="100%">
+            <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
                 <thead>
                     <tr>
-                        <th>合約編號</th>
-                        <th class="text-center">學員</th>
-                        <th class="text-center">簽約體能顧問</th>
-                        <th class="text-center">到期日</th>
-                        <th class="text-center">是否過期</th>
+                        <th data-hide="phone,tablet">合約編號</th>
+                        <th data-class="expand">學員</th>
+                        <th data-hide="phone,tablet">簽約體能顧問</th>
+                        <th data-hide="phone" class="text-center">到期日</th>
+                        <th class="text-center">過期</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,8 +34,8 @@
                         { %>
                     <tr>
                         <td><%= item.ContractNo() %></td>
-                        <td class="text-center"><%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName())) %></td>
-                        <td class="text-center"><%= item.ServingCoach.UserProfile.FullName() %></td>
+                        <td><%= String.Join("/",item.CourseContractMember.Select(m=>m.UserProfile).ToArray().Select(u=>u.FullName())) %></td>
+                        <td><%= item.ServingCoach.UserProfile.FullName() %></td>
                         <td class="text-center"><%= String.Format("{0:yyyy/MM/dd}",item.Expiration) %></td>
                         <td class="text-center"><%= item.Expiration<DateTime.Today ? "是" : "否" %></td>
                     </tr>
@@ -49,11 +49,54 @@
     <!-- end widget div -->
 </div>
 
+<script>
+
+    $(function () {
+        var responsiveHelper_<%= _tableId %> = undefined;
+
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+        $('#<%= _tableId %>').dataTable({
+            //"bPaginate": false,
+            "pageLength": 30,
+            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            "ordering": true,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "autoWidth": true,
+            "oLanguage": {
+                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+            },
+            "preDrawCallback": function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_<%= _tableId %>) {
+                    responsiveHelper_<%= _tableId %> = new ResponsiveDatatablesHelper($('#<%= _tableId %>'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow) {
+                responsiveHelper_<%= _tableId %>.createExpandIcon(nRow);
+            },
+            "drawCallback": function (oSettings) {
+                responsiveHelper_<%= _tableId %>.respond();
+            }
+        });
+    });
+</script>
+
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     IQueryable<CourseContract> _items;
+    String _tableId = "expiringContract" + DateTime.Now.Ticks;
 
     protected override void OnInit(EventArgs e)
     {
@@ -76,6 +119,12 @@
         else if (profile.IsCoach())
         {
             _items = _items.Where(c => c.FitnessConsultant == profile.UID);
+        }
+
+        ServingCoach coach = (ServingCoach)ViewBag.CurrentCoach;
+        if(coach!=null)
+        {
+            _items = _items.Where(c => c.FitnessConsultant == coach.CoachID);
         }
     }
 

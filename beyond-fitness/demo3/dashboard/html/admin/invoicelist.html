@@ -203,7 +203,7 @@
             </span>
             <!-- breadcrumb -->
             <ol class="breadcrumb">
-               <li>發票管理</li>
+               <li>收款管理</li>
                <li>電子發票列印</li>
             </ol>
             <!-- end breadcrumb -->
@@ -359,7 +359,7 @@
                            -->
                         <header>
                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                           <h2>收款清單</h2>
+                           <h2>發票清單</h2>
                            <div class="widget-toolbar">
                                <a href="#" class="btn btn-primary"><i class="fa fa-fw fa-print"></i> 整批列印</a>
                             </div>
@@ -377,51 +377,75 @@
                                   <thead>
                                      <tr>
                                         <th data-class="expand">發票號碼</th>
-                                        <th>分店</th>
+                                        <th data-hide="phone,tablet">分店</th>
                                         <th data-hide="phone">收款人</th>
                                         <th>學員</th>
-                                        <th>收款日期</th>
+                                        <th>收款日</th>
+                                        <th data-hide="phone,tablet">發票日</th>
+                                        <th data-hide="phone,tablet">作廢/折讓日</th>
                                         <th data-hide="phone">收款品項</th>
-                                        <th>金額</th>          
+                                        <th>收款金額</th> 
+                                        <th data-hide="phone,tablet">發票金額</th>
+                                        <th data-hide="phone,tablet">作廢/折讓(含稅)</th> 
+                                        <th data-hide="phone,tablet">折讓(未稅)</th> 
+                                        <th data-hide="phone,tablet">營業稅</th>
                                         <th data-hide="phone">收款方式</th>
-                                        <th data-hide="phone">發票類型</th>
-                                        <th data-hide="phone">發票狀態</th>
+                                        <th data-hide="phone,tablet">發票類型</th>
+                                        <th>發票狀態</th>
                                         <th data-hide="phone,tablet">買受人統編</th>
                                         <th data-hide="phone,tablet">合約編號</th>
+                                        <th data-hide="phone,tablet">合約總金額</th> 
+                                        <th data-hide="phone,tablet">備註</th>
                                         <th data-hide="phone">列印次數</th>
                                         <th>功能</th>
                                      </tr>
                                   </thead>
                                   <tbody>
                                      <tr>
-                                        <td>AU00000002</td>
+                                        <td>AU00000001</td>
                                         <td>小巨蛋</td>
                                         <td>黃政浩 Bill</td>
-                                        <td>宋胖子</td>
+                                        <td>鄭胖子</td>
                                         <td>2017/01/05</td>
-                                        <td>自主訓練</td>
-                                        <td>300</td>
-                                        <td>現金</td>
-                                        <td>電子</td>
-                                        <td>未作廢</td>
+                                        <td>2017/01/05</td>
                                         <td>--</td>
-                                        <td noWrap="noWrap">--</td>
+                                        <td>體能顧問服務費</td>
+                                        <td class="text-right">20,000</td>
+                                        <td class="text-right">20,000</td>
+                                        <td class="text-right">--</td>
+                                        <td class="text-right">--</td>
+                                        <td class="text-right">0</td>
+                                        <td>現金</td>
+                                        <td>紙本</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td noWrap="noWrap">CPA201701050001-00</td>
+                                        <td class="text-right">10,500</td>
+                                        <td></td>
                                         <td>1</td>
                                         <td></td>
                                      </tr>
                                      <tr>
-                                        <td>AU00000003</td>
+                                        <td>AU00000001</td>
                                         <td>小巨蛋</td>
                                         <td>黃政浩 Bill</td>
-                                        <td>宋胖子</td>
+                                        <td>鄭胖子</td>
                                         <td>2017/01/05</td>
-                                        <td>水</td>
-                                        <td>15</td>
-                                        <td>現金</td>
-                                        <td>電子</td>
-                                        <td>未作廢</td>
+                                        <td>2017/01/05</td>
                                         <td>--</td>
-                                        <td noWrap="noWrap">--</td>
+                                        <td>體能顧問服務費</td>
+                                        <td class="text-right">20,000</td>
+                                        <td class="text-right">20,000</td>
+                                        <td class="text-right">--</td>
+                                        <td class="text-right">--</td>
+                                        <td class="text-right">0</td>
+                                        <td>現金</td>
+                                        <td>紙本</td>
+                                        <td>--</td>
+                                        <td>--</td>
+                                        <td noWrap="noWrap">CPA201701050001-00</td>
+                                        <td class="text-right">10,500</td>
+                                        <td></td>
                                         <td>0</td>
                                         <td><a href="#" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a></td>
                                      </tr>
@@ -562,7 +586,7 @@
             };
              
             $('#payist_dt').dataTable({
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12'l C>r>" +
                          "t" +
                          "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
                  "autoWidth": true,
@@ -582,7 +606,45 @@
                 },
                 "drawCallback": function(oSettings) {
                     responsiveHelper_dt_basic.respond();
-                }
+                },
+                "columnDefs": [
+                    {
+                        "targets": [1],
+                        "visible": false
+                    },
+                    {
+                        "targets": [5],
+                        "visible": false
+                    },
+                    {
+                        "targets": [6],
+                        "visible": false
+                    },
+                    {
+                        "targets": [9],
+                        "visible": false
+                    },
+                    {
+                        "targets": [12],
+                        "visible": false
+                    },
+                    {
+                        "targets": [16],
+                        "visible": false
+                    },
+                    {
+                        "targets": [17],
+                        "visible": false
+                    },
+                    {
+                        "targets": [18],
+                        "visible": false
+                    },
+                    {
+                        "targets": [19],
+                        "visible": false
+                    }
+                ]      
             }); 
                          
          })

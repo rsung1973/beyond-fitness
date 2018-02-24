@@ -71,7 +71,11 @@
                         "visible": false
                     },
                     {
-                        "targets": [13],
+                        "targets": [2],
+                        "visible": false
+                    },
+                    {
+                        "targets": [5],
                         "visible": false
                     },
                     {
@@ -79,7 +83,15 @@
                         "visible": false
                     },
                     {
-                        "targets": [15],
+                        "targets": [16],
+                        "visible": false
+                    },
+                    {
+                        "targets": [17],
+                        "visible": false
+                    },
+                    {
+                        "targets": [18],
                         "visible": false
                     },
                     <%  }
@@ -98,7 +110,7 @@
                         "visible": false
                     },
                     {
-                        "targets": [9],
+                        "targets": [6],
                         "visible": false
                     },
                     {
@@ -106,7 +118,7 @@
                         "visible": false
                     },
                     {
-                        "targets": [14],
+                        "targets": [11],
                         "visible": false
                     },
                     {
@@ -115,6 +127,14 @@
                     },
                     {
                         "targets": [17],
+                        "visible": false
+                    },
+                    {
+                        "targets": [18],
+                        "visible": false
+                    },
+                    {
+                        "targets": [19],
                         "visible": false
                     },
                     <%      }
@@ -129,19 +149,31 @@
                         "visible": false
                     },
                     {
-                        "targets": [13],
+                        "targets": [6],
                         "visible": false
                     },
                     {
-                        "targets": [14],
+                        "targets": [9],
                         "visible": false
                     },
                     {
-                        "targets": [15],
+                        "targets": [10],
                         "visible": false
                     },
                     {
                         "targets": [16],
+                        "visible": false
+                    },
+                    {
+                        "targets": [17],
+                        "visible": false
+                    },
+                    {
+                        "targets": [18],
+                        "visible": false
+                    },
+                    {
+                        "targets": [19],
                         "visible": false
                     },
                         <%  }   %>
@@ -152,6 +184,7 @@
     {  %>
         $('#btnDownload').css('display', 'inline');
 <%  }  %>
+
 
     });
 </script>

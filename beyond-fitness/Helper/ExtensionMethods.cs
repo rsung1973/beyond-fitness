@@ -136,6 +136,16 @@ namespace WebHome.Helper
             }
         }
 
+        public static int? AdjustTrustAmount(this int? amount)
+        {
+            return (amount * 2 + 5) / 10;
+        }
+
+        public static int AdjustTrustAmount(this int amount)
+        {
+            return (amount * 2 + 5) / 10;
+        }
+
 
     }
 }

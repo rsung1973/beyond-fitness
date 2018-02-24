@@ -11,18 +11,7 @@
 <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            <th data-class="expand">發票號碼</th>
-            <th>分店</th>
-            <th data-hide="phone">收款人</th>
-            <th>學員</th>
-            <th>收款日期</th>
-            <th data-hide="phone">收款品項</th>
-            <th>金額</th>
-            <th data-hide="phone">收款方式</th>
-            <th data-hide="phone">發票類型</th>
-            <th data-hide="phone">發票狀態</th>
-            <th data-hide="phone,tablet">買受人統編</th>
-            <th data-hide="phone,tablet">合約編號</th>
+            <%  Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TH.ascx"); %>
             <th data-hide="phone">列印次數</th>
             <th>功能</th>
         </tr>
@@ -31,49 +20,7 @@
         <%  foreach (var item in _model)
             { %>
         <tr>
-            <td nowrap="noWrap"><%  if (item.InvoiceID.HasValue)
-                                    {   %>
-                        <%= item.InvoiceItem.TrackCode %><%= item.InvoiceItem.No %>
-                <%  } %>
-            </td>
-            <td><%= item.PaymentTransaction.BranchStore.BranchName %></td>
-            <td ><%= item.UserProfile.FullName() %></td>
-            <td ><%= item.TuitionInstallment != null
-                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                        : item.ContractPayment != null
-                            ? item.ContractPayment.CourseContract.ContractOwner.FullName()
-                            : "--" %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", item.PayoffDate) %></td>
-            <td><%= ((Naming.PaymentTransactionType)item.TransactionType).ToString() %>
-                <%  if (item.TransactionType == (int)Naming.PaymentTransactionType.運動商品
-|| item.TransactionType == (int)Naming.PaymentTransactionType.飲品)
-                    { %>
-                (<%= String.Join("、", item.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)) %>)
-                <%  } %>
-            </td>
-            <td nowrap="noWrap" class="text-right"><%= item.PayoffAmount >= 0 ? String.Format("{0:##,###,###,###}", item.PayoffAmount) : String.Format("({0:##,###,###,###})", -item.PayoffAmount) %></td>
-            <td><%= item.PaymentType %></td>
-            <td><%= item.InvoiceID.HasValue
-                        ? item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
-                            ? "電子發票"
-                            : "紙本"
-                        : "--" %></td>
-            <td><%= item.VoidPayment == null
-                        ? "已開立"
-                        : item.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? item.InvoiceItem.InvoiceAllowance.Any() 
-                                ? "已折讓"
-                                : "已作廢"
-                            : "已開立" %></td>
-            <td><%= item.InvoiceID.HasValue
-                        ? item.InvoiceItem.InvoiceBuyer.IsB2C() ? "--" : item.InvoiceItem.InvoiceBuyer.ReceiptNo
-                        : "--" %></td>
-            <td nowrap="noWrap">
-                <%  if (item.ContractPayment != null)
-                    { %>
-                        <%= item.ContractPayment.CourseContract.ContractNo() %>
-                <%  } %>
-            </td>
+            <%  Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TD.ascx",item); %>
             <td nowrap="noWrap" class="text-right">
                 <%  if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                     { %>
@@ -81,16 +28,22 @@
                 <%  } %>
             </td>
             <td>
-                <%  if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
-                        && item.InvoiceItem.PrintMark=="Y")
+                <%  if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                     {
-                        if (item.InvoiceItem.InvoiceCancellation == null
-                            && (item.InvoiceItem.Document.DocumentPrintLog.Count == 0
-                                || _profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()))
-                        { %>
-                <%--<a href="<%= Url.Action("GetInvoicePDF", "Invoice", new { item.InvoiceID }) %>" target="_blank" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>--%>
-                <a onclick="printInvoice(<%= item.InvoiceID %>);" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>
-                <%      }
+                        if (ViewBag.DataAction == "CommitAllowance")
+                        {   %>
+                    <a onclick="prepareAllowance(<%= item.InvoiceID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
+                    <%  }
+                        else if (item.InvoiceItem.PrintMark == "Y")
+                        {
+                            if (item.InvoiceItem.InvoiceCancellation == null
+                                && (item.InvoiceItem.Document.DocumentPrintLog.Count == 0
+                                    || _profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()))
+                            { %>
+                    <%--<a href="<%= Url.Action("GetInvoicePDF", "Invoice", new { item.InvoiceID }) %>" target="_blank" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>--%>
+                    <a onclick="printInvoice(<%= item.InvoiceID %>);" class="btn btn-circle bg-color-pink"><i class="fa fa-fw fa fa-lg fa-print" aria-hidden="true"></i></a>
+                    <%      }
+                        }
                     } %>
             </td>
         </tr>
@@ -117,7 +70,7 @@
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": true,
             "order": [[0, "asc"]],
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l C>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
             "autoWidth": true,
@@ -135,7 +88,45 @@
             },
             "drawCallback": function (oSettings) {
                 responsiveHelper_<%= _tableId %>.respond();
-            }
+            },
+            "columnDefs": [
+                    {
+                        "targets": [1],
+                        "visible": false
+                    },
+                    {
+                        "targets": [4],
+                        "visible": false
+                    },
+                    {
+                        "targets": [6],
+                        "visible": false
+                    },
+                    {
+                        "targets": [13],
+                        "visible": false
+                    },
+                    {
+                        "targets": [14],
+                        "visible": false
+                    },
+                    {
+                        "targets": [17],
+                        "visible": false
+                    },
+                    {
+                        "targets": [18],
+                        "visible": false
+                    },
+                    {
+                        "targets": [19],
+                        "visible": false
+                    },
+                    {
+                        "targets": [20],
+                        "visible": false
+                    },
+            ]
         });
 
 <%  if(_model.Count()>0)

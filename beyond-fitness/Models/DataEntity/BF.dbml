@@ -240,6 +240,7 @@
       <Association Name="UserProfile_CourseContractLevel" Member="CourseContractLevel" ThisKey="UID" OtherKey="ExecutorID" Type="CourseContractLevel" />
       <Association Name="UserProfile_EmployeeWelfare" Member="EmployeeWelfare" ThisKey="UID" OtherKey="UID" Type="EmployeeWelfare" Cardinality="One" />
       <Association Name="UserProfile_Payment" Member="Payment" ThisKey="UID" OtherKey="HandlerID" Type="Payment" />
+      <Association Name="UserProfile_ExerciseGameContestant" Member="ExerciseGameContestant" ThisKey="UID" OtherKey="UID" Type="ExerciseGameContestant" Cardinality="One" />
       <Association Name="Attachment_UserProfile" Member="Attachment" ThisKey="PictureID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" />
       <Association Name="LevelExpression_UserProfile" Member="LevelExpression" ThisKey="LevelID" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="UserProfile_UserProfile" Member="UserProfile1" ThisKey="Creator" OtherKey="UID" Type="UserProfile" IsForeignKey="true" />
@@ -1805,6 +1806,59 @@
       <Column Name="RegisterID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="LearnerAward_AwardingLesson" Member="LearnerAward" ThisKey="AwardID" OtherKey="AwardID" Type="LearnerAward" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
       <Association Name="RegisterLesson_AwardingLesson" Member="RegisterLesson" ThisKey="RegisterID" OtherKey="RegisterID" Type="RegisterLesson" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExerciseGameItem" Member="ExerciseGameItem">
+    <Type Name="ExerciseGameItem">
+      <Column Name="ExerciseID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Exercise" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit" Type="System.String" DbType="NVarChar(16)" CanBeNull="true" />
+      <Association Name="ExerciseGameItem_ExerciseGameResult" Member="ExerciseGameResult" ThisKey="ExerciseID" OtherKey="ExerciseID" Type="ExerciseGameResult" />
+      <Association Name="ExerciseGameItem_ExerciseGameRank" Member="ExerciseGameRank" ThisKey="ExerciseID" OtherKey="ExerciseID" Type="ExerciseGameRank" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExerciseGameResult" Member="ExerciseGameResult">
+    <Type Name="ExerciseGameResult">
+      <Column Name="TestID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExerciseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Score" Type="System.Decimal" DbType="Decimal(12,4) NOT NULL" CanBeNull="false" />
+      <Column Name="TestDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ExerciseGameResult_ExerciseGameRank" Member="ExerciseGameRank" ThisKey="TestID" OtherKey="RecordID" Type="ExerciseGameRank" />
+      <Association Name="ExerciseGameItem_ExerciseGameResult" Member="ExerciseGameItem" ThisKey="ExerciseID" OtherKey="ExerciseID" Type="ExerciseGameItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="ExerciseGameContestant_ExerciseGameResult" Member="ExerciseGameContestant" ThisKey="UID" OtherKey="UID" Type="ExerciseGameContestant" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExerciseGameRank" Member="ExerciseGameRank">
+    <Type Name="ExerciseGameRank">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ExerciseID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RecordID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RankingScore" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Rank" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="ExerciseGameItem_ExerciseGameRank" Member="ExerciseGameItem" ThisKey="ExerciseID" OtherKey="ExerciseID" Type="ExerciseGameItem" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="ExerciseGameResult_ExerciseGameRank" Member="ExerciseGameResult" ThisKey="RecordID" OtherKey="TestID" Type="ExerciseGameResult" IsForeignKey="true" />
+      <Association Name="ExerciseGameContestant_ExerciseGameRank" Member="ExerciseGameContestant" ThisKey="UID" OtherKey="UID" Type="ExerciseGameContestant" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExerciseGamePersonalRank" Member="ExerciseGamePersonalRank">
+    <Type Name="ExerciseGamePersonalRank">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TotalScope" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rank" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="ExerciseGameContestant_ExerciseGamePersonalRank" Member="ExerciseGameContestant" ThisKey="UID" OtherKey="UID" Type="ExerciseGameContestant" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExerciseGameContestant" Member="ExerciseGameContestant">
+    <Type Name="ExerciseGameContestant">
+      <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TotalScope" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Rank" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="ExerciseGameContestant_ExerciseGameResult" Member="ExerciseGameResult" ThisKey="UID" OtherKey="UID" Type="ExerciseGameResult" />
+      <Association Name="ExerciseGameContestant_ExerciseGameRank" Member="ExerciseGameRank" ThisKey="UID" OtherKey="UID" Type="ExerciseGameRank" />
+      <Association Name="ExerciseGameContestant_ExerciseGamePersonalRank" Member="ExerciseGamePersonalRank" ThisKey="UID" OtherKey="UID" Type="ExerciseGamePersonalRank" Cardinality="One" />
+      <Association Name="UserProfile_ExerciseGameContestant" Member="UserProfile" ThisKey="UID" OtherKey="UID" Type="UserProfile" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
   <Function Name="dbo.InquireVacantNo" Method="InquireVacantNo">

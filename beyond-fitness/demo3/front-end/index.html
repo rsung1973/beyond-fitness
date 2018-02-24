@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 
 <head>
@@ -52,7 +52,7 @@
     <![endif]-->
     <!-- Facebook Pixel Code -->
     <script>
-        ! function (f, b, e, v, n, t, s) {
+        (function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
             n = f.fbq = function () {
                 n.callMethod ?
@@ -68,7 +68,7 @@
             t.src = v;
             s = b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
+        })(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '139380543390363');
         fbq('track', 'PageView');
@@ -118,22 +118,22 @@
                             <div class="z-nav-inner">
                                 <ul class="z-nav__list">
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
+                                        <a onclick="fbq('track', 'CompleteRegistration');" class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
+                                        <a onclick="fbq('track', 'Search');" class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
+                                        <a onclick="fbq('track', 'AddToWishlist');" class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
+                                        <a onclick="fbq('track', 'AddToCart');" class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
+                                        <a onclick="fbq('track', 'ViewContent');" class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
+                                        <a onclick="fbq('track', 'AddToPaymentInfo');" class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
                                     </li>
                                 </ul>
                             </div>
@@ -360,7 +360,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問BeyondFitness有體驗課程嗎？
+                                      是否有體驗課程？其內容是什麼呢？如何預約呢？
                                     </a>
                                   </h4>
                             </div>
@@ -368,7 +368,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
-                                    BeyondFitness認為所有人都值得瞭解自己也同時瞭解我們的環境。我們提供一次首次的檢測體驗課是無需付費的，但必須提前預約，才能為您做好最妥善的安排。
+                                    有的！體驗課程需要提前預約，其課程內容專業教練會根據每個人狀況的不同而規劃，我們會為您做到最好的專業以及最大的體貼。無倫您是什麼樣的健康狀況 、年齡以及需求 ，BeyondFitness 專業的團隊都能為您達到您的目標。<br/><br/>體驗課程的內容如網站上所顯示，BeyondFitness將您的目標以及需求放在第一優先，瞭解後以「專業化」、「客制化」以及科學數據化的方式為您服務。您將能在這裡得到任何您需要的信任與成效。<br/><br/>您可以直接電話聯繫我們，也可以在臉書或是網站上留下您的聯絡方式，我們會請專人與您服務。若您不方便留下聯絡電話的話也可以在網站上與我們對談，我們會細心地解決您所有的疑問：）。<br/>BeyondFitness認為所有人都值得瞭解自己也同時瞭解我們的環境，但必須提前預約，才能為您做好最妥善的安排。<br/><br/>體驗課程將讓客戶更能達到自己的各項體能狀況（肌力、心肺、柔軟度和活動度），並且一同討論私人客製化的專業建議與目標規劃。
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -384,7 +384,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問BeyondFitness的收費方式如何？會收取相關入會費、手續費及月費嗎？
+                                      會收取入會費、手續費及月費嗎？
                                     </a>
                                   </h4>
                             </div>
@@ -392,7 +392,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    BeyondFitness的專業人員會先評估和了解，您個人身體狀況與各方面的身體能力，針對您目標規劃對您最有效率的訓練課程，價格會依照規劃的長短及堂數會有所不同。<br/></br/>BeyondFitness專注於一對一的客製化專業訓練，所以只需專業客製的訓練費用。無須再繳交任何其他相關費用。
+                                    不會。<br/><br/>BeyondFitness專注於一對一的客製化專業訓練，所以只需專業客製的訓練費用，無須再繳交任何其他相關費用。
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -408,7 +408,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問私人教練跟一般團體課的教練差在哪？
+                                     收費方式為何？
                                     </a>
                                   </h4>
                             </div>
@@ -416,7 +416,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    真正專業以及優良的私人教練主要是針對學生的目標、生活作息、運動狀況及飲食習慣，做出客製化的訓練安排以及真正的陪伴。<br/>相較於團體課程的教練，私人教練更能針對學生的目的去做訓練以及訓練得更具有實際效益！
+                                    BeyondFitness以堂數做收費計算，價格會依照您的目標、規劃的時間長短及堂數而有所不同。<br/><br/>分別有短程計畫、中長程計畫以及長程計畫，而教練會依照您個人身體狀況與各方面的身體能力，針對您的目標規劃做最有效率的訓練課程。                                    
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -456,7 +456,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問你們有TRX課程或壺鈴課程嗎？
+                                      私人教練跟團課教練差在哪邊？
                                     </a>
                                   </h4>
                             </div>
@@ -464,7 +464,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseFive" class="panel-collapse collapse">
                                 <div class="panel-body">                                    
-                                    BeyondFitnes是以目的取向為第一優先，所有教練均有良好的專業以及技術能力包含TRX以及壺鈴等專業訓練的能力。<br/>專業訓練中各個器材都可能使用到，我們的訓練是依照您的身體專屬設計，所以器材使用上會依您而有許多不同的變化。
+                                    私人教練是針對學生的目標、生活作息、運動狀況及飲食習慣，做出客製化的訓練安排以及真正將心比心的瞭解客戶的需求，專業的私人教練會給您您需要的建議，以及幫您規劃您生活中其餘非運動時間需要注意的事項，擁有一個瞭解您的私人教練是一件非常美好的事情。<br/><br/>相較於團體課程的教練，私人教練更能針對學生的目的去做訓練以及訓練得更具有實際效益哦！
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -504,7 +504,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問你們這裡場地可以自己來運動嗎？除了上教練課以外的時間我可以來自己練嗎？
+                                      請問你們這裡可以自己去運動嗎？
                                     </a>
                                   </h4>
                             </div>
@@ -512,7 +512,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseSeven" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    BeyondFitnss為提供最佳的運動環境，會進行人數的管控以維持現場運動的品質，只提供自身的客戶登記BeyondFitness特有的自主訓練P.I Session。自主的訓練內容從專業以及貼近您的身體狀況所設計，這是只有BeyondFitness的客戶才能擁有的權利。
+                                    我們只提供BeyondFitness的客戶登記使用，經由規劃專業自主訓練P.I Session，並且進行人數的管控以維持場地以及最好的運動品質。
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -528,7 +528,7 @@
                                             <span class="marker__close"><i class="fa fa-plus"></i></span>
                                             <span class="marker__open"><i class="fa fa-minus"></i></span>
                                         </span>
-                                      請問我跟另一半想一起運動，可是體力與肌力狀況不一樣，可以一起運動嗎？
+                                      我跟我的朋友想一起運動，但是體力跟肌力狀況不一樣，可以一起運動嗎？
                                     </a>
                                   </h4>
                             </div>
@@ -536,7 +536,7 @@
                             <!-- accordion panel body -->
                             <div id="collapseEight" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    當然可以，體力與肌力不同也是可以一起運動的，教練會依據你們的身體狀況給予不同的強度訓練，課表也會有所調整相互配合，不用擔心！
+                                    當然可以。<br/><br/>教練會依據你們的身體狀況給予不同的強度訓練，課表也會有所調整相互配合，不用擔心！
                                 </div>
                             </div>
                             <!-- end accordion panel body -->
@@ -654,7 +654,7 @@
                                     </div>
                                 </div>
                                 <textarea class="contact__field contact__area" name="contact-message" placeholder="message"></textarea>
-                                <button class="btn btn--decorated btn-warning btn-submit" type="submit">Send Message</button>
+                                <button onclick="fbq('track', 'Purchase');" class="btn btn--decorated btn-warning btn-submit" type="submit">Send Message</button>
                             </form>
                         </div>
                     </div>

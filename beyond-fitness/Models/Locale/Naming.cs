@@ -107,7 +107,8 @@ namespace WebHome.Models.Locale
             Assistant = 8,
             Manager = 9,
             ViceManager = 10,
-            Preliminary = 11
+            Preliminary = 11,
+            Servitor = 12
         }
 
         public static readonly String[] RoleName = new String[] {
@@ -123,6 +124,7 @@ namespace WebHome.Models.Locale
             "FM",
             "AFM",
             "體驗學員",
+            "工讀生"
         };
 
         public enum LessonStatus

@@ -65,20 +65,12 @@
                             <td>上課場所：<%= _model.CourseContractExtension.BranchStore.BranchName %></td>
                         </tr>
                         <tr>
-                            <td>單堂原價：<% LessonPriceType originalPrice = null; %>
-                                <%= (originalPrice =_model.OriginalSeriesPrice())!=null 
-                                                ? String.Format("{0:##,###,###,###}",originalPrice.ListPrice) 
-                                                : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人</td>
-                            <td>購買堂數：<%= _model.Lessons %></td>
-                            <td>課程單價：<%= String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人 
-                                <%  if (_model.Status >= (int)Naming.CourseContractStatus.待審核 && Request["pdf"]!="1")
-                                    { %>
-                                        (<%= _model.LessonPriceType.Description %>)
-                                <%  } %>
-                            </td>
+                            <td colspan="2">專業顧問建置與諮詢費：<%= String.Format("{0:##,###,###,###}",(_model.TotalCost*8+5)/10) %></td>
+                            <td>教練課程費：<%= String.Format("{0:##,###,###,###}",(_model.TotalCost*2+5)/10) %></td>
                         </tr>
                         <tr>
-                            <td colspan="3">專業顧問服務總費用：<%= String.Format("{0:##,###,###,###}",_model.TotalCost) %></td>
+                            <td colspan="2">購買堂數：<%= _model.Lessons %></td>
+                            <td>專業顧問服務總費用：<%= String.Format("{0:##,###,###,###}",_model.TotalCost) %></td>
                         </tr>
                         <tr>
                             <td colspan="3">顧問服務使用期限：自 <%= String.Format("{0:yyyy/MM/dd}",_model.ValidFrom) %> 起，至 <%= String.Format("{0:yyyy/MM/dd}",_model.Expiration) %> 止。</td>
@@ -199,6 +191,7 @@
                             <ol style="-webkit-padding-start: 20px;">
                                 <li>營業時間及設備：營業時間及設備參照各上課地點規定。</li>
                                 <li>學員資格：未成年人應得其法定代理人允許或承認。</li>
+                                <li>教練課程費入台新銀行信託專戶。</li>
                                 <li>學員健康情形與醫療諮詢：您聲明其身體健康狀況良好，並無存在會妨礙其預計使用體能顧問服務之醫療原因或傷病。您確認本公司未在客戶簽署本特約條款之前為您提供醫療建議，且在簽署本特約條款後亦不會為您提供有關身體狀況和使用訓練課程能力的任何建議。如果您目前或簽約後有任何健康或醫療方面的問題，應先諮詢醫生，然後再使用其體能顧問服務之權利。</li>
                                 <li>使用期限：顧問服務使用期限係依課程堂數而定，使用期限原則不逾18個月。</li>
                                 <li>展延：無法於上述使用期限內完成課程堂數者，得於到期前30日內申請展延使用，並得就未完成部分協商展延3個月內完成，且展延後不得申請轉讓或退費。</li>
@@ -219,7 +212,10 @@
                                             <ul class="list-unstyled">
                                                 <li>(1)	學員得於本合約期限屆滿前，隨時終止本合約，惟因涉及學員權益及金額，請學員須親赴本公司辦理。</li>
                                                 <li>(2)	合約簽訂後七日內，學員未使用所約定服務(課程)而解除契約者，全額退還學員已繳費用。</li>
-                                                <li>(3)	退費計算方式：已繳服務總費用扣除依簽約時課程單堂原價乘以實際上課堂數之費用。</li>
+                                                <li>(3)	已繳服務總費用扣除依簽約時課程單堂原價(<% LessonPriceType originalPrice = null; %>
+                                                    <%= (originalPrice =_model.OriginalSeriesPrice())!=null 
+                                                    ? String.Format("{0:##,###,###,###}",originalPrice.ListPrice) 
+                                                    : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人)乘以實際上課堂數之費用。</li>
                                             </ul>
                                 </li>
                                 <li>場所使用規定
@@ -243,6 +239,7 @@
                             <ol style="-webkit-padding-start: 20px;">
                                 <li>營業時間及設備：營業時間及設備參照各上課地點規定。</li>
                                 <li>學員資格：未成年人應得其法定代理人允許或承認。</li>
+                                <li>教練課程費入台新銀行信託專戶。</li>
                                 <li>學員健康情形與醫療諮詢：您聲明其身體健康狀況良好，並無存在會妨礙其預計使用體能顧問服務之醫療原因或傷病。您確認本公司未在客戶簽署本特約條款之前為您提供醫療建議，且在簽署本特約條款後亦不會為您提供有關身體狀況和使用訓練課程能力的任何建議。如果您目前或簽約後有任何健康或醫療方面的問題，應先諮詢醫生，然後再使用其體能顧問服務之權利。</li>
                                 <li>使用期限：顧問服務使用期限係依課程堂數而定，使用期限原則不逾18個月。</li>
                                 <li>展延：無法於上述使用期限內完成課程堂數者，得於到期前30日內申請展延使用，並得就未完成部分協商展延3個月內完成，且展延後不得申請轉讓或退費。</li>
@@ -260,11 +257,14 @@
                                 </li>
                                 <li>學員於簽署本合約且支付「顧問費用」後，有權於「使用期限」內使用本「體能顧問聘請服務合約」所簽訂之顧問條款。所有體能顧問相關服務需於「使用期限」內使用完畢，逾期且未申請展延之剩餘未使用之課程堂數，將喪失使用權。未使用或喪失使用權之課程堂數，將不予退費。</li>
                                 <li>終止合約及退費計算基準：
-                                <ul class="list-unstyled">
-                                    <li>(1)	學員得於本合約期限屆滿前，隨時終止本合約，惟因涉及學員權益及金額，請學員須親赴本公司辦理。</li>
-                                    <li>(2)	合約簽訂後七日內，學員未使用所約定服務(課程)而解除契約者，全額退還學員已繳費用。</li>
-                                    <li>(3)	退費計算方式：已繳服務總費用扣除依簽約時課程單堂原價乘以實際上課堂數之費用。</li>
-                                </ul>
+                                            <ul class="list-unstyled">
+                                                <li>(1)	學員得於本合約期限屆滿前，隨時終止本合約，惟因涉及學員權益及金額，請學員須親赴本公司辦理。</li>
+                                                <li>(2)	合約簽訂後七日內，學員未使用所約定服務(課程)而解除契約者，全額退還學員已繳費用。</li>
+                                                <li>(3)	已繳服務總費用扣除依簽約時課程單堂原價(<% LessonPriceType originalPrice = null; %>
+                                                    <%= (originalPrice =_model.OriginalSeriesPrice())!=null 
+                                                    ? String.Format("{0:##,###,###,###}",originalPrice.ListPrice) 
+                                                    : String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>/人)乘以實際上課堂數之費用。</li>
+                                            </ul>
                                 </li>
                                 <li>場所使用規定
                                 <ul class="list-unstyled">

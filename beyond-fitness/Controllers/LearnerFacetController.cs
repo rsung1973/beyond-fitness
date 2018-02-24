@@ -29,7 +29,7 @@ namespace WebHome.Controllers
     public class LearnerFacetController : SampleController<UserProfile>
     {
 
-        [LearnerAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Learner, (int)Naming.RoleID.Assistant })]
         public ActionResult LearnerIndex(DateTime? lessonDate, DateTime? endQueryDate)
         {
             UserProfile item = HttpContext.GetUser();

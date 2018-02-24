@@ -519,18 +519,30 @@ namespace WebHome.Controllers
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
             {
                 case Naming.RoleID.Administrator:
-                    return RedirectToAction("Index", "CoachFacet");
+                    //return RedirectToAction("Index", "CoachFacet");
 
                 case Naming.RoleID.Coach:
                 case Naming.RoleID.Manager:
                 case Naming.RoleID.ViceManager:
+                case Naming.RoleID.Officer:
+                case Naming.RoleID.Assistant:
                     return RedirectToAction("Index", "CoachFacet", new { CoachID = item.UID });
 
-                case Naming.RoleID.Assistant:
-                    return RedirectToAction("Index", "CoachFacet");
+                //case Naming.RoleID.Assistant:
+                //    return RedirectToAction("Index", "CoachFacet");
 
                 case Naming.RoleID.Accounting:
                     return RedirectToAction("TrustIndex", "Accounting");
+
+                case Naming.RoleID.Learner:
+                    if (isJson)
+                        return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/Vip") });
+                    else
+                        return RedirectToAction("TimeLine", "Activity", new { uid = item.UID });
+
+                case Naming.RoleID.Servitor:
+                    return RedirectToAction("PaymentIndex", "Payment");
+
 
                 case Naming.RoleID.FreeAgent:
                     if (isJson)
@@ -538,11 +550,6 @@ namespace WebHome.Controllers
                     else
                         return RedirectToAction("FreeAgent", "Account");
 
-                case Naming.RoleID.Learner:
-                    if (isJson)
-                        return Json(new { result = true, url = VirtualPathUtility.ToAbsolute("~/Account/Vip") });
-                    else
-                        return RedirectToAction("TimeLine", "Activity", new { uid = item.UID });
             }
 
             return View();

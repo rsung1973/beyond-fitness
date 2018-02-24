@@ -114,5 +114,14 @@ namespace WebHome.Properties {
                 return ((string)(this["EINVTurnKeyB2P"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseSSL {
+            get {
+                return ((bool)(this["UseSSL"]));
+            }
+        }
     }
 }

@@ -414,6 +414,18 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult ShowCoachCertificate(int coachID)
+        {
+            ViewResult result = (ViewResult)EditCoachCertificate(coachID);
+            ServingCoach item = result.Model as ServingCoach;
+            if(item!=null)
+            {
+                result.ViewName = "~/Views/Member/Module/ShowCoachCertificate.ascx";
+            }
+            return result;
+        }
+
+
         public ActionResult AddCoachCertificate(int uid)
         {
 
@@ -487,9 +499,10 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult CoachCertificateList(int uid)
+        public ActionResult CoachCertificateList(int uid,bool? viewOnly)
         {
             var items = models.GetTable<CoachCertificate>().Where(c => c.CoachID == uid);
+            ViewBag.ViewOnly = viewOnly;
             return View("~/Views/Member/Module/CoachCertificateList.ascx", items);
         }
 

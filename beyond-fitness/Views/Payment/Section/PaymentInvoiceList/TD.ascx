@@ -25,6 +25,7 @@
                     : _model.ContractPayment.CourseContract.ContractOwner.FullName()
                 : "--" %></td>
 <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", _model.PayoffDate) %></td>
+<td nowrap="noWrap"><%= _model.InvoiceID.HasValue ? String.Format("{0:yyyy/MM/dd}", _model.InvoiceItem.InvoiceDate) : null %></td>
 <td nowrap="noWrap">
     <%  if (_model.InvoiceItem.InvoiceCancellation != null && _model.VoidPayment!=null)
         { %>
@@ -43,6 +44,16 @@
     <%  } %>
 </td>
 <td nowrap="noWrap" class="text-right"><%= _model.PayoffAmount >= 0 ? String.Format("{0:##,###,###,###}", _model.PayoffAmount) : String.Format("({0:##,###,###,###})", -_model.PayoffAmount) %></td>
+<td nowrap="noWrap" class="text-right"><%= _model.InvoiceID.HasValue
+                                               ? _model.InvoiceItem.InvoiceBuyer.IsB2C()
+                                                    ? String.Format("{0:##,###,###,###}", _model.InvoiceItem.InvoiceAmountType.TotalAmount)
+                                                    : String.Format("{0:##,###,###,###}", _model.InvoiceItem.InvoiceAmountType.SalesAmount)
+                                               : null %></td>
+<td nowrap="noWrap" class="text-right"><%= _model.InvoiceID.HasValue
+                                               ? _model.InvoiceItem.InvoiceBuyer.IsB2C()
+                                                    ? null
+                                                    : String.Format("{0:##,###,###,###}", _model.InvoiceItem.InvoiceAmountType.TaxAmount)
+                                               : null %></td>
 <td nowrap="noWrap" class="text-right">
     <%  if (_model.InvoiceItem.InvoiceCancellation != null && _model.VoidPayment!=null)
         { %>
@@ -106,10 +117,22 @@
         else if (_model.InvoiceAllowance!=null)
         { %>
     <%= _model.InvoiceAllowance.InvoiceAllowanceDetails.First().InvoiceAllowanceItem.Remark %>
+    <%  }
+        else
+        { %>
+    <%= _model.Remark %>
     <%  } %>
 </td>
-<td><%= (Naming.CourseContractStatus)_model.Status %><%= _model.PaymentAudit != null && _model.PaymentAudit.AuditorID.HasValue ? "" : "(*)" %></td>
-
+<td><%  if (_model.VoidPayment != null)
+        { %>
+            <%= (Naming.CourseContractStatus)_model.VoidPayment.Status %>
+    <%  }
+        else
+        { %>
+            <%= (Naming.CourseContractStatus)_model.Status %>
+            <%= _model.PaymentAudit != null && _model.PaymentAudit.AuditorID.HasValue ? "" : "(*)" %>
+    <%  } %>
+</td>
 <script runat="server">
 
     ModelStateDictionary _modelState;

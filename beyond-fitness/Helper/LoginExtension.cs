@@ -288,8 +288,14 @@ namespace WebHome.Helper
 
         public static bool IsLearner(this UserProfile profile)
         {
-            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Assistant));
+            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Learner || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Learner));
         }
+
+        public static bool IsServitor(this UserProfile profile)
+        {
+            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Servitor || profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Servitor));
+        }
+
 
         public static bool IsAuthorizedSysAdmin(this UserProfile profile)
         {

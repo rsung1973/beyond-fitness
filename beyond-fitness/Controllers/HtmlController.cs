@@ -105,13 +105,19 @@ namespace WebHome.Controllers
             return View("~/Views/Html/Module/CompleteRegister.ascx", item);
         }
 
+        [Authorize]
         public ActionResult EditMySelf(RegisterViewModel viewModel)
         {
+            //UserProfile item = viewModel.UID.HasValue
+            //    ? models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault()
+            //    : HttpContext.GetUser();
+
             UserProfile item = HttpContext.GetUser();
-            if (item == null)
-            {
-                return Redirect(FormsAuthentication.LoginUrl);
-            }
+
+            //if (item == null)
+            //{
+            //    return Redirect(FormsAuthentication.LoginUrl);
+            //}
 
             viewModel.EMail = item.PID.Contains("@") ? item.PID : null;
             viewModel.MemberCode = item.MemberCode;
@@ -228,7 +234,7 @@ namespace WebHome.Controllers
             UrlHelper url = new UrlHelper(ControllerContext.RequestContext);
             if (item.IsAuthorizedSysAdmin())
             {
-                return url.Action("Index", "CoachFacet");
+                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
             }
             else if (item.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach || r.RoleID == (int)Naming.RoleID.Manager || r.RoleID == (int)Naming.RoleID.ViceManager))
             {
@@ -236,11 +242,15 @@ namespace WebHome.Controllers
             }
             else if(item.IsAssistant())
             {
-                return url.Action("Index", "CoachFacet");
+                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
             }
             else if(item.IsAccounting())
             {
                 return url.Action("TrustIndex", "Accounting");
+            }
+            else if(item.IsServitor())
+            {
+                return url.Action("PaymentIndex", "Payment");
             }
 
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
@@ -251,19 +261,25 @@ namespace WebHome.Controllers
                 case Naming.RoleID.Coach:
                 case Naming.RoleID.Manager:
                 case Naming.RoleID.ViceManager:
+                case Naming.RoleID.Officer:
+                case Naming.RoleID.Assistant:
                     return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
 
-                case Naming.RoleID.Assistant:
-                    return url.Action("Index", "CoachFacet");
+                //case Naming.RoleID.Assistant:
+                //    return url.Action("Index", "CoachFacet");
 
                 case Naming.RoleID.Accounting:
                     return url.Action("TrustIndex", "Accounting");
 
+                case Naming.RoleID.Learner:
+                    return url.Action("LearnerIndex", "LearnerFacet");
+
+                case Naming.RoleID.Servitor:
+                    return url.Action("PaymentIndex", "Payment");
+
                 case Naming.RoleID.FreeAgent:
                     return url.Action("FreeAgent", "Account");
 
-                case Naming.RoleID.Learner:
-                    return url.Action("LearnerIndex", "LearnerFacet");
             }
 
             return url.Action("Index", "Account"); ;

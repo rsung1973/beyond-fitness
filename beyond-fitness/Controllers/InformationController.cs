@@ -77,7 +77,8 @@ namespace WebHome.Controllers
 
         }
 
-        [CoachOrAssistantAuthorize]
+        //[CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor})]
         public ActionResult Publish(PagingIndexViewModel viewModel)
         {
             ViewBag.PagingModel = viewModel;
@@ -91,7 +92,8 @@ namespace WebHome.Controllers
             return View("Publish",items);
         }
 
-        [CoachOrAssistantAuthorize]
+        //[CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Servitor })]
         public ActionResult CreateNew()
         {
 
@@ -115,7 +117,8 @@ namespace WebHome.Controllers
             return View("EditBlog", item);
         }
 
-        [CoachOrAssistantAuthorize]
+        //[CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Servitor })]
         public ActionResult EditBlog(int id)
         {
 

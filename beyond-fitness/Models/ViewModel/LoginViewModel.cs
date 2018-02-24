@@ -73,7 +73,7 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
-        public int? UID;
+        public int? UID { get; set; }
 
     }
 

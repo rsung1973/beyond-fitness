@@ -202,6 +202,9 @@
         <!-- WIDGET END -->
     </div>
     <!-- end row -->
+    <div class="row">
+        <a onclick="testPrintInvoice(23417);"><h2><u>發票測試列印(請於列印發票前點選此連結進行測試列印)</u></h2></a>
+    </div>
     <!-- row -->
     <div class="row">
         <!-- NEW WIDGET START -->
@@ -276,6 +279,24 @@
         });
     }
 
+    function testPrintInvoice(invoiceID) {
+        var event = event || window.event;
+        var printerIP = $('input[name="PrinterIP"]').val();
+        if (!printerIP || printerIP == '') {
+            alert('請先設定印表機IP!!');
+            return;
+        }
+        <%  if(WebHome.Properties.Settings.Default.UseSSL)
+            {  %>
+        $('<form>').launchDownload('<%= "http://210.65.88.44/WebInvoice" + Url.Action("LoadInvoiceImageByUID", "Invoice",new { _profile.UID,t = DateTime.Now.Ticks }) %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        <%  }
+            else
+            {   %> 
+        $('<form>').launchDownload('<%= Url.Action("LoadInvoiceImage", "Invoice",new { t = DateTime.Now.Ticks }) %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        <%  }   %>
+    }
+
+
     function printInvoice(invoiceID) {
         var event = event || window.event;
         var printerIP = $('input[name="PrinterIP"]').val();
@@ -283,7 +304,14 @@
             alert('請先設定印表機IP!!');
             return;
         }
-        $('<form>').launchDownload('<%= Url.Action("LoadInvoiceImage", "Invoice") %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        <%  if(WebHome.Properties.Settings.Default.UseSSL)
+            {  %>
+        $('<form>').launchDownload('<%= "http://210.65.88.44/WebInvoice" + Url.Action("LoadInvoiceImageByUID", "Invoice",new { _profile.UID,t = DateTime.Now.Ticks }) %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        <%  }
+            else
+            {   %> 
+        $('<form>').launchDownload('<%= Url.Action("LoadInvoiceImage", "Invoice",new { t = DateTime.Now.Ticks }) %>', { 'invoiceID': invoiceID, 'printerIP': printerIP }, '_blank');
+        <%  }   %>
         $(event.target).closest('a').after('<span>已列印</span>').remove();
     }
 

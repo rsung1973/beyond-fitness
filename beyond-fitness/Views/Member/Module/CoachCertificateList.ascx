@@ -13,7 +13,10 @@
         <tr>
             <th><i class="fa fa-fw fa-certificate text-muted hidden-md hidden-sm hidden-xs"></i>證照名稱</th>
             <th><i class="fa fa-fw fa-calendar text-muted hidden-md hidden-sm hidden-xs"></i>到期日</th>
+            <%  if (ViewBag.ViewOnly != true)
+                { %>
             <th>功能</th>
+            <%  } %>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +25,12 @@
         <tr>
             <td><%= item.ProfessionalCertificate.Description %></td>
             <td><%= String.Format("{0:yyyy/MM/dd}",item.Expiration) %></td>
+            <%  if (ViewBag.ViewOnly != true)
+                { %>
             <td>
                 <a onclick="deleteCertificate(<%= item.CertificateID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
             </td>
+            <%  } %>
         </tr>
         <%  } %>
     </tbody>

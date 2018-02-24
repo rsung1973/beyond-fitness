@@ -25,7 +25,7 @@
 <body>
     <%  if (_model.Count() > 0 && !_model.First().InvoiceBuyer.IsB2C())
         { %>
-    <canvas id="invCanvas" width="440" height="1040" style="width:20%;"></canvas>
+    <canvas id="invCanvas" width="440" height="1280" style="width:20%;"></canvas>
     <%  }
         else
         { %>
@@ -63,10 +63,14 @@
             var image = new Image();
 
             image.src = '<%= VirtualPathUtility.ToAbsolute("~/Invoice/DrawInvoice") + "?UID=" + _profile.UID %>' + '&InvoiceID=' + id;
-
+            //alert('載入來源:'+image.src);
             image.onload = function () {
                 context.drawImage(image, 0, 0);
-                printInvoice();
+                try {
+                    printInvoice();
+                } catch(err) {
+                    alert('列印失敗:' + err.name + ":" + err.message);
+                }
             }
 
             image.onerror = function () {
@@ -169,7 +173,8 @@
 
         trader.onError = function (response) {
             var Pmsg = ' 傳送錯誤\n';
-            Pmsg += '\t無法傳送資料到 IP=' + UseIP + ' 印表機，請檢查印表機！';
+            Pmsg += '\t無法傳送資料到 IP=' + UseIP + ' 印表機，請檢查印表機！\n';
+            Pmsg += '原因: (' + response.status + ')' + response.responseText;
 
             $('<div style="color:red;"></div>').text(Pmsg).insertAfter($canvas);
             //document.getElementById('TxtPanel').value = Pmsg;
@@ -193,6 +198,7 @@
         items = <%= JsonConvert.SerializeObject(_model.Select(i=>i.InvoiceID).ToArray()) %>;
         if(items!=null && items.length>0) {
             itemIndex=0;
+            alert('開始列印,本次列印'+items.length+'張發票...');
             chainToPrint();
         }
     });

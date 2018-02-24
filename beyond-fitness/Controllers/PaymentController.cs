@@ -78,7 +78,7 @@ namespace WebHome.Controllers
             return View();
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor,(int)Naming.RoleID.Manager,(int)Naming.RoleID.ViceManager})]
         public ActionResult EditPayment(PaymentViewModel viewModel)
         {
             switch ((Naming.PaymentTransactionType?)viewModel.TransactionType)
@@ -102,7 +102,7 @@ namespace WebHome.Controllers
             return View("~/Views/SystemInfo/MerchandiseOptions.ascx", items);
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult EditPaymentForPISession(PaymentViewModel viewModel)
         {
             ViewResult result = (ViewResult)EditPaymentForContract(viewModel);
@@ -111,7 +111,7 @@ namespace WebHome.Controllers
             return result;
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult EditPaymentForShopping(PaymentViewModel viewModel)
         {
             ViewResult result = (ViewResult)EditPaymentForContract(viewModel);
@@ -121,7 +121,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult EditPaymentForContract(PaymentViewModel viewModel)
         {
             var item = models.GetTable<Payment>().Where(c => c.PaymentID == viewModel.PaymentID).FirstOrDefault();
@@ -192,12 +192,12 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("errorMessage", "請選擇收款方式!!");
             }
 
-            viewModel.ItemNo = new string[] { "01" };
-            viewModel.Brief = new string[] { "體能顧問服務費" };
-            viewModel.CostAmount = new int?[] { viewModel.PayoffAmount };
-            viewModel.UnitCost = new int?[] { viewModel.PayoffAmount };
-            viewModel.Piece = new int?[] { 1 };
-            viewModel.ItemRemark = new string[] { viewModel.Remark };
+            viewModel.ItemNo = new string[] { "01","02" };
+            viewModel.Brief = new string[] { "專業顧問建置與諮詢費", "教練課程費" };
+            viewModel.CostAmount = new int?[] { (viewModel.PayoffAmount * 8 + 5) / 10, (viewModel.PayoffAmount * 2 + 5) / 10 };
+            viewModel.UnitCost = new int?[] { (viewModel.PayoffAmount * 8 + 5) / 10, (viewModel.PayoffAmount * 2 + 5) / 10 };
+            viewModel.Piece = new int?[] { 1,1 };
+            viewModel.ItemRemark = new string[] { viewModel.Remark, null };
 
             var invoice = checkInvoiceNo(viewModel);
 
@@ -261,7 +261,7 @@ namespace WebHome.Controllers
             }
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult EditPaymentForEnterprise(PaymentViewModel viewModel)
         {
             ViewResult result = (ViewResult)EditPaymentForContract(viewModel);
@@ -522,12 +522,25 @@ namespace WebHome.Controllers
             }
             else
             {
-                viewModel.ItemNo = new string[] { "01" };
-                viewModel.Brief = new string[] { product.ProductName };
-                viewModel.CostAmount = new int?[] { product.UnitPrice * viewModel.ProductCount };
-                viewModel.UnitCost = new int?[] { product.UnitPrice };
-                viewModel.Piece = new int?[] { viewModel.ProductCount };
-                viewModel.ItemRemark = new string[] { viewModel.Remark };
+                int? totalAmt = product.UnitPrice * viewModel.ProductCount;
+                if (totalAmt > viewModel.PayoffAmount)
+                {
+                    viewModel.ItemNo = new string[] { "01","02" };
+                    viewModel.Brief = new string[] { product.ProductName,"優惠折扣" };
+                    viewModel.CostAmount = new int?[] { totalAmt, viewModel.PayoffAmount - totalAmt };
+                    viewModel.UnitCost = new int?[] { product.UnitPrice, viewModel.PayoffAmount - totalAmt };
+                    viewModel.Piece = new int?[] { viewModel.ProductCount, 1 };
+                    viewModel.ItemRemark = new string[] { viewModel.Remark, null };
+                }
+                else
+                {
+                    viewModel.ItemNo = new string[] { "01" };
+                    viewModel.Brief = new string[] { product.ProductName };
+                    viewModel.CostAmount = new int?[] { product.UnitPrice * viewModel.ProductCount };
+                    viewModel.UnitCost = new int?[] { product.UnitPrice };
+                    viewModel.Piece = new int?[] { viewModel.ProductCount };
+                    viewModel.ItemRemark = new string[] { viewModel.Remark };
+                }
             }
 
             var invoice = checkInvoiceNo(viewModel);
@@ -998,6 +1011,9 @@ namespace WebHome.Controllers
 
                 models.SubmitChanges();
             }
+
+            TaskExtensionMethods.ProcessInvoiceToGov();
+
         }
 
         public ActionResult CancelVoidPayment(PaymentViewModel viewModel)
@@ -1158,7 +1174,7 @@ namespace WebHome.Controllers
             return newItem;
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult CommitToAuditPayment(PaymentViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -1225,8 +1241,6 @@ namespace WebHome.Controllers
             IQueryable<VoidPayment> voidItems = models.GetTable<VoidPayment>();
 
             IQueryable<InvoiceItem> invoiceItems = models.GetTable<InvoiceItem>();
-            IQueryable<InvoiceAllowance> allowanceItems = models.GetTable<InvoiceAllowance>();
-            IQueryable<InvoiceCancellation> cancelledItems = models.GetTable<InvoiceCancellation>();
 
             var profile = HttpContext.GetUser();
 
@@ -1284,7 +1298,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsServitor())
                 {
 
                 }
@@ -1354,13 +1368,14 @@ namespace WebHome.Controllers
             Expression<Func<InvoiceItem,bool>> queryInv = f => true;
             bool dateQuery = false;
             Expression<Func<Payment, bool>> dateItems = p => true;
+            IQueryable<InvoiceAllowance> allowanceItems = models.GetTable<InvoiceAllowance>();
+            IQueryable<InvoiceCancellation> cancelledItems = models.GetTable<InvoiceCancellation>();
+
             if (viewModel.PayoffDateFrom.HasValue)
             {
                 dateQuery = true;
                 dateItems = dateItems.And(p => p.PayoffDate >= viewModel.PayoffDateFrom);
-                //items = items.Where(c => c.PayoffDate >= viewModel.PayoffDateFrom);
                 queryInv = queryInv.And(i => i.InvoiceDate >= viewModel.PayoffDateFrom);
-                //invoiceItems = invoiceItems.Where(i => i.InvoiceDate >= viewModel.PayoffDateFrom);
                 cancelledItems = cancelledItems.Where(i => i.CancelDate >= viewModel.PayoffDateFrom);
                 allowanceItems = allowanceItems.Where(a => a.AllowanceDate >= viewModel.PayoffDateFrom);
                 voidItems = voidItems.Where(v => v.VoidDate >= viewModel.PayoffDateFrom);
@@ -1370,67 +1385,31 @@ namespace WebHome.Controllers
             {
                 dateQuery = true;
                 dateItems = dateItems.And(i => i.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
-
-                //items = items.Where(c => c.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
                 queryInv = queryInv.And(i => i.InvoiceDate < viewModel.PayoffDateTo.Value.AddDays(1));
-                //invoiceItems = invoiceItems.Where(i => i.InvoiceDate < viewModel.PayoffDateTo.Value.AddDays(1));
                 cancelledItems = cancelledItems.Where(i => i.CancelDate < viewModel.PayoffDateTo.Value.AddDays(1));
                 allowanceItems = allowanceItems.Where(a => a.AllowanceDate < viewModel.PayoffDateTo.Value.AddDays(1));
                 voidItems = voidItems.Where(v => v.VoidDate < viewModel.PayoffDateTo.Value.AddDays(1));
             }
 
-            //var allowanceID = allowanceItems.Select(a => a.AllowanceID);
+            IQueryable<Payment> result = items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+            if (dateQuery)
+            {
+                result = result.Join(models.GetTable<Payment>().Where(dateItems), p => p.PaymentID, d => d.PaymentID, (p, d) => p)
+                    .Union(result.Join(models.GetTable<InvoiceItem>().Where(queryInv), p => p.InvoiceID, i => i.InvoiceID, (p, i) => p))
+                    .Union(result.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p)
+                    .Union(result.Join(voidItems, p => p.PaymentID, c => c.VoidID, (p, c) => p)));
+            }
 
-            //var result = items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p)
-            //    .Concat(items.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p))
-            //    .GroupBy(p => p.PaymentID).Select(g => g.First());
-
-            allowanceItems = allowanceItems
-                .Join(models.GetTable<Payment>()
-                    .Join(invoiceItems, 
-                        p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
-                    a => a.AllowanceID, p => p.AllowanceID, (a, p) => a);
-
-            voidItems = voidItems
-                .Join(models.GetTable<Payment>()
-                    .Join(invoiceItems,
-                        p => p.InvoiceID, i => i.InvoiceID, (p, i) => p),
-                    a => a.VoidID, p => p.PaymentID, (a, p) => a);
-
-            IQueryable<Payment> result;
             if (viewModel.IsCancelled == true)
             {
-                //queryInv = queryInv.And(i => i.InvoiceCancellation != null);
-                //invoiceItems = invoiceItems.Where(i => i.InvoiceCancellation != null);
-                result = items
-                    .Where(p => p.VoidPayment != null || p.AllowanceID.HasValue)
-                    .Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
-                        || allowanceItems.Select(a => (int?)a.AllowanceID).Contains(p.AllowanceID)
-                        //|| cancelledItems.Select(c => (int?)c.InvoiceID).Contains(p.InvoiceID)
-                        || voidItems.Select(c => c.VoidID).Contains(p.PaymentID));
+                result = result
+                    .Where(p => p.VoidPayment != null || p.AllowanceID.HasValue);
 
             }
             else if (viewModel.IsCancelled == false)
             {
-                //invoiceItems = invoiceItems.Where(i => i.InvoiceCancellation == null);
-                //queryInv = queryInv.And(i => i.InvoiceCancellation == null);
-
                 result = items
-                    .Where(p => p.VoidPayment == null && !p.AllowanceID.HasValue)
-                    .Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
-                        && !p.AllowanceID.HasValue);
-            }
-            else
-            {
-                result = items.Where(p => invoiceItems.Where(queryInv).Select(i => (int?)i.InvoiceID).Contains(p.InvoiceID)
-                    || allowanceItems.Select(a => (int?)a.AllowanceID).Contains(p.AllowanceID)
-                    //|| cancelledItems.Select(c => (int?)c.InvoiceID).Contains(p.InvoiceID)
-                    || voidItems.Select(c => c.VoidID).Contains(p.PaymentID));
-            }
-
-            if(dateQuery)
-            {
-                result = result.Union(items.Where(dateItems));
+                    .Where(p => p.VoidPayment == null && !p.AllowanceID.HasValue);
             }
 
             return View("~/Views/Payment/Module/PaymentInvoiceList.ascx", result);
@@ -1507,7 +1486,9 @@ namespace WebHome.Controllers
                     狀態 = i.Direction > 0
                         ? String.Concat((Naming.CourseContractStatus)i.Item.Status, i.Item.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
                         : String.Concat((Naming.VoidPaymentStatus)i.Item.VoidPayment.Status, "(作廢)"),
-                    備註 = i.Direction > 0 ? i.Item.Remark : i.Item.VoidPayment.Remark
+                    備註 = i.Direction > 0 ? i.Item.Remark : i.Item.VoidPayment.Remark,
+                    i.Item.PaymentID,
+                    VoidID = i.Item.VoidPayment!=null ? i.Item.VoidPayment.VoidID : (int?)null
                 });
 
 
@@ -1559,6 +1540,7 @@ namespace WebHome.Controllers
                                 : i.ContractPayment.CourseContract.ContractOwner.FullName()
                             : "--",
                     收款日期 = String.Format("{0:yyyy/MM/dd}", i.PayoffDate),
+                    發票日期 = String.Format("{0:yyyy/MM/dd}", i.InvoiceItem.InvoiceDate),
                     作廢或折讓日 = i.InvoiceItem.InvoiceCancellation != null && i.VoidPayment != null
                         ? String.Format("{0:yyyy/MM/dd}", i.InvoiceItem.InvoiceCancellation.CancelDate)
                         : i.InvoiceAllowance != null
@@ -1569,12 +1551,14 @@ namespace WebHome.Controllers
                                 ? String.Format("({0})", String.Join("、", i.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName)))
                                 : null),
                     收款金額 = i.PayoffAmount,
+                    發票金額 = i.InvoiceItem.InvoiceBuyer.IsB2C() ? i.InvoiceItem.InvoiceAmountType.TotalAmount : i.InvoiceItem.InvoiceAmountType.SalesAmount,
                     收款未稅金額 = Math.Round((decimal)i.PayoffAmount / 1.05m),
                     作廢或折讓未稅金額 = i.InvoiceItem.InvoiceCancellation != null && i.VoidPayment != null
                         ? i.PayoffAmount
                         : i.InvoiceAllowance != null
                             ? i.InvoiceAllowance.TotalAmount
                             : null,
+                    營業稅 = i.InvoiceItem.InvoiceBuyer.IsB2C() ? (decimal?)null : i.InvoiceItem.InvoiceAmountType.TaxAmount,
                     收款方式 = i.PaymentType,
                     發票類型 = i.InvoiceID.HasValue
                         ? i.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
@@ -1603,6 +1587,8 @@ namespace WebHome.Controllers
                     狀態 = i.VoidPayment == null
                         ? String.Concat((Naming.CourseContractStatus)i.Status, i.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
                         : String.Concat((Naming.VoidPaymentStatus)i.VoidPayment.Status, "(作廢)"),
+                    //i.PaymentID,
+                    //VoidID = i.VoidPayment != null ? i.VoidPayment.VoidID : (int?)null
                 });
 
 
@@ -1742,7 +1728,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult EditPaymentAchievement(PaymentViewModel viewModel)
         {
             var item = models.GetTable<Payment>().Where(c => c.PaymentID == viewModel.PaymentID).FirstOrDefault();
@@ -1768,7 +1754,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager })]
         public ActionResult DeleteCoachAchievement(PaymentViewModel viewModel)
         {
             try
@@ -1786,7 +1772,7 @@ namespace WebHome.Controllers
             return Json(new { result = false,message = "資料錯誤!!" });
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
         public ActionResult DeleteEnterprisePayment(PaymentViewModel viewModel)
         {
             try
@@ -1806,7 +1792,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager })]
         public ActionResult CommitToApplyCoachAchievement(PaymentViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -1867,7 +1853,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager })]
         public ActionResult ApplyPaymentAchievement(PaymentViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

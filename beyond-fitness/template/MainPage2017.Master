@@ -116,7 +116,7 @@
 		* 'fixed-page-footer' - Fixes footer
 		* 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
 	-->
-<body class="smart-style-5 menu-on-top">
+<body class="smart-style-5 menu-on-top fixed-header">
        
         <% Html.RenderPartial("~/Views/Layout/_2017/Header.ascx", _userProfile); %>
 

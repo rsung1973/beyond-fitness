@@ -37,5 +37,8 @@
     <Setting Name="EINVTurnKeyB2P" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\EINVTurnkey\UpCast\B2PMESSAGE</Value>
     </Setting>
+    <Setting Name="UseSSL" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

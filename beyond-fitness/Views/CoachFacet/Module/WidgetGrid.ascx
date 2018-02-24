@@ -11,20 +11,13 @@
 
 <section id="widget-grid" class="">
     <!-- row -->
-    <div class="row">
-        <!-- NEW WIDGET START -->
-        <article id="lgCalendar" class="col-md-6 col-lg-6 hidden-xs hidden-sm">
-            <!-- new widget -->
-            <%  Html.RenderPartial("~/Views/CoachFacet/Module/MyCalendar.ascx",_model); %>
-            <!-- end widget -->
-        </article>
-        <!-- WIDGET END -->		
-        <article class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div class="row">	
+        <article class="col-xs-12 col-sm-12 col-md-5 col-lg-5 padding-5">
             <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
+            <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
                 <header>
                     <span class="widget-icon"><i class="fa fa-address-book"></i></span>
-                    <h2></h2>
+                    <h2><%= _coach!=null ? _coach.UserProfile.FullName() : _model.FullName() %></h2>
                     <div class="widget-toolbar">
                     </div>
                 </header>
@@ -36,29 +29,34 @@
                         <%  if (_coach != null)
                             { %>
                             <%  Html.RenderPartial("~/Views/CoachFacet/Module/CoachToday.ascx", _coach); %>
-                        <%  } %>
+                        <%  }
+                            else if(_model.ServingCoach!=null)
+                            {
+                                Html.RenderPartial("~/Views/CoachFacet/Module/CoachToday.ascx", _model.ServingCoach);
+                            }
+                            else
+                            {
+                                Html.RenderPartial("~/Views/Member/Module/MemberToday.ascx", _model.ServingCoach); 
+                            }   %>
                         </div>						
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="padding-10">
-                                    <ul class="nav nav-tabs tabs-pull-right">
+                                    <ul class="nav nav-tabs">
                                         <li>
-                                            <a href="#todolist_tab" data-toggle="tab">待辦事項</a>
+                                            <a href="#todolist_tab" data-toggle="tab"><i class="fa fa-check"></i> 待辦事項</a>
                                         </li>
-                                        <li>
+                                        <!--<li>
                                             <a href="#mystudentlist_tab" data-toggle="tab">學員清單</a>
-                                        </li>
+                                        </li>-->
                                         <li>
-                                            <a href="#contractlist_tab" data-toggle="tab">合約到期(前)清單</a>
+                                            <a href="#contractlist_tab" data-toggle="tab"><i class="fa fa-exclamation-triangle"></i> 合約到期(前)清單</a>
                                         </li>
                                         <li class="">
-                                            <a href="#birthdaylist_tab" data-toggle="tab">生日提醒</a>
+                                            <a href="#birthdaylist_tab" data-toggle="tab"><i class="fa fa-birthday-cake"></i> 生日提醒</a>
                                         </li>
                                         <li class="active">
-                                            <a href="#smCalendar" data-toggle="tab" class="hidden-md hidden-lg">行事曆</a>
-                                        </li>
-                                        <li class="pull-left">
-                                            <span class="margin-top-10 display-inline"><i class="fa fa-rss text-success"></i>Activity</span>
+                                            <a href="#smCalendar" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar"></i> 行事曆</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content padding-top-10">
@@ -67,14 +65,14 @@
                                             <%  Html.RenderAction("LessonsSummary", "CoachFacet", new { CoachID = _coach!=null ? (int?)_coach.CoachID : null }); %>
                                             <!-- end widget -->
                                         </div>
-                                        <div class="tab-pane fade" id="mystudentlist_tab">
+                                        <%--<div class="tab-pane fade" id="mystudentlist_tab">
                                             <!-- Widget ID (each widget will need unique ID)-->
                                             <%  if(_coach!=null)
                                                 { %>
                                             <%  Html.RenderPartial("~/Views/CoachFacet/Module/LearnerListByCoach.ascx",_coach); %>
                                             <%  } %>
                                             <!-- end widget -->
-                                        </div>
+                                        </div>--%>
                                         <div class="tab-pane fade" id="contractlist_tab">
                                             <!-- Widget ID (each widget will need unique ID)-->
                                             <%  Html.RenderPartial("~/Views/CoachFacet/Module/ExpiringContractList.ascx", _model); %>
@@ -101,6 +99,13 @@
             </div>
             <!-- end widget -->
         </article>	
+         <!-- NEW WIDGET START -->
+        <article id="lgCalendar" class="col-md-7 col-lg-7 hidden-xs hidden-sm no-padding">
+            <!-- new widget -->
+            <%  Html.RenderPartial("~/Views/CoachFacet/Module/MyCalendar.ascx",_model); %>
+            <!-- end widget -->
+        </article>
+        <!-- WIDGET END -->	       
     </div>
     <!-- end row -->
 </section>

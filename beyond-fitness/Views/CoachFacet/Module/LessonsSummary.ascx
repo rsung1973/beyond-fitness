@@ -35,7 +35,7 @@
                     <%  } %>
                 </ul>
             </div>
-            <div class="btn-group">
+<%--            <div class="btn-group">
                 <button class="btn dropdown-toggle btn-xs bg-color-pinkDark" data-toggle="dropdown">
                     體能顧問 <i class="fa fa-caret-down"></i>
                 </button>
@@ -67,25 +67,8 @@
                         <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
                     </li>
                     <%  } %>
-
-<%--                    <%  if (_model.IsAssistant())
-                        {
-                            var items = models.GetTable<ServingCoach>();
-                            foreach (var item in items)
-                            { %>
-                    <li>
-                        <a href="javascript:selectInspectedCoach(<%= item.CoachID %>,'<%= item.CoachID == _model.UID ? "我" : item.UserProfile.FullName() %>');"><%= item.UserProfile.FullName() %></a>
-                    </li>
-                    <%      }
-                        }
-                        else
-                        {   %>
-                    <li>
-                        <a href="javascript:selectInspectedCoach(<%= _model.UID %>,'我');"><%= _model.FullName() %></a>
-                    </li>
-                    <%  } %>--%>
                 </ul>
-            </div>
+            </div>--%>
         </div>
     </header>
     <!-- widget div-->

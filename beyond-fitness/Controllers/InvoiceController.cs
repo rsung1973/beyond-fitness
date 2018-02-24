@@ -54,6 +54,12 @@ namespace WebHome.Controllers
             return View("PrintIndex",result.Model ?? models.GetTable<Payment>().Where(p => false));
         }
 
+        public ActionResult AllowanceIndex(InvoiceQueryViewModel viewModel)
+        {
+            return View("AllowanceIndex", models.GetTable<Payment>().Where(p => false));
+        }
+
+
         public ActionResult TurnkeyIndex(InvoiceQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -594,6 +600,11 @@ namespace WebHome.Controllers
                 }
             }
 
+            if (viewModel.InvoiceType.HasValue)
+            {
+                items = items.Where(c => c.InvoiceType == (byte)viewModel.InvoiceType);
+            }
+
             if (viewModel.DateFrom.HasValue && viewModel.DocType==Naming.DocumentTypeDefinition.E_Invoice)
                 items = items.Where(c => c.InvoiceDate >= viewModel.DateFrom);
 
@@ -637,6 +648,17 @@ namespace WebHome.Controllers
             if(result.Model is IQueryable<Payment>)
             {
                 result.ViewName = "~/Views/Invoice/Module/InvoiceItemSummary.ascx";
+            }
+            return result;
+        }
+
+        public ActionResult InquireInvoiceToCommitAllowance(InvoiceQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireInvoice(viewModel);
+            if (result.Model is IQueryable<Payment>)
+            {
+                ViewBag.DataAction = "CommitAllowance";
+                result.ViewName = "~/Views/Invoice/Module/InvoiceItemList.ascx";
             }
             return result;
         }
@@ -755,6 +777,7 @@ namespace WebHome.Controllers
         }
 
 
+        [AllowAnonymous]
         public ActionResult DrawInvoice(InvoiceQueryViewModel viewModel)
         {
             //HtmlRender.RenderToImage
@@ -782,6 +805,7 @@ namespace WebHome.Controllers
             return new EmptyResult();
         }
 
+        [AllowAnonymous]
         public ActionResult DrawAllowance(InvoiceQueryViewModel viewModel)
         {
             String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Invoice/CanvasPrintAllowance") + "?" + Request.Params["QUERY_STRING"];

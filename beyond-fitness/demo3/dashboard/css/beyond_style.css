@@ -190,19 +190,19 @@ body.modal-open {
     .block .head{padding: 8px 10px; float: left; width: 100%;}
         .head-subtitle{font-size: 11px; color: #DDD; float: left; line-height: 13px; margin-bottom: 5px; width: 100%;}
         .block .head-panel{width: 100%; float: left; margin: 30px 0px 0px; position: relative;}    
-            .block .head-panel .hp-info{margin-left: 20px; position: relative;}
+            .block .head-panel .hp-info{margin-left: 5px; position: relative;}
                 .block .head-panel .hp-info:first-child{margin-left: 0px;}
                 .block .head-panel .hp-info.hp-disabled{opacity: 0.5; filter: alpha(opacity=50);}
-                .block .head-panel .hp-info .hp-icon{position: absolute; left: 0px; top: 3px; font-size: 20px;}
+                .block .head-panel .hp-info .hp-icon{position: absolute; left: 1px; top: 0px; font-size: 20px;}
                 .block .head-panel .hp-info .hp-main,
                 .block .head-panel .hp-info .hp-sm{display: block; float: left; margin-left: 27px; clear: both; line-height: 14px;}
                     .block .head-panel .hp-info .hp-main{font-size: 14px; margin-top: 2px;}
-                    .block .head-panel .hp-info .hp-sm{font-size: 11px; opacity: 0.8; filter: alpha(opacity=80); margin-top: 3px; text-align: center;}    
+                    .block .head-panel .hp-info .hp-sm{font-size: 12px; opacity: 0.8; filter: alpha(opacity=80); margin-top: 3px; text-align: center;}    
                         
                         .block .head-panel .hp-info .hp-sm .progress{margin: 3px 0px 2px;}
                     
                     .block .head-panel .hp-info.hp-one{margin-top: 6px;}
-                        .block .head-panel .hp-info.hp-one .hp-icon{font-size: 16px; top: -3px;}
+                        .block .head-panel .hp-info.hp-one .hp-icon{font-size: 14px; top: -3px;}
                         .block .head-panel .hp-info.hp-one .hp-main{font-size: 12px; margin-left: 21px; margin-top: 6px;}
                     
                     .block .head-panel .hp-info.hp-simple{margin-left: 10px;}
@@ -473,4 +473,62 @@ body.modal-open {
     padding: 0px;
     width: 106px;
     height: 66px;
+}
+
+
+.smart-style-5 .dd-handle {
+	margin: 0px 0!important;
+}
+
+.smart-style-5 .dd3-handle {
+	margin: 0px 0!important;
+    border: 0px;
+}
+
+.dd {
+    max-width: 100%!important;
+}
+
+.smart-style-5 .dd-handle>span {
+    color: #777;!important;
+}
+
+.dd3-content {
+    margin: 0px 0;!important;
+    font-size: 14px;!important;
+    border: 0px;!important;
+}
+
+.smart-style-5 .dd-handle, .smart-style-5 .dd3-content>span {
+    color: #777;!important;
+}
+
+.text-pacificblue {
+    color:  #1ca9c9;
+}
+
+.text-carmine {
+    color:  #a90329;
+}
+
+.text-lightgray {
+    color:  #D3D3D3;
+}
+
+.line-legend > span {
+  display: inline-block;
+  margin-right: 25px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.line-legend > span:last-child {
+  margin-right: 5;
+}
+.line-legend > span > i {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 7px;
+  margin-top: -3px;
+  vertical-align: middle;
 }

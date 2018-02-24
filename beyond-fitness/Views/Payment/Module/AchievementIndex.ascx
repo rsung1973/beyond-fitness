@@ -43,6 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
                         <form action="<%= Url.Action("InquirePaymentForAchievement","Payment") %>" method="post" class="smart-form">
+                            <input type="hidden" name="InvoiceType" value="" />
                             <fieldset>
                                 <div class="row">
                                     <section class="col col-xs-12 col-sm-6 col-md-3">

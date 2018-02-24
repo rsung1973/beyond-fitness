@@ -316,19 +316,19 @@ body.modal-open {
     .block .head{padding: 8px 10px; float: left; width: 100%;}
         .head-subtitle{font-size: 11px; color: #DDD; float: left; line-height: 13px; margin-bottom: 5px; width: 100%;}
         .block .head-panel{width: 100%; float: left; margin: 30px 0px 0px; position: relative;}    
-            .block .head-panel .hp-info{margin-left: 20px; position: relative;}
+            .block .head-panel .hp-info{margin-left: 5px; position: relative;}
                 .block .head-panel .hp-info:first-child{margin-left: 0px;}
                 .block .head-panel .hp-info.hp-disabled{opacity: 0.5; filter: alpha(opacity=50);}
-                .block .head-panel .hp-info .hp-icon{position: absolute; left: 0px; top: 3px; font-size: 24px;}
+                .block .head-panel .hp-info .hp-icon{position: absolute; left: 1px; top: 0px; font-size: 20px;}
                 .block .head-panel .hp-info .hp-main,
                 .block .head-panel .hp-info .hp-sm{display: block; float: left; margin-left: 27px; clear: both; line-height: 14px;}
                     .block .head-panel .hp-info .hp-main{font-size: 14px; margin-top: 2px;}
-                    .block .head-panel .hp-info .hp-sm{font-size: 11px; opacity: 0.8; filter: alpha(opacity=80); margin-top: 3px; text-align: center;}    
+                    .block .head-panel .hp-info .hp-sm{font-size: 12px; opacity: 0.8; filter: alpha(opacity=80); margin-top: 3px; text-align: center;}    
                         
                         .block .head-panel .hp-info .hp-sm .progress{margin: 3px 0px 2px;}
                     
                     .block .head-panel .hp-info.hp-one{margin-top: 6px;}
-                        .block .head-panel .hp-info.hp-one .hp-icon{font-size: 16px; top: -3px;}
+                        .block .head-panel .hp-info.hp-one .hp-icon{font-size: 14px; top: -3px;}
                         .block .head-panel .hp-info.hp-one .hp-main{font-size: 12px; margin-left: 21px; margin-top: 6px;}
                     
                     .block .head-panel .hp-info.hp-simple{margin-left: 10px;}
@@ -354,7 +354,7 @@ body.modal-open {
         .block .user_taurus .info .informer.informer-two{right: 10px; top: 10px;}        
         .block .user_taurus .info .informer.informer-three{left: 10px; bottom: 10px;}
         .block .user_taurus .info .informer.informer-four{right: 10px; bottom: 10px;}
-        .block .user_taurus .info .informer span{font-size: 15px; font-weight: bold; display: block;}
+        .block .user_taurus .info .informer span{font-size: 12px; font-weight: bold; display: block;}
             
         .block .user_taurus .user-change{position: relative;}
         .block .user_taurus .user-change-button{width: 96px; height: 96px; font-size: 32px; line-height: 96px; color: #FFF; background: rgba(255,255,255,0.2); 
@@ -362,8 +362,9 @@ body.modal-open {
         .block .user_taurus .user-change:hover .user-change-button{display: block;}
             .block .user-change-row{display: none;}                
       /*div > .block:last-child{margin-bottom: 0px;}*/      
-      
       .contact-images img{margin-bottom: 5px;}
+
+
 /* eof blocks */
 
 

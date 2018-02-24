@@ -33,10 +33,10 @@ namespace WebHome.Controllers
         public ActionResult Index(DailyBookingQueryViewModel viewModel,bool? showTodoTab)
         {
             var profile = HttpContext.GetUser();
-            if (!viewModel.CoachID.HasValue && !profile.IsAssistant())
-            {
-                viewModel.CoachID = profile.UID;
-            }
+            //if (!viewModel.CoachID.HasValue && !profile.IsAssistant())
+            //{
+            //    viewModel.CoachID = profile.UID;
+            //}
 
             ViewBag.ViewModel = viewModel;
             ViewBag.CurrentCoach = models.GetTable<ServingCoach>().Where(s => s.CoachID == viewModel.CoachID).FirstOrDefault();
@@ -964,5 +964,29 @@ namespace WebHome.Controllers
         {
             return View("~/Views/CoachFacet/Module/QueryAttendee.ascx");
         }
+
+        public ActionResult ShowAttenderListByCoach(int coachID)
+        {
+
+            ServingCoach item = models.GetTable<ServingCoach>().Where(u => u.CoachID == coachID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+            }
+
+            return View("~/Views/CoachFacet/Module/ShowAttenderListByCoach.ascx", item);
+
+        }
+
+        public ActionResult SelectCoachFacet(DailyBookingQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+            var item = profile.LoadInstance(models);
+
+            return View("~/Views/CoachFacet/Module/SelectCoachFacet.ascx", item);
+        }
+
     }
 }

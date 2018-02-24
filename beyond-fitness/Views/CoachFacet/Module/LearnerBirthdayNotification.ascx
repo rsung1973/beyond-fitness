@@ -56,22 +56,30 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
 
+        IQueryable<UserProfile> items = models.GetTable<UserProfile>();
+        ServingCoach coach = (ServingCoach)ViewBag.CurrentCoach;
+        if (coach != null)
+        {
+            items = items.Join(models.GetTable<LearnerFitnessAdvisor>().Where(a => a.CoachID == coach.CoachID),
+                                u => u.UID, a => a.UID, (u, a) => u);
+        }
+
         startDay = DateTime.Today.Month*100 + DateTime.Today.Day;
         var endDate = DateTime.Today.AddDays(7);
         endDay = endDate.Month*100 + endDate.Day;
         if (startDay < endDay)
         {
-            _items = models.GetTable<UserProfile>().Where(u => u.BirthdateIndex >= startDay
+            _items = items.Where(u => u.BirthdateIndex >= startDay
                     && u.BirthdateIndex <= endDay)
                 .OrderBy(u => u.BirthdateIndex).ToList();
         }
         else
         {
-            _items = models.GetTable<UserProfile>()
+            _items = items
                     .Where(u => u.BirthdateIndex >= startDay)
                     .OrderBy(u => u.BirthdateIndex)
                     .ToList();
-            _items.AddRange(models.GetTable<UserProfile>()
+            _items.AddRange(items
                         .Where(u => u.BirthdateIndex <= endDay)
                         .OrderBy(u => u.BirthdateIndex));
         }

@@ -249,6 +249,7 @@ namespace WebHome.Models.ViewModel
         public int? DispatchStatus { get; set; }
         public int?[] AllowanceID { get; set; }
         public Naming.DocumentTypeDefinition? DocType { get; set; }
+        public int? InvoiceType { get; set; }
 
     }
 
@@ -260,6 +261,16 @@ namespace WebHome.Models.ViewModel
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
 
+    }
+
+    public class ExerciseGameViewModel
+    {
+        public int? UID { get; set; }
+        public int? Status { get; set; }
+        public decimal? Score { get; set; }
+        public DateTime? TestDate { get; set; }
+        public int? ExerciseID { get; set; }
+        public int? TestID { get; set; }
     }
 
 }

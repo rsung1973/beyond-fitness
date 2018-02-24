@@ -71,7 +71,7 @@
             <fieldset>
                 <div class="row">
                     <section class="col col-12" id="PISessionList">
-                        <%  Html.RenderAction("ListUnpaidPISession", "Payment", new { branchID =  branch!=null ? branch.BranchID : (int?)null }); %>
+                        <%  Html.RenderAction("ListUnpaidPISession", "Payment", new { branchID =  branch!=null ? branch.BranchID : 1 }); %>
                     </section>
                 </div>
             </fieldset>
@@ -105,9 +105,16 @@
                     <section class="col col-5">
                         <label class="label">發票類型</label>
                         <div class="inline-group">
+                            <%  if (_profile.IsAssistant() || _profile.IsSysAdmin())
+                                {   %>
                             <label class="radio">
-                                <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.二聯式 %>" <%= _viewModel.InvoiceType!=Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
+                                <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.二聯式 %>" <%= _viewModel.InvoiceType != Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
                                 <i></i>紙本</label>
+                            <%  }
+                                else
+                                {
+                                    _viewModel.InvoiceType = Naming.InvoiceTypeDefinition.一般稅額計算之電子發票;
+                                } %>
                             <label class="radio">
                                 <input type="radio" name="InvoiceType" value="<%= (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 %>" <%= _viewModel.InvoiceType==Naming.InvoiceTypeDefinition.一般稅額計算之電子發票 ? "checked" : null %> />
                                 <i></i>電子</label>

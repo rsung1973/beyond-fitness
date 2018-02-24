@@ -156,7 +156,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         int[] roleID = new int[] {(int)Naming.RoleID.Accounting,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Coach,
-            (int)Naming.RoleID.Manager,(int)Naming.RoleID.Officer,(int)Naming.RoleID.ViceManager};
+            (int)Naming.RoleID.Manager,(int)Naming.RoleID.Officer,(int)Naming.RoleID.ViceManager,(int)Naming.RoleID.Servitor};
 
         _items = models.EntityList  //.Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted)
             .Join(models.GetTable<UserRole>()
