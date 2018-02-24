@@ -49,6 +49,34 @@
     <!--[if lte IE 9]>
         <link href="css/ie9.css?v=1" rel="stylesheet" />
     <![endif]-->
+    <!-- Facebook Pixel Code -->
+    <script>
+        (function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        })(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '139380543390363');
+        fbq('track', 'PageView');
+        fbq('track', 'AddToWishlist');
+    </script>
+    <noscript>
+        <img height="1" width="1" src="https://www.facebook.com/tr?id=139380543390363&ev=PageView&noscript=1" / >
+    </noscript>
+    <!-- End Facebook Pixel Code -->      
 </head>
 
 <body>
@@ -108,23 +136,23 @@
                             </a>
                             <ul class="z-nav__list">
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
+                                        <a onclick="fbq('track', 'CompleteRegistration');" class="z-nav__link z-nav__link--simple current-position" href="index.html#top">Home</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
+                                        <a onclick="fbq('track', 'Search');" class="z-nav__link z-nav__link--simple" href="index.html#about">About</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#team">Team</a>
+                                        <a onclick="fbq('track', 'AddToWishlist');" class="z-nav__link z-nav__link--simple" href="index.html#ourteam">Team</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
+                                        <a onclick="fbq('track', 'AddToCart');" class="z-nav__link z-nav__link--simple" href="index.html#support">Q＆A</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
+                                        <a onclick="fbq('track', 'ViewContent');" class="z-nav__link z-nav__link--simple" href="blog.html#blog">Blog</a>
                                     </li>
                                     <li class="z-nav__item">
-                                        <a class="z-nav__link z-nav__link--simple" href="#contact">Contact</a>
-                                    </li>                             
+                                        <a onclick="fbq('track', 'AddToPaymentInfo');" class="z-nav__link z-nav__link--simple" href="index.html#contact">Contact</a>
+                                    </li>
                                 </ul>
                             <!-- end list menu item -->
                         </nav>
