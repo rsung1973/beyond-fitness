@@ -40,9 +40,12 @@
                         {   %>
                 <td nowrap="noWrap" class="text-center">
                             <%  if (item.Unit == "秒")
-                                { %>
+                                {
+                                    if(gameRank.RecordID.HasValue)
+                                    {   %>
                             <%= String.Format("{0:00}",(int)gameRank.ExerciseGameResult.Score/60) %>:<%= String.Format("{0:00}",(int)gameRank.ExerciseGameResult.Score%60) %>
-                            <%  }
+                            <%      }
+                                }
                                 else
                                 { %>
                             <%= gameRank.RecordID.HasValue ? gameRank.ExerciseGameResult.Score.ToString() : "--" %> 

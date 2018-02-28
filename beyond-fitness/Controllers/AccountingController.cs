@@ -211,23 +211,22 @@ namespace WebHome.Controllers
 
             var profile = HttpContext.GetUser();
 
-            Expression<Func<LessonTime, bool>> queryExpr = c => false;
             bool hasConditon = false;
 
             if (viewModel.CoachID.HasValue)
             {
                 hasConditon = true;
-                queryExpr = queryExpr.Or(c => c.AttendingCoach == viewModel.CoachID);
+                items = items.Where(c => c.AttendingCoach == viewModel.CoachID);
             }
 
-            if (!hasConditon)
+            //if (!hasConditon)
+            //{
+            if (viewModel.BranchID.HasValue)
             {
-                if (viewModel.BranchID.HasValue)
-                {
-                    hasConditon = true;
-                    queryExpr = queryExpr.Or(c => c.RegisterLesson.LessonPriceType.BranchID == viewModel.BranchID);
-                }
+                hasConditon = true;
+                items = items.Where(c => c.BranchID == viewModel.BranchID);
             }
+            //}
 
 
             if (!hasConditon)
@@ -245,11 +244,6 @@ namespace WebHome.Controllers
                 {
                     items = items.Where(c => c.AttendingCoach == profile.UID);
                 }
-            }
-
-            if (hasConditon)
-            {
-                items = items.Where(queryExpr);
             }
 
             if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthFrom))
@@ -279,25 +273,18 @@ namespace WebHome.Controllers
 
             var profile = HttpContext.GetUser();
 
-            Expression<Func<TuitionAchievement, bool>> queryExpr = c => false;
             bool hasConditon = false;
 
-            if (!hasConditon)
+            if (viewModel.CoachID.HasValue)
             {
-                if (viewModel.CoachID.HasValue)
-                {
-                    hasConditon = true;
-                    queryExpr = queryExpr.Or(c => c.CoachID == viewModel.CoachID);
-                }
+                hasConditon = true;
+                items = items.Where(c => c.CoachID == viewModel.CoachID);
             }
 
-            if (!hasConditon)
+            if (viewModel.BranchID.HasValue)
             {
-                if (viewModel.BranchID.HasValue)
-                {
-                    hasConditon = true;
-                    queryExpr = queryExpr.Or(c => c.Payment.ContractPayment.CourseContract.CourseContractExtension.BranchID == viewModel.BranchID);
-                }
+                hasConditon = true;
+                items = items.Where(c => c.Payment.ContractPayment.CourseContract.CourseContractExtension.BranchID == viewModel.BranchID);
             }
 
             if (!hasConditon)
@@ -320,11 +307,6 @@ namespace WebHome.Controllers
                 {
                     items = items.Where(p => false);
                 }
-            }
-
-            if (hasConditon)
-            {
-                items = items.Where(queryExpr);
             }
 
             if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthFrom))

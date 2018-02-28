@@ -465,9 +465,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertAwardingLesson(AwardingLesson instance);
     partial void UpdateAwardingLesson(AwardingLesson instance);
     partial void DeleteAwardingLesson(AwardingLesson instance);
-    partial void InsertExerciseGameItem(ExerciseGameItem instance);
-    partial void UpdateExerciseGameItem(ExerciseGameItem instance);
-    partial void DeleteExerciseGameItem(ExerciseGameItem instance);
     partial void InsertExerciseGameResult(ExerciseGameResult instance);
     partial void UpdateExerciseGameResult(ExerciseGameResult instance);
     partial void DeleteExerciseGameResult(ExerciseGameResult instance);
@@ -480,6 +477,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertExerciseGameContestant(ExerciseGameContestant instance);
     partial void UpdateExerciseGameContestant(ExerciseGameContestant instance);
     partial void DeleteExerciseGameContestant(ExerciseGameContestant instance);
+    partial void InsertExerciseGameItem(ExerciseGameItem instance);
+    partial void UpdateExerciseGameItem(ExerciseGameItem instance);
+    partial void DeleteExerciseGameItem(ExerciseGameItem instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1680,14 +1680,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		public System.Data.Linq.Table<ExerciseGameItem> ExerciseGameItem
-		{
-			get
-			{
-				return this.GetTable<ExerciseGameItem>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ExerciseGameResult> ExerciseGameResult
 		{
 			get
@@ -1717,6 +1709,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<ExerciseGameContestant>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ExerciseGameItem> ExerciseGameItem
+		{
+			get
+			{
+				return this.GetTable<ExerciseGameItem>();
 			}
 		}
 		
@@ -41999,172 +41999,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExerciseGameItem")]
-	public partial class ExerciseGameItem : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ExerciseID;
-		
-		private string _Exercise;
-		
-		private string _Unit;
-		
-		private EntitySet<ExerciseGameResult> _ExerciseGameResult;
-		
-		private EntitySet<ExerciseGameRank> _ExerciseGameRank;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnExerciseIDChanging(int value);
-    partial void OnExerciseIDChanged();
-    partial void OnExerciseChanging(string value);
-    partial void OnExerciseChanged();
-    partial void OnUnitChanging(string value);
-    partial void OnUnitChanged();
-    #endregion
-		
-		public ExerciseGameItem()
-		{
-			this._ExerciseGameResult = new EntitySet<ExerciseGameResult>(new Action<ExerciseGameResult>(this.attach_ExerciseGameResult), new Action<ExerciseGameResult>(this.detach_ExerciseGameResult));
-			this._ExerciseGameRank = new EntitySet<ExerciseGameRank>(new Action<ExerciseGameRank>(this.attach_ExerciseGameRank), new Action<ExerciseGameRank>(this.detach_ExerciseGameRank));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExerciseID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ExerciseID
-		{
-			get
-			{
-				return this._ExerciseID;
-			}
-			set
-			{
-				if ((this._ExerciseID != value))
-				{
-					this.OnExerciseIDChanging(value);
-					this.SendPropertyChanging();
-					this._ExerciseID = value;
-					this.SendPropertyChanged("ExerciseID");
-					this.OnExerciseIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Exercise", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
-		public string Exercise
-		{
-			get
-			{
-				return this._Exercise;
-			}
-			set
-			{
-				if ((this._Exercise != value))
-				{
-					this.OnExerciseChanging(value);
-					this.SendPropertyChanging();
-					this._Exercise = value;
-					this.SendPropertyChanged("Exercise");
-					this.OnExerciseChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Unit", DbType="NVarChar(16)")]
-		public string Unit
-		{
-			get
-			{
-				return this._Unit;
-			}
-			set
-			{
-				if ((this._Unit != value))
-				{
-					this.OnUnitChanging(value);
-					this.SendPropertyChanging();
-					this._Unit = value;
-					this.SendPropertyChanged("Unit");
-					this.OnUnitChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameResult", Storage="_ExerciseGameResult", ThisKey="ExerciseID", OtherKey="ExerciseID")]
-		public EntitySet<ExerciseGameResult> ExerciseGameResult
-		{
-			get
-			{
-				return this._ExerciseGameResult;
-			}
-			set
-			{
-				this._ExerciseGameResult.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameRank", Storage="_ExerciseGameRank", ThisKey="ExerciseID", OtherKey="ExerciseID")]
-		public EntitySet<ExerciseGameRank> ExerciseGameRank
-		{
-			get
-			{
-				return this._ExerciseGameRank;
-			}
-			set
-			{
-				this._ExerciseGameRank.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ExerciseGameResult(ExerciseGameResult entity)
-		{
-			this.SendPropertyChanging();
-			entity.ExerciseGameItem = this;
-		}
-		
-		private void detach_ExerciseGameResult(ExerciseGameResult entity)
-		{
-			this.SendPropertyChanging();
-			entity.ExerciseGameItem = null;
-		}
-		
-		private void attach_ExerciseGameRank(ExerciseGameRank entity)
-		{
-			this.SendPropertyChanging();
-			entity.ExerciseGameItem = this;
-		}
-		
-		private void detach_ExerciseGameRank(ExerciseGameRank entity)
-		{
-			this.SendPropertyChanging();
-			entity.ExerciseGameItem = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExerciseGameResult")]
 	public partial class ExerciseGameResult : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -42183,9 +42017,9 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<ExerciseGameRank> _ExerciseGameRank;
 		
-		private EntityRef<ExerciseGameItem> _ExerciseGameItem;
-		
 		private EntityRef<ExerciseGameContestant> _ExerciseGameContestant;
+		
+		private EntityRef<ExerciseGameItem> _ExerciseGameItem;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -42206,8 +42040,8 @@ namespace WebHome.Models.DataEntity
 		public ExerciseGameResult()
 		{
 			this._ExerciseGameRank = new EntitySet<ExerciseGameRank>(new Action<ExerciseGameRank>(this.attach_ExerciseGameRank), new Action<ExerciseGameRank>(this.detach_ExerciseGameRank));
-			this._ExerciseGameItem = default(EntityRef<ExerciseGameItem>);
 			this._ExerciseGameContestant = default(EntityRef<ExerciseGameContestant>);
+			this._ExerciseGameItem = default(EntityRef<ExerciseGameItem>);
 			OnCreated();
 		}
 		
@@ -42332,40 +42166,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameResult", Storage="_ExerciseGameItem", ThisKey="ExerciseID", OtherKey="ExerciseID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public ExerciseGameItem ExerciseGameItem
-		{
-			get
-			{
-				return this._ExerciseGameItem.Entity;
-			}
-			set
-			{
-				ExerciseGameItem previousValue = this._ExerciseGameItem.Entity;
-				if (((previousValue != value) 
-							|| (this._ExerciseGameItem.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ExerciseGameItem.Entity = null;
-						previousValue.ExerciseGameResult.Remove(this);
-					}
-					this._ExerciseGameItem.Entity = value;
-					if ((value != null))
-					{
-						value.ExerciseGameResult.Add(this);
-						this._ExerciseID = value.ExerciseID;
-					}
-					else
-					{
-						this._ExerciseID = default(int);
-					}
-					this.SendPropertyChanged("ExerciseGameItem");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameContestant_ExerciseGameResult", Storage="_ExerciseGameContestant", ThisKey="UID", OtherKey="UID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public ExerciseGameContestant ExerciseGameContestant
 		{
@@ -42396,6 +42196,40 @@ namespace WebHome.Models.DataEntity
 						this._UID = default(int);
 					}
 					this.SendPropertyChanged("ExerciseGameContestant");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameResult", Storage="_ExerciseGameItem", ThisKey="ExerciseID", OtherKey="ExerciseID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public ExerciseGameItem ExerciseGameItem
+		{
+			get
+			{
+				return this._ExerciseGameItem.Entity;
+			}
+			set
+			{
+				ExerciseGameItem previousValue = this._ExerciseGameItem.Entity;
+				if (((previousValue != value) 
+							|| (this._ExerciseGameItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ExerciseGameItem.Entity = null;
+						previousValue.ExerciseGameResult.Remove(this);
+					}
+					this._ExerciseGameItem.Entity = value;
+					if ((value != null))
+					{
+						value.ExerciseGameResult.Add(this);
+						this._ExerciseID = value.ExerciseID;
+					}
+					else
+					{
+						this._ExerciseID = default(int);
+					}
+					this.SendPropertyChanged("ExerciseGameItem");
 				}
 			}
 		}
@@ -42449,11 +42283,11 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _Rank;
 		
-		private EntityRef<ExerciseGameItem> _ExerciseGameItem;
-		
 		private EntityRef<ExerciseGameResult> _ExerciseGameResult;
 		
 		private EntityRef<ExerciseGameContestant> _ExerciseGameContestant;
+		
+		private EntityRef<ExerciseGameItem> _ExerciseGameItem;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -42473,9 +42307,9 @@ namespace WebHome.Models.DataEntity
 		
 		public ExerciseGameRank()
 		{
-			this._ExerciseGameItem = default(EntityRef<ExerciseGameItem>);
 			this._ExerciseGameResult = default(EntityRef<ExerciseGameResult>);
 			this._ExerciseGameContestant = default(EntityRef<ExerciseGameContestant>);
+			this._ExerciseGameItem = default(EntityRef<ExerciseGameItem>);
 			OnCreated();
 		}
 		
@@ -42591,40 +42425,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameRank", Storage="_ExerciseGameItem", ThisKey="ExerciseID", OtherKey="ExerciseID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public ExerciseGameItem ExerciseGameItem
-		{
-			get
-			{
-				return this._ExerciseGameItem.Entity;
-			}
-			set
-			{
-				ExerciseGameItem previousValue = this._ExerciseGameItem.Entity;
-				if (((previousValue != value) 
-							|| (this._ExerciseGameItem.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ExerciseGameItem.Entity = null;
-						previousValue.ExerciseGameRank.Remove(this);
-					}
-					this._ExerciseGameItem.Entity = value;
-					if ((value != null))
-					{
-						value.ExerciseGameRank.Add(this);
-						this._ExerciseID = value.ExerciseID;
-					}
-					else
-					{
-						this._ExerciseID = default(int);
-					}
-					this.SendPropertyChanged("ExerciseGameItem");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameResult_ExerciseGameRank", Storage="_ExerciseGameResult", ThisKey="RecordID", OtherKey="TestID", IsForeignKey=true)]
 		public ExerciseGameResult ExerciseGameResult
 		{
@@ -42689,6 +42489,40 @@ namespace WebHome.Models.DataEntity
 						this._UID = default(int);
 					}
 					this.SendPropertyChanged("ExerciseGameContestant");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameRank", Storage="_ExerciseGameItem", ThisKey="ExerciseID", OtherKey="ExerciseID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public ExerciseGameItem ExerciseGameItem
+		{
+			get
+			{
+				return this._ExerciseGameItem.Entity;
+			}
+			set
+			{
+				ExerciseGameItem previousValue = this._ExerciseGameItem.Entity;
+				if (((previousValue != value) 
+							|| (this._ExerciseGameItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ExerciseGameItem.Entity = null;
+						previousValue.ExerciseGameRank.Remove(this);
+					}
+					this._ExerciseGameItem.Entity = value;
+					if ((value != null))
+					{
+						value.ExerciseGameRank.Add(this);
+						this._ExerciseID = value.ExerciseID;
+					}
+					else
+					{
+						this._ExerciseID = default(int);
+					}
+					this.SendPropertyChanged("ExerciseGameItem");
 				}
 			}
 		}
@@ -43125,6 +42959,196 @@ namespace WebHome.Models.DataEntity
 		{
 			this.SendPropertyChanging();
 			entity.ExerciseGameContestant = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ExerciseGameItem")]
+	public partial class ExerciseGameItem : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ExerciseID;
+		
+		private string _Exercise;
+		
+		private string _Unit;
+		
+		private System.Nullable<bool> _Descending;
+		
+		private EntitySet<ExerciseGameResult> _ExerciseGameResult;
+		
+		private EntitySet<ExerciseGameRank> _ExerciseGameRank;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnExerciseIDChanging(int value);
+    partial void OnExerciseIDChanged();
+    partial void OnExerciseChanging(string value);
+    partial void OnExerciseChanged();
+    partial void OnUnitChanging(string value);
+    partial void OnUnitChanged();
+    partial void OnDescendingChanging(System.Nullable<bool> value);
+    partial void OnDescendingChanged();
+    #endregion
+		
+		public ExerciseGameItem()
+		{
+			this._ExerciseGameResult = new EntitySet<ExerciseGameResult>(new Action<ExerciseGameResult>(this.attach_ExerciseGameResult), new Action<ExerciseGameResult>(this.detach_ExerciseGameResult));
+			this._ExerciseGameRank = new EntitySet<ExerciseGameRank>(new Action<ExerciseGameRank>(this.attach_ExerciseGameRank), new Action<ExerciseGameRank>(this.detach_ExerciseGameRank));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ExerciseID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ExerciseID
+		{
+			get
+			{
+				return this._ExerciseID;
+			}
+			set
+			{
+				if ((this._ExerciseID != value))
+				{
+					this.OnExerciseIDChanging(value);
+					this.SendPropertyChanging();
+					this._ExerciseID = value;
+					this.SendPropertyChanged("ExerciseID");
+					this.OnExerciseIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Exercise", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
+		public string Exercise
+		{
+			get
+			{
+				return this._Exercise;
+			}
+			set
+			{
+				if ((this._Exercise != value))
+				{
+					this.OnExerciseChanging(value);
+					this.SendPropertyChanging();
+					this._Exercise = value;
+					this.SendPropertyChanged("Exercise");
+					this.OnExerciseChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Unit", DbType="NVarChar(16)")]
+		public string Unit
+		{
+			get
+			{
+				return this._Unit;
+			}
+			set
+			{
+				if ((this._Unit != value))
+				{
+					this.OnUnitChanging(value);
+					this.SendPropertyChanging();
+					this._Unit = value;
+					this.SendPropertyChanged("Unit");
+					this.OnUnitChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Descending", DbType="Bit")]
+		public System.Nullable<bool> Descending
+		{
+			get
+			{
+				return this._Descending;
+			}
+			set
+			{
+				if ((this._Descending != value))
+				{
+					this.OnDescendingChanging(value);
+					this.SendPropertyChanging();
+					this._Descending = value;
+					this.SendPropertyChanged("Descending");
+					this.OnDescendingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameResult", Storage="_ExerciseGameResult", ThisKey="ExerciseID", OtherKey="ExerciseID")]
+		public EntitySet<ExerciseGameResult> ExerciseGameResult
+		{
+			get
+			{
+				return this._ExerciseGameResult;
+			}
+			set
+			{
+				this._ExerciseGameResult.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ExerciseGameItem_ExerciseGameRank", Storage="_ExerciseGameRank", ThisKey="ExerciseID", OtherKey="ExerciseID")]
+		public EntitySet<ExerciseGameRank> ExerciseGameRank
+		{
+			get
+			{
+				return this._ExerciseGameRank;
+			}
+			set
+			{
+				this._ExerciseGameRank.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ExerciseGameResult(ExerciseGameResult entity)
+		{
+			this.SendPropertyChanging();
+			entity.ExerciseGameItem = this;
+		}
+		
+		private void detach_ExerciseGameResult(ExerciseGameResult entity)
+		{
+			this.SendPropertyChanging();
+			entity.ExerciseGameItem = null;
+		}
+		
+		private void attach_ExerciseGameRank(ExerciseGameRank entity)
+		{
+			this.SendPropertyChanging();
+			entity.ExerciseGameItem = this;
+		}
+		
+		private void detach_ExerciseGameRank(ExerciseGameRank entity)
+		{
+			this.SendPropertyChanging();
+			entity.ExerciseGameItem = null;
 		}
 	}
 	

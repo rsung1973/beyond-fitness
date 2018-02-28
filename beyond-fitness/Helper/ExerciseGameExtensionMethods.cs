@@ -75,6 +75,8 @@ namespace WebHome.Helper
         public static void RefreshExerciseGameRank<TEntity>(this ModelSource<TEntity> models, int exerciseID)
             where TEntity : class, new()
         {
+            var exerciseItem = models.GetTable<ExerciseGameItem>().Where(r => r.ExerciseID == exerciseID).First();
+
             var table = models.GetTable<ExerciseGameRank>();
             models.ExecuteCommand(@"
                                 UPDATE ExerciseGameRank
@@ -89,13 +91,28 @@ namespace WebHome.Helper
                                 WHERE   (ExerciseGameRank.ExerciseID = {0}) AND (ExerciseGameResult.TestDate < {1})",
                 exerciseID, DateTime.Today.AddMonths(-3));
 
-            var items = table
+            IOrderedQueryable<IGrouping<decimal, ExerciseGameRank>> items;
+
+            if (exerciseItem.Descending == false)
+            {
+                items = table
+                .Join(models.GetTable<ExerciseGameContestant>().Where(c => c.Status == (int)Naming.GeneralStatus.Successful),
+                    r => r.UID, c => c.UID, (r, c) => r)
+                .Where(r => r.ExerciseID == exerciseID && r.RecordID.HasValue)
+                .OrderBy(r => r.ExerciseGameResult.Score) //.Take(10)
+                .GroupBy(r => r.ExerciseGameResult.Score)
+                .OrderBy(g => g.Key);
+            }
+            else
+            {
+                items = table
                 .Join(models.GetTable<ExerciseGameContestant>().Where(c => c.Status == (int)Naming.GeneralStatus.Successful),
                     r => r.UID, c => c.UID, (r, c) => r)
                 .Where(r => r.ExerciseID == exerciseID && r.RecordID.HasValue)
                 .OrderByDescending(r => r.ExerciseGameResult.Score) //.Take(10)
                 .GroupBy(r => r.ExerciseGameResult.Score)
                 .OrderByDescending(g => g.Key);
+            }
 
             //int score = Math.Min(10, models.GetTable<ExerciseGameContestant>().Where(c => c.Status == (int)Naming.GeneralStatus.Successful).Count());
             int score = models.GetTable<ExerciseGameContestant>().Where(c => c.Status == (int)Naming.GeneralStatus.Successful).Count();

@@ -467,6 +467,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Frank.html" />
     <Content Include="Galai.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -769,17 +770,21 @@
     <Content Include="images\tooltip\avatar4.jpg" />
     <Content Include="images\tooltip\sample.jpg" />
     <Content Include="index.html" />
+    <Content Include="Iron.html" />
     <Content Include="Jack.html" />
     <Content Include="Joei.html" />
     <Content Include="js\custom.js" />
     <Content Include="js\form.js" />
     <Content Include="js\jQuery-Extended.js" />
     <Content Include="js\min\custom.min.js" />
+    <Content Include="Lucy.html" />
     <Content Include="Peter.html" />
     <Content Include="pricing-101.html" />
     <Content Include="pricing-arena.html" />
     <Content Include="pricing-sogo.html" />
     <Content Include="Sabrina.html" />
+    <Content Include="Sam.html" />
+    <Content Include="Sammie.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include=".DS_Store" />
@@ -966,6 +971,7 @@
     <Content Include="team-101.html" />
     <Content Include="team-arena.html" />
     <Content Include="team-sogo.html" />
+    <Content Include="Ted.html" />
     <Content Include="Vic.html" />
     <Content Include="Views\FrontEnd\Module\CategoryList.ascx" />
     <Content Include="Views\FrontEnd\Module\BlogTitle.ascx" />
