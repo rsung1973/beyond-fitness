@@ -22,11 +22,13 @@
                                                                 ? "團體課程"
                                                                 : _model.RegisterLesson.RegisterLessonEnterprise !=null
                                                                     ? _model.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Description
-                                                                    :   _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.已刪除 || _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.一般課程
-                                                                            ? "P.T session"
-                                                                            : _model.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
-                                                                                ? "P.I session"
-                                                                                :((Naming.LessonPriceStatus)_model.RegisterLesson.LessonPriceType.Status).ToString() %>：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %></span>
+                                                                    :   _model.RegisterLesson.LessonPriceType.Status.LessonTypeStatus() %>：<%= _model.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= _model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value).ToString("HH:mm") %>
+                    <br />
+                    <%  if (_model.TrainingBySelf != 2)
+                        { %>
+                    上課地點：<%= _model.BranchStore.BranchName %>
+                    <%  } %>
+                </span>
             </div>
         </div>
     </div>
@@ -117,9 +119,12 @@
 
     bool couldBeCancelled()
     {
+        if (_model.TrainingBySelf == 2)
+            return true;
+
         if (!_model.ContractTrustTrack.Any(s => s.SettlementID.HasValue))
         {
-            if (_model.GroupingLesson.RegisterLesson.Any(r => r.RegisterLessonContract != null && r.RegisterLessonContract.CourseContract.RevisionList.Count > 0))
+            if (_model.GroupingLesson.RegisterLesson.Any(r => r.RegisterLessonContract != null && r.RegisterLessonContract.CourseContract.RevisionList.Where(v => v.Reason != "展延").Count() > 0))
             {
                 return false;
             }

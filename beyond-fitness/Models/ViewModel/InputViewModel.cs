@@ -273,4 +273,12 @@ namespace WebHome.Models.ViewModel
         public int? TestID { get; set; }
     }
 
+    public class DailyQuestionViewModel
+    {
+        public int? QuestionID { get; set; }
+        public int? SuggestionID { get; set; }
+        public String Question { get; set; }
+
+    }
+
 }

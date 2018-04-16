@@ -59,7 +59,8 @@ namespace WebHome.Models.Locale
             內部訓練 = 1005,
             體驗課程 = 1006,
             點數兌換課程 = 1007,
-            團體學員課程 = 1008
+            團體學員課程 = 1008,
+            在家訓練 = 1009
         }
 
         public enum LessonPriceFeature

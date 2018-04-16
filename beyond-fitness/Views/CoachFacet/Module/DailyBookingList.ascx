@@ -53,7 +53,7 @@
                                     lessonID = item.LessonID
                                 }) %>);'
                                 class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
-                            <%  if (!item.LessonPlan.CommitAttendance.HasValue && _profile.IsAssistant())
+                            <%  if (!item.LessonPlan.CommitAttendance.HasValue && _profile.IsAssistant() && item.TrainingBySelf!=2)
                                 { %>
                             <a href="#" onclick="$global.checkLessonAttendance(<%= item.LessonID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
                             <%  } %>

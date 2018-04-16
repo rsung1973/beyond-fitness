@@ -34,7 +34,7 @@ namespace WebHome.Controllers
             var item = models.GetTable<LessonTime>().Where(i => i.LessonID == lessonID).First();
             return View(item);
         }
-        public ActionResult ShowUndone(int? lessonID,int? direction)
+        public ActionResult ShowUndone(int? lessonID, int? direction)
         {
             var current = models.GetTable<LessonTime>().Where(t => t.LessonID == lessonID).FirstOrDefault();
             if (current != null)
@@ -100,6 +100,12 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/MessageView.ascx", model: "課程資料已信託，不可修改!!");
             }
 
+            var coach = models.GetTable<ServingCoach>().Where(c => c.CoachID == viewModel.CoachID).FirstOrDefault();
+            if (coach == null)
+            {
+                return View("~/Views/Shared/MessageView.ascx", model: "上課教練資料錯誤!!");
+            }
+
             LessonTime timeItem = new LessonTime
             {
                 InvitedCoach = item.InvitedCoach,
@@ -121,7 +127,7 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/JsAlert.ascx");
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/Shared/ReportInputError.ascx");
@@ -131,10 +137,14 @@ namespace WebHome.Controllers
 
             var changeCoach = item.AttendingCoach != viewModel.CoachID;
             item.InvitedCoach = viewModel.CoachID;
-            item.AttendingCoach = viewModel.CoachID;
+            item.AssignLessonAttendingCoach(coach);
             item.ClassTime = viewModel.ClassDate;
             item.DurationInMinutes = timeItem.DurationInMinutes;
             item.BranchID = viewModel.BranchID;
+            foreach(var t in item.ContractTrustTrack)
+            {
+                t.EventDate = viewModel.ClassDate;
+            }
             //item.TrainingBySelf = viewModel.TrainingBySelf;
 
             models.SubmitChanges();
@@ -177,9 +187,13 @@ namespace WebHome.Controllers
                 models.ExecuteCommand("update TuitionInstallment set PayoffDate = {0} where RegisterID = {1} ", item.ClassTime, item.RegisterID);
             }
 
-            return Json(new { result = true, message = "上課時間修改完成!!",
+            return Json(new
+            {
+                result = true,
+                message = "上課時間修改完成!!",
                 changeCoach = changeCoach,
-                classTime = String.Format("{0:yyyy/MM/dd H:mm}", item.ClassTime) + "-" + String.Format("{0:H:mm}", item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value)) });
+                classTime = String.Format("{0:yyyy/MM/dd H:mm}", item.ClassTime) + "-" + String.Format("{0:H:mm}", item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value))
+            });
 
         }
 
@@ -261,8 +275,140 @@ namespace WebHome.Controllers
             return View("~/Views/ClassFacet/Module/BookingByCoach.ascx");
         }
 
+        public ActionResult CommitExercisePurpose(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "學員資料錯誤!!");
+            }
 
+            if (item.PersonalExercisePurpose == null)
+            {
+                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            item.PersonalExercisePurpose.Purpose = viewModel.Purpose;
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = viewModel.Purpose });
+
+        }
+
+        public ActionResult EditPowerAbility(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "學員資料錯誤!!");
+            }
+
+            return View("~/Views/ClassFacet/Module/EditPowerAbility.ascx", item);
+        }
+
+
+        public ActionResult CommitPowerAbility(ExercisePurposeViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditPowerAbility(viewModel);
+            UserProfile item = result.Model as UserProfile;
+
+            if (item == null)
+                return result;
+
+            if (item.PersonalExercisePurpose == null)
+            {
+                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            item.PersonalExercisePurpose.PowerAbility = viewModel.Ability;
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = viewModel.Ability });
+
+        }
+
+
+        public ActionResult CommitPurposeItem(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "學員資料錯誤!!");
+            }
+
+            viewModel.PurposeItem = viewModel.PurposeItem.GetEfficientString();
+            if (viewModel.PurposeItem == null)
+            {
+                return Json(new { result = false, message = "請輸入目標!!" });
+            }
+
+            if (item.PersonalExercisePurpose == null)
+            {
+                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            item.PersonalExercisePurpose.PersonalExercisePurposeItem.Add(new PersonalExercisePurposeItem
+            {
+                PurposeItem = viewModel.PurposeItem
+            });
+
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+
+        }
+
+        public ActionResult ExercisePurposeItemList(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewBag.IsComplete = viewModel.IsComplete;
+
+            var item = models.GetTable<PersonalExercisePurpose>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "學員資料錯誤!!");
+            }
+
+            if (viewModel.IsComplete == true)
+            {
+                return View("~/Views/ClassFacet/Module/CompletePurposeItemList.ascx", item);
+            }
+            else
+            {
+                return View("~/Views/ClassFacet/Module/ExercisePurposeItemList.ascx", item);
+            }
+        }
+
+        public ActionResult DeletePurposeItem(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.DeleteAny<PersonalExercisePurposeItem>(p => p.UID == viewModel.UID && p.ItemID == viewModel.ItemID);
+
+            if (item == null)
+            {
+                return Json(new { result = false, message = "資料錯誤!!" });
+            }
+
+            return Json(new { result = true });
+        }
+
+        public ActionResult CompletePurposeItem(ExercisePurposeViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var item = models.GetTable<PersonalExercisePurposeItem>().Where(p => p.UID == viewModel.UID && p.ItemID == viewModel.ItemID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Json(new { result = false, message = "資料錯誤!!" });
+            }
+
+            item.CompleteDate = DateTime.Now;
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+        }
     }
-
-
 }

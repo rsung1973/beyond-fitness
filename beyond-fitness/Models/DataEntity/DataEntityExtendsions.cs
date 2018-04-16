@@ -113,6 +113,8 @@ namespace WebHome.Models.DataEntity
                 case (int)Naming.LessonPriceStatus.團體學員課程:
                 case (int)Naming.LessonPriceStatus.已刪除:
                     return "P.T.session";
+                case (int)Naming.LessonPriceStatus.在家訓練:
+                    return "S.T.session";
                 default:
                     return ((Naming.LessonPriceStatus)status).ToString();
             }

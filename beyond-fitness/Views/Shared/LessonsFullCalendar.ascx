@@ -13,7 +13,8 @@
 <div id='calendar'></div>
 
 <script>
-    $(document).ready(function () {
+
+    function renderLessonCalender() {
 
         if ($("#calendar").length) {
             var date = new Date();
@@ -76,10 +77,17 @@
                 }
             });
 
-        }
+            debugger;
+            /* hide default buttons */
+            $('.fc-toolbar .fc-right, .fc-toolbar .fc-center').hide();
 
-        /* hide default buttons */
-        $('.fc-toolbar .fc-right, .fc-toolbar .fc-center').hide();
+        }
+      
+    }
+
+    var calendarEventHandler = {};
+
+    function initializeCalendar() {
 
         // calendar prev
         $('#calendar-buttons #btn-prev').click(function () {
@@ -115,10 +123,18 @@
         $('#td').click(function () {
             $('#calendar').fullCalendar('changeView', 'agendaDay');
         });
-      
+    }
+
+    $(function () {
+        initializeCalendar();
+        renderLessonCalender();
     });
 
-    var calendarEventHandler = {};
+    function drawLessonCalender() {
+        $('#calendar').fullCalendar('destroy');
+        renderLessonCalender();
+    }
+
 </script>
 
 <script runat="server">

@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%  if (_model.TrainingID.HasValue)
+<%  if (String.IsNullOrEmpty(_model.BreakIntervalInSecond))
     {
         var rowSpan = String.IsNullOrEmpty(_model.Remark) ? 1 : 2;  %>
         <tr class="rowIdx">

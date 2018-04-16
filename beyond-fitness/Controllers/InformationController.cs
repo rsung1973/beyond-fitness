@@ -352,14 +352,16 @@ namespace WebHome.Controllers
                 {
                     if (stretch == true)
                     {
-                        using (var img = Bitmap.FromFile(item.StoredPath))
+                        using (Bitmap img = new Bitmap(item.StoredPath))
                         {
+                            checkOrientation(img);
+
                             if (img.Width > Settings.Default.ResourceMaxWidth)
                             {
                                 using (Bitmap m = new Bitmap(img, new Size(Settings.Default.ResourceMaxWidth, img.Height * Settings.Default.ResourceMaxWidth / img.Width)))
                                 {
                                     Response.Clear();
-                                    Response.ContentType = "application/octet-stream";
+                                    Response.ContentType = "image/jpeg";
                                     m.Save(Response.OutputStream, ImageFormat.Jpeg);
                                     return new EmptyResult();
                                 }
@@ -371,6 +373,43 @@ namespace WebHome.Controllers
             }
             return new EmptyResult();
 
+        }
+
+        private void checkOrientation(Bitmap img)
+        {
+            if (Array.IndexOf(img.PropertyIdList, 274) > -1)
+            {
+                var orientation = (int)img.GetPropertyItem(274).Value[0];
+                switch (orientation)
+                {
+                    case 1:
+                        // No rotation required.
+                        break;
+                    case 2:
+                        img.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        break;
+                    case 3:
+                        img.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        break;
+                    case 4:
+                        img.RotateFlip(RotateFlipType.Rotate180FlipX);
+                        break;
+                    case 5:
+                        img.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        break;
+                    case 6:
+                        img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        break;
+                    case 7:
+                        img.RotateFlip(RotateFlipType.Rotate270FlipX);
+                        break;
+                    case 8:
+                        img.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        break;
+                }
+                // This EXIF data is now invalid and should be removed.
+                img.RemovePropertyItem(274);
+            }
         }
 
         [AllowAnonymous]
@@ -465,14 +504,14 @@ namespace WebHome.Controllers
             return View();
         }
 
-        [AuthorizedSysAdmin]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Officer })]
         public ActionResult MotivationalWords()
         {
             var items = models.GetTable<Article>().Where(a => a.Document.DocType == (int)Naming.DocumentTypeDefinition.Inspirational);
             return View(items);
         }
 
-        [AuthorizedSysAdmin]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Officer })]
         public ActionResult EditMotivationalWords(int? id)
         {
             var item = models.GetTable<Article>().Where(a => a.DocID == id && a.Document.DocType == (int)Naming.DocumentTypeDefinition.Inspirational).FirstOrDefault();
@@ -494,7 +533,7 @@ namespace WebHome.Controllers
             return View(item);
         }
 
-        [AuthorizedSysAdmin]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Officer })]
         public ActionResult CommitMotivationalWords(MotivationalWordsViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -546,7 +585,7 @@ namespace WebHome.Controllers
             return result;
         }
 
-        [AssistantOrSysAdminAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Officer })]
         public ActionResult DeleteMotivationalWords(int? id)
         {
             var item = models.DeleteAny<Document>(a => a.DocID == id && a.DocType == (int)Naming.DocumentTypeDefinition.Inspirational);

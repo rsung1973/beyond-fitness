@@ -365,7 +365,7 @@ namespace WebHome.Controllers
             }
 
             if (models.GetTable<PDQTask>().Count(t => t.UID == profile.UID && t.PDQQuestion.GroupID == 6) >=
-                models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID)
+                models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID && r.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
                     .Select(r => r.GroupingLesson).Sum(g => g.LessonTime.Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
             {
                 return new EmptyResult();

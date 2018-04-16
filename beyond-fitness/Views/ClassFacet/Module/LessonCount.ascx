@@ -8,39 +8,42 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%--<div class="col-xs-3 col-sm-3 profile-pic">
-    <% _model.RenderUserPicture(Writer, "profileImg"); %>
-    <div class="padding-10">
-        <i class="fa fa-birthday-cake"></i>&nbsp;&nbsp;<span class="txt-color-darken"> <%= _model.YearsOld() %>歲</span>
-        <br />
-        <h4 class="font-md"><strong>
-            <% var totalLessons = _currentLessons.Sum(c => c.Lessons); %>
-            <%= totalLessons
-                    - _currentLessons.Sum(c=>c.AttendedLessons)
-                    - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %> / <%= totalLessons %></strong>
-            <br />
-            <small>剩餘/全部 上課數</small>
-            <br />
-            <strong>
-            <%= _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1))) %> / 
-            <%= _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(l=> l.ClassTime>=DateTime.Today && l.LessonAttendance==null)) %></strong>
-            <br />
-            <small>未完成/已預約 上課數</small>
-        </h4>
-    </div>
-</div>--%>
-<div class="head bg-dot30 np tac">
-    <div class="user_taurus">
-        <div class="info">
-            <a class="informer informer-one">
-                <span>
-                <%  var totalLessons = _currentLessons.Sum(c => (int?)c.Lessons);
-                    var familyLessons =
-                        _currentLessons.Join(models.GetTable<RegisterLessonContract>().Where(c => c.CourseContract.CourseContractType.ContractCode == "CFA"), r => r.RegisterID, c => c.RegisterID, (r, c) => c)
-                            .Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
-                            .Join(models.GetTable<RegisterLesson>(), c => c.RegisterID, r => r.RegisterID, (c, r) => r); %>
-                    <font color="red">
-                        <%  if (familyLessons.Count() > 0)
+<div class="head" style="bottom center no-repeat;">
+    <%  ViewBag.IsLearner = true;
+        Html.RenderPartial("~/Views/Member/Module/MemberPhoto.ascx", _model); %>
+    <div class="head-panel nm">
+        <div class="hp-info pull-left">
+            <div class="hp-icon">
+                <span class="fa fa-birthday-cake"></span>
+            </div>
+            <span class="hp-main"><%= _model.YearsOld() %></span>
+            <span class="hp-sm">Age</span>
+        </div>
+        <div class="hp-info pull-left" onclick="diagnose();" >
+            <div class="hp-icon">
+                <span class="fa fa-child"></span>
+            </div>
+            <span class="hp-main"><%= String.Format("{0:.}",_model.BodyDiagnosis.Count) %></span>
+            <span class="hp-sm">Dx.</span>
+        </div>
+        <div class="hp-info pull-left" onclick="checkBonus(<%= _model.UID %>);" >
+            <div class="hp-icon">
+                <span class="fa fa-gift"></span>
+            </div>
+            <span class="hp-main"><%= _model.BonusPoint(models) ?? 0 %></span>
+            <span class="hp-sm">Point</span>
+        </div>
+        <div class="hp-info pull-left">
+            <div class="hp-icon">
+                <font color="red"><span class="fa fa-tint"></span></font>
+            </div>
+            <%  var totalLessons = _currentLessons.Sum(c => (int?)c.Lessons);
+                        var familyLessons =
+                            _currentLessons.Join(models.GetTable<RegisterLessonContract>().Where(c => c.CourseContract.CourseContractType.ContractCode == "CFA"), r => r.RegisterID, c => c.RegisterID, (r, c) => c)
+                                .Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
+                                .Join(models.GetTable<RegisterLesson>(), c => c.RegisterID, r => r.RegisterID, (c, r) => r); %>
+            <font color="red"><span class="hp-main">
+                <%  if (familyLessons.Count() > 0)
                             {
                                 var exceptFamily = _currentLessons.Where(r => r.RegisterLessonContract == null || r.RegisterLessonContract.CourseContract.CourseContractType.ContractCode != "CFA");    %>
                         <%= totalLessons
@@ -55,30 +58,88 @@
                     - _currentLessons.Sum(c=>c.AttendedLessons)
                     - _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>(int?)c.GroupingLesson.LessonTime.Count(/*l=>l.LessonAttendance!= null*/)) %>
                         <%  } %>
-                    </font> / <%= totalLessons %>
-
-                </span>
-<%--                <span>
-                    <font color="red"><%= _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(l=>l.LessonAttendance== null && l.ClassTime<DateTime.Today.AddDays(1))) %></font> / 
-                    <%= _currentLessons.Where(c=>c.RegisterGroupID.HasValue).Sum(c=>c.GroupingLesson.LessonTime.Count(l=> l.ClassTime>=DateTime.Today && l.LessonAttendance==null)) %>
-                </span>--%>
-            </a>
-            <a href="#" class="informer informer-two" onclick="checkBonus(<%= _model.UID %>);">
-                <span class="fa fa-gift">&nbsp;&nbsp;<b><u><%= _model.BonusPoint(models) ?? 0 %></u></b></span>
-            </a>
-            <a onclick="$global.editLearner(<%= _model.UID %>);" class="informer informer-three">
-                <span class="fa fa-birthday-cake fa-2x">&nbsp;<u><%= _model.YearsOld() %></u></span>
-            </a>
-            <a href="#" class="informer informer-four" onclick="showLearnerAssessment(<%= _model.UID %>,<%= _item.LessonID %>);">
-                <u><span class="fa fa-line-chart fa-2x"></span></u>
-            </a>
-            <a onclick="$global.editLearner(<%= _model.UID %>);">
-                <%  _model.RenderUserPicture(Writer, new { @class = "img-circle img-thumbnail", @style = "width:100px" }); %>
-
-            </a>
+                              </span></font>
+            <span class="hp-sm"><%= totalLessons %></span>
         </div>
+        <div class="hp-info pull-right">
+            <a onclick="editPowerAbility();" id="powerAbility"></a>&nbsp;&nbsp;
+            <script>
+                $(function () {
+                    showAbility('<%= _model.PersonalExercisePurpose!=null && _model.PersonalExercisePurpose.PowerAbility!=null
+                                                                                                                  ? _model.PersonalExercisePurpose.PowerAbility : null %>');
+                });
+                
+                function showAbility(data) {
+                    var $a = $('#powerAbility');
+                    if (data.indexOf('初') >= 0) {
+                        $a.attr('class', 'btn btn-circle btn-warning');
+                    } else if (data.indexOf('中') >= 0) {
+                        $a.attr('class', 'btn btn-circle btn-success');
+                    } else if (data.indexOf('高') >= 0) {
+                        $a.attr('class', 'btn btn-circle btn-danger');
+                    } else {
+                        $a.attr('class', 'btn btn-circle bg-color-blueLight');
+                    }
+                    if (data.indexOf('變') >= 0) {
+                        $a.text('變');
+                    } else if (data.indexOf('守') >= 0) {
+                        $a.text('守');
+                    } else if (data.indexOf('混') >= 0) {
+                        $a.text('混');
+                    } else {
+                        $a.text('無');
+                    }
+                }
+            </script>
+        </div>
+        <%
+            var questItems = models.GetTable<QuestionnaireRequest>()
+                .Where(q => q.UID == _model.UID)
+                .Where(q => !q.Status.HasValue || q.Status == (int)Naming.IncommingMessageStatus.未讀)
+                .Where(q => q.PDQTask.Any());
+
+
+            if (questItems.Count()>0)
+            { %>
+        <div class="hp-info pull-right" onclick="showLearnerQuestionnaire(<%= questItems.OrderByDescending(q => q.QuestionnaireID).Select(q => q.QuestionnaireID).First() %>);">
+            <div class="hp-icon">
+                <span class="fa fa-volume-up text-success"></span>
+            </div>
+            <span class="hp-main text-success"><%= questItems.Count() %></span>
+            <span class="hp-sm text-success">New</span>
+        </div>
+        <%  } %>
     </div>
 </div>
+
+<script>
+    function diagnose(diagnosisID) {
+        showLoading();
+        $.post('<%= Url.Action("Diagnose","FitnessDiagnosis",new { uid = _model.UID }) %>', { 'diagnosisID': diagnosisID }, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
+        });
+    }
+
+    function checkBonus(id) {
+        showLoading();
+        $.post('<%= Url.Action("CheckBonus","LearnerFacet") %>', { 'id': id }, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
+        });
+        return false;
+    }
+
+    function editPowerAbility() {
+        showLoading();
+        $.post('<%= Url.Action("EditPowerAbility","ClassFacet",new { uid = _model.UID }) %>', { }, function (data) {
+            hideLoading();
+            $(data).appendTo($('body'));
+        });
+    }
+
+
+</script>
 
 <script runat="server">
 

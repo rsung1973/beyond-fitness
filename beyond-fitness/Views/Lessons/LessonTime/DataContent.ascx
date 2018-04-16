@@ -145,7 +145,7 @@
                     {
                         ViewBag.ShowOnly = true;
                         ViewBag.DataTableId = "itemList" + _ticks;
-                        Html.RenderPartial("~/Views/Lessons/SingleTrainingExecutionPlan.ascx", _item.TrainingPlan.First().TrainingExecution);
+                        Html.RenderPartial("~/Views/Lessons/Module/TrainingStagePlanView.ascx", _item.TrainingPlan.First().TrainingExecution);
                     }
                     //if (ViewBag.Learner == true)
                     //    Html.RenderPartial("~/Views/Activity/LessonFeedBack.ascx", _item);
@@ -189,9 +189,10 @@
                                 <%  Html.RenderPartial("~/Views/Lessons/DailyFitnessPieView.ascx", _model); %>
                             </div>
                         </div>--%>
-                        <%  ViewBag.ShowOnly = true;
+                        <%--<%  ViewBag.ShowOnly = true;
                             ViewBag.Index = DateTime.Now.Ticks;
-                            Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessment.ascx", assessment); %>
+                            Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessment.ascx", assessment); %>--%>
+                        <%  Html.RenderPartial("~/Views/Training/Module/LessonContentReview.ascx", _model); %>
                     </div>
                 <%  if (ViewBag.LearnerAttendance != true)
                     { %>

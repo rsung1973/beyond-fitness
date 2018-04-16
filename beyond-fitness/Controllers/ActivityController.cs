@@ -195,25 +195,13 @@ namespace WebHome.Controllers
             return ListDailyQuestion();
         }
 
-        public ActionResult AnswerDailyQuestion(int? questionID,int? suggestionID)
+        public ActionResult AnswerDailyQuestion(DailyQuestionViewModel viewModel)
         {
-            UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
-            {
-                return Json(new { result = false });
-            }
 
-            //if (profile.DailyQuestionID == null)
-            //{
-            //    return Json(new { result = false });
-            //}
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
 
-            //var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == profile.DailyQuestionID).FirstOrDefault();
-            //if (item == null)
-            //{
-            //    return Json(new { result = false });
-            //}
-            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == questionID).FirstOrDefault();
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID).FirstOrDefault();
             if (item == null)
             {
                 return Json(new { result = false, message = "回答題目錯誤！！" });
@@ -226,17 +214,22 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "很抱歉，您今日已答過題嘍！！" });
             }
 
+            if(String.IsNullOrEmpty(viewModel.Question) || !item.Question.StartsWith(viewModel.Question))
+            {
+                return View("~/Views/Html/Module/LearnerDailyQuestion.ascx", item);
+            }
+
             var taskItem = new PDQTask
             {
                 QuestionID = item.QuestionID,
-                SuggestionID = suggestionID,
+                SuggestionID = viewModel.SuggestionID,
                 UID = profile.UID,
                 TaskDate = DateTime.Now
             };
             models.GetTable<PDQTask>().InsertOnSubmit(taskItem);
             models.SubmitChanges();
 
-            if (item.PDQSuggestion.Any(s => s.SuggestionID == suggestionID && s.RightAnswer == true))
+            if (item.PDQSuggestion.Any(s => s.SuggestionID == viewModel.SuggestionID && s.RightAnswer == true))
             {
                 if (item.PDQQuestionExtension != null)
                 {

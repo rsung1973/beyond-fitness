@@ -171,6 +171,7 @@
                                                             <option value="1">教練未完成上課</option>
                                                             <option value="3">學員尚未打卡</option>
                                                             <option value="4">P.I session</option>
+                                                            <option value="5">S.T session</option>
                                                         </select>
                                                         <i class="icon-append fa fa-file-word-o"></i>
                                                     </label>

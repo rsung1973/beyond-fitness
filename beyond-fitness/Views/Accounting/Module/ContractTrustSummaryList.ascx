@@ -28,39 +28,46 @@
         <tr>
             <td nowrap="noWrap" class="text-right">
                 <%  var totalInitialAmt = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount);
-                    var totalTrustAmt = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount);%>
-                <%= String.Format("{0:##,###,###,##0}",totalInitialAmt) %></td>
+                    var totalTrustAmt = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount);
+                    var totalBookingAmt = item.ContractTrustSettlement.Sum(s => s.BookingTrustAmount);%>
+                <%= String.Format("{0:##,###,###,##0}",totalInitialAmt.AdjustTrustAmount()) %></td>
             <td nowrap="noWrap" class="text-right">
-                <%  var totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount); %>
-                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("{0:##,###,###,##0}",totalAmt) : "--" %>
+                <%  var totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount);
+                    int T_Amt = totalAmt ?? 0;  %>
+                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); %>
-                <%= totalAmt.HasValue ? String.Format("{0:##,###,###,##0}",totalAmt) : "--" %>
+                <%  totalAmt = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0).Select(s => s.CourseContract).Sum(c => c.TotalCost);  //item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); 
+                    int B_Amt = totalAmt ?? 0;  %>
+                <%= totalAmt.HasValue ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
                 <%   totalAmt = (item.ContractTrustTrack
-                        .Where(t => t.TrustType == "N")
-                        .Select(t=>t.LessonTime.RegisterLesson)
-                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
-                       + (item.ContractTrustTrack.Where(t => t.TrustType == "V")
-                       .Select(t=>t.VoidPayment.Payment)
-                        .Sum(p => p.PayoffAmount) ?? 0); %>
-                <%= totalAmt.HasValue && totalAmt!=0 ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
+                     .Where(t => t.TrustType == "N")
+                     .Select(t => t.LessonTime.RegisterLesson)
+                     .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+                    //+ (item.ContractTrustTrack.Where(t => t.TrustType == "V")
+                    //.Select(t=>t.VoidPayment.Payment)
+                    // .Sum(p => p.PayoffAmount) ?? 0); 
+                    int N_Amt = totalAmt ?? 0; %>
+                <%= totalAmt.HasValue && totalAmt!=0 ? String.Format("({0:##,###,###,##0})",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount); %>
-                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
+                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount);
+                    int S_Amt = totalAmt ?? 0;  %>
+                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount); %>
-                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt) : "--" %>
+                <%  totalAmt = -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount);
+                    int X_Amt = totalAmt ?? 0;%>
+                <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("({0:##,###,###,##0})",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = totalTrustAmt-totalInitialAmt; %>
-                <%= totalAmt>=0 ? String.Format("{0:##,###,###,##0}",totalAmt) : String.Format("({0:##,###,###,##0})",-totalAmt) %>
+                <%  totalAmt = totalBookingAmt-totalInitialAmt;
+                    totalAmt = B_Amt + T_Amt - N_Amt - S_Amt - X_Amt; %>
+                <%= totalAmt>=0 ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : String.Format("({0:##,###,###,##0})",-totalAmt.AdjustTrustAmount()) %>
             </td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}",totalTrustAmt) %></td>
+            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}",totalBookingAmt.AdjustTrustAmount()) %></td>
         </tr>
         <%  } %>
     </tbody>

@@ -77,7 +77,19 @@
                             $global.listContractByNo = function () {
                                 showLoading();
                                 $('#contractList').load('<%= Url.Action("ListContractByContractNo","Payment") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val() }, function (data) {
+                                });
+                                console.log('debug...');
+                                $.post('<%= Url.Action("LoadContract", "CourseContract") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val(), 'contractDateFrom': null }, function (data) {
                                     hideLoading();
+                                    if ($.isPlainObject(data)) {
+                                        if (data.data.length > 0 && !data.data[0].Installment) {
+                                            $('input[name="PayoffAmount"]').val(data.data[0].TotalCost);
+                                            $('input[name="PayoffAmount"]').prop('readOnly', true);
+                                        } else {
+                                            $('input[name="PayoffAmount"]').val('');
+                                            $('input[name="PayoffAmount"]').prop('readOnly', false);
+                                        }
+                                    }
                                 });
                             };
                         });

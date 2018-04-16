@@ -23,12 +23,18 @@
 		    return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 		}
 
-		function drawPie(placeholder, data) {
+		function drawPie(placeholder, data, options) {
 
 		    if (!Array.isArray(data) || data.length == 0) {
 		        placeholder.html('<div class="pie_light"><span>目前尚無資料</span></div>');
 		        return;
 		    }
+
+		    var defaultOpts = {
+		        'showLegend': true
+		    };
+
+		    $.extend(defaultOpts, options);
 
 		    placeholder.unbind();
 		    var plot = $.plot(placeholder, data, {
@@ -52,7 +58,7 @@
 		            }
 		        },
 		        legend: {
-		            show: true,
+		            show: defaultOpts.showLegend,
 		            noColumns: 1, // number of colums in legend table
 		            labelFormatter: null, // fn: string -> string
 		            labelBoxBorderColor: "#000", // border color for the little label boxes
@@ -66,11 +72,14 @@
 		            hoverable: true,
 		            clickable: true
 		        },
+                colors: defaultOpts.colors,
 		    });
 
 		    placeholder.on('click',function (evt) {
 		        plot.draw();
 		    });
+
+		    return plot;
         }
 
 </script>

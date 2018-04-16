@@ -43,6 +43,15 @@ namespace WebHome.Controllers
             ViewBag.ShowTodoTab = showTodoTab;
             var item = models.GetTable<UserProfile>().Where(s => s.UID == profile.UID).FirstOrDefault();
 
+            if (ViewBag.CurrentCoach == null)
+            {
+                if (!item.IsAuthorized(new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Manager }))
+                {
+                    ViewBag.CurrentCoach = item.ServingCoach;
+                    viewModel.CoachID = item.UID;
+                }
+            }
+
             return View("~/Views/CoachFacet/Index.aspx", item);
         }
 
@@ -621,6 +630,10 @@ namespace WebHome.Controllers
             item.DurationInMinutes = timeItem.DurationInMinutes;
             //item.BranchID = viewModel.BranchID;
             //item.TrainingBySelf = viewModel.TrainingBySelf;
+            foreach (var t in item.ContractTrustTrack)
+            {
+                t.EventDate = viewModel.ClassTimeStart.Value;
+            }
 
             models.SubmitChanges();
 

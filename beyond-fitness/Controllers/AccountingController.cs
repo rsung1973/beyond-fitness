@@ -387,11 +387,23 @@ namespace WebHome.Controllers
             return View("~/Views/Accounting/Module/ContractTrustList.ascx", items.Join(trackItems, s => s.SettlementID, t => t.SettlementID, (s, t) => t));
         }
 
+        class _TrustSummaryReportItem
+        {
+            public int 信託期初金額 { get; set; }
+            public int T_轉入 { get; set; }
+            public int B_新增 { get; set; }
+            public int N_返還 { get; set; }
+            public int S_終止 { get; set; }
+            public int X_轉讓 { get; set; }
+            public int 收_付金額 { get; set; }
+            public int 信託期末金額 { get; set; }
+        }
+
         class _TrustTrackReportItem
         {
             public String 處理代碼 { get; set; }
-            public String 入會契約編號 { get; set; }
             public String 契約編號 { get; set; }
+            public String 入會契約編號 { get; set; }
             public String 買受人證號 { get; set; }
             public String 姓名 { get; set; }
             public String 通訊地址 { get; set; }
@@ -403,6 +415,8 @@ namespace WebHome.Controllers
             public String 交付信託日期 { get; set; }
             public DateTime? 契約起日 { get; set; }
             public DateTime? 契約迄日 { get; set; }
+            //public int? 應入信託金額 { get; set; }
+            public int? 代墊信託金額 { get; set; }
         }
 
         public ActionResult CreateTrustTrackXlsx(TrustQueryViewModel viewModel)
@@ -412,20 +426,29 @@ namespace WebHome.Controllers
 
             IQueryable<Settlement> settlementItems = (IQueryable<Settlement>)ViewBag.DataItems;
             var summary = settlementItems.ToArray()
-                .Select(item => new
+                .Select(item => new _TrustSummaryReportItem
                 {
-                    信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount).AdjustTrustAmount().ToString(),
-                    T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount().ToString(),
-                    B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount().ToString(),
-                    N_返還 = String.Format("{0}", (item.ContractTrustTrack.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
-                        .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
-                        + (item.ContractTrustTrack.Where(t => t.TrustType == "V").Select(t => t.VoidPayment.Payment)
-                        .Sum(p => p.PayoffAmount).AdjustTrustAmount() ?? 0)),
-                    S_終止 = String.Format("{0}", -item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount()),
-                    X_轉讓 = String.Format("{0}", -item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount()),
-                    收_付金額 = (item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount)).AdjustTrustAmount().ToString(),
-                    信託期末金額 = item.ContractTrustSettlement.Sum(s => s.TotalTrustAmount).AdjustTrustAmount().ToString(),
-                });
+                    信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount).AdjustTrustAmount(),
+                    T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount(),
+                    //B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount().ToString(),
+                    B_新增 = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0).Select(s => s.CourseContract).Sum(c => c.TotalCost).AdjustTrustAmount(),
+                    N_返還 = 
+                        ((item.ContractTrustTrack.Where(t => t.TrustType == "N")
+                            .Select(t => t.LessonTime.RegisterLesson)
+                            .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+                        /*+ (item.ContractTrustTrack.Where(t => t.TrustType == "V")
+                            .Select(t => t.VoidPayment.Payment)
+                            .Sum(p => p.PayoffAmount) ?? 0)*/).AdjustTrustAmount(),
+                    S_終止 = (-item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount)).AdjustTrustAmount(),
+                    X_轉讓 = (-item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount)).AdjustTrustAmount(),
+                    收_付金額 = (item.ContractTrustSettlement.Sum(s => s.BookingTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount)).AdjustTrustAmount(),
+                    信託期末金額 = item.ContractTrustSettlement.Sum(s => s.BookingTrustAmount).AdjustTrustAmount(),
+                }).ToArray();
+
+            //foreach(var s in summary)
+            //{
+            //    s.收_付金額 = s.B_新增 + s.T_轉入 - s.N_返還 - s.S_終止 - s.X_轉讓;
+            //}
 
             DataTable summaryTable = summary.ToDataTable();
             summaryTable.TableName = "彙總表(差額請領)";
@@ -436,16 +459,19 @@ namespace WebHome.Controllers
             {
                 var contract = models.GetTable<CourseContract>().Where(c => c.ContractID == item.Key).First();
                 var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();
+                var initialTrustAmount = settlement.InitialTrustAmount == 0 ? contract.TotalCost : settlement.BookingTrustAmount;
+                _TrustTrackReportItem headerItem = null;
 
                 var amt = item.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0)
+                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
                 {
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "B";
                     settlement.InitialTrustAmount += amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount());
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    reportItem.當期信託金額 = String.Format("{0}", contract.TotalCost.AdjustTrustAmount());
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   // settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
+                    headerItem = reportItem;
                 }
                 amt = item.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount);
                 if (amt.HasValue && amt > 0)
@@ -454,9 +480,11 @@ namespace WebHome.Controllers
                     reportItem.處理代碼 = "T";
                     settlement.InitialTrustAmount += amt.Value;
                     reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   // settlement.InitialTrustAmount.AdjustTrustAmount();
                     reportItem.轉出買受人証號 = contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo;
                     details.Add(reportItem);
+                    if (headerItem == null)
+                        headerItem = reportItem;
                 }
 
                 amt = item.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
@@ -466,21 +494,27 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
+                    initialTrustAmount -= amt.Value;
                     reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
+                    if (headerItem == null)
+                        headerItem = reportItem;
                 }
 
                 amt = item.Where(t => t.TrustType == "V").Select(t => t.VoidPayment.Payment)
                          .Sum(p => p.PayoffAmount);
-                if (amt.HasValue && amt > 0)
+                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
                 {
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
+                    initialTrustAmount -= amt.Value;
                     reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
+                    if (headerItem == null)
+                        headerItem = reportItem;
                 }
 
                 amt = -item.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount);
@@ -489,9 +523,12 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "X";
                     settlement.InitialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    initialTrustAmount -= amt.Value;
+                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); 
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
+                    if (headerItem == null)
+                        headerItem = reportItem;
                 }
 
                 amt = -item.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount);
@@ -500,9 +537,18 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "S";
                     settlement.InitialTrustAmount -= amt.Value;
+                    initialTrustAmount -= amt.Value;
                     reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
-                    reportItem.信託餘額 = settlement.InitialTrustAmount.AdjustTrustAmount();
+                    reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
+                    if (headerItem == null)
+                        headerItem = reportItem;
+                }
+
+                if (headerItem != null)
+                {
+                    //headerItem.應入信託金額 = settlement.BookingTrustAmount.AdjustTrustAmount();
+                    headerItem.代墊信託金額 = settlement.CurrentLiableAmount.AdjustTrustAmount();
                 }
 
             }
@@ -545,10 +591,12 @@ namespace WebHome.Controllers
                 轉出買受人証號 = null,
                 當期信託金額 = null,
                 信託餘額 = null,
-                契約總價金 = contract.TotalCost,
+                契約總價金 = contract.TotalCost.AdjustTrustAmount(),
                 交付信託日期 = null,
                 契約起日 = contract.ValidFrom.Value.Date,
                 契約迄日 = contract.Expiration.Value.Date,
+                //應入信託金額 = null,
+                代墊信託金額 = null,
             };
         }
 
@@ -581,7 +629,7 @@ namespace WebHome.Controllers
                         ContractID = item.RegisterLessonContract.ContractID,
                         EventDate = firstLesson.ClassTime.Value,
                         LessonID = firstLesson.LessonID,
-                        TrustType = "N"
+                        TrustType = Naming.TrustType.N.ToString()
                     });
                 }
             }

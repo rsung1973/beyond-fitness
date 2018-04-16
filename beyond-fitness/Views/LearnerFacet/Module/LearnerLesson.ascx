@@ -15,14 +15,11 @@
                 <div class="padding-10">
                     <ul class="nav nav-tabs tabs-pull-right">
                         <li class="active">
-                            <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
+                            <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>課表</span></a>
                         </li>
-                        <%  if (_model.TrainingBySelf != 1)
-                            { %>
                         <li>
-                            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+                            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>分析</span></a>
                         </li>
-                        <%  } %>
                     </ul>
                     <div class="tab-content padding-top-10">
                         <div class="tab-pane fade widget-body no-padding-bottom active in" id="os3_<%= _ticks %>">
@@ -36,22 +33,28 @@
                                 {
                                     ViewBag.ShowOnly = true;
                                     ViewBag.DataTableId = "itemList" + _ticks;
-                                    Html.RenderPartial("~/Views/Lessons/SingleTrainingExecutionPlan.ascx", _model.TrainingPlan.First().TrainingExecution);
+                                    //Html.RenderPartial("~/Views/Lessons/SingleTrainingExecutionPlan.ascx", _model.TrainingPlan.First().TrainingExecution);
+                                    Html.RenderPartial("~/Views/Lessons/Module/TrainingStagePlanView.ascx", _model.TrainingPlan.First().TrainingExecution);
                                 }
                                 //if (ViewBag.Learner == true)
                                 //    Html.RenderPartial("~/Views/Activity/LessonFeedBack.ascx", _model);
                                 //else 
                                 //    Html.RenderPartial("~/Views/Activity/ShowLessonFeedBack.ascx", _model); 
-                                %>
+                            %>
                         </div>
-                        <%  if (_model.TrainingBySelf != 1)
-                            { %>
                         <div class="tab-pane fade widget-body no-padding-bottom" id="os5_<%= _ticks %>">
-                            <%  ViewBag.ShowOnly = true;
+                            <%--<%  ViewBag.ShowOnly = true;
                             ViewBag.Index = DateTime.Now.Ticks;
-                            Html.RenderPartial("~/Views/Lessons/LessonAssessment.ascx", _model); %>
+                            Html.RenderPartial("~/Views/Lessons/LessonAssessment.ascx", _model); %>--%>
+                            <%  ViewBag.LessonTime = _model;
+                                ViewBag.ViewOnly = true;
+                                Html.RenderPartial("~/Views/Training/Module/LessonContentReview.ascx", _model.GroupingLesson.RegisterLesson.Where(r => r.UID == _profile.UID).First()); %>
                         </div>
-                        <%  } %>
+                        <script>
+                            $('a[href="#os5_<%= _ticks %>"]').on('shown.bs.tab', function () {
+                                $('#os5_<%= _ticks %>').resize();
+                                });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -81,6 +84,7 @@
     LessonTime _model;
     long _ticks;
     String _viewClassDialog;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -90,6 +94,7 @@
         _model = (LessonTime)this.Model;
         _ticks = DateTime.Now.Ticks;
         _viewClassDialog = "viewClassDialog" + _ticks;
+        _profile = Context.GetUser();
     }
 
 </script>

@@ -27,7 +27,7 @@
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _items = models.GetTable<TrainingType>();
+        _items = models.GetTable<TrainingType>().Where(t => t.TrainingID < 8);
         _trainingID = this.Model as int?;
     }
 

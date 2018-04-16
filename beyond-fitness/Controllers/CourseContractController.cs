@@ -909,6 +909,9 @@ namespace WebHome.Controllers
                         UPDATE UserRole
                         SET        RoleID = {2}
                         WHERE   (UID = {0}) AND (RoleID = {1})", m.UID, (int)Naming.RoleID.Preliminary, (int)Naming.RoleID.Learner);
+
+                models.ExecuteCommand(@"
+                        update UserProfileExtension set CurrentTrial = null where UID = {0}", m.UID);
             }
 
             var pdfFile = item.CreateContractPDF();
@@ -1615,7 +1618,19 @@ namespace WebHome.Controllers
             return new EmptyResult();
         }
 
+        public ActionResult LoadContract(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireContract(viewModel);
+            IQueryable<CourseContract> items = (IQueryable<CourseContract>)result.Model;
 
+            return Json(new
+            {
+                result = true,
+                data = items.ToArray()
+                .Select(c => new { ContractNo = c.ContractNo(), c.TotalCost, c.Installment })
+            }, JsonRequestBehavior.AllowGet);
+
+        }
 
     }
 }

@@ -257,6 +257,7 @@ namespace WebHome.Models.ViewModel
 
         public int? LessonID { get; set; }
         public int? CurrentTrial { get; set; }
+        public Naming.LessonPriceStatus? SessionStatus { get; set; }
 
     }
 
@@ -301,6 +302,7 @@ namespace WebHome.Models.ViewModel
         public String Conclusion { get; set; }
 
         public int ExecutionID { get; set; }
+        public String Emphasis { get; set; }
     }
 
     public class TrainingItemViewModel
@@ -334,6 +336,17 @@ namespace WebHome.Models.ViewModel
         public String BreakInterval { get; set; }
 
         public int? ItemID { get; set; }
+        public int[] AidID { get; set; }
+        public decimal? DurationInSeconds { get; set; }
+        public decimal? DurationInMinutes
+        {
+            get
+            {
+                return DurationInSeconds / 60;
+            }
+        }
+
+        public int? StageID { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -608,6 +621,16 @@ namespace WebHome.Models.ViewModel
 
     }
 
+    public class ExercisePurposeViewModel
+    {
+        public int? UID { get; set; }
+        public String Purpose { get; set; }
+        public DateTime? CompleteDate { get; set; }
+        public String PurposeItem { get; set; }
+        public int? ItemID { get; set; }
+        public bool? IsComplete { get; set; }
+        public String Ability { get; set; }
 
+    }
 
 }

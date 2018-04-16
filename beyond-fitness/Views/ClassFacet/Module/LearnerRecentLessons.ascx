@@ -45,7 +45,6 @@
                     $('#recentLessons').dialog('close');
                 }
             });
-
         });
     </script>
 </div>

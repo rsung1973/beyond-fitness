@@ -374,7 +374,7 @@
                         'userName':'<%= _model.LessonTime.RegisterLesson.UserProfile.FullName() %>',
                         'classDate': '<%= _model.ClassDate.ToString("yyyy-MM-dd") %>',
                         'hour': <%= _model.Hour %>,
-                        'registerID': <%= _model.RegisterID %>
+                        'registerID': <%= _model.RegisterID %>,
                     } , function () {
                         hideLoading();
                         $modal.on('hidden.bs.modal', function (evt) {

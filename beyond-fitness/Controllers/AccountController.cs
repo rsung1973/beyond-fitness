@@ -888,11 +888,19 @@ namespace WebHome.Controllers
             return View("~/Views/Html/Module/LoginPhoto.ascx");
         }
 
-        public ActionResult CheckProfessionalLeve()
+        public ActionResult CheckProfessionalLeve(int? coachID)
         {
-            foreach(var item in models.GetTable<ServingCoach>())
+            var coach = models.GetTable<ServingCoach>().Where(s => s.CoachID == coachID).FirstOrDefault();
+            if (coach == null)
             {
-                models.CheckProfessionalLeve(item);
+                foreach (var item in models.GetTable<ServingCoach>())
+                {
+                    models.CheckProfessionalLeve(item);
+                }
+            }
+            else
+            {
+                models.CheckProfessionalLeve(coach);
             }
             return new EmptyResult();
         }

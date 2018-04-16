@@ -13,18 +13,43 @@
 <div class="widget-body txt-color-white no-padding">
     <div class="row no-padding">
         <!--profile-->
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <%  ViewBag.LessonTime = _model;
                 Html.RenderPartial("~/Views/ClassFacet/Module/LearnerLessonPlan.ascx", _lesson); %>
             <div class="row">
                 <div class="col-sm-12">
                     <hr>
-                    <div class="padding-5">
-                        <ul class="nav nav-tabs tabs-pull-right">
+                    <div class="no-padding">
+                        <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="#calendar_tab" data-toggle="tab">行事曆</a>
+                                <a href="#exercisePurposeTab" data-toggle="tab"><i class="fa fa-flag"></i>近期目標 <span id="exercisePurpose" class="badge bg-color-teal txt-color-white"><%= _lesson.UserProfile.PersonalExercisePurpose!=null ? _lesson.UserProfile.PersonalExercisePurpose.Purpose : null %></span></a>
                             </li>
                             <li>
+                                <a href="#completePurposeTab" data-toggle="tab"><i class="fa fa-flag-checkered"></i>已達成目標</a>
+                            </li>
+                            <li>
+                                <a href="#calendarTab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar"></i>行事曆</a>
+                            </li>
+                            <li>
+                                <a id="smRow" href="#editLessonTab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-heartbeat"></i><span>課表</span></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#contentChartTab" class="hidden-md hidden-lg"><i class="fa fa-pie-chart"></i><span>分析</span></a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#exerciseGameTab" class="hidden-md hidden-lg"><i class="fa fa-trophy"></i><span>競賽</span>
+                                    <%  var contestant = _lesson.UserProfile.ExerciseGameContestant;
+                                        if (contestant != null && contestant.ExerciseGamePersonalRank != null)
+                                        { %>
+                                    <span class="badge bg-color-red txt-color-white">No. <%= contestant.ExerciseGamePersonalRank.Rank %></span>
+                                    <%  }
+                                        else
+                                        { %>
+                                    <span class="badge bg-color-red txt-color-white">Join</span>
+                                    <%  } %>
+                                </a>
+                            </li>
+                            <%--<li>
                                 <a href="#pdq_tab" data-toggle="tab">PDQ</a>
                             </li>
                             <li>
@@ -32,46 +57,31 @@
                             </li>
                             <li>
                                 <a href="#chatlist_tab" data-toggle="tab">運動留言板</a>
-                            </li>
-                            <li>
-                                <a id="smRowTab" href="#smRow" data-toggle="tab" class="hidden-md hidden-lg">課程內容</a>
+                            </li>--%>
+                            <li class="pull-right hidden-md hidden-lg">
+                                <span class="margin-top-10 display-inline">
+                                    <i class="fa fa-rss text-success"></i><span id="classTime"><%= String.Format("{0:yyyy/MM/dd H:mm}",_model.ClassTime) %>-<%= String.Format("{0:H:mm}",_model.ClassTime.Value.AddMinutes(_model.DurationInMinutes.Value)) %></span> <%= _model.AsAttendingCoach.UserProfile.FullName() %>
+                                </span>
                             </li>
                         </ul>
-                        <div id="<%= _tabContent %>" class="tab-content padding-top-10">
-                            <div class="tab-pane fade in active" id="calendar_tab">
-                                <!-- new widget -->
-                                <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
-                                    <header>
-                                        <span class="widget-icon"><i class="fa fa-calendar"></i></span>
-                                        <h2><%= _lesson.UserProfile.FullName() %>行事曆</h2>
-                                        <div class="widget-toolbar">
-                                            <a href="#" class="btn  btn-primary" onclick="bookingByCoach('<%= DateTime.Today.ToString("yyyy-MM-dd") %>');">預約上課</a>
-                                        </div>
-                                    </header>
-                                    <!-- widget div-->
-                                    <div>
-                                        <div class="widget-body bg-color-darken txt-color-white no-padding">
-                                            <!-- content goes here -->
-                                            <div class="widget-body-toolbar">
-
-                                                <div id="calendar-buttons">
-
-                                                    <div class="btn-group">
-                                                        <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
-                                                        <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <% 
-                                                Html.RenderPartial("~/Views/ClassFacet/Module/VipCalendar.ascx", _lesson); %>
-                                            <!-- end content -->
-                                        </div>
-                                    </div>
-                                    <!-- end widget div -->
-                                </div>
-                                <!-- end widget -->
+                        <div id="smTabContainer" class="tab-content padding-5">
+                            <div class="tab-pane fade in active" id="exercisePurposeTab">
+                                <%  Html.RenderPartial("~/Views/ClassFacet/Module/ExercisePurpose.ascx", _lesson.UserProfile); %>
                             </div>
-                            <div class="tab-pane fade" id="pdq_tab">
+                            <div class="tab-pane fade" id="completePurposeTab">
+                                <table id="completePurposeList" class="table table-striped table-bordered table-hover" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>完成日</th>
+                                            <th>目標</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%  Html.RenderPartial("~/Views/ClassFacet/Module/CompletePurposeItemList.ascx", _lesson.UserProfile.PersonalExercisePurpose); %>
+                                    </tbody>
+                                </table>                            
+                            </div>
+                            <%--                            <div class="tab-pane fade" id="pdq_tab">
                                 <%  Html.RenderPartial("~/Views/ClassFacet/Module/ShowPAQPDQ.ascx", _lesson.UserProfile); %>
                             </div>
                             <div class="tab-pane fade" id="questionaire_tab">
@@ -81,9 +91,7 @@
                                 <div class="col-md-12 block block-drop-shadow" id="chatboard">
                                     <%  Html.RenderPartial("~/Views/CoachFacet/Module/LessonCommentList.ascx",_lesson.UserProfile); %>
                                 </div>
-                            </div>
-                            <div class="tab-pane fade" id="smRow">
-                            </div>
+                            </div>--%>
                         </div>
                     </div>
                 </div>
@@ -91,7 +99,7 @@
         </div>
         <!--end profile-->
         <!--content-->
-        <div class="col-md-7 col-lg-7 hidden-xs hidden-sm" id="lgRow">
+        <div class="col-md-8 col-lg-8 hidden-xs hidden-sm">
             <div class="padding-5" id="currentContent">
                 <%  ViewBag.LessonTime = _model; %>
                 <%  Html.RenderPartial("~/Views/ClassFacet/Module/LessonContent.ascx", _lesson); %>
@@ -109,45 +117,89 @@
                 hideLoading();
                 if(data.result) {
                     alert("資料已複製!!");
-                    showLoading();
+                    loadTrainingStagePlan();
+
+                    var $tab = $('#lgTabContainer .in.active');
+                    if ($tab.length == 0) { //小版
+                        $tab = $('#smTabContainer .in.active');
+                        $('li.active').removeClass('active');
+                        $('#smRow').closest('li').addClass('active');
+                    } else {
+                        $('#currentContent li.active').removeClass('active');
+                        $('#lgRow').closest('li').addClass('active');
+                    }
+                    $tab.removeClass('in').removeClass('active');
+                    $('#editLessonTab').addClass('in active');
+
+<%--                    showLoading();
                     $('#currentContent').load('<%= Url.Action("LessonContent","ClassFacet",new { lessonID = _model.LessonID, registerID = _lesson.RegisterID }) %>',{},function(data){
                         hideLoading();
-                    });
+
+                    });--%>
                 } else {
                     alert(data.message);
                 }
             });
         };
 
-        if ($('#smRowTab').css('display') == 'block') {
-<%--            $('ul.nav-tabs.tabs-pull-right li.active').removeClass('active');
+        if ($('#smRow').css('display') == 'block') {
+            <%--            $('ul.nav-tabs.tabs-pull-right li.active').removeClass('active');
             $('ul.nav-tabs.tabs-pull-right li:eq(4)').addClass('active');
-            $('#<%= _tabContent %> div.active.in').removeClass('active in');
-            $('#<%= _tabContent %> div:eq(4)').addClass('active in');--%>
-            $('#currentContent').appendTo($('#smRow'));
+            $('#smTabContainer div.active.in').removeClass('active in');
+            $('#smTabContainer div:eq(4)').addClass('active in');--%>
+
+
+            $('#exerciseGameTab').appendTo($('#smTabContainer'));
+            $('#calendarTab').appendTo($('#smTabContainer'));
+            $('#editLessonTab').appendTo($('#smTabContainer'));
+            $('#contentChartTab').appendTo($('#smTabContainer'));
             console.log($('#currentContent').css('display'));
+
+            drawLessonCalender();
+            $('#calendarTab').removeClass('in').removeClass('active');
 
         } else if ($('#lgRow').css('display') == 'block') {
 
         }
 
         $(window).resize(function () {
-            if ($('#smRowTab').css('display') == 'block') {
-                if($('#smRow').find('#currentContent').length==0) {
-<%--                    $('ul.nav-tabs.tabs-pull-right li.active').removeClass('active');
-                    $('ul.nav-tabs.tabs-pull-right li:eq(4)').addClass('active');
-                    $('#<%= _tabContent %> div.active.in').removeClass('active in');
-                    $('#<%= _tabContent %> div:eq(4)').addClass('active in');--%>
-                    $('#currentContent').appendTo($('#smRow'));
-                }
+            if ($('#smRow').css('display') == 'block') {
+
+                $('#lgTabContainer .in.active').removeClass('in').removeClass('active');
+                $('#currentContent li.active').removeClass('active');
+
+                $('#exerciseGameTab').appendTo($('#smTabContainer'));
+                $('#calendarTab').appendTo($('#smTabContainer'));
+                $('#editLessonTab').appendTo($('#smTabContainer'));
+                $('#contentChartTab').appendTo($('#smTabContainer'));
+
             } else if ($('#lgRow').css('display') == 'block') {
-                if($('#lgRow').find('#currentContent').length==0) {
-                    $('#currentContent').appendTo($('#lgRow'));
-                    $('ul.nav-tabs.tabs-pull-right li.active').removeClass('active');
-                    $('ul.nav-tabs.tabs-pull-right li:eq(0)').addClass('active');
-                    $('#<%= _tabContent %> div.active.in').removeClass('active in');
-                    $('#<%= _tabContent %> div:eq(0)').addClass('active in');
-                }
+
+                $('#exerciseGameTab').appendTo($('#lgTabContainer'));
+                $('#calendarTab').appendTo($('#lgTabContainer'));
+                $('#editLessonTab').appendTo($('#lgTabContainer'));
+                $('#contentChartTab').appendTo($('#lgTabContainer'));
+                //if($('#lgRow').find('#currentContent').length==0) {
+                //    $('#currentContent').appendTo($('#lgRow'));
+                //    $('ul.nav-tabs.tabs-pull-right li.active').removeClass('active');
+                //    $('ul.nav-tabs.tabs-pull-right li:eq(0)').addClass('active');
+                //    $('#smTabContainer div.active.in').removeClass('active in');
+                //    $('#smTabContainer div:eq(0)').addClass('active in');
+                //}
+
+                var $tabs = $('.in.active');
+                if($tabs.length==1) {
+                    var $lgTabs = $('#lgTabContainer .in.active');
+                    if($lgTabs.length==1) {
+                        $('a[href="#exercisePurposeTab"]').closest('li').addClass('active');
+                        $('#exercisePurposeTab').addClass('in active');
+
+                        $('#currentContent a[href="#' + $lgTabs.attr('id') + '"]').closest('li').addClass('active');
+                    } else {
+                        $('#calendarTab').addClass('in active');
+                        $('#currentContent a[href="#calendarTab"]').closest('li').addClass('active');
+                    }
+                } 
             }
         });
 

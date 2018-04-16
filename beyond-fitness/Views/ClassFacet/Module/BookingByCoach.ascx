@@ -12,39 +12,61 @@
     <form class="smart-form" id="bookingForm" autofocus>
         <fieldset>
             <div class="row">
-                <section class="col col-4">
+                <section class="col col-3">
+                    <label class="label">請選擇上課教練</label>
+                    <label class="select">
+                        <select name="CoachID">
+                            <%  if (_profile.IsAssistant())
+                                {
+                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
+                                }
+                                else if (_profile.IsManager() || _profile.IsViceManager())
+                                {
+                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", _profile.GetServingCoachInSameStore(models));
+                                }
+                                else
+                                {
+                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
+                                } %>                             
+                        </select>
+                        <%  if (_profile.IsCoach())
+                            { %>
+                        <script>
+                            $(function () {
+                                $('select[name="CoachID"]').val('<%= _profile.UID %>');
+                            });
+                        </script>
+                        <%  } %>
+                        <%  else if (_viewModel.CoachID.HasValue)
+                            { %>
+                        <script>
+                            $(function () {
+                                $('select[name="CoachID"]').val('<%= _viewModel.CoachID %>');
+                            });
+                        </script>
+                        <%  } %>
+                        <i class="icon-append fa fa-clock-o"></i>
+                    </label>
+                </section>
+                <section class="col col-3">
                     <label class="label">請選擇課程類別</label>
                     <label class="select">
                         <select id="lessonType">
                             <option value="0">P.T session</option>
-                            <option value="1">P.I session</option>
+                            <option value="<%= (int)Naming.LessonPriceStatus.自主訓練 %>">P.I session</option>
+                            <option value="<%= (int)Naming.LessonPriceStatus.在家訓練 %>">S.T session</option>
                         </select>
-                        <script>
-                            $('#lessonType').on('change', function (evt) {
-                                var lessonType = $(this).val();
-
-                                switch (lessonType)
-                                {
-                                    case '0':
-                                        $('.part0').css('display', 'block');
-                                        break;
-                                    case '1':
-                                        $('.part0').css('display', 'none');
-                                        break;
-                                }
-                            });
-                        </script>
                         <i class="icon-append fa fa-clock-o"></i>
                     </label>
                 </section>
-                <section class="col col-4">
+                <section class="col col-3">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
                         <i class="icon-append fa fa-calendar"></i>
                         <input type="text" name="ClassDate" id="classDate" class="form-control date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.LessonDate) %>" placeholder="請輸入上課開始時間" />
                     </label>
                 </section>
-                <section class="col col-4">
+                <section class="col col-3 part1">
                     <label class="label">請選擇上課地點</label>
                     <label class="select">
                         <select name="BranchID">
@@ -96,16 +118,42 @@
                 </section>
             </div>
         </fieldset>
-        <input type="hidden" name="CoachID" value="<%= _viewModel.CoachID %>" />
+        <%--<input type="hidden" name="CoachID" value="<%= _viewModel.CoachID %>" />--%>
         <input type="hidden" name="UID" value="<%= _viewModel.UID %>" />
     </form>
     <script>
         $(function () {
+
+            var $datetime;
+
+            $('#lessonType').on('change', function (evt) {
+                var lessonType = $(this).val();
+                debugger;
+                switch (lessonType) {
+                    case '0':
+                        $('.part0').css('display', 'block');
+                        $('.part1').css('display', 'block');
+                        $datetime.data('datetimepicker').setStartDate('<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>');
+                        break;
+                    case '<%= (int)Naming.LessonPriceStatus.自主訓練 %>':
+                        $('.part0').css('display', 'none');
+                        $('.part1').css('display', 'block');
+                        $datetime.data('datetimepicker').setStartDate('<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>');
+                        break;
+                    case '<%= (int)Naming.LessonPriceStatus.在家訓練 %>':
+                        $('.part0').css('display', 'none');
+                        $('.part1').css('display', 'none');
+                        $datetime.data('datetimepicker').setStartDate(Infinity);
+                        break;
+                }
+            });
+
             $global.commitBooking = function (callback) {
+                var $formData = $('#bookingForm').serializeObject();
                 var lessonType = $('#lessonType').val();
                 switch (lessonType) {
                     case '0':
-                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize(), function (data) {
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $formData, function (data) {
                             if (data.result) {
                                 smartAlert(data.message);
                                 callback();
@@ -114,8 +162,22 @@
                             }
                         });
                         break;
-                    case '1':
-                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $('#bookingForm').serialize()+'&trainingBySelf=1', function (data) {
+                    case '<%= (int)Naming.LessonPriceStatus.自主訓練 %>':
+                        $formData.sessionStatus = lessonType;
+                        $formData.trainingBySelf = 1;
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $formData, function (data) {
+                            if (data.result) {
+                                smartAlert(data.message);
+                                callback();
+                            } else {
+                                $(data).appendTo('body').remove();
+                            }
+                        });
+                        break;
+                    case '<%= (int)Naming.LessonPriceStatus.在家訓練 %>':
+                        $formData.sessionStatus = lessonType;
+                        $formData.trainingBySelf = 2;
+                        $.post('<%= Url.Action("CommitBookingByCoach","Lessons") %>', $formData, function (data) {
                             if (data.result) {
                                 smartAlert(data.message);
                                 callback();
@@ -126,20 +188,24 @@
                         break;
                 }
             };
+
+            debugger;
+            $datetime = $('.input_time').datetimepicker({
+                language: 'zh-TW',
+                weekStart: 0,
+                todayBtn: 1,
+                clearBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 0,
+                minuteStep: 30,
+                forceParse: 0,
+                startDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>'
+            });
+
         });
-        $('.input_time').datetimepicker({
-            language: 'zh-TW',
-            weekStart: 0,
-            todayBtn: 1,
-            clearBtn: 1,
-            autoclose: 1,
-            todayHighlight: 1,
-            startView: 2,
-            minView: 0,
-            minuteStep: 30,
-            forceParse: 0,
-            startDate: '<%= String.Format("{0:yyyy-MM-dd}",DateTime.Today) %>'
-        });
+
     </script>
 </div>
 

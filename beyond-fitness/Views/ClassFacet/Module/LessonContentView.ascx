@@ -13,18 +13,15 @@
 <%  var prefix = "content" + DateTime.Now.Ticks + "_"; %>
 <ul class="nav nav-tabs">
     <li class="active">
-        <a data-toggle="tab" class="editLessonTab" href="#<%= prefix %>2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
+        <a data-toggle="tab" class="editLessonTab" href="#<%= prefix %>2"><i class="fa fa-heartbeat"></i><span>課表</span></a>
     </li>
-    <%  if (_item.TrainingBySelf != 1)
-        { %>
     <li>
-        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-pie-chart"></i><span>分析</span></a>
     </li>
-    <%  } %>
     <li class="pull-right">
         <span class="margin-top-10 display-inline">
             <a href="#" onclick="showLoading();window.location.href = '<%= Url.Action("ClassIndex","ClassFacet",new { lessonID = _item.LessonID }) %>';" class="btn btn-xs bg-color-yellow">編輯</a>
-            <i class="fa fa-rss text-success"></i><span id="classTime"><%= String.Format("{0:yyyy/MM/dd H:mm}",_item.ClassTime) %>-<%= String.Format("{0:H:mm}",_item.ClassTime.Value.AddMinutes(_item.DurationInMinutes.Value)) %></span> (體能顧問：<%= _item.AsAttendingCoach.UserProfile.FullName() %>)
+            <i class="fa fa-rss text-success"></i><span id="classTime"><%= String.Format("{0:yyyy/MM/dd H:mm}",_item.ClassTime) %>-<%= String.Format("{0:H:mm}",_item.ClassTime.Value.AddMinutes(_item.DurationInMinutes.Value)) %></span> <%= _item.AsAttendingCoach.UserProfile.FullName() %>
         </span>
     </li>
 </ul>
@@ -36,48 +33,22 @@
                 if (_item.TrainingPlan.Count > 0)
                     {
                         ViewBag.ShowOnly = true;
-                        Html.RenderPartial("~/Views/Lessons/SingleTrainingExecutionPlan.ascx", _item.TrainingPlan.First().TrainingExecution);
+                        Html.RenderPartial("~/Views/Lessons/Module/TrainingStagePlanView.ascx", _item.TrainingPlan.First().TrainingExecution);
                     } %>
     </div>
-    <%  if (_item.TrainingBySelf != 1)
-        { %>
     <div class="tab-pane fade" id="<%= prefix %>4">
-        <%--<div class="jarviswidget" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-colorbutton="false" data-widget-fullscreenbutton="false">
-            <!-- widget options:
-                                                                                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-                                                                                
-                                                                                data-widget-colorbutton="false" 
-                                                                                data-widget-editbutton="false"
-                                                                                data-widget-togglebutton="false"
-                                                                                data-widget-deletebutton="false"
-                                                                                data-widget-fullscreenbutton="false"
-                                                                                data-widget-custombutton="false"
-                                                                                data-widget-collapsed="true" 
-                                                                                data-widget-sortable="false"
-                                                                                
-                                                                            -->
-            <header>
-                <span class="widget-icon"><i class="fa fa-edit"></i></span>
-                <h2>身體健康指數 </h2>
-            </header>
-
-            <!-- widget div-->
-            <div>
-                <!-- widget content -->
-                <div class="widget-body">
-                    <%  Html.RenderPartial("~/Views/Activity/HealthIndex.ascx", _model.UserProfile); %>
-                </div>
-                <!-- end widget content -->
-            </div>
-            <!-- end widget div -->
-
-        </div>--%>
-        <%  
+<%--        <%  
             var assessment = _item.LessonFitnessAssessment.Where(f => f.UID == _model.UID).FirstOrDefault();
             ViewBag.Index = 0;
-            Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessment.ascx", assessment); %>
+            Html.RenderPartial("~/Views/Lessons/LessonLearnerAssessment.ascx", assessment); %>--%>
+        <%  ViewBag.ViewOnly = true;
+            Html.RenderPartial("~/Views/Training/Module/LessonContentReview.ascx", _model); %>
     </div>
-    <%  } %>
+    <script>
+        $('a[href="#<%= prefix %>4"]').on('shown.bs.tab', function () {
+            $('#<%= prefix %>4').resize();
+        });
+    </script>
 </div>
 
 <%--<%  Html.RenderPartial("~/Views/Shared/MorrisGraphView.ascx"); %>--%>

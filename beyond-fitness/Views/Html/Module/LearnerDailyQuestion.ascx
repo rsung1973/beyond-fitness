@@ -9,9 +9,9 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="questionDialog" title="每日問與答" class="bg-color-darken">
+<div id="<%= _dialogID %>" title="每日問與答" class="bg-color-darken">
     <div class="panel panel-default bg-color-darken">
-        <form action="<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>" method="post" id="dailyAns" class="smart-form">
+        <form action="<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>" method="post" class="smart-form">
             <div class="panel-body status smart-form vote">
                 <div class="who clearfix">
                     <% _model.UserProfile.RenderUserPicture(Writer, new { @class = "busy" }); %>
@@ -31,14 +31,14 @@
                     </li>
                     <%  } %>
                 </ul>
-                <footer>
-                    <button id="btnAnswer" type="button" class="btn btn-primary">
-                        送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                    </button>
-                    <button id="btnDismiss" type="button" class="btn btn-default" data-dismiss="modal">
-                        取消
-                    </button>
-                </footer>
+            <footer>
+                <button type="button" class="btn btn-primary">
+                    送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    取消
+                </button>
+            </footer>
 
                 <div class="message">
                     <i class="fa fa-check fa-lg"></i>
@@ -54,81 +54,75 @@
             </div>
         </form>
     </div>
+    <script>
+
+        $(function () {
+
+            $('#<%= _dialogID %>').dialog({
+                //autoOpen: false,
+                resizable: true,
+                modal: true,
+                width: "auto",
+                height: "auto",
+                title: "<h4 class='modal-title'><i class='fa fa-fw fa-quora'></i>  每日問與答</h4>",
+                close: function (event, ui) {
+                    $('#<%= _dialogID %>').remove();
+                }
+            });
+            debugger;
+            $btnAnswer = $('#<%= _dialogID %> button.btn-primary');
+
+            $btnAnswer.on('click', function (evt) {
+                var event = event || window.event;
+                var $form = $(event.target).closest('form');
+                var $formData = $form.serializeObject();
+                $formData.question = $form.find('strong').text().substring(0, 5);
+
+                var $dailyAns = $('#<%= _dialogID %> form');
+                var $ans = $dailyAns.find('input:radio[name="suggestionID"]:checked');
+                if ($ans.length == 0) {
+                    alert('請選擇!!');
+                    return;
+                }
+
+                showLoading();
+                $.post('<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>', $formData, function (data) {
+                    hideLoading();
+                    $dailyAns.find('footer').remove();
+
+                    if ($.isPlainObject(data)) {
+                        if (data.result) {
+                            $dailyAns.find('.message').css('display', 'block')
+                            .find('p').text('恭喜你答對囉，可獲得點數' + data.message + '點，集滿一定點數後有意想不到的驚喜喔！');
+                        } else {
+                            //$modal.modal('hide');
+                            if (data.message) {
+                                $dailyAns.find('.errormessage p').text(data.message);
+                            }
+                            $dailyAns.find('.errormessage').css('display', 'block');
+                        }
+                        $('#<%= _dialogID %>').scrollTop(300);
+                    } else {
+                        $(data).appendTo($('body'));
+                        $('#<%= _dialogID %>').dialog('close');
+                    }
+                });
+
+                $dailyAns.find('input:radio[name="suggestionID"]').prop('disabled', true);
+
+            });
+
+            $('#<%= _dialogID %> button[data-dismiss="modal"]').on('click', function (evt) {
+                $('#<%= _dialogID %>').dialog('close');
+            });
+
+        });
+
+    </script>
 </div>
 
 
-<script>
 
-    $(function () {
-
-        $('#questionDialog').dialog({
-            //autoOpen: false,
-            resizable: true,
-            modal: true,
-            width: "auto",
-            height: "auto",
-            title: "<h4 class='modal-title'><i class='fa fa-fw fa-quora'></i>  每日問與答</h4>",
-            close: function (event, ui) {
-                $('#questionDialog').remove();
-            }
-        });
-
-        $('#btnAnswer').on('click', function (evt) {
-
-            var $ans = $('#dailyAns input:radio[name="suggestionID"]:checked');
-            if ($ans.length == 0) {
-                alert('請選擇!!');
-                return;
-            }
-
-            showLoading();
-            $.post('<%= Url.Action("AnswerDailyQuestion","Activity",new { _model.QuestionID }) %>', { 'suggestionID': $ans.val() }, function (data) {
-                hideLoading();
-                $('#dailyAns footer').remove();
-                if (data.result) {
-                    $('#dailyAns .message').css('display', 'block')
-                    .find('p').text('恭喜你答對囉，可獲得點數' + data.message + '點，集滿一定點數後有意想不到的驚喜喔！');
-                } else {
-                    //$modal.modal('hide');
-                    if (data.message) {
-                        $('#dailyAns .errormessage p').text(data.message);
-                    }
-                    $('#dailyAns .errormessage').css('display', 'block');
-                }
-                $('#questionDialog').scrollTop(300);
-            });
-
-            $('#dailyAns input:radio[name="suggestionID"]').prop('disabled', true);
-                                    
-            <%--            $('#dailyAns').ajaxForm({
-                beforeSubmit: function () {
-                    showLoading(true);
-                },
-                success: function (data) {
-                    hideLoading();
-                    $('#dailyAns footer').remove();
-                    if (data.result) {
-                        $('#dailyAns .message').css('display', 'block')
-                        .find('p').text('恭喜你答對囉，可獲得點數' + data.message + '點，集滿一定點數後有意想不到的驚喜喔！');
-                    } else {
-                        //$modal.modal('hide');
-                        $('#dailyAns .errormessage').css('display', 'block');
-                    }
-                    $('#questionDialog').scrollTop(300);
-                },
-                error: function () {
-                }
-            }).submit();    --%>
-
-        });
-
-        $('#btnDismiss').on('click', function (evt) {
-            $('#questionDialog').dialog('close');
-        });
-
-    });
-
-</script>
 <script runat="server">
 
     ModelStateDictionary _modelState;
@@ -136,6 +130,7 @@
     PDQQuestion _model;
     UserProfile _userProfile;
     RegisterLesson _lesson;
+    String _dialogID = "learnerQuest" + DateTime.Now.Ticks;
 
     protected override void OnInit(EventArgs e)
     {

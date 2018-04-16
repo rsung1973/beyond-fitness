@@ -42,11 +42,13 @@
         <a href="#" class="informer informer-three" id="undolistDialog_link">
             <span class="fa fa-check-square-o">&nbsp;&nbsp;<b><u><%= _uncheckedLessons.Count() %></u></b></span>
         </a>
-        <a href="#chatboard" class="informer informer-four">
+        <%--<a href="#chatboard" class="informer informer-four">
             <span class="fa fa-envelope">&nbsp;&nbsp;<b><u><%= models.GetTable<LessonComment>().Where(u => u.HearerID == _model.UID)
                 .Where(u => u.Status == (int)Naming.IncommingMessageStatus.未讀).Count() %></u></b></span>
-        </a>
+        </a>--%>
+        <a onclick="$('#updateProfile_link').click();">
         <%  _model.RenderUserPicture(Writer, new { @class = "img-circle img-thumbnail", @style = "width:100px" }); %>
+        </a>
     </div>
 </div>
 
@@ -101,10 +103,7 @@
             .OrderByDescending(r => r.RegisterID);
         _currentLessons = _items.Where(i => i.Attended != (int)Naming.LessonStatus.課程結束);
 
-        _uncheckedLessons = models.GetTable<LessonTime>()
-            //.Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-            .Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1))
-            .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == _model.UID));
+        _uncheckedLessons = _model.LearnerGetUncheckedLessons(models);
     }
 
 </script>

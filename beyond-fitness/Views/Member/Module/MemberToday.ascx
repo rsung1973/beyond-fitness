@@ -12,9 +12,7 @@
 <div class="col-sm-12">
     <div class="block">
         <div class="head" style="bottom center no-repeat;">
-            <div class="head-panel nm text-center">
-                <a href="javascript:editProfile(<%= _model.UID %>);"><% _model.RenderUserPicture(Writer, new { @class = "img-circle img-thumbnail", @style = "width:130px" }); %></a>                                                                             
-            </div>
+            <%  Html.RenderPartial("~/Views/Member/Module/MemberPhoto.ascx", _model); %>
             <div class="head-panel nm">
                 <%--<div class="hp-info pull-left" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-blueLight font-md'></span>" data-html="true">
                     <div class="hp-icon">
@@ -59,14 +57,6 @@
         $(function () {
             $('span[rel="tooltip"]').tooltip();
         });
-
-        function editProfile(uid) {
-            showLoading();
-            $.post('<%= Url.Action("EditMySelf","Html") %>', { 'uid': uid }, function (data) {
-                $(data).appendTo($('body'));
-                hideLoading();
-            });
-        }
 
         function showGameWidget(uid) {
             showLoading();

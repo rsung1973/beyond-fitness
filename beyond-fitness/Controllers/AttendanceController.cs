@@ -75,6 +75,13 @@ namespace WebHome.Controllers
                 return null;
             }
 
+            var coach = models.GetTable<ServingCoach>().Where(c => c.CoachID == viewModel.CoachID).FirstOrDefault();
+            if(coach==null)
+            {
+                result = Json(new { result = false, message = "上課教練資料錯誤!!" });
+                return null;
+            }
+
             if (assessmentOnly != true)
             {
                 if (viewModel.Conclusion != null)
@@ -118,7 +125,7 @@ namespace WebHome.Controllers
             fitness.SportsPerformance = viewModel.SportsPerformance;
             fitness.Strength = viewModel.Strength;
 
-            model.LessonTime.AttendingCoach = viewModel.CoachID;
+            model.LessonTime.AssignLessonAttendingCoach(coach);
             model.LessonTime.RegisterLesson.Attended = (int)Naming.LessonStatus.上課中;
 
             return model;
@@ -131,6 +138,12 @@ namespace WebHome.Controllers
 
             if (item == null)
                 return Json(new { result = false, message = "未登記此上課時間!!" }, JsonRequestBehavior.AllowGet);
+
+            if (String.IsNullOrEmpty(item.TrainingPlan.Select(p => p.TrainingExecution.Emphasis).FirstOrDefault()))
+            {
+                return Json(new { result = false, message = "未輸入課表重點，無法完成上課!!" }, JsonRequestBehavior.AllowGet);
+            }
+
 
             models.AttendLesson(item);
             foreach (var r in item.GroupingLesson.RegisterLesson)

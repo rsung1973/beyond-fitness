@@ -16,7 +16,7 @@
             <img src="~/img/logo.png" alt="SmartAdmin" runat="server" style="width:130px;" />
         </span>
         <!-- END LOGO PLACEHOLDER -->
-        <%  Html.RenderPartial("~/Views/BulletinBoard/ActivityNotification.ascx"); %>
+        <%--<%  Html.RenderPartial("~/Views/BulletinBoard/ActivityNotification.ascx"); %>--%>
 
     </div>
 

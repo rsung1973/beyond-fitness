@@ -144,8 +144,8 @@
                                 <a href="#" class="list-group-item" id="diagnosisDialog_link"><i class="fa fa-child"></i>&nbsp;&nbsp;Fitness Diagnosis<i class="fa fa-angle-right pull-right"></i></a>
                                 <%  } %>
                                 <a href="#" class="list-group-item" id="updateProfile_link"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Profile<i class="fa fa-angle-right pull-right"></i></a>
-                                <a href="#" class="list-group-item" id="healthlist_link"><i class="fa fa-history"></i>&nbsp;&nbsp;Health<i class="fa fa-angle-right  pull-right"></i></a>
-                                <a href="#calendar" class="list-group-item"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Calendar<i class="fa fa-angle-right pull-right"></i></a>
+                                <%--<a href="#" class="list-group-item" id="healthlist_link"><i class="fa fa-history"></i>&nbsp;&nbsp;Health<i class="fa fa-angle-right  pull-right"></i></a>
+                                <a href="#calendar" class="list-group-item"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Calendar<i class="fa fa-angle-right pull-right"></i></a>--%>
                                 <%  if (models.GetQuestionnaireRequest(_profile).Count() > 0)
                                     { %>
                                 <a href="#" class="list-group-item bg-color-redLight" id="questionnaire_link"><i class="fa fa-volume-up"></i>&nbsp;&nbsp;Questionnaire<i class="fa fa-angle-right pull-right"></i></a>
@@ -190,7 +190,7 @@
                                 </div>
                                 <!-- end widget div -->
                             </div>
-                            <%  Html.RenderPartial("~/Views/LearnerFacet/Module/LessonComments.ascx",_profile); %>
+                            <%--<%  Html.RenderPartial("~/Views/LearnerFacet/Module/LessonComments.ascx",_profile); %>--%>
                         </div>
                     </div>
                 </article>
@@ -361,7 +361,7 @@
         console.log($('#smRow').css('display'));
 
         function drawAssessment($element) {
-            $element.load('<%= Url.Action("DrawFitnessAssessment","LearnerFacet",new { uid = _profile.UID }) %>');
+            <%--$element.load('<%= Url.Action("DrawFitnessAssessment","LearnerFacet",new { uid = _profile.UID }) %>');--%>
         }
 
         if ($('#smRow').css('display') == 'block') {

@@ -96,10 +96,7 @@
         _model = (UserProfile)this.Model;
         _tableId = ViewBag.DataTableId ?? "dt_attendLesson";
 
-        _uncheckedLessons = models.GetTable<LessonTime>()
-            //.Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-            .Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1))
-            .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == _model.UID))
+        _uncheckedLessons = _model.LearnerGetUncheckedLessons(models)
             .OrderBy(l => l.ClassTime);
 
 

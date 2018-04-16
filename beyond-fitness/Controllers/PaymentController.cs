@@ -973,12 +973,28 @@ namespace WebHome.Controllers
 
             if (item.Payment.InvoiceItem.InvoiceCancellation != null)
             {
-                models.ExecuteCommand(@"
+                if (item.Payment.ContractPayment != null)
+                {
+                    if (item.Payment.PayoffDate.Value.AddMonths(1) > item.VoidDate)
+                    {
+                        models.ExecuteCommand(@"
                             DELETE FROM ContractTrustTrack
                             FROM     ContractTrustTrack INNER JOIN
                                            Payment ON ContractTrustTrack.PaymentID = Payment.PaymentID INNER JOIN
                                            VoidPayment ON Payment.PaymentID = VoidPayment.VoidID
                             WHERE   (ContractTrustTrack.PaymentID = {0})", item.VoidID);
+                    }
+                    else
+                    {
+                        models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                        {
+                            ContractID = item.Payment.ContractPayment.ContractID,
+                            EventDate = item.VoidDate.Value,
+                            VoidID = item.VoidID,
+                            TrustType = Naming.TrustType.V.ToString()
+                        });
+                    }
+                }
 
                 if (item.Payment.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
                     && item.Payment.InvoiceItem.InvoiceCancellation.InvoiceCancellationDispatch == null)
@@ -1867,7 +1883,6 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             return View("~/Views/Payment/Module/ApplyPaymentAchievement.ascx", item);
         }
-
 
     }
 }

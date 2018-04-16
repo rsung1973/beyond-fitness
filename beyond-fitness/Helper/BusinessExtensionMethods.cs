@@ -201,6 +201,20 @@ namespace WebHome.Helper
                 }));
 
             items = items.Concat(dataItems
+                .Where(t => t.TrainingBySelf == 2)
+                .GroupBy(t => t.ClassTime.Value.Date)
+                .Select(g => new CalendarEvent
+                {
+                    id = "home",
+                    title = g.Count().ToString(),
+                    start = g.Key.ToString("yyyy-MM-dd"),
+                    description = "S.T session",
+                    allDay = true,
+                    className = g.Key < today ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-yellow" },
+                    icon = "fa-child" // g.Key < today ? "fa-ckeck" : "fa-clock-o"
+                }));
+
+            items = items.Concat(dataItems
                 .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
                 .GroupBy(t => t.ClassTime.Value.Date)
                 .Select(g => new CalendarEvent
@@ -313,6 +327,23 @@ namespace WebHome.Helper
                 }));
 
             items = items.Concat(dataItems
+                .Where(t => t.TrainingBySelf == 2)
+                .Select(g => new CalendarEvent
+                {
+                    id = g.LessonID.ToString(),
+                    lessonID = g.LessonID,
+                    title = g.RegisterLesson.UserProfile.RealName,
+                    start = String.Format("{0:O}", g.ClassTime),
+                    end = String.Format("{0:O}", g.ClassTime.Value.AddMinutes(g.DurationInMinutes.Value)),
+                    //description = "自主訓練",
+                    allDay = false,
+                    className = new string[] { "event", "bg-color-yellow" },
+                    editable = true,
+                    icon = null,
+                }));
+
+
+            items = items.Concat(dataItems
                 .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
                 .Select(g => new CalendarEvent
                 {
@@ -419,7 +450,7 @@ namespace WebHome.Helper
                     CurrentTrial = viewModel.CurrentTrial
                 }
             };
-            if(viewModel.Birthday.HasValue)
+            if (viewModel.Birthday.HasValue)
                 item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
 
@@ -717,7 +748,7 @@ namespace WebHome.Helper
                 CoachID = item.CoachID,
                 RatingDate = DateTime.Now,
                 TuitionSummary = summary,
-                RatingID = item.LevelID.Value
+                LevelID = item.LevelID.Value,
             };
             item.CoachRating.Add(ratingItem);
 
@@ -728,14 +759,14 @@ namespace WebHome.Helper
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.DemotionID.Value;
                 }
             }
-            else if(item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 4)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 4)
             {
                 if (attendanceCount >= 165 && summary >= 240000)
                 {
                     ratingItem.LevelID = item.ProfessionalLevel.ProfessionalLevelReview.PromotionID.Value;
                 }
             }
-            else if(item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 5)
+            else if (item.ProfessionalLevel.ProfessionalLevelReview.CheckLevel == 5)
             {
                 if (attendanceCount >= 185 && summary >= 320000)
                 {
@@ -794,6 +825,13 @@ namespace WebHome.Helper
 
             models.SubmitChanges();
             models.ExecuteCommand("update ServingCoach set LevelID={0} where CoachID={1}", ratingItem.LevelID, item.CoachID);
+            models.ExecuteCommand(@"
+                UPDATE LessonTimeSettlement
+                SET        ProfessionalLevelID = ServingCoach.LevelID
+                FROM     LessonTime INNER JOIN
+                               LessonTimeSettlement ON LessonTime.LessonID = LessonTimeSettlement.LessonID INNER JOIN
+                               ServingCoach ON LessonTime.AttendingCoach = ServingCoach.CoachID
+                WHERE   (LessonTime.ClassTime >= {0}) AND (ServingCoach.CoachID = {1}) ", quarterEnd, item.CoachID);
 
         }
 
@@ -1384,10 +1422,10 @@ namespace WebHome.Helper
             return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.體驗課程).FirstOrDefault();
         }
 
-        public static LessonPriceType CurrentPISessionPrice<TEntity>(this ModelSource<TEntity> models)
+        public static LessonPriceType CurrentSessionPrice<TEntity>(this ModelSource<TEntity> models, Naming.LessonPriceStatus sessionStatus = Naming.LessonPriceStatus.自主訓練)
             where TEntity : class, new()
         {
-            return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.自主訓練).FirstOrDefault();
+            return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)sessionStatus).FirstOrDefault();
         }
 
         public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate, DateTime endExclusiveDate)
@@ -1408,8 +1446,8 @@ namespace WebHome.Helper
                 models.SubmitChanges();
 
                 models.ExecuteCommand(@"INSERT INTO ContractTrustSettlement
-                       (ContractID, SettlementID, TotalTrustAmount, InitialTrustAmount)
-                        SELECT  s.ContractID, {0}, t.TotalTrustAmount, t.TotalTrustAmount
+                       (ContractID, SettlementID, TotalTrustAmount, InitialTrustAmount, BookingTrustAmount, CurrentLiableAmount)
+                        SELECT  s.ContractID, {0}, t.TotalTrustAmount, t.BookingTrustAmount, t.BookingTrustAmount, 0
                         FROM     (SELECT  a.ContractID, MAX(a.SettlementID) AS SettlementID
                         FROM     ContractTrustSettlement AS a INNER JOIN
                                        CourseContract AS b ON a.ContractID = b.ContractID
@@ -1450,7 +1488,9 @@ namespace WebHome.Helper
                             ContractID = contract.ContractID,
                             SettlementID = settlement.SettlementID,
                             InitialTrustAmount = 0,
-                            TotalTrustAmount = 0
+                            TotalTrustAmount = 0,
+                            BookingTrustAmount = contract.TotalCost,
+                            CurrentLiableAmount = 0
                         };
 
                         models.GetTable<ContractTrustSettlement>().InsertOnSubmit(contractTrustSettlement);
@@ -1464,8 +1504,10 @@ namespace WebHome.Helper
                             {
                                 ContractID = contract.ContractID,
                                 SettlementID = settlement.SettlementID,
-                                InitialTrustAmount = currentTrustSettlement.TotalTrustAmount,
-                                TotalTrustAmount = currentTrustSettlement.TotalTrustAmount
+                                InitialTrustAmount = currentTrustSettlement.BookingTrustAmount.Value,
+                                TotalTrustAmount = currentTrustSettlement.TotalTrustAmount,
+                                BookingTrustAmount = currentTrustSettlement.BookingTrustAmount,
+                                CurrentLiableAmount = 0
                             };
 
                             models.GetTable<ContractTrustSettlement>().InsertOnSubmit(contractTrustSettlement);
@@ -1484,17 +1526,28 @@ namespace WebHome.Helper
                         {
                             case "B":
                             case "T":
+                                contractTrustSettlement.TotalTrustAmount += trust.Payment.PayoffAmount ?? 0;
+                                break;
+
                             case "X":
                             case "S":
                                 contractTrustSettlement.TotalTrustAmount += trust.Payment.PayoffAmount ?? 0;
+                                contractTrustSettlement.BookingTrustAmount += trust.Payment.PayoffAmount ?? 0;
+                                break;
+
+                            case "V":
+                                contractTrustSettlement.TotalTrustAmount -= trust.VoidPayment.Payment.PayoffAmount ?? 0;
                                 break;
 
                             case "N":
                                 var lesson = trust.LessonTime.RegisterLesson;
                                 contractTrustSettlement.TotalTrustAmount -= (lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
+                                contractTrustSettlement.BookingTrustAmount -= (lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
                                 break;
                         }
                     }
+
+                    contractTrustSettlement.CurrentLiableAmount = contractTrustSettlement.BookingTrustAmount - contractTrustSettlement.TotalTrustAmount;
 
                     models.SubmitChanges();
                     if (toUpdateTrustSettlement)
@@ -1549,5 +1602,28 @@ namespace WebHome.Helper
                 models.GetDataContext().ProcessInvoiceNo(item.BranchID, year, periodNo);
             }
         }
+
+        public static IQueryable<LessonTime> LearnerGetUncheckedLessons<TEntity>(this UserProfile profile, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<LessonTime>()
+                .Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
+                .Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1))
+                .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID));
+        }
+
+        public static void AssignLessonAttendingCoach(this LessonTime item, ServingCoach coach)
+        {
+            item.AttendingCoach = coach.CoachID;
+            if(item.LessonTimeSettlement==null)
+            {
+                item.LessonTimeSettlement = new LessonTimeSettlement
+                {
+                };
+            }
+            item.LessonTimeSettlement.ProfessionalLevelID = coach.LevelID.Value;
+            item.LessonTimeSettlement.MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex;
+        }
+
     }
 }

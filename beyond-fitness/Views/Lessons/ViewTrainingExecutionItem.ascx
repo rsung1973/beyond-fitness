@@ -98,7 +98,7 @@
         List<TrainingItem> items = new List<TrainingItem>();
         foreach(var item in _model.TrainingItem.OrderBy(t=>t.Sequence))
         {
-            if(item.TrainingID.HasValue)
+            if(String.IsNullOrEmpty(item.BreakIntervalInSecond))
             {
                 items.Add(item);
             }

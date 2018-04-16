@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<%  if (_model.TrainingID.HasValue)
+<%  if (String.IsNullOrEmpty(_model.BreakIntervalInSecond))
     { %>
         <tr>
             <td><%= _model.TrainingType.BodyParts %> <%= String.IsNullOrEmpty(_model.Description) ? null : "【" + _model.Description + "】" %></td>

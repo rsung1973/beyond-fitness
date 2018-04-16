@@ -34,10 +34,10 @@
             {
                 var contract = models.GetTable<CourseContract>().Where(c => c.ContractID == item.Key).First();
                 var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();
-                var initialTrustAmount = settlement.InitialTrustAmount;
+                var initialTrustAmount = settlement.InitialTrustAmount==0 ? contract.TotalCost : settlement.BookingTrustAmount; // settlement.InitialTrustAmount;
                 %>
             <%  var amt = item.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0)
+                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
                 { %>
             <tr>
                 <td>B</td>
@@ -53,8 +53,8 @@
                     <%  } %>--%>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  initialTrustAmount += amt.Value; %>
-                    <%= String.Format("{0:##,###,###,##0}", amt.AdjustTrustAmount())   %>
+                    <%  //initialTrustAmount += amt.Value; %>
+                    <%= settlement.InitialTrustAmount == 0 ? String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount()) : null  %>
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
@@ -77,7 +77,7 @@
                     <%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
                 </td>
                 <td nowrap="noWrap" class="text-right">
-                    <%  initialTrustAmount += amt.Value; %>
+                    <%  //initialTrustAmount += amt.Value; %>
                     <%= String.Format("{0:##,###,###,##0}", amt.AdjustTrustAmount())   %>
                 </td>
                 <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
@@ -110,10 +110,11 @@
             <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
         </tr>
             <%  } %>
-            <%  amt = item.Where(t => t.TrustType == "V")
-                    .Select(t => t.VoidPayment.Payment)
-                    .Sum(p => p.PayoffAmount);
-                if (amt.HasValue && amt > 0)
+            <%  //amt = item.Where(t => t.TrustType == "V")
+                //    .Select(t => t.VoidPayment.Payment)
+                //    .Sum(p => p.PayoffAmount);
+                amt = 0;
+                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
                 { %>
             <tr>
             <td>N</td>
@@ -204,8 +205,8 @@
             //"bPaginate": false,
             "pageLength": 30,
             "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
-            "ordering": true,
-            "order": [[1,'asc']],
+            "ordering": false,
+            //"order": [[1,'asc']],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
                 "t" +
                 "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",

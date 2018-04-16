@@ -16,7 +16,7 @@
             bookingByCoach(date.format('YYYY-MM-DD')+' 08:00');
         },
         eventClick: function (calEvent) {
-            if(calEvent.id=='course' || calEvent.id=='self' || calEvent.id=='trial') {
+            if(calEvent.id=='course' || calEvent.id=='self' || calEvent.id=='trial' || calEvent.id=='home' || calEvent.id=='coach') {
                 showLoading();
                 $.post('<%= Url.Action("LearnerRecentLessons","ClassFacet") %>', { 'uid': <%= _model.UID %>, 'lessonID': calEvent.lessonID }, function (data) {
                     $(data).appendTo($('body'));
