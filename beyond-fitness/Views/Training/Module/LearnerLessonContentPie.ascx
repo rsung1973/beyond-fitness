@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="col-xs-6 col-sm-6 col-sm-md-6 text-center">
+<div class="col-xs-12 col-sm-6 col-sm-md-6 text-center">
     <label class="label text-lightgray">累計訓練時間比例</label>
     <div id="<%= _chartID %>" class="chart-large has-legend-unique"></div>
     <script>

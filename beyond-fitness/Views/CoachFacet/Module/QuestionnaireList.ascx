@@ -29,6 +29,10 @@
                             {   %>
                                 回覆不方便填寫
                         <%  }
+                            else  if (item.Status == (int)Naming.IncommingMessageStatus.教練代答)
+                            {   %>
+                                我超強不用了解學生
+                        <%  }
                             else
                             {
                                 if (_profile.IsAssistant())

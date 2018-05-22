@@ -13,7 +13,7 @@
 <asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
     <span class="ribbon-button-alignment">
         <span id="refresh" class="btn btn-ribbon">
-            <i class="fa fa-usd"></i>
+            <i class="fa fa-hand-holding-usd"></i>
         </span>
     </span>
     <!-- breadcrumb -->

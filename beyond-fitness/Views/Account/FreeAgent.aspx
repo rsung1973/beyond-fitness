@@ -69,7 +69,7 @@
 
 								-->
                 <header>
-                    <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                    <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                     <h2>BEYOND FITNESS Events </h2>
                     <div class="widget-toolbar">
                         <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/Lessons/BookingByFreeAgent") %>"><i class="fa fa-fw fa-bookmark"></i>預約上課時間</a>

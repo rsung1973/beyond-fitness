@@ -13,7 +13,7 @@
         if (_items.Count() > 1)
         { %>
             <span class="dropdown">
-                <a class="btn-system btn-small dropdown-toggle" id="freeAgentClockIn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">自由教練打卡 <i class="fa fa-check-square" aria-hidden="true"></i></a>
+                <a class="btn-system btn-small dropdown-toggle" id="freeAgentClockIn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">自由教練打卡 <i class="far fa-check-square" aria-hidden="true"></i></a>
                 <ul class="dropdown-menu" aria-labelledby="freeAgentClockIn">
                     <%  foreach (var item in _items)
                         { %>
@@ -24,7 +24,7 @@
     <%  }
         else
         {   %>
-            <a class="btn-system btn-small" onclick="clockIn(<%= _items.First().CoachID %>);">自由教練打卡 <i class="fa fa-check-square" aria-hidden="true"></i></a>
+            <a class="btn-system btn-small" onclick="clockIn(<%= _items.First().CoachID %>);">自由教練打卡 <i class="far fa-check-square" aria-hidden="true"></i></a>
     <%  }
             %>
 <script>

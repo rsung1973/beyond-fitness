@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="bookingDialog" title="新增行事曆" class="bg-color-darken">
+<div id="<%= _dialogID %>" title="新增行事曆" class="bg-color-darken">
     <div class="row padding-10">
         <ul class="nav nav-tabs">
             <li class="active">
@@ -78,13 +78,13 @@
 
                             });
                         </script>
-                        <i class="icon-append fa fa-clock-o"></i>
+                        <i class="icon-append far fa-clock"></i>
                     </label>
                 </section>
                 <section class="col col-4">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
-                        <i class="icon-append fa fa-calendar"></i>
+                        <i class="icon-append far fa-calendar-alt"></i>
                         <input type="text" name="ClassDate" id="classDate" class="form-control input date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.LessonDate) %>" placeholder="請輸入上課開始時間" />
                     </label>
                 </section>                
@@ -95,7 +95,7 @@
                             <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
                             <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>--%>
                 <section class="col col-4">
@@ -104,7 +104,7 @@
                         <select name="BranchID">
                             <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
             </div>
@@ -235,6 +235,11 @@
 
                 }
             };
+
+            $global.closeDialog = function () {
+                $('#<%= _dialogID %>').dialog('close');
+            };
+
         });
 
         $('.input_time').datetimepicker({
@@ -266,6 +271,7 @@
     ModelSource<UserProfile> models;
     FullCalendarViewModel _viewModel;
     UserProfile _profile;
+    String _dialogID = "bookingDialog" + DateTime.Now.Ticks;
 
     protected override void OnInit(EventArgs e)
     {

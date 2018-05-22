@@ -64,7 +64,7 @@
 
 								-->
                 <header>
-                    <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                    <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                     <h2>BEYOND FITNESS Events </h2>
                 </header>
 

@@ -29,14 +29,14 @@
                             <section class="col col-6">
                                 <label>付款金額</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-usd"></i>
+                                    <i class="icon-append fa fa-dollar-sign"></i>
                                     <input type="text" name="PayoffAmount" placeholder="請輸入付款總金額" value="" />
                                 </label>
                             </section>
                             <section class="col col-6">
                                 <label>付款日期</label>
                                 <label class="input input-group">
-                                    <i class="icon-append fa fa-calendar"></i>
+                                    <i class="icon-append far fa-calendar-alt"></i>
                                     <input type="text" class="form-control date form_date" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請輸入付款日期" name="PayoffDate" />
                                 </label>
                             </section>

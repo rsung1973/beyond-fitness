@@ -154,7 +154,8 @@ namespace WebHome.Models.Locale
         {
             未讀 = 3,
             已讀 = 4,
-            拒答 = 5
+            拒答 = 5,
+            教練代答 = 6,
         }
 
         public enum LessonQueryType
@@ -162,7 +163,8 @@ namespace WebHome.Models.Locale
             一般課程 = 0,
             自主訓練,
             內部訓練,
-            體驗課程
+            體驗課程,
+            在家訓練,
         }
 
         public enum ProfessionalCategory

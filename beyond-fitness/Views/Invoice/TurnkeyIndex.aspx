@@ -13,7 +13,7 @@
 <asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
     <span class="ribbon-button-alignment">
         <span id="refresh" class="btn btn-ribbon">
-            <i class="fa fa-cloud-upload"></i>
+            <i class="fa fa-cloud-upload-alt"></i>
         </span>
     </span>
     <!-- breadcrumb -->

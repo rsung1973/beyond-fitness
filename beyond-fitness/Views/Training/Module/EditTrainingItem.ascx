@@ -134,7 +134,7 @@
     <%  if (_model != null)
         {   %>
             {
-                html: "<i class='fa fa-trash-o'></i>&nbsp; 刪除",
+                html: "<i class='far fa-trash-alt'></i>&nbsp; 刪除",
                 "class": "btn bg-color-red",
                 click: function () {
                     if (confirm('確定刪除此項目?')) {

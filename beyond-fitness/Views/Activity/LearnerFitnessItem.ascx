@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-md-4 smart-form">
                         <label class="input input-group" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" class="form-control input-lg date form_date" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" name="assessmentDate" id="assessmentDate" />
                         </label>
                     </div>

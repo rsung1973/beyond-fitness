@@ -12,7 +12,7 @@
 
 <div class="alert alert-warning fade in padding-5" onclick="editEmphasis();">
     <button class="close">
-        <i class="fa fa-pencil"></i>
+        <i class="fa fa-pencil-alt"></i>
     </button>
     <i class="fa-fw fa fa-info-circle"></i>
     <strong id="emphasis">重點：<%= _model.Emphasis ?? "<i>點此編輯課程重點!!</i>" %></strong>

@@ -35,7 +35,7 @@
                                 <option><%= year %></option>
                                 <%  } %>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <script>
                             $('#<%= _dialog %> select[name="Year"]').val('<%= _viewModel.Year %>')
@@ -48,7 +48,7 @@
                                 <option value="0">已停用</option>
                                 <option value="1">已啟用</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <script>
                             $('#<%= _dialog %> select[name="Status"]').val('<%= _viewModel.Status %>')
@@ -61,7 +61,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員單堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[0] %>" <%= _viewModel.ReadOnly[0]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[0] %>" />
                         </label>
@@ -69,7 +69,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員單堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[1] %>" <%= _viewModel.ReadOnly[1]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[1] %>" />
                         </label>
@@ -79,7 +79,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員單堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[2] %>" <%= _viewModel.ReadOnly[2]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[2] %>" />
                         </label>
@@ -87,7 +87,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員單堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[3] %>" <%= _viewModel.ReadOnly[3]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[3] %>" />
                         </label>
@@ -99,7 +99,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員25堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[4] %>" <%= _viewModel.ReadOnly[4]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[4] %>" />
                         </label>
@@ -107,7 +107,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員25堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[5] %>" <%= _viewModel.ReadOnly[5]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[5] %>" />
                         </label>
@@ -117,7 +117,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員25堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[6] %>" <%= _viewModel.ReadOnly[6]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[6] %>" />
                         </label>
@@ -125,7 +125,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員25堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[7] %>" <%= _viewModel.ReadOnly[7]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[7] %>" />
                         </label>
@@ -137,7 +137,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員50堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[8] %>" <%= _viewModel.ReadOnly[8]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[8] %>" />
                         </label>
@@ -145,7 +145,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員50堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[9] %>" <%= _viewModel.ReadOnly[9]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[9] %>" />
                         </label>
@@ -155,7 +155,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員50堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[10] %>" <%= _viewModel.ReadOnly[10]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[10] %>" />
                         </label>
@@ -163,7 +163,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員50堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[11] %>" <%= _viewModel.ReadOnly[11]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[11] %>" />
                         </label>
@@ -175,7 +175,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員75堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[12] %>" <%= _viewModel.ReadOnly[12]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[12] %>" />
                         </label>
@@ -183,7 +183,7 @@
                     <section class="col col-6">
                         <label class="label">一般學員75堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[13] %>" <%= _viewModel.ReadOnly[13]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[13] %>" />
                         </label>
@@ -193,7 +193,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員75堂 / 時間長度：60分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[14] %>" <%= _viewModel.ReadOnly[14]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[14] %>" />
                         </label>
@@ -201,7 +201,7 @@
                     <section class="col col-6">
                         <label class="label">舊學員75堂 / 時間長度：90分鐘</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ListPriceSeries" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPriceSeries[15] %>" <%= _viewModel.ReadOnly[15]==true ? "readOnly" : null %> />
                             <input type="hidden" name="PriceSeriesID" value="<%= _viewModel.PriceSeriesID[15] %>" />
                         </label>
@@ -221,7 +221,7 @@
         <%  if (!_viewModel.ReadOnly.Any(r => r == true))
             {   %>
             {
-                html: "<i class='fa fa-trash-o' aria-hidden='true'></i>&nbsp; 刪除",
+                html: "<i class='far fa-trash-alt' aria-hidden='true'></i>&nbsp; 刪除",
                 "class": "btn bg-color-red",
                 click: function () {
 
@@ -247,7 +247,7 @@
             },
         <%  }   %>
             {
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

@@ -12,11 +12,11 @@
     <thead>
         <tr>
             <th colspan="2" class="text-right">週期性目標
+                <a onclick="commitExercisePurpose('輔助');" class="badge bg-color-blue">輔助</a>&nbsp;&nbsp;
                 <a onclick="commitExercisePurpose('耐力');" class="badge bg-color-blue">耐力</a>&nbsp;&nbsp;
                 <a onclick="commitExercisePurpose('增肌');" class="badge bg-color-blue">增肌</a>&nbsp;&nbsp;
                 <a onclick="commitExercisePurpose('力量');" class="badge bg-color-blue">力量</a>&nbsp;&nbsp;
                 <a onclick="commitExercisePurpose('運能');" class="badge bg-color-blue">運能</a>&nbsp;&nbsp;
-                <a onclick="commitExercisePurpose('輔助');" class="badge bg-color-blue">輔助</a>&nbsp;&nbsp;
                 <a onclick="commitExercisePurpose('目標');" class="badge bg-color-blue">目標</a>&nbsp;&nbsp;
             </th>
         </tr>
@@ -106,7 +106,7 @@
             content: "",
             buttons: "[取消][確定]",
             input: "text",
-            placeholder: "請輸入目標（至多50個中英文字）",
+            placeholder: "請輸入目標（至多20個中英文字）",
             inputValue: ""
         }, function (buttonPress, value) {
             if (buttonPress == "確定") {

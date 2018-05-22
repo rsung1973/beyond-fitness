@@ -40,6 +40,18 @@ namespace WebHome.Controllers
             return View(items);
         }
 
+        [CoachOrAssistantAuthorize]
+        public ActionResult DailyQuestionIndex(DailyQuestionQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+            if(profile.IsCoach())
+            {
+                viewModel.AskerID = profile.UID;
+            }
+            return View("~/Views/Activity/ListDailyQuestion.aspx");
+        }
+
         private void contructTimeline(UserProfile profile, List<TimelineEvent> items)
         {
             ///1. fetch all reserved lessons
@@ -177,22 +189,101 @@ namespace WebHome.Controllers
         }
 
         [CoachOrAssistantAuthorize]
-        public ActionResult ListDailyQuestion()
+        public ActionResult InquireDailyQuestion(DailyQuestionQueryViewModel viewModel)
         {
-            var items = models.GetTable<PDQQuestion>().Where(g => g.GroupID == 6)
-                .OrderByDescending(q => q.QuestionID);
-            return View("ListDailyQuestion", items);
-        }
+            ViewBag.ViewModel = viewModel;
 
-        public ActionResult DeleteQuestion(int id)
-        {
-            var item = models.DeleteAny<PDQQuestion>(q => q.QuestionID == id && q.GroupID == 6);
-            if (item != null)
+            var items = models.GetTable<PDQQuestion>().Where(g => g.GroupID == 6);
+
+            IQueryable<PDQQuestionExtension> extensionItems = models.GetTable<PDQQuestionExtension>();
+
+            if(viewModel.QuestionID.HasValue)
             {
-                ViewBag.Message = "資料已刪除!!";
+                items = items.Where(q => q.QuestionID == viewModel.QuestionID);
             }
 
-            return ListDailyQuestion();
+            if(viewModel.AskerID.HasValue)
+            {
+                items = items.Where(q => q.AskerID == viewModel.AskerID);
+            }
+
+            if(viewModel.Status.HasValue)
+            {
+                extensionItems = extensionItems.Where(t => t.Status == viewModel.Status);
+            }
+
+            viewModel.Keyword = viewModel.Keyword.GetEfficientString();
+            if(viewModel.Keyword!=null)
+            {
+                items = items.Where(q => q.Question.Contains(viewModel.Keyword));
+            }
+
+            items = items.Join(extensionItems, q => q.QuestionID, t => t.QuestionID, (q, t) => q);
+
+            return View("~/Views/Activity/Module/DailyQuestionList.ascx", items);
+        }
+
+        public ActionResult LoadDailyQuestion(DailyQuestionViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.QuestionID = viewModel.DecryptKeyValue();
+            }
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID && q.GroupID == 6).FirstOrDefault();
+
+            if (item != null)
+            {
+                return View("~/Views/Activity/Module/DailyQuestionDataItem.ascx", item);
+            }
+
+            return View("~/Views/Shared/JsAlert.ascx", model: "問與答資料錯誤!!");
+        }
+        public ActionResult DeleteQuestion(DailyQuestionViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.QuestionID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID && q.GroupID == 6).FirstOrDefault();
+
+            if (item != null)
+            {
+                if (models.GetTable<PDQTask>().Any(t => t.QuestionID == item.QuestionID))
+                {
+                    viewModel.Status = (int)Naming.GeneralStatus.Failed;
+                    return CommitQuestionStatus(viewModel);
+                }
+                else
+                {
+                    models.ExecuteCommand("delete PDQQuestion where QuestionID={0}", item.QuestionID);
+                    return Json(new { result = true });
+                }
+            }
+
+            return View("~/Views/Shared/JsAlert.ascx", model: "問與答資料錯誤!!");
+        }
+
+        public ActionResult CommitQuestionStatus(DailyQuestionViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.QuestionID = viewModel.DecryptKeyValue();
+            }
+
+            //models.ExecuteCommand("update PDQQuestionExtension set Status={0} where QuestionID={1}", status, questionID);
+            var item = models.GetTable<PDQQuestionExtension>().Where(t => t.QuestionID == viewModel.QuestionID).FirstOrDefault();
+            if (item != null)
+            {
+                item.Status = viewModel.Status;
+                models.SubmitChanges();
+                return Json(new { result = true, item.QuestionID });
+            }
+
+            return View("~/Views/Shared/JsAlert.ascx", model: "問與答資料錯誤!!");
         }
 
         public ActionResult AnswerDailyQuestion(DailyQuestionViewModel viewModel)
@@ -244,22 +335,13 @@ namespace WebHome.Controllers
 
         }
 
-
-        [HttpGet]
         [CoachOrAssistantAuthorize]
-        public ActionResult EditDailyQuestion(int? questionID)
+        public ActionResult EditDailyQuestion(PDQQuestionViewModel viewModel)
         {
             UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
-            {
-                return Redirect(FormsAuthentication.LoginUrl);
-            }
+            ViewBag.ViewModel = viewModel;
 
-            var viewModel = new PDQQuestionViewModel
-            {
-                AskerID = profile.UID
-            };
-            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == questionID).FirstOrDefault();
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID).FirstOrDefault();
             if (item != null)
             {
                 viewModel.QuestionID = item.QuestionID;
@@ -273,38 +355,55 @@ namespace WebHome.Controllers
                 viewModel.BonusPoint = item.PDQQuestionExtension.BonusPoint;
             }
 
-            ViewBag.ViewModel = viewModel;
-            return View("EditDailyQuestion", profile);
+            return View("~/Views/Activity/Module/EditDailyQuestion.ascx", item);
 
         }
 
         [CoachOrAssistantAuthorize]
-        public ActionResult EditDailyQuestion(PDQQuestionViewModel viewModel)
+        public ActionResult CommitDailyQuestion(PDQQuestionViewModel viewModel)
         {
             UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
-            {
-                return Redirect(FormsAuthentication.LoginUrl);
-            }
 
             ViewBag.ViewModel = viewModel;
-            if (!viewModel.AskerID.HasValue)
-            {
-                ModelState.AddModelError("AskerID", "請選擇提問者!!");
-                ViewBag.ModelState = ModelState;
-                return View("EditDailyQuestion", profile);
-            }
-            if (!viewModel.BonusPoint.HasValue)
-            {
-                ModelState.AddModelError("BonusPoint", "請輸入回饋點數!!");
-                ViewBag.ModelState = ModelState;
-                return View("EditDailyQuestion", profile);
-            }
+            //if (!viewModel.AskerID.HasValue)
+            //{
+            //    ModelState.AddModelError("AskerID", "請選擇提問者!!");
+            //    ViewBag.ModelState = ModelState;
+            //    return View("EditDailyQuestion", profile);
+            //}
+            //if (!viewModel.BonusPoint.HasValue)
+            //{
+            //    ModelState.AddModelError("BonusPoint", "請輸入回饋點數!!");
+            //    ViewBag.ModelState = ModelState;
+            //    return View("EditDailyQuestion", profile);
+            //}
+            viewModel.BonusPoint = 1;
+
             if (viewModel.Suggestion == null || viewModel.Suggestion.Length < 1)
             {
                 ModelState.AddModelError("Suggestion", "請輸入選項!!");
-                ViewBag.ModelState = ModelState;
-                return View("EditDailyQuestion", profile);
+            }
+            else
+            {
+                viewModel.Suggestion = viewModel.Suggestion
+                    .Select(s => s.GetEfficientString())
+                    .Where(s => s != null).ToArray();
+
+                if(viewModel.Suggestion.Length<4)
+                {
+                    ModelState.AddModelError("Suggestion", "請輸入選項!!");
+                }
+            }
+
+            if(!viewModel.RightAnswerIndex.HasValue)
+            {
+                ModelState.AddModelError("RightAnswerIndex", "請正確設定答案!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
             }
 
             PDQQuestion item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID).FirstOrDefault();
@@ -312,7 +411,14 @@ namespace WebHome.Controllers
             {
                 item = new PDQQuestion
                 {
-                    PDQQuestionExtension = new PDQQuestionExtension { }
+                    PDQQuestionExtension = new PDQQuestionExtension
+                    {
+                        BonusPoint = 1,
+                        CreationTime = DateTime.Now
+                    },
+                    AskerID = profile.UID,
+                    GroupID = 6,
+                    QuestionType = (int)Naming.QuestionType.單選題,
                 };
 
                 models.GetTable<PDQQuestion>().InsertOnSubmit(item);
@@ -325,9 +431,10 @@ namespace WebHome.Controllers
 
 
             item.Question = viewModel.Question;
-            item.QuestionType = viewModel.QuestionType;
-            item.GroupID = viewModel.GroupID;
-            item.AskerID = viewModel.AskerID;
+            item.PDQQuestionExtension.CreationTime = DateTime.Now;
+            //item.QuestionType = viewModel.QuestionType;
+            //item.GroupID = viewModel.GroupID;
+            //item.AskerID = viewModel.AskerID;
 
             for (int i = 0; i < viewModel.Suggestion.Length; i++)
             {
@@ -335,12 +442,10 @@ namespace WebHome.Controllers
                 item.PDQSuggestion[i].RightAnswer = i == viewModel.RightAnswerIndex;
             }
 
-            item.PDQQuestionExtension.BonusPoint = viewModel.BonusPoint;
+            //item.PDQQuestionExtension.BonusPoint = viewModel.BonusPoint;
 
             models.SubmitChanges();
-            ViewBag.Message = "資料已儲存!!";
-
-            return ListDailyQuestion();
+            return Json(new { result = true, item.QuestionID });
 
         }
 

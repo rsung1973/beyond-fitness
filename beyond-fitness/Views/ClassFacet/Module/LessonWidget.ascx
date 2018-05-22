@@ -28,13 +28,13 @@
                                 <a href="#completePurposeTab" data-toggle="tab"><i class="fa fa-flag-checkered"></i>已達成目標</a>
                             </li>
                             <li>
-                                <a href="#calendarTab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar"></i>行事曆</a>
+                                <a href="#calendarTab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar-alt"></i>行事曆</a>
                             </li>
                             <li>
                                 <a id="smRow" href="#editLessonTab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-heartbeat"></i><span>課表</span></a>
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#contentChartTab" class="hidden-md hidden-lg"><i class="fa fa-pie-chart"></i><span>分析</span></a>
+                                <a data-toggle="tab" href="#contentChartTab" class="hidden-md hidden-lg"><i class="fa fa-chart-pie"></i><span>分析</span></a>
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#exerciseGameTab" class="hidden-md hidden-lg"><i class="fa fa-trophy"></i><span>競賽</span>
@@ -219,7 +219,7 @@
                     closeText: "關閉",
                     title : "<div class='modal-title'><h4><i class='fa fa-warning'></i> 預約課程</h4></div>",
                     buttons : [{
-                        html : "<i class='fa fa-send'></i>&nbsp;確定",
+                        html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                         "class" : "btn btn-primary",
                         click : function() {
                             var f = function() {  

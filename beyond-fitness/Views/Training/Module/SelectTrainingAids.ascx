@@ -23,14 +23,18 @@
                         var aids = item.TrainingAids
                             .Where(t => t.Status == (int)Naming.GeneralStatus.Successful)
                             .ToArray();
+                        int cols = aids.Length / 4;
+                        int remainders = aids.Length % 4;
+                        int remainderIdx = 1;
                         for(int idx=0;idx < aids.Length;)
                         { %>
                     <div class="col col-3">
                         <%
-                            for (int j = 0; j < 2 && idx < aids.Length; j++)
+                            int bound = (remainderIdx++) < remainders ? cols + 1 : cols;
+                            for (int j = 0; j < bound && idx < aids.Length; j++)
                             {
                                 var aid = aids[idx++]; %>
-                        <label class="checkbox">
+                        <label class="checkbox" style="white-space:nowrap;">
                             <input type="checkbox" name="AidID" value="<%= aid.AidID %>" />
                             <i></i><%= aid.ItemName %></label>
                         <%  } %>
@@ -50,7 +54,7 @@
             width: 'auto',
             title: "<h4 class='modal-title'><i class='fa-fw fa fa-edit'></i>  編輯使用器材</h4>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     $global.aidID = [];

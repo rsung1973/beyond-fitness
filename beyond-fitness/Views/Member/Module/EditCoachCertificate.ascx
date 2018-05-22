@@ -55,7 +55,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 編輯證照資料</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     $(this).dialog("close");
@@ -85,7 +85,7 @@
             var event = event || window.event;
             var $tr = $(event.target).closest('tr');
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除證照",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除證照",
                 content: "確定刪除此資料?",
                 buttons: '[刪除][取消]'
             }, function (ButtonPressed) {

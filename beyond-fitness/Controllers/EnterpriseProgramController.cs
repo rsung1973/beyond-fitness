@@ -646,6 +646,10 @@ namespace WebHome.Controllers
                 }
             };
 
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                timeItem.HourOfClassTime = viewModel.ClassDate.Hour;
+
+
             if (lesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練)
                 timeItem.TrainingBySelf = 1;
 

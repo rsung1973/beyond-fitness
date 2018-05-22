@@ -24,7 +24,7 @@
                                         .Contains(c.CoachID));
                                 Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx",items); %>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
             </fieldset>
@@ -40,7 +40,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 設定體能顧問</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

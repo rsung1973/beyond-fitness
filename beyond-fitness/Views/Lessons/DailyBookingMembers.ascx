@@ -63,7 +63,7 @@
                                             <button class="btn bg-color-blueLight" data-toggle="dropdown">請選擇功能</button>
                                             <button class="btn bg-color-blueLight dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                                             <ul class="dropdown-menu">
-                                                <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>取消上課</a></li>
+                                                <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>取消上課</a></li>
                                             </ul>
                                         </div>
                                 <%  }            

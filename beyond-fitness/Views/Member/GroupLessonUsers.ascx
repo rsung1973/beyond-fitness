@@ -78,14 +78,14 @@
         var memberCount = <%= _model.GroupingMemberCount-1 %>;
         if ($items.length <= 0) {
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 作業訊息",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 作業訊息",
                 content: "請勾選本次團體課學員!!",
                 buttons: '[關閉]'
             });
             return;
         } else if($items.length > memberCount) {
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 作業訊息",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 作業訊息",
                 content: "勾選的學員數超過本次團體課人數!!",
                 buttons: '[關閉]'
             });

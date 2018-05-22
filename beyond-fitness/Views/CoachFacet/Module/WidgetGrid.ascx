@@ -56,7 +56,7 @@
                                             <a href="#birthdaylist_tab" data-toggle="tab"><i class="fa fa-birthday-cake"></i> 生日提醒</a>
                                         </li>
                                         <li class="active">
-                                            <a href="#smCalendar" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar"></i> 行事曆</a>
+                                            <a href="#smCalendar" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar-alt"></i> 行事曆</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content padding-top-10">

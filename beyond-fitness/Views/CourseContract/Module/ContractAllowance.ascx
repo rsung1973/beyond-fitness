@@ -17,7 +17,7 @@
     </button>
     <%  } %>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="enableContract();">
-        確認審核 <i class="fa fa-file-text-o" aria-hidden="true"></i>
+        確認審核 <i class="far fa-copy" aria-hidden="true"></i>
     </button>
 </div>
 <script>

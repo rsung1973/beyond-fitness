@@ -14,18 +14,21 @@
     <table id="<%= _tableId %>" class="table table-striped table-bordered table-hover" width="100%">
         <thead>
             <tr>
+                <th data-class="expand">日期</th>
                 <th>時間</th>
                 <th>類別</th>
                 <th>學員</th>
                 <th data-hide="phone">體能顧問</th>
                 <th data-hide="phone">目前狀態</th>
+                <th data-hide="phone">課表重點</th>
             </tr>
         </thead>
         <tbody>
             <%  foreach (var item in _model)
                 { %>
             <tr>
-                <td><%= item.ClassTime.Value.ToString("yyyy/MM/dd HH:mm") %>~<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %></td>
+                <td><%= item.ClassTime.Value.ToString("yyyy/MM/dd") %></td>
+                <td><%= item.ClassTime.Value.ToString("HH:mm") %>~<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %></td>
                 <td><%  if(item.RegisterLesson.RegisterLessonEnterprise==null)
                         { %>
                             <%= item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus() %>
@@ -38,26 +41,23 @@
                 <td><%= String.Join("/",item.GroupingLesson.RegisterLesson.Select(r=>r.UserProfile.RealName)) %></td>
                 <td><%= item.AsAttendingCoach.UserProfile.FullName() %></td>
                 <td>
-                    <%  if (item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約)
-                        {   %>
-                            <a class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
-                    <%  }
-                        else
+                    <a onclick="$global.showLearnerLesson(<%= item.GroupingLesson.RegisterLesson.Select(r=>r.UID).FirstOrDefault() %>,<%= item.LessonID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa-lg fa-eye" aria-hidden="true"></i> </a>
+                    <%  
+                    var expansion = item.LessonTimeExpansion.First(); %>
+                    <a onclick='makeLessonPlan(<%= JsonConvert.SerializeObject(new
                         {
-                            var expansion = item.LessonTimeExpansion.First(); %>
-                            <a onclick='makeLessonPlan(<%= JsonConvert.SerializeObject(new
-                                {
-                                    classDate = expansion.ClassDate.ToString("yyyy-MM-dd"),
-                                    hour = expansion.Hour,
-                                    registerID = item.RegisterID,
-                                    lessonID = item.LessonID
-                                }) %>);'
-                                class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
-                            <%  if (!item.LessonPlan.CommitAttendance.HasValue && _profile.IsAssistant() && item.TrainingBySelf!=2)
-                                { %>
-                            <a href="#" onclick="$global.checkLessonAttendance(<%= item.LessonID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
-                            <%  } %>
-                    <%  }   %>
+                            classDate = expansion.ClassDate.ToString("yyyy-MM-dd"),
+                            hour = expansion.Hour,
+                            registerID = item.RegisterID,
+                            lessonID = item.LessonID
+                        }) %>);'
+                        class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
+                    <%  if (!item.LessonPlan.CommitAttendance.HasValue 
+                            && (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()) 
+                            && item.TrainingBySelf!=2)
+                        { %>
+                    <a href="#" onclick="$global.checkLessonAttendance(<%= item.LessonID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
+                    <%  } %>
                     <%= item.TrainingPlan.Count==0
                                     ? item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自由教練預約 
                                         ? item.LessonAttendance == null 
@@ -72,6 +72,7 @@
                     (學員已打卡）
                     <%  }   %>
                 </td>
+                <td><%= item.TrainingPlan.FirstOrDefault()?.TrainingExecution.Emphasis %></td>
             </tr>
             <%  } %>
         </tbody>
@@ -115,6 +116,15 @@
                 responsiveHelper_<%= _tableId %>.respond();
             }
         });
+
+        $global.showLearnerLesson = function (uid,lessonID) {
+            showLoading();
+            $.post('<%= Url.Action("LearnerRecentLessons","ClassFacet") %>', { 'uid': uid, 'lessonID': lessonID }, function (data) {
+                $(data).appendTo($('body'));
+                hideLoading();
+            });
+        }
+
     });
     </script>
 

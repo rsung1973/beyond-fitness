@@ -18,7 +18,7 @@
                         <select name="BranchID">
                             <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
             </fieldset>
@@ -164,7 +164,7 @@
                                 <option value="False" <%= _viewModel.HasGiftLessons!=true ? "selected" : null %>>否</option>
                                 <option value="True" <%= _viewModel.HasGiftLessons==true ? "selected" : null %>>是</option>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                         <script>
                             function checkGiftLessons() {
@@ -203,7 +203,7 @@
                                 <option value="1105" <%= _viewModel.LevelCategory == 1105 ? "selected" : null %>>否</option>
                                 <option value="1104" <%= _viewModel.LevelCategory == 1104 ? "selected" : null %>>是</option>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                     </section>
                     <section class="col col-6">
@@ -261,7 +261,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 編輯<%= _viewModel.CoachRole==(int)Naming.RoleID.Coach ? "員工" : "員工" %>資料</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     clearErrors();

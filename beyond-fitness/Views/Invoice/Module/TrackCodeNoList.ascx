@@ -38,13 +38,13 @@
                             if(!item.InvoiceNoIntervalGroup.InvoiceNoInterval.Any(i=>i.InvoiceNoAssignment.Count>0))
                             { %>
                 <a onclick="editIntervalGroup(<%= item.GroupID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                <a onclick="deleteInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="deleteInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                     <%      }
                         }
                         else
                         { %>
                 <a onclick="editInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                <a onclick="deleteInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="deleteInterval(<%= item.IntervalID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                 <%      } %>
                 <%  } %>
             </td>

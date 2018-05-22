@@ -88,14 +88,14 @@
                                     <section class="col col-6">
                                         <label class="label">&nbsp;</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= dateFrom.ToString("yyyy/MM/dd") %>' />
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="label">&nbsp;</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="dateTo" id="dateTo" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= dateFrom.AddMonths(1).AddDays(-1).ToString("yyyy/MM/dd") %>' />
                                         </label>
                                     </section>

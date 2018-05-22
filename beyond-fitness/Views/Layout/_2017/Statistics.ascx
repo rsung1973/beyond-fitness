@@ -15,7 +15,7 @@
             <span class="ribbon-button-alignment pull-right">
                 <h5>
                     <span class="txt-color-blue">
-                        <a href="javascript:void(0);" rel="tooltip" data-placement="top" data-original-title="<h1><em><%= _item.Title %></em></h1>" data-html="true"><%= _item.Title.Length>15 ?_item.Title.Substring(0,15) + "..." : _item.Title %></a>
+                        <a href="javascript:void(0);" rel="tooltip" data-placement="top" data-original-title="<h1><em><%= _item.Title %></em></h1>" data-html="true"><%= /*_item.Title.Length>15 ?_item.Title.Substring(0,15) + "..." :*/ _item.Title %></a>
                     </span>
                 </h5>
             </span>

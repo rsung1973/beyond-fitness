@@ -24,7 +24,7 @@
                                 <option value="3" <%= _viewModel.TransactionType==(int)Naming.PaymentTransactionType.飲品 ? "selected" : null %> >飲品</option>
                                 <option value="4" <%= _viewModel.TransactionType==(int)Naming.PaymentTransactionType.運動商品 ? "selected" : null %>>運動商品</option>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                         <script>
                             $('#<%= _dialog %> select[name="TransactionType"]').on('change', function (evt) {
@@ -71,7 +71,7 @@
                                         .OrderBy(p => p.ProductName);
                                     Html.RenderPartial("~/Views/SystemInfo/MerchandiseOptions.ascx", items); %>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                     </section>
                     <section class="col col-6">
@@ -116,7 +116,7 @@
                                 <option value="刷卡">刷卡</option>
                                 <option value="轉帳">轉帳</option>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>-->
                         <div class="inline-group">
                             <label class="radio">
@@ -184,14 +184,14 @@
                     <section class="col col-6">
                         <label class="label">收款日期</label>
                         <label class="input">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
                         </label>
                     </section>
                     <section class="col col-6">
                         <label class="label">收款金額</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="PayoffAmount" maxlength="10" placeholder="請輸入收款金額" value="<%= _viewModel.PayoffAmount %>" />
                         </label>
                     </section>
@@ -303,7 +303,7 @@
                     commitPayoff(true);
                 }
             },--%> {
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     commitPayoff(false);

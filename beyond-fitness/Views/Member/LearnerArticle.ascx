@@ -36,7 +36,7 @@
                         { %>
                             <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" onclick="registerLessons();">
                                 <span class="btn-label">
-                                    <i class="fa fa-calendar-plus-o"></i>
+                                    <i class="fa fa-calendar-alt-plus-o"></i>
                                 </span>新增課堂數
                             </button>
                     <%  }

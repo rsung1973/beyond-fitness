@@ -21,7 +21,7 @@
             width: "auto",
             resizable: false,
             modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-child'></i> Fitness Diagnosis</h4></div>",
+            title: "<div class='modal-title'><h4><i class='fa fa-diagnoses'></i> Fitness Diagnosis</h4></div>",
             close: function (event, ui) {
                 $('#<%= _dialog %>').remove();
             }

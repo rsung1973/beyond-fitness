@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Newtonsoft.Json;
+using CommonLib.DataAccess;
 
 using CommonLib.MvcExtension;
 using Utility;
@@ -24,6 +25,7 @@ using WebHome.Models.Timeline;
 using WebHome.Models.ViewModel;
 using WebHome.Security.Authorization;
 using WebHome.Properties;
+using System.Data;
 
 namespace WebHome.Controllers
 {
@@ -39,10 +41,9 @@ namespace WebHome.Controllers
         public ActionResult InquireLearner(LearnerQueryViewModel viewModel)
         {
             IQueryable<UserProfile> items = models.EntityList
-                         .Join(models.GetTable<UserRole>()
-                                 .Where(r => r.RoleID == (int)Naming.RoleID.Learner
-                                    || r.RoleID == (int)Naming.RoleID.Preliminary),
-                             u => u.UID, r => r.UID, (u, r) => u);
+                        .Where(u =>
+                            u.UserRole.Any(r => r.RoleID == (int)Naming.RoleID.Learner
+                                    || r.RoleID == (int)Naming.RoleID.Preliminary));
 
             Expression<Func<UserProfile, bool>> queryExpr = u => false;
 
@@ -386,7 +387,7 @@ namespace WebHome.Controllers
 
         public ActionResult EnableLearner(int uid)
         {
-            
+
             UserProfile item = models.EntityList.Where(u => u.UID == uid).FirstOrDefault();
 
             if (item == null)
@@ -398,9 +399,62 @@ namespace WebHome.Controllers
             models.SubmitChanges();
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-
-
         }
+
+        public ActionResult CreateUnallocatedLearnerListXlsx(LearnerQueryViewModel viewModel, String tableName)
+        {
+            ViewResult result = (ViewResult)InquireLearner(viewModel);
+            IQueryable<UserProfile> items = result.Model as IQueryable<UserProfile>;
+            if (items == null)
+            {
+                ViewBag.GoBack = true;
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+            }
+
+            items = items.Where(u => !u.LearnerFitnessAdvisor.Any())
+                        .Where(l => l.UserProfileExtension != null && !l.UserProfileExtension.CurrentTrial.HasValue);
+
+            renderToXlsx(items, "未指派體能顧問學員清單",$"({DateTime.Now:yyyy-MM-dd HH-mm-ss})LearnerReport");
+            return new EmptyResult();
+        }
+
+
+        private void renderToXlsx(IQueryable<UserProfile> items, String tableName,String fileName)
+        {
+
+            var resultItems = items.Select(u => new {
+                EMail = u.LevelID==(int)Naming.MemberStatus.已註冊 ? u.PID : null,
+                真實姓名 = u.RealName,
+                暱稱 = u.Nickname,
+                性別 = u.UserProfileExtension.Gender == "F" ? "女" : "男",
+                出生 = u.Birthday,
+                聯絡電話 = u.Phone,
+            });
+
+            DataTable details = resultItems.ToDataTable();
+            if (!String.IsNullOrEmpty(tableName))
+                details.TableName = tableName;
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", $"attachment;filename={fileName}.xlsx");
+
+            using (DataSet ds = new DataSet())
+            {
+                ds.Tables.Add(details);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            details.Dispose();
+        }
+
 
 
 

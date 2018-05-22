@@ -53,7 +53,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-gift'></i> 送禮物</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定送P.T session禮物包",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定送P.T session禮物包",
                 "class": "btn btn-primary",
                 click: function () {
                     var $item = $('input[name="UID"]:checked');

@@ -25,15 +25,15 @@
         <li class="divider"></li>
 <%  if (_model.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
     {   %>
-        <li><a onclick="bookingSelfTraining(<%= _model.LessonID %>);"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i>修改上課時間</a></li>
+        <li><a onclick="bookingSelfTraining(<%= _model.LessonID %>);"><i class="fa fa-fw fa fa-calendar-alt-check-o" aria-hidden="true"></i>修改上課時間</a></li>
 <%  }
     else
     { %>
-        <li><a onclick="showLoading(true,function(){ window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/RebookingByCoach/") + _model.LessonID %>';});"><i class="fa fa-fw fa fa-calendar-check-o" aria-hidden="true"></i>修改上課時間</a></li>
+        <li><a onclick="showLoading(true,function(){ window.location.href = '<%= VirtualPathUtility.ToAbsolute("~/Lessons/RebookingByCoach/") + _model.LessonID %>';});"><i class="fa fa-fw fa fa-calendar-alt-check-o" aria-hidden="true"></i>修改上課時間</a></li>
 <%  }
     if (item.LessonTime.LessonAttendance == null)
     { %>
-        <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>取消上課</a></li>
+        <li><a onclick="revokeBooking(<%= item.LessonID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>取消上課</a></li>
 <%  }
     if(item.LessonTime.TrainingPlan.Count>0)
     {  %>

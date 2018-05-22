@@ -53,7 +53,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-search'></i> 學員查詢</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $item = $('input[name="UID"]:checked');

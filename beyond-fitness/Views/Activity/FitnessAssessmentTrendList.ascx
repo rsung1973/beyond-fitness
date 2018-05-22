@@ -27,7 +27,7 @@
                                 <i class="fa fa-pencil-square-o text-warning btn btn-xs bg-color-orange"></i>
                             </a>&nbsp;&nbsp;
                             <a onclick="deleteAssessmentTrendItem(<%= item.AssessmentID %>,<%= item.ItemID %>);">
-                                <i class="fa fa-trash-o btn btn-xs bg-color-redLight"></i>
+                                <i class="far fa-trash-alt btn btn-xs bg-color-redLight"></i>
                             </a>
                         
                         <%

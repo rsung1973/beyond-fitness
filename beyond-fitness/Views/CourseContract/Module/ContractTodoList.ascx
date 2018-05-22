@@ -43,20 +43,20 @@
                     <%  if (_viewModel.Status == (int)Naming.CourseContractStatus.草稿)
                         { %>
                     <a onclick="$global.editContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                    <a onclick="$global.deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待確認)
                         {   %>
-                    <a onclick="$global.openToApproveContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToApproveContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待簽名)
                         {   %>
-                    <a onclick="$global.openToSignContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToSignContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil-alt" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
-                    <%--<a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>--%>
-                    <a onclick="$global.openToEnableContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <%--<a href="<%= Url.Action("GetContractPdf","CourseContract",new { item.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-pdf" aria-hidden="true"></i></a>--%>
+                    <a onclick="$global.openToEnableContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                     <%  } %>
                     <%= item.CourseContractType.TypeName %>(<%= item.LessonPriceType.DurationInMinutes %>分鐘)
                 </td>

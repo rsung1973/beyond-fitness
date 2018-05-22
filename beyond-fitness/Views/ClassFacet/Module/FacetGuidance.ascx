@@ -32,7 +32,7 @@
                 && _model.ClassTime < DateTime.Today.AddDays(1)) && _model.LessonAttendance == null
                 && _model.TrainingBySelf != 2)
             { %>
-        <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>完成上課</a>
+        <a onclick="attendLesson(<%= _model.LessonID %>);" class="btn btn-success"><i class="far fa-fw fa-check-square"></i>完成上課</a>
         <%  } %>
         <a href="javascript:showUndone(<%= _model.LessonID %>,-1);" class="btn btn-default" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>前往上一筆未完成資料</span>" data-html="true"><i class="fa fa-arrow-circle-left fa-lg"></i></a>
         <a href="javascript:showUndone(<%= _model.LessonID %>,1);" class="btn btn-default" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-darken font-md'>前往下一筆未完成資料</span>" data-html="true"><i class="fa fa-arrow-circle-right  fa-lg"></i></a>

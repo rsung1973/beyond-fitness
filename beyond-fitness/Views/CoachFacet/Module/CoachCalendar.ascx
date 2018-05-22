@@ -169,7 +169,7 @@
                                         closeText: "關閉",
                                         title: "<div class='modal-title'><h4><i class='fa fa-warning'></i> 新增行事曆</h4></div>",
                                         buttons : [{
-                                            html : "<i class='fa fa-send'></i>&nbsp;確定",
+                                            html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                                             "class" : "btn btn-primary",
                                             click: function () {
                                                 var f = function () {

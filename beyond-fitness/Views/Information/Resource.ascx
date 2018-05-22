@@ -22,8 +22,8 @@
                 <input type="radio" name="rbTitleImg" value="<%# Item.AttachmentID %>" />
                 <i></i>設成主題圖片
             </label>
-            <img width="60" src="<%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) + "?stretch=true" %>" />  
-             <a  onclick="javascript:deleteResource(<%# Item.AttachmentID %>)" class="btn btn-primary"><i class="fa fa-fw fa-trash-o"></i> 刪除</a>
+            <img width="60" src="<%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID) + "?stretch=false" %>" />  
+             <a  onclick="javascript:deleteResource(<%# Item.AttachmentID %>)" class="btn btn-primary"><i class="fa fa-fw fa-trash-alt"></i> 刪除</a>
             <label  class="label" class="form-md">
                 ( <%# VirtualPathUtility.ToAbsolute("~/Information/GetResource/"+Item.AttachmentID + "?stretch=true") %> )               
             </label>

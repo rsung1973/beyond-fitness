@@ -208,9 +208,13 @@
     }
 
     $(function () {
-        $global.showLessonList = function (url, title) {
+        $global.showLessonList = function (url, title, params) {
+            var postData = <%= JsonConvert.SerializeObject(_viewModel) %>;
+            if(params){
+                $.extend(postData,params);
+            }
             showLoading();
-            $.post(url, <%= JsonConvert.SerializeObject(_viewModel) %>, function (data) {
+            $.post(url,postData , function (data) {
                 hideLoading();
                 if (data) {
                     var $dialog = $(data);
@@ -317,7 +321,7 @@
 
     IQueryable<LessonTime> learnerToCommit(IQueryable<LessonTime> items)
     {
-        return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue);
+        return items.GetLearnerUncheckedLessons();
     }
 
     String reportCount(int count,String asZero = null)

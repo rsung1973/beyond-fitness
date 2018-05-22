@@ -66,7 +66,7 @@
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
                                                     } %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
@@ -79,7 +79,7 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依合約編號查詢</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-file-text-o"></i>
+                                            <i class="icon-append far fa-copy"></i>
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號">
                                         </label>
                                     </section>
@@ -92,7 +92,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: -1);    %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 <%  }
@@ -117,7 +117,7 @@
                                                 <option value="3">飲品</option>
                                                 <option value="4">運動商品</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -129,7 +129,7 @@
                                                 <option value="1204">待審核（作廢）</option>
                                                 <%--<option value="1205">已生效</option>--%>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>
@@ -142,7 +142,7 @@
                                                 <option value="2">紙本</option>
                                                 <option value="7">電子</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <%--<section class="col col-xs-12 col-sm-6 col-md-3">
@@ -153,7 +153,7 @@
                                                 <option value="<%= false %>">已開立</option>
                                                 <option value="<%= true %>">已作廢</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>--%>
                                     <section class="col col-xs-12 col-sm-6 col-md-4">
@@ -166,7 +166,7 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">買受人統編</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-file-text-o"></i>
+                                            <i class="icon-append far fa-copy"></i>
                                             <input type="text" name="BuyerReceiptNo" class="form-control input" maxlength="10" placeholder="請輸入買受人統編"/>
                                         </label>
                                     </section>
@@ -177,7 +177,7 @@
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢起日</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
                                             <input type="text" name="PayoffDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
@@ -185,7 +185,7 @@
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢迄日</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="PayoffDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",DateTime.Today) %>" />
                                         </label>
                                     </section>
@@ -233,7 +233,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>收款清單</h2>
                     <div class="widget-toolbar">
-                        <a id="btnDownload" onclick="downloadPayment();" style="display:none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
+                        <a id="btnDownload" onclick="downloadPayment();" style="display:none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
                     </div>
                 </header>
                 <!-- widget div-->

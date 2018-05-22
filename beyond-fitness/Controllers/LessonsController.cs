@@ -229,6 +229,9 @@ namespace WebHome.Controllers
                 //item.InvitedCoach = viewModel.CoachID;
                 //item.AttendingCoach = viewModel.CoachID;
                 item.ClassTime = viewModel.ClassDate;
+                if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                    item.HourOfClassTime = viewModel.ClassDate.Hour;
+
                 //item.DurationInMinutes = viewModel.Duration;
                 item.BranchID = viewModel.BranchID;
                 //item.TrainingBySelf = viewModel.TrainingBySelf;
@@ -725,6 +728,8 @@ namespace WebHome.Controllers
                     MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
                 }
             };
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                timeItem.HourOfClassTime = viewModel.ClassDate.Hour;
 
             if (viewModel.TrainingBySelf.HasValue)
             {
@@ -894,6 +899,9 @@ namespace WebHome.Controllers
                     MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
                 }
             };
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                timeItem.HourOfClassTime = viewModel.ClassDate.Hour;
+
 
             var users = models.CheckOverlapedBooking(timeItem, lesson);
             if (users.Count() > 0)
@@ -1036,6 +1044,8 @@ namespace WebHome.Controllers
                     MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
                 }
             };
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                timeItem.HourOfClassTime = viewModel.ClassDate.Hour;
 
             timeItem.GroupID = lesson.RegisterGroupID;
             timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
@@ -1265,7 +1275,8 @@ namespace WebHome.Controllers
                     .Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted
                         && u.LevelID != (int)Naming.MemberStatusDefinition.Anonymous)
                     .Where(l => l.RealName.Contains(userName) || l.Nickname.Contains(userName))
-                    .Where(l => l.UserRole.Count(r => r.RoleID == (int)Naming.RoleID.Learner) > 0)
+                    .Where(l => l.UserRole.Any(r => r.RoleID == (int)Naming.RoleID.Learner)
+                        || l.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Learner))
                     .Where(u => u.UserProfileExtension != null && !u.UserProfileExtension.CurrentTrial.HasValue)
                     .OrderBy(l => l.UID);
             }
@@ -1521,7 +1532,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },//g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pinkDark" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  // "fa -user"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  // "fa -user"
                 });
 
             items = items.Concat(dataItems
@@ -1536,7 +1547,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },  //g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-pinkDark" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-users"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-users"
                 }));
 
             items = items.Concat(dataItems
@@ -1565,7 +1576,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = /*g.ClassTime < today ? new string[] { "event", "bg-color-yellow" } :*/ g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-red" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
             items = items.Concat(dataItems
@@ -1579,7 +1590,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = /*g.ClassTime < today ? new string[] { "event", "bg-color-yellow" } :*/ g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-yellow" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
             items = items.Concat(dataItems
@@ -1593,7 +1604,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-pink" },  //  g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pink" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-magic"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-magic"
                 }));
 
             items = items.Concat(buildVipLessonEventsForEnterprise(start, end, learner, item));
@@ -1623,7 +1634,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },//g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pinkDark" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  // "fa -user"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  // "fa -user"
                 });
 
             items = items.Concat(dataItems
@@ -1637,7 +1648,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-blue" },  //g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-pinkDark" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-users"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-users"
                 }));
 
             items = items.Concat(dataItems
@@ -1651,7 +1662,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = /*g.ClassTime < today ? new string[] { "event", "bg-color-yellow" } :*/ g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-red" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-child" // learner == true ? "fa-child" : g.ClassTime < today ? "fa-ckeck" : "fa-clock-o"
                 }));
 
             items = items.Concat(dataItems
@@ -1665,7 +1676,7 @@ namespace WebHome.Controllers
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.LessonAttendance != null && learner == false ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-pink" },  //  g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-pink" },
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null  //"fa-magic"
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null  //"fa-magic"
                 }));
             return items;
         }

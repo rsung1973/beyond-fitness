@@ -107,7 +107,7 @@
                                     <i class="fa fa-plus text-warning"></i>
                                 </a>&nbsp;&nbsp;
                                 <a onclick="editStageBreakInterval(<%= _stage.StageID %>);" >
-                                    <i class="fa fa-clock-o text-warning"></i>
+                                    <i class="far fa-clock text-warning"></i>
                                 </a>
                             </h4>
                         </div>

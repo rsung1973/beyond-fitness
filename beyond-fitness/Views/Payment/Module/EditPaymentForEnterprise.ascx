@@ -17,7 +17,7 @@
                     <section class="col col-6">
                         <label class="label">收款日期</label>
                         <label class="input">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" name="PayoffDate" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.PayoffDate) %>' />
                         </label>
                     </section>
@@ -52,7 +52,7 @@
                                 <option value="刷卡">刷卡</option>
                                 <option value="轉帳">轉帳</option>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                         <script>
                             $('#<%= _dialog %> select[name="PaymentType"]').val('<%= _viewModel.PaymentType %>');
@@ -61,7 +61,7 @@
                     <section class="col col-4">
                         <label class="label">收款金額</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="PayoffAmount" maxlength="10" placeholder="請輸入收款金額" value="<%= _viewModel.PayoffAmount %>" />
                         </label>
                     </section>
@@ -101,7 +101,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認收款資料正確?")) {

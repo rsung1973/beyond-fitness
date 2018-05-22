@@ -39,16 +39,16 @@
                 <td>
                     <%  if(_viewModel.Status == (int)Naming.CourseContractStatus.待確認)
                         {   %>
-                    <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToApproveAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待簽名)
                         {   %>
-                    <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
+                    <a onclick="$global.openToSignAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil-alt" aria-hidden="true"></i></a>
                     <%  }
                         else if(_viewModel.Status == (int)Naming.CourseContractStatus.待審核)
                         {   %>
-                    <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { r.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
-                    <a onclick="$global.enableAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                    <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { r.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>
+                    <a onclick="$global.enableAmendment(<%= r.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                     <%  } %>
                     <%= r.Reason %>
                 </td>

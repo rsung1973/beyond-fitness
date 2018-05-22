@@ -21,7 +21,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil-alt"></i>
             </span>
         </span>
 
@@ -49,7 +49,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-pencil"></i>專業知識
+        <i class="fa-fw fa fa-pencil-alt"></i>專業知識
 							<span>>  
 								新增文章
                             </span>
@@ -101,7 +101,7 @@
                                 <div class="row">
                                     <section class="col col-6">
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" class="form-control input-lg date form_date" data-date="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請輸入發佈時間" value="<%= _item.Document.DocDate.ToString("yyyy/MM/dd") %>" name="docDate" id="docDate" />
                                         </label>
                                     </section>
@@ -109,20 +109,20 @@
                                         <label class="select">
                                             <% ViewBag.SelectIndication = "<option value='1'>請選擇撰文者</option>";
                                                 Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "authorID", Name = "authorID", DefaultValue = _item.AuthorID }); %>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>
 
                                 <section>
                                     <label class="input">
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                         <input type="text" class="input-lg" name="title" id="title" maxlength="50" placeholder="請輸入文章主要標題" value="<%= _item.Title %>" />
                                     </label>
                                 </section>
                                 <%--<section>
                                     <label class="input">
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                         <input type="text" class="input-lg" name="subtitle" maxlength="50" placeholder="請輸入文章次要標題" value="<%= _item.Subtitle %>">
                                     </label>
                                 </section>--%>

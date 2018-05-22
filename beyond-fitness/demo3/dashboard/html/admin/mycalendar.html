@@ -7,7 +7,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
       <!-- Basic Styles -->
       <link rel="stylesheet" type="text/css" media="screen" href="../../css/bootstrap.min.css">
-      <link rel="stylesheet" type="text/css" media="screen" href="../../css/font-awesome.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="../../fonts/fontawesome5.0/css/fontawesome-all.css">
       <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
       <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-production-plugins.min.css">
       <link rel="stylesheet" type="text/css" media="screen" href="../../css/smartadmin-production.min.css">
@@ -85,41 +85,13 @@
       * 'fixed-page-footer' - Fixes footer
       * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
       -->
-   <body class="smart-style-5 menu-on-top">
+   <body class="smart-style-5 menu-on-top fixed-header">
       <!-- HEADER -->
       <header id="header">
          <div id="logo-group">
             <!-- PLACE YOUR LOGO HERE -->
             <span id="logo"> <img src="../../img/logo.png" alt="Beyond-Fitness"> </span>
             <!-- END LOGO PLACEHOLDER -->
-            <!-- Note: The activity badge color changes when clicked and resets the number to 0
-               Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-            <span id="activity" class="activity-dropdown"> <i class="fa fa-user"></i> <b class="badge"> 21 </b> </span>
-            <!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
-            <div class="ajax-dropdown">
-               <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
-               <div class="btn-group btn-group-justified" data-toggle="buttons">
-                  <label class="btn btn-default">
-                  <input type="radio" name="activity" id="../../ajax/notify/message.html">運動留言板 (14)</label>
-                  <label class="btn btn-default">
-                  <input type="radio" name="activity" id="../../ajax/notify/questioniare.html">階段性調整計劃 (3)</label>
-               </div>
-               <!-- notification content -->
-               <div class="ajax-notifications custom-scroll">
-                  <div class="alert alert-transparent">
-                     <h4>在這邊有許多有趣的訊息喔！為了保護您的訊息不被他人所直接觀看，請您點選上方類別後才可查看相關訊息！</h4>
-                  </div>
-                  <i class="fa fa-lock fa-4x fa-border"></i>
-               </div>
-               <!-- end notification content -->
-               <!-- footer: refresh area -->
-               <span> 最後更新時間: 2016/07/23 9:43AM
-               <button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
-               <i class="fa fa-refresh"></i>
-               </button> </span>
-               <!-- end footer -->
-            </div>
-            <!-- END AJAX-DROPDOWN -->
          </div>
          <!-- pulled right: nav area -->
          <div class="pull-right">
@@ -190,7 +162,7 @@
          <div id="ribbon">
             <span class="ribbon-button-alignment"> 
                <span id="refresh" class="btn btn-ribbon">
-                  <i class="fa fa-calendar-o"></i>
+                  <i class="far fa-calendar-check"></i>
                </span> 
             </span>
             <!-- breadcrumb -->
@@ -255,12 +227,12 @@
                                        <div class="col-sm-3">
                                           <h1><small>今日上課學員</small></h1>
                                           <ul class="list-inline friends-list">
-                                             <li><a href="editclass.html"><img src="../../img/avatars/garfaild.png" alt="劉加菲"></a></li>
-                                             <li><a href="editclass.html"><img src="../../img/avatars/Bryant.jpg"></a></li>
-                                             <li><a href="editclass.html"><img src="../../img/avatars/female.png"></a></li>
-                                             <li><a href="editclass.html"><img src="../../img/avatars/male.png"></a></li>
-                                             <li><a href="editclass.html"><img src="../../img/avatars/female.png"></a></li>
-                                             <li><a href="editclass.html"><img src="../../img/avatars/male.png"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/garfaild.png" alt="劉加菲"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/Bryant.jpg"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/female.png"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/male.png"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/female.png"></a></li>
+                                             <li><a href="editclass_v2.html"><img src="../../img/avatars/male.png"></a></li>
                                           </ul>
                                        </div>
                                     </div>
@@ -271,9 +243,10 @@
                                                     <a href="modifycoachprofile.html"><img src="../../img/avatars/Doreen.jpg" class="img-circle img-thumbnail" width="130px"/></a>                                                                             
                                                 </div>                                                
                                                 <div class="head-panel nm">
-                                                    <div class="hp-info pull-left" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-blueLight font-md'>180堂 / 9,800,000元</span>" data-html="true">
+<!--                                                    <div class="hp-info pull-left" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-blueLight font-md'>180堂 / 9,800,000元</span>" data-html="true">-->
+                                                    <div class="hp-info pull-left" id="achievementDialog_link">
                                                         <div class="hp-icon">
-                                                            <span class="fa fa-trophy"></span>
+                                                            <span class="achievement"></span>
                                                         </div>                                
                                                         <span class="hp-main">AFM</span>
                                                         <span class="hp-sm">P.T 6</span>
@@ -323,7 +296,7 @@
                                              <a href="#birthdaylist_tab" data-toggle="tab"><i class="fa fa-birthday-cake"></i> 生日提醒</a>
                                           </li>
                                           <li>
-                                             <a href="#mycalendar_tab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar"></i> 行事曆</a>
+                                             <a href="#mycalendar_tab" data-toggle="tab" class="hidden-md hidden-lg"><i class="fa fa-calendar-alt"></i> 行事曆</a>
                                           </li>
 <!--
                                           <li class="pull-left">
@@ -405,6 +378,7 @@
                                                                <td class="text-center">--</td>
                                                                <td class="text-center">--</td>
                                                             </tr>
+<!--
                                                             <tr>
                                                                <td>階段性調整計劃(25)</td>
                                                                <td class="text-center">--</td>
@@ -412,6 +386,7 @@
                                                                <td class="text-center"><a href="#" class="questionnairelist_link"><u>(5)</u></a></td>
                                                                <td class="text-center"><a href="#" class="questionnairelist_link"><u>(20)</u></a></td>
                                                             </tr>                                                             
+-->
                                                          </tbody>
                                                       </table>
                                                       <!-- end content -->                                                                                                        
@@ -555,69 +530,69 @@
                                                    <div class="widget-body txt-color-white padding-5">
                                                       <!-- content -->
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Jenn Wilson</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Jenn Wilson</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Mike McBride</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Mike McBride</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Travis Wilson</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Travis Wilson</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="Joe Cadena joe@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png">Mike McBride</a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Mike McBride</a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png">Marshall Hitt</a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Marshall Hitt</a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png">Joe Cadena</a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Joe Cadena</a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <div class="user" title="email@company.com">
-                                                         <a href="editclass.html"><img src="../../img/avatars/female.png">Mike McBride</a>
+                                                         <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Mike McBride</a>
                                                          <div class="email">
-                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                                                            <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                                                          </div>
                                                       </div>
                                                       <!-- end content -->                                                                                                        
@@ -698,7 +673,7 @@
                                              <!-- new widget -->
                                              <div class="jarviswidget" data-widget-editbutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
                                                 <header>
-                                                   <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                                                   <span class="widget-icon"> <i class="fa fa-calendar-alt"></i> </span>
                                                    <h2>我的行事曆：101</h2>
                                                    <div class="widget-toolbar">
 <!--                                                       <div class="btn-group">
@@ -790,7 +765,7 @@
                      <!-- new widget -->
                      <div class="jarviswidget" data-widget-editbutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
                         <header>
-                           <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                           <span class="widget-icon"> <i class="fa fa-calendar-alt"></i> </span>
                            <h2>我的行事曆：101</h2>
                            <div class="widget-toolbar">
 <!--                               <div class="btn-group">
@@ -879,8 +854,8 @@
                         <td noWrap="noWrap">張大哥</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">                        
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                           <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                           <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -891,7 +866,7 @@
                         <td noWrap="noWrap">劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程(學員已打卡)
                         </td>
                      </tr>
@@ -902,8 +877,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -914,7 +889,7 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程(學員已打卡)
                         </td>
                      </tr>
@@ -925,8 +900,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -937,8 +912,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -949,8 +924,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -961,7 +936,7 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
                            已完成課程
                         </td>
                      </tr>
@@ -972,8 +947,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -984,8 +959,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -996,8 +971,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -1008,8 +983,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td>
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -1020,8 +995,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>                        
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -1032,8 +1007,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -1044,8 +1019,8 @@
                         <td noWrap="noWrap">宋胖子/劉加菲</td>
                         <td noWrap="noWrap">邱鈺烘 Jack Chu</td>
                         <td noWrap="noWrap">
-                           <a href="editclass.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
-                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                           <a href="editclass_v2.html" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a> 
+                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                            已完成課程
                         </td>
                      </tr>
@@ -1081,7 +1056,7 @@
                                           <option value="4">企業方案</option>
                                           <option value="5">內部福利課程</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  <section class="col col-4">
@@ -1092,7 +1067,7 @@
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  <section class="col col-4">
@@ -1102,7 +1077,7 @@
                                           <option value="1">小巨蛋</option>
                                           <option value="2">１０１</option>
                                        </select>
-                                       <i class="icon-append fa fa-file-word-o"></i>
+                                       <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                  </section>
                               </div>
@@ -1164,9 +1139,9 @@
                                              <li class="fa fa-exclamation-triangle"></li>
                                              未有付款紀錄!!!
                                           </span>
-                                          <span class="label label-warning">
+                                          <span class="label label-warning" id="questionnaire2_link">
                                              <li class="fa fa-exclamation-triangle"></li>
-                                             階段性調整計劃未填寫，請通知學員登入系統完成滿意度問卷調查。
+                                             階段性調整計劃未填寫，請 <u>立即填寫!</u> 階段性調整計劃。
                                           </span>
                                        </label>
                                        <label class="radio">
@@ -1198,7 +1173,7 @@
                                                    <option value="1">男</option>
                                                    <option value="2">女</option>
                                                 </select>
-                                                <i class="icon-append fa fa-file-word-o"></i>
+                                                <i class="icon-append far fa-keyboard"></i>
                                              </label>
                                           </section>                                                            
                                        </div>  -->                            
@@ -1236,7 +1211,7 @@
                                           <option value="2">休假</option>
                                           <option value="3">其他</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>  
                                  <section class="col col-6">
@@ -1246,14 +1221,14 @@
                                           <option value="1">小巨蛋</option>
                                           <option value="2">１０１</option>
                                        </select>
-                                       <i class="icon-append fa fa-file-word-o"></i>
+                                       <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                  </section>                                                                                            
                               </div>  
                               <div>
                                  <section>
                                     <label class="label">請輸入行事曆內容</label>
-                                    <label class="input"> <i class="icon-append fa fa-file-word-o"></i>
+                                    <label class="input"> <i class="icon-append far fa-keyboard"></i>
                                           <input type="text" name="eventcontent" maxlength="10" placeholder="請輸入行事曆內容">
                                     </label>
                                  </section>                               
@@ -1269,7 +1244,7 @@
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  <section class="col col-6">
@@ -1280,7 +1255,7 @@
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  
@@ -1369,7 +1344,7 @@
                                           <option value="2">休假</option>
                                           <option value="3">其他</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>  
                                  <section class="col col-6">
@@ -1379,14 +1354,14 @@
                                           <option value="1">小巨蛋</option>
                                           <option value="2">１０１</option>
                                        </select>
-                                       <i class="icon-append fa fa-file-word-o"></i>
+                                       <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                  </section>                                                                                            
                               </div>  
                               <div>
                                  <section>
                                     <label class="label">請輸入行事曆內容</label>
-                                    <label class="input"> <i class="icon-append fa fa-file-word-o"></i>
+                                    <label class="input"> <i class="icon-append far fa-keyboard"></i>
                                           <input type="text" name="eventcontent" maxlength="10" placeholder="請輸入行事曆內容">
                                     </label>
                                  </section>                               
@@ -1402,7 +1377,7 @@
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  <section class="col col-6">
@@ -1413,7 +1388,7 @@
                                           <option value="1">07:30</option>
                                           <option value="2">08:00</option>
                                        </select>
-                                       <i class="icon-append fa fa-clock-o"></i>
+                                       <i class="icon-append far fa-clock"></i>
                                     </label>
                                  </section>
                                  
@@ -1588,8 +1563,8 @@
                      <tbody>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1603,8 +1578,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1618,8 +1593,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1633,8 +1608,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1648,8 +1623,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1663,8 +1638,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1678,8 +1653,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1693,8 +1668,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1708,8 +1683,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1723,8 +1698,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1738,8 +1713,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1753,8 +1728,8 @@
                         </tr>
                         <tr>
                            <td>
-                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-square-o" aria-hidden="true"></i> </a>                        
-                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a> 
+                              <a href="#" class="btn btn-circle bg-color-orange"><i class="fa fa-fw fa fa-lg fa-pencil-alt-alt" aria-hidden="true"></i> </a>                        
+                              <a href="#" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a> 
                               2016/7/20
                            </td>
                            <td>2</td>
@@ -1827,27 +1802,27 @@
                         <span class="from font-md">已於 2016/01/05 填寫階段性調整計劃！</span>
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>1. 在幫助學員進行訓練的過程中，學員最喜歡哪一方面？</span><br/>
+                        <span class="text-warning">1. 在幫助學員進行訓練的過程中，學員最喜歡哪一方面？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;休息
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>2. 學員在訓練過後有什麼感覺或想法？</span><br/>
+                        <span class="text-warning">2. 學員在訓練過後有什麼感覺或想法？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;累
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>3. 是否有學員所期待或任何學員想達成但尚未完成的事？</span><br/>
+                        <span class="text-warning">3. 是否有學員所期待或任何學員想達成但尚未完成的事？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;打教練
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>4. 學員覺得有什麼更好的方法才能讓學員獲得更好的體驗？</span><br/>
+                        <span class="text-warning">4. 學員覺得有什麼更好的方法才能讓學員獲得更好的體驗？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;持續放鬆
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>5. 學員認為目前所提供的訓練和服務在1-10(1是最差，10是最佳)分範圍中應得幾分？</span><br/>
+                        <span class="text-warning">5. 學員認為目前所提供的訓練和服務在1-10(1是最差，10是最佳)分範圍中應得幾分？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;8分
                      </div>
                      <div class="image font-md">
-                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i>6. 在接下來30天，學員期望可實現最重要的目標或成果是什麼？並請同時說明為什麼？</span><br/>
+                        <span class="text-warning">6. 在接下來30天，學員期望可實現最重要的目標或成果是什麼？並請同時說明為什麼？</span><br/>
                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;放鬆
                      </div>
                   </div>
@@ -1892,7 +1867,7 @@
                                        <label class="fa fa-comments"></label>
                                  </div>
                                  <span class="input-group-btn">
-                                       <button class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
+                                       <button class="btn btn-primary" type="button"><i class="fa fa-paper-plane"></i></button>
                                  </span>
                         </div>                  
                         <div class="content messages npr npb">
@@ -1951,7 +1926,7 @@
                          <td>2017/01/05</td>
                          <td noWrap="noWrap">                              
                             <a href="#" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>&nbsp;&nbsp;          
-                             <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>           
+                             <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a>           
                             1對1
                          </td>
                       </tr>
@@ -1978,7 +1953,7 @@
                          <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
                          <td noWrap="noWrap">                              
-                            <a href="contractapprove.html" target="_blank" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                            <a href="contractapprove.html" target="_blank" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                              1對1
                          </td>
                       </tr>
@@ -2005,7 +1980,7 @@
                          <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
                          <td noWrap="noWrap">                              
-                            <a href="contractsign.html" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i> </a>           
+                            <a href="contractsign.html" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil-alt" aria-hidden="true"></i> </a>           
                              1對1
                          </td>
                       </tr>
@@ -2029,7 +2004,7 @@
                                      <option value="3">1對2（個人）</option>
                                      <option value="5">企業版</option>
                                   </select>
-                                  <i class="icon-append fa fa-file-word-o"></i>
+                                  <i class="icon-append far fa-keyboard"></i>
                                </label>
                             </section>
                             <section class="col col-6">
@@ -2042,7 +2017,7 @@
                                      <option value="3">Anastasia</option>
                                      <option value="4">Avelina</option>
                                   </select>
-                                  <i class="icon-append fa fa-file-word-o"></i>
+                                  <i class="icon-append far fa-keyboard"></i>
                                </label>
                             </section>
                          </div>
@@ -2069,7 +2044,7 @@
                                  <tr>
                                     <th noWrap="noWrap">
                                        <a href="#" class="btn btn-circle bg-color-yellow modifyStudentDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>&nbsp;&nbsp;
-                                       <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>                                                 
+                                       <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a>                                                 
                                     </th>
                                     <td>劉思琳</td>
                                     <td noWrap="noWrap">F224553186</td>
@@ -2105,7 +2080,7 @@
                                     <option value="1">60分鐘</option>
                                     <option value="2">90分鐘</option>
                                  </select>
-                                 <i class="icon-append fa fa-clock-o"></i>
+                                 <i class="icon-append far fa-clock"></i>
                               </label>
                            </section>                       
                         </div>
@@ -2160,7 +2135,7 @@
                          <td>2017/01/05</td>
                          <td noWrap="noWrap">                              
                             <a href="#" class="btn btn-circle bg-color-yellow applyContractDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i> </a>&nbsp;&nbsp;          
-                             <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>           
+                             <a href="#" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a>           
                             展延
                          </td>
                       </tr>
@@ -2187,7 +2162,7 @@
                          <td noWrap="noWrap">宋胖子</td>
                          <td>2017/01/05</td>
                          <td noWrap="noWrap">                              
-                            <a href="contract_extend.html" target="_blank" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i> </a>           
+                            <a href="contract_extend.html" target="_blank" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i> </a>           
                              展延
                          </td>
                       </tr>
@@ -2213,7 +2188,7 @@
                                      <option value="4">終止</option>
                                      <option value="5">其他</option>
                                   </select>
-                                  <i class="icon-append fa fa-file-word-o"></i>
+                                  <i class="icon-append far fa-keyboard"></i>
                                </label>
                             </section>
                             <section class="col col-6" id="extend" style="display:none">
@@ -2225,7 +2200,7 @@
                                      <option value="3">9個月</option>
                                      <option value="4">12個月</option>
                                   </select>
-                                  <i class="icon-append fa fa-clock-o"></i>
+                                  <i class="icon-append far fa-clock"></i>
                                </label>
                             </section>
                             <section class="col col-6" style="display:none" id="transfer_spot">
@@ -2286,7 +2261,7 @@
                                </section>
                                <section class="col col-6">
                                   <label class="label">身份證字號/護照號碼</label>
-                                  <label class="input"> <i class="icon-append fa fa-id-card-o"></i>
+                                  <label class="input"> <i class="icon-append far fa-id-card"></i>
                                   <input type="tel" name="idno" maxlength="20" placeholder="請輸入身份證字號/護照號碼">
                                   </label>
                                </section>
@@ -2296,7 +2271,7 @@
                              <div class="row">
                                <section class="col col-6">
                                   <label class="label">出生</label>
-                                  <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1"><i class="icon-append fa fa-calendar"></i>
+                                  <label class="input input-group date form_date" data-date-format="yyyy/mm/dd" data-link-field="dtp_input1"><i class="icon-append far fa-calendar-alt"></i>
                                   <input type="text" name="birthday" class="form-control" placeholder="請選擇生日" readonly="readonly">
                                   </label> 
                                </section>
@@ -2473,8 +2448,8 @@
                                         <td>--</td>
                                         <td noWrap="noWrap">CPA201701050001-00</td>
                                         <td noWrap="noWrap">
-                                            <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
-                                            <a href="#" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i> </a>
+                                            <a href="#" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
+                                            <a href="#" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-pencil-alt" aria-hidden="true"></i> </a>
                                         </td>
                                      </tr>
                                      
@@ -2497,69 +2472,69 @@
                       <div class="widget-body txt-color-white padding-5">
                          <!-- content -->
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Jenn Wilson</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Jenn Wilson</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Mike McBride</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Mike McBride</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Travis Wilson</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Travis Wilson</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Marshall Hitt</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="Joe Cadena joe@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png"><i class="fa fa-bell text-warning"> Joe Cadena</i></a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png">Mike McBride</a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Mike McBride</a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png">Marshall Hitt</a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Marshall Hitt</a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png">Joe Cadena</a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Joe Cadena</a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <div class="user" title="email@company.com">
-                            <a href="editclass.html"><img src="../../img/avatars/female.png">Mike McBride</a>
+                            <a href="editclass_v2.html"><img src="../../img/avatars/female.png">Mike McBride</a>
                             <div class="email">
-                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                               <a href="http://line.me/R/msg/text/?(♛‿♛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                             </div>
                          </div>
                          <!-- end content -->                                                                                                        
@@ -2845,7 +2820,7 @@
                 </div>                    
              </div>
              <!-- dialog-message -->  
-             <!-- dialog-message --> 
+             <!-- ui-dialog -->
             <div id="listCertDialog" title="證照列表" class="bg-color-darken">
                 <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
@@ -2882,7 +2857,209 @@
                 </div>
                 <!-- end widget -->            
             </div>              
-             <!-- dialog-message -->                
+             <!-- dialog-message --> 
+             <!-- ui-dialog -->
+            <div id="questionnaireDialog2" title="階段性調整計劃" class="bg-color-darken">
+               <div class="panel panel-default bg-color-darken">
+                  <div class="panel-body status smart-form vote no-padding">
+                     <div class="alert alert-warning">
+                        <i class="fa fa-info-circle">
+                        為了讓您的教練做出更優化的階段性調整，下方提供 <六個小問題> 請您回答補充，資料僅提供訓練使用，不會外洩，敬請放心填寫！
+                        </i>
+                     </div>                  
+                     <form action="#" method="post" class="smart-form">
+                        <fieldset>
+                           <div class="row">
+                              <section class="col col-6">
+                                 <label class="label">1.在教練訓練中，您最喜歡整體規劃的哪一部分？</label>
+                                 <label class="input"> <i class="icon-append fa fa-comments"></i>
+                                    <input type="text" placeholder="請輸入簡短描述即可" maxlength="100" size="60">
+                                 </label>
+                              </section>
+                              <section class="col col-6">
+                                 <label class="label">2.您在於每次訓練後的感覺跟想法？</label>
+                                 <label class="input"> <i class="icon-append fa fa-comments"></i>
+                                    <input type="text" placeholder="請輸入簡短描述即可" maxlength="100" size="60">
+                                 </label>
+                              </section>
+                           </div>
+                           <div class="row">
+                              <section class="col col-6">
+                                 <label class="label">3. 運動中是否有期待或任何想達成的事情呢？</label>
+                                 <label class="input"> <i class="icon-append fa fa-comments"></i>
+                                    <input type="text" placeholder="請輸入簡短描述即可" maxlength="100" size="60">
+                                 </label>
+                              </section>
+                              <section class="col col-6">
+                                 <label class="label">4. 教練的整體規劃服務 1~10你會給幾分</label>
+                                 <label class="select">
+                                    <select>
+                                       <option value="1">1</option>
+                                       <option value="2">2</option>
+                                       <option value="3">3</option>
+                                       <option value="4">4</option>
+                                       <option value="5">5</option>
+                                       <option value="6">6</option>
+                                       <option value="7">7</option>
+                                       <option value="8">8</option>
+                                       <option value="9">9</option>
+                                       <option value="10">10</option>
+                                    </select>
+                                    <i></i> 
+                                 </label>
+                              </section>
+                           </div>
+                           <div class="row">
+                              <section class="col col-6">
+                                 <label class="label">5. 您覺得有什麼更好的方法才能獲得更好的體驗？</label>
+                                 <label class="input"> <i class="icon-append fa fa-comments"></i>
+                                    <input type="text" placeholder="請輸入簡短描述即可" maxlength="100" size="60">
+                                 </label>
+                              </section>
+                              
+                              <section class="col col-6">
+                                 <label class="label">6. 在接下來30天，您期望可實現最重要的目標或成果是什麼？</label>
+                                 <label class="input"> <i class="icon-append fa fa-comments"></i>
+                                    <input type="text" placeholder="請輸入簡短描述即可" maxlength="100" size="60">
+                                 </label>
+                              </section>
+                           </div>
+                        </fieldset>
+                        <footer>                           
+                           <button type="submit" name="submit" class="btn btn-primary">
+                                送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                           </button>
+                           <button type="submit" name="submit" class="btn bg-color-yellow">
+                             我超強不用了解學生 <i class="far fa-thumbs-up" aria-hidden="true"></i>
+                           </button>
+                        </footer>
+                        <div class="message">
+                           <i class="fa fa-check fa-lg"></i>
+                           <p>
+                              Your comment was successfully added!
+                           </p>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+            <!-- dialog-message --> 
+            <!-- ui-dialog -->
+            <div id="achievementDialog" title="業績列表" class="bg-color-darken">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                   <div>
+                      <!-- widget edit box -->
+                      <div class="jarviswidget-editbox">
+                         <!-- This area used as dropdown edit box -->
+                      </div>
+                      <!-- end widget edit box -->
+                      <!-- widget content -->
+                      <div class="widget-body bg-color-darken txt-color-white no-padding">
+                         <table id="achievement_dt" class="table table-striped table-bordered table-hover" width="100%">
+                            <thead>
+                               <tr>
+                                  <th data-class="expand">月份</th>
+                                  <th>上課堂數</th>
+                                  <th>上課金額（含稅）</th>
+                                  <th>業績金額（含稅）</th>
+                               </tr>
+                            </thead>
+                            <tbody>
+                               <tr>
+                                  <td>2018/04</td>
+                                  <td class="text-center"><u class="classlistDialog_link">999</u></td>
+                                  <td class="text-right">99,999</td>
+                                   <td class="text-right"><u class="paylistDialog_link">999,999</u></td>
+                               </tr>
+                               <tr>
+                                  <td>2018/05</td>
+                                  <td class="text-center"><u class="classlistDialog_link">999</u></td>
+                                  <td class="text-right">99,999</td>
+                                   <td class="text-right"><u class="paylistDialog_link">999,999</u></td>
+                               </tr>
+                               <tr>
+                                  <td>2018/06</td>
+                                  <td class="text-center"><u class="classlistDialog_link">999</u></td>
+                                  <td class="text-right">99,999</td>
+                                   <td class="text-right"><u class="paylistDialog_link">999,999</u></td>
+                               </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                  <td class="text-right">總計</td>
+                                  <td class="text-center">9,999</td>
+                                  <td class="text-right">99,999</td>
+                                  <td class="text-right">999,999</td>
+                                </tr>
+                            </tfoot>
+                         </table>
+                      </div>
+                      <!-- end widget content -->
+                   </div>
+                   <!-- end widget div -->
+                </div>
+                <!-- end widget -->            
+            </div>              
+             <!-- dialog-message --> 
+            <!-- ui-dialog -->
+            <div id="paylistDialog" title="分潤明細" class="bg-color-darken">
+               <!-- content -->
+                <table id="paylist_dt" class="table table-striped table-bordered table-hover" width="100%">
+                   <thead>
+                      <tr>
+                         <th>發票號碼</th>
+                         <th data-class="expand">分店</th>
+                         <th data-hide="phone">收款人</th>
+                         <th>學員</th>
+                         <th>收款/作廢日期</th>
+                         <th>金額</th>
+                         <th data-hide="phone">合約編號</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td>AU00000003</td>
+                         <td>南京</td>
+                         <td>黃政浩 Bill</td>
+                         <td>宋胖子</td>
+                         <td>2017/01/05</td>
+                         <td class="text-right">1,500</td>
+                         <td noWrap="noWrap">運動商品</td>
+                         
+                      </tr>
+                   </tbody>
+                </table>                
+                <canvas id="achievement-piechart"></canvas>
+               <!-- end content -->  
+            </div>
+            <!-- dialog-message -->   
+            <!-- ui-dialog -->
+            <div id="classlistDialog" title="上課明細" class="bg-color-darken">
+               <!-- content -->
+                <table id="classlist2_dt" class="table table-striped table-bordered table-hover" width="100%">
+                   <thead>
+                      <tr>
+                         <th data-class="expand">合約編號</th>
+                         <th>分店</th>
+                         <th>學員</th>
+                         <th>合約名稱</th>
+                         <th data-hide="phone">半價計算堂數</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td noWrap="noWrap">CPA201608121117-00</td>
+                         <td noWrap="noWrap">南京</td>
+                         <td noWrap="noWrap">鄭胖子</td>
+                         <td  >1對1體能顧問課程(60分鐘)</td>
+                         <td>否</td>
+                      </tr>
+                   </tbody>
+                </table>               
+               <!-- end content -->              
+            </div>
+            <!-- dialog-message -->                 
          </div>
       <!-- PAGE FOOTER -->
       <div class="page-footer">
@@ -2892,7 +3069,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 text-right hidden-xs">
                <div class="txt-color-white inline-block">
-                  <i class="txt-color-blueLight hidden-mobile">Last update time <i class="fa fa-clock-o"></i>  <strong>2016/07/23 PM 20:03 &nbsp;</strong> 
+                  <i class="txt-color-blueLight hidden-mobile">Last update time <i class="far fa-clock"></i>  <strong>2016/07/23 PM 20:03 &nbsp;</strong> 
                   </i>
                </div>
             </div>
@@ -2982,6 +3159,8 @@
       <script src="../../js/plugin/morris/raphael.min.js"></script>
       <script src="../../js/plugin/morris/morris.min.js"></script>
       <script src='../../js/plugin/knob/jquery.knob.js'></script>
+      <!-- Chartjs -->
+      <script src="../../js/plugin/chartjs/Chart.bundle.min.js"></script>
       <!-- PAGE RELATED PLUGIN(S) 
          <script src="..."></script>-->
       <script type="text/javascript">
@@ -2992,6 +3171,10 @@
          
              pageSetUp();
          
+              setInterval(function () {
+                $('.achievement').toggleClass('bling')
+              }, 1000)
+             
              /* knob plugin */
              if($(".knob").length > 0) $(".knob input").knob();
              /* eof knob plugin */
@@ -3014,7 +3197,7 @@
                   width: 600,
                   title : "<div class='modal-title'><h4><i class='fa fa-warning'></i> 新增行事曆</h4></div>",
                   buttons : [{
-                     html : "<i class='fa fa-send'></i>&nbsp;確定",
+                     html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                      "class" : "btn btn-primary",
                       click : function() {                         
                          $(this).dialog("close");
@@ -3087,11 +3270,11 @@
                      html : "<i class='fa fa-edit'></i>&nbsp;編輯",
                      "class" : "btn btn-primary",
                       click : function() { 
-                         window.location.href = "editclass.html";                        
+                         window.location.href = "editclass_v2.html";                        
                          $(this).dialog("close");
                      }
                }, {
-                     html : "<i class='fa fa-trash-o'></i>&nbsp;刪除",
+                     html : "<i class='fa fa-trash-alt'></i>&nbsp;刪除",
                      "class" : "btn bg-color-red",
                       click : function() {                                                   
                          $(this).dialog("close");
@@ -3114,7 +3297,7 @@
                          $(this).dialog("close");
                      }
                }, {
-                     html : "<i class='fa fa-trash-o'></i>&nbsp;刪除",
+                     html : "<i class='fa fa-trash-alt'></i>&nbsp;刪除",
                      "class" : "btn bg-color-red",
                       click : function() {                                                   
                          $(this).dialog("close");
@@ -3131,7 +3314,7 @@
                height: "auto",    
                title: "<h4 class='modal-title'><i class='fa fa-fw fa-calendar'></i>  行事曆</h4>",
                buttons : [{
-                     html : "<i class='fa fa-send'></i>&nbsp;確定",
+                     html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                      "class" : "btn btn-primary",
                       click : function() {                         
                          $(this).dialog("close");
@@ -3240,13 +3423,13 @@
                   modal : true,
                   title : "<div class='modal-title'><h4><i class='fa fa-edit'></i> 合約編號：CPA201701050001</h4></div>",
                   buttons : [{
-                     html : "<i class='fa fa-floppy-o'></i>&nbsp; 暫存",
+                     html : "<i class='far fa-save'></i>&nbsp; 暫存",
                      "class" : "btn bg-color-darken",
                      click : function() {
                         $(this).dialog("close");
                      }
                   }, {
-                     html : "<i class='fa fa-check-square-o'></i>&nbsp; 送交審核",
+                     html : "<i class='fa fa-check-square'></i>&nbsp; 送交審核",
                      "class" : "btn bg-color-red",
                      click : function() {
                         if (confirm("請再次確認合約內容資料正確")) {
@@ -3254,7 +3437,7 @@
                         }                       
                      }
                   }, {
-                     html : "<i class='fa fa-pencil'></i>&nbsp; 送交簽名",
+                     html : "<i class='fa fa-pencil-alt'></i>&nbsp; 送交簽名",
                      "class" : "btn bg-color-green",
                      click : function() {
                         if (confirm("請再次確認合約內容資料正確")) {
@@ -3307,7 +3490,7 @@
                   resizable : false,
                   modal : true,
                   title : "<div class='modal-title'><h4><i class='fa fa-cogs'></i> 學員服務申請</h4></div>"
-             });       
+             });                       
              
             $("#applyContractItem").change(function(){
                 jQuery('option:selected', this).each(function(){ 
@@ -3357,7 +3540,7 @@
                   modal : true,
                   title : "<div class='modal-title'><h4><i class='fa fa-search'></i> 學員查詢</h4></div>",
                   buttons : [{
-                     html : "<i class='fa fa-send'></i>&nbsp;確定",
+                     html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                      "class" : "btn btn-primary",
                       click : function() {                         
                          $(this).dialog("close");
@@ -3455,7 +3638,64 @@
                   resizable : false,
                   modal : true,
                   title : "<div class='modal-title'><h4><i class='fa fa-certificate'></i> 證照列表</h4></div>"
-             });               
+             });     
+             
+            $('#questionnaire2_link').click(function() {
+               $('#questionnaireDialog2').dialog('open');
+               return false;
+            });
+         
+            // Dialog click
+             $('#achievementDialog_link').click(function() {
+               $('#achievementDialog').dialog('open');
+               return false;
+         
+             });   
+         
+             $('#achievementDialog').dialog({
+                  autoOpen : false,
+                  width : "auto",
+                  resizable : false,
+                  modal : true,
+                  title : "<div class='modal-title'><h4><i class='fa fa-trophy'></i> 業績統計表</h4></div>"
+             }); 
+             
+            $('#questionnaireDialog2').dialog({
+               autoOpen : false,
+               resizable : true,
+               modal : true,
+               width: "auto",
+               height: "auto",    
+               title: "<h4 class='modal-title'><i class='fa fa-fw fa-volume-up'></i>  階段性調整計劃</h4>"
+            });         
+             
+           $('#paylistDialog').dialog({
+               autoOpen : false,
+               resizable : true,
+               modal : true,
+               width: "auto",
+               height: "auto",
+               title: "<h4 class='modal-title'><i class='fa-fw fa fa-table'></i>  分潤明細：黃比爾</h4>"
+            });
+         
+            $('.paylistDialog_link').click(function() {
+               $('#paylistDialog').dialog('open');
+               return false;
+            });            
+         
+            $('#classlistDialog').dialog({
+               autoOpen : false,
+               resizable : true,
+               modal : true,
+               width: "auto",
+               height: "auto",
+               title: "<h4 class='modal-title'><i class='fa-fw fa fa-table'></i>  上課明細：黃比爾</h4>"
+            });
+         
+            $('.classlistDialog_link').click(function() {
+               $('#classlistDialog').dialog('open');
+               return false;
+            });               
              
              /*
               * FULL CALENDAR JS
@@ -3574,7 +3814,7 @@
                          description: '課程訓練',
                          allDay: false,
                          className: ["event", "bg-color-gray"],
-                         icon: 'fa-check-square-o',
+                         icon: 'fa-check-square',
                          editable:false
                      }, {
                          title: '會議',
@@ -3676,6 +3916,9 @@
              var responsiveHelper_dt_basic7 = undefined;
              var responsiveHelper_dt_basic8 = undefined;
              var responsiveHelper_dt_basic9 = undefined;
+             var responsiveHelper_dt_basic10 = undefined;
+             var responsiveHelper_dt_basic11 = undefined;
+             var responsiveHelper_dt_basic12 = undefined;
          
              var responsiveHelper_datatable_fixed_column = undefined;
              var responsiveHelper_datatable_col_reorder = undefined;
@@ -3888,7 +4131,75 @@
                  "drawCallback": function(oSettings) {
                      responsiveHelper_dt_basic9.respond();
                  }
-             });                  
+             });  
+             
+             $('#classlist2_dt').dataTable({
+                 "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                         "t" +
+                         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                 "autoWidth": true,
+                 "order": [],
+                 "oLanguage": {
+                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                 },
+                "preDrawCallback": function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic12) {
+                        responsiveHelper_dt_basic12 = new ResponsiveDatatablesHelper($('#classlist2_dt'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function(nRow) {
+                    responsiveHelper_dt_basic12.createExpandIcon(nRow);
+                },
+                "drawCallback": function(oSettings) {
+                    responsiveHelper_dt_basic12.respond();
+                }
+            });
+             
+              $('#paylist_dt').dataTable({
+                 "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                         "t" +
+                         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                 "autoWidth": true,
+                 "order": [],
+                 "oLanguage": {
+                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                 },
+                 "preDrawCallback": function() {
+                     // Initialize the responsive datatables helper once.
+                     if (!responsiveHelper_dt_basic11) {
+                         responsiveHelper_dt_basic11 = new ResponsiveDatatablesHelper($('#paylist_dt'), breakpointDefinition);
+                     }
+                 },
+                 "rowCallback": function(nRow) {
+                     responsiveHelper_dt_basic11.createExpandIcon(nRow);
+                 },
+                 "drawCallback": function(oSettings) {
+                     responsiveHelper_dt_basic11.respond();
+                 }
+             });   
+             
+             $('#achievement_dt').dataTable({
+                 "sDom": "",
+                 "autoWidth": true,
+                 "bPaginate": false,
+                 "order": [],
+                 "oLanguage": {
+                 "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                 },
+                 "preDrawCallback": function() {
+                     // Initialize the responsive datatables helper once.
+                     if (!responsiveHelper_dt_basic10) {
+                         responsiveHelper_dt_basic10 = new ResponsiveDatatablesHelper($('#achievement_dt'), breakpointDefinition);
+                     }
+                 },
+                 "rowCallback": function(nRow) {
+                     responsiveHelper_dt_basic10.createExpandIcon(nRow);
+                 },
+                 "drawCallback": function(oSettings) {
+                     responsiveHelper_dt_basic10.respond();
+                 }
+             });    
              
              /* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
              if ($('#strengthGraph').length) {
@@ -4102,12 +4413,88 @@
                      labels: ['增強式訓練次數']
                  })
              }  
+             
+           // Define a plugin to provide data labels
+            Chart.plugins.register({
+                afterDatasetsDraw: function(chart) {
+                    var ctx = chart.ctx;
+
+                    chart.data.datasets.forEach(function(dataset, i) {
+                        var meta = chart.getDatasetMeta(i);
+                        if (!meta.hidden) {
+                            meta.data.forEach(function(element, index) {
+                                // Draw the text in black, with the specified font
+                                ctx.fillStyle = '#D3D3D3';
+
+                                var fontSize = 12;
+                                var fontStyle = 'normal';
+                                var fontFamily = 'Helvetica Neue';
+                                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                                // Just naively convert to string for now
+                                var dataString = dataset.data[index].toString() + '%';
+
+                                // Make sure alignment settings are correct
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+
+                                var padding = 5;
+                                var position = element.tooltipPosition();
+                                if (dataset.data[index] >0) {
+                                    ctx.fillText(dataString, position.x, position.y - (fontSize / 2) + padding);
+                                }                                
+                            });
+                        }
+                    });
+                }
+            });                   
+             var donutConfig1 = {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [
+                            80, 28, 5, 2
+                        ],
+                        backgroundColor: [
+                            'rgba(146, 203, 128, .8)',
+                            'rgba(247, 208, 207, .8)',
+                            'rgba(255,7,7,.43)',
+                            'rgba(223, 152, 134, 1)',
+                        ],
+                        label: '',
+                        borderWidth: [1, 1, 1, 1]
+                    }],
+                    labels: [
+                        '舊合約',
+                        '新合約',
+                        'P.I',
+                        '其他'
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'top',                       
+                        labels: {
+                            fontColor: '#D3D3D3'
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            };
+             
+            var piectx = document.getElementById('achievement-piechart').getContext('2d');
+			window.myDoughnut = new Chart(piectx, donutConfig1); 
          
              // With Buttons
              $(".delete").click(function(e) {
          
                  $.SmartMessageBox({
-                     title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除確認",
+                     title: "<i class=\"fa fa-fw fa fa-trash-alt\" aria-hidden=\"true\"></i> 刪除確認",
                      content: "請確認是否刪除此筆資料",
                      buttons: '[刪除][取消]'
                  });

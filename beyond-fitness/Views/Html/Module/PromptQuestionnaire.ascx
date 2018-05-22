@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 
-<div id="questionnaireDialog" title="階段性調整計劃" class="bg-color-darken">
+<div id="<%= _dialogID %>" title="階段性調整計劃" class="bg-color-darken">
     <div class="panel panel-default bg-color-darken">
         <div class="panel-body status smart-form vote no-padding">
             <div class="alert alert-warning">
@@ -23,11 +23,11 @@
                     <%  Html.RenderPartial("~/Views/Html/Module/Questionnaire.ascx", _model); %>
                 </fieldset>
                 <footer>
-                    <button type="button" id="btnSend" class="btn btn-primary">
+                    <button type="button" name="btnSend" class="btn btn-primary">
                         填寫完成並送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>
-                    <button type="button" id="btnCancel" class="btn bg-color-blueDark">
-                        不方便作答
+                    <button type="button" name="btnCancel" class="btn bg-color-blueDark">
+                        <%= (bool?)ViewBag.ByCoach==true ? "我超強不用了解學生" : "不方便作答"  %>
                     </button>
                 </footer>
                 <div class="message">
@@ -45,9 +45,8 @@
     </div>
     <script>
 
-        console.log('debug...');
-
-        $('#questionnaireDialog').dialog({
+        debugger;
+        $('#<%= _dialogID %>').dialog({
             //autoOpen: false,
             resizable: true,
             modal: true,
@@ -59,38 +58,44 @@
             }
         });
 
-        $('#btnSend').on('click', function (evt) {
+        $('#<%= _dialogID %> button[name="btnSend"]').on('click', function (evt) {
 
-            var form = $(this)[0].form;
-            if (!validateForm(form))
+            var $form = $('#<%= _dialogID %> form');
+            if (!validateForm($form[0]))
                 return false;
 
             showLoading();
-            $($(this)[0].form).ajaxSubmit({
+            $form.ajaxSubmit({
                 success: function (data) {
                     hideLoading();
                     if (data.result) {
-                        $('#questionnaireDialog footer').remove();
-                        $('#questionnaireDialog .message').css('display', 'block');
+                        $('#<%= _dialogID %> footer').remove();
+                        $('#<%= _dialogID %> .message').css('display', 'block');
                         if (data.result && !data.message) {
                             $('#questionnaire_link').remove();
+                            if ($global.removeQuestionnairePrompt) {
+                                $global.removeQuestionnairePrompt();
+                            }
                         }
                     } else {
-                        $('#questionnaireDialog .errormessage').css('display', 'block')
+                        $('#<%= _dialogID %> .errormessage').css('display', 'block')
                             .find('p').text(data.message);
                     }
                 }
             });
         });
 
-        $('#btnCancel').on('click', function (evt) {
+        $('#<%= _dialogID %> button[name="btnCancel"]').on('click', function (evt) {
             showLoading();
-            $.post('<%= Url.Action("RejectQuestionnaire","Interactivity",new { id = _model.QuestionnaireID }) %>', {}, function (data) {
+            $.post('<%= Url.Action("RejectQuestionnaire","Interactivity",new { id = _model.QuestionnaireID, status = _profile.UID!=_model.UID ? (int)Naming.IncommingMessageStatus.教練代答 : (int)Naming.IncommingMessageStatus.拒答 }) %>', {}, function (data) {
                 hideLoading();
                 if (data.result && !data.message) {
                     $('#questionnaire_link').remove();
+                    if ($global.removeQuestionnairePrompt) {
+                        $global.removeQuestionnairePrompt();
+                    }
                 }
-                $('#questionnaireDialog').dialog('close');
+                $('#<%= _dialogID %>').dialog('close');
             });
         });
 
@@ -103,6 +108,8 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     QuestionnaireRequest _model;
+    String _dialogID = "questionnaireDialog" + DateTime.Now.Ticks;
+    UserProfile _profile;
 
     protected override void OnInit(EventArgs e)
     {
@@ -110,6 +117,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (QuestionnaireRequest)this.Model;
+        _profile = Context.GetUser();
     }
 
 </script>

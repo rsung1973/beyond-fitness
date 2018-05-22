@@ -13,13 +13,13 @@
 <%  var prefix = "content" + _model.RegisterID + "_"; %>
 <ul class="nav nav-tabs">
     <li class="active">
-        <a href="#calendarTab" data-toggle="tab"><i class="fa fa-calendar"></i> 行事曆</a>
+        <a href="#calendarTab" data-toggle="tab"><i class="fa fa-calendar-alt"></i> 行事曆</a>
     </li>
     <li>
         <a id="lgRow" data-toggle="tab" class="editLessonTab" href="#editLessonTab"><i class="fa fa-heartbeat"></i> <span>課表</span></a>
     </li>
     <li>
-        <a data-toggle="tab" href="#contentChartTab"><i class="fa fa-pie-chart"></i><span>分析</span></a>
+        <a data-toggle="tab" href="#contentChartTab"><i class="fa fa-chart-pie"></i><span>分析</span></a>
     </li>
     <li>
         <a data-toggle="tab" href="#exerciseGameTab"><i class="fa fa-trophy"></i><span>競賽</span>
@@ -46,7 +46,7 @@
         <!-- new widget -->
         <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
             <header>
-                <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                 <h2><%= _model.UserProfile.FullName() %>行事曆</h2>
                 <div class="widget-toolbar">
                     <a href="#" class="btn  btn-primary" onclick="bookingByCoach('<%= DateTime.Today.ToString("yyyy-MM-dd") %>');">預約上課</a>

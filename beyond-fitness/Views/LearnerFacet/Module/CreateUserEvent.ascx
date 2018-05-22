@@ -15,7 +15,7 @@
                 <section>
                     <label class="label">請輸入行事曆內容</label>
                     <label class="input">
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                         <input type="text" name="Title" maxlength="10" placeholder="請輸入行事曆內容" value="<%= _viewModel.Title %>"/>
                     </label>
                 </section>
@@ -26,14 +26,14 @@
                 <section class="col col-6">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
-                        <i class="icon-append fa fa-calendar"></i>
+                        <i class="icon-append far fa-calendar-alt"></i>
                         <input type="text" name="StartDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" value="<%= String.Format("{0:yyyy/MM/dd}",_viewModel.StartDate) %>" placeholder="請選擇開始時間" />
                     </label>
                 </section>
                 <section class="col col-6">
                     <label class="label">請選擇結束時間</label>
                     <label class="input">
-                        <i class="icon-append fa fa-calendar"></i>
+                        <i class="icon-append far fa-calendar-alt"></i>
                         <input type="text" name="EndDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" value="<%= String.Format("{0:yyyy/MM/dd}",_viewModel.EndDate) %>" placeholder="請選擇結束時間" />
                     </label>
                 </section>
@@ -53,7 +53,7 @@
 <%  if(_viewModel.EventID.HasValue)
     {   %>
             {
-                html: "<i class='fa fa-trash-o'></i>&nbsp;刪除",
+                html: "<i class='far fa-trash-alt'></i>&nbsp;刪除",
                 "class": "btn btn-primary",
                 click: function () {
                     var $this = $(this);
@@ -75,7 +75,7 @@
             },
 <%  }   %>
             {
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     //$(this).dialog("close");

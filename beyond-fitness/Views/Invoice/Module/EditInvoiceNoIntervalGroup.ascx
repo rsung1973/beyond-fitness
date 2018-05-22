@@ -23,7 +23,7 @@
                                 <option value="<%= year %>"><%= year %></option>
                                 <%  } %>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <%  if (_viewModel.Year.HasValue)
                             { %>
@@ -43,7 +43,7 @@
                                 <option value="5">09-10月</option>
                                 <option value="6">11-12月</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <%  if (_viewModel.PeriodNo.HasValue)
                             { %>
@@ -59,21 +59,21 @@
                     <section class="col col-4">
                         <label class="label">字軌</label>
                         <label class="input">
-                            <i class="icon-append fa fa-text-height"></i>
+                            <i class="icon-append fa fa-font"></i>
                             <input type="text" name="TrackCode" maxlength="2" placeholder="請輸入字軌" value="<%= _viewModel.TrackCode %>" />
                         </label>
                     </section>
                     <section class="col col-4">
                         <label class="label">發票開始號碼（起）</label>
                         <label class="input">
-                            <i class="icon-append fa fa-ticket"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="text" name="StartNo" maxlength="8" placeholder="請輸入發票開始號碼（起）" value="<%= String.Format("{0:00000000}",_viewModel.StartNo) %>" />
                         </label>
                     </section>
                     <section class="col col-4">
                         <label class="label">發票開始號碼（迄）</label>
                         <label class="input">
-                            <i class="icon-append fa fa-ticket"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="text" name="EndNo" maxlength="8" placeholder="請輸入發票開始號碼（迄）" value="<%= String.Format("{0:00000000}",_viewModel.EndNo) %>" />
                         </label>
                     </section>
@@ -85,7 +85,7 @@
                     <section class="col col-4">
                         <label class="label">南京小巨蛋</label>
                         <label class="input">
-                            <i class="icon-append fa fa-pencil"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="hidden" name="BookletBranchID" value="<%= _viewModel.BookletBranchID!=null && _viewModel.BookletBranchID.Length>0 ? _viewModel.BookletBranchID[0] : 1 %>" />
                             <input type="number" name="BookletCount" maxlength="4" placeholder="請輸入本數" value="<%= _viewModel.BookletCount!=null && _viewModel.BookletCount.Length>0 ? _viewModel.BookletCount[0] : null %>" />
                         </label>
@@ -93,7 +93,7 @@
                     <section class="col col-4">
                         <label class="label">Enhanced 101</label>
                         <label class="input">
-                            <i class="icon-append fa fa-pencil"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="hidden" name="BookletBranchID" value="<%= _viewModel.BookletBranchID!=null && _viewModel.BookletBranchID.Length>1 ? _viewModel.BookletBranchID[1] : 2 %>" />
                             <input type="number" name="BookletCount" maxlength="4" placeholder="請輸入本數" value="<%= _viewModel.BookletCount!=null && _viewModel.BookletCount.Length>1 ? _viewModel.BookletCount[1] : null %>" />
                         </label>
@@ -101,7 +101,7 @@
                     <section class="col col-4">
                         <label class="label">忠孝</label>
                         <label class="input">
-                            <i class="icon-append fa fa-pencil"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="hidden" name="BookletBranchID" value="<%= _viewModel.BookletBranchID!=null && _viewModel.BookletBranchID.Length>2 ? _viewModel.BookletBranchID[2] : 3 %>" />
                             <input type="number" name="BookletCount" maxlength="4" placeholder="請輸入本數" value="<%= _viewModel.BookletCount!=null && _viewModel.BookletCount.Length>2 ? _viewModel.BookletCount[2] : null %>" />
                         </label>
@@ -118,7 +118,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯發票號碼</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認字軌與號碼資料正確?")) {

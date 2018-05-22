@@ -28,7 +28,7 @@
             <%
                 if (item.LessonTime.LessonAttendance == null && item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
                 { %>
-                    <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-times-o" aria-hidden="true"></i></a>
+                    <a onclick="revokeBooking(<%= item.LessonID %>);" class="btn btn-system btn-small">取消預約 <i class="fa fa-calendar-alt-times-o" aria-hidden="true"></i></a>
             <%  } %>
         </td>--%>
     </tr>

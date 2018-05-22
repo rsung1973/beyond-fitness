@@ -22,7 +22,7 @@
             modal: true,
             width: "100%",
             height: "auto",
-            title: "<h4 class='modal-title'><i class='fa fa-fw fa-volume-up'></i>  點數兌換</h4>",
+            title: "<h4 class='modal-title'><i class='fa fa-fw fa-gift'></i>  點數兌換</h4>",
             close: function (event, ui) {
                 $('#bonusDialog').remove();
             }

@@ -31,7 +31,7 @@
         <%  if (_item.TrainingBySelf != 1 && ViewBag.LearnerAttendance != true)
             { %>
         <li>
-            <a data-toggle="tab" href="#os7_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>身體健康指數</span></a>
+            <a data-toggle="tab" href="#os7_<%= _ticks %>"><i class="fa fa-chart-pie"></i><span>身體健康指數</span></a>
         </li>
         <%  } %>
         <%--<li>
@@ -49,7 +49,7 @@
         <%  if (_item.TrainingBySelf != 1)
             { %>
         <li>
-            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-chart-pie"></i><span>評量指數</span></a>
         </li>
         <%      if (ViewBag.ByCalendar != true && ViewBag.LearnerAttendance != true)
                 {%>

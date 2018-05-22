@@ -14,7 +14,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil-alt"></i>
             </span>
         </span>
 
@@ -43,7 +43,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-pencil"></i>每日激勵小語
+        <i class="fa-fw fa fa-pencil-alt"></i>每日激勵小語
                             <span>>  
                                 <%= _viewModel.DocID.HasValue ? "修改" : "新增" %>問題
                             </span>
@@ -93,7 +93,7 @@
                             <fieldset>
                                 <section>
                                     <label class="input">
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                         <input type="text" class="input-lg" name="Title" maxlength="ˇ15" placeholder="請輸入激勵小語" value="<%= _viewModel.Title %>"/>
                                     </label>
                                     <p class="note"><strong>Note:</strong> 最多僅能輸入15個中英文字</p>
@@ -104,14 +104,14 @@
                                     <section class="col col-6">
                                         <label class="label">請輸入開始時間</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="StartDate" id="StartDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入開始時間" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.StartDate) %>" />
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="label">請輸入結束時間</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="EndDate" id="EndDate" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入開始時間" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.EndDate) %>" />
                                         </label>
                                     </section>

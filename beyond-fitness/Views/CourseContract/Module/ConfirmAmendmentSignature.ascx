@@ -55,10 +55,10 @@
 
 <div id="contractAction" class="row text-center">
     <button type="button" name="btnReject" class="btn bg-color-red" onclick="rejectSignature();">
-        刪除 <i class='fa fa-trash-o' aria-hidden='true'></i>
+        刪除 <i class='far fa-trash-alt' aria-hidden='true'></i>
     </button>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="confirmSignature();">
-        確定 <i class="fa fa-send" aria-hidden="true"></i>
+        確定 <i class="fa fa-paper-plane" aria-hidden="true"></i>
     </button>
 </div>
 <script>

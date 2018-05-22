@@ -44,7 +44,7 @@
             <th nowrap="noWrap">
                 <input type="hidden" name="UID" value="<%= item.UID %>" />
                 <a onclick="$global.editContractMember(<%= item.UID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                   <a onclick="$global.deleteContractMember(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                                   <a onclick="$global.deleteContractMember(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
             </th>
             <%  } %>
             <td><%= (ViewBag.ContractType==2 || ViewBag.ContractType==3) && ViewBag.OwnerID==item.UID ? "*" : null %><%= item.FullName() %></td>

@@ -81,7 +81,7 @@
 
         function deleteCoach(uid) {
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除教練＼員工",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除教練＼員工",
                 content: "確定刪除此資料?",
                 buttons: '[刪除][取消]'
             }, function (ButtonPressed) {

@@ -163,6 +163,10 @@ namespace WebHome.Models.ViewModel
         public DateTime? AchievementDateTo { get; set; }
         public String AchievementYearMonthFrom { get; set; }
         public String AchievementYearMonthTo { get; set; }
+        public int?[] ByCoachID { get; set; }
+        public DateTime? ClassTime { get; set; }
+        public Naming.LessonQueryType? QueryType { get; set; }
+
 
     }
 
@@ -179,6 +183,7 @@ namespace WebHome.Models.ViewModel
         public DateTime? TrustDateFrom { get; set; }
         public DateTime? TrustDateTo { get; set; }
         public String TrustYearMonth { get; set; }
+        public String ContractNo { get; set; }
 
     }
 
@@ -273,12 +278,10 @@ namespace WebHome.Models.ViewModel
         public int? TestID { get; set; }
     }
 
-    public class DailyQuestionViewModel
+    public class DailyQuestionViewModel : DailyQuestionQueryViewModel
     {
-        public int? QuestionID { get; set; }
         public int? SuggestionID { get; set; }
         public String Question { get; set; }
-
     }
 
 }

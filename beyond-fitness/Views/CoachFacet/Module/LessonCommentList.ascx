@@ -27,7 +27,7 @@
             <label class="fa fa-comments"></label>
         </div>
         <span class="input-group-btn">
-            <button class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
+            <button class="btn btn-primary" type="button"><i class="fa fa-paper-plane"></i></button>
         </span>
     </div>
 </div>--%>

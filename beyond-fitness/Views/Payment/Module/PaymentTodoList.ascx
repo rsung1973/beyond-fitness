@@ -90,11 +90,11 @@
                 <%  }
                     else if(ViewBag.ViewAction == "待審核")
                     { %>
-                <a onclick="$global.approveToVoid(<%= item.PaymentID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>
+                <a onclick="$global.approveToVoid(<%= item.PaymentID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                 <%  }
                     else if(ViewBag.ViewAction == "草稿")
                     { %>
-                <a onclick="$global.editToVoid(<%= item.PaymentID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-pencil" aria-hidden="true"></i></a>
+                <a onclick="$global.editToVoid(<%= item.PaymentID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-pencil-alt" aria-hidden="true"></i></a>
                 <%  } %>
             </td>
             <%  } %>

@@ -23,7 +23,7 @@
                                 <option value="<%= item.TypeID %>"><%= item.TypeName %></option>
                                 <%  } %>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                             <script>
                                 function selectContractType() {
                                     $('div.modal-title h4').html('<i class="fa fa-edit"></i>  合約名稱：' + $('#<%= _dialog %> select[name="ContractType"] option:selected').text());
@@ -55,7 +55,7 @@
                                                     : _profile.GetServingCoachInSameStore(models);
                                     Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", items); %>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                         <script>
                             $(function(){
@@ -138,7 +138,7 @@
                                 <option value="60">60分鐘</option>
                                 <option value="90">90分鐘</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                             <%  if (_model != null)
                                 { %>
                             <script>
@@ -286,7 +286,7 @@
         <%  if (ViewBag.ViewOnly != true)
         {   %>
             {
-                html: "<i class='fa fa-floppy-o'></i>&nbsp; 儲存草稿",
+                html: "<i class='far fa-save'></i>&nbsp; 儲存草稿",
                 "class": "btn bg-color-darken",
                 click: function () {
                     var $form = $('#<%= _dialog%> form');
@@ -303,7 +303,7 @@
                     <%--$('#<%= _dialog%>').dialog("close");--%>
                 }
             }, {
-                html: "<i class='fa fa-send'></i>&nbsp; 確定產生合約",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定產生合約",
                 "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認合約內容資料正確?")) {
@@ -324,7 +324,7 @@
             }, 
         <%  }   %>
             <%--{
-                html: "<i class='fa fa-pencil'></i>&nbsp; 送交簽名",
+                html: "<i class='fa fa-pencil-alt'></i>&nbsp; 送交簽名",
                 "class": "btn bg-color-green",
                 click: function () {
                     if (confirm("請再次確認合約內容資料正確")) {

@@ -13,7 +13,7 @@
 <asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
     <span class="ribbon-button-alignment">
         <span id="refresh" class="btn btn-ribbon">
-            <i class="fa fa-calendar-o"></i>
+            <i class="far fa-calendar-check"></i>
         </span>
     </span>
     <!-- breadcrumb -->

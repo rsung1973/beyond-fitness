@@ -22,10 +22,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/fonts/fontawesome5.0/css/fontawesome-all.css">
     <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-plugins.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-plugins-20180501.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-20180501.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-skins.min.css">
     <!-- SmartAdmin RTL Support -->
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-rtl.min.css">

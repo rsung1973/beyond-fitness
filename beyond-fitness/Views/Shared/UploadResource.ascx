@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="System.Web.Mvc.ViewUserControl" %>
-<i class="icon-append fa fa-file-word-o"></i> 圖片：
+<i class="icon-append far fa-keyboard"></i> 圖片：
 <input type="file" class="input-lg" name="photopic" id="photopic" aria-describedby="photopicStatus"/>
 <%--    <span class="glyphicon glyphicon-remove form-control-feedback text-danger" aria-hidden="true"></span>
     <span id="photopicStatus" class="sr-only">(success)</span>--%>

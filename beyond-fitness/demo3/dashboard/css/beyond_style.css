@@ -532,3 +532,18 @@ body.modal-open {
   margin-top: -3px;
   vertical-align: middle;
 }
+
+.achievement::after {
+    vertical-align: middle;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f091";
+}
+
+.achievement.bling::after {
+    vertical-align: middle;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f091";
+    color: rgba(184,227,243,1);
+}

@@ -932,6 +932,30 @@ namespace WebHome.Controllers
             return Json(new { result = true });
         }
 
+        public ActionResult ResetPassword(PasswordViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            UserProfile item = null;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+                item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            }
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+            }
+
+            item.Password = (viewModel.Password).MakePassword();
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+
+        }
+
+
 
     }
 }

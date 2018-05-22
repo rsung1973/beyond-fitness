@@ -53,7 +53,7 @@
             </td>
             <td>
                 <button type="button" class="btn bg-color-orange btn-xs" onclick="addBreakInterval(<%= _model.ExecutionID %>);">
-                    <i class="fa fa-clock-o"></i>編輯休息時間與組數
+                    <i class="far fa-clock"></i>編輯休息時間與組數
                 </button>
             </td>
             <td></td>

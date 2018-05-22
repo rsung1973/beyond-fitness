@@ -54,7 +54,7 @@
             width: "auto",
             resizable: true,
             modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-usd'></i> 企業合作方案收款清單</h4></div>",
+            title: "<div class='modal-title'><h4><i class='fa fa-dollar-sign'></i> 企業合作方案收款清單</h4></div>",
             close: function () {
                 $('#<%= _dialog %>').remove();
             }

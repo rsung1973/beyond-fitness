@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <div class="col col-sm-12">
                         <label class="input input-group">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" class="form-control date form_date" value="<%= String.Format("{0:yyyy/MM/dd}", DateTime.Today) %>" readonly="readonly" data-date-format="yyyy/mm/dd" placeholder="請輸入付款日期" name="assessmentDate" />
                         </label>
                     </div>

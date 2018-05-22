@@ -30,7 +30,7 @@
                     <section class="col col-4">
                         <label class="label">身份證字號/護照號碼</label>
                         <label class="input">
-                            <i class="icon-append fa fa-id-card-o"></i>
+                            <i class="icon-append far fa-id-card"></i>
                             <input type="text" name="IDNo" value="<%= _viewModel.IDNo %>" maxlength="20" placeholder="請輸入身份證字號/護照號碼"/>
                         </label>
                     </section>
@@ -41,7 +41,7 @@
                     <section class="col col-6">
                         <label class="label">出生</label>
                         <label class="input">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" name="Birthday" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _viewModel.Birthday.HasValue ? _viewModel.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
                         </label>
                     </section>
@@ -207,7 +207,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 編輯學員資料</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

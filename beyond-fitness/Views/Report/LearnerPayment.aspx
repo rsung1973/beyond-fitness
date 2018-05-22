@@ -13,7 +13,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-usd"></i>
+                <i class="fa fa-dollar-sign"></i>
             </span>
         </span>
 
@@ -40,7 +40,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-usd"></i>報表管理
+        <i class="fa-fw fa fa-dollar-sign"></i>報表管理
                             <span>>  
                                 付款紀錄表
                             </span>
@@ -96,7 +96,7 @@
                                                 ViewBag.SelectIndication = "<option value=''>請選擇體能顧問</option>";
                                                 ViewBag.ByAuthorization = true;
                                                 Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -106,7 +106,7 @@
                                                 <option value="true" <%= _viewModel.Payoff==true ? "selected" : null %>>是</option>
                                                 <option value="false" <%= _viewModel.Payoff==false ? "selected" : null %>>否</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <script>
                                                 $(function () {
                                                     $('select[name="payoff"]').on('change', function (evt) {
@@ -124,13 +124,13 @@
                                 <div class="row byDate" style="<%= _viewModel.Payoff!=true ? "display: none;" : null %>">
                                     <section class="col col-6">
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起日" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) %>" />
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="dateTo" id="dateTo" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value="<%= String.Format("{0:yyyy/MM/dd}", _viewModel.DateTo) %>" />
                                         </label>
                                     </section>

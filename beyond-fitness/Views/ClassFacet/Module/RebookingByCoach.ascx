@@ -22,7 +22,7 @@
                 <section class="col col-4">
                     <label class="label">請選擇開始時間</label>
                     <label class="input">
-                        <i class="icon-append fa fa-calendar"></i>
+                        <i class="icon-append far fa-calendar-alt"></i>
                         <input type="text" name="ClassDate" id="classDate" class="form-control date input_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= String.Format("{0:yyyy/MM/dd HH:mm}",_viewModel.ClassDate) %>" placeholder="請輸入上課開始時間" />
                     </label>
                 </section>
@@ -32,7 +32,7 @@
                         <select name="BranchID">
                             <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
             </div>
@@ -46,7 +46,7 @@
                             <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
                             <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
             </div>
@@ -62,7 +62,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-warning'></i> 修改課程</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $this = $(this);

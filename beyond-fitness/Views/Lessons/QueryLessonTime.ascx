@@ -31,7 +31,7 @@
                                     ViewBag.Inline = true;
                                     ViewBag.SelectAll = true;
                                     Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
-                                <i class="icon-append fa fa-file-word-o"></i>
+                                <i class="icon-append far fa-keyboard"></i>
                             </label>
                         </section>
                         <section class="col col-5">
@@ -54,7 +54,7 @@
                                     <option value="1">自主訓練</option>
                                     <option value="0">一般課程</option>
                                 </select>
-                                <i class="icon-append fa fa-file-word-o"></i>
+                                <i class="icon-append far fa-keyboard"></i>
                                 <%  if (_viewModel.TrainingBySelf.HasValue)
                                     { %>
                                         <script>

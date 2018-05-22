@@ -10,7 +10,7 @@
 
 <div id="calendarView" class="jarviswidget" data-widget-editbutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
     <header>
-        <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+        <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
         <h2><span id="coachName"><%= _coach==null
                                         ? _viewModel.CoachID.HasValue
                                             ? "我"

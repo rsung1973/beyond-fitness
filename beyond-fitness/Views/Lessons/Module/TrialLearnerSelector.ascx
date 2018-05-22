@@ -53,7 +53,7 @@
                 <option value="M">男</option>
                 <option value="F">女</option>
             </select>
-            <i class="icon-append fa fa-file-word-o"></i>
+            <i class="icon-append far fa-keyboard"></i>
         </label>
     </section>
 </div>--%>

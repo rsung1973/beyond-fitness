@@ -23,10 +23,10 @@
                     <i class="fa fa-arrow-circle-o-down fa-lg btn btn-xs bg-color-pink"></i>
                 </a>&nbsp;
                 <a onclick="editTrainingItem(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
-                    <i class="fa fa-pencil text-warning fa-lg btn btn-xs bg-color-orange"></i>
+                    <i class="fa fa-pencil-alt text-warning fa-lg btn btn-xs bg-color-orange"></i>
                 </a>&nbsp;
                 <a onclick="deleteItem(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
-                    <i class="fa fa-trash-o btn btn-xs fa-lg bg-color-redLight"></i>
+                    <i class="far fa-trash-alt btn btn-xs fa-lg bg-color-redLight"></i>
                 </a>
                 <input type="hidden" name="ItemID" value="<%= _model.ItemID %>" />
             </td>
@@ -75,10 +75,10 @@
                     <i class="fa fa-arrow-circle-o-down fa-lg btn btn-xs bg-color-pink"></i>
                 </a>&nbsp;
                 <a onclick="editBreakInterval(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
-                    <i class="fa fa-pencil text-warning fa-lg btn btn-xs bg-color-orange"></i>
+                    <i class="fa fa-pencil-alt text-warning fa-lg btn btn-xs bg-color-orange"></i>
                 </a>&nbsp;
                 <a onclick="deleteItem(<%= _model.ExecutionID %>,<%= _model.ItemID %>);">
-                    <i class="fa fa-trash-o btn btn-xs fa-lg bg-color-redLight"></i>
+                    <i class="far fa-trash-alt btn btn-xs fa-lg bg-color-redLight"></i>
                 </a>
                 <input type="hidden" name="ItemID" value="<%= _model.ItemID %>" />
             </td>

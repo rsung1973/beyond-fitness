@@ -29,7 +29,7 @@
     <div class="row">
         <section class="col col-6">
             <label class="input input-group">
-                <i class="icon-append fa fa-calendar"></i>
+                <i class="icon-append far fa-calendar-alt"></i>
                 <input type="text" name="birthDay" id="birthDay" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value='<%= _model.Birthday.HasValue ? _model.Birthday.Value.ToString("yyyy/MM/dd") : "" %>' />
             </label>
         </section>
@@ -53,7 +53,7 @@
                     <option value="M">男</option>
                     <option value="F">女</option>
                 </select>
-                <i class="icon-append fa fa-file-word-o"></i>
+                <i class="icon-append far fa-keyboard"></i>
             </label>
             <%  if (_model.Gender != null)
                 { %>

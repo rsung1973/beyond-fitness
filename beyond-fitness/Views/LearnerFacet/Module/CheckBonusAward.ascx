@@ -21,7 +21,7 @@
                 { %>
             <li>
                 <label class="radio font-md">
-                    <i class="fa fa-check-square"></i><%= item.BonusAwardingItem.ItemName %>：<%= item.BonusAwardingItem.PointValue %>點
+                    <i class="far fa-check-square"></i><%= item.BonusAwardingItem.ItemName %>：<%= item.BonusAwardingItem.PointValue %>點
                 </label>
             </li>
             <%  } %>

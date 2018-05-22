@@ -34,13 +34,13 @@
                                 <label class="select">
                                     <%  ViewBag.Inline = true;
                                         Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "CoachID", Name = "CoachID" }); %>
-                                    <i class="icon-append fa fa-file-word-o"></i>
+                                    <i class="icon-append far fa-keyboard"></i>
                                 </label>
                             </section>
                             <section class="col col-6">
                                 <label>業績金額</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-usd"></i>
+                                    <i class="icon-append fa fa-dollar-sign"></i>
                                     <input type="text" name="ShareAmount" maxlength="7" placeholder="請輸入業績金額" value=""/>
                                 </label>
                             </section>

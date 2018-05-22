@@ -52,7 +52,7 @@
         <a onclick="$global.viewContract(<%= _model.ContractID %>);" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
         <%  if (_model.Status > (int)Naming.CourseContractStatus.待審核 && _model.ContractID>1045)
                         { %>
-        <a href="<%= Url.Action("GetContractPdf","CourseContract",new { _model.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
+        <a href="<%= Url.Action("GetContractPdf","CourseContract",new { _model.ContractID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-pdf" aria-hidden="true"></i></a>
         <%  }
                         else
                         { %>
@@ -62,7 +62,7 @@
                     {
                         if (_model.Status > (int)Naming.CourseContractStatus.待審核)
                         { %>
-        <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { revision.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-pdf-o" aria-hidden="true"></i></a>
+        <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { revision.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-pdf" aria-hidden="true"></i></a>
         <%  }
                         else
                         { %>

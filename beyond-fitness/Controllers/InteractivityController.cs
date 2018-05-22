@@ -48,7 +48,7 @@ namespace WebHome.Controllers
             }
 
             var item = models.GetTable<QuestionnaireRequest>().Where(l => l.QuestionnaireID == id).FirstOrDefault();
-            if (item == null || item.UID!=profile.UID)
+            if (item == null /*|| item.UID!=profile.UID*/)
             {
                 return Json(new { result = false, message = "問卷資料不存在!!" });
             }
@@ -60,7 +60,7 @@ namespace WebHome.Controllers
             DateTime taskDate = DateTime.Now;
             foreach (var key in Request.Form.AllKeys.Where(k => Regex.IsMatch(k, "_\\d")))
             {
-                saveQuestionnaire(item, key, ref taskDate);
+                saveQuestionnaire(item, key, ref taskDate, profile);
             }
 
             models.SubmitChanges();
@@ -90,7 +90,7 @@ namespace WebHome.Controllers
 
         }
 
-        protected void saveQuestionnaire(QuestionnaireRequest item, string key,ref DateTime taskDate)
+        protected void saveQuestionnaire(QuestionnaireRequest item, string key,ref DateTime taskDate,UserProfile actor)
         {
             int questionID = int.Parse(key.Substring(1));
             var quest = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == questionID).FirstOrDefault();
@@ -110,7 +110,7 @@ namespace WebHome.Controllers
                         models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
                         {
                             QuestionID = quest.QuestionID,
-                            UID = item.UID,
+                            UID = actor.UID,
                             PDQAnswer = strVal,
                             QuestionnaireID = item.QuestionnaireID,
                             TaskDate = taskDate
@@ -129,7 +129,7 @@ namespace WebHome.Controllers
                             models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
                             {
                                 QuestionID = quest.QuestionID,
-                                UID = item.UID,
+                                UID = actor.UID,
                                 SuggestionID = suggestID,
                                 QuestionnaireID = item.QuestionnaireID,
                                 TaskDate = taskDate
@@ -140,7 +140,7 @@ namespace WebHome.Controllers
                             models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
                             {
                                 QuestionID = quest.QuestionID,
-                                UID = item.UID,
+                                UID = actor.UID,
                                 PDQAnswer = v,
                                 QuestionnaireID = item.QuestionnaireID,
                                 TaskDate = taskDate
@@ -159,7 +159,7 @@ namespace WebHome.Controllers
                         models.GetTable<PDQTask>().InsertOnSubmit(new PDQTask
                         {
                             QuestionID = quest.QuestionID,
-                            UID = item.UID,
+                            UID = actor.UID,
                             YesOrNo = values[0] == "1" ? true : false,
                             QuestionnaireID = item.QuestionnaireID,
                             TaskDate = taskDate
@@ -170,7 +170,7 @@ namespace WebHome.Controllers
             }
         }
 
-        public ActionResult RejectQuestionnaire(int id)
+        public ActionResult RejectQuestionnaire(int id, int? status)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
@@ -184,7 +184,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "問卷資料不存在!!" });
             }
 
-            item.Status = (int)Naming.IncommingMessageStatus.拒答;
+            item.Status = status ?? (int)Naming.IncommingMessageStatus.拒答;
             models.SubmitChanges();
 
             var items = models.GetQuestionnaireRequest(item.UserProfile);
@@ -218,25 +218,26 @@ namespace WebHome.Controllers
 
         public ActionResult PromptQuestionnaire()
         {
-            UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
-            {
-                return new EmptyResult();
-            }
+            //UserProfile profile = HttpContext.GetUser();
+            //if (profile == null)
+            //{
+            //    return new EmptyResult();
+            //}
 
-            profile = models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
+            //profile = models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
 
-            var item = models.GetQuestionnaireRequest(profile).FirstOrDefault();
+            //var item = models.GetQuestionnaireRequest(profile).FirstOrDefault();
 
-            if (item==null)
-            {
-                return new EmptyResult();
-            }
-            else
-            {
-                return View("~/Views/Interactivity/Questionnaire/PromptQuestionnaire.ascx", item);
-            }
+            //if (item==null)
+            //{
+            //    return new EmptyResult();
+            //}
+            //else
+            //{
+            //    return View("~/Views/Interactivity/Questionnaire/PromptQuestionnaire.ascx", item);
+            //}
 
+            return new EmptyResult();
         }
 
         public ActionResult LearnerDailyQuestion()
@@ -262,13 +263,16 @@ namespace WebHome.Controllers
             }
 
 
-            int[] items = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+                .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
+                    q => q.QuestionID, t => t.QuestionID, (q, t) => q);
+            int[] items = questItems
                 .Select(q => q.QuestionID)
                 .Where(q => !models.GetTable<PDQTask>().Where(t => t.UID == profile.UID).Select(t => t.QuestionID).Contains(q)).ToArray();
 
             if (items.Length == 0)
             {
-                items = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+                items = questItems
                 .Select(q => q.QuestionID).ToArray();
             }
 

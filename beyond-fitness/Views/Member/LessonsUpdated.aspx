@@ -25,7 +25,7 @@
                 <div class="col-md-8">
 
                     <!-- Classic Heading -->
-                    <h4 class="classic-title"><span class="fa fa-calendar-o"> 新增/刪除上課數完成</span></h4>
+                    <h4 class="classic-title"><span class="far fa-calendar-check"> 新增/刪除上課數完成</span></h4>
                     <!-- Stat Search -->
                     <!-- Start Post -->
                     <% Html.RenderPartial("~/Views/Member/MemberInfo.ascx", _model); %>

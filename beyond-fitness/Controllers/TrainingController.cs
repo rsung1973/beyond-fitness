@@ -473,13 +473,7 @@ namespace WebHome.Controllers
         }
         public ActionResult LearnerTrainingAidsPieData(int uid)
         {
-            var items = models.GetTable<RegisterLesson>().Where(f => f.UID == uid)
-                .Join(models.GetTable<GroupingLesson>(), r => r.RegisterGroupID, g => g.GroupID, (r, g) => g)
-                .Join(models.GetTable<LessonTime>(), g => g.GroupID, l => l.GroupID, (g, l) => l)
-                .Join(models.GetTable<TrainingPlan>(), l => l.LessonID, p => p.LessonID, (l, p) => p)
-                .Join(models.GetTable<TrainingExecution>(), p => p.ExecutionID, x => x.ExecutionID, (p, x) => x)
-                .Join(models.GetTable<TrainingItem>(), x => x.ExecutionID, i => i.ExecutionID, (x, i) => i)
-                .Join(models.GetTable<TrainingItemAids>(), x => x.ItemID, s => s.ItemID, (x, s) => s)
+            var items = uid.LearnerTrainingAids(models)
                 .Select(s => s.TrainingAids.ItemName);
 
             if (items.Count() == 0)

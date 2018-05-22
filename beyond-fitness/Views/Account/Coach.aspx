@@ -69,7 +69,7 @@
 
 								-->
                             <header>
-                                <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                                <span class="widget-icon"> <i class="fa fa-calendar-alt"></i> </span>
                                 <h2> 地點：<%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></h2>
                                 <div class="widget-toolbar">
                                     <a href="<%= Url.Action("BookingTrialLesson","Lessons") %>" class="btn bg-color-pink"><i class="fa fa-fw fa-magic"></i> 預約體驗課程</a>

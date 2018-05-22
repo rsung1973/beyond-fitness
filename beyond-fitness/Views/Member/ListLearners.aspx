@@ -120,7 +120,7 @@
 
         function deleteLearner(uid) {
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除學員",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除學員",
                 content: "確定刪除此學員資料?",
                 buttons: '[刪除][取消]'
             }, function (ButtonPressed) {

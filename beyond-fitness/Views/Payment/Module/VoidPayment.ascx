@@ -16,7 +16,7 @@
                     <section class="col col-8">
                         <label class="label">發票號碼</label>
                         <label class="input">
-                            <i class="icon-append fa fa-file-text-o"></i>
+                            <i class="icon-append far fa-copy"></i>
                             <input type="text" name="InvoiceNo" maxlength="20" placeholder="請輸入發票號碼" />
                         </label>
                     </section>
@@ -59,7 +59,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  作廢收款</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

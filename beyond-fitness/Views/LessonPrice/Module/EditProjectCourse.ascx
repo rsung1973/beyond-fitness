@@ -16,7 +16,7 @@
                 <section>
                     <label class="label">專案名稱</label>
                     <label class="input">
-                        <i class="icon-append fa fa-file-text-o"></i>
+                        <i class="icon-append far fa-copy"></i>
                         <input type="text" name="Description" maxlength="40" placeholder="請輸入專案名稱" value="<%= _viewModel.Description %>" />
                     </label>
                 </section>
@@ -25,7 +25,7 @@
                 <section>
                     <label class="label">價格</label>
                     <label class="input">
-                        <i class="icon-append fa fa-file-text-o"></i>
+                        <i class="icon-append far fa-copy"></i>
                         <input type="number" name="ListPrice" maxlength="20" placeholder="請輸入價格" value="<%= _viewModel.ListPrice %>" />
                     </label>
                 </section>
@@ -51,7 +51,7 @@
                                 <option value="60">60分鐘</option>
                                 <option value="90">90分鐘</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <script>
                             $('select[name="DurationInMinutes"]').val('<%= _viewModel.DurationInMinutes %>')
@@ -64,7 +64,7 @@
                                 <option value="0">已停用</option>
                                 <option value="1">已啟用</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <script>
                             $('#<%= _dialog %> select[name="Status"]').val('<%= _viewModel.Status %>')
@@ -85,7 +85,7 @@
     <%  if (_model != null && _model.RegisterLesson.Count == 0 && _model.CourseContract.Count == 0)
         {       %>
             {
-                html: "<i class='fa fa-trash-o' aria-hidden='true'></i>&nbsp; 刪除",
+                html: "<i class='far fa-trash-alt' aria-hidden='true'></i>&nbsp; 刪除",
                 "class": "btn bg-color-red",
                 click: function () {
 
@@ -106,7 +106,7 @@
             },
     <%  }   %>
             {
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

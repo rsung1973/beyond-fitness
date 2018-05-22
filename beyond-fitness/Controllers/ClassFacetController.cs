@@ -139,6 +139,9 @@ namespace WebHome.Controllers
             item.InvitedCoach = viewModel.CoachID;
             item.AssignLessonAttendingCoach(coach);
             item.ClassTime = viewModel.ClassDate;
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                item.HourOfClassTime = viewModel.ClassDate.Hour;
+
             item.DurationInMinutes = timeItem.DurationInMinutes;
             item.BranchID = viewModel.BranchID;
             foreach(var t in item.ContractTrustTrack)
@@ -322,10 +325,39 @@ namespace WebHome.Controllers
                 item.PersonalExercisePurpose = new PersonalExercisePurpose { };
             }
 
-            item.PersonalExercisePurpose.PowerAbility = viewModel.Ability;
+            switch(viewModel.Feature)
+            {
+                case "Flexibility":
+                    item.PersonalExercisePurpose.Flexibility = viewModel.Point;
+                    break;
+                case "Cardiopulmonary":
+                    item.PersonalExercisePurpose.Cardiopulmonary = viewModel.Point;
+                    break;
+                case "MuscleStrength":
+                    item.PersonalExercisePurpose.MuscleStrength = viewModel.Point;
+                    break;
+                default:
+                    item.PersonalExercisePurpose.PowerAbility = viewModel.Ability;
+                    break;
+            }
+
             models.SubmitChanges();
 
             return Json(new { result = true, message = viewModel.Ability });
+
+        }
+
+        public ActionResult GetPowerAbility(ExercisePurposeViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditPowerAbility(viewModel);
+            UserProfile item = result.Model as UserProfile;
+
+            if (item == null || item.PersonalExercisePurpose == null)
+                return Json(new object { },JsonRequestBehavior.AllowGet);
+
+            var data = item.PersonalExercisePurpose;
+
+            return Json(new { data.Cardiopulmonary, data.Flexibility, data.MuscleStrength, data.PowerAbility });
 
         }
 
@@ -340,9 +372,9 @@ namespace WebHome.Controllers
             }
 
             viewModel.PurposeItem = viewModel.PurposeItem.GetEfficientString();
-            if (viewModel.PurposeItem == null)
+            if (viewModel.PurposeItem == null || viewModel.PurposeItem.Length > 20)
             {
-                return Json(new { result = false, message = "請輸入目標!!" });
+                return Json(new { result = false, message = "請輸入目標最多20個字!!" });
             }
 
             if (item.PersonalExercisePurpose == null)

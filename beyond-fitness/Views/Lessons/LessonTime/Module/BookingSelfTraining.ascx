@@ -15,7 +15,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-check-square-o"></i>預約內部訓練</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class="far fa-fw fa-check-square"></i>預約內部訓練</h4>
             </div>
             <div class="modal-body bg-color-darken txt-color-white">
                 <div class="panel panel-default bg-color-darken no-padding">
@@ -25,7 +25,7 @@
                                 <section class="col col-6">
                                     <label>請選擇上課時段</label>
                                     <label class="input">
-                                        <i class="icon-append fa fa-calendar"></i>
+                                        <i class="icon-append far fa-calendar-alt"></i>
                                         <input type="text" name="classDate" readonly="readonly" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
                                     </label>
                                 </section>
@@ -36,7 +36,7 @@
                                             <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
                                             <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
                                         </select>
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                 </section>
                                 <section class="col col-4" style="display:none;">
@@ -45,7 +45,7 @@
                                         <select class="input-lg" name="branchID">
                                             <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                                         </select>
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                 </section>
                             </div>

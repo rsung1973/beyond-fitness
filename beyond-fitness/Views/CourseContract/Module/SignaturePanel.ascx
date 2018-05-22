@@ -25,13 +25,13 @@
                 modal: true,
                 title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> Sign Here</h4></div>",
                 buttons: [{
-                    html: "<i class='fa fa-floppy-o'></i>&nbsp; 清除",
+                    html: "<i class='far fa-save'></i>&nbsp; 清除",
                     "class": "btn bg-color-darken",
                     click: function () {
                         $sigdiv.jSignature('reset');
                     }
                 }, {
-                    html: "<i class='fa fa-file-text-o'></i>&nbsp; 確定",
+                    html: "<i class='far fa-copy'></i>&nbsp; 確定",
                     "class": "btn btn-primary",
                     click: function () {
                         //showLoading();

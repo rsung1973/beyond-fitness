@@ -17,20 +17,20 @@
             <a href="<%= Url.Action("AchievementIndex", "Accounting") %>"><i class="fa fa-fw fa-trophy"></i>業績統計表</a>
         </li>
         <li>
-            <a href="<%= Url.Action("TrustIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>信託請款表</a>
+            <a href="<%= Url.Action("TrustIndex", "Accounting") %>"><i class="far fa-fw fa-file-excel"></i>信託請款表</a>
         </li>
         <li>
             <a href="<%= Url.Action("TaxCsvIndex", "Invoice") %>"><i class="fa fa-fw fa-download"></i>401申報書下載</a>
         </li>
 <%--        <li>
-            <a href="<%= Url.Action("ReceivableIndex", "Accounting") %>"><i class="fa fa-fw fa-file-excel-o"></i>應收帳款催收表</a>
+            <a href="<%= Url.Action("ReceivableIndex", "Accounting") %>"><i class="far fa-fw fa-file-excel"></i>應收帳款催收表</a>
         </li>--%>
     <%--<%  Html.RenderPartial("~/Views/Layout/NavItem/PaymentList.ascx", _userProfile);       %>--%>
         <li>
             <a href="<%= Url.Action("BonusAwardList","Report") %>"><i class="fa fa-fw fa-gift"></i>點數兌換</a>
         </li>
         <li>
-            <a href="<%= Url.Action("AverageFitness", "Activity") %>"><i class="fa fa-fw fa-heartbeat"></i>體能檢測表</a>
+            <a href="<%= Url.Action("AverageFitness", "Activity") %>"><i class="fas fa-fw fa-file-medical-alt"></i>體能檢測表</a>
         </li>
     </ul>
 </li>

@@ -202,7 +202,7 @@
                             <!-- Start Call Action -->
                             <textarea class="form-control" name="feedBack" rows="4"><%= _model.LessonPlan != null ? _model.LessonPlan.FeedBack : null %></textarea>
                             <div class="text-right" style="margin-bottom: 5px;">
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar-alt" aria-hidden="true"></i></a>
                                 <a onclick="saveAll();" class="btn-system  btn-sm">更新 <i class="fa fa-refresh" aria-hidden="true"></i></a>
                             </div>
                             <!-- End Call Action -->
@@ -212,7 +212,7 @@
                         else
                         { %>
                             <div class="text-right" style="margin-bottom: 5px;">
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar" aria-hidden="true"></i></a>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/Account/Vip") %>" class="btn-system btn-medium">回行事曆清單 <i class="fa fa-calendar-alt" aria-hidden="true"></i></a>
                             </div>
                     <%  } %>
                 </div>

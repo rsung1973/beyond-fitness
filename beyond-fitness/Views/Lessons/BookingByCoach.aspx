@@ -99,7 +99,7 @@
                                             if (ViewBag.DefaultCoach != null)
                                                 inputItem.DefaultValue = ViewBag.DefaultCoach;
                                             Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                 </section>
                             </fieldset>
@@ -112,7 +112,7 @@
                                                 <option value="0">否</option>
                                                 <option value="1" <%= _viewModel.TrainingBySelf==1 ? "selected": null %>>是</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <script>
                                                 $(function () {
                                                     $('select[name="trainingBySelf"]').on('change', function (evt) {
@@ -141,7 +141,7 @@
                                     <section class="col col-4">
                                         <label>請選擇上課時段</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="classDate" id="classDate" class="form-control input-lg date form_time" data-date-format="yyyy/mm/dd hh:ii" readonly="readonly" value="<%= _viewModel.ClassDate.ToString("yyyy/MM/dd HH:mm") %>" placeholder="請輸入上課開始時間" />
                                         </label>
                                     </section>
@@ -152,7 +152,7 @@
                                                 <option value="60" <%= _viewModel.Duration==60 ? "selected": null %>>60 分鐘</option>
                                                 <option value="90" <%= _viewModel.Duration==90 ? "selected": null %>>90 分鐘</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>--%>
                                     <section class="col col-4">
@@ -161,7 +161,7 @@
                                             <select class="input-lg" name="branchID">
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID); %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>

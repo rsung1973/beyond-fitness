@@ -79,19 +79,78 @@ namespace WebHome.Helper
 
             if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) && underCount) || (totalAttendance + 1) == item.Lessons)
             {
+                CreateQuestionnaire(models, item);
+            }
+
+        }
+
+        public static QuestionnaireRequest CreateQuestionnaire<TEntity>(this ModelSource<TEntity> models, RegisterLesson item) where TEntity : class, new()
+        {
+            var group = models.GetTable<QuestionnaireGroup>().OrderByDescending(q => q.GroupID).FirstOrDefault();
+            if (group != null && !item.QuestionnaireRequest.Any(q => q.PDQTask.Count == 0))
+            {
+                var questionnaire = new QuestionnaireRequest
+                {
+                    GroupID = group.GroupID,
+                    RegisterID = item.RegisterID,
+                    RequestDate = DateTime.Now,
+                    UID = item.UID
+                };
+                models.GetTable<QuestionnaireRequest>().InsertOnSubmit(questionnaire);
+                models.SubmitChanges();
+
+                return questionnaire;
+            }
+            return null;
+        }
+
+        public static bool CheckCurrentQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, RegisterLesson item)
+            where TEntity : class, new()
+        {
+            if (item.LessonPriceType.ExcludeQuestionnaire.HasValue)
+                return false;
+
+            if (item.Lessons <= 10)
+                return false;
+
+            int countBase;
+            //if (item.Lessons <= 10)
+            //{
+            //    countBase = item.Lessons;
+            //}
+            //else 
+            if (item.Lessons <= 51)
+            {
+                countBase = item.Lessons / 2;
+            }
+            else
+            {
+                countBase = item.Lessons / 3;
+            }
+
+            int totalAttendance =
+                models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID && l.LessonAttendance != null).Count()
+                    + (item.AttendedLessons ?? 0) + 1;
+            int checkAttendance = totalAttendance;
+            bool underCount = true;
+            if (item.QuestionnaireRequest.Count > 0)
+            {
+                var questItem = item.QuestionnaireRequest.OrderByDescending(q => q.QuestionnaireID).First();
+                checkAttendance = models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID
+                    && l.LessonAttendance != null && l.LessonAttendance.CompleteDate > questItem.RequestDate).Count();
+                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1);
+            }
+
+            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) && underCount) || (totalAttendance + 1) == item.Lessons)
+            {
                 var group = models.GetTable<QuestionnaireGroup>().OrderByDescending(q => q.GroupID).FirstOrDefault();
                 if (group != null && !item.QuestionnaireRequest.Any(q => q.PDQTask.Count == 0))
                 {
-                    models.GetTable<QuestionnaireRequest>().InsertOnSubmit(new QuestionnaireRequest
-                    {
-                        GroupID = group.GroupID,
-                        RegisterID = item.RegisterID,
-                        RequestDate = DateTime.Now,
-                        UID = item.UID
-                    });
-                    models.SubmitChanges();
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public static bool CouldMarkToAttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item)
@@ -291,7 +350,7 @@ namespace WebHome.Helper
                     allDay = false,
                     className = g.LessonAttendance == null ? new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-grayDark" },
                     editable = g.LessonAttendance == null,
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null
                 }));
 
             items = items.Concat(dataItems
@@ -307,7 +366,7 @@ namespace WebHome.Helper
                     allDay = false,
                     className = g.LessonAttendance == null ? new string[] { "event", "bg-color-teal" } : new string[] { "event", "bg-color-grayDark" },
                     editable = g.LessonAttendance == null,
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null
                 }));
 
             items = items.Concat(dataItems
@@ -323,7 +382,7 @@ namespace WebHome.Helper
                     allDay = false,
                     className = g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-grayDark" },
                     editable = g.LessonAttendance == null,
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null
                 }));
 
             items = items.Concat(dataItems
@@ -356,7 +415,7 @@ namespace WebHome.Helper
                     allDay = false,
                     className = g.LessonAttendance == null ? new string[] { "event", "bg-color-pink" } : new string[] { "event", "bg-color-grayDark" },
                     editable = g.LessonAttendance == null,
-                    icon = g.LessonPlan.CommitAttendance.HasValue ? "fa-check-square-o" : null
+                    icon = g.LessonPlan.CommitAttendance.HasValue ? "far fa-check-square" : null
                 }));
 
             //items = items.Concat(dataItems
@@ -1608,8 +1667,13 @@ namespace WebHome.Helper
         {
             return models.GetTable<LessonTime>()
                 .Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
-                .Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1))
-                .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID));
+                .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID))
+                .GetLearnerUncheckedLessons();
+        }
+
+        public static IQueryable<LessonTime> GetLearnerUncheckedLessons(this IQueryable<LessonTime> items)
+        {
+            return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1));
         }
 
         public static void AssignLessonAttendingCoach(this LessonTime item, ServingCoach coach)
@@ -1623,6 +1687,52 @@ namespace WebHome.Helper
             }
             item.LessonTimeSettlement.ProfessionalLevelID = coach.LevelID.Value;
             item.LessonTimeSettlement.MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex;
+        }
+
+        public static IQueryable<TrainingItemAids> LearnerTrainingAids<TEntity>(this int uid, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<RegisterLesson>().Where(f => f.UID == uid)
+                .Join(models.GetTable<GroupingLesson>(), r => r.RegisterGroupID, g => g.GroupID, (r, g) => g)
+                .Join(models.GetTable<LessonTime>(), g => g.GroupID, l => l.GroupID, (g, l) => l)
+                .Join(models.GetTable<TrainingPlan>(), l => l.LessonID, p => p.LessonID, (l, p) => p)
+                .Join(models.GetTable<TrainingExecution>(), p => p.ExecutionID, x => x.ExecutionID, (p, x) => x)
+                .Join(models.GetTable<TrainingItem>(), x => x.ExecutionID, i => i.ExecutionID, (x, i) => i)
+                .Join(models.GetTable<TrainingItemAids>(), x => x.ItemID, s => s.ItemID, (x, s) => s);
+        }
+
+        public static IQueryable<LessonTime> ByLessonQueryType(this IQueryable<LessonTime> items,Naming.LessonQueryType? query)
+        {
+            switch (query)
+            {
+                case Naming.LessonQueryType.一般課程:
+                    int[] scope = new int[] {
+                        (int)Naming.LessonPriceStatus.一般課程,
+                        //(int)Naming.LessonPriceStatus.企業合作方案,
+                        (int)Naming.LessonPriceStatus.已刪除,
+                        (int)Naming.LessonPriceStatus.點數兌換課程 };
+                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
+                            || (l.RegisterLesson.RegisterLessonEnterprise != null
+                                    && (new int?[] { (int)Naming.LessonPriceStatus.一般課程, (int)Naming.LessonPriceStatus.團體學員課程 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+                    break;
+                case Naming.LessonQueryType.自主訓練:
+                    //items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
+                    //    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
+                    items = items.Where(l => l.TrainingBySelf == 1);
+                    break;
+                case Naming.LessonQueryType.內部訓練:
+                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);
+                    break;
+                case Naming.LessonQueryType.體驗課程:
+                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+                    break;
+                case Naming.LessonQueryType.在家訓練:
+                    items = items.Where(l => l.TrainingBySelf == 2);
+                    break;
+            }
+
+            return items;
         }
 
     }

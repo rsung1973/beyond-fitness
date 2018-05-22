@@ -61,7 +61,7 @@
     </button>
     <%  } %>
     <button type="button" name="btnConfirm" class="btn btn-primary" onclick="confirmSignature();">
-        確定 <i class="fa fa-send" aria-hidden="true"></i>
+        確定 <i class="fa fa-paper-plane" aria-hidden="true"></i>
     </button>
 </div>
 <script>

@@ -8,13 +8,13 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="col-12 text-center">
+<div class="col-xs-12 col-sm-6 col-md-6 text-center">
     <label class="label text-lightgray">器材使用率</label>
     <div id="<%= _chartID %>" class="chart-large has-legend-unique"></div>
     <script>
         $(function () {
             $.post('<%= Url.Action("LearnerTrainingAidsPieData","Training",new { _model.UID }) %>', {}, function (data) {
-                var plot = drawPie($('#<%= _chartID %>'), data, { 'showLegend': true });
+                var plot = drawPie($('#<%= _chartID %>'), data, { 'showLegend': false });
                 <%  if(ViewBag.ViewOnly!=true)
                     {   %>
                 $global.drawTrainingAidsPie = function () {

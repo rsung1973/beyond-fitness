@@ -65,7 +65,7 @@
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
                                                     } %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="ol col-xs-12 col-sm-6 col-md-3">
@@ -78,7 +78,7 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依合約編號查詢</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-file-text-o"></i>
+                                            <i class="icon-append far fa-copy"></i>
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號" />
                                         </label>
                                     </section>
@@ -91,7 +91,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: -1);    %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <%  }
@@ -113,7 +113,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/ContractTypeOptions.ascx", model: null);                     %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -127,7 +127,7 @@
                                                 <option value="1204">待審核</option>
                                                 <option value="1205">已生效</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>
@@ -135,14 +135,14 @@
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢合約起日</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="ContractDateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起日" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.ContractDateFrom) %>' />
                                         </label>
                                     </section>
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢合約迄日</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="ContractDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.ContractDateTo) %>' />
                                         </label>
                                     </section>
@@ -190,7 +190,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>合約列表</h2>
                     <div class="widget-toolbar">
-                        <a id="btnDownloadContract" onclick="downloadContract();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
+                        <a id="btnDownloadContract" onclick="downloadContract();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
                     </div>
                 </header>
                 <!-- widget div-->

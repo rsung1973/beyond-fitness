@@ -421,7 +421,8 @@ namespace WebHome.Controllers
                     .Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted
                         && u.LevelID != (int)Naming.MemberStatusDefinition.Anonymous)
                     .Where(l => l.RealName.Contains(userName) || l.Nickname.Contains(userName))
-                    .Where(l => l.UserRole.Count(r => r.RoleID == (int)Naming.RoleID.Learner) > 0)
+                    .Where(l => l.UserRole.Any(r => r.RoleID == (int)Naming.RoleID.Learner)
+                        || l.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Learner))
                     .Where(l => l.UserProfileExtension != null && !l.UserProfileExtension.CurrentTrial.HasValue)
                     .OrderBy(l => l.UID);
             }
@@ -547,6 +548,9 @@ namespace WebHome.Controllers
                 }
             };
 
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Hour))
+                timeItem.HourOfClassTime = viewModel.ClassDate.Hour;
+
             timeItem.GroupID = lesson.RegisterGroupID;
             timeItem.LessonFitnessAssessment.Add(new LessonFitnessAssessment
             {
@@ -628,6 +632,8 @@ namespace WebHome.Controllers
             //item.AttendingCoach = viewModel.CoachID;
             item.ClassTime = viewModel.ClassTimeStart;
             item.DurationInMinutes = timeItem.DurationInMinutes;
+            if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassTimeStart.Value.Hour))
+                item.HourOfClassTime = viewModel.ClassTimeStart.Value.Hour;
             //item.BranchID = viewModel.BranchID;
             //item.TrainingBySelf = viewModel.TrainingBySelf;
             foreach (var t in item.ContractTrustTrack)
@@ -702,6 +708,8 @@ namespace WebHome.Controllers
                 items = items.Where(t => t.AttendingCoach == viewModel.CoachID);
             if (viewModel.QueryStart.HasValue)
                 items = items.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
+            if (viewModel.ClassTime.HasValue)
+                items = items.Where(t => t.ClassTime >= viewModel.ClassTime && t.ClassTime < viewModel.ClassTime.Value.AddDays(1));
 
             return View("~/Views/CoachFacet/Module/LessonsSummaryReport.ascx", items);
         }
@@ -713,39 +721,9 @@ namespace WebHome.Controllers
             items = items
                 .Where(t => t.LessonAttendance == null);
 
-            items = byLessonQueryType(query, items);
+            items = items.ByLessonQueryType(query);
 
             return View("~/Views/CoachFacet/Module/DailyBookingList.ascx", items);
-        }
-
-        private IQueryable<LessonTime> byLessonQueryType(Naming.LessonQueryType? query, IQueryable<LessonTime> items)
-        {
-            switch (query)
-            {
-                case Naming.LessonQueryType.一般課程:
-                    int[] scope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
-                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                            || (l.RegisterLesson.RegisterLessonEnterprise != null
-                                    && (new int?[] { (int)Naming.LessonPriceStatus.一般課程, (int)Naming.LessonPriceStatus.團體學員課程 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
-                    break;
-                case Naming.LessonQueryType.自主訓練:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
-                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
-                    break;
-                case Naming.LessonQueryType.內部訓練:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);
-                    break;
-                case Naming.LessonQueryType.體驗課程:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
-                    break;
-            }
-
-            return items;
         }
 
         public ActionResult ShowLearnerMarkAttended(LessonQueryViewModel viewModel, Naming.LessonQueryType? query)
@@ -755,7 +733,7 @@ namespace WebHome.Controllers
             items = items
                 .Where(l => l.LessonPlan.CommitAttendance.HasValue);
 
-            items = byLessonQueryType(query, items);
+            items = items.ByLessonQueryType(query);
 
             return View("~/Views/CoachFacet/Module/DailyBookingList.ascx", items);
         }
@@ -767,7 +745,7 @@ namespace WebHome.Controllers
             items = items
                 .Where(l => !l.LessonPlan.CommitAttendance.HasValue);
 
-            items = byLessonQueryType(query, items);
+            items = items.ByLessonQueryType(query);
 
             return View("~/Views/CoachFacet/Module/DailyBookingList.ascx", items);
         }

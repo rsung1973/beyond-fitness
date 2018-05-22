@@ -57,7 +57,7 @@
                         <% if (item.LevelID == (int)Naming.MemberStatusDefinition.Deleted)
                             {   %>
                         <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EnableUser/") + item.UID %>"><i class="fa fa-fw fa fa-check-square" aria-hidden="true"></i>啟用</a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/EnableUser/") + item.UID %>"><i class="far fa-fw fa-check-square" aria-hidden="true"></i>啟用</a>
                         </li>
                         <li class="divider"></li>
                         <%  }
@@ -66,7 +66,7 @@
                                 if (_userProfile.IsAssistant())
                                 { %>
                         <li>
-                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>"><i class="fa fa-fw fa fa-calendar-o" aria-hidden="true"></i>維護上課數</a>
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Member/AddLessons/") + item.UID %>"><i class="fa fa-fw far fa-calendar-check" aria-hidden="true"></i>維護上課數</a>
                         </li>
                         <%      } %>
                         <li>
@@ -81,7 +81,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a onclick='deleteLearner(<%= item.UID %>);'><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                            <a onclick='deleteLearner(<%= item.UID %>);'><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                         </li>
                         <%  } %>
                         <li>

@@ -50,7 +50,7 @@
                                             <select name="BranchID">
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", _viewModel.BranchID ?? -1); %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -62,7 +62,7 @@
                                                 <option value="<%= year %>"><%= year %></option>
                                                 <%  } %>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -76,7 +76,7 @@
                                                 <option value="5">09-10月</option>
                                                 <option value="6">11-12月</option>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                         <%  if (_viewModel.PeriodNo.HasValue)
                                             { %>

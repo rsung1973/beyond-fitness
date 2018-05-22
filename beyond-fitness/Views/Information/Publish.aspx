@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/template/MainPage2017.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="System.Web.Mvc.ViewPage" %>
 
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq.Expressions" %>
@@ -15,7 +15,6 @@
 
 
 <asp:Content ID="ribbonContent" ContentPlaceHolderID="ribbonContent" runat="server">
-<div id="ribbon">
 
     <span class="ribbon-button-alignment">
         <span id="refresh" class="btn btn-ribbon">
@@ -31,38 +30,20 @@
     </ol>
     <!-- end breadcrumb -->
 
-    <!-- You can also add more buttons to the
-                ribbon for further usability
-
-                Example below:
-
-                <span class="ribbon-button-alignment pull-right">
-                <span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-                <span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-                <span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-                </span> -->
-
-</div>
 </asp:Content>
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
-    <h1 class="page-title txt-color-blueDark">
-        <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-puzzle-piece"></i>專業知識
-                            <span>>  
-                                專業知識列表
-                            </span>
-    </h1>
 </asp:Content>
 <asp:Content ID="mainContent" ContentPlaceHolderID="mainContent" runat="server">
 
-    <div class="row">
+    <section id="widget-grid" class="">
+        <div class="row">
 
-        <!-- NEW WIDGET START -->
-        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-            <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
-                <!-- widget options:
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                    <!-- widget options:
                                 usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
 
                                 data-widget-colorbutton="false"
@@ -75,83 +56,87 @@
                                 data-widget-sortable="false"
 
                                 -->
-                <header>
-                    <span class="widget-icon"><i class="fa fa-table"></i></span>
-                    <h2>文章列表</h2>
-                    <div class="widget-toolbar">
-                        <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/CreateNew") %>" class="btn btn-primary"><i class="fa fa-fw fa-pencil"></i>新增文章</a>
+                    <header>
+                        <span class="widget-icon"><i class="fa fa-table"></i></span>
+                        <h2>文章列表</h2>
+                        <div class="widget-toolbar">
+                            <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/CreateNew") %>" class="btn btn-primary"><i class="fa fa-fw fa-pencil-alt"></i>新增文章</a>
+                        </div>
+                    </header>
+
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+                        </div>
+                        <!-- end widget edit box -->
+
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th data-class="expand">時間</th>
+                                        <th>標題</th>
+                                        <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>作者</th>
+                                        <th data-hide="phone">功能</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <asp:Repeater ID="rpList" runat="server" ItemType="WebHome.Models.DataEntity.Article">
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td><%# Container.ItemIndex+1 %></td>
+                                                <td><%# Item.Document.DocDate.ToString("yyyy/MM/dd") %></td>
+                                                <td>《<%# Item.Title %>》</td>
+                                                <td><%# Item.AuthorID.HasValue ? Item.UserProfile.RealName : null %></td>
+                                                <td>
+                                                    <div class="btn-group dropup">
+                                                        <button class="btn bg-color-blueLight" data-toggle="dropdown">
+                                                            請選擇功能
+                                                        </button>
+                                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/EditBlog/"+Item.DocID) %>"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改</a>
+                                                            </li>
+                                                            <li>
+                                                                <a onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="deletedata"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除</a>
+                                                            </li>
+                                                            <li>
+                                                                <%--<a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+Item.DocID) %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>--%>
+                                                                <a href="<%# "../../../front-end/single-post.html?id=" + Item.DocID %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end widget content -->
+
                     </div>
-                </header>
-
-                <!-- widget div-->
-                <div>
-
-                    <!-- widget edit box -->
-                    <div class="jarviswidget-editbox">
-                        <!-- This area used as dropdown edit box -->
-                    </div>
-                    <!-- end widget edit box -->
-
-                    <!-- widget content -->
-                    <div class="widget-body no-padding">
-
-                        <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th data-class="expand">時間</th>
-                                    <th>標題</th>
-                                    <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>作者</th>
-                                    <th data-hide="phone">功能</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <asp:Repeater ID="rpList" runat="server" ItemType="WebHome.Models.DataEntity.Article">
-                                    <ItemTemplate>
-                                        <tr>
-                                            <td><%# Container.ItemIndex+1 %></td>
-                                            <td><%# Item.Document.DocDate.ToString("yyyy/MM/dd") %></td>
-                                            <td>《<%# Item.Title %>》</td>
-                                            <td><%# Item.AuthorID.HasValue ? Item.UserProfile.RealName : null %></td>
-                                            <td>
-                                                <div class="btn-group dropup">
-                                                    <button class="btn bg-color-blueLight" data-toggle="dropdown">
-                                                        請選擇功能
-                                                    </button>
-                                                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                                                        <span class="caret"></span>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a href="<%# VirtualPathUtility.ToAbsolute("~/Information/EditBlog/"+Item.DocID) %>"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改</a>
-                                                        </li>
-                                                        <li>
-                                                            <a onclick='<%# "javascript:deleteArticle(" + Item.DocID + ");" %>' class="deletedata"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除</a>
-                                                        </li>
-                                                        <li>
-                                                            <%--<a href="<%# VirtualPathUtility.ToAbsolute("~/Information/BlogDetail/"+Item.DocID) %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>--%>
-                                                            <a href="<%# "../../../front-end/single-post.html?id=" + Item.DocID %>" target="_blank"><i class="fa fa-fw fa fa-eye" aria-hidden="true"></i>檢視資料</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- end widget content -->
+                    <!-- end widget div -->
 
                 </div>
-                <!-- end widget div -->
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
 
-            </div>
-            <!-- end widget -->
-        </article>
-        <!-- WIDGET END -->
+        </div>
 
-    </div>
+    </section>
+
+
 
     <!-- PAGE RELATED PLUGIN(S) -->
 
@@ -213,7 +198,7 @@
         function deleteArticle(docID) {
 
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除專業知識",
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除專業知識",
                 content: "確定刪除此文章?",
                 buttons: '[刪除][取消]'
             }, function (ButtonPressed) {
@@ -222,7 +207,7 @@
                         .prop('action', '<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog") %>' + '?docID=' + docID)
                         .submit();
 
-<%--                    $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog")%>', { 'docID': docID }, function (data) {
+                    <%--                    $.post('<%= VirtualPathUtility.ToAbsolute("~/Information/DeleteBlog")%>', { 'docID': docID }, function (data) {
                         smartAlert(data.message);
                         if (data.result) {
                             window.location.reload();

@@ -11,14 +11,15 @@
 <div class="row">
 
     <div class="block">
-        <%  if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
-        {
-            Html.RenderPartial("~/Views/ClassFacet/Module/CoachSelfLesson.ascx", _model.UserProfile);
-        }
-        else
-        {
-            Html.RenderPartial("~/Views/ClassFacet/Module/LessonCount.ascx", _model.UserProfile);
-        } %>        
+        <%  //if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+            //{
+            //    Html.RenderPartial("~/Views/ClassFacet/Module/CoachSelfLesson.ascx", _model.UserProfile);
+            //}
+            //else
+            {
+                ViewBag.RegisterLesson = _model;
+                Html.RenderPartial("~/Views/ClassFacet/Module/LessonCount.ascx", _model.UserProfile);
+            } %>        
     </div>
     <%  Html.RenderPartial("~/Views/Member/Module/MemberRecentStatus.ascx", _model.UserProfile); %>
 

@@ -32,7 +32,7 @@
                 <a onclick="$global.editProjectCourse(<%= item.PriceID %>);" class="btn btn-circle bg-color-yellow modifyStandarPriceDialog_link"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
 <%--                <%  if (item.Status == (int)Naming.LessonSeriesStatus.已啟用)
                     { %>
-                <a onclick="deletePrice(<%= item.PriceID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="deletePrice(<%= item.PriceID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                 <%  } %>--%>
             </td>
         </tr>

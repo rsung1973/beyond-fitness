@@ -33,7 +33,7 @@
             width: "auto",
             title: "<h4 class='modal-title'><i class='fa-fw fa fa-anchor'></i>  編輯診斷內容</h4>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     showLoading();

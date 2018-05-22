@@ -67,8 +67,8 @@
     void renderItem(int idx)
     {
         var item = _items[idx];
-        ViewBag.PDQTask = item.PDQTask.Where(p => p.UID == _profile.UID).FirstOrDefault();
-        ViewBag.Answer = item.PDQTask.Where(p => p.UID == _profile.UID && !p.SuggestionID.HasValue).FirstOrDefault();
+        ViewBag.PDQTask = item.PDQTask.Where(p => p.UID == _model.UID).FirstOrDefault();
+        ViewBag.Answer = item.PDQTask.Where(p => p.UID == _model.UID && !p.SuggestionID.HasValue).FirstOrDefault();
         ViewBag.InlineGroup = true;
         Html.RenderPartial("~/Views/Interactivity/Module/QuestionnaireItem.ascx", item);
     }

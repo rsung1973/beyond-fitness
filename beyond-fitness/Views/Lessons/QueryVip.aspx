@@ -122,7 +122,7 @@
                                                     <label class="select">
                                                         <%  ViewBag.SelectIndication = "<option value=''>全部</option>";
                                                             Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "coachID", Name = "coachID",DefaultValue = _viewModel.CoachID }); %>
-                                                        <i class="icon-append fa fa-file-word-o"></i>
+                                                        <i class="icon-append far fa-keyboard"></i>
                                                     </label>
                                                     <%--<script>
                                                         $('#coachID').on('change', function (evt) {
@@ -141,7 +141,7 @@
                                             <div class="row">
                                                 <section class="col col-6">
                                                     <label class="input input-group">
-                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        <i class="icon-append far fa-calendar-alt"></i>
                                                         <input type="text" name="dateFrom" id="dateFrom" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢起日" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateFrom) : null %>" />
                                                     </label>
                                                 </section>
@@ -154,7 +154,7 @@
                                                         <i></i>
                                                     </label>--%>
                                                     <label class="input input-group">
-                                                        <i class="icon-append fa fa-calendar"></i>
+                                                        <i class="icon-append far fa-calendar-alt"></i>
                                                         <input type="text" name="dateTo" id="dateTo" readonly="readonly" class="form-control input-lg date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value="<%= _viewModel.HasQuery==true ? String.Format("{0:yyyy/MM/dd}", _viewModel.DateTo) : null %>" />
                                                     </label>
                                                 </section>
@@ -173,7 +173,7 @@
                                                             <option value="4">P.I session</option>
                                                             <option value="5">S.T session</option>
                                                         </select>
-                                                        <i class="icon-append fa fa-file-word-o"></i>
+                                                        <i class="icon-append far fa-keyboard"></i>
                                                     </label>
                                                 </section>
                                             </div>
@@ -210,7 +210,7 @@
 
 								-->
                             <header>
-                                <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                                <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                                 <h2>地點：<%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %> </h2>
                                 <div class="widget-toolbar">
                                     <a href="<%= Url.Action("BookingTrialLesson","Lessons") %>" class="btn bg-color-pink"><i class="fa fa-fw fa-magic"></i> 預約體驗課程</a>

@@ -39,7 +39,7 @@
                                 : "--" %></td>
             <td><%= p.Remark %></td>
             <td nowrap="noWrap">
-                <a onclick="deletePayment(<%= p.PaymentID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="deletePayment(<%= p.PaymentID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
             </td>
         </tr>
         <%  } %>

@@ -40,7 +40,7 @@
 
                 %>
         <tr>
-            <td><a href="#" onclick="deleteFitnessAssessment(<%= item.AssessmentID  %>);" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a> 
+            <td><a href="#" onclick="deleteFitnessAssessment(<%= item.AssessmentID  %>);" class="btn btn-circle bg-color-redLight delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a> 
                 <%= String.Format("{0:yyyy/MM/dd}", item.AssessmentDate) %></td>
             <td><%= item49!=null && item49.TotalAssessment>0 ? item49.TotalAssessment.ToString() : "--" %></td>
             <td><%= item13!=null && item13.TotalAssessment>0 ? item13.TotalAssessment.ToString() : "--" %></td>

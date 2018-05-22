@@ -54,7 +54,7 @@
                                     <section class="col col-6">
                                         <label class="label">或依合約編號查詢</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-file-text-o"></i>
+                                            <i class="icon-append far fa-copy"></i>
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號"/>
                                         </label>
                                     </section>                                

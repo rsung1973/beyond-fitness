@@ -4,6 +4,12 @@
     <script>
         alert('<%= HttpUtility.JavaScriptStringEncode(_message) %>');
     </script>
+<%  }
+    if (ViewBag.GoBack == true)
+    { %>
+    <script>
+        window.history.go(-1);
+    </script>
 <%  } %>
 <script runat="server">
     String _message;

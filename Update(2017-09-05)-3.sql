@@ -242,7 +242,7 @@ SELECT  ContractPayment.ContractID, Payment.PayoffDate AS EventDate, 'B' AS Expr
 FROM     Payment INNER JOIN
                ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID INNER JOIN
                CourseContract ON ContractPayment.ContractID = CourseContract.ContractID
-WHERE   (Payment.TransactionType = 1) AND (CourseContract.EffectiveDate >= '2018/1/1') and Payment.PaymentID 
+WHERE   (Payment.TransactionType = 1) AND (CourseContract.EffectiveDate >= '2018/2/14') and Payment.PaymentID 
 	not in (select InstallmentID from  TuitionInstallment)
 			   go
 
@@ -252,13 +252,13 @@ SELECT  ContractPayment.ContractID, Payment.PayoffDate AS EventDate, 'S' AS Expr
 FROM     Payment INNER JOIN
                ContractPayment ON Payment.PaymentID = ContractPayment.PaymentID INNER JOIN
                CourseContract ON ContractPayment.ContractID = CourseContract.ContractID
-WHERE   (Payment.TransactionType = 7) AND (CourseContract.EffectiveDate >= '2018/1/1')
+WHERE   (Payment.TransactionType = 7) AND (CourseContract.EffectiveDate >= '2018/2/14')
 			   go
 
 DELETE FROM ContractTrustTrack
 FROM     ContractTrustTrack INNER JOIN
                CourseContract ON ContractTrustTrack.ContractID = CourseContract.ContractID
-WHERE   (CourseContract.ContractDate < '2018/1/1')
+WHERE   (CourseContract.ContractDate < '2018/2/14')
 go
 
 DELETE FROM ContractTrustTrack
@@ -276,7 +276,7 @@ FROM     CourseContract AS c INNER JOIN
                CourseContractExtension ON c.ContractID = CourseContractExtension.ContractID INNER JOIN
                CourseContractRevision ON CourseContractExtension.RevisionTrackingID = CourseContractRevision.RevisionID INNER JOIN
                CourseContract AS o ON CourseContractRevision.OriginalContract = o.ContractID
-WHERE   (o.EffectiveDate < '2018/1/1'))
+WHERE   (o.EffectiveDate < '2018/2/14'))
 go
 
 Alter TABLE [dbo].[Settlement]

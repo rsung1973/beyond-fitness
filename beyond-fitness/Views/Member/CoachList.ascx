@@ -51,11 +51,11 @@
                                 <%  }
                                     if (item.LevelID == (int)Naming.MemberStatusDefinition.Deleted)
                                     { %>
-                                <a href="<%= Url.Action("EnableCoach","Member",new { id = item.UID }) %>" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                                <a href="<%= Url.Action("EnableCoach","Member",new { id = item.UID }) %>" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>&nbsp;&nbsp;
                                 <%  }
                                     else if(!item.IsSysAdmin())
                                     { %>
-                                <a href="#" onclick='deleteCoach(<%= item.UID %>);' class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                                <a href="#" onclick='deleteCoach(<%= item.UID %>);' class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                                 <%  } %>
 <%--                                <div class="btn-group dropup">
                                     <button class="btn bg-color-blueLight" data-toggle="dropdown">
@@ -77,7 +77,7 @@
                                             else
                                             { %>
                                                 <li>
-                                                    <a onclick='deleteCoach(<%= item.UID %>);'><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                                    <a onclick='deleteCoach(<%= item.UID %>);'><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                                                 </li>
                                         <%  } %>
                                         <%  if (item.IsCoach())

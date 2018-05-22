@@ -39,7 +39,7 @@
                                     <a href="<%= Url.Action("EditMotivationalWords","Information",new { id = item.DocID }) %>"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                                 </li>
                                 <li>
-                                    <a onclick="deleteArticle(<%= item.DocID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                    <a onclick="deleteArticle(<%= item.DocID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                                 </li>
                             </ul>
                         </div>
@@ -91,7 +91,7 @@
     function deleteArticle(docID) {
 
         $.SmartMessageBox({
-            title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除激勵小語",
+            title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除激勵小語",
             content: "確定刪除此小語?",
             buttons: '[刪除][取消]'
         }, function (ButtonPressed) {

@@ -15,7 +15,7 @@
         var lessonCount = contract.RemainedLessonCount();
         bool pdqStatus = completePDQ(item);
         bool groupComplete = item.GroupingMemberCount == item.GroupingLesson.RegisterLesson.Count ? true : false;
-        bool questionnaireStatus = item.QuestionnaireRequest.Any(q => q.Status != (int)Naming.IncommingMessageStatus.拒答 && q.PDQTask.Count == 0);
+        bool questionnaireStatus = item.QuestionnaireRequest.Any(q => !q.Status.HasValue && !q.PDQTask.Any());
         bool revisionStatus = contract.RevisionList.Any(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效);
 
         var pastReserved = item.LessonTime.Count(l => l.ClassTime < DateTime.Today.AddDays(1) && l.LessonAttendance == null);
@@ -87,9 +87,9 @@
     <%  }
         if (questionnaireStatus)
         { %>
-    <span class="label label-danger">
+    <span class="label label-warning" onclick="$global.promptQuestionnaire(<%= item.RegisterID %>);$global.call('closeDialog');">
         <li class="fa fa-exclamation-triangle"></li>
-        階段性調整計劃未填寫，請通知學員登入系統完成階段性調整計劃。
+        階段性調整計劃未填寫，請 <u>立即填寫!</u> 階段性調整計劃。
     </span>
     <%  }
         if (!validContract)
@@ -108,8 +108,7 @@
     <%  } %>
 </label>
 <%  }   %>
-
-
+<%  Html.RenderPartial("~/Views/ClassFacet/Module/PromptQuestionnaire.ascx"); %>
 
 <script runat="server">
 

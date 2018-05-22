@@ -19,13 +19,13 @@
         <%  if (_userProfile.IsSysAdmin())
             { %>
         <li>
-            <a href="<%= Url.Action("VacantNoIndex", "Invoice") %>" title="空白電子發票下載"><i class="fa fa-lg fa-fw fa-cloud-download"></i>空白電子發票下載</a>
+            <a href="<%= Url.Action("VacantNoIndex", "Invoice") %>" title="空白電子發票下載"><i class="fa fa-lg fa-fw fa-cloud-download-alt"></i>空白電子發票下載</a>
         </li>
         <%  }
             if (_userProfile.IsAssistant())
             {   %>
         <li>
-            <a href="<%= Url.Action("TurnkeyIndex", "Invoice") %>" title="電子發票上傳紀錄查詢"><i class="fa fa-lg fa-fw fa-cloud-upload"></i>電子發票上傳紀錄查詢</a>
+            <a href="<%= Url.Action("TurnkeyIndex", "Invoice") %>" title="電子發票上傳紀錄查詢"><i class="fas fa-lg fa-fw fa-cloud-upload-alt"></i>電子發票上傳紀錄查詢</a>
         </li>
         <%  }
             if (_userProfile.IsAccounting() || _userProfile.IsSysAdmin())

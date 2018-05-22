@@ -62,7 +62,7 @@
         if (couldBeCancelled())
         { %>
             {
-                html: "<i class='fa fa-trash-o'></i>&nbsp;取消預約",
+                html: "<i class='far fa-trash-alt'></i>&nbsp;取消預約",
                 "class": "btn bg-color-red",
                 click: function () {
                     if (confirm('確定取消預約此課程?')) {

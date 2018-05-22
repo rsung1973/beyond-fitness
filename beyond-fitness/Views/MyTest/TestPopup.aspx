@@ -62,19 +62,19 @@
 
     <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" onclick="popup();">
         <span class="btn-label">
-            <i class="fa fa-calendar-plus-o"></i>
+            <i class="fa fa-calendar-alt-plus-o"></i>
         </span>method 1
     </button>
 
     <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" data-toggle="modal" data-target="#popup">
         <span class="btn-label">
-            <i class="fa fa-calendar-plus-o"></i>
+            <i class="fa fa-calendar-alt-plus-o"></i>
         </span>method 2
     </button>
 
     <button type="button" class="btn btn-labeled btn-success bg-color-blueLight" onclick="loadPopup();">
         <span class="btn-label">
-            <i class="fa fa-calendar-plus-o"></i>
+            <i class="fa fa-calendar-alt-plus-o"></i>
         </span>method 3
     </button>
 

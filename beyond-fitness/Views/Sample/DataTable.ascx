@@ -41,7 +41,7 @@
                             <a href="classtypemaintain.html"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                            <a href="#"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                         </li>
                     </ul>
                 </div>
@@ -68,7 +68,7 @@
                             <a href="classtypemaintain.html"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                            <a href="#"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                         </li>
                     </ul>
                 </div>
@@ -94,7 +94,7 @@
                             <a href="updatevip.html"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                            <a href="#"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                         </li>
                     </ul>
                 </div>

@@ -81,7 +81,7 @@
                             <label class="select">
                                 <% //ViewBag.SelectIndication = "<option value=''></option>";
                                     Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", new InputViewModel { Id = "AdvisorID", Name = "AdvisorID", DefaultValue = _model.AdvisorID>1 ? _model.AdvisorID : (int?)null }); %>
-                                <i class="icon-append fa fa-file-word-o"></i>
+                                <i class="icon-append far fa-keyboard"></i>
                             </label>
                         </section>
                     </fieldset>

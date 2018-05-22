@@ -24,7 +24,7 @@
             <%  if (!_model.RevisionList.Any(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效))
                 { %>
             buttons : [{
-                html : "<i class='fa fa-send'></i>&nbsp; 新增服務申請",
+                html : "<i class='fa fa-paper-plane'></i>&nbsp; 新增服務申請",
                     "class" : "btn btn-primary",
                     click : function() {
                     showLoading();

@@ -25,7 +25,7 @@
                         <a onclick="$global.editLearner(<%= item.UID %>);">
                             <%  profile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %><i class="fa fa-bell text-warning"> <%= profile.FullName() %></i></a>
                         <%--<div class="email">
-                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                            <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                         </div>--%>
                     </div>
             <%  } %>
@@ -36,7 +36,7 @@
                 <a onclick="$global.editLearner(<%= item.UID %>);">
                     <%  profile.RenderUserPicture(Writer, new { @class = "", @style = "width:40px" }); %> <%= profile.FullName() %></a>
                 <%--<div class="email">
-                    <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-send"></i></span></a>
+                    <a href="http://line.me/R/msg/text/?ξ( ✿＞◡❛)" target="_blank"><span class="label label-success">Line it! <i class="fa fa-fw fa fa-paper-plane"></i></span></a>
                 </div>--%>
             </div>
             <%  } %>

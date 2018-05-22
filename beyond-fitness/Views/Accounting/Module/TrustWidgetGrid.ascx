@@ -47,14 +47,14 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-6">
                                         <label class="label">請選擇信託資料月份</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="TrustYearMonth" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢月份" value='<%= _viewModel.TrustYearMonth %>' />
                                         </label>
                                     </section>
                                     <%--<section class="col col-xs-12 col-sm-6 col-md-6">
                                         <label class="label">請選擇信託資料迄月</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="TrustDateTo" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄月" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.TrustDateTo) %>' />
                                         </label>
                                     </section>--%>
@@ -69,7 +69,7 @@
                                                 <option value="S">終止（S）</option>
                                                 <option value="X">轉讓（X）</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>
@@ -101,6 +101,7 @@
 </section>
 
 <script>
+    debugger;
     function inquireTrust() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');

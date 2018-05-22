@@ -20,12 +20,12 @@
             <a href="<%= VirtualPathUtility.ToAbsolute("~/Information/Publish") %>"><i class="fa fa-fw fa-puzzle-piece"></i>專業知識</a>
         </li>
         <li>
-            <a href="<%= Url.Action("ListDailyQuestion","Activity") %>"><i class="fa fa-fw fa-question"></i>問與答</a>
+            <a href="<%= Url.Action("DailyQuestionIndex","Activity") %>"><i class="fa fa-fw fa-question"></i>問與答</a>
         </li>
         <%  if (_userProfile.IsAuthorizedSysAdmin() || _userProfile.IsOfficer())
             { %>
                 <li>
-                    <a href="<%= Url.Action("MotivationalWords","Information") %>"><i class="fa fa-fw fa-volume-control-phone"></i>每日激勵小語</a>
+                    <a href="<%= Url.Action("MotivationalWords","Information") %>"><i class="fas fa-fw fa-lightbulb"></i>每日激勵小語</a>
                 </li>
         <%  } %>
     </ul>

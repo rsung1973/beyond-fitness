@@ -14,7 +14,7 @@
         <input type="hidden" name="coachID" value="<%= _model.LessonTime.AttendingCoach %>" />
         <div class="col-xs-12 col-sm-6 cols-md-6 cols-lg-6">
             <div class="padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-pie-chart"></i>著重方向</h5>
+                <h5 class="margin-top-0"><i class="fa fa-chart-pie"></i>著重方向</h5>
                 <ul class="no-padding no-margin">
 
                     <fieldset>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-xs-12 col-sm-6 cols-md-6 cols-lg-6">
             <div class="padding-10">
-                <h5 class="margin-top-0"><i class="fa fa-pie-chart"></i>體適能</h5>
+                <h5 class="margin-top-0"><i class="fa fa-chart-pie"></i>體適能</h5>
                 <ul class="no-padding no-margin">
                     <fieldset>
                         <div class="input-group">

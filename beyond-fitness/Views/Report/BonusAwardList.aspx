@@ -69,13 +69,13 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>()); %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">或依學員姓名(暱稱)查詢</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-qrcode"></i>
+                                            <i class="icon-append fa fa-user"></i>
                                             <input type="text" name="UserName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名"/>
                                         </label>
                                     </section>
@@ -101,7 +101,7 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-6">
                                         <label class="label">請選擇兌換起日</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <%  var dateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1); %>
                                             <input type="text" name="DateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom) %>" />
                                         </label>
@@ -109,7 +109,7 @@
                                     <section class="col col-xs-12 col-sm-6 col-md-6">
                                         <label class="label">請選擇兌換迄日</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="DateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom.AddMonths(1).AddDays(-1)) %>" />
                                         </label>
                                     </section>

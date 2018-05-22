@@ -32,7 +32,7 @@
                 $('#modifyStudentStatusDialog').remove();
             },
             buttons : [{
-                html : "<i class='fa fa-send'></i>&nbsp;確定",
+                html : "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class" : "btn btn-primary",
                 click : function() {
                     commitRecentStatus(<%= _model.UID %>,$('#modifyStudentStatusDialog').find('textarea').val());

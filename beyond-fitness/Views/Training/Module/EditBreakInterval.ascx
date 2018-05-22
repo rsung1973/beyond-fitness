@@ -53,12 +53,12 @@
             width: 600,
             resizable: false,
             modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-clock-o'></i> 新增休息時間與總組數</h4></div>",
+            title: "<div class='modal-title'><h4><i class='far fa-clock'></i> 新增休息時間與總組數</h4></div>",
             buttons: [
     <%  if (_model != null)
         {   %>
             {
-                html: "<i class='fa fa-trash-o'></i>&nbsp; 刪除",
+                html: "<i class='far fa-trash-alt'></i>&nbsp; 刪除",
                 "class": "btn bg-color-red",
                 click: function () {
                     if (confirm('確定刪除此項目?')) {

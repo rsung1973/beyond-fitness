@@ -11,7 +11,7 @@
 <%  if (_model.PDQSuggestion.Count > 5)
     {   %>
         <label class="select">
-            <select class="input-lg" name='<%= "_" + _model.QuestionID %>'>
+            <select name='<%= "_" + _model.QuestionID %>'>
             <%  foreach (var item in _model.PDQSuggestion)
                 { %>
                     <option value="<%= item.SuggestionID %>"><%= item.Suggestion %></option>

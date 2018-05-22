@@ -29,7 +29,7 @@
                             <%  foreach (var item in _model.PDQTask.OrderBy(t=>t.PDQQuestion.QuestionNo))
                                 { %>
                                     <div class="image font-md">
-                                        <span class="text-warning"><i class="fa-fw fa fa-quora"></i><%= item.PDQQuestion.QuestionNo %>. <%= item.PDQQuestion.Question %></span><br />
+                                        <span class="text-warning"><%--<i class="fa-fw fa fa-quora"></i>--%><%= item.PDQQuestion.QuestionNo %>. <%= item.PDQQuestion.Question %></span><br />
                                         <i class="fa-fw fa fa-hand-o-right"></i>&nbsp;&nbsp;&nbsp;<%= getAnswer(item) %>
                                     </div>
                             <%  } %>

@@ -21,7 +21,7 @@
             width: "auto",
             resizable: false,
             modal: true,
-            title: "<div class='modal-title'><h4><i class='fa fa-child'></i> Fitness Diagnosis</h4></div>",
+            title: "<div class='modal-title'><h4><i class='fa fa-diagnoses'></i> Fitness Diagnosis</h4></div>",
             buttons: [
     <%  if (_item!=null && _item.LevelID == (int)Naming.DocumentLevelDefinition.暫存)
         {   %>

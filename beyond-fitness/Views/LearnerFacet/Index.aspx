@@ -19,10 +19,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../fonts/fontawesome5.0/css/fontawesome-all.css">
     <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-production-plugins.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-production-plugins-20180501.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-production-20180501.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-skins.min.css">
     <!-- SmartAdmin RTL Support -->
     <link rel="stylesheet" type="text/css" media="screen" href="../css/smartadmin-rtl.min.css">
@@ -141,15 +141,15 @@
                             <div class="list-group list-group-icons bg-color-darken">
                                 <%  if (_profile.BodyDiagnosis.Where(d => d.LevelID == (int)Naming.DocumentLevelDefinition.正常).Count() > 0)
                                     {   %>
-                                <a href="#" class="list-group-item" id="diagnosisDialog_link"><i class="fa fa-child"></i>&nbsp;&nbsp;Fitness Diagnosis<i class="fa fa-angle-right pull-right"></i></a>
+                                <a href="#" class="list-group-item" id="diagnosisDialog_link"><i class="fa fa-diagnoses"></i>&nbsp;&nbsp;Fitness Diagnosis<i class="fa fa-angle-right pull-right"></i></a>
                                 <%  } %>
                                 <a href="#" class="list-group-item" id="updateProfile_link"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Profile<i class="fa fa-angle-right pull-right"></i></a>
                                 <%--<a href="#" class="list-group-item" id="healthlist_link"><i class="fa fa-history"></i>&nbsp;&nbsp;Health<i class="fa fa-angle-right  pull-right"></i></a>
-                                <a href="#calendar" class="list-group-item"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Calendar<i class="fa fa-angle-right pull-right"></i></a>--%>
-                                <%  if (models.GetQuestionnaireRequest(_profile).Count() > 0)
+                                <a href="#calendar" class="list-group-item"><i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;Calendar<i class="fa fa-angle-right pull-right"></i></a>--%>
+                                <%--<%  if (models.GetQuestionnaireRequest(_profile).Count() > 0)
                                     { %>
                                 <a href="#" class="list-group-item bg-color-redLight" id="questionnaire_link"><i class="fa fa-volume-up"></i>&nbsp;&nbsp;Questionnaire<i class="fa fa-angle-right pull-right"></i></a>
-                                <%  } %>
+                                <%  } %>--%>
                             </div>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                             <!-- Widget ID (each widget will need unique ID)-->
                             <div class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
                                 <header>
-                                    <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                                    <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                                     <h2>Calendar</h2>
                                     <div class="widget-toolbar">
                                     </div>
@@ -217,7 +217,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 text-right hidden-xs">
                 <div class="txt-color-white inline-block">
-                    <i class="txt-color-blueLight hidden-mobile">Last update time <i class="fa fa-clock-o"></i><strong>2016/07/23 PM 20:03 &nbsp;</strong>
+                    <i class="txt-color-blueLight hidden-mobile">Last update time <i class="far fa-clock"></i><strong>2016/07/23 PM 20:03 &nbsp;</strong>
                     </i>
                 </div>
             </div>

@@ -12,10 +12,10 @@
 <nav>
     <ul>
         <li>
-            <a href="#" title="收款管理"><i class="fa fa-lg fa-fw fa-usd"></i><span class="menu-item-parent">收款管理</span></a>
+            <a href="#" title="收款管理"><i class="fa fa-lg fa-fw fa-dollar-sign"></i><span class="menu-item-parent">收款管理</span></a>
             <ul>
                 <li>
-                    <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-usd"></i>收款新增/作廢</a>
+                    <a href="<%= Url.Action("PaymentIndex","Payment") %>" title="收款新增/作廢"><i class="fa fa-lg fa-fw fa-dollar-sign"></i>收款新增/作廢</a>
                 </li>
                 <li>
                     <a href="<%= Url.Action("QueryIndex", "Payment") %>" title="收款/作廢紀錄查詢"><i class="fa fa-lg fa-fw fa-search"></i>收款/作廢紀錄查詢</a>

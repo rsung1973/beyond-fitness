@@ -70,7 +70,7 @@
                                                 });
                                             </script>
                                             <%  } %>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-3">
@@ -83,7 +83,7 @@
                                     <section class="col col-3">
                                         <label class="label">或依身分證字號查詢</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-id-card-o"></i>
+                                            <i class="icon-append far fa-id-card"></i>
                                             <input type="text" name="IDNo" class="form-control input" maxlength="20" placeholder="請輸入身分證字號"/>
                                         </label>
                                     </section>
@@ -107,7 +107,7 @@
                                                 <option value="-1">正式學員</option>
                                                 <option value="1">體驗學員</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-3">
@@ -119,7 +119,7 @@
                                                 <option value="1001">尚未註冊</option>
                                                 <option value="1002">已停用</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-3">
@@ -130,7 +130,7 @@
                                                 <option value="M">男</option>
                                                 <option value="F">女</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-3">
@@ -141,7 +141,7 @@
                                                 <option value="1">是</option>
                                                 <option value="0">否</option>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                 </div>
@@ -188,6 +188,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>人員列表</h2>
                     <div class="widget-toolbar">
+                        <a onclick="downloadUnallocated();" class="btn bg-color-green"><i class="fa fa-fw fa-cloud-download-alt fa-spin"></i> 未指派體能顧問清單</a>
                         <a onclick="$global.editLearner();" class="btn btn-primary modifyStudentDialog_link"><i class="fa fa-fw fa-user-plus"></i>新增學員</a>
                     </div>
                 </header>
@@ -229,6 +230,10 @@
     }
 </script>
 <script>
+
+    function downloadUnallocated() {
+        $('').launchDownload('<%= Url.Action("CreateUnallocatedLearnerListXlsx","Learner") %>');
+    }
 
     $(function () {
 
@@ -311,10 +316,34 @@
             });
         };
 
+        $global.resetPassword = function (keyID) {
+            var event = event || window.event;
+
+            $.SmartMessageBox({
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 重置密碼確認",
+                content: "請確認是否重置密碼為「BEYOND」？",
+                buttons: '[確定][取消]'
+            }, function (buttonValue) {
+                if (buttonValue == '確定') {
+                    startLoading();
+                    $.post('<%= Url.Action("ResetPassword","Account") %>', { 'keyID': keyID, 'password': 'BEYOND' }, function (data) {
+                        hideLoading();
+                        if ($.isPlainObject(data)) {
+                            if (data.result) {
+                                alert('密碼已重設!!');
+                            } else {
+                                alert(data.message);
+                            }
+                        } else {
+                            $(data).appendTo($('body')).remove();
+                        }
+                    });
+                }
+            });
+        };
 
     });
 
-    
 </script>
 
 <script runat="server">

@@ -10,7 +10,7 @@
 
 <div id="calendarView" class="jarviswidget" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false">
     <header>
-        <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+        <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
         <h2><span id="coachName"><%= _coach==null ? "全部練教" : _coach.CoachID==_model.UID ? "我" : _coach.UserProfile.FullName() %></span>的行事曆：<span id="branchName"><%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreText.ascx", _viewModel.BranchID); %></span></h2>
         <div class="widget-toolbar">
 <%--            <div class="btn-group">

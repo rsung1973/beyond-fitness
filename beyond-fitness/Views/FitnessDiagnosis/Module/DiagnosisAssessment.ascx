@@ -25,10 +25,10 @@
                 <%  if (_model.LevelID == (int)Naming.DocumentLevelDefinition.暫存)
                     { %>
                 <a href="#" onclick="editDiagnosisAssessment(<%= _model.DiagnosisID %>,<%= item.ItemID %>);">
-                    <i class="fa fa-pencil text-warning fa-lg btn btn-xs bg-color-orange"></i>
+                    <i class="fa fa-pencil-alt text-warning fa-lg btn btn-xs bg-color-orange"></i>
                 </a>&nbsp;&nbsp;
                 <a href="#" onclick="deleteDiagnosisAssessment(<%= _model.DiagnosisID %>,<%= item.ItemID %>);">
-                    <i class="fa fa-trash-o btn btn-xs fa-lg bg-color-redLight"></i>
+                    <i class="far fa-trash-alt btn btn-xs fa-lg bg-color-redLight"></i>
                 </a>
                 <%  } %>
                 <%= item.FitnessAssessmentItem.ItemName %>

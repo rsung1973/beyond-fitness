@@ -28,7 +28,7 @@
                     <section class="col col-6">
                         <label class="label">證照到期日</label>
                         <label class="input">
-                            <i class="icon-append fa fa-calendar"></i>
+                            <i class="icon-append far fa-calendar-alt"></i>
                             <input type="text" name="Expiration" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" value="" placeholder="請選擇證照到期日" />
                         </label>
                     </section>
@@ -44,7 +44,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 新增證照資料</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     showLoading();

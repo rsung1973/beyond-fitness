@@ -56,7 +56,7 @@
             modal: true,
             title: "<h4 class='modal-title'><i class='fa-fw fa fa-edit'></i>  編輯結果</h4>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

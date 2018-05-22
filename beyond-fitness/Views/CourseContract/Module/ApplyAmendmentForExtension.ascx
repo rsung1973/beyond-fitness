@@ -18,7 +18,7 @@
             <option value="9">9個月</option>
             <option value="12">12個月</option>--%>
         </select>
-        <i class="icon-append fa fa-clock-o"></i>
+        <i class="icon-append far fa-clock"></i>
     </label>
     <script>
         $('select[name="MonthExtension"]').on('change', function (evt) {

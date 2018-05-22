@@ -52,20 +52,24 @@
                 <a onclick="$global.editPDQ(<%= item.UID %>);" class="btn btn-circle bg-color-green modifyPDQDialog_link"><i class="fa fa-fw fa fa-lg fa-street-view " aria-hidden="true"></i></a>&nbsp;&nbsp;   
                         <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
                             { %>
-                <a onclick="$global.listAdvisor(<%= item.UID %>);" class="btn btn-circle bg-color-blueLight"><i class="fa fa-fw fa fa-lg fa-address-book-o" aria-hidden="true"></i></a>&nbsp;&nbsp;   
+                <a onclick="$global.listAdvisor(<%= item.UID %>);" class="btn btn-circle bg-color-blueLight"><i class="far fa-fw fa-lg fa-address-book" aria-hidden="true"></i></a>&nbsp;&nbsp;   
                         <%  } %>
                 <%  } %>
                 <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
                     {
                         if (item.LevelID == (int)Naming.MemberStatus.已註冊 || item.LevelID == (int)Naming.MemberStatus.尚未註冊)
                         { %>
-                        <a onclick="$global.deleteLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                        <a onclick="$global.deleteLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                 <%      }
                         else
                         { %>
-                        <a onclick="$global.enableLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square" aria-hidden="true"></i></a>
+                        <a onclick="$global.enableLearner(<%= item.UID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
                 <%      }
-                    } %>
+                    }
+                    if (!item.UserProfileExtension.CurrentTrial.HasValue)
+                    { %>
+                    <a onclick="$global.resetPassword('<%= item.UID.EncryptKey() %>');" class="btn btn-circle bg-color-pink forget"><i class="fa fa-fw fa fa-lg fa-key" aria-hidden="true"></i> </a>
+                <%  } %>
             </td>
         </tr>
         <%  } %>

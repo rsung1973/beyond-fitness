@@ -34,7 +34,7 @@
             {
                 var contract = models.GetTable<CourseContract>().Where(c => c.ContractID == item.Key).First();
                 var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();
-                var initialTrustAmount = settlement.InitialTrustAmount==0 ? contract.TotalCost : settlement.BookingTrustAmount; // settlement.InitialTrustAmount;
+                var initialTrustAmount = settlement.InitialTrustAmount==0 ? contract.TotalCost : settlement.InitialTrustAmount; //settlement.BookingTrustAmount;
                 %>
             <%  var amt = item.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount);
                 if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)

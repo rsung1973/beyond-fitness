@@ -13,7 +13,7 @@
     || _userProfile.IsAssistant()))
     { %>
 <li>
-    <a href="#" title="人員管理"><i class="fa fa-lg fa-fw fa-group"></i><span class="menu-item-parent">人員管理</span></a>
+    <a href="#" title="人員管理"><i class="fas fa-lg fa-fw fa-users"></i><span class="menu-item-parent">人員管理</span></a>
     <ul>
         <li>
             <a href="<%= Url.Action("Index","Learner") %>"><i class="fa fa-fw fa-user"></i>學員管理</a>
@@ -27,7 +27,7 @@
     else if(_userProfile.IsCoach())
     { %>
 <li>
-    <a href="<%= Url.Action("Index","Learner") %>" title="學員管理"><i class="fa fa-lg fa-fw fa-group"></i><span class="menu-item-parent">學員管理</span></a>
+    <a href="<%= Url.Action("Index","Learner") %>" title="學員管理"><i class="fa fa-lg fa-fw fa-user"></i><span class="menu-item-parent">學員管理</span></a>
 </li>
 <%  } %>
 

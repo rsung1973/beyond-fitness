@@ -38,7 +38,7 @@
                                        
                                        -->
                             <header>
-                                <span class="widget-icon"><i class="fa fa-calendar"></i></span>
+                                <span class="widget-icon"><i class="fa fa-calendar-alt"></i></span>
                                 <h2><%= _model.FullName() %>的上課日曆 </h2>
                             </header>
                             <!-- widget div-->

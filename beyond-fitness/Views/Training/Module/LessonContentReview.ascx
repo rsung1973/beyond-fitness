@@ -20,6 +20,9 @@
 </div>
 <div class="row">
     <%  Html.RenderPartial("~/Views/Training/Module/LearnerTrainingAidsPie.ascx", _model); %>
+    <div class="col-xs-12 col-sm-6 col-md-6 text-center">
+        <%  Html.RenderPartial("~/Views/Training/Module/LearnerTrainingAidsList.ascx", _model); %>
+    </div>
 </div>
 
 <script runat="server">

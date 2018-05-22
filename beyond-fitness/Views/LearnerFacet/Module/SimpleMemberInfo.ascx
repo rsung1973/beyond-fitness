@@ -37,10 +37,10 @@
                   </font> / <%= totalLessons ?? 0 %></span>
         </a>
         <a href="#" class="informer informer-two" id="bonus_link">
-            <span class="fa fa-quora ">&nbsp;&nbsp;<b><u><%= _model.BonusPoint(models) ?? 0 %></u></b></span>
+            <span class="fa fa-gift ">&nbsp;&nbsp;<b><u><%= _model.BonusPoint(models) ?? 0 %></u></b></span>
         </a>
         <a href="#" class="informer informer-three" id="undolistDialog_link">
-            <span class="fa fa-check-square-o">&nbsp;&nbsp;<b><u><%= _uncheckedLessons.Count() %></u></b></span>
+            <span class="far fa-check-square">&nbsp;&nbsp;<b><u><%= _uncheckedLessons.Count() %></u></b></span>
         </a>
         <%--<a href="#chatboard" class="informer informer-four">
             <span class="fa fa-envelope">&nbsp;&nbsp;<b><u><%= models.GetTable<LessonComment>().Where(u => u.HearerID == _model.UID)

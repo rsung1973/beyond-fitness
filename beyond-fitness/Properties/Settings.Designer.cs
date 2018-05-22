@@ -123,5 +123,25 @@ namespace WebHome.Properties {
                 return ((bool)(this["UseSSL"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("96938fc3a87869160831460153f84b70")]
+        public string ChannelSecret {
+            get {
+                return ((string)(this["ChannelSecret"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9cKb6ExKnQMNeUiOk02agKk8c+yforhhQ2KO1wqnoGQ7A7qfzo8TgpNaSiw4ZwWqCNjk7ds8gFK38hE0a" +
+            "c2Bfxjja2tPFvkzzVF5J3G4Klj1fxcrBBYwC7L9wi3Xbx5e95oyFRCIPeUKgq/pgwOfzgdB04t89/1O/" +
+            "w1cDnyilFU=")]
+        public string ChannelToken {
+            get {
+                return ((string)(this["ChannelToken"]));
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-calendar-plus-o"></i>
+                <i class="fa fa-calendar-alt-plus-o"></i>
             </span>
         </span>
 
@@ -43,7 +43,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-calendar-plus-o"></i>學員管理
+        <i class="fa-fw fa fa-calendar-alt-plus-o"></i>學員管理
                             <span>>  
                                 維護上課數
                             </span>

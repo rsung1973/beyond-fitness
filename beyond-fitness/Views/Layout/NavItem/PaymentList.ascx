@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 
 <li>
-    <a href="<%= VirtualPathUtility.ToAbsolute("~/Report/LearnerPayment") %>" title="付款紀錄查詢"><i class="fa fa-fw fa-usd"></i>付款紀錄表</a>
+    <a href="<%= VirtualPathUtility.ToAbsolute("~/Report/LearnerPayment") %>" title="付款紀錄查詢"><i class="fa fa-fw fa-dollar-sign"></i>付款紀錄表</a>
 </li>
 
 <script runat="server">

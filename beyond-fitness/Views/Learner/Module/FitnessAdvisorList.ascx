@@ -21,7 +21,7 @@
         <tr>
             <td><%= item.ServingCoach.UserProfile.FullName() %></td>
             <td>
-                <a onclick="$global.deleteAdvisor(<%= item.CoachID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="$global.deleteAdvisor(<%= item.CoachID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
             </td>
         </tr>
         <%  } %>

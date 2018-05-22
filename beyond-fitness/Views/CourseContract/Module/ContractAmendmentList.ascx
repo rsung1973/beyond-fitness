@@ -31,23 +31,23 @@
             <td nowrap="noWrap">
                 <%  if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待確認)
                     { %>
-                <%--<a onclick="$global.openToApproveAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                <%--<a onclick="$global.openToApproveAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>--%>
                 <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
                 <%  }
                     else if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待簽名)
                     { %>
-                <%--<a onclick="$global.openToSignAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
+                <%--<a onclick="$global.openToSignAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>--%>
                 <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
                 <%  }
                     else if (item.CourseContract.Status == (int)Naming.CourseContractStatus.待審核)
                     {   %>
-                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>
                 <a href="<%= Url.Action("ViewContractAmendment","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-yellow modifyPersonalContractDialog_link"><i class="fa fa-fw fa fa-lg fa-binoculars" aria-hidden="true"></i></a>
-                <%--<a onclick="$global.enableAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-check-square-o" aria-hidden="true"></i></a>--%>
+                <%--<a onclick="$global.enableAmendment(<%= item.RevisionID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>--%>
                 <%  }
                     else
                     {  %>
-                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>
+                <a href="<%= Url.Action("GetContractAmendmentPdf","CourseContract",new { item.RevisionID }) %>" target="_blank" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>
                 <%  } %>
             </td>
         </tr>

@@ -68,7 +68,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>課程類別列表</h2>
                     <div class="widget-toolbar">
-                        <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/EditLessonPrice") %>"><i class="fa fa-fw fa-pencil"></i>新增課程類別</a>
+                        <a class="btn btn-primary" href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/EditLessonPrice") %>"><i class="fa fa-fw fa-pencil-alt"></i>新增課程類別</a>
                     </div>
                 </header>
 
@@ -122,7 +122,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>相關商品列表</h2>
                     <div class="widget-toolbar">
-                        <a href="productmaintain.html" class="btn btn-primary"><i class="fa fa-fw fa-pencil"></i>相關商品產品</a>
+                        <a href="productmaintain.html" class="btn btn-primary"><i class="fa fa-fw fa-pencil-alt"></i>相關商品產品</a>
                     </div>
                 </header>
 
@@ -143,7 +143,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th data-class="expand">商品名稱</th>
-                                    <th data-hide="phone"><i class="fa fa-fw fa-usd text-muted hidden-md hidden-sm hidden-xs"></i>售價金額</th>
+                                    <th data-hide="phone"><i class="fa fa-fw fa-dollar-sign text-muted hidden-md hidden-sm hidden-xs"></i>售價金額</th>
                                     <th><i class="fa fa-fw fa-picture-o  text-muted hidden-md hidden-sm hidden-xs"></i>商品圖片</th>
                                     <th>功能</th>
                                 </tr>
@@ -168,7 +168,7 @@
                                                     <a href="classtypemaintain.html"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                                    <a href="#"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -194,7 +194,7 @@
                                                     <a href="classtypemaintain.html"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                                                 </li>
                                                 <li>
-                                                    <a href="#"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                                    <a href="#"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                                                 </li>
                                             </ul>
                                         </div>

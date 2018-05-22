@@ -42,7 +42,7 @@
                         }
                     }
                 }, {
-                    html: "<i class='fa fa-trash-o'></i>&nbsp;取消",
+                    html: "<i class='far fa-trash-alt'></i>&nbsp;取消",
                     "class": "btn bg-color-red",
                     click: function () {
                         if (options.cancel) {
@@ -72,7 +72,7 @@
         $('#confirmDialog').modal('show');
 --%>
             $.SmartMessageBox({
-                title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> " + message.title,
+                title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> " + message.title,
                 content: message.message,
                 buttons: '[確定][取消]'
             }, function (ButtonPressed) {

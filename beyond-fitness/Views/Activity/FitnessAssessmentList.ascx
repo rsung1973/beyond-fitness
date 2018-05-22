@@ -28,7 +28,7 @@
                         <a onclick="editAssessment(<%= item.AssessmentID %>);">
                             <i class="fa fa-pencil-square-o fa-2x btn btn-xs bg-color-orange"></i>
                         </a><a onclick="deleteAssessment(<%= item.AssessmentID %>);">
-                            <i class="fa fa-trash-o fa-2x btn btn-xs bg-color-redLight"></i>
+                            <i class="far fa-trash-alt fa-2x btn btn-xs bg-color-redLight"></i>
                         </a>
                     </td>
                     <td><%= item.AssessmentDate.ToString("yyyy/MM/dd") %></td>

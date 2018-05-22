@@ -20,7 +20,7 @@
         { %>
     <div class="col-xs-2 col-sm-1">
         <time datetime="" class="icon">
-            <strong><i class="fa-fw fa fa-quora"></i></strong>
+            <strong><%--<i class="fa-fw fa fa-quora"></i>--%></strong>
             <span><%= item.PDQQuestion.QuestionNo %></span>
         </time>
     </div>

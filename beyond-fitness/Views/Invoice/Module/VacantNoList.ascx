@@ -47,8 +47,8 @@
             <td><%= String.Format("{0:00000000}",tailItem.InvoiceNo) %></td>
             <td><%= tailItem.InvoiceNo-item.InvoiceNo+1 %></td>
             <td>
-                <a onclick="downloadCsv(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-cloud-download" aria-hidden="true"></i></a>
-                <a onclick="processE0402(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-excel-o" aria-hidden="true"></i></a>
+                <a onclick="downloadCsv(<%= seller.BranchID %>);" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-excel" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <a onclick="processE0402(<%= seller.BranchID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-upload" aria-hidden="true"></i></a>
             </td>
         </tr>
         <%      }

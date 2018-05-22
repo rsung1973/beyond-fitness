@@ -20,7 +20,7 @@
                 <div class="widget-toolbar">
                     <%  if ((_item.TrainingBySelf==1 || models.CouldMarkToAttendLesson(_item)) && _item.LessonAttendance == null)
                             { %>
-                    <a onclick="attendLesson(<%= _item.LessonID %>);" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i>完成上課</a>
+                    <a onclick="attendLesson(<%= _item.LessonID %>);" class="btn btn-success"><i class="far fa-fw fa-check-square"></i>完成上課</a>
                     <%  } %>
                     <a onclick="cloneLesson(<%= _item.LessonID %>);" class="btn bg-color-orange"><i class="fa fa-fw fa-files-o"></i>複製課表</a>
                     <a onclick='previewLesson(<%= JsonConvert.SerializeObject(new
@@ -61,7 +61,7 @@
                     <%  if (_item.TrainingBySelf != 1)
                         { %>
                     <li class="contentTab">
-                        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-pie-chart"></i><span>評量指數</span></a>
+                        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-chart-pie"></i><span>評量指數</span></a>
                     </li>
                     <li class="contentTab">
                         <a data-toggle="tab" href="#<%= prefix %>6"><i class="fa fa-line-chart"></i><span>體能分析表</span></a>

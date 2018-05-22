@@ -47,14 +47,14 @@
                             <section class="col col-8">
                                 <label class="label">企業名稱</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-file-o"></i>
+                                    <i class="icon-append fa fa-font"></i>
                                     <input type="text" name="CompanyName" maxlength="200" placeholder="請輸入企業名稱" value="<%= _viewModel.CompanyName %>" />
                                 </label>
                             </section>
                             <section class="col col-4">
                                 <label class="label">統一編號</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-file-o"></i>
+                                    <i class="icon-append fa fa-font"></i>
                                     <input type="tel" name="ReceiptNo" maxlength="20" placeholder="請輸入統一編號" value="<%= _viewModel.ReceiptNo %>" />
                                 </label>
                             </section>
@@ -68,20 +68,20 @@
                                     <select class="input" name="BranchID">
                                         <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: _viewModel.BranchID ?? -1);    %>
                                     </select>
-                                    <i class="icon-append fa fa-file-word-o"></i>
+                                    <i class="icon-append far fa-keyboard"></i>
                                 </label>
                             </section>
                             <section class="col col-4">
                                 <label class="label">合約起日</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
+                                    <i class="icon-append far fa-calendar-alt"></i>
                                     <input type="text" name="ValidFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請選擇合約起日" value='<%= _viewModel.ValidFrom.HasValue ? _viewModel.ValidFrom.Value.ToString("yyyy/MM/dd") : "" %>' />
                                 </label>
                             </section>
                             <section class="col col-4">
                                 <label class="label">合約迄日</label>
                                 <label class="input">
-                                    <i class="icon-append fa fa-calendar"></i>
+                                    <i class="icon-append far fa-calendar-alt"></i>
                                     <input type="text" name="Expiration" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請選擇合約迄日" value='<%= _viewModel.Expiration.HasValue ? _viewModel.Expiration.Value.ToString("yyyy/MM/dd") : "" %>' />
                                 </label>
                             </section>
@@ -91,7 +91,7 @@
                         <section>
                             <label class="label">合作方案說明</label>
                             <label class="input">
-                                <i class="icon-append fa fa-file-o"></i>
+                                <i class="icon-append fa fa-font"></i>
                                 <input type="text" name="Subject" maxlength="200" placeholder="請輸入合作方案說明" value="<%= _viewModel.Subject %>" />
                             </label>
                         </section>
@@ -131,7 +131,7 @@
                                         <input type="hidden" name="EnterpriseListPrice" value="<%= _viewModel.EnterpriseListPrice[i] %>" />
                                     </td>
                                     <td>
-                                        <a onclick="$global.deleteItem();" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                                        <a onclick="$global.deleteItem();" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <%      }
@@ -149,7 +149,7 @@
                         <section>
                             <label class="label">以上項目套裝價格為每人</label>
                             <label class="input">
-                                <i class="icon-append fa fa-usd"></i>
+                                <i class="icon-append fa fa-dollar-sign"></i>
                                 <input type="tel" name="TotalCost" maxlength="10" placeholder="請輸入價格" value="<%= _viewModel.TotalCost %>" />
                             </label>
                         </section>
@@ -169,7 +169,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i> 設定企業合作方案項目</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     clearErrors();

@@ -16,7 +16,7 @@
         <a data-toggle="tab" class="editLessonTab" href="#<%= prefix %>2"><i class="fa fa-heartbeat"></i><span>課表</span></a>
     </li>
     <li>
-        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-pie-chart"></i><span>分析</span></a>
+        <a data-toggle="tab" href="#<%= prefix %>4"><i class="fa fa-chart-pie"></i><span>分析</span></a>
     </li>
     <li class="pull-right">
         <span class="margin-top-10 display-inline">

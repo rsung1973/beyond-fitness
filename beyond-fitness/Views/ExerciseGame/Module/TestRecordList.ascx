@@ -33,7 +33,7 @@
             <td><%= String.Format("{0:yyyy/MM/dd}", item.TestDate) %>
                 <%  if (ViewBag.ViewOnly != true)
                     { %>
-                <a onclick="deleteExerciseResult(<%= item.TestID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i> </a>
+                <a onclick="deleteExerciseResult(<%= item.TestID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i> </a>
                 <%  } %>
             </td>
         </tr>

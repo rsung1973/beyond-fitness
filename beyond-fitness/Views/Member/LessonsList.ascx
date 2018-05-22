@@ -104,12 +104,12 @@
                                                     <a onclick="javascript:registerLessons(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i> 修改課堂數</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<%= Url.Action("LessonTuitionInstallment","Member",new { id = item.RegisterID }) %>"><i class="fa fa-fw fa fa-usd" aria-hidden="true"></i> 維護付款紀錄</a>
+                                                    <a href="<%= Url.Action("LessonTuitionInstallment","Member",new { id = item.RegisterID }) %>"><i class="fa fa-fw fa fa-dollar-sign" aria-hidden="true"></i> 維護付款紀錄</a>
                                                 </li>
                                             <%  if (newRegistering)
                                                 { %>
                                                     <li>
-                                                        <a onclick="javascript:deleteLesson(<%= item.RegisterID %>)"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i> 刪除資料</a>
+                                                        <a onclick="javascript:deleteLesson(<%= item.RegisterID %>)"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i> 刪除資料</a>
                                                     </li>
                                             <%  } %>
                                         </ul>
@@ -164,7 +164,7 @@
 
     function deleteLesson(lessonID) {
         $.SmartMessageBox({
-            title: "<i class=\"fa fa-fw fa fa-trash-o\" aria-hidden=\"true\"></i> 刪除課程",
+            title: "<i class=\"fa fa-fw far fa-trash-alt\" aria-hidden=\"true\"></i> 刪除課程",
             content: "確定刪除此課程資料?",
             buttons: '[刪除][取消]'
         }, function (ButtonPressed) {

@@ -9,7 +9,7 @@
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 
-            <%--<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/chartjs/chart.min.js") %>"></script>--%>
+            <%--<script src="<%= VirtualPathUtility.ToAbsolute("~/js/plugin/chartjs2_7_2/chart.min.js") %>"></script>--%>
             <%  if (_item != null && _item.Status == (int)Naming.GeneralStatus.Successful)
                 {
                     var rankItems = _item.ExerciseGameRank.Where(r => r.RankingScore.HasValue);
@@ -60,7 +60,7 @@
                                 };
 
                                 if($global.chartJS==undefined) {
-                                    loadScript('<%= VirtualPathUtility.ToAbsolute("~/js/plugin/chartjs/chart.min.js") %>',function() { 
+                                    loadScript('<%= VirtualPathUtility.ToAbsolute("~/js/plugin/chartjs2_7_2/chart.min.js") %>',function() { 
                                         $global.chartJS=true;
                                         window.myRadar = new Chart(document.getElementById("<%= _chartID %>"), RadarConfig);
                                     });

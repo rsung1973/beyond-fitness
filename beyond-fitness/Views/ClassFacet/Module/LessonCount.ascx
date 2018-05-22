@@ -21,7 +21,7 @@
         </div>
         <div class="hp-info pull-left" onclick="diagnose();" >
             <div class="hp-icon">
-                <span class="fa fa-child"></span>
+                <span class="fa fa-diagnoses"></span>
             </div>
             <span class="hp-main"><%= String.Format("{0:.}",_model.BodyDiagnosis.Count) %></span>
             <span class="hp-sm">Dx.</span>
@@ -92,7 +92,8 @@
                 }
             </script>
         </div>
-        <%
+        <%  Html.RenderPartial("~/Views/ClassFacet/Module/CurrentQuestionnaire.ascx", _lesson); %>
+        <%--<%
             var questItems = models.GetTable<QuestionnaireRequest>()
                 .Where(q => q.UID == _model.UID)
                 .Where(q => !q.Status.HasValue || q.Status == (int)Naming.IncommingMessageStatus.未讀)
@@ -108,7 +109,7 @@
             <span class="hp-main text-success"><%= questItems.Count() %></span>
             <span class="hp-sm text-success">New</span>
         </div>
-        <%  } %>
+        <%  } %>--%>
     </div>
 </div>
 
@@ -147,6 +148,7 @@
     ModelStateDictionary _modelState;
     UserProfile _model;
     LessonTime _item;
+    RegisterLesson _lesson;
 
     IQueryable<RegisterLesson> _items;
     IQueryable<RegisterLesson> _currentLessons;
@@ -158,6 +160,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _model = (UserProfile)this.Model;
         _item = (LessonTime)ViewBag.LessonTime;
+        _lesson = (RegisterLesson)ViewBag.RegisterLesson;
 
         _items = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
             .Where(l => l.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)

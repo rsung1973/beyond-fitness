@@ -22,7 +22,7 @@
                             <option value="<%= price.TypeID %>"><%= price.Description %></option>
                             <%  } %>
                         </select>
-                        <i class="icon-append fa fa-file-word-o"></i>
+                        <i class="icon-append far fa-keyboard"></i>
                     </label>
                 </section>
                 <section class="col col-6">
@@ -32,7 +32,7 @@
                             <option value="60">60分鐘</option>
                             <option value="90">90分鐘</option>
                         </select>
-                        <i class="icon-append fa fa-clock-o"></i>
+                        <i class="icon-append far fa-clock"></i>
                     </label>
                 </section>
             </fieldset>
@@ -47,7 +47,7 @@
                 <section class="col col-6">
                     <label class="label">體能顧問終點費用</label>
                     <label class="input">
-                        <i class="icon-append fa fa-usd"></i>
+                        <i class="icon-append fa fa-dollar-sign"></i>
                         <input type="number" name="ListPrice" maxlength="10" placeholder="請輸入數字"/>
                     </label>
                 </section>
@@ -62,7 +62,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-plus'></i> 新增項目</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     var $form = $('#<%= _dialog %> form');

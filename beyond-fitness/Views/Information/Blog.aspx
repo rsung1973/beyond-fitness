@@ -46,7 +46,7 @@
                                 <img runat="server" class="img-responsive" alt="img" src='<%# Item.Illustration.HasValue ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/")+Item.Attachment.AttachmentID.ToString()+"?stretch=true" : VirtualPathUtility.ToAbsolute("~/images/blog_pic.png") %>' />
                                 <ul class="list-inline padding-10">
                                     <li>
-                                        <i class="fa fa-calendar"></i>
+                                        <i class="fa fa-calendar-alt"></i>
                                         <a><%# Item.Document.DocDate.ToString("yyyy-MM-dd") %></a>
                                     </li>
                                 </ul>

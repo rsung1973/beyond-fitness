@@ -969,6 +969,9 @@ namespace WebHome.Controllers
                 }
 
                 item.EffectiveDate = DateTime.Now;
+                //item.ValidFrom = DateTime.Today;
+                //item.Expiration = DateTime.Today.AddMonths(18);
+
                 models.SubmitChanges();
 
                 markContractNo(item);

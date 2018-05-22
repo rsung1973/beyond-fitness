@@ -23,11 +23,11 @@
 
     <!-- Basic Styles -->
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/fonts/fontawesome5.0/css/fontawesome-all.css" />
 
     <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-plugins.min.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-plugins-20180501.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-production-20180501.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="~/css/smartadmin-skins.min.css" />
 
     <!-- SmartAdmin RTL Support -->
@@ -199,7 +199,7 @@
                     <i class="txt-color-blueLight hidden-mobile"> 
                         <%  if (ViewBag.CountDown == true)
                             { %>
-                        <i class="fa fa-clock-o"></i><strong id="countDown"></strong> 後自動登出</i>
+                        <i class="far fa-clock"></i><strong id="countDown"></strong> 後自動登出</i>
                         <%  } %>
                 </div>
             </div>

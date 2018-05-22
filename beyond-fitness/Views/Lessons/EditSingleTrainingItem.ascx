@@ -97,7 +97,7 @@
             height: "auto",
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-edit'></i>  編輯項目</h4>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     commitTrainingItem($('#<%= _dialogID %> form'));

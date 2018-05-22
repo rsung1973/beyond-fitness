@@ -51,7 +51,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: -1);    %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -64,7 +64,7 @@
                                                 <option><%= year %></option>
                                                 <%  } %>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -75,7 +75,7 @@
                                                 <option value="0">已停用</option>
                                                 <option value="1">生效中</option>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                     </section>
                                 </div>

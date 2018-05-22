@@ -11,7 +11,13 @@
 <script>
 
     var $global = {
-        'onReady': []
+        'onReady': [],
+        call: function(name) {
+            var fn = $global[name];
+            if(typeof fn==='function') {
+                fn();
+            }
+        },
     };
 
     <%-- begin temp --%>

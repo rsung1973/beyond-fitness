@@ -24,7 +24,7 @@
             <td><%= item.ServingCoach.UserProfile.RealName %></td>
             <td><%= String.Format("{0:N0}",item.ShareAmount) %></td>
             <td nowrap="noWrap">
-                <a onclick="$global.deleteAchievement(<%= item.CoachID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="$global.deleteAchievement(<%= item.CoachID %>);" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
             </td>
         </tr>
         <%  } %>

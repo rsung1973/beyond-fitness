@@ -12,7 +12,7 @@
     && (_userProfile.IsSysAdmin() || _userProfile.IsCoach() || _userProfile.IsAssistant()))
     { %>
 <li>
-    <a href="<%= Url.Action("Index","CoachFacet",new { CoachID = _userProfile.IsCoach() ? (int?)_userProfile.UID : null }) %>" title="行事曆"><i class="fa fa-lg fa-fw fa-calendar-check-o"></i><span class="menu-item-parent">行事曆</span></a>
+    <a href="<%= Url.Action("Index","CoachFacet",new { CoachID = _userProfile.IsCoach() ? (int?)_userProfile.UID : null }) %>" title="行事曆"><i class="far fa-lg fa-fw fa-calendar-check"></i><span class="menu-item-parent">行事曆</span></a>
 </li>
 <%  } %>
 

@@ -7,7 +7,7 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<label class="label"><i class="fa-fw fa fa-quora"></i><%=  _model.QuestionNo %>.<%= _model.Question %></label>
+<label class="label"><%--<i class="fa-fw fa fa-quora"></i>--%><%=  _model.QuestionNo %>.<%= _model.Question %></label>
 <%  Html.RenderPartial("~/Views/Interactivity/Module/SingleChoiceItem.ascx", _model); %>
 
 <script runat="server">

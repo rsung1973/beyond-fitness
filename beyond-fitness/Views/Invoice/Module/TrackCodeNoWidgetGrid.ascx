@@ -51,7 +51,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", -1); %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -64,7 +64,7 @@
                                                 <option value="<%= year %>"><%= year %></option>
                                                 <%  } %>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                     </section>
                                     <section class="col col-4">
@@ -79,7 +79,7 @@
                                                 <option value="5">09-10月</option>
                                                 <option value="6">11-12月</option>
                                             </select>
-                                            <i class="icon-append fa fa-clock-o"></i>
+                                            <i class="icon-append far fa-clock"></i>
                                         </label>
                                     </section>
                                 </div>
@@ -126,7 +126,7 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>發票號碼清單</h2>
                     <div class="widget-toolbar">
-                        <a onclick="downloadInterval();" id="btnDownloadInterval" style="display: none;" class="btn btn-success"><i class="fa fa-fw fa-cloud-download"></i>下載配號檔</a>
+                        <a onclick="downloadInterval();" id="btnDownloadInterval" style="display: none;" class="btn btn-success"><i class="fa fa-fw fa-cloud-download-alt"></i>下載配號檔</a>
                         <a onclick="editIntervalGroup();" class="btn btn-primary modifyInvoiceNoDialog_link"><i class="fa fa-fw fa-plus"></i>新增發票號碼</a>
                     </div>
                 </header>

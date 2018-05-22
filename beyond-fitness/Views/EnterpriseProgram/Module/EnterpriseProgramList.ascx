@@ -39,10 +39,10 @@
             <td nowrap="noWrap">
                 <a onclick="editEnterpriseContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
                 <a onclick="showEnterpriseMember(<%= item.ContractID %>);" class="btn btn-circle btn-primary listAttendantDialog_link"><i class="fa fa-fw fa fa-lg fa-user-plus" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                         <%--<a href="#" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-text-o" aria-hidden="true"></i></a>--%>
-                <a href="<%= Url.Action("GetMemberLessonXlsxList","EnterpriseProgram",new { item.ContractID }) %>" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-excel-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                <a onclick="showEnterprisePayment(<%= item.ContractID %>);" class="btn btn-circle bg-color-pink listPaymentDialog_link"><i class="fa fa-fw fa fa-lg fa-usd" aria-hidden="true"></i></a>
-                <%--<a href="<%= Url.Action("GetEnterpriseLessonReportXlsx","EnterpriseProgram",new { item.ContractID }) %>" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa fa-lg fa-file-excel-o" aria-hidden="true"></i></a>--%>
+                                         <%--<a href="#" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-copy" aria-hidden="true"></i></a>--%>
+                <a href="<%= Url.Action("GetMemberLessonXlsxList","EnterpriseProgram",new { item.ContractID }) %>" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-excel" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <a onclick="showEnterprisePayment(<%= item.ContractID %>);" class="btn btn-circle bg-color-pink listPaymentDialog_link"><i class="fa fa-fw fa fa-lg fa-hand-holding-usd" aria-hidden="true"></i></a>
+                <%--<a href="<%= Url.Action("GetEnterpriseLessonReportXlsx","EnterpriseProgram",new { item.ContractID }) %>" class="btn btn-circle bg-color-green"><i class="far fa-fw fa-lg fa-file-excel" aria-hidden="true"></i></a>--%>
             </td>
         </tr>
         <%  } %>

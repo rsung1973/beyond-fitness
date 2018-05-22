@@ -32,7 +32,7 @@
                                 <i class="fa fa-pencil-square-o text-warning btn btn-xs bg-color-orange"></i>
                             </a>&nbsp;&nbsp;
                             <a onclick="deleteAssessmentItem(<%= item.AssessmentID %>,<%= item.ItemID %>,<%= _model.ItemID %>);">
-                                <i class="fa fa-trash-o btn btn-xs bg-color-redLight"></i>
+                                <i class="far fa-trash-alt btn btn-xs bg-color-redLight"></i>
                             </a>
                         
                         <%  } %><%= item.FitnessAssessmentItem.ItemName %><%= item.BySingleSide==true ? "(單邊)" : item.BySingleSide==false ? "(雙邊)" : null %><%= !String.IsNullOrEmpty(item.ByCustom) ? "("+item.ByCustom+")" : null %></td>

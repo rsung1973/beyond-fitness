@@ -14,7 +14,7 @@
 
         <span class="ribbon-button-alignment">
             <span id="refresh" class="btn btn-ribbon">
-                <i class="fa fa-pencil"></i>
+                <i class="fa fa-pencil-alt"></i>
             </span>
         </span>
 
@@ -42,7 +42,7 @@
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
     <h1 class="page-title txt-color-blueDark">
         <!-- PAGE HEADER -->
-        <i class="fa-fw fa fa-pencil"></i>每日問與答
+        <i class="fa-fw fa fa-pencil-alt"></i>每日問與答
                             <span>>  
                                 新增問題
                             </span>
@@ -96,12 +96,12 @@
                                         <%  var inputItem = new InputViewModel { Id = "AskerID", Name = "AskerID", DefaultValue = _viewModel.AskerID };
                                             ViewBag.SelectIndication = "<option value=''>請選擇提問者</option>";
                                             Html.RenderPartial("~/Views/Lessons/SimpleCoachSelector.ascx", inputItem); %>
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                     </label>
                                 </section>
                                 <section>
                                     <label class="input">
-                                        <i class="icon-append fa fa-file-word-o"></i>
+                                        <i class="icon-append far fa-keyboard"></i>
                                         <input type="text" class="input-lg" name="question" id="question" maxlength="100" placeholder="請輸入題目" value="<%= _viewModel.Question %>"/>
                                     </label>
                                     <p class="note"><strong>Note:</strong> 最多僅能輸入100個中英文字</p>
@@ -112,7 +112,7 @@
                                     <section class="col col-6">
                                         <label class="label">選項A</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <input type="text" class="input-lg" name="Suggestion" id="Suggestion0" maxlength="60" placeholder="請輸入選項A" value="<%= _viewModel.Suggestion!=null && _viewModel.Suggestion.Length>0 ? _viewModel.Suggestion[0] : null %>" />
                                         </label>
                                         <p class="note"><strong>Note:</strong> 最多僅能輸入60個中英文字</p>
@@ -120,7 +120,7 @@
                                     <section class="col col-6">
                                         <label class="label">選項B</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <input type="text" class="input-lg" name="Suggestion" id="Suggestion1" maxlength="60" placeholder="請輸入選項B" value="<%= _viewModel.Suggestion!=null && _viewModel.Suggestion.Length>1 ? _viewModel.Suggestion[1] : null %>" />
                                         </label>
                                         <p class="note"><strong>Note:</strong> 最多僅能輸入60個中英文字</p>
@@ -130,7 +130,7 @@
                                     <section class="col col-6">
                                         <label class="label">選項C</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <input type="text" class="input-lg" name="Suggestion" id="Suggestion2" maxlength="60" placeholder="請輸入選項C" value="<%= _viewModel.Suggestion!=null && _viewModel.Suggestion.Length>2 ? _viewModel.Suggestion[2] : null %>" />
                                         </label>
                                         <p class="note"><strong>Note:</strong> 最多僅能輸入60個中英文字</p>
@@ -138,7 +138,7 @@
                                     <section class="col col-6">
                                         <label class="label">選項D</label>
                                         <label class="input">
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                             <input type="text" class="input-lg" name="Suggestion" id="Suggestion3" maxlength="60" placeholder="請輸入選項D" value="<%= _viewModel.Suggestion!=null && _viewModel.Suggestion.Length>3 ? _viewModel.Suggestion[3] : null %>" />
                                         </label>
                                         <p class="note"><strong>Note:</strong> 最多僅能輸入60個中英文字</p>

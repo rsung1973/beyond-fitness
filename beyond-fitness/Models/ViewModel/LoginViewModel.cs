@@ -7,6 +7,11 @@ using WebHome.Models.Locale;
 
 namespace WebHome.Models.ViewModel
 {
+    public class QueryViewModel
+    {
+        public String KeyID { get; set; }
+    }
+
     public class LoginViewModel
     {
         [Required]
@@ -77,7 +82,7 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class PasswordViewModel
+    public class PasswordViewModel : QueryViewModel
     {
 
         [DataType(DataType.Password)]
@@ -93,7 +98,7 @@ namespace WebHome.Models.ViewModel
         public string lockPattern { get; set; }
 
         public String PID { get; set; }
-
+        public int? UID { get; set; }
     }
 
     public class LearnerViewModel
@@ -557,6 +562,7 @@ namespace WebHome.Models.ViewModel
     {
         public int? CoachID { get; set; }
         public DateTime? QueryStart { get; set; }
+        public DateTime? ClassTime { get; set; }
     }
     public class LessonTimeBookingViewModel
     {
@@ -630,7 +636,17 @@ namespace WebHome.Models.ViewModel
         public int? ItemID { get; set; }
         public bool? IsComplete { get; set; }
         public String Ability { get; set; }
+        public String Feature { get; set; }
+        public int? Point { get; set; }
 
+    }
+
+    public class DailyQuestionQueryViewModel : QueryViewModel
+    {
+        public int? QuestionID { get; set; }
+        public int? AskerID { get; set; }
+        public int? Status { get; set; }
+        public String Keyword { get; set; }
     }
 
 }

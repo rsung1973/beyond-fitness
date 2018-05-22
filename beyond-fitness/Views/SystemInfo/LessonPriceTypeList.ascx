@@ -51,7 +51,7 @@
                         <% if (item.RegisterLesson.Count == 0)
                             { %>
                         <li>
-                            <a onclick="deletePrice(<%= item.PriceID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                            <a onclick="deletePrice(<%= item.PriceID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
                         </li>
                         <%  } %>
                         <%  if(item.Status!=(int)Naming.DocumentLevelDefinition.自主訓練)
@@ -59,13 +59,13 @@
                                 if (item.Status == (int)Naming.DocumentLevelDefinition.已刪除)
                                 { %>
                             <li>
-                                <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/UpdateLessonPrice")+"?status=1&priceID="+item.PriceID %>"><i class="fa fa-fw fa fa-check-square" aria-hidden="true"></i>啟用資料</a>
+                                <a href="<%= VirtualPathUtility.ToAbsolute("~/SystemInfo/UpdateLessonPrice")+"?status=1&priceID="+item.PriceID %>"><i class="far fa-fw fa-check-square" aria-hidden="true"></i>啟用資料</a>
                             </li>
                             <%  }
                                 else
                                 { %>
                             <li>
-                                <a onclick="disablePrice(<%= item.PriceID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>停用資料</a>
+                                <a onclick="disablePrice(<%= item.PriceID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>停用資料</a>
                             </li>
                             <%  }
                             } %>

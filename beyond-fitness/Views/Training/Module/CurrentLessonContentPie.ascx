@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div class="col-xs-6 col-sm-6 col-sm-md-6 text-center">
+<div class="col-xs-12 col-sm-6 col-sm-md-6 text-center">
     <label class="label text-lightgray">本次訓練時間比例</label>
 <%  if (_model == null)
     { %>

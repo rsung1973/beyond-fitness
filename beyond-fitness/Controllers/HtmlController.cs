@@ -9,6 +9,7 @@ using WebHome.Helper;
 using WebHome.Models.ViewModel;
 using Utility;
 using System.Web.Security;
+using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
@@ -328,24 +329,52 @@ namespace WebHome.Controllers
 
         public ActionResult PromptQuestionnaire()
         {
-            UserProfile profile = HttpContext.GetUser();
-            if (profile == null)
+            //UserProfile profile = HttpContext.GetUser();
+            //if (profile == null)
+            //{
+            //    return new EmptyResult();
+            //}
+
+            //profile = models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
+
+            //var item = models.GetQuestionnaireRequest(profile).FirstOrDefault();
+
+            //if (item == null)
+            //{
+            //    return new EmptyResult();
+            //}
+            //else
+            //{
+            //    return View("~/Views/Html/Module/PromptQuestionnaire.ascx", item);
+            //}
+
+            return new EmptyResult();
+
+        }
+
+        [CoachOrAssistantAuthorize]
+        public ActionResult PromptCurrentQuestionnaire(int? registerID)
+        {
+
+            var lesson = models.GetTable<RegisterLesson>().Where(u => u.RegisterID == registerID).FirstOrDefault();
+            if (lesson == null)
             {
-                return new EmptyResult();
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
             }
 
-            profile = models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
-
-            var item = models.GetQuestionnaireRequest(profile).FirstOrDefault();
-
-            if (item == null)
+            var item = models.GetQuestionnaireRequest(lesson.UserProfile).FirstOrDefault();
+            if (item == null && models.CheckCurrentQuestionnaireRequest(lesson))
             {
-                return new EmptyResult();
+                item = models.CreateQuestionnaire(lesson);
             }
-            else
+
+            if (item != null)
             {
+                ViewBag.ByCoach = true;
                 return View("~/Views/Html/Module/PromptQuestionnaire.ascx", item);
             }
+
+            return View("~/Views/Shared/JsAlert.ascx", model: "階段性調整資料待建立!!");
 
         }
 
@@ -371,14 +400,16 @@ namespace WebHome.Controllers
                 return new EmptyResult();
             }
 
-
-            int[] items = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+                .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
+                    q => q.QuestionID, t => t.QuestionID, (q, t) => q);
+            int[] items = questItems
                 .Select(q => q.QuestionID)
                 .Where(q => !models.GetTable<PDQTask>().Where(t => t.UID == profile.UID).Select(t => t.QuestionID).Contains(q)).ToArray();
 
             if (items.Length == 0)
             {
-                items = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+                items = questItems
                 .Select(q => q.QuestionID).ToArray();
             }
 

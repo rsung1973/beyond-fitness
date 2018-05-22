@@ -18,7 +18,7 @@
                             <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>課表</span></a>
                         </li>
                         <li>
-                            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-pie-chart"></i><span>分析</span></a>
+                            <a data-toggle="tab" href="#os5_<%= _ticks %>"><i class="fa fa-chart-pie"></i><span>分析</span></a>
                         </li>
                     </ul>
                     <div class="tab-content padding-top-10">

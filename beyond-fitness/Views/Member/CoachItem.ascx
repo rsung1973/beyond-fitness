@@ -74,7 +74,7 @@
             <label class="label">職級</label>
             <label class="select">
                 <%  Html.RenderPartial("~/Views/Lessons/ProfessionalLevelSelector.ascx", new InputViewModel { Id = "LevelID", Name = "LevelID", DefaultValue = _model.LevelID }); %>
-                <i class="icon-append fa fa-file-word-o"></i>
+                <i class="icon-append far fa-keyboard"></i>
             </label>
         </section>
         <%  } %>

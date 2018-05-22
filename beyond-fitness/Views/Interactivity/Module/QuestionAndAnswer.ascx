@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<label class="label"><i class="fa-fw fa fa-quora"></i><%=  _model.QuestionNo %>.<%= _model.Question %></label>
+<label class="label"><%--<i class="fa-fw fa fa-quora"></i>--%><%=  _model.QuestionNo %>.<%= _model.Question %></label>
 <label class="textarea">
     <i class="icon-append fa fa-comments"></i>
     <textarea rows="1" name="<%= "_" + _model.QuestionID %>" placeholder="請輸入簡短描述" maxlength="100"><%= _item!=null ? _item.PDQAnswer : null %></textarea>

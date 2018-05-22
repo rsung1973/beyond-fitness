@@ -43,7 +43,7 @@
             <td class="text-right"><%= String.Format("{0:##,###,###,###}", item.TotalCost) %></td>
             <td nowrap="noWrap">
                 <a onclick="editContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                <a onclick="deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>
+                <a onclick="deleteContract(<%= item.ContractID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
             </td>
         </tr>
         <%  } %>

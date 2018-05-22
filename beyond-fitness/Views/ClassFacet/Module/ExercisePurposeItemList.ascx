@@ -18,7 +18,7 @@
     <td><%= item.PurposeItem %></td>
     <td>
         <a onclick="completePurposeItem(<%= item.ItemID %>);" class="btn btn-circle btn-success"><i class="fa fa-fw fa fa-lg fa-check" aria-hidden="true"></i></a>&nbsp;&nbsp;
-        <a onclick="deletePurposeItem(<%= item.ItemID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
+        <a onclick="deletePurposeItem(<%= item.ItemID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>&nbsp;&nbsp;
     </td>
 </tr>
 <%      } %>

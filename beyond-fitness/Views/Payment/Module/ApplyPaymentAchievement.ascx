@@ -23,13 +23,13 @@
                                         .Select(i => i.CoachID);
                                     Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(s => !assignedItems.Contains(s.CoachID))); %>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                     </section>
                     <section class="col col-6">
                         <label class="label">業績分潤金額</label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="ShareAmount" maxlength="10" placeholder="請輸入業績分潤金額" value="<%= _viewModel.ShareAmount %>"/>
                         </label>
                     </section>
@@ -45,7 +45,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-add'></i>  新增業績分潤金額</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     clearErrors();

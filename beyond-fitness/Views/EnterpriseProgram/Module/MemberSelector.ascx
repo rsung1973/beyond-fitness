@@ -41,7 +41,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-user-plus'></i> 新增上課學員</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp;確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp;確定",
                 "class": "btn btn-primary",
                 click: function () {
                     clearErrors();

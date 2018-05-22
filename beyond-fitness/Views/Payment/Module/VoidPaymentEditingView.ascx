@@ -36,7 +36,7 @@
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  作廢收款</h4></div>",
             buttons: [
                 {
-                    html: "<i class='fa fa-trash-o' aria-hidden='true'></i>&nbsp; 刪除",
+                    html: "<i class='far fa-trash-alt' aria-hidden='true'></i>&nbsp; 刪除",
                     "class": "btn bg-color-red",
                     click: function () {
                         showLoading();

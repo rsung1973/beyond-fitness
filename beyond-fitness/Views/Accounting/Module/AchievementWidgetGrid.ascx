@@ -51,7 +51,7 @@
                                     <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">請選擇查詢月份</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
                                             <input type="hidden" name="AchievementYearMonthTo" value='' />
                                         </label>
@@ -77,7 +77,7 @@
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>().Where(c => c.CoachID == _profile.UID));
                                                     } %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <%  if (_profile.IsAssistant() || _profile.IsAccounting())
@@ -89,7 +89,7 @@
                                                 <option value="">全部</option>
                                                 <%  Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", model: -1);    %>
                                             </select>
-                                            <i class="icon-append fa fa-file-word-o"></i>
+                                            <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
                                     <%  }
@@ -107,7 +107,7 @@
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢月份</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="AchievementYearMonthFrom" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢起日" value='<%= _viewModel.AchievementYearMonthFrom %>' />
                                             <input type="hidden" name="AchievementYearMonthTo" value='' />
                                         </label>
@@ -115,7 +115,7 @@
                                     <section class="col col-6">
                                         <label class="label">請選擇查詢查詢迄月</label>
                                         <label class="input input-group">
-                                            <i class="icon-append fa fa-calendar"></i>
+                                            <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="AchievementYearMonthTo" readonly="readonly" class="form-control date form_month" data-date-format="yyyy/mm" placeholder="請輸入查詢迄日" value='<%= _viewModel.AchievementYearMonthTo %>' />
                                         </label>
                                     </section>
@@ -213,7 +213,7 @@
                         <span class="achievement"></span>
                     </h2>
                     <div class="widget-toolbar">
-                        <a onclick="downloadAchievement();" id="btnDownloadAchievement" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載檔案</a>
+                        <a onclick="downloadAchievement();" id="btnDownloadAchievement" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
                     </div>
                 </header>
                 <!-- widget div-->

@@ -31,7 +31,7 @@
                 <span class="widget-icon"><i class="fa fa-table"></i></span>
                 <h2>預收款信託清單</h2>
                 <div class="widget-toolbar">
-                    <a id="btnDownloadTrustTrack" onclick="downloadTrustTrack();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載</a>
+                    <a id="btnDownloadTrustTrack" onclick="downloadTrustTrack();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載</a>
                 </div>
             </header>
             <!-- widget div-->
@@ -78,7 +78,7 @@
                 <span class="widget-icon"><i class="fa fa-table"></i></span>
                 <h2>彙總表</h2>
                 <div class="widget-toolbar">
-                    <%--<a id="btnDownloadTrustSummary" onclick="downloadTrustSummary();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download"></i>下載</a>--%>
+                    <%--<a id="btnDownloadTrustSummary" onclick="downloadTrustSummary();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載</a>--%>
                 </div>
             </header>
             <!-- widget div-->

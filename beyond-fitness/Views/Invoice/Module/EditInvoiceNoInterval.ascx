@@ -34,7 +34,7 @@
                                 <option value="<%= year %>"><%= year %></option>
                                 <%  } %>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <%  if (_viewModel.Year.HasValue)
                             { %>
@@ -54,7 +54,7 @@
                                 <option value="5">09-10月</option>
                                 <option value="6">11-12月</option>
                             </select>
-                            <i class="icon-append fa fa-clock-o"></i>
+                            <i class="icon-append far fa-clock"></i>
                         </label>
                         <%  if (_viewModel.PeriodNo.HasValue)
                             { %>
@@ -70,21 +70,21 @@
                     <section class="col col-4">
                         <label class="label">字軌</label>
                         <label class="input">
-                            <i class="icon-append fa fa-text-height"></i>
+                            <i class="icon-append fa fa-font"></i>
                             <input type="text" name="TrackCode" maxlength="2" placeholder="請輸入字軌" value="<%= _viewModel.TrackCode %>" />
                         </label>
                     </section>
                     <section class="col col-4">
                         <label class="label">發票開始號碼（起）</label>
                         <label class="input">
-                            <i class="icon-append fa fa-ticket"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="text" name="StartNo" maxlength="8" placeholder="請輸入發票開始號碼（起）" value="<%= String.Format("{0:00000000}",_viewModel.StartNo) %>"/>
                         </label>
                     </section>
                     <section class="col col-4">
                         <label class="label">發票開始號碼（起）</label>
                         <label class="input">
-                            <i class="icon-append fa fa-ticket"></i>
+                            <i class="icon-append fa fa-sort-numeric-up"></i>
                             <input type="text" name="EndNo" maxlength="8" placeholder="請輸入發票開始號碼（迄）" value="<%= String.Format("{0:00000000}",_viewModel.EndNo) %>" />
                         </label>
                     </section>
@@ -100,7 +100,7 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-edit'></i>  編輯發票號碼</h4></div>",
             buttons: [{
-                html: "<i class='fa fa-send'></i>&nbsp; 確定",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 確定",
                 "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認字軌與號碼資料正確?")) {

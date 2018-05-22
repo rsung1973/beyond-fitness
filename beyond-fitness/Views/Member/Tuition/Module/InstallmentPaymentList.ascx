@@ -26,7 +26,7 @@
                     <i class="fa fa-pencil-square-o fa-2x text-warning btn btn-xs bg-color-orange"></i>
                 </a>--%>
                 <a onclick="deletePayment(<%= item.InstallmentID %>);" class="deletePay">
-                    <i class="fa fa-trash-o fa-2x btn btn-xs bg-color-redLight"></i>
+                    <i class="far fa-trash-alt fa-2x btn btn-xs bg-color-redLight"></i>
                 </a>
                 <a onclick="shareInstallment(<%= item.InstallmentID %>);">
                     <i class="fa fa-plus-square fa-2x btn btn-xs fa-user-plus bg-color-pink"></i>
@@ -38,7 +38,7 @@
                 <%  foreach(var t in item.TuitionAchievement)
                     { %>
                         <%= t.ServingCoach.UserProfile.FullName() %>《<%= String.Format("{0:##,###,###,###}",t.ShareAmount) %>》
-                        <a onclick="deleteAchievementShare(<%= t.InstallmentID %>,<%= t.CoachID %>);" class="deletePay"><i class="fa fa-trash-o btn btn-xs bg-color-redLight"></i></a>
+                        <a onclick="deleteAchievementShare(<%= t.InstallmentID %>,<%= t.CoachID %>);" class="deletePay"><i class="far fa-trash-alt btn btn-xs bg-color-redLight"></i></a>
                         <br />
                 <%  } %>
             </td>

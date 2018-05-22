@@ -93,7 +93,7 @@
                                     } %>
                                 <%--<option value="其他">其他</option>--%>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                             <script>
                                 $(function(){
                                     $('select[name="Reason"]').val('<%= _viewModel.Reason %>');
@@ -134,7 +134,7 @@
                     : _profile.GetServingCoachInSameStore(models);
                                     Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", items); %>
                             </select>
-                            <i class="icon-append fa fa-file-word-o"></i>
+                            <i class="icon-append far fa-keyboard"></i>
                         </label>
                         <script>
                             $(function(){
@@ -158,7 +158,7 @@
                     <section class="col col-6">
                         <label class="label">課程單價 <span class="label-warning"><i class="fa fa-info-circle"></i>原購買堂數：<%= _model.Lessons %>堂 / <%= String.Format("{0:##,###,###,###}",_model.LessonPriceType.ListPrice) %>元</span></label>
                         <label class="input">
-                            <i class="icon-append fa fa-usd"></i>
+                            <i class="icon-append fa fa-dollar-sign"></i>
                             <input type="number" name="SettlementPrice" maxlength="20" placeholder="請輸入單堂折算價格" />
                         </label>
                     </section>
@@ -217,13 +217,13 @@
             modal: true,
             title: "<div class='modal-title'><h4><i class='fa fa-cogs'></i> 學員服務申請</h4></div>",
             buttons: [<%--{
-                html: "<i class='fa fa-floppy-o'></i>&nbsp; 暫存",
+                html: "<i class='far fa-save'></i>&nbsp; 暫存",
                 "class": "btn bg-color-darken",
                 click: function () {
                     $(this).dialog("close");
                 }
             },--%> {
-                html: "<i class='fa fa-send'></i>&nbsp; 送交審核",
+                html: "<i class='fa fa-paper-plane'></i>&nbsp; 送交審核",
                 "class": "btn btn-primary",
                 click: function () {
                     if (confirm("請再次確認合約內容資料正確")) {

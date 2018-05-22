@@ -40,9 +40,24 @@
                                 <li>
                                     <a href="<%= Url.Action("EditDailyQuestion",new { questionID = item.QuestionID }) %>"><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>修改資料</a>
                                 </li>
+                                <%  if (item.PDQQuestionExtension.Status.HasValue)
+                                    { %>
                                 <li>
-                                    <a onclick="deleteItem(<%= item.QuestionID %>);"><i class="fa fa-fw fa fa-trash-o" aria-hidden="true"></i>刪除資料</a>
+                                    <a onclick="enableItem(<%= item.QuestionID %>);"><i class="far fa-fw fa-check-square" aria-hidden="true"></i>啟用資料</a>
                                 </li>
+                                <%  }
+                                    else
+                                    {
+                                        if (!item.PDQTask.Any())
+                                        {%>
+                                <li>
+                                    <a onclick="deleteItem(<%= item.QuestionID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>刪除資料</a>
+                                </li>
+                                    <%  } %>
+                                <li>
+                                    <a onclick="disableItem(<%= item.QuestionID %>);"><i class="fa fa-fw far fa-trash-alt" aria-hidden="true"></i>停用資料</a>
+                                </li>
+                                <%  } %>
                             </ul>
                         </div>
                     </td>
