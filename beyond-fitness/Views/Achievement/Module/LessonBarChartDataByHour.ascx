@@ -13,8 +13,10 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
+    String _tableId = "lesson" + DateTime.Now.Ticks;
     IQueryable<LessonTime> _model;
     AchievementQueryViewModel _viewModel;
+    String _chartID = "bar" + DateTime.Now.Ticks;
     Object result;
 
     protected override void OnInit(EventArgs e)
@@ -25,14 +27,25 @@
         _model = (IQueryable<LessonTime>)this.Model;
         _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
 
-        var lessons = _model.PTLesson();
+        var items = _model.PTLesson();
+        var dailyItems = models.GetTable<DailyWorkingHour>()
+            .Select(d => new { d.Hour, Items = _model.Where(l => l.HourOfClassTime == d.Hour) });
 
-        var items = _model.GroupBy(l => l.AttendingCoach)
-                        .Select(l => l.Key).ToList();
+        List<_ResultItem> resultItems = models.GetTable<DailyWorkingHour>()
+            .Select(t => new _ResultItem
+            {
+                Hour = t.Hour,
+                PTCount = items.Where(l => l.HourOfClassTime == t.Hour).Count(),
+                PICount = _model.Where(l => l.HourOfClassTime == t.Hour)
+                                .Where(l => l.TrainingBySelf == 1).Count(),
+                TrialCount = _model.Where(l => l.HourOfClassTime == t.Hour)
+                                .Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count()
+            }).ToList();
+
         result = new
         {
-            labels = items.Select(g => models.GetTable<UserProfile>().Where(u => u.UID == g)
-                        .Select(u => u.RealName).FirstOrDefault()).ToArray(),
+            labels = resultItems.Select(g => $"{g.Hour:00}:00"),
             datasets = new object[]
             {
                 new
@@ -41,9 +54,7 @@
                     label= "P.T",
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(184,227,243,.43)",
-                    data= items
-                            .Select(g=>lessons.Where(l=>l.AttendingCoach==g)
-                                .Count()).ToArray(),
+                    data= resultItems.Select(g=>g.PTCount),
                 },
                 new
                 {
@@ -51,8 +62,7 @@
                     label= "P.I",
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(255,7,7,.43)",
-                    data= items.Select(g=>_model.Where(l=>l.AttendingCoach==g)
-                                    .Where(l => l.TrainingBySelf == 1).Count()).ToArray(),
+                    data= resultItems.Select(g=>g.PICount),
                 },
                 new
                 {
@@ -60,12 +70,18 @@
                     label= "體驗",
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(233,157,201,.43)",
-                    data= items.Select(g=>_model.Where(l=>l.AttendingCoach==g)
-                                        .Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                            || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count()).ToArray(),
+                    data= resultItems.Select(g=>g.TrialCount),
                 }
             }
         };
     }
 
+    class _ResultItem
+    {
+        public DateTime? ClassTime { get; set; }
+        public int Hour { get; set; }
+        public int PTCount { get; set; }
+        public int PICount { get; set; }
+        public int TrialCount { get; set; }
+    }
 </script>

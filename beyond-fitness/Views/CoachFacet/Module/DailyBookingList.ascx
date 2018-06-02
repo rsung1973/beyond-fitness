@@ -54,6 +54,7 @@
                         class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
                     <%  if (!item.LessonPlan.CommitAttendance.HasValue 
                             && (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()) 
+                            && item.ClassTime<DateTime.Today.AddDays(1)
                             && item.TrainingBySelf!=2)
                         { %>
                     <a href="#" onclick="$global.checkLessonAttendance(<%= item.LessonID %>);" class="btn btn-circle bg-color-red"><i class="far fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>

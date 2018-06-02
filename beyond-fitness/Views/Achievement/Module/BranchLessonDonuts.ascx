@@ -7,16 +7,27 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<%@ Import Namespace="Newtonsoft.Json" %>
-<%  if (_viewModel.AchievementDateFrom == _viewModel.AchievementDateTo)
+
+<%  foreach (var b in models.GetTable<BranchStore>())
     {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByHour.ascx", _model);
-    }
-    else
-    {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByDay.ascx", _model);
-    }
-       %>
+        ViewBag.BranchStore = b;
+%>
+<div class="col col-xs-12 col-sm-6 col-md-4">
+    <%  Html.RenderPartial("~/Views/Achievement/Module/LessonDonut.ascx"); %>
+</div>
+<%  } %>
+<%  Html.RenderPartial("~/Views/Shared/InitBarChart.ascx"); %>
+<script>
+    $(function () {
+        $global.updateBranchLessonDonuts = function (formData) {
+<%  foreach (var b in models.GetTable<BranchStore>())
+    {   %>
+            $global.updateBranchDonut[<%= b.BranchID %>](formData);
+            <%  } %>
+        };
+    });
+</script>
+
 <script runat="server">
 
     ModelStateDictionary _modelState;

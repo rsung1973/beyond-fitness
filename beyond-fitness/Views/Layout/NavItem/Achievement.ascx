@@ -20,10 +20,10 @@
         <li>
             <a href="<%= Url.Action("LessonIndex","Achievement") %>"><i class="fas fa-fw fa-clipboard-list"></i>上課統計表</a>
         </li>
-<%--        <li>
-            <a href="lessonbarchartbybranch.html"><i class="far fa-fw fa-chart-bar"></i>分店上課總覽</a>
-        </li>
         <li>
+            <a href="<%= Url.Action("BranchStoreIndex","Achievement") %>"><i class="far fa-fw fa-chart-bar"></i>分店上課總覽</a>
+        </li>
+ <%--       <li>
             <a href="salarylist.html"><i class="fas fa-fw fa-hand-holding-heart fa-spin"></i>每月薪資統計表</a>
         </li>--%>
     </ul>

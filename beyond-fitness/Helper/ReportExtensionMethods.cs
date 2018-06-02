@@ -29,18 +29,21 @@ namespace WebHome.Helper
             table.Columns.Add(new DataColumn("課程單價", typeof(int)));
             table.Columns.Add(new DataColumn("全價計算堂數", typeof(int)));
             table.Columns.Add(new DataColumn("半價計算堂數", typeof(int)));
+            table.Columns.Add(new DataColumn("上課地點", typeof(String)));
 
             var details = items.Where(t => t.RegisterLesson.RegisterLessonContract != null)
                 .GroupBy(t => new
                 {
                     t.AttendingCoach,
-                    ContractID = t.RegisterLesson.RegisterLessonContract.ContractID
+                    ContractID = t.RegisterLesson.RegisterLessonContract.ContractID,
+                    t.BranchID
                 });
 
             foreach (var item in details)
             {
                 CourseContract contract = models.GetTable<CourseContract>().Where(u => u.ContractID == item.Key.ContractID).First();
                 ServingCoach coach = models.GetTable<ServingCoach>().Where(c => c.CoachID == item.Key.AttendingCoach).First();
+                var branch = models.GetTable<BranchStore>().Where(b => b.BranchID == item.Key.BranchID).First();
 
                 var r = table.NewRow();
                 r[0] = contract.ContractNo();
@@ -63,6 +66,7 @@ namespace WebHome.Helper
                 var halfCount = item.Count(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue);
                 r[6] = item.Count() - halfCount;
                 r[7] = halfCount;
+                r[8] = branch.BranchName;
                 table.Rows.Add(r);
             }
 
@@ -119,6 +123,7 @@ namespace WebHome.Helper
                 var halfCount = item.LessonAttendance == null || item.LessonPlan.CommitAttendance.HasValue ? 1 : 0;
                 r[6] = 1 - halfCount;
                 r[7] = halfCount;
+                r[8] = item.BranchStore.BranchName;
                 table.Rows.Add(r);
             }
 

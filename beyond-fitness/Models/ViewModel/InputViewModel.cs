@@ -166,6 +166,7 @@ namespace WebHome.Models.ViewModel
         public int?[] ByCoachID { get; set; }
         public DateTime? ClassTime { get; set; }
         public Naming.LessonQueryType? QueryType { get; set; }
+        public Naming.QueryIntervalDefinition? QueryInterval { get; set; }
 
 
     }

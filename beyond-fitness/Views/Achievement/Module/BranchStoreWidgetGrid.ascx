@@ -42,63 +42,35 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
                         <form method="post" id="queryForm" class="smart-form">
-                            <fieldset>
-                                <div class="panel-group smart-accordion-default" id="accordion">
-                                    <%  foreach (var item in models.GetTable<BranchStore>())
-                                        {
-                                            if (_profile.IsManager() || _profile.IsViceManager())
-                                            {
-                                                if (!item.CoachWorkplace.Any(w => w.CoachID == _profile.UID))
-                                                    continue;
-                                            }   %>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                <label class="radio radio-inline">
-                                                    <input type="radio" class="radiobox" name="checkAll" value="<%= item.BranchID %>" />
-                                                    <span class="panel-title">依分店-<%= item.BranchName %>查詢</span>
-                                                </label>
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseArena<%= item.BranchID %>" class="collapsed"><i class="fa fa-lg fa-angle-down pull-right"></i><i class="fa fa-lg fa-angle-up pull-right"></i>體能顧問列表 </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseArena<%= item.BranchID %>" class="panel-collapse collapse">
-                                            <%  var coaches = item.CoachWorkplace.Select(w => w.ServingCoach).ToArray(); %>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <%  for (int c = 0; c < 4; c++)
-                                                        { %>
-                                                    <div class="col col-3">
-                                                        <%  for (int i = c; i < coaches.Length; i += 4)
-                                                            { %>
-                                                        <label class="checkbox">
-                                                            <input type="checkbox" name="ByCoachID" value="<%= coaches[i].CoachID %>">
-                                                            <i></i><%= coaches[i].UserProfile.FullName() %></label>
-                                                        <%  } %>
-                                                    </div>
-                                                    <%  } %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <%  } %>
-                                </div>
-                                <script>
-                                    $(function () {
-                                        $('#accordion div.panel-collapse.collapse').eq(0).addClass('in');
-                                        $('#accordion input:radio').on('click', function (evt) {
-                                            var $this = $(this);
-                                            $('#accordion input:checkbox').prop('checked', false);
-                                            if ($this.is(':checked')) {
-                                                $('#collapseArena' + $this.val() + ' input:checkbox').prop('checked', true);
-                                                //$('#accordion div.panel-collapse.collapse').removeClass('in');
-                                                //$this.parent().parent().next().addClass('in');
-                                            }
-                                        });
-                                    });
-                                </script>
-                            </fieldset>
-                            <fieldset>
-                                <div class="row">
+                            <div class="inline-group">
+                                <fieldset>
+                                    <section class="col col-xs-12">
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" checked="checked" value="<%= (int)Naming.QueryIntervalDefinition.今日 %>" />
+                                            <i></i>今天</label>
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="<%= (int)Naming.QueryIntervalDefinition.本週 %>" />
+                                            <i></i>本週</label>
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="<%= (int)Naming.QueryIntervalDefinition.本月 %>" />
+                                            <i></i>本月</label>
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="<%= (int)Naming.QueryIntervalDefinition.本季 %>" />
+                                            <i></i>本季</label>
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="<%= (int)Naming.QueryIntervalDefinition.近半年 %>" />
+                                            <i></i>近半年</label>
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="<%= (int)Naming.QueryIntervalDefinition.近一年 %>" />
+                                            <i></i>近一年</label>
+                                    </section>
+                                </fieldset>
+                                <fieldset>
+                                    <section class="col col-xs-12 col-sm-12 col-md-12">
+                                        <label class="radio">
+                                            <input type="radio" name="QueryInterval" value="" />
+                                            <i></i>自訂區間</label>
+                                    </section>
                                     <section class="col col-xs-12 col-sm-6 col-md-6">
                                         <label class="label">請選擇上課起日</label>
                                         <label class="input input-group">
@@ -107,14 +79,23 @@
                                         </label>
                                     </section>
                                     <section class="col col-xs-12 col-sm-6 col-md-6">
-                                        <label class="label">請選擇上課迄日（查詢區間限定1個月）</label>
+                                        <label class="label">請選擇上課迄日</label>
                                         <label class="input input-group">
                                             <i class="icon-append far fa-calendar-alt"></i>
                                             <input type="text" name="AchievementDateTo" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請輸入查詢迄日" value='<%= String.Format("{0:yyyy/MM/dd}",_viewModel.AchievementDateTo) %>' />
                                         </label>
                                     </section>
-                                </div>
-                            </fieldset>
+                                </fieldset>
+                                <script>
+                                    $('#queryForm input:radio[name="QueryInterval"]').on('click', function (evt) {
+                                        showLoading();
+                                        $.post('<%= Url.Action("LoadQueryInterval", "Achievement") %>', { 'queryInterval': $(this).val() }, function (data) {
+                                            hideLoading();
+                                            $(data).appendTo($('body'));
+                                        });
+                                    });
+                                </script>
+                            </div>
                             <footer>
                                 <button type="button" name="btnSend" class="btn btn-primary" onclick="inquireLesson();">
                                     送出 <i class="fa fa-paper-plane" aria-hidden="true"></i>
@@ -139,7 +120,7 @@
         <!-- NEW WIDGET START -->
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget jarviswidget-color-darken" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
                 <!-- widget options:
                            usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
                            
@@ -155,9 +136,8 @@
                            -->
                 <header>
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
-                    <h2>課程統計</h2>
+                    <h2 class="achievement"><%= _viewModel.QueryInterval %>課程總覽</h2>
                     <div class="widget-toolbar">
-                        <a href="#" class="btn btn-success" id="btnLearnerToComplete" onclick="showLearnerToComplete();" style="display: none;"><i class="far fa-fw fa-check-square"></i>學員未打卡比較表</a>
                         <a href="#" class="btn btn-primary" id="btnDownloadLessons" onclick="downloadLesson();" style="display: none;"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
                     </div>
                 </header>
@@ -171,19 +151,17 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
                         <div class="row">
-                            <div class="col col-xs-12 col-sm-12 col-md-12">
-                                <%  Html.RenderPartial("~/Views/Achievement/Module/LessonBarChart.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
-                            </div>
-                            <div id="lessonList" class="col col-xs-12 col-sm-12 col-md-12">
-                                <%  Html.RenderPartial("~/Views/Achievement/Module/DailyLessonList.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                            <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonDonuts.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                            <div id="lessonList" class="col col-xs-12 col-sm-6 col-md-12">
+                                <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonList.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col col-xs-12 col-sm-12 col-md-12">
-                                <%  Html.RenderPartial("~/Views/Achievement/Module/CoachLessonBarChart.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                                <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonBarChart.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
                             </div>
-                            <div id="coachLessonList" class="col col-xs-12 col-sm-12 col-md-12">
-                                <%  Html.RenderPartial("~/Views/Achievement/Module/DailyLessonList.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                            <div id="lessonCount" class="col col-xs-12 col-sm-12 col-md-12">
+                                <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonCount.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
                             </div>
                         </div>
                     </div>
@@ -205,15 +183,11 @@
         var event = event || window.event;
         var $form = $(event.target).closest('form');
         var formData = $form.serializeObject();
-        if (!formData.ByCoachID || (Array.isArray(formData.ByCoachID) && formData.ByCoachID.length > 20)) {
-            alert('請勾選查詢教練不超過20名!!');
-            retur;
-        }
-        $('#btnLearnerToComplete').css('display', 'none');
+
         $('#btnDownloadLessons').css('display', 'none');
         clearErrors();
         showLoading();
-        $.post('<%= Url.Action("InquireLesson","Achievement") %>', formData, function (data) {
+        $.post('<%= Url.Action("InquireBranchLessonList","Achievement") %>', formData, function (data) {
             hideLoading();
             if ($.isPlainObject(data)) {
                 alert(data.message);
@@ -223,24 +197,24 @@
             }
         });
 
-        $global.updateBarChart(formData);
+        $global.updateBranchLessonDonuts(formData);
 
-        $.post('<%= Url.Action("InquireCoachLesson","Achievement") %>', formData, function (data) {
+        $.post('<%= Url.Action("InquireBranchLessonCount","Achievement") %>', formData, function (data) {
             hideLoading();
             if ($.isPlainObject(data)) {
                 alert(data.message);
             } else {
-                $('#coachLessonList').empty();
-                $(data).appendTo($('#coachLessonList'));
+                $('#lessonCount').empty();
+                $(data).appendTo($('#lessonCount'));
             }
         });
 
-        $global.updateCoachBarChart(formData);
+        $global.updateBranchBarChart(formData);
 
     }
 
     function downloadLesson() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreateLessonListXlsx","Achievement") %>');
+        $('#queryForm').launchDownload('<%= Url.Action("CreateBranchLessonListXlsx","Achievement") %>');
     }
 
     debugger;

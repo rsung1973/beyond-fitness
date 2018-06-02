@@ -31,6 +31,7 @@
                 <span class="widget-icon"><i class="fa fa-table"></i></span>
                 <h2>預收款信託清單</h2>
                 <div class="widget-toolbar">
+                    <a id="btnDownloadTrustLesson" onclick="downloadTrustLesson();" class="btn bg-color-green"><i class="fa fa-fw fa-clipboard-list"></i> 當月上課清單</a>
                     <a id="btnDownloadTrustTrack" onclick="downloadTrustTrack();" style="display: none;" class="btn btn-primary"><i class="fa fa-fw fa-cloud-download-alt"></i>下載</a>
                 </div>
             </header>

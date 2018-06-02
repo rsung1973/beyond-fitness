@@ -25,12 +25,6 @@
         _model = (IQueryable<LessonTime>)this.Model;
         _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
 
-        int[] scope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
-
         var items = _model.GroupBy(l=>l.AttendingCoach);
         result = new
         {
@@ -44,10 +38,7 @@
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(184,227,243,.43)",
                     data= items.Select(g=>
-                                    g.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                                            || (l.RegisterLesson.RegisterLessonEnterprise!=null
-                                            && (new int?[] {(int)Naming.LessonPriceStatus.一般課程,(int)Naming.LessonPriceStatus.團體學員課程 })
-                                                .Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status))).Count()).ToArray(),
+                                    g.PTLesson().Count()).ToArray(),
                 },
                 new
                 {

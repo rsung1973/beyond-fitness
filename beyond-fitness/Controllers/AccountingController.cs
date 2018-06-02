@@ -607,6 +607,90 @@ namespace WebHome.Controllers
             };
         }
 
+        public ActionResult CreateTrustLessonXlsx(TrustQueryViewModel viewModel)
+        {
+            if (String.IsNullOrEmpty(viewModel.TrustYearMonth))
+            {
+                ModelState.AddModelError("TrustYearMonth", "請輸入查詢月份!!");
+            }
+            else
+            {
+                viewModel.TrustDateFrom = DateTime.ParseExact(viewModel.TrustYearMonth, "yyyy/MM", System.Globalization.CultureInfo.CurrentCulture);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.GoBack = true;
+                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+            }
+
+            models.GetDataContext().DeleteRedundantTrack();
+
+            IQueryable<ContractTrustTrack> items = models.GetTable<ContractTrustTrack>()
+                .Where(t => t.EventDate >= viewModel.TrustDateFrom && t.EventDate < viewModel.TrustDateFrom.Value.AddMonths(1))
+                .Join(models.GetTable<LessonTime>(), t => t.LessonID, l => l.LessonID, (t, l) => t);
+
+            DataTable table = new DataTable();
+            table.Columns.Add(new DataColumn("合約編號", typeof(String)));
+            table.Columns.Add(new DataColumn("合約總金額", typeof(int)));
+            table.Columns.Add(new DataColumn("課程單價", typeof(int)));
+            table.Columns.Add(new DataColumn("上課日期", typeof(String)));
+            table.Columns.Add(new DataColumn("上課時間", typeof(String)));
+            table.Columns.Add(new DataColumn("上課地點", typeof(String)));
+            table.Columns.Add(new DataColumn("上課時間長度", typeof(int)));
+            table.Columns.Add(new DataColumn("體能顧問姓名", typeof(String)));
+            table.Columns.Add(new DataColumn("學員姓名", typeof(String)));
+            table.Columns.Add(new DataColumn("簽到時間", typeof(String)));
+
+            foreach (var item in items.OrderBy(l => l.LessonTime.ClassTime))
+            {
+                var lesson = item.LessonTime;
+                var contract = item.CourseContract;
+
+                var r = table.NewRow();
+                r[0] = $"{contract.ContractNo()}";
+                r[1] = contract.TotalCost.AdjustTrustAmount();
+                r[2] = contract.LessonPriceType.ListPrice;
+                r[3] = $"{lesson.ClassTime.Value.Date:yyyy/MM/dd}";
+                r[4] = $"{lesson.ClassTime:HH:mm}~{lesson.ClassTime.Value.AddMinutes(lesson.DurationInMinutes.Value):HH:mm}";
+                r[5] = lesson.BranchStore.BranchName;
+                r[6] = lesson.DurationInMinutes;
+                r[7] = lesson.AsAttendingCoach.UserProfile.FullName();
+                if (contract.CourseContractType.ContractCode == "CFA")
+                {
+                    r[8] = contract.ContractOwner.RealName + "(" + String.Join("/", lesson.GroupingLesson.RegisterLesson.Select(g => g.UserProfile.RealName)) + ")";
+                }
+                else
+                {
+                    r[8] = String.Join("/", lesson.GroupingLesson.RegisterLesson.Select(g => g.UserProfile.RealName));
+                }
+                r[9] = $"{lesson.LessonPlan.CommitAttendance:yyyy/MM/dd HH:mm:ss}";
+
+                table.Rows.Add(r);
+            }
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=({1:yyyy-MM-dd HH-mm-ss}){0}", HttpUtility.UrlEncode("TrustLessons.xlsx"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                ds.Tables.Add(table);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.Worksheets.ElementAt(0).Name = "上課明細表" + String.Format("{0:yyyy-MM-dd}~{1:yyyy-MM-dd}", viewModel.TrustDateFrom, viewModel.TrustDateFrom.Value.AddMonths(1).AddDays(-1));
+
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
         public ActionResult ExecuteSettlementForLastMonth(DateTime? settlementDate)
         {
             if (!settlementDate.HasValue)

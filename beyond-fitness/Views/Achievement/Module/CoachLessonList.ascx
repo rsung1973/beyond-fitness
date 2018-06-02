@@ -24,12 +24,6 @@
             </thead>
             <tbody>
                 <%  int PTTotalCount = 0, PTUnfinished = 0, PITotalCount = 0, PIUnfinished = 0, STTotalCount = 0, trialTotalCount = 0, selfTotalCount = 0;
-                    int[] scope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
-
 
                     foreach (var c in _model.GroupBy(l => l.AttendingCoach))
                     {
@@ -37,10 +31,7 @@
                 <tr>
                     <td><%= coach.UserProfile.FullName() %></td>
                     <td nowrap="noWrap" class="text-center">
-                        <%  var items = c.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null
-                                    && (new int?[] { (int)Naming.LessonPriceStatus.一般課程, (int)Naming.LessonPriceStatus.團體學員課程 })
-                                        .Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+                        <%  var items = c.PTLesson();
                             int PTCount = items.Where(l => l.LessonAttendance != null).Count();
                             PTTotalCount += PTCount;
                             if (PTCount > 0)

@@ -8,19 +8,34 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
-<%  if (_viewModel.AchievementDateFrom == _viewModel.AchievementDateTo)
+
+<%  
+    if (_viewModel.AchievementDateFrom == _viewModel.AchievementDateTo)
     {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByHour.ascx", _model);
+        Html.RenderPartial("~/Views/Achievement/Module/BranchLessonCountByHour.ascx", _model);
     }
     else
     {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByDay.ascx", _model);
+        var interval = _viewModel.AchievementDateTo - _viewModel.AchievementDateFrom;
+        if (interval.HasValue)
+        {
+            if (interval.Value.TotalDays > 31)
+            {
+                Html.RenderPartial("~/Views/Achievement/Module/BranchLessonCountByMonth.ascx", _model);
+            }
+            else
+            {
+                Html.RenderPartial("~/Views/Achievement/Module/BranchLessonCountByDay.ascx", _model);
+            }
+        }
     }
-       %>
+     %>
+
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
+    String _tableId = "lesson" + DateTime.Now.Ticks;
     IQueryable<LessonTime> _model;
     AchievementQueryViewModel _viewModel;
 

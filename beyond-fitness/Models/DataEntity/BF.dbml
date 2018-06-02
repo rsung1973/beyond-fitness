@@ -1987,4 +1987,7 @@
       <Column Name="CheckPrev" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </ElementType>
   </Function>
+  <Function Name="dbo.DeleteRedundantTrack" Method="DeleteRedundantTrack">
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

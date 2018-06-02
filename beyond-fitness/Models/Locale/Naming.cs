@@ -276,6 +276,17 @@ namespace WebHome.Models.Locale
             Failed = 0,
             Successful = 1
         }
+
+        public enum QueryIntervalDefinition
+        {
+            自訂區間 = 0,
+            今日 = 1,
+            本週 = 2,
+            本月 = 3,
+            本季 = 4,
+            近半年 = 5,
+            近一年 = 6
+        }
             
     }
 }

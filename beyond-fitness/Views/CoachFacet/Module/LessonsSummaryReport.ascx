@@ -20,14 +20,8 @@
         </tr>
     </thead>
     <tbody>
-        <%  int[] scope = new int[] {
-                (int)Naming.LessonPriceStatus.一般課程,
-                //(int)Naming.LessonPriceStatus.企業合作方案,
-                (int)Naming.LessonPriceStatus.已刪除,
-                (int)Naming.LessonPriceStatus.點數兌換課程 };
-            var items = _model.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                    || (l.RegisterLesson.RegisterLessonEnterprise!=null
-                        && (new int?[] {(int)Naming.LessonPriceStatus.一般課程,(int)Naming.LessonPriceStatus.團體學員課程 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));  %>
+        <%  
+            var items = _model.PTLesson();  %>
         <tr>
             <td nowrap="noWrap">P.T session<%= reportCount(items.Count(),"") %></td>
             <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
@@ -321,7 +315,7 @@
 
     IQueryable<LessonTime> learnerToCommit(IQueryable<LessonTime> items)
     {
-        return items.GetLearnerUncheckedLessons();
+        return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue);
     }
 
     String reportCount(int count,String asZero = null)

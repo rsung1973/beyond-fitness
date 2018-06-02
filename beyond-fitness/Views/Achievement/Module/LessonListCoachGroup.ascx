@@ -53,10 +53,7 @@
                     <%--<td><%= byHour ? $"{g.Key:yyyy/MM/dd HH:mm}" : $"{g.Key:yyyy/MM/dd}" %></td>--%>
                     <td><%= coach.UserProfile.FullName() %></td>
                     <td nowrap="noWrap" class="text-center">
-                        <%  var items = c.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                                || (l.RegisterLesson.RegisterLessonEnterprise!=null
-                                && (new int?[] {(int)Naming.LessonPriceStatus.一般課程,(int)Naming.LessonPriceStatus.團體學員課程 })
-                                    .Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+                        <%  var items = c.PTLesson();
                             int PTCount = items.Where(l => l.LessonAttendance != null).Count();
                             PTTotalCount += PTCount;
                             if (PTCount > 0)

@@ -24,11 +24,6 @@
             </thead>
             <tbody>
                 <%  int PTTotalCount = 0, PTUnfinished = 0, PITotalCount = 0, PIUnfinished = 0, STTotalCount = 0, trialTotalCount = 0, selfTotalCount = 0;
-                    int[] scope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
 
                     IQueryable<_DataItem> dataItems;
                     bool byHour = false;
@@ -59,10 +54,7 @@
                 <tr>
                     <td><%= byHour ? $"{p.Key.ClassTime:yyyy/MM/dd} {p.Key.Hour:00}:00" : $"{p.Key.ClassTime:yyyy/MM/dd}" %></td>
                     <td nowrap="noWrap" class="text-center">
-                        <%  var items = g.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                                || (l.RegisterLesson.RegisterLessonEnterprise!=null
-                                && (new int?[] {(int)Naming.LessonPriceStatus.一般課程,(int)Naming.LessonPriceStatus.團體學員課程 })
-                                    .Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+                        <%  var items = g.PTLesson();
                             int PTCount = items.Where(l => l.LessonAttendance != null).Count();
                             PTTotalCount += PTCount;
                             if (PTCount > 0)

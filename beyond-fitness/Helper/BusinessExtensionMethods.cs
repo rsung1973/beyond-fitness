@@ -1490,6 +1490,8 @@ namespace WebHome.Helper
         public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate, DateTime endExclusiveDate)
             where TEntity : class, new()
         {
+            models.GetDataContext().DeleteRedundantTrack();
+
             var items = models.GetTable<ContractTrustTrack>().Where(t => t.EventDate >= startDate && t.EventDate < endExclusiveDate)
                     .Where(t => !t.SettlementID.HasValue);
 
@@ -1706,15 +1708,9 @@ namespace WebHome.Helper
             switch (query)
             {
                 case Naming.LessonQueryType.一般課程:
-                    int[] scope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
-                    items = items.Where(l => scope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                            || (l.RegisterLesson.RegisterLessonEnterprise != null
-                                    && (new int?[] { (int)Naming.LessonPriceStatus.一般課程, (int)Naming.LessonPriceStatus.團體學員課程 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+                    items = items.PTLesson();
                     break;
+
                 case Naming.LessonQueryType.自主訓練:
                     //items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
                     //    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
@@ -1733,6 +1729,34 @@ namespace WebHome.Helper
             }
 
             return items;
+        }
+
+        public static int[] PTScope = new int[] {
+                        (int)Naming.LessonPriceStatus.一般課程,
+                        //(int)Naming.LessonPriceStatus.企業合作方案,
+                        (int)Naming.LessonPriceStatus.已刪除,
+                        (int)Naming.LessonPriceStatus.點數兌換課程 };
+
+        public static IQueryable<LessonTime> PTLesson(this IQueryable<LessonTime> items)
+        {
+            return items.Where(l => PTScope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
+                    || (l.RegisterLesson.RegisterLessonEnterprise != null
+                            && (new int?[] 
+                                {
+                                    (int)Naming.LessonPriceStatus.一般課程,
+                                    (int)Naming.LessonPriceStatus.團體學員課程
+                                }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+        }
+
+        public static IEnumerable<LessonTime> PTLesson(this IEnumerable<LessonTime> items)
+        {
+            return items.Where(l => PTScope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
+                    || (l.RegisterLesson.RegisterLessonEnterprise != null
+                            && (new int?[]
+                                {
+                                    (int)Naming.LessonPriceStatus.一般課程,
+                                    (int)Naming.LessonPriceStatus.團體學員課程
+                                }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
         }
 
     }

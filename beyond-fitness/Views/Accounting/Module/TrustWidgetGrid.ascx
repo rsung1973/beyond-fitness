@@ -108,6 +108,7 @@
         var formData = $form.serializeObject();
         $('#btnDownloadTrustTrack').css('display', 'none');
         $('#btnDownloadTrustSummary').css('display', 'none');
+        //$('#btnDownloadTrustLesson').css('display', 'none');
 
         showLoading();
         $('#trustList').load('<%= Url.Action("InquireContractTrust","Accounting") %>', formData, function (data) {
@@ -122,6 +123,10 @@
 
     function downloadTrustSummary() {
         $('#queryForm').launchDownload('<%= Url.Action("CreateTrustSummaryXlsx","Accounting") %>');
+    }
+
+    function downloadTrustLesson() {
+        $('#queryForm').launchDownload('<%= Url.Action("CreateTrustLessonXlsx","Accounting") %>');
     }
 
     

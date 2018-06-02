@@ -8,21 +8,14 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
-<%  if (_viewModel.AchievementDateFrom == _viewModel.AchievementDateTo)
-    {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByHour.ascx", _model);
-    }
-    else
-    {
-        Html.RenderPartial("~/Views/Achievement/Module/LessonBarChartDataByDay.ascx", _model);
-    }
-       %>
+<%= JsonConvert.SerializeObject(result) %>
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     IQueryable<LessonTime> _model;
     AchievementQueryViewModel _viewModel;
+    decimal[] result;
 
     protected override void OnInit(EventArgs e)
     {
@@ -31,6 +24,24 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (IQueryable<LessonTime>)this.Model;
         _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
+
+        List<decimal> items = new List<decimal>();
+
+        var PTCount = _model.PTLesson().Count();
+        var PICount = _model.Where(l => l.TrainingBySelf == 1).Count();
+        var trialCount = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count();
+
+        var totalCount = PTCount + PICount + trialCount;
+
+        if (totalCount > 0)
+        {
+            items.Add(Math.Round(PTCount * 100m / totalCount));
+            items.Add(Math.Round(PICount * 100m / totalCount));
+            items.Add(Math.Round(trialCount * 100m / totalCount));
+
+            result = items.ToArray();
+        }
     }
 
 </script>

@@ -231,6 +231,7 @@
 <%  if(_model.Count()>0)
     {  %>
         $('#btnDownloadTrustTrack').css('display', 'inline');
+        //$('#btnDownloadTrustLesson').css('display', 'inline');
 <%  }  %>
 
     });
