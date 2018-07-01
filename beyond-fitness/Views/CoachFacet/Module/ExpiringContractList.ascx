@@ -103,13 +103,8 @@
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        var revisionID = models.GetTable<CourseContractRevision>().Where(r => r.Reason == "展延")
-            .Select(r => r.RevisionID);
         var profile = Context.GetUser();
-        _items = models.GetTable<CourseContract>()
-            .Where(c => !c.RegisterLessonContract.Any(r => r.RegisterLesson.Attended == (int)Naming.LessonStatus.課程結束))
-            .Where(c => c.Expiration < DateTime.Today.AddMonths(1))
-            .Where(c => !revisionID.Any(r => r == c.ContractID));
+        _items = models.PromptExpiringContract();
 
         if (profile.IsAssistant())
         {

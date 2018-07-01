@@ -23,7 +23,7 @@
                 <%  } %>
             </div>
             <div class="head-panel nm">
-                <div class="hp-info pull-left" rel="tooltip" data-placement="bottom" data-original-title="<span class='label bg-color-blueLight font-md'><%= _items.Count() + (decimal)_PISession.Count()/2m %>堂 / <%= String.Format("{0:##,###,###,###}",_tuition.Sum(i=>i.ShareAmount)) %>元</span>" data-html="true">
+                <div class="hp-info pull-left" onclick="showCoachPerformance(<%= _model.CoachID %>);">
                     <div class="hp-icon">
                         <span class="fa fa-trophy"></span>
                     </div>
@@ -83,6 +83,14 @@
             });
         }
 
+        function showCoachPerformance(coachID) {
+            showLoading();
+            $.post('<%= Url.Action("GetCoachCurrentQuarterPerformance","Achievement") %>', { 'coachID': coachID }, function (data) {
+                hideLoading();
+                $(data).appendTo($('body'));
+            });
+        }
+
         function showGameWidget(uid) {
             showLoading();
             $.post('<%= Url.Action("ShowGameWidget","ExerciseGame") %>', { 'uid': uid }, function (data) {
@@ -96,6 +104,28 @@
             $.post('<%= Url.Action("ShowAttenderListByCoach","CoachFacet") %>', { 'coachID': coachID }, function (data) {
                 hideLoading();
                 $(data).appendTo($('body'));
+            });
+        }
+
+        function showAttendanceAchievement(monthFrom) {
+            showLoading();
+            $.post('<%= Url.Action("ListAttendanceAchievement","Accounting",new { _model.CoachID }) %>', {
+                'AchievementYearMonthFrom': monthFrom,
+                'AchievementYearMonthTo': null,
+            }, function (data) {
+                hideLoading();
+                $(data).appendTo($('#content'));
+            });
+        }
+
+        function showTuitionShares(monthFrom) {
+            showLoading();
+            $.post('<%= Url.Action("ListTuitionShares","Accounting",new { _model.CoachID }) %>', {
+                'AchievementYearMonthFrom': monthFrom,
+                'AchievementYearMonthTo': null,
+            }, function (data) {
+                hideLoading();
+                $(data).appendTo($('#content'));
             });
         }
 
@@ -119,9 +149,9 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     ServingCoach _model;
-    IQueryable<LessonTime> _items;
-    IQueryable<LessonTime> _PISession;
-    IQueryable<TuitionAchievement> _tuition;
+    //IQueryable<LessonTime> _items;
+    //IQueryable<LessonTime> _PISession;
+    //IQueryable<TuitionAchievement> _tuition;
     IQueryable<UserProfile> _learners;
     UserProfile _profile;
 
@@ -134,11 +164,11 @@
 
         _profile = Context.GetUser();
 
-        DateTime quarterStart = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
-        DateTime? dateTo = null;
-        _items = models.GetLessonAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
-        _PISession = models.GetPISessionAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
-        _tuition = models.GetTuitionAchievement(_model.CoachID, quarterStart, ref dateTo, 3);
+        //DateTime quarterStart = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
+        //DateTime? dateTo = null;
+        //_items = models.GetLessonAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
+        //_PISession = models.GetPISessionAttendance(_model.CoachID, quarterStart, ref dateTo, 3, null);
+        //_tuition = models.GetTuitionAchievement(_model.CoachID, quarterStart, ref dateTo, 3);
 
         _learners = models.GetTable<LearnerFitnessAdvisor>()
             .Where(u => u.CoachID == _model.CoachID)

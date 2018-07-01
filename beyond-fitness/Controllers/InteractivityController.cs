@@ -185,6 +185,13 @@ namespace WebHome.Controllers
             }
 
             item.Status = status ?? (int)Naming.IncommingMessageStatus.拒答;
+            if(status==(int)Naming.IncommingMessageStatus.教練代答 && item.QuestionnaireCoachBypass==null)
+            {
+                item.QuestionnaireCoachBypass = new QuestionnaireCoachBypass
+                {
+                    UID = profile.UID
+                };
+            }
             models.SubmitChanges();
 
             var items = models.GetQuestionnaireRequest(item.UserProfile);

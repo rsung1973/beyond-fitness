@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 
-<div id="questionnaireDialog" title="階段性調整計劃" class="bg-color-darken">
+<div id="<%= _dialogID %>" title="階段性調整計劃" class="bg-color-darken">
     <div class="panel panel-default bg-color-darken">
         <div class="panel-body status smart-form vote">
             <div class="who clearfix">
@@ -26,7 +26,7 @@
         </div>
     </div>
     <script>
-        $('#questionnaireDialog').dialog({
+        $('#<%= _dialogID %>').dialog({
             width: "auto",
             height: "auto",
             resizable: true,
@@ -34,7 +34,7 @@
             closeText: "關閉",
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-volume-up'></i>  階段性調整計劃</h4>",
             close: function (evt, ui) {
-                $('#questionnaireDialog').remove();
+                $('#<%= _dialogID %>').remove();
             }
         });
     </script>
@@ -47,7 +47,7 @@
     ModelSource<UserProfile> models;
     QuestionnaireRequest _model;
     UserProfile _profile;
-
+    String _dialogID = "questionnaireDialog" + DateTime.Now.Ticks;
 
     protected override void OnInit(EventArgs e)
     {

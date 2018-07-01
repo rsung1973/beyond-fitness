@@ -31,7 +31,7 @@
                             <option value="1">P.I session</option>
                             <option value="3">體驗課程</option>
                             <option value="5">點數兌換課程</option>
-                            <option value="2">內部訓練</option>
+                            <option value="2">教練P.I</option>
                             <option value="4">企業方案</option>
                             <option value="6">員工福利課程</option>
                         </select>
@@ -42,6 +42,8 @@
 
                                 $('input[name="userName"]').val('');
                                 $('#attendeeSelector').empty();
+                                var $branch = $('select[name="BranchID"]');
+                                $branch.find("option:contains('其他')").remove();
 
                                 switch (lessonType) {
                                     case '0':
@@ -52,6 +54,7 @@
                                         break;
                                     case '2':
                                         $('.part0').css('display', 'none');
+                                        $branch.append($('<option value="-1">其他</option>'));
                                         break;
                                     case '3':
                                     case '4':

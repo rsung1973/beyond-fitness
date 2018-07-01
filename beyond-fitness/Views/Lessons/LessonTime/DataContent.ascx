@@ -22,7 +22,7 @@
     <%  } %>
     </div>
     <ul id="introduction_<%= _ticks %>" class="nav nav-tabs pull-right">
-        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
             { %>
         <%--<li class="active">
             <a data-toggle="tab" href="#os1_<%= _ticks %>"><i class="fa fa-commenting-o"></i><span>教練悄悄話</span></a>
@@ -40,7 +40,7 @@
         <li class="active">
             <a data-toggle="tab" href="#os3_<%= _ticks %>"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
         </li>
-        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
             { %>
         <%--<li>
             <a data-toggle="tab" href="#os4_<%= _ticks %>"><i class="fa fa-comments-o"></i><span>課後提醒</span></a>
@@ -66,7 +66,7 @@
     <div class="widget-body no-padding">
         <!-- content -->
         <div id="tabContent_<%= _ticks %>" class="tab-content padding-10">
-            <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+            <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                 { %>
             <%--<div class="tab-pane fade widget-body no-padding-bottom active in" id="os1_<%= _ticks %>">
                 <div class="chat-body no-padding profile-message">
@@ -153,7 +153,7 @@
                     //    Html.RenderPartial("~/Views/Activity/ShowLessonFeedBack.ascx", _item); %>
             </div>
             <!-- end s3 tab pane -->
-            <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+            <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                 { %>
 <%--            <div class="tab-pane fade widget-body no-padding-bottom" id="os4_<%= _ticks %>">
                 <div class="panel-body status">

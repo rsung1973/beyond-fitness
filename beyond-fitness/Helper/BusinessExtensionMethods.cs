@@ -232,14 +232,14 @@ namespace WebHome.Helper
                 }));
 
             items = items.Concat(dataItems
-                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
                 .GroupBy(t => t.ClassTime.Value.Date)
                 .Select(g => new CalendarEvent
                 {
                     id = "coach",
                     title = g.Count().ToString(),
                     start = g.Key.ToString("yyyy-MM-dd"),
-                    description = "內部訓練",
+                    description = "教練P.I",
                     allDay = true,
                     className = g.Key < today ? new string[] { "event", "bg-color-grayDark" } : new string[] { "event", "bg-color-teal" },
                     icon = /*g.Key < today ? "fa-check" :*/ "fa-university"
@@ -354,7 +354,7 @@ namespace WebHome.Helper
                 }));
 
             items = items.Concat(dataItems
-                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
                 .Select(g => new CalendarEvent
                 {
                     id = g.LessonID.ToString(),
@@ -362,7 +362,7 @@ namespace WebHome.Helper
                     title = g.AsAttendingCoach.UserProfile.RealName,
                     start = String.Format("{0:O}", g.ClassTime),
                     end = String.Format("{0:O}", g.ClassTime.Value.AddMinutes(g.DurationInMinutes.Value)),
-                    //description = "內部訓練",
+                    //description = "教練P.I",
                     allDay = false,
                     className = g.LessonAttendance == null ? new string[] { "event", "bg-color-teal" } : new string[] { "event", "bg-color-grayDark" },
                     editable = g.LessonAttendance == null,
@@ -569,7 +569,7 @@ namespace WebHome.Helper
                 //.Where(t => t.LessonAttendance != null)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
                 .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
                 //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
                 .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null
@@ -1346,7 +1346,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             IQueryable<PaymentAudit> items;
-            if (profile.IsAssistant())
+            if (profile.IsAssistant() || profile.IsOfficer())
             {
                 items = models.GetTable<PaymentAudit>().Where(p => !p.AuditorID.HasValue);
             }
@@ -1370,7 +1370,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             IQueryable<VoidPayment> items;
-            if (profile.IsAssistant())
+            if (profile.IsAssistant() || profile.IsOfficer())
             {
                 items = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.待審核);
             }
@@ -1395,7 +1395,7 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             IQueryable<VoidPayment> items;
-            if (profile.IsAssistant())
+            if (profile.IsAssistant() || profile.IsOfficer())
             {
                 items = models.GetTable<VoidPayment>().Where(p => p.Status == (int)Naming.CourseContractStatus.草稿);
             }
@@ -1449,6 +1449,7 @@ namespace WebHome.Helper
             item.PriceID = viewModel.PriceID.Value;
             item.Remark = viewModel.Remark;
             item.FitnessConsultant = viewModel.FitnessConsultant.Value;
+            item.Renewal = viewModel.Renewal;
             //item.Status = viewModel.Status;
             if (viewModel.UID != null && viewModel.UID.Length > 0)
             {
@@ -1716,13 +1717,13 @@ namespace WebHome.Helper
                     //    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
                     items = items.Where(l => l.TrainingBySelf == 1);
                     break;
-                case Naming.LessonQueryType.內部訓練:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);
+                case Naming.LessonQueryType.教練PI:
+                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.教練PI);
                     break;
                 case Naming.LessonQueryType.體驗課程:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+                    items = items.TrialLesson();
                     break;
+
                 case Naming.LessonQueryType.在家訓練:
                     items = items.Where(l => l.TrainingBySelf == 2);
                     break;
@@ -1757,6 +1758,32 @@ namespace WebHome.Helper
                                     (int)Naming.LessonPriceStatus.一般課程,
                                     (int)Naming.LessonPriceStatus.團體學員課程
                                 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
+        }
+
+        public static IQueryable<LessonTime> TrialLesson(this IQueryable<LessonTime> items)
+        {
+            return items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+        }
+
+        public static IEnumerable<LessonTime> TrialLesson(this IEnumerable<LessonTime> items)
+        {
+            return items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+        }
+
+        public static IQueryable<LessonTime> AllCompleteLesson(this IQueryable<LessonTime> items)
+        {
+            return items                
+                //.Where(t => t.LessonAttendance != null)
+                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
+                //.Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
+                //    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
+                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
+                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
+                .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
         }
 
     }

@@ -151,17 +151,17 @@
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding">
                         <div class="row">
-                            <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonDonuts.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
-                            <div id="lessonList" class="col col-xs-12 col-sm-6 col-md-12">
-                                <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonList.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col col-xs-12 col-sm-12 col-md-12">
                                 <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonBarChart.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
                             </div>
                             <div id="lessonCount" class="col col-xs-12 col-sm-12 col-md-12">
                                 <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonCount.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonDonuts.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
+                            <div id="lessonList" class="col col-xs-12 col-sm-6 col-md-12">
+                                <%  Html.RenderPartial("~/Views/Achievement/Module/BranchLessonList.ascx", models.GetTable<LessonTime>().Where(c => false)); %>
                             </div>
                         </div>
                     </div>
@@ -218,13 +218,13 @@
     }
 
     debugger;
-    function showLessonList(params) {
+    function showBranchLessonList(params) {
         var formData = $('#queryForm').serializeObject();
         if (params) {
             $.extend(formData, params);
         }
         showLoading();
-        $.post('<%= Url.Action("ShowLessonList","Achievement") %>', formData, function (data) {
+        $.post('<%= Url.Action("ShowBranchLessonList","Achievement") %>', formData, function (data) {
             hideLoading();
             if (data) {
                 var $dialog = $(data);

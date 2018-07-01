@@ -104,7 +104,7 @@
             </fieldset>
             <fieldset>
                 <div class="row">
-                    <section class="col col-6">
+                    <section class="col col-4">
                         <label class="label">上課地點</label>
                         <label class="select">
                             <select name="BranchID">
@@ -126,7 +126,24 @@
                             </script>
                         </label>
                     </section>
-                    <section class="col col-6">
+                    <section class="col col-4">
+                        <label class="label">是否為舊學員續約</label>
+                        <label class="select">
+                            <select name="Renewal">
+                                <option value="" selected>請選擇</option>
+                                <option value="<%= true %>">是</option>
+                                <option value="<%= false %>">否</option>
+                            </select>
+                            <i class="icon-append far fa-keyboard"></i>
+                            <%  if (_viewModel.Renewal.HasValue)
+                                { %>
+                            <script>
+                                $('#<%= _dialog %> select[name="Renewal"]').val('<%= _viewModel.Renewal %>');
+                            </script>
+                            <%  } %>
+                        </label>
+                    </section>
+                    <section class="col col-4">
                         <label class="label">上課時間長度 <span class="label-info"><i class="fa fa-info-circle "></i>單堂原價：<span id="singlePrice">
                             <%  LessonPriceType originalPrice; %>
                             <%= _model!=null && (originalPrice =_model.OriginalSeriesPrice())!=null 

@@ -10,7 +10,7 @@
 
 <div class="row">
 
-    <%  if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+    <%  if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
         {
             Html.RenderPartial("~/Views/Member/CoachSelfLesson.ascx", _model.UserProfile);
         }
@@ -26,7 +26,7 @@
         <p style="display:none;">
             <img src="<%= VirtualPathUtility.ToAbsolute("~/img/confidential.png") %>" width="40%"/>
         </p>
-        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+        <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
             { %>
         <p class="alert alert-danger secret-info">
             <strong>
@@ -74,7 +74,7 @@
             <%  } %>
         </p>
     </div>
-    <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+    <%  if (_model.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
         { %>
     <div class="col-xs-12 col-sm-4">
         <%  Html.RenderPartial("~/Views/Member/ContactInfo.ascx", _model.UserProfile); %>

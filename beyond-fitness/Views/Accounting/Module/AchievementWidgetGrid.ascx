@@ -60,11 +60,11 @@
                                         <label class="label">依體能顧問查詢</label>
                                         <label class="select">
                                             <select name="CoachID" class="input">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager()|| _profile.IsAccounting())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsAccounting() || _profile.IsOfficer())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant()|| _profile.IsAccounting())
+                                                <%  if (_profile.IsAssistant()|| _profile.IsAccounting() || _profile.IsOfficer())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
@@ -80,7 +80,7 @@
                                             <i class="icon-append far fa-keyboard"></i>
                                         </label>
                                     </section>
-                                    <%  if (_profile.IsAssistant() || _profile.IsAccounting())
+                                    <%  if (_profile.IsAssistant() || _profile.IsAccounting() || _profile.IsOfficer())
                                     { %>
                                     <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">或依分店查詢</label>

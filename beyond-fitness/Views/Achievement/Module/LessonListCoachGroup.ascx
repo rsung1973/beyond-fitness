@@ -20,7 +20,7 @@
                     <th>P.I未完成</th>
                     <th data-hide="phone">S.T</th>
                     <th data-hide="phone">體驗課程</th>
-                    <th data-hide="phone">內部訓練</th>
+                    <th data-hide="phone">教練P.I</th>
                 </tr>
             </thead>
             <tbody>
@@ -116,8 +116,7 @@
                         <%  } %>
                     </td>
                     <td nowrap="noWrap" class="text-center">
-                        <%  items = c.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+                        <%  items = c.TrialLesson();
 
                             int trialCount = items.Count();
                             trialTotalCount += trialCount;
@@ -131,7 +130,7 @@
                         <%  } %>
                     </td>
                     <td nowrap="noWrap" class="text-center">
-                        <%  items = c.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);
+                        <%  items = c.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.教練PI);
 
                             int selfCount = items.Count();
                             selfTotalCount += selfCount;

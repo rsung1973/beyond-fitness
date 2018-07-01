@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>BEYOND FITNESS - 運動小學堂</title>
+      <!-- CSS  -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- materialize  -->
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <!-- livIconsevo  -->
+      <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
+      <!-- scrollup-master  -->
+      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
+      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <!--ionicons -->
+      <link href='css/ionicons/ionicons.min.css' rel="stylesheet" type="text/css" media="screen" />
+      <!-- STYLE 要放最下面  -->
+      <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   </head>
+   <body>
+      <!--//預設值為藍色 / 若要設定女生 請加上 mode-girls /-->
+      <div class="wrapper full-fixed mode-girls">
+         <div class="wrapper-fixed">
+            <!--Header -->
+            <nav class="white non-line" role="navigation">
+               <div class="nav-wrapper container">
+                  <!-- BACK --> 
+                  <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index-girl.html');">
+                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></div>
+                  </a>
+                  <!-- // End of BACK --> 
+                  <a id="logo-container" href="#" class="brand-logo toptitle center" >運動小學堂</a> 
+               </div>
+            </nav>
+            <!-- // End of Header --> 
+            <!-- main -->
+            <div class="main">
+               <div class="container">
+                  <div class="qa-forms">
+                     <!-- 切換頁籤 - TAB -->
+                     <ul id="tabs-swipe-demo" class="tabs col s12">
+                        <li class="tab col s6"><a class="active"  href="#test-swipe-1">題目卷</a></li>
+                        <li class="tab col s6"><a href="#test-swipe-2">答案卷</a></li>
+                     </ul>
+                     <div id="test-swipe-1" class="tab-content acc-content col s12">
+                        <!-- QA info -->
+                        <div class="qa-content">
+                           <div class="personal-info">
+                              <div class="row valign-wrapper">
+                                 <div class="col s4 m2"> <img src="images/avatars/Sam.jpg" alt="" class="circle responsive-img valign"> </div>
+                                 <div class="col s8 m10 text-box"> <span class="black-t18">李山姆(Sam Lee)</span> <span class="black-t12">Hi，來點腦力激盪，答對我出的題目可以獲得點數喔！</span> </div>
+                              </div>
+                           </div>
+                           <!-- 問題 -->
+                           <p class="collection"> <span class="gray-t16">廣告：「Redbull給你一對翅膀！」工作很累，下班又要來健身，為了目標而努力，這時會想來點提神飲料……。提神飲料讓你提神最主要的原因是因為內含一種中樞神經興奮劑，下列何者提神飲料內容物是最主要的中樞神經興奮劑？</span>
+                           <form action="#">
+                              <p>
+                                 <input class="with-gap"  name="group1" type="radio" id="test1" />
+                                 <label for="test1">牛磺酸</label>
+                              </p>
+                              <p>
+                                 <input class="with-gap"  name="group1" type="radio" id="test2" />
+                                 <label for="test2">咖啡因</label>
+                              </p>
+                              <p>
+                                 <input class="with-gap"  name="group1" type="radio" id="test3" />
+                                 <label for="test3">維生素B群</label>
+                              </p>
+                              <p>
+                                 <input class="with-gap"  name="group1" type="radio" id="test4" />
+                                 <label for="test4">水</label>
+                              </p>
+                           </form>
+                           <!-- Button -->
+                           <div class="content-area">
+                              <button class="btn waves-effect waves-light btn-send" type="submit" name="action">我超聰明</button>
+                           </div>
+                           <!--// End of button-->
+                        </div>
+                        <!--//End of QA info--> 
+                     </div>
+                    <div id="test-swipe-2" class="tab-content acc-content col s12">
+                       <div class="accordion js-accordion">
+                          <div class="accordion__item js-accordion-item">
+                             <div class="accordion-header js-accordion-header">
+                                <ul class="lesson-box">
+                                   <li class="qa-item">營養素裡面一公克脂質為幾大卡（仟卡）的熱量？（<span class="bingo">答對</span>）</li>
+                                </ul>
+                             </div>
+                             <div class="accordion-body js-accordion-body">
+                                <div class="accordion-body__contents">
+                                   <form action="#">
+                                      <p>
+                                         <input class="with-gap"  name="group1" type="radio" id="test5" disabled="disabled"/>
+                                         <label for="test5">4 大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap"  name="group1" type="radio" id="test6" checked disabled="disabled"/>
+                                         <label for="test6">7 大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap" name="group1" type="radio" id="test7"  disabled="disabled"/>
+                                         <label for="test7">12大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap" name="group1" type="radio" id="test8"  disabled="disabled"/>
+                                         <label for="test8">脂質沒有熱量</label>
+                                      </p>
+                                   </form>
+                                </div>
+                             </div>
+                             <!-- end of accordion body --> 
+                          </div>
+                          <!-- end of accordion item --> 
+                          <div class="accordion__item js-accordion-item">
+                             <div class="accordion-header js-accordion-header">
+                                <ul class="lesson-box">
+                                   <li class="qa-item">營養素裡面一公克脂質為幾大卡（仟卡）的熱量？（<span class="wrong">答錯</span>）</li>
+                                </ul>
+                             </div>
+                             <div class="accordion-body js-accordion-body">
+                                <div class="accordion-body__contents">
+                                   <form action="#">
+                                      <p>
+                                         <input class="with-gap"  name="group1" type="radio" id="test9" checked disabled="disabled"/>
+                                         <label for="test9">4 大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap"  name="group1" type="radio" id="test10" disabled="disabled" />
+                                         <label for="test10">7 大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap" name="group1" type="radio" id="test11"  disabled="disabled"/>
+                                         <label for="test11">12大卡</label>
+                                      </p>
+                                      <p>
+                                         <input class="with-gap" name="group1" type="radio" id="test12"  disabled="disabled"/>
+                                         <label for="test12">脂質沒有熱量</label>
+                                      </p>
+                                   </form>
+                                </div>
+                             </div>
+                             <!-- end of accordion body --> 
+                          </div>
+                          <!-- end of accordion item -->
+                       </div>
+                       <!--//End of Accordion--> 
+                    </div>                      
+                     <!-- //End of 登入 - TAB --> 
+                  </div>
+               </div>
+            </div>
+            <!-- // End of main --> 
+         </div>
+         <!--// End of wrapper-fixed--> 
+      </div>
+      <!--// End of wrapper--> 
+      <!-- Footer --> 
+      <!--<footer class="page-footer teal">
+         <!-- // End of Footer --> 
+      <!--  Scripts--> 
+      <script src="js/libs/jquery-2.2.4.min.js"></script> 
+      <script src="js/materialize.js"></script> 
+      <script src="js/init.js"></script>
+      <!-- LivIconsEvo  -->
+      <script src="js/plugin/LivIconsEvo/tools/snap.svg-min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/TweenMax.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/DrawSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/MorphSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/verge.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.Tools.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.defaults.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.js"></script> 
+      <!-- scrollup-master  -->
+      <script src="js/plugin/scrollup-master/jquery.scrollUp.min.js"></script>
+      <script>
+         $(function () {
+             $.scrollUp({
+                 animation: 'fade',
+                 activeOverlay: '#00FFFF',
+                 scrollImg: {
+                     active: true,
+                     type: 'background',
+                     src: '../images/top.png'
+                 }
+             });
+             //countup
+             $('.countuptime').each(function() {
+                 // no need to specify options unless they differ from the defaults
+                 var target = this;
+                 var endVal = parseInt($(this).attr('data-endVal'));
+                 theAnimation = new countUp(target, 0, endVal, 0, 2.5);
+                 theAnimation.start();
+             });   
+         
+         });
+         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
+         $('.image-switch').addClass('active');    
+      </script> 
+   </body>
+</html>

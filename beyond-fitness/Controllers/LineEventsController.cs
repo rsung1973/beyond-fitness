@@ -117,7 +117,14 @@ namespace WebHome.Controllers
         public async Task<ActionResult> GetIcon(String id)
         {
             var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            var path = Server.MapPath("~/images/GitHubIcon/"+ id + ".png");
+            var path = Server.MapPath("~/images/GitHubIcon/" + id + ".png");
+
+            return File(path, "image/png");
+        }
+        public async Task<ActionResult> GetImageMap(String id)
+        {
+            var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            var path = Server.MapPath("~/images/Map/" + id + ".png");
 
             return File(path, "image/png");
         }

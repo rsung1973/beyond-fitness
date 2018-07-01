@@ -50,12 +50,12 @@
                 <%  if (!item.UserProfileExtension.CurrentTrial.HasValue)
                     { %>
                 <a onclick="$global.editPDQ(<%= item.UID %>);" class="btn btn-circle bg-color-green modifyPDQDialog_link"><i class="fa fa-fw fa fa-lg fa-street-view " aria-hidden="true"></i></a>&nbsp;&nbsp;   
-                        <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                        <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsOfficer())
                             { %>
                 <a onclick="$global.listAdvisor(<%= item.UID %>);" class="btn btn-circle bg-color-blueLight"><i class="far fa-fw fa-lg fa-address-book" aria-hidden="true"></i></a>&nbsp;&nbsp;   
                         <%  } %>
                 <%  } %>
-                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsOfficer())
                     {
                         if (item.LevelID == (int)Naming.MemberStatus.已註冊 || item.LevelID == (int)Naming.MemberStatus.尚未註冊)
                         { %>

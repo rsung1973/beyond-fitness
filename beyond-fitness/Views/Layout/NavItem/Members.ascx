@@ -10,7 +10,8 @@
 
 <%  if (_userProfile != null
 && (_userProfile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator
-    || _userProfile.IsAssistant()))
+    || _userProfile.IsAssistant()
+    || _userProfile.IsOfficer()))
     { %>
 <li>
     <a href="#" title="人員管理"><i class="fas fa-lg fa-fw fa-users"></i><span class="menu-item-parent">人員管理</span></a>

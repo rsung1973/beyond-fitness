@@ -261,7 +261,7 @@ namespace WebHome.Controllers
             }
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager })]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Coach,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Servitor, (int)Naming.RoleID.Manager, (int)Naming.RoleID.ViceManager,(int)Naming.RoleID.Officer })]
         public ActionResult EditPaymentForEnterprise(PaymentViewModel viewModel)
         {
             ViewResult result = (ViewResult)EditPaymentForContract(viewModel);
@@ -756,7 +756,7 @@ namespace WebHome.Controllers
         public ActionResult PaymentAuditSummary()
         {
             var profile = HttpContext.GetUser();
-            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager() || profile.IsAccounting())
+            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager() || profile.IsAccounting()/* || profile.IsOfficer()*/)
             {
                 return View("~/Views/Payment/Module/PaymentAuditSummary.ascx");
             }
@@ -1314,7 +1314,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsServitor())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsServitor() || profile.IsOfficer())
                 {
 
                 }

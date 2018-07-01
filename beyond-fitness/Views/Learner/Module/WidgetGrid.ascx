@@ -49,7 +49,7 @@
                                         <label class="select">
                                             <select name="CoachID">
                                                 <option value="">全部</option>
-                                                <%  if (_profile.IsAssistant())
+                                                <%  if (_profile.IsAssistant() || _profile.IsOfficer())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }

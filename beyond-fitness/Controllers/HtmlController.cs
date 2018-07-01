@@ -224,66 +224,10 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 HttpContext.SignOn(item);
-                return View("~/Views/Html/Module/AutoLogin.ascx", model: processLogin(item));
+                return View("~/Views/Html/Module/AutoLogin.ascx", model: this.ProcessLogin(item));
             }
 
             return new EmptyResult();
-        }
-
-        private String processLogin(UserProfile item)
-        {
-            UrlHelper url = new UrlHelper(ControllerContext.RequestContext);
-            if (item.IsAuthorizedSysAdmin())
-            {
-                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
-            }
-            else if (item.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Coach || r.RoleID == (int)Naming.RoleID.Manager || r.RoleID == (int)Naming.RoleID.ViceManager))
-            {
-                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
-            }
-            else if(item.IsAssistant())
-            {
-                return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
-            }
-            else if(item.IsAccounting())
-            {
-                return url.Action("TrustIndex", "Accounting");
-            }
-            else if(item.IsServitor())
-            {
-                return url.Action("PaymentIndex", "Payment");
-            }
-
-            switch ((Naming.RoleID)item.UserRole[0].RoleID)
-            {
-                case Naming.RoleID.Administrator:
-                    return url.Action("Index", "CoachFacet");
-
-                case Naming.RoleID.Coach:
-                case Naming.RoleID.Manager:
-                case Naming.RoleID.ViceManager:
-                case Naming.RoleID.Officer:
-                case Naming.RoleID.Assistant:
-                    return url.Action("Index", "CoachFacet", new { CoachID = item.UID });
-
-                //case Naming.RoleID.Assistant:
-                //    return url.Action("Index", "CoachFacet");
-
-                case Naming.RoleID.Accounting:
-                    return url.Action("TrustIndex", "Accounting");
-
-                case Naming.RoleID.Learner:
-                    return url.Action("LearnerIndex", "LearnerFacet");
-
-                case Naming.RoleID.Servitor:
-                    return url.Action("PaymentIndex", "Payment");
-
-                case Naming.RoleID.FreeAgent:
-                    return url.Action("FreeAgent", "Account");
-
-            }
-
-            return url.Action("Index", "Account"); ;
         }
 
         public ActionResult LoginByForm(LoginViewModel viewModel, string returnUrl)
@@ -313,7 +257,7 @@ namespace WebHome.Controllers
 
             }
 
-            return View("~/Views/Html/Module/AutoLogin.ascx", model: processLogin(item));
+            return View("~/Views/Html/Module/AutoLogin.ascx", model: this.ProcessLogin(item));
 
         }
 
@@ -353,19 +297,27 @@ namespace WebHome.Controllers
         }
 
         [CoachOrAssistantAuthorize]
-        public ActionResult PromptCurrentQuestionnaire(int? registerID)
+        public ActionResult PromptCurrentQuestionnaire(int? registerID,int? questionnaireID)
         {
-
-            var lesson = models.GetTable<RegisterLesson>().Where(u => u.RegisterID == registerID).FirstOrDefault();
-            if (lesson == null)
+            QuestionnaireRequest item = null;
+            if(questionnaireID.HasValue)
             {
-                return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                item = models.GetTable<QuestionnaireRequest>().Where(q => q.QuestionnaireID == questionnaireID).FirstOrDefault();
             }
 
-            var item = models.GetQuestionnaireRequest(lesson.UserProfile).FirstOrDefault();
-            if (item == null && models.CheckCurrentQuestionnaireRequest(lesson))
+            if (item == null)
             {
-                item = models.CreateQuestionnaire(lesson);
+                var lesson = models.GetTable<RegisterLesson>().Where(u => u.RegisterID == registerID).FirstOrDefault();
+                if (lesson == null)
+                {
+                    return View("~/Views/Shared/JsAlert.ascx", model: "資料錯誤!!");
+                }
+
+                item = models.GetQuestionnaireRequest(lesson.UserProfile).FirstOrDefault();
+                if (item == null && models.CheckCurrentQuestionnaireRequest(lesson))
+                {
+                    item = models.CreateQuestionnaire(lesson);
+                }
             }
 
             if (item != null)
@@ -386,36 +338,12 @@ namespace WebHome.Controllers
                 return new EmptyResult();
             }
 
-            if (models.GetTable<PDQTask>().Any(t => t.UID == profile.UID
-                 && t.TaskDate >= DateTime.Today && t.TaskDate < DateTime.Today.AddDays(1)
-                 && t.PDQQuestion.GroupID == 6))
+            var item = models.PromptLearnerDailyQuestion(profile);
+            if (item == null)
             {
                 return new EmptyResult();
             }
 
-            if (models.GetTable<PDQTask>().Count(t => t.UID == profile.UID && t.PDQQuestion.GroupID == 6) >=
-                models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID && r.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
-                    .Select(r => r.GroupingLesson).Sum(g => g.LessonTime.Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
-            {
-                return new EmptyResult();
-            }
-
-            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
-                .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
-                    q => q.QuestionID, t => t.QuestionID, (q, t) => q);
-            int[] items = questItems
-                .Select(q => q.QuestionID)
-                .Where(q => !models.GetTable<PDQTask>().Where(t => t.UID == profile.UID).Select(t => t.QuestionID).Contains(q)).ToArray();
-
-            if (items.Length == 0)
-            {
-                items = questItems
-                .Select(q => q.QuestionID).ToArray();
-            }
-
-            profile.DailyQuestionID = items[DateTime.Now.Ticks % items.Length];
-
-            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == profile.DailyQuestionID).FirstOrDefault();
             return View("~/Views/Html/Module/LearnerDailyQuestion.ascx", item);
         }
 
@@ -468,7 +396,7 @@ namespace WebHome.Controllers
 
             HttpContext.SignOn(item);
 
-            return Redirect(processLogin(item));
+            return Redirect(this.ProcessLogin(item));
 
         }
 

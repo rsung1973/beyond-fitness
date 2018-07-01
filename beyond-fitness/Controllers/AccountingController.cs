@@ -97,7 +97,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
                 {
 
                 }
@@ -198,16 +198,7 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/ReportInputError.ascx");
             }
 
-            IQueryable<LessonTime> items = models.GetTable<LessonTime>()
-                //.Where(t => t.LessonAttendance != null)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
-                //.Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
-                //    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
-                .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>().AllCompleteLesson();
 
             var profile = HttpContext.GetUser();
 
@@ -217,6 +208,11 @@ namespace WebHome.Controllers
             {
                 hasConditon = true;
                 items = items.Where(c => c.AttendingCoach == viewModel.CoachID);
+            }
+
+            if (viewModel.ByCoachID != null && viewModel.ByCoachID.Length > 0)
+            {
+                items = items.Where(c => viewModel.ByCoachID.Contains(c.AttendingCoach));
             }
 
             //if (!hasConditon)
@@ -231,7 +227,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
                 {
 
                 }
@@ -267,6 +263,7 @@ namespace WebHome.Controllers
 
         public ActionResult InquireTuitionAchievement(AchievementQueryViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
 
             IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
                 .Where(t => t.Payment.VoidPayment == null);
@@ -281,15 +278,20 @@ namespace WebHome.Controllers
                 items = items.Where(c => c.CoachID == viewModel.CoachID);
             }
 
+            if (viewModel.ByCoachID != null && viewModel.ByCoachID.Length > 0)
+            {
+                items = items.Where(t => viewModel.ByCoachID.Contains(t.CoachID));
+            }
+
             if (viewModel.BranchID.HasValue)
             {
                 hasConditon = true;
-                items = items.Where(c => c.Payment.ContractPayment.CourseContract.CourseContractExtension.BranchID == viewModel.BranchID);
+                items = items.Where(c => c.Payment.PaymentTransaction.BranchID == viewModel.BranchID);
             }
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
                 {
 
                 }
@@ -416,7 +418,7 @@ namespace WebHome.Controllers
             public String 通訊地址 { get; set; }
             public String 電話 { get; set; }
             public String 轉出買受人証號 { get; set; }
-            public String 當期信託金額 { get; set; }
+            public int? 當期信託金額 { get; set; }
             public int? 信託餘額 { get; set; }
             public int? 契約總價金 { get; set; }
             public String 交付信託日期 { get; set; }
@@ -438,7 +440,9 @@ namespace WebHome.Controllers
                     信託期初金額 = item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount).AdjustTrustAmount(),
                     T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount(),
                     //B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount().ToString(),
-                    B_新增 = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0).Select(s => s.CourseContract).Sum(c => c.TotalCost).AdjustTrustAmount(),
+                    B_新增 = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0)
+                        .Join(items.Where(t => t.TrustType == "B"), s => s.ContractID, t => t.ContractID, (s, t) => s)
+                        .Select(s => s.CourseContract).Sum(c => c.TotalCost).AdjustTrustAmount(),
                     N_返還 = 
                         ((item.ContractTrustTrack.Where(t => t.TrustType == "N")
                             .Select(t => t.LessonTime.RegisterLesson)
@@ -475,7 +479,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "B";
                     settlement.InitialTrustAmount += amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", contract.TotalCost.AdjustTrustAmount());
+                    reportItem.當期信託金額 = contract.TotalCost.AdjustTrustAmount();
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   // settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
                     headerItem = reportItem;
@@ -486,7 +490,7 @@ namespace WebHome.Controllers
                     _TrustTrackReportItem reportItem = newReportItem(contract);
                     reportItem.處理代碼 = "T";
                     settlement.InitialTrustAmount += amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
+                    reportItem.當期信託金額 = amt.AdjustTrustAmount(); 
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   // settlement.InitialTrustAmount.AdjustTrustAmount();
                     reportItem.轉出買受人証號 = contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo;
                     details.Add(reportItem);
@@ -502,7 +506,7 @@ namespace WebHome.Controllers
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
                     initialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
+                    reportItem.當期信託金額 = amt.AdjustTrustAmount(); ;
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
                     if (headerItem == null)
@@ -517,7 +521,7 @@ namespace WebHome.Controllers
                     reportItem.處理代碼 = "N";
                     settlement.InitialTrustAmount -= amt.Value;
                     initialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
+                    reportItem.當期信託金額 = amt.AdjustTrustAmount();
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
                     if (headerItem == null)
@@ -531,7 +535,7 @@ namespace WebHome.Controllers
                     reportItem.處理代碼 = "X";
                     settlement.InitialTrustAmount -= amt.Value;
                     initialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); 
+                    reportItem.當期信託金額 = amt.AdjustTrustAmount(); 
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
                     if (headerItem == null)
@@ -545,7 +549,7 @@ namespace WebHome.Controllers
                     reportItem.處理代碼 = "S";
                     settlement.InitialTrustAmount -= amt.Value;
                     initialTrustAmount -= amt.Value;
-                    reportItem.當期信託金額 = String.Format("{0}", amt.AdjustTrustAmount()); ;
+                    reportItem.當期信託金額 = amt.AdjustTrustAmount();
                     reportItem.信託餘額 = initialTrustAmount.AdjustTrustAmount();   //settlement.InitialTrustAmount.AdjustTrustAmount();
                     details.Add(reportItem);
                     if (headerItem == null)
@@ -653,7 +657,8 @@ namespace WebHome.Controllers
                 r[2] = contract.LessonPriceType.ListPrice;
                 r[3] = $"{lesson.ClassTime.Value.Date:yyyy/MM/dd}";
                 r[4] = $"{lesson.ClassTime:HH:mm}~{lesson.ClassTime.Value.AddMinutes(lesson.DurationInMinutes.Value):HH:mm}";
-                r[5] = lesson.BranchStore.BranchName;
+                if (lesson.BranchID.HasValue)
+                    r[5] = lesson.BranchStore.BranchName;
                 r[6] = lesson.DurationInMinutes;
                 r[7] = lesson.AsAttendingCoach.UserProfile.FullName();
                 if (contract.CourseContractType.ContractCode == "CFA")
@@ -754,7 +759,8 @@ namespace WebHome.Controllers
             table.Columns.Add(new DataColumn("總終點課數", typeof(decimal)));
             table.Columns.Add(new DataColumn("總鐘點費用", typeof(int)));
             table.Columns.Add(new DataColumn("等級", typeof(String)));
-            table.Columns.Add(new DataColumn("實際抽成費用", typeof(int)));
+            table.Columns.Add(new DataColumn("實際抽成費用(含稅)", typeof(int)));
+            table.Columns.Add(new DataColumn("實際抽成費用", typeof(decimal)));
 
             foreach (var item in details)
             {
@@ -774,6 +780,7 @@ namespace WebHome.Controllers
                 r[2] = models.CalcAchievement(lessons, out shares);
                 r[3] = lesson.LessonTimeSettlement.ProfessionalLevel.LevelName;
                 r[4] = shares;
+                r[5] = Math.Round(shares / 1.05m);
                 table.Rows.Add(r);
             }
 
@@ -828,7 +835,8 @@ namespace WebHome.Controllers
 
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("姓名", typeof(String)));
-            table.Columns.Add(new DataColumn("業績金額", typeof(int)));
+            table.Columns.Add(new DataColumn("業績金額(含稅)", typeof(int)));
+            table.Columns.Add(new DataColumn("業績金額", typeof(decimal)));
 
             foreach (var item in details)
             {
@@ -836,6 +844,7 @@ namespace WebHome.Controllers
                 var coach = models.GetTable<ServingCoach>().Where(u => u.CoachID == item.Key).First();
                 r[0] = coach.UserProfile.RealName;
                 r[1] = item.Sum(l => l.ShareAmount);
+                r[2] = Math.Round((int)r[1] / 1.05m);
                 table.Rows.Add(r);
             }
 
@@ -849,42 +858,7 @@ namespace WebHome.Controllers
             ViewResult result = (ViewResult)InquireTuitionAchievement(viewModel);
             IQueryable<TuitionAchievement> items = (IQueryable<TuitionAchievement>)result.Model;
 
-            var details = items.ToArray().Select(item=> new {
-                發票號碼 = item.Payment.InvoiceID.HasValue 
-                    ? item.Payment.InvoiceItem.TrackCode + item.Payment.InvoiceItem.No : null,
-                分店 = item.Payment.PaymentTransaction.BranchStore.BranchName,
-                收款人 = item.Payment.UserProfile.FullName(),
-                業績所屬體能顧問 = item.ServingCoach.UserProfile.FullName(),
-                學員 = item.Payment.TuitionInstallment != null
-                        ? item.Payment.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
-                        : item.Payment.ContractPayment != null
-                            ? item.Payment.ContractPayment.CourseContract.ContractOwner.FullName()
-                            : "--",
-                收款日期 = item.Payment.VoidPayment == null ? String.Format("{0:yyyy/MM/dd}", item.Payment.PayoffDate) : null,
-                作廢日期 = item.Payment.VoidPayment != null ? String.Format("{0:yyyy/MM/dd}", item.Payment.VoidPayment.VoidDate) : null,
-                業績金額 = item.ShareAmount,
-                收款方式 = item.Payment.PaymentType,
-                發票類型 = item.Payment.InvoiceID.HasValue
-                        ? item.Payment.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
-                            ? "電子發票"
-                            : "紙本"
-                        : "--",
-                發票狀態 = item.Payment.VoidPayment == null
-                        ? "已開立"
-                        : item.Payment.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
-                            ? item.Payment.InvoiceItem.InvoiceAllowance.Any() 
-                                ? "已折讓"
-                                : "已作廢"
-                            : "已開立",
-                合約編號 = item.Payment.ContractPayment != null
-                    ? item.Payment.ContractPayment.CourseContract.ContractNo()
-                    : ((Naming.PaymentTransactionType)item.Payment.TransactionType).ToString(),
-                狀態 = ((Naming.CourseContractStatus)item.Payment.Status).ToString()
-                    + (item.Payment.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
-            });
-
-            DataTable table = details.ToDataTable();
-            table.TableName = "業績統計表-人員明細";
+            DataTable table = models.CreateTuitionAchievementDetails(items);
 
             return table;
         }
@@ -900,6 +874,14 @@ namespace WebHome.Controllers
 
             return View("~/Views/Accounting/Module/ContractPaymentList.ascx", item);
         }
+
+        public ActionResult ListTuitionShares(AchievementQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)InquireTuitionAchievement(viewModel);
+            result.ViewName = "~/Views/Accounting/Module/TuitionAchievementShares.ascx";
+            return result;
+        }
+
 
 
     }

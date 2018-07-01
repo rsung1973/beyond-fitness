@@ -38,8 +38,7 @@
                         items = lessons.Where(l => l.TrainingBySelf == 1);
                         int PICount = items.Count();
 
-                        items = lessons.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                                        || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
+                        items = lessons.TrialLesson();
 
                         int trialCount = items.Count();
                         int totalCount = PTCount + PICount + trialCount;

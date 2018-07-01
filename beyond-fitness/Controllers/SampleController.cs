@@ -50,5 +50,17 @@ namespace WebHome.Controllers
             if (_dbInstance)
                 models.Dispose();
         }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is CryptographicException)
+            {
+                Response.Redirect((new UrlHelper(filterContext.RequestContext)).Action("InvalidCrypto", "Error"));
+            }
+            else
+            {
+                base.OnException(filterContext);
+            }
+        }
     }
 }

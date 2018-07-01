@@ -11,7 +11,7 @@
 <div class="row">
 
     <div class="block">
-        <%  //if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+        <%  //if (_model.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
             //{
             //    Html.RenderPartial("~/Views/ClassFacet/Module/CoachSelfLesson.ascx", _model.UserProfile);
             //}

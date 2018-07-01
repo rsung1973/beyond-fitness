@@ -115,6 +115,8 @@ namespace WebHome.Models.DataEntity
                     return "P.T.session";
                 case (int)Naming.LessonPriceStatus.在家訓練:
                     return "S.T.session";
+                case (int)Naming.LessonPriceStatus.教練PI:
+                    return "教練P.I";
                 default:
                     return ((Naming.LessonPriceStatus)status).ToString();
             }

@@ -12,6 +12,7 @@ using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
 using WebHome.Properties;
+using CommonLib.DataAccess;
 
 namespace WebHome.Helper
 {
@@ -113,7 +114,8 @@ namespace WebHome.Helper
                 var r = table.NewRow();
                 r[0] = "--";
                 r[1] = item.AsAttendingCoach.UserProfile.FullName();
-                r[2] = item.BranchStore.BranchName;
+                if (item.BranchID.HasValue)
+                    r[2] = item.BranchStore.BranchName;
 
                 r[3] = item.RegisterLesson.UserProfile.FullName();
 
@@ -123,12 +125,56 @@ namespace WebHome.Helper
                 var halfCount = item.LessonAttendance == null || item.LessonPlan.CommitAttendance.HasValue ? 1 : 0;
                 r[6] = 1 - halfCount;
                 r[7] = halfCount;
-                r[8] = item.BranchStore.BranchName;
+                if (item.BranchID.HasValue)
+                    r[8] = item.BranchStore.BranchName;
                 table.Rows.Add(r);
             }
 
             table.TableName = "上課統計表-人員明細";
 
+            return table;
+        }
+
+        public static DataTable CreateTuitionAchievementDetails<TEntity>(this ModelSource<TEntity> models, IQueryable<TuitionAchievement> items)
+            where TEntity : class, new()
+        {
+            var details = items.ToArray().Select(item => new
+            {
+                發票號碼 = item.Payment.InvoiceID.HasValue
+                    ? item.Payment.InvoiceItem.TrackCode + item.Payment.InvoiceItem.No : null,
+                分店 = item.Payment.PaymentTransaction.BranchStore.BranchName,
+                收款人 = item.Payment.UserProfile.FullName(),
+                業績所屬體能顧問 = item.ServingCoach.UserProfile.FullName(),
+                學員 = item.Payment.TuitionInstallment != null
+                        ? item.Payment.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : item.Payment.ContractPayment != null
+                            ? item.Payment.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : "--",
+                收款日期 = item.Payment.VoidPayment == null ? String.Format("{0:yyyy/MM/dd}", item.Payment.PayoffDate) : null,
+                作廢日期 = item.Payment.VoidPayment != null ? String.Format("{0:yyyy/MM/dd}", item.Payment.VoidPayment.VoidDate) : null,
+                業績金額 = item.ShareAmount,
+                收款方式 = item.Payment.PaymentType,
+                發票類型 = item.Payment.InvoiceID.HasValue
+                        ? item.Payment.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票
+                            ? "電子發票"
+                            : "紙本"
+                        : "--",
+                發票狀態 = item.Payment.VoidPayment == null
+                        ? "已開立"
+                        : item.Payment.VoidPayment.Status == (int)Naming.CourseContractStatus.已生效
+                            ? item.Payment.InvoiceItem.InvoiceAllowance.Any()
+                                ? "已折讓"
+                                : "已作廢"
+                            : "已開立",
+                合約編號 = item.Payment.ContractPayment != null
+                    ? item.Payment.ContractPayment.CourseContract.ContractNo()
+                    : ((Naming.PaymentTransactionType)item.Payment.TransactionType).ToString(),
+                狀態 = ((Naming.CourseContractStatus)item.Payment.Status).ToString()
+                    + (item.Payment.PaymentAudit.AuditorID.HasValue ? "" : "(*)")
+            });
+
+            DataTable table = details.ToDataTable();
+            table.TableName = "業績統計表-人員明細";
             return table;
         }
 

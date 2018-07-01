@@ -18,5 +18,10 @@ namespace WebHome.Controllers
         {
             return View();
         }
+
+        public ActionResult InvalidCrypto()
+        {
+            return View();
+        }
     }
 }

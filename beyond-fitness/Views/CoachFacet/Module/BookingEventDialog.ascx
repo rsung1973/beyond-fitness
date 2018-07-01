@@ -26,7 +26,7 @@
                     <br />
                     <%  if (_model.TrainingBySelf != 2)
                         { %>
-                    上課地點：<%= _model.BranchStore.BranchName %>
+                    上課地點：<%= _model.BranchID.HasValue ? _model.BranchStore.BranchName : "其他" %>
                     <%  } %>
                 </span>
             </div>

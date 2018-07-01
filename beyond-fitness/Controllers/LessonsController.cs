@@ -73,10 +73,10 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/ReportInputError.ascx");
             }
 
-            var priceType = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.內部訓練).FirstOrDefault();
+            var priceType = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.教練PI).FirstOrDefault();
             if (priceType == null)
             {
-                ViewBag.Message = "內部訓練課程類別未設定!!";
+                ViewBag.Message = "教練P.I課程類別未設定!!";
                 return View("~/Views/Shared/AlertMessage.ascx");
             }
 
@@ -125,7 +125,8 @@ namespace WebHome.Controllers
 
             timeItem.ClassTime = viewModel.ClassDate;
             timeItem.DurationInMinutes = priceType.DurationInMinutes;
-            timeItem.BranchID = viewModel.BranchID;
+            if (viewModel.BranchID > 0)
+                timeItem.BranchID = viewModel.BranchID;
             timeItem.InvitedCoach =  timeItem.AttendingCoach = profile.UID;
 
             models.DeleteAllOnSubmit<LessonTimeExpansion>(t => t.LessonID == viewModel.LessonID);
@@ -1364,7 +1365,7 @@ namespace WebHome.Controllers
                     }));
 
                 items = items.Concat(dataItems
-                    .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+                    .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
                     .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
@@ -1372,7 +1373,7 @@ namespace WebHome.Controllers
                         id = "coach",
                         title = g.Distinct().Count().ToString(),
                         start = g.Key.ToString("yyyy-MM-dd"),
-                        description = "內部訓練",
+                        description = "教練P.I",
                         allDay = true,
                         className = g.Key < today ? new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-teal" },
                         icon = /*g.Key < today ? "fa-check" :*/ "fa-university"
@@ -1551,13 +1552,13 @@ namespace WebHome.Controllers
                 }));
 
             items = items.Concat(dataItems
-                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
                 .Select(g => new CalendarEvent
                 {
                     id = "coach",
                     title = "",
                     start = g.ClassTime.Value.ToString("yyyy-MM-dd"),
-                    description = "內部訓練",
+                    description = "教練P.I",
                     lessonID = g.LessonID,
                     allDay = true,
                     className = g.ClassTime < today ? g.LessonAttendance == null ? new string[] { "event", "bg-color-red" } : new string[] { "event", "bg-color-blue" } : new string[] { "event", "bg-color-teal" },
@@ -1858,7 +1859,7 @@ namespace WebHome.Controllers
 
             if (category == "coach")
             {
-                queryExpr = queryExpr.And(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                queryExpr = queryExpr.And(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
             }
             else if (category == "trial")
             {
@@ -2004,7 +2005,7 @@ namespace WebHome.Controllers
                 items = items.Where(t => t.ClassTime < end.Value.AddDays(1));
             if (category == "coach")
             {
-                items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
             }
             else if (category == "trial")
             {
@@ -2041,7 +2042,7 @@ namespace WebHome.Controllers
             IQueryable<LessonTime> lessons = queryBookingLessons(item);
             if (category == "coach")
             {
-                lessons = lessons.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                lessons = lessons.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
             }
             else if (category == "trial")
             {
@@ -2121,7 +2122,7 @@ namespace WebHome.Controllers
             IQueryable<LessonTime> lessons = queryBookingLessons(item).Where(t => t.ClassTime >= lessonDate && t.ClassTime < lessonDate.AddDays(1));
             if (category == "coach")
             {
-                lessons = lessons.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                lessons = lessons.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
             }
             else if (category == "trial")
             {
@@ -2298,7 +2299,7 @@ namespace WebHome.Controllers
                     }));
 
                 items = items.Concat(lessons
-                        .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+                        .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
                     .Join(models.GetTable<LessonTimeExpansion>(), n => n.LessonID, t => t.LessonID, (n, t) => t)
                     .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1))
                     .Select(t => new { t.ClassDate, t.LessonID }).ToList()
@@ -2308,7 +2309,7 @@ namespace WebHome.Controllers
                         id = "coach",
                         title = g.Distinct().Count().ToString(),
                         start = g.Key.ToString("yyyy-MM-dd"),
-                        description = "內部訓練",
+                        description = "教練P.I",
                         allDay = true,
                         className = g.Key < today ? new string[] { "event", "bg-color-yellow" } : new string[] { "event", "bg-color-teal" },
                         icon = /*g.Key < today ? "fa-check" :*/ "fa-university"
@@ -2849,7 +2850,7 @@ namespace WebHome.Controllers
                 }
                 if (category == "coach")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
                 }
                 else if (category == "trial")
                 {
@@ -2876,7 +2877,7 @@ namespace WebHome.Controllers
                 }
                 if (category == "coach")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
                 }
                 else if (category == "trial")
                 {
@@ -2924,7 +2925,7 @@ namespace WebHome.Controllers
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
             if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
                 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/ 
-                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練
+                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI
                 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
@@ -3845,7 +3846,7 @@ namespace WebHome.Controllers
             var profile = HttpContext.GetUser();
 
             IQueryable<LessonTime> items = queryBookingLessons(profile, viewModel)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練);
+                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI);
 
             DataTable table = new DataTable();
 
@@ -3864,7 +3865,8 @@ namespace WebHome.Controllers
 
                 row["上課日期"] = String.Format("{0:yyyy/MM/dd}",item.ClassTime);
                 row["上課時間"] = String.Format("{0:HH:mm}", item.ClassTime) + "~" + String.Format("{0:HH:mm}", item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value));
-                row["上課地點"] = item.BranchStore.BranchName;
+                if (item.BranchID.HasValue)
+                    row["上課地點"] = item.BranchStore.BranchName;
                 row["上課時間長度"] = item.DurationInMinutes;
                 row["課程類別"] = item.RegisterLesson.RegisterLessonEnterprise==null 
                     ? item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus()

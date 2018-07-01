@@ -37,7 +37,7 @@
             </div>
         </div>
         <%  if(_profile!=null 
-                && (_profile.IsAssistant() || _profile.IsCoach() || _profile.IsManager() || _profile.IsViceManager()))
+                && (_profile.IsAssistant() || _profile.IsCoach() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsOfficer()))
             { %>
         <div class="col col-6">
             <label>合約簽名檔</label>

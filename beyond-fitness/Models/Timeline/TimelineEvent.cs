@@ -8,7 +8,7 @@ namespace WebHome.Models.Timeline
 {
     public class TimelineEvent
     {
-        public DateTime EventTime { get; set; }
+        public DateTime? EventTime { get; set; }
         public UserProfile Profile { get; set; }
     }
 
@@ -31,5 +31,26 @@ namespace WebHome.Models.Timeline
     {
         public QuestionnaireRequest Questionnaire { get; set; }
     }
+
+    public class LessonAttendanceCheckEvent : TimelineEvent
+    {
+        public int CheckCount { get; set; }
+    }
+
+    public class DailyQuestionEvent : TimelineEvent
+    {
+        public PDQQuestion DailyQuestion { get; set; }
+    }
+
+    public class UserGuideEvent : TimelineEvent
+    {
+
+    }
+
+    public class ExpiringContractEvent : TimelineEvent
+    {
+        public CourseContract ExpiringContract { get; set; }
+    }
+
 
 }

@@ -36,8 +36,8 @@
                             <%  } %>
                         </td>
                         <td class="col-xs-1 col-sm-1">
-                            <%= item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練
-                                    ? "內部訓練"
+                            <%= item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI
+                                    ? "教練P.I"
                                     : item.LessonTime.AsAttendingCoach.UserProfile.FullName() %>
                         </td> 
                         <td><%= item.LessonTime.TrainingPlan.Count==0

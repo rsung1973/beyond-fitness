@@ -45,13 +45,13 @@
             resizable: true,
             modal: true,
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-exchange'></i>  切換行事曆</h4>",
-            buttons: [{
+            buttons: [<%-- {
                 html: "<i class='fa fa-road'></i>&nbsp;查看全部",
                 "class": "btn btn-primary",
                 click: function () {
                     selectCoach(null, '全部');
                 }
-            }, {
+            },--%> {
                 html: "<i class='fa fa-undo'></i>&nbsp; 回到我的行事曆",
                 "class": "btn btn-primary",
                 click: function () {

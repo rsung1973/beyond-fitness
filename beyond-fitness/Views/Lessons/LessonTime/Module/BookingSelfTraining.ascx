@@ -15,7 +15,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel"><i class="far fa-fw fa-check-square"></i>預約內部訓練</h4>
+                <h4 class="modal-title" id="myModalLabel"><i class="far fa-fw fa-check-square"></i>預約教練P.I</h4>
             </div>
             <div class="modal-body bg-color-darken txt-color-white">
                 <div class="panel panel-default bg-color-darken no-padding">

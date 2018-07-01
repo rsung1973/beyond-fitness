@@ -61,8 +61,7 @@
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(233,157,201,.43)",
                     data= items.Select(g=>_model.Where(l=>l.AttendingCoach==g)
-                                        .Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                            || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count()).ToArray(),
+                                        .TrialLesson().Count()).ToArray(),
                 }
             }
         };

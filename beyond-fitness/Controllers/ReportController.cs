@@ -37,7 +37,7 @@ namespace WebHome.Controllers
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
                     .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練);
+                    .Where(r => r.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI);
 
 
                 if (viewModel.Payoff == true)
@@ -209,7 +209,7 @@ namespace WebHome.Controllers
         //        //.Where(t => t.LessonAttendance != null)
         //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
         //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-        //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+        //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
         //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
         //        .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
         //        .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
@@ -304,13 +304,13 @@ namespace WebHome.Controllers
         //    return items;
         //}
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult BonusAwardList()
         {
             return View();
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult ListBonusAward(AwardQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -355,6 +355,94 @@ namespace WebHome.Controllers
 
             return View("~/Views/Report/Module/ListBonusAward.ascx", items);
         }
+
+        public ActionResult QuestionnaireIndex(QuestionnaireQueryViewModel viewModel)
+        {
+            viewModel.AchievementDateTo = DateTime.Today;
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
+        public ActionResult InquireQuestionnaire(QuestionnaireQueryViewModel viewModel, int? qureyAction = null)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            //if (!viewModel.AchievementDateFrom.HasValue)
+            //{
+            //    ModelState.AddModelError("AchievementDateFrom", "請選擇查詢起日");
+            //}
+
+            if (!viewModel.AchievementDateTo.HasValue)
+            {
+                ModelState.AddModelError("AchievementDateTo", "請選擇查詢迄日");
+            }
+
+            //if (viewModel.AchievementDateFrom.HasValue && viewModel.AchievementDateTo.HasValue
+            //    && (viewModel.AchievementDateTo.Value - viewModel.AchievementDateFrom.Value).TotalDays > 31)
+            //{
+            //    ModelState.AddModelError("AchievementDateFrom", "查詢區間只能是一個月內");
+            //    ModelState.AddModelError("AchievementDateTo", "查詢區間只能是一個月內");
+            //}
+
+            if (viewModel.ByCoachID == null || viewModel.ByCoachID.Length == 0)
+            {
+                ModelState.AddModelError("ByCoachID", "請勾選一位");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/Shared/ReportInputError.ascx");
+            }
+
+            IQueryable<QuestionnaireRequest> items = models.GetTable<QuestionnaireRequest>();
+
+            if (viewModel.AchievementDateFrom.HasValue)
+                items = items.Where(t => t.RequestDate >= viewModel.AchievementDateFrom);
+
+            if (viewModel.AchievementDateTo.HasValue)
+                items = items.Where(t => t.RequestDate < viewModel.AchievementDateTo.Value.AddDays(1));
+
+            if (viewModel.ByCoachID != null && viewModel.ByCoachID.Length > 0)
+            {
+                var uid = models.GetTable<LearnerFitnessAdvisor>().Where(l => viewModel.ByCoachID.Contains(l.CoachID));
+                var questID = models.GetTable<PDQTask>().Where(u => viewModel.ByCoachID.Contains(u.UID))
+                        .GroupBy(t => t.QuestionnaireID).Select(g => g.Key);
+                items = items.Join(uid, q => q.UID, u => u.UID, (q, u) => q)
+                    .Union(items.Join(questID, q => q.QuestionnaireID, t => t, (q, t) => q));
+            }
+
+            if (viewModel.Status.HasValue)
+            {
+                switch (viewModel.Status)
+                {
+                    case 1:
+                        items = items.Where(q => !q.Status.HasValue);
+                        break;
+                    case 2:
+                        items = items.Where(q => q.Status == (int)Naming.IncommingMessageStatus.已讀
+                            || q.Status == (int)Naming.IncommingMessageStatus.未讀);
+                        break;
+                    case 3:
+                        items = items.Where(q => q.Status == (int)Naming.IncommingMessageStatus.教練代答);
+                        break;
+                    case 4:
+                        items = items.Where(q => q.Status == (int)Naming.IncommingMessageStatus.拒答);
+                        break;
+                }
+            }
+
+            viewModel.UserName = viewModel.UserName.GetEfficientString();
+            if (viewModel.UserName!=null)
+            {
+                var uid = models.GetTable<UserProfile>().Where(u => u.RealName.Contains(viewModel.UserName) || u.Nickname.Contains(viewModel.UserName))
+                    .Select(u => u.UID);
+                items = items.Where(q => uid.Contains(q.UID));
+            }
+
+            return View("~/Views/Report/Module/QuestionnaireList.ascx", items);
+        }
+
 
 
     }

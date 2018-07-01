@@ -38,8 +38,7 @@
                 ClassTime = t,
                 PTCount = lessons.PTLesson().Count(),
                 PICount = lessons.Where(l => l.TrainingBySelf == 1).Count(),
-                TrialCount = lessons.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count()
+                TrialCount = lessons.TrialLesson().Count()
             });
         }
 

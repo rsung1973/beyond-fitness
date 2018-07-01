@@ -20,7 +20,7 @@
             modal: true,
             width: "auto",
             height: "auto",
-            title: "<h4 class='modal-title'><i class='fa-fw fa fa-table'></i>  上課明細：<%= _model.First().AsAttendingCoach.UserProfile.FullName() %></h4>",
+            title: "<h4 class='modal-title'><i class='fa-fw fa fa-table'></i>  <%= _viewModel.AchievementYearMonthFrom %>上課明細：<%= _model.First().AsAttendingCoach.UserProfile.FullName() %></h4>",
             close: function () {
                 $('#<%= _dialog %>').remove();
             }
@@ -34,6 +34,7 @@
     ModelSource<UserProfile> models;
     String _dialog = "attendance" + DateTime.Now.Ticks;
     IQueryable<LessonTime> _model;
+    AchievementQueryViewModel _viewModel;
 
     protected override void OnInit(EventArgs e)
     {
@@ -41,6 +42,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (IQueryable<LessonTime>)this.Model;
+        _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
     }
 
 </script>

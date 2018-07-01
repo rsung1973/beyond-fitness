@@ -25,10 +25,11 @@
         _model = (IQueryable<LessonTime>)this.Model;
         _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
 
-        var items = _model.GroupBy(l=>l.AttendingCoach);
+        var items = _model.GroupBy(l => l.AttendingCoach)
+                        .Select(g => g.Key).ToArray();
         result = new
         {
-            labels = items.Join(models.GetTable<UserProfile>(),g => g.Key,u=>u.UID,(g,u)=>u).Select(u=>u.RealName).ToArray(),
+            labels = items.Select(g => models.GetTable<UserProfile>().Where(u => u.UID == g).Select(u => u.RealName).FirstOrDefault()).ToArray(),
             datasets = new object[]
             {
                 new
@@ -37,8 +38,7 @@
                     label= "P.T",
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(184,227,243,.43)",
-                    data= items.Select(g=>
-                                    g.PTLesson().Count()).ToArray(),
+                    data= items.Select(g=>_model.PTLesson().Where(t=>t.AttendingCoach==g).Count()).ToArray(),
                 },
                 new
                 {
@@ -46,8 +46,7 @@
                     label= "P.I",
                     yAxisID= "y-axis-0",
                     backgroundColor= "rgba(255,7,7,.43)",
-                    data= items.Select(g=>
-                                    g.Where(l => l.TrainingBySelf == 1).Count()).ToArray(),
+                    data= items.Select(g=>_model.Where(l => l.TrainingBySelf == 1).Where(t=>t.AttendingCoach==g).Count()).ToArray(),
                 }
             }
         };

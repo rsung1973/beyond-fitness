@@ -13,6 +13,10 @@
     {
         Html.RenderPartial("~/Views/SiteAction/SystemAdmin.ascx", _userProfile);
     }
+    else if (_userProfile.IsOfficer())
+    {
+        Html.RenderPartial("~/Views/SiteAction/Officer.ascx", _userProfile);
+    }
     else if (_userProfile.IsCoach())
     {
         Html.RenderPartial("~/Views/SiteAction/Coach.ascx", _userProfile);

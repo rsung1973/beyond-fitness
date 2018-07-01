@@ -78,7 +78,7 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
-        public int? UID { get; set; }
+        public string LineID { get; set; }
 
     }
 
@@ -428,7 +428,7 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class DailyBookingQueryViewModel
+    public class DailyBookingQueryViewModel : QueryViewModel
     {
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }

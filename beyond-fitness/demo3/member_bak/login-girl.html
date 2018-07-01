@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>BEYOND FITNESS - Registered-login</title>
+      <!-- CSS  -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <link href='css/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <link href='css/patternLock.css' rel='stylesheet' type='text/css'>
+	   	   <!-- STYLE 要放最下面  -->
+	   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   </head>
+   <body>
+      <!--//預設值為藍色 / 若要設定女生 請加上 mode-girls /--> 
+      <div class="wrapper home-fixed mode-girls">
+         <div class="wrapper-fixed">
+            <!--Header --> 
+            <!-- <nav class="white" role="navigation">
+               <div class="nav-wrapper container"> <a id="logo-container" href="#" class="brand-logo center">BEYOND FITNESS</a> 
+               </div>
+               </nav>--> 
+            <!-- // End of Header --> 
+            <!-- main -->
+            <div class="main">
+               <div class="container">
+                  <!--品牌LOGO -->
+                  <div class="brand-wrapper">
+                     <div class="brand-area"> <img src="images/logo-black.png" alt="BEYOND FITNESS" class="responsive-img"> </div>
+                  </div>
+                  <!-- // End of 品牌LOGO -->
+                  <div class="registered-forms">
+                     <!-- 登入 - TAB -->
+                     <ul id="tabs-swipe-demo" class="tabs col s12">                        
+                        <li class="tab col s6"><a class="active" href="#test-swipe-2" id="graphTab">快速登入</a></li>
+                        <li class="tab col s6"><a href="#test-swipe-1" id="alphaTab">一般登入</a></li>
+                     </ul>
+                     <div id="test-swipe-1" class="tab-content col s12">
+                        <form class="">
+                           <div class="row">
+                              <!--1-->
+                              <div class="input-field col s12">
+                                 <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines; strokeColor:#fd5c63; autoPlay:true"></i>
+                                 <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                                 <label for="icon_prefix2">請輸入電子郵件信箱</label>
+                              </div>
+                              <!--2-->
+                              <div class="input-field col s12"> 
+                                 <i class="livicon-evo prefix" data-options="name: lock.svg; size: 30px; style: lines;  strokeColor:#fd5c63; autoPlay:true"></i>
+                                 <textarea id="icon_prefix3" class="materialize-textarea"></textarea>
+                                 <label for="icon_prefix3">請輸入英數字密碼</label>
+                              </div>
+                              <span class="memo-text right">＊<a href="#">忘記密碼</a>？</span> 
+                           </div>
+                        </form>
+                     </div>
+                     <div id="test-swipe-2" class="tab-content col s12">
+                         <form class="">
+                           <div class="row">
+                              <!--1-->
+                              <div class="input-field col s12">
+                                 <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines;  strokeColor:#fd5c63; autoPlay:true"></i>
+                                 <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                                 <label for="icon_prefix2">請輸入電子郵件信箱</label>
+                              </div>
+                              <!--2-->
+                              <div class="input-field col s12"> 
+                                 <p class="memo-text center">請輸入圖形密碼</p>
+                                 <div id="patternContainer"></div>
+                              </div>
+                              <span class="memo-text right">＊<a href="password.html">忘記密碼</a>？</span> 
+                           </div>
+                        </form>
+                         
+                     </div>
+                  </div>
+                  <!-- //End of 登入 - TAB --> 
+               </div>
+            </div>
+            <!-- // End of main --> 
+         </div>
+         <!--// End of wrapper-fixed--> 
+         <!-- Botton -->
+         <div class="bottom-area">
+            <button class="btn waves-effect waves-light btn-send" type="submit" name="action" onclick="javascript:window.location.assign('index-girl.html');">登  入</button>            
+         </div>
+      </div>
+      <!--// End of wrapper--> 
+      <!-- Footer --> 
+      <!--<footer class="page-footer teal">
+         <div class="footer-copyright">
+           <div class="container"><a class="brown-text text-lighten-3" href="#">BEYOND FITNESS</a> </div>
+         </div>
+         </footer>--> 
+      <!-- // End of Footer --> 
+      <!--  Scripts--> 
+      <script src="js/libs/jquery-3.3.1.min.js"></script> 
+      <script src="js/materialize.js"></script> 
+      <script src="js/init.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/snap.svg-min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/TweenMax.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/DrawSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/MorphSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/verge.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.Tools.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.defaults.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.js"></script> 
+      <script src="js/plugin/patternLock/patternLock.min.js"></script> 
+      <script src="js/plugin/scrollup-master/jquery.scrollUp.min.js"></script>
+      <script>
+         var lock = new PatternLock("#patternContainer", {
+         onDraw:function(pattern){
+
+                 if(pattern.length<6||pattern.length>12) {
+                    alert('圖形密碼長度須為6~12個連續點位');
+                 }else {
+                    //alert(pattern);
+                    window.location.href = 'index-girl.html';
+                 }
+                },
+                 allowRepeat : true
+         });
+          // initialize sortable
+             $(function() {
+                 //ScrollAuto
+                 $.scrollUp({
+                     animation: 'slide',
+                     scrollText: '',
+                     scrollImg: true,
+                 });               
+             }); 
+          
+         $('.bottom-area').hide();
+         $('#alphaTab').click(function() {
+              $('.bottom-area').show();
+         });  
+         
+         $('#graphTab').click(function() {
+              $('.bottom-area').hide();
+         });              
+      </script>
+   </body>
+</html>

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>BEYOND FITNESS - 體能分析圖表</title>
+      <!-- CSS  -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <link href='css/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <!-- STYLE 要放最下面  -->
+      <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   </head>
+   <body>
+      <!--//預設值為藍色 / 若要設定女生 請加上 mode-girls /  全版 full-fixed / 背景色 light-gray-->
+      <div class="wrapper light-gray full-fixed mode-girls">
+         <div class="wrapper-fixed">
+            <!--Header -->
+            <nav class="white non-line" role="navigation">
+               <div class="nav-wrapper container">
+                  <!-- BACK --> 
+                  <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index-girl.html');">
+                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original;"></div>
+                  </a>
+                  <!-- // End of BACK --> 
+                  <a id="logo-container" href="#" class="brand-logo toptitle center" >體能分析圖</a> 
+               </div>
+            </nav>
+            <!-- // End of Header --> 
+            <!-- main -->
+            <div class="main main-fixed">
+               <div class="container">
+                  <!--品牌LOGO --> 
+                  <!-- // End of 品牌LOGO -->
+                  <div class="chart-wrap">
+                     <!-- Ｃhart -->
+                     <ul class="collection">
+                        <!-- Card 1-->
+                        <li class="collection-item avatar">
+                           <!-- 上 -->
+                           <div class="row">
+                              <ul class="chart-card">
+                                 <li class="chart-top">
+                                    <span class="title">體能分析</span>
+                                    <canvas id="radarChart" class="chart-box"></canvas>
+                                 </li>
+                                 <!-- 下-->
+                                 <li class="chart-bottom">
+                                    <div class="col s6">
+                                       <ul class="list-2">
+                                          <li>身體質量 --</li>
+                                          <li>相對肌力 --</li>
+                                          <li>爆發力 --</li>
+                                       </ul>
+                                    </div>
+                                    <div class="col s6">
+                                       <ul class="list-3">
+                                          <li>柔軟度 --</li>
+                                          <li>心肺適能 --</li>
+                                       </ul>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <!-- Card 2-->
+                        <li class="collection-item avatar">
+                           <!-- 上 -->
+                           <div class="row">
+                              <ul class="chart-card">
+                                 <li class="chart-top">
+                                    <span class="title">累積訓練時間比例</span>
+                                    <div class="pie">
+                                        <div class="pie_light">您沒有<br/><span>相關累計運動時間</span>
+                                        </div>
+                                    </div>
+                                 </li>
+                                 <!-- 下-->
+                                 <li class="chart-bottom">
+                                    <div class="col s6">
+                                       <ul class="list-2">
+                                          <li>基本  --</li>
+                                          <li>運動技巧  --</li>
+                                          <li>肌力  --</li>
+                                       </ul>
+                                    </div>
+                                    <div class="col s6">
+                                       <ul class="list-3">
+                                          <li>心肺  --</li>
+                                          <li>恢復  --</li>
+                                       </ul>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <!-- Card 3-->
+                        <li class="collection-item avatar list-box box-left">
+                           <!-- Left -->
+                           <div class="row">
+                              <div class="col s12 "> <span class="title">本月訓練時間</span> </div>
+                              <div class="col s12">
+                                 <div class="time-box"><span class="flow-text">00:00<small>小時:分鐘</small></span></div>
+                              </div>
+                           </div>
+                        </li>
+                        <!-- Card 4-->
+                        <li class="collection-item avatar list-box box-right">
+                           <!-- Left -->
+                           <div class="row">
+                              <div class="col s12"> <span class="title">器材使用率</span> </div>
+                              <!-- Right -->
+                              <div class="">
+                                 <ul class="list-4">
+                                    <li class="chart-bottom">
+                                       <div class="col s6 w-half">
+                                          <table>
+                                             <tbody>
+                                             <thead>
+                                                <tr>
+                                                   <th style="width: 25px"></th>
+                                                   <th></th>
+                                                   <th style="min-width: 25px;width: 35px;"></th>
+                                                </tr>
+                                             </thead>
+                                             <tr>
+                                                <td>1. </td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>2. </td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>3. </td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>4. </td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>5. </td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             </tbody>
+                                          </table>
+                                          <!--<ul class="list-4">
+                                             <li>Power Plate 18%</li>
+                                             <li>按摩球   13%</li>
+                                             <li>Roller 12%</li>
+                                             <li>啞鈴   8%</li>
+                                             <li>壺鈴   7%</li>
+                                             </ul>--> 
+                                       </div>
+                                       <div class="col s6 w-half">
+                                          <table>
+                                             <tbody>
+                                             <thead>
+                                                <tr>
+                                                   <th style="width: 25px"></th>
+                                                   <th></th>
+                                                   <th style="min-width: 25px;width: 35px;"></th>
+                                                </tr>
+                                             </thead>
+                                             <tr>
+                                                <td>6.</td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>7.</td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>8.</td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>9.</td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             <tr>
+                                                <td>10.</td>
+                                                <td>--</td>
+                                                <td>--%</td>
+                                             </tr>
+                                             </tbody>
+                                          </table>
+                                          <!--<ul class="list-4">
+                                             <li>ViPR 6%</li>
+                                             <li>飛輪   5%</li>
+                                             <li>Keiser 5%</li>
+                                             <li>藥球   5%</li>
+                                             <li>槓片   3%</li>
+                                             </ul>-->
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </li>
+                        <!-- Card 5-->
+                        <li class="collection-item avatar list-box">
+                           <!-- Left -->
+                           <div class="row">
+                              <div class="col s12 ">
+                                 <span class="title">累積運動時間</span>
+                                 <div class="bar-chart">
+                                    <canvas id="barchart" ></canvas>
+                                 </div>
+                              </div>
+                           </div>
+                        </li>
+                     </ul>
+                     <!-- //End of Card  --> 
+                  </div>
+               </div>
+               <!--//End of Chart--> 
+            </div>
+            <!-- // End of main --> 
+         </div>
+         <!--// End of wrapper-fixed--> 
+      </div>
+      <!--// End of wrapper--> 
+      <!-- Footer --> 
+      <!--<footer class="page-footer teal">
+         <!-- // End of Footer --> 
+      <!--  Scripts--> 
+      <script src="js/libs/jquery-3.3.1.min.js"></script> 
+      <script src="js/materialize.js"></script> 
+      <script src="js/init.js"></script> 
+      <script src="js/plugin/LivIconsEvo/tools/snap.svg-min.js"></script> 
+      <script src="js/plugin/LivIconsEvo/tools/TweenMax.min.js"></script> 
+      <script src="js/plugin/LivIconsEvo/tools/DrawSVGPlugin.min.js"></script> 
+      <script src="js/plugin/LivIconsEvo/tools/MorphSVGPlugin.min.js"></script> 
+      <script src="js/plugin/LivIconsEvo/tools/verge.min.js"></script> 
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.Tools.js"></script> 
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.defaults.js"></script> 
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.js"></script> 
+      <!--scrollup plugin--> 
+      <script src="js/plugin/scrollup-master/jquery.scrollUp.min.js"></script> 
+      <!--chartjs plugin--> 
+      <script src="js/plugin/chartjs/chart.min.js"></script> 
+      <script>
+         // initialize sortable
+         $(function () {
+             //ScrollAuto
+             $.scrollUp({
+                 animation: 'slide',
+                 scrollText: '',
+                 scrollImg: true,
+             });
+         });
+         var RadarConfig = {
+             type: 'radar',
+             data: {
+                 labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
+                 datasets: [{
+                     label: "分佈圖",
+                     backgroundColor: "rgba(253,92,99,.43)",
+                     pointBackgroundColor: "rgba(253,92,99,1)",
+                     data: [0, 0, 0, 0, 0]
+                 }]
+             },
+             options: {
+                 legend: {
+                     display: false
+                 },
+         
+                 scale: {
+                     reverse: false,
+                     display: true,
+                     ticks: {
+                         showLabelBackdrop: false,
+                         beginAtZero: true,
+                         backdropColor: '#0061d2',
+                         maxTicksLimit: 5,
+                         max: 10,
+                         fontSize: 5,
+                         backdropPaddingX: 5,
+                         backdropPaddingY: 5
+                     },
+                     gridLines: {
+                         color: "#888888",
+                         lineWidth: 1
+                     },
+                     pointLabels: {                        
+                         fontSize: 8,
+                         fontColor: "#AAAAAA"
+                     }
+                 }
+             }
+         };
+         window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
+         var donutConfig2 = {
+             type: 'pie',
+             data: {
+                 datasets: [{
+                     data: [
+                         28, 11, 31, 23, 7
+                     ],
+                     backgroundColor: [
+                         'rgba(245, 166, 35, .8)',
+                         'rgba(74, 144, 226, .8)',
+                         'rgba(126, 211, 33, .8)',
+                         'rgba(255, 78, 100, .8)',
+                         'rgba(51, 107, 191, .8)',
+                     ],
+                     label: '',
+                     borderWidth: [1, 1, 1, 1]
+                 }],
+                 labels: [
+                     '基本',
+                     '運動技巧',
+                     '肌力',
+                     '心肺',
+                     '恢復'
+                 ]
+             },
+             options: {
+                 responsive: true,
+                 legend: {
+                     display: false
+                 },
+         
+                 title: {
+                     display: false
+                 },
+                 animation: {
+                     animateScale: true,
+                     animateRotate: true
+                 }
+             }
+         };
+
+         var barChartData = {
+         labels: ['2018/01', '2017/02', '2018/03', '2018/04', '2018/05', '2018/06', '2018/07', 
+                        '2018/08', '2018/09', '2018/10', '2018/11', '2018/12'],
+         datasets: [{
+                     backgroundColor: "rgba(253,92,99, .43)",
+                     pointBackgroundColor: "rgba(253,92,99, 1)",
+                     hoverPointBackgroundColor: "#fff",
+                     pointHighlightStroke: "rgba(151,187,205, 1)",
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+             }]
+         };
+          var ctx = document.getElementById('barchart').getContext('2d');
+             window.myBar = new Chart(ctx, {
+                 type: 'bar',
+                 data: barChartData,
+                 options: {
+                 responsive: true,
+                 legend: {
+                    display: false,
+                 },
+                 title: {
+                    display: false,
+                 }
+             }
+         });
+      </script>
+   </body>
+</html>

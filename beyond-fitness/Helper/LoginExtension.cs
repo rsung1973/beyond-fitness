@@ -264,13 +264,16 @@ namespace WebHome.Helper
 
         public static bool IsOfficer(this UserProfile profile)
         {
-            return profile != null && profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Officer);
+            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Officer ||
+                profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Officer));
         }
 
         public static bool IsSysAdmin(this UserProfile profile)
         {
-            return profile != null && profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator;
+            return profile != null && (profile.CurrentUserRole.RoleID == (int)Naming.RoleID.Administrator ||
+                profile.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Administrator));
         }
+
         public static bool IsCoach(this UserProfile profile)
         {
             return profile != null

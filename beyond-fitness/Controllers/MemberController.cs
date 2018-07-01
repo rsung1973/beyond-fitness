@@ -20,7 +20,7 @@ using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
-    [Authorize]
+    [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
     public class MemberController : SampleController<UserProfile>
     {
         public MemberController() : base()
@@ -28,7 +28,7 @@ namespace WebHome.Controllers
 
         }
 
-        [AssistantOrSysAdminAuthorizeAttribute]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult ListCoaches()
         {
             MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
@@ -44,7 +44,7 @@ namespace WebHome.Controllers
             return View("ListCoaches",viewModel);
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult ListLearners(String byName, String message = null)
         {
 
@@ -76,7 +76,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult AddLearner(LearnerViewModel viewModel)
         {
             return View(viewModel);
@@ -332,7 +332,21 @@ namespace WebHome.Controllers
                 item.EmployeeWelfare.MonthlyGiftLessons = viewModel.HasGiftLessons == true ? viewModel.MonthlyGiftLessons : null;
             }
 
-            ProfessionalLevel professionLevel = null;
+            if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Manager
+                                || r == (int)Naming.RoleID.ViceManager
+                                || r == (int)Naming.RoleID.Officer) && !viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach))
+            {
+                item.UserRoleAuthorization.Add(new UserRoleAuthorization
+                {
+                    RoleID = (int)Naming.RoleID.Coach
+                });
+                item.UserRole.Add(new UserRole
+                {
+                    RoleID = (int)Naming.RoleID.Coach
+                });
+            }
+
+                ProfessionalLevel professionLevel = null;
             if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach
                     || r == (int)Naming.RoleID.Manager
                     || r == (int)Naming.RoleID.ViceManager
@@ -673,7 +687,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditCoach(int id)
         {
 
@@ -706,7 +720,7 @@ namespace WebHome.Controllers
 
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditMember(CoachViewModel viewModel)
         {
 
@@ -765,7 +779,7 @@ namespace WebHome.Controllers
 
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult ShowLearner(int id)
         {
             return ShowMember(id);
@@ -773,7 +787,7 @@ namespace WebHome.Controllers
 
 
         [HttpPost]
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditCoach(CoachViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
@@ -846,7 +860,7 @@ namespace WebHome.Controllers
             return ListCoaches();
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditLearner(int id)
         {
             UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();
@@ -881,7 +895,7 @@ namespace WebHome.Controllers
         }
 
         [HttpPost]
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditLearner(LearnerViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
@@ -1558,7 +1572,7 @@ namespace WebHome.Controllers
             return View();
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult PDQ(int id, int? groupID)
         {
             UserProfile profile = HttpContext.GetUser();

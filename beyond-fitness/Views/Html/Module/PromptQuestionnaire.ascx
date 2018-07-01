@@ -54,7 +54,7 @@
             height: "auto",
             title: "<h4 class='modal-title'><i class='fa fa-fw fa-volume-up'></i>  階段性調整計劃</h4>",
             close: function (event, ui) {
-                $('#updateProfileDialog').remove();
+                $('#<%= _dialogID %>').remove();
             }
         });
 
@@ -64,6 +64,9 @@
             if (!validateForm($form[0]))
                 return false;
 
+            $('#<%= _dialogID %> button').prop('disabled', true);
+            $('#<%= _dialogID %> .errormessage').css('display', 'none');
+
             showLoading();
             $form.ajaxSubmit({
                 success: function (data) {
@@ -72,25 +75,27 @@
                         $('#<%= _dialogID %> footer').remove();
                         $('#<%= _dialogID %> .message').css('display', 'block');
                         if (data.result && !data.message) {
-                            $('#questionnaire_link').remove();
                             if ($global.removeQuestionnairePrompt) {
                                 $global.removeQuestionnairePrompt();
                             }
+                        } else {
+                            $('#<%= _dialogID %> button').prop('disabled', false);
                         }
                     } else {
                         $('#<%= _dialogID %> .errormessage').css('display', 'block')
                             .find('p').text(data.message);
+                        $('#<%= _dialogID %> button').prop('disabled', false);
                     }
                 }
             });
         });
 
         $('#<%= _dialogID %> button[name="btnCancel"]').on('click', function (evt) {
+            $('#<%= _dialogID %> button').prop('disabled', true);
             showLoading();
             $.post('<%= Url.Action("RejectQuestionnaire","Interactivity",new { id = _model.QuestionnaireID, status = _profile.UID!=_model.UID ? (int)Naming.IncommingMessageStatus.教練代答 : (int)Naming.IncommingMessageStatus.拒答 }) %>', {}, function (data) {
                 hideLoading();
                 if (data.result && !data.message) {
-                    $('#questionnaire_link').remove();
                     if ($global.removeQuestionnairePrompt) {
                         $global.removeQuestionnairePrompt();
                     }

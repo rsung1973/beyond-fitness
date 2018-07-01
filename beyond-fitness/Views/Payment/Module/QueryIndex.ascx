@@ -49,11 +49,11 @@
                                         <label class="label">依收款人查詢</label>
                                         <label class="select">
                                             <select class="input" name="HandlerID">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsAccounting() || _profile.IsServitor())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsAccounting() || _profile.IsServitor() || _profile.IsOfficer())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant() || _profile.IsAccounting() || _profile.IsServitor())
+                                                <%  if (_profile.IsAssistant() || _profile.IsAccounting() || _profile.IsServitor() || _profile.IsOfficer())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
@@ -83,7 +83,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號">
                                         </label>
                                     </section>
-                                <%  if (_profile.IsAssistant() || _profile.IsAccounting() || _profile.IsServitor())
+                                <%  if (_profile.IsAssistant() || _profile.IsAccounting() || _profile.IsServitor() || _profile.IsOfficer())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>

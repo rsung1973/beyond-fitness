@@ -203,6 +203,30 @@ namespace WebHome.Helper
             });
         }
 
+        public static void RefreshExerciseGameRank()
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                try
+                {
+                    using (var models = new ModelSource<UserProfile>())
+                    {
+                        foreach (var item in models.GetTable<ExerciseGameItem>())
+                        {
+                            models.RefreshExerciseGameRank(item.ExerciseID);
+                        }
+
+                        models.RefreshPersonalRank();
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                }
+            });
+        }
+
         public static void RefreshExerciseGameContestant<TEntity>(this ModelSource<TEntity> models, ExerciseGameContestant contestant)
             where TEntity : class, new()
         {

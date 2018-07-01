@@ -71,7 +71,7 @@
                  %>
         <tr>
             <td nowrap="noWrap">--</td>
-            <td nowrap="noWrap"><%= item.BranchStore.BranchName %></td>
+            <td nowrap="noWrap"><%= item.BranchID.HasValue ? item.BranchStore.BranchName : "其他" %></td>
             <td nowrap="noWrap"><%= item.RegisterLesson.UserProfile.FullName() %></td>
             <td><%= item.RegisterLesson.LessonPriceType.Description  %>(<%= item.RegisterLesson.LessonPriceType.DurationInMinutes %>分鐘)</td>
             <td><%  var halfCount = item.LessonAttendance == null || !item.LessonPlan.CommitAttendance.HasValue ? 1 : 0 ; %>

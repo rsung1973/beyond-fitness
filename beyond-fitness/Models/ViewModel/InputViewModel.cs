@@ -46,6 +46,7 @@ namespace WebHome.Models.ViewModel
         public int? RevisionID { get; set; }
         public bool? Drawback { get; set; }
         public int? SettlementPrice { get; set; }
+        public bool? Renewal { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -167,8 +168,16 @@ namespace WebHome.Models.ViewModel
         public DateTime? ClassTime { get; set; }
         public Naming.LessonQueryType? QueryType { get; set; }
         public Naming.QueryIntervalDefinition? QueryInterval { get; set; }
+    }
 
-
+    public class QuestionnaireQueryViewModel : AchievementQueryViewModel
+    {
+        public QuestionnaireQueryViewModel() : base()
+        {
+            AchievementDateFrom = null;
+        }
+        public String UserName { get; set; }
+        public int? Status { get; set; }
     }
 
     public class TrustQueryViewModel

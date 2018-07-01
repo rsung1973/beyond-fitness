@@ -10,18 +10,18 @@
 
 <script>
     $(function () {
-        $global.promptQuestionnaire = function (registerID) {
+        $global.promptQuestionnaire = function (registerID, questionnaireID) {
             showLoading();
-            $.post('<%= Url.Action("PromptCurrentQuestionnaire", "Html") %>', { 'registerID': registerID }, function (data) {
-                    hideLoading();
-                    if ($.isPlainObject(data)) {
-                        alert(data.message);
-                    } else {
-                        $(data).appendTo($('body'));
-                    }
-                });
-            };
-        });
+            $.post('<%= Url.Action("PromptCurrentQuestionnaire", "Html") %>', { 'registerID': registerID, 'questionnaireID': questionnaireID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        };
+    });
 </script>
 
 <script runat="server">

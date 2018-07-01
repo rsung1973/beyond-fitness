@@ -11,7 +11,7 @@
 <label class="label"><%--<i class="fa-fw fa fa-quora"></i>--%><%=  _model.QuestionNo %>.<%= _model.Question %></label>
 <label class="textarea">
     <i class="icon-append fa fa-comments"></i>
-    <textarea rows="1" name="<%= "_" + _model.QuestionID %>" placeholder="請輸入簡短描述" maxlength="100"><%= _item!=null ? _item.PDQAnswer : null %></textarea>
+    <textarea rows="1" name="<%= "_" + _model.QuestionID %>" placeholder="<%= _item!=null ? _item.PDQAnswer : "請輸入簡短描述" %>" maxlength="100"></textarea>
 </label>
 
 <script runat="server">

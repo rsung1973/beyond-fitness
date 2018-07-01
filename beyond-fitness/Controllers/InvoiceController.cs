@@ -566,7 +566,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting())
+                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
                 {
 
                 }
@@ -775,6 +775,21 @@ namespace WebHome.Controllers
             ViewBag.PrinterIP = printerIP;
             return result;
         }
+
+        [AllowAnonymous]
+        public ActionResult PrintAllowanceImageByUID(InvoiceQueryViewModel viewModel, String printerIP)
+        {
+            var profile = HttpContext.GetUser();
+            if (profile == null)
+            {
+                profile = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+                if (profile != null)
+                    HttpContext.SignOn(profile);
+            }
+
+            return PrintAllowanceImage(viewModel, printerIP);
+        }
+
 
 
         [AllowAnonymous]

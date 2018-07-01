@@ -159,9 +159,7 @@
             (int)Naming.RoleID.Manager,(int)Naming.RoleID.Officer,(int)Naming.RoleID.ViceManager,(int)Naming.RoleID.Servitor};
 
         _items = models.EntityList  //.Where(u => u.LevelID != (int)Naming.MemberStatusDefinition.Deleted)
-            .Join(models.GetTable<UserRole>()
-                .Where(r => roleID.Contains(r.RoleID)),
-            u => u.UID, r => r.UID, (u, r) => u);
+            .Where(u=>u.UserRole.Any(r=>roleID.Contains(r.RoleID)));
     }
 
 </script>

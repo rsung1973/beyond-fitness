@@ -23,7 +23,7 @@
                                     lessonID = item.LessonID
                                 }) %>);'><i class="fa fa-fw fa fa-edit" aria-hidden="true"></i>編輯上課內容</a></li>
         <li class="divider"></li>
-<%  if (_model.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練)
+<%  if (_model.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
     {   %>
         <li><a onclick="bookingSelfTraining(<%= _model.LessonID %>);"><i class="fa fa-fw fa fa-calendar-alt-check-o" aria-hidden="true"></i>修改上課時間</a></li>
 <%  }

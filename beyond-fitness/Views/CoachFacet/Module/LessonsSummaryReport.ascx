@@ -105,8 +105,7 @@
                 <%  } %>
             </td>
         </tr>
-        <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));  %>
+        <%  items = _model.TrialLesson();  %>
         <tr>
             <td nowrap="noWrap">體驗課程<%= reportCount(items.Count(),"") %></td>
             <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
@@ -144,15 +143,15 @@
                 <%  } %>
             </td>
         </tr>
-        <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.內部訓練);  %>
+        <%  items = _model.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.教練PI);  %>
         <tr>
-            <td nowrap="noWrap">內部訓練<%= reportCount(items.Count(),"") %></td>
+            <td nowrap="noWrap">教練P.I<%= reportCount(items.Count(),"") %></td>
             <td nowrap="noWrap" class="text-center"><%= reportCount(coachMarkAttended(items).Count()) %></td>
             <td nowrap="noWrap" class="text-center">
                 <%  listItems = coachToCommit(items);
                     if (listItems.Count() > 0)
                     { %>
-                <a href="javascript:showCoachToCommit(<%= (int)Naming.LessonQueryType.內部訓練 %>,'待辦事項：內部訓練(教練未完成)');" class="undolistDialog_link"><u>(<%= listItems.Count() %>)</u></a>
+                <a href="javascript:showCoachToCommit(<%= (int)Naming.LessonQueryType.教練PI %>,'待辦事項：教練P.I(教練未完成)');" class="undolistDialog_link"><u>(<%= listItems.Count() %>)</u></a>
                 <%  }
                     else
                     { %>
@@ -174,13 +173,13 @@
                 questionnaireItems = questionnaireItems.Where(q => uid.Contains(q.UID));
             }
             %>
-        <tr>
+        <%--<tr>
             <td nowrap="noWrap">階段性調整計劃<%= reportCount(questionnaireItems.Count(),"") %></td>
             <td nowrap="noWrap" class="text-center">--</td>
             <td nowrap="noWrap" class="text-center">--</td>
             <td nowrap="noWrap" class="text-center"><a href="javascript:showQuestionnaire(true,'待辦事項：階段性調整計劃(學員已完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>q.PDQTask.Any()).Count()) %></u></a></td>
             <td nowrap="noWrap" class="text-center"><a href="javascript:showQuestionnaire(false,'待辦事項：階段性調整計劃(學員未完成)');" class="questionnairelist_link"><u><%= reportCount(questionnaireItems.Where(q=>!q.PDQTask.Any()).Count()) %></u></a></td>
-        </tr>
+        </tr>--%>
     </tbody>
 </table>
 <script>
@@ -246,24 +245,7 @@
             });
         };
 
-        $global.checkLessonAttendance = function (lessonID) {
-            var event = event || window.event;
-            var $target = $(event.target)
-            var $a = $target.closest('a');
-            showLoading();
-            $.post('<%= Url.Action("LearnerAttendLesson","Attendance") %>', { 'lessonID': lessonID }, function (data) {
-                hideLoading();
-                if (data) {
-                    if (data.result) {
-                        alert("已完成打卡!!");
-                        $a.remove();
-                    } else {
-                        alert(data.message);
-                    }
-                }
-            });
-        };
-
+        
         $global.rejectQuestionnaire = function (id) {
             var event = event || window.event;
             var $tr = $(event.target).closest('tr');

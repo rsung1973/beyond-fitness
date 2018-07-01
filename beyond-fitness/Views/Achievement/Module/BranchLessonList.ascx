@@ -34,9 +34,7 @@
 
                     int PICount = items.Where(l => l.TrainingBySelf == 1).Count();
 
-                    int trialCount = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程))
-                                            .Count();
+                    int trialCount = items.TrialLesson().Count();
                     int totalCount = PTCount + PICount + trialCount;
                      %>
         <tr>
@@ -53,7 +51,16 @@
             <td nowrap="noWrap" class="text-center"><%= totalCount > 0 ? $"{Math.Round(PICount * 100m / totalCount)}%" : "--" %></td>
             <td nowrap="noWrap" class="text-center"><%= trialCount %></td>
             <td nowrap="noWrap" class="text-center"><%= totalCount > 0 ? $"{Math.Round(trialCount * 100m / totalCount)}%" : "--" %></td>
-            <td nowrap="noWrap" class="text-center"><%= totalCount %></td>
+            <td nowrap="noWrap" class="text-center">
+                <%  if ((_viewModel.AchievementDateTo - _viewModel.AchievementDateFrom)?.TotalDays > 31)
+                    { %>
+                <%= totalCount %>
+                <%  }
+                    else
+                    { %>
+                <a href='javascript:showBranchLessonList(<%= JsonConvert.SerializeObject(new { g.BranchID }) %>);'><u><%= totalCount %></u></a>
+                <%  } %>
+            </td>
         </tr>
         <%      }
             } %>

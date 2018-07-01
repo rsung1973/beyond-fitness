@@ -28,6 +28,7 @@
         _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
 
         var items = _model.PTLesson();
+        var trialItems = _model.TrialLesson();
         var dailyItems = models.GetTable<DailyWorkingHour>()
             .Select(d => new { d.Hour, Items = _model.Where(l => l.HourOfClassTime == d.Hour) });
 
@@ -38,9 +39,7 @@
                 PTCount = items.Where(l => l.HourOfClassTime == t.Hour).Count(),
                 PICount = _model.Where(l => l.HourOfClassTime == t.Hour)
                                 .Where(l => l.TrainingBySelf == 1).Count(),
-                TrialCount = _model.Where(l => l.HourOfClassTime == t.Hour)
-                                .Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count()
+                TrialCount = trialItems.Where(l => l.HourOfClassTime == t.Hour).Count()
             }).ToList();
 
         result = new

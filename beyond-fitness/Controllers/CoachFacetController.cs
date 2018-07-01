@@ -29,9 +29,15 @@ namespace WebHome.Controllers
     public class CoachFacetController : SampleController<UserProfile>
     {
         // GET: CoachFacet
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult Index(DailyBookingQueryViewModel viewModel,bool? showTodoTab)
         {
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.CoachID = viewModel.DecryptKeyValue();
+            }
+
             var profile = HttpContext.GetUser();
             //if (!viewModel.CoachID.HasValue && !profile.IsAssistant())
             //{
@@ -185,7 +191,7 @@ namespace WebHome.Controllers
 
             //if (viewModel.Category == "coach")
             //{
-            //    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練);
+            //    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
             //}
             //else if (viewModel.Category == "trial")
             //{
@@ -238,7 +244,7 @@ namespace WebHome.Controllers
             }
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult RevokeBooking(int lessonID)
         {
             LessonTime item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID).FirstOrDefault();
@@ -259,7 +265,7 @@ namespace WebHome.Controllers
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
             if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
                 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/
-                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.內部訓練
+                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI
                 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
@@ -269,7 +275,7 @@ namespace WebHome.Controllers
 
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult RevokeCoachEvent(int eventID,int uid)
         {
             UserEvent item = models.DeleteAny<UserEvent>(l => l.EventID == eventID && l.UID == uid);

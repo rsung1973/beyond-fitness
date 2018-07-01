@@ -45,6 +45,10 @@
                                     {   %>
                             <%= String.Format("{0:00}",(int)gameRank.ExerciseGameResult.Score/60) %>:<%= String.Format("{0:00}",(int)gameRank.ExerciseGameResult.Score%60) %>
                             <%      }
+                                    else
+                                    {
+                                        Writer.Write("--");
+                                    }
                                 }
                                 else
                                 { %>
@@ -60,8 +64,8 @@
                             <%  } %>
                 </td>
                 <%      }
-                    else
-                    {   %>
+                        else
+                        {   %>
                 <td nowrap="noWrap" class="text-center">-- <%--<span class="badge bg-color-yellow">0P</span>--%></td>
                 <%      }    %>
                 <%  } %>
@@ -73,7 +77,11 @@
                     <%  if (personalRank != null)
                         { %>
                     <%= personalRank.Rank %>
-                    <%  } %>
+                    <%  }
+                        else
+                        {
+                            Writer.Write("--");
+                        } %>
                     <%  if (contestant.Status == (int)Naming.GeneralStatus.Failed)
                         { %>
                         <span class="badge bg-color-red txt-color-white"><i class="fa fa-fw fa-h-square"></i> 退賽</span>

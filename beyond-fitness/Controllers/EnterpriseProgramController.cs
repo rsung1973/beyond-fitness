@@ -31,13 +31,13 @@ namespace WebHome.Controllers
         }
 
         // GET: EnterpriseProgram
-        [AssistantOrSysAdminAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult ProgramIndex()
         {
             return View();
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditEnterpriseContract(EnterpriseContractViewModel viewModel)
         {
             var item = models.GetTable<EnterpriseCourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
@@ -63,7 +63,7 @@ namespace WebHome.Controllers
             return View("~/Views/EnterpriseProgram/Module/EditEnterpriseContract.ascx", item);
         }
 
-        [AssistantOrSysAdminAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult EditProgramDataItem(EnterpriseProgramItemViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -71,7 +71,7 @@ namespace WebHome.Controllers
         }
 
 
-        [AssistantOrSysAdminAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult ApplyProgramDataItem(EnterpriseProgramItemViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -107,7 +107,7 @@ namespace WebHome.Controllers
 
         }
 
-        [AssistantOrSysAdminAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult CommitEnterpriseContract(EnterpriseContractViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -234,7 +234,7 @@ namespace WebHome.Controllers
             }
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult ListMember(EnterpriseContractViewModel viewModel,bool? itemsOnly)
         {
             ViewBag.ViewModel = viewModel;
@@ -292,7 +292,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult CommitMember(EnterpriseGroupMemberViewModel viewModel)
         {
             if(!viewModel.UID.HasValue)
@@ -347,7 +347,7 @@ namespace WebHome.Controllers
 
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult TakeGroupApart(int groupID)
         {
             var item = models.DeleteAny<GroupingLesson>(g => g.GroupID == groupID);
@@ -473,7 +473,7 @@ namespace WebHome.Controllers
             return table;
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult AttendeeSelector(String userName)
         {
             IEnumerable<RegisterLesson> items;
@@ -497,7 +497,7 @@ namespace WebHome.Controllers
             return View("~/Views/EnterpriseProgram/Module/AttendeeSelector.ascx", items);
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult CheckMemberLessonStatus()
         {
             foreach(var profile in models.GetTable<EnterpriseCourseMember>())
@@ -581,7 +581,7 @@ namespace WebHome.Controllers
         }
 
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult CommitBookingByCoach(LessonTimeViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -737,7 +737,7 @@ namespace WebHome.Controllers
             return Json(new { result = true, message = "上課時間預約完成!!" });
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EnterprisePaymentList(EnterpriseContractViewModel viewModel,bool? itemsOnly)
         {
             var item = models.GetTable<EnterpriseCourseContract>().Where(t => t.ContractID == viewModel.ContractID).FirstOrDefault();

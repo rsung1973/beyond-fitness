@@ -82,7 +82,7 @@
                     <%  } %>
                 </ul>
             </div>--%>
-            <%  if (_model.IsAuthorized(new int[] {(int)Naming.RoleID.Administrator,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Officer,(int)Naming.RoleID.Manager }))
+            <%  if (_model.IsAuthorized(new int[] {(int)Naming.RoleID.Administrator,(int)Naming.RoleID.Assistant,(int)Naming.RoleID.Officer }))
                 { %>
             <a onclick="selectCoachFacet();" class="btn bg-color-pinkDark"><i class="fa fa-fw fa-user-circle"></i> 體能顧問</a>
             <%  } %>

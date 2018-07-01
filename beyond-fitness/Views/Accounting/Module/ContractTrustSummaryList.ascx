@@ -32,12 +32,14 @@
                     var totalBookingAmt = item.ContractTrustSettlement.Sum(s => s.BookingTrustAmount);%>
                 <%= String.Format("{0:##,###,###,##0}",totalInitialAmt.AdjustTrustAmount()) %></td>
             <td nowrap="noWrap" class="text-right">
-                <%  var totalAmt = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount);
+                <%  var totalAmt =  item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount);
                     int T_Amt = totalAmt ?? 0;  %>
                 <%= totalAmt.HasValue && totalAmt!=0  ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
             <td nowrap="noWrap" class="text-right">
-                <%  totalAmt = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0).Select(s => s.CourseContract).Sum(c => c.TotalCost);  //item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); 
+                <%  totalAmt = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0)
+                            .Join(_model.Where(t => t.TrustType == "B"), s => s.ContractID, t => t.ContractID, (s, t) => s)
+                            .Select(s => s.CourseContract).Sum(c => c.TotalCost);  //item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); 
                     int B_Amt = totalAmt ?? 0;  %>
                 <%= totalAmt.HasValue ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>
@@ -126,12 +128,14 @@
     ModelSource<UserProfile> models;
     String _tableId = "trustSummary" + DateTime.Now.Ticks;
     IQueryable<Settlement> _items;
+    IQueryable<ContractTrustTrack> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<ContractTrustTrack>)this.Model;
         _items = (IQueryable<Settlement>)ViewBag.DataItems;
     }
 

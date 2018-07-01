@@ -504,6 +504,9 @@ namespace WebHome.Models.DataEntity
     partial void InsertLessonTime(LessonTime instance);
     partial void UpdateLessonTime(LessonTime instance);
     partial void DeleteLessonTime(LessonTime instance);
+    partial void InsertQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
+    partial void UpdateQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
+    partial void DeleteQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1805,6 +1808,14 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<LessonTime>();
+			}
+		}
+		
+		public System.Data.Linq.Table<QuestionnaireCoachBypass> QuestionnaireCoachBypass
+		{
+			get
+			{
+				return this.GetTable<QuestionnaireCoachBypass>();
 			}
 		}
 		
@@ -5254,6 +5265,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<PersonalExercisePurpose> _PersonalExercisePurpose;
 		
+		private EntitySet<QuestionnaireCoachBypass> _QuestionnaireCoachBypass;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -5351,6 +5364,7 @@ namespace WebHome.Models.DataEntity
 			this._Payment = new EntitySet<Payment>(new Action<Payment>(this.attach_Payment), new Action<Payment>(this.detach_Payment));
 			this._ExerciseGameContestant = default(EntityRef<ExerciseGameContestant>);
 			this._PersonalExercisePurpose = default(EntityRef<PersonalExercisePurpose>);
+			this._QuestionnaireCoachBypass = new EntitySet<QuestionnaireCoachBypass>(new Action<QuestionnaireCoachBypass>(this.attach_QuestionnaireCoachBypass), new Action<QuestionnaireCoachBypass>(this.detach_QuestionnaireCoachBypass));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6403,6 +6417,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_QuestionnaireCoachBypass", Storage="_QuestionnaireCoachBypass", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<QuestionnaireCoachBypass> QuestionnaireCoachBypass
+		{
+			get
+			{
+				return this._QuestionnaireCoachBypass;
+			}
+			set
+			{
+				this._QuestionnaireCoachBypass.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -6974,6 +7001,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_Payment(Payment entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_QuestionnaireCoachBypass(QuestionnaireCoachBypass entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_QuestionnaireCoachBypass(QuestionnaireCoachBypass entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -13716,6 +13755,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<PDQTask> _PDQTask;
 		
+		private EntityRef<QuestionnaireCoachBypass> _QuestionnaireCoachBypass;
+		
 		private EntityRef<LevelExpression> _LevelExpression;
 		
 		private EntityRef<PDQGroup> _PDQGroup;
@@ -13745,6 +13786,7 @@ namespace WebHome.Models.DataEntity
 		public QuestionnaireRequest()
 		{
 			this._PDQTask = new EntitySet<PDQTask>(new Action<PDQTask>(this.attach_PDQTask), new Action<PDQTask>(this.detach_PDQTask));
+			this._QuestionnaireCoachBypass = default(EntityRef<QuestionnaireCoachBypass>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._PDQGroup = default(EntityRef<PDQGroup>);
 			this._RegisterLesson = default(EntityRef<RegisterLesson>);
@@ -13898,6 +13940,35 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._PDQTask.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="QuestionnaireRequest_QuestionnaireCoachBypass", Storage="_QuestionnaireCoachBypass", ThisKey="QuestionnaireID", OtherKey="QuestionnaireID", IsUnique=true, IsForeignKey=false)]
+		public QuestionnaireCoachBypass QuestionnaireCoachBypass
+		{
+			get
+			{
+				return this._QuestionnaireCoachBypass.Entity;
+			}
+			set
+			{
+				QuestionnaireCoachBypass previousValue = this._QuestionnaireCoachBypass.Entity;
+				if (((previousValue != value) 
+							|| (this._QuestionnaireCoachBypass.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._QuestionnaireCoachBypass.Entity = null;
+						previousValue.QuestionnaireRequest = null;
+					}
+					this._QuestionnaireCoachBypass.Entity = value;
+					if ((value != null))
+					{
+						value.QuestionnaireRequest = this;
+					}
+					this.SendPropertyChanged("QuestionnaireCoachBypass");
+				}
 			}
 		}
 		
@@ -21312,6 +21383,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<bool> _Installment;
 		
+		private System.Nullable<bool> _Renewal;
+		
 		private EntitySet<RegisterLessonContract> _RegisterLessonContract;
 		
 		private EntitySet<CourseContractMember> _CourseContractMember;
@@ -21384,6 +21457,8 @@ namespace WebHome.Models.DataEntity
     partial void OnEffectiveDateChanged();
     partial void OnInstallmentChanging(System.Nullable<bool> value);
     partial void OnInstallmentChanged();
+    partial void OnRenewalChanging(System.Nullable<bool> value);
+    partial void OnRenewalChanged();
     #endregion
 		
 		public CourseContract()
@@ -21787,6 +21862,26 @@ namespace WebHome.Models.DataEntity
 					this._Installment = value;
 					this.SendPropertyChanged("Installment");
 					this.OnInstallmentChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Renewal", DbType="Bit")]
+		public System.Nullable<bool> Renewal
+		{
+			get
+			{
+				return this._Renewal;
+			}
+			set
+			{
+				if ((this._Renewal != value))
+				{
+					this.OnRenewalChanging(value);
+					this.SendPropertyChanging();
+					this._Renewal = value;
+					this.SendPropertyChanged("Renewal");
+					this.OnRenewalChanged();
 				}
 			}
 		}
@@ -23594,6 +23689,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<bool> _RegisterStatus;
 		
+		private string _LineID;
+		
 		private EntityRef<UserProfile> _UserProfile;
 		
     #region Extensibility Method Definitions
@@ -23622,6 +23719,8 @@ namespace WebHome.Models.DataEntity
     partial void OnSignatureChanged();
     partial void OnRegisterStatusChanging(System.Nullable<bool> value);
     partial void OnRegisterStatusChanged();
+    partial void OnLineIDChanging(string value);
+    partial void OnLineIDChanged();
     #endregion
 		
 		public UserProfileExtension()
@@ -23850,6 +23949,26 @@ namespace WebHome.Models.DataEntity
 					this._RegisterStatus = value;
 					this.SendPropertyChanged("RegisterStatus");
 					this.OnRegisterStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LineID", DbType="NVarChar(64)")]
+		public string LineID
+		{
+			get
+			{
+				return this._LineID;
+			}
+			set
+			{
+				if ((this._LineID != value))
+				{
+					this.OnLineIDChanging(value);
+					this.SendPropertyChanging();
+					this._LineID = value;
+					this.SendPropertyChanged("LineID");
+					this.OnLineIDChanged();
 				}
 			}
 		}
@@ -45062,6 +45181,174 @@ namespace WebHome.Models.DataEntity
 		{
 			this.SendPropertyChanging();
 			entity.LessonTime = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.QuestionnaireCoachBypass")]
+	public partial class QuestionnaireCoachBypass : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _QuestionnaireID;
+		
+		private int _UID;
+		
+		private EntityRef<QuestionnaireRequest> _QuestionnaireRequest;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnQuestionnaireIDChanging(int value);
+    partial void OnQuestionnaireIDChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    #endregion
+		
+		public QuestionnaireCoachBypass()
+		{
+			this._QuestionnaireRequest = default(EntityRef<QuestionnaireRequest>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_QuestionnaireID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int QuestionnaireID
+		{
+			get
+			{
+				return this._QuestionnaireID;
+			}
+			set
+			{
+				if ((this._QuestionnaireID != value))
+				{
+					if (this._QuestionnaireRequest.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnQuestionnaireIDChanging(value);
+					this.SendPropertyChanging();
+					this._QuestionnaireID = value;
+					this.SendPropertyChanged("QuestionnaireID");
+					this.OnQuestionnaireIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="QuestionnaireRequest_QuestionnaireCoachBypass", Storage="_QuestionnaireRequest", ThisKey="QuestionnaireID", OtherKey="QuestionnaireID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public QuestionnaireRequest QuestionnaireRequest
+		{
+			get
+			{
+				return this._QuestionnaireRequest.Entity;
+			}
+			set
+			{
+				QuestionnaireRequest previousValue = this._QuestionnaireRequest.Entity;
+				if (((previousValue != value) 
+							|| (this._QuestionnaireRequest.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._QuestionnaireRequest.Entity = null;
+						previousValue.QuestionnaireCoachBypass = null;
+					}
+					this._QuestionnaireRequest.Entity = value;
+					if ((value != null))
+					{
+						value.QuestionnaireCoachBypass = this;
+						this._QuestionnaireID = value.QuestionnaireID;
+					}
+					else
+					{
+						this._QuestionnaireID = default(int);
+					}
+					this.SendPropertyChanged("QuestionnaireRequest");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_QuestionnaireCoachBypass", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.QuestionnaireCoachBypass.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.QuestionnaireCoachBypass.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	

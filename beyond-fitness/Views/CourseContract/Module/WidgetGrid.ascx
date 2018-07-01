@@ -48,11 +48,11 @@
                                         <label class="label">依體能顧問查詢</label>
                                         <label class="select">
                                             <select name="FitnessConsultant" class="input">
-                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
+                                                <%  if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsOfficer())
                                                     { %>
                                                 <option value="">全部</option>
                                                 <%  } %>
-                                                <%  if (_profile.IsAssistant())
+                                                <%  if (_profile.IsAssistant() || _profile.IsOfficer())
                                                     {
                                                         Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                                     }
@@ -82,7 +82,7 @@
                                             <input type="text" name="ContractNo" class="form-control input" maxlength="20" placeholder="請輸入合約編號" />
                                         </label>
                                     </section>
-                                    <%  if (_profile.IsAssistant())
+                                    <%  if (_profile.IsAssistant() || _profile.IsOfficer())
                                     { %>
                                     <section class="col col-xs-12 col-sm-6 col-md-3">
                                         <label class="label">或依分店查詢</label>

@@ -526,7 +526,7 @@ namespace WebHome.Controllers
                 case Naming.RoleID.ViceManager:
                 case Naming.RoleID.Officer:
                 case Naming.RoleID.Assistant:
-                    return RedirectToAction("Index", "CoachFacet", new { CoachID = item.UID });
+                    return RedirectToAction("Index", "CoachFacet", new { KeyID = item.UID.EncryptKey() });
 
                 //case Naming.RoleID.Assistant:
                 //    return RedirectToAction("Index", "CoachFacet");

@@ -93,8 +93,7 @@
                     var scopeItems = items.Where(t => t.HourOfClassTime == h.Hour);
                     yield return scopeItems.PTLesson().Count()
                             + scopeItems.Where(l => l.TrainingBySelf == 1).Count()
-                            + scopeItems.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count();
+                            + scopeItems.TrialLesson().Count();
                 }
                 break;
             case 1:
@@ -103,8 +102,7 @@
                     var scopeItems = items.Where(t => t.ClassTime >= g && t.ClassTime < g.AddDays(1));
                     yield return scopeItems.PTLesson().Count()
                             + scopeItems.Where(l => l.TrainingBySelf == 1).Count()
-                            + scopeItems.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count();
+                            + scopeItems.TrialLesson().Count();
 
                 }
                 break;
@@ -114,8 +112,7 @@
                     var scopeItems = items.Where(t => t.ClassTime >= g && t.ClassTime < g.AddMonths(1));
                     yield return scopeItems.PTLesson().Count()
                             + scopeItems.Where(l => l.TrainingBySelf == 1).Count()
-                            + scopeItems.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程)).Count();
+                            + scopeItems.TrialLesson().Count();
 
                 }
                 break;

@@ -16,7 +16,7 @@
                     <label class="label">請選擇上課教練</label>
                     <label class="select">
                         <select name="CoachID">
-                            <%  if (_profile.IsAssistant())
+                            <%  if (_profile.IsAssistant() || _profile.IsOfficer())
                                 {
                                     Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>());
                                 }

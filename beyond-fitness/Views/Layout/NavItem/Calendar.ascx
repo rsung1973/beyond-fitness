@@ -7,12 +7,13 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
+<%@ Import Namespace="WebHome.Models.ViewModel" %>
 
 <%  if (_userProfile != null
-    && (_userProfile.IsSysAdmin() || _userProfile.IsCoach() || _userProfile.IsAssistant()))
+    && (_userProfile.IsSysAdmin() || _userProfile.IsCoach() || _userProfile.IsAssistant() || _userProfile.IsOfficer()))
     { %>
 <li>
-    <a href="<%= Url.Action("Index","CoachFacet",new { CoachID = _userProfile.IsCoach() ? (int?)_userProfile.UID : null }) %>" title="行事曆"><i class="far fa-lg fa-fw fa-calendar-check"></i><span class="menu-item-parent">行事曆</span></a>
+    <a href="<%= Url.Action("Index","CoachFacet",new { KeyID = _userProfile.IsCoach() || _userProfile.IsAssistant() ? _userProfile.UID.EncryptKey() : null }) %>" title="行事曆"><i class="far fa-lg fa-fw fa-calendar-check"></i><span class="menu-item-parent">行事曆</span></a>
 </li>
 <%  } %>
 

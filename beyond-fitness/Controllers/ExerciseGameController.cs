@@ -195,5 +195,11 @@ namespace WebHome.Controllers
             return Json(new { result = true });
 
         }
+
+        public ActionResult RefreshExerciseGameRank()
+        {
+            ExerciseGameExtensionMethods.RefreshExerciseGameRank();
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

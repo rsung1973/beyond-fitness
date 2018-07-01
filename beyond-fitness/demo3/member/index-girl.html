@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>BEYOND FITNESS - 卡片總覽</title>
+      <!-- CSS  -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- materialize  -->
+      <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <!-- livIconsevo  -->
+      <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
+      <!-- scrollup-master  -->
+      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
+      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <!-- STYLE 要放最下面  -->
+      <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+   </head>
+   <body>
+      <div class="wrapper">
+         <div class="wrapper-fixed">
+            <!--Header -->
+            <nav class="white" role="navigation">
+               <div class="nav-wrapper container">
+                  <a id="logo-container" href="#" class="brand-logo center" ><img src="images/Nav-logo-black.png" title="BEYOND FITNESS" alt="BEYOND FITNESS"></a>
+                  <ul class="right hide-on-med-and-down">
+                     <li>
+                        <a href="calendar-girl.html">
+                           <div class="livicon-evo" data-options="name: calendar.svg; size: 40px; style: lines; strokeColor:#fd5c63; strokeWidth:2px; autoPlay:true"></div>
+                        </a>
+                     </li>
+                  </ul>
+                  <!-- 側邊選單 -->
+                  <ul id="slide-out" class="side-nav">
+                     <li>
+                        <div class="user-view">
+                           <div class="background"><img src="images/carousel/background4.jpg"></div>
+                           <a href="personal-settings-girl.html"><img class="circle" src="images/avatars/garfaild.png"></a> <a href="personal-settings-girl.html"><span class="white-text name">劉加菲（garfaild）</span></a> <a href="index-marketing.html"><span class="white-text email">登出</span></a> 
+                        </div>
+                     </li>
+                     <li><a href="calendar-girl.html">我的行事曆</a></li>
+                     <li><a href="notice-girl.html">我的通知 <span class="btn-floating waves-effect waves-light btn-notice red">4</span></a></li>
+                     <li><a href="goal-girl.html">我的目標</a></li>
+                     <li><a href="personal-settings-girl.html">我的設定</a></li>
+                     <li><a href="points-exchange-girl.html">兌換我的獎品</a></li>
+                     <li><a href="navigation.html">新手上路</a></li>
+                     <!--
+                        <li><div class="divider"></div></li>
+                           <li><a class="subheader">Subheader</a></li>
+                           <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+                        -->
+                  </ul>
+                  <a href="calendar-girl.html" data-activates="slide-out" class="button-collapse">
+                     <div class="livicon-evo" data-options="name: morph-menu-collapse.svg; size: 40px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></div>
+                  </a>
+                  <!-- // End of 側邊選單 --> 
+               </div>
+            </nav>
+            <!-- // End of Header --> 
+            <!-- main -->
+            <div class="main">
+               <div class="container">
+                  <!-- 訊息通知 -->
+                  <div class="notice-block">
+                     <ul id="dropdown1" class="dropdown-content notice-dropdown">
+                        <li>
+                           <a href="check-in-girl.html">
+                           親愛的，還有 2 堂課沒打卡
+                           <i class="material-icons right">arrow_forward</i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="qa-girl.html">
+                           親愛的，來挑戰運動小學堂
+                           <i class="material-icons right">arrow_forward</i>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="navigation.html">
+                           親愛的，跟著 Beyond 走，新手導航去
+                           <i class="material-icons right">arrow_forward</i>
+                           </a>
+                        </li>                         
+                        <li>
+                           <a href="#">
+                           親愛的，合約即將到期（2018/01/01）
+                           <i class="livicon-evo right" data-options="name: bell.svg; size: 30px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i>
+                           </a>
+                        </li>
+                     </ul>
+                     <ul class="hide-on-med-and-down">
+                        <!-- Dropdown Trigger -->
+                        <li>
+                           <a class="dropdown-button" data-activates="dropdown1">
+                           <span class="btn-floating waves-effect waves-light btn-notice red">4</span>提醒通知
+                           <i class="material-icons right">keyboard_arrow_down</i>
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+                  <!-- // End of 活動通知 --> 
+                  <!-- 累計運動時間 -->
+                  <div class="notice-block">
+                     <ul id="dropdown2" class="dropdown-content notice-dropdown ">
+                     </ul>
+                     <ul class="hide-on-med-and-down notice-non">
+                        <!-- Dropdown Trigger -->
+                        <li><a class="dropdown-button" data-activates="dropdown2">本月：<span class="f-green countuptime" data-endVal="859">859</span>分鐘（<span class="f-green countuptime" data-endVal="14">14</span>小時:<span class="f-green countuptime" data-endVal="19">19</span>分鐘）</a></li>
+                     </ul>
+                  </div>
+                  <!-- // End of 活動通知 --> 
+                  <!-- 體能分析圖 -->
+                  <div class="goal-block">
+                     <h3>體能分析庫</h3>
+                     <div id="" div class="parallax-container" onclick="javascript:window.location.assign('chart-girl.html');">
+                        <div class="section no-pad-bot">
+                           <div class="container">
+                              <div style="width: 100%; margin: 0 auto 10px;">
+                                 <canvas id="radarChart"></canvas>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="parallax white"></div>
+                     </div>
+                  </div>
+                  <!-- // End of 體能分析圖 -->                     
+                  <!-- 個人目標 -->
+                  <div class="goal-block" onclick="javascript:window.location.assign('goal.html');">
+                     <h3>我的目標</h3>
+                     <div id="" class="parallax-container">
+                        <div class="section no-pad-bot">
+                           <div class="container">
+                              <div class="text-area">
+                                 <h4>週期性目標 - 耐力期</h4>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="parallax"><img src="images/carousel/background0.jpg" alt="Unsplashed background img 1"></div>
+                     </div>
+                  </div>
+                  <!-- // End of 個人目標 --> 
+                  <!-- 課表內容 Slider -->
+                  <div class="class-block">
+                     <h3>課表內容</h3>
+                     <div class="carousel carousel-slider center " data-indicators="true">
+                        <div class="carousel-fixed-item center middle-indicator">
+                           <div class="left"> <a href="Previo" class="movePrevCarousel middle-indicator-text waves-effect waves-light content-indicator"><i class="material-icons left  middle-indicator-text">chevron_left</i></a> </div>
+                           <div class="right"> <a href="Siguiente" class=" moveNextCarousel middle-indicator-text waves-effect waves-light content-indicator"><i class="material-icons right middle-indicator-text">chevron_right</i></a> </div>
+                        </div>
+                        <div class="carousel-item red white-text">
+                           <img src="images/carousel/background5.jpg" alt="Unsplashed background img 1">
+                           <div class="container">
+                              <div class="text-area" onclick="javascript:window.location.assign('lesson.html');">
+                                 <h4>課程日期 - 2018/05/17 14:00-15:00</h4>
+                                 <p class="white-text left">肌力/燃脂</p>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item amber white-text" >
+                           <img src="images/carousel/background6.jpg" alt="Unsplashed background img 2">
+                           <div class="container">
+                              <div class="text-area" onclick="javascript:window.location.assign('lesson.html');">
+                                 <h4>課程日期 - 2018/05/21 15:00-16:00 </h4>
+                                 <p class="white-text left">功能性整合</p>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item green white-text" >
+                           <img src="images/carousel/background7.jpg" alt="Unsplashed background img 3">
+                           <div class="container" onclick="javascript:window.location.assign('lesson.html');">
+                              <div class="text-area">
+                                 <h4>課程日期 - 2018/06/06 16:00-17:00</h4>
+                                 <p class="white-text left"></p>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item green white-text" >
+                           <img src="images/carousel/background8.jpg" alt="Unsplashed background img 4">
+                           <div class="container" onclick="javascript:window.location.assign('lesson.html');">
+                              <div class="text-area">
+                                 <h4>課程日期 - 2018/06/18 12:00-13:00</h4>
+                                 <p class="white-text left"></p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- // End of 課表內容 Slider -->                    
+                  <!-- 專業文章 Slider -->
+                  <div class="article-block">
+                     <h3>專業文章</h3>
+                     <div class="carousel carousel-slider center " data-indicators="true">
+                        <div class="carousel-fixed-item center middle-indicator">
+                           <div class="left"> <a href="Previo" class="movePrevCarousel middle-indicator-text waves-effect waves-light content-indicator"><i class="material-icons left  middle-indicator-text">chevron_left</i></a> </div>
+                           <div class="right"> <a href="Siguiente" class=" moveNextCarousel middle-indicator-text waves-effect waves-light content-indicator"><i class="material-icons right middle-indicator-text">chevron_right</i></a> </div>
+                        </div>
+                        <div class="carousel-item red white-text" href="#one!">
+                           <img src="images/carousel/background4.jpg" alt="Unsplashed background img 1">
+                           <div class="container">
+                              <div class="text-area" >
+                                 <h4>感冒能運動嗎？</h4>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item amber white-text" href="#two!">
+                           <img src="images/carousel/background10.jpg" alt="Unsplashed background img 2">
+                           <div class="container">
+                              <div class="text-area" >
+                                 <h4>肌肉痠痛還可以運動嗎？</h4>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="carousel-item green white-text" href="#three!">
+                           <img src="images/carousel/background11.jpg" alt="Unsplashed background img 3">
+                           <div class="container">
+                              <div class="text-area" >
+                                 <h4>訓練喝肌酸有什麼用處呢？</h4>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- // End of 專業文章 Slider --> 
+                  <!-- 點數兌換 -->
+                  <div class="points-block">
+                     <h3>兌換我的獎品</h3>
+                     <div id="" div class="parallax-container parallax-min" onclick="javascript:window.location.assign('points-exchange.html');">
+                        <div class="section no-pad-bot">
+                           <div class="container">
+                              <div class="points-text-area">
+                                 <h5>目前已參加運動小學堂<span class="f-green"> 5 </span>次囉！</h5>
+                                 <p class="white-text">答題正確率已達 <span class="f-green"> 20%</span>，就讀運動幼幼班，再接再厲！</p>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="parallax bgcolor"></div>
+                     </div>
+                  </div>
+                  <!-- // End of 點數兌換 --> 
+               </div>
+            </div>
+            <!-- // End of main --> 
+         </div>
+         <!--// End of wrapper-fixed--> 
+         <!-- Footer -->
+         <footer class="page-footer teal">
+            <div class="footer-copyright">
+               <div class="container"><a class="brown-text text-lighten-3" href="#">BEYOND FITNESS</a> </div>
+            </div>
+         </footer>
+         <!-- // End of Footer --> 
+      </div>
+      <!--// End of wrapper-->        
+      <!--  Scripts--> 
+      <script src="js/libs/jquery-2.2.4.min.js"></script> 
+      <script src="js/materialize.js"></script> 
+      <script src="js/init.js"></script>
+      <!-- LivIconsEvo  -->
+      <script src="js/plugin/LivIconsEvo/tools/snap.svg-min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/TweenMax.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/DrawSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/MorphSVGPlugin.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/tools/verge.min.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.Tools.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.defaults.js"></script>
+      <script src="js/plugin/LivIconsEvo/LivIconsEvo.js"></script> 
+      <!-- scrollup-master  -->
+      <script src="js/plugin/scrollup-master/jquery.scrollUp.min.js"></script>
+      <!--counup plugin-->
+      <script src="js/plugin/countup/countUp.min.js"></script>
+      <!--chartjs plugin-->
+      <script src="js/plugin/chartjs/chart.min.js"></script>
+      <script> 
+         $(function () {
+             $.scrollUp({
+                 animation: 'fade',
+                 activeOverlay: '#00FFFF',
+                 scrollImg: {
+                     active: true,
+                     type: 'background',
+                     src: '../images/top.png'
+                 }
+             });
+             //countup
+             $('.countuptime').each(function() {
+                 // no need to specify options unless they differ from the defaults
+                 var target = this;
+                 var endVal = parseInt($(this).attr('data-endVal'));
+                 theAnimation = new countUp(target, 0, endVal, 0, 2.5);
+                 theAnimation.start();
+             });   
+         
+         });
+         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
+         $('.image-switch').addClass('active');          
+              
+          
+          var RadarConfig = {
+          type: 'radar',
+          data: {
+            labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
+            datasets: [{
+                label: "分佈圖",
+                backgroundColor: "rgba(253,92,99,.43)",
+               pointBackgroundColor: "rgba(253,92,99,1)",
+                data: [6, 6, 7, 10, 8]
+            }]
+          },
+          options: {
+            legend: {
+               display:false
+            },
+            
+            scale: {
+              reverse: false,
+                       display: true,
+              ticks: {
+                         showLabelBackdrop: false,
+                beginAtZero: true,
+                         backdropColor: '#0061d2',
+                         maxTicksLimit: 5,
+                         max: 10,
+                         fontSize: 5,
+                         backdropPaddingX: 5,
+                         backdropPaddingY: 5
+              },
+                       gridLines: {
+                           color: "#888888",
+                           lineWidth: 1
+                       },
+                       pointLabels: {
+                           fontSize: 12,
+                           fontColor: "#AAAAAA"
+                       }
+            }
+          }
+          };
+          window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
+      </script>
+   </body>
+</html>

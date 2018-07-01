@@ -10,6 +10,7 @@
 
 <script>
 
+    debugger;
     $(function () {
 
         if ($global.chartJS == undefined) {
@@ -34,7 +35,9 @@
                                     ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
 
                                     // Just naively convert to string for now
-                                    var dataString = dataset.data[index].toString();
+                                    var dataString = '';
+                                    if(dataset.data[index])
+                                        dataString = dataset.data[index].toString();
 
                                     // Make sure alignment settings are correct
                                     ctx.textAlign = 'center';
@@ -50,6 +53,11 @@
                         });
                     }
                 });
+
+                if ($global.initGraph) {
+                    $global.initGraph();
+                }
+
             });
         } else {
 

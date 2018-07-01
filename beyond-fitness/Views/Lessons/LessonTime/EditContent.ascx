@@ -34,7 +34,7 @@
                 </div>
                 <%  var prefix = "content" + _model.RegisterID + "_"; %>
                 <ul id="widget-tab-1" class="nav nav-tabs pull-right">
-                    <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                    <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                         { %>
                     <%--<li class="active contentTab">
                         <a data-toggle="tab" href="#<%= prefix %>5"><i class="fa fa-commenting-o"></i><span>教練悄悄話</span></a>
@@ -52,7 +52,7 @@
                     <li class="active contentTab">
                         <a data-toggle="tab" class="editLessonTab" href="#<%= prefix %>2"><i class="fa fa-heartbeat"></i><span>訓練內容</span></a>
                     </li>
-                    <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                    <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                         { %>
                     <%--<li class="contentTab">
                         <a data-toggle="tab" href="#<%= prefix %>3"><i class="fa fa-comments-o"></i><span>課後提醒</span></a>
@@ -120,7 +120,7 @@
                         <%  } %>
                         </div>
                         <!-- end s2 tab pane -->
-                        <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.內部訓練)
+                        <%  if (_item.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
                             { %>
                         <%--<div class="tab-pane fade widget-body no-padding-bottom" id="<%= prefix %>3">
                             <div class="panel-body status">
@@ -172,7 +172,7 @@
                         </div>
                         <%  } %>
                         <!-- end s4 tab pane -->
-                        <%  if(_item.RegisterLesson.LessonPriceType.Status!=(int)Naming.DocumentLevelDefinition.內部訓練)
+                        <%  if(_item.RegisterLesson.LessonPriceType.Status!=(int)Naming.DocumentLevelDefinition.教練PI)
                             { %>
                         <%--<div class="tab-pane fade active widget-body in no-padding-bottom" id="<%= prefix %>5">
                             <div class="panel-body status">

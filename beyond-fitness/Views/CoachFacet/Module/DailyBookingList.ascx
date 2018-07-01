@@ -19,6 +19,7 @@
                 <th>類別</th>
                 <th>學員</th>
                 <th data-hide="phone">體能顧問</th>
+                <th data-hide="phone">上課地點</th>
                 <th data-hide="phone">目前狀態</th>
                 <th data-hide="phone">課表重點</th>
             </tr>
@@ -40,6 +41,7 @@
                 </td>
                 <td><%= String.Join("/",item.GroupingLesson.RegisterLesson.Select(r=>r.UserProfile.RealName)) %></td>
                 <td><%= item.AsAttendingCoach.UserProfile.FullName() %></td>
+                <td><%= item.BranchID.HasValue ? item.BranchStore.BranchName : "其他" %></td>
                 <td>
                     <a onclick="$global.showLearnerLesson(<%= item.GroupingLesson.RegisterLesson.Select(r=>r.UID).FirstOrDefault() %>,<%= item.LessonID %>);" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa-lg fa-eye" aria-hidden="true"></i> </a>
                     <%  
@@ -53,7 +55,7 @@
                         }) %>);'
                         class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>
                     <%  if (!item.LessonPlan.CommitAttendance.HasValue 
-                            && (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager()) 
+                            && (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsOfficer()) 
                             && item.ClassTime<DateTime.Today.AddDays(1)
                             && item.TrainingBySelf!=2)
                         { %>
@@ -118,13 +120,31 @@
             }
         });
 
-        $global.showLearnerLesson = function (uid,lessonID) {
+        $global.showLearnerLesson = function (uid, lessonID) {
             showLoading();
             $.post('<%= Url.Action("LearnerRecentLessons","ClassFacet") %>', { 'uid': uid, 'lessonID': lessonID }, function (data) {
                 $(data).appendTo($('body'));
                 hideLoading();
             });
-        }
+        };
+
+        $global.checkLessonAttendance = function (lessonID) {
+            var event = event || window.event;
+            var $target = $(event.target)
+            var $a = $target.closest('a');
+            showLoading();
+            $.post('<%= Url.Action("LearnerAttendLesson","Attendance") %>', { 'lessonID': lessonID }, function (data) {
+                hideLoading();
+                if (data) {
+                    if (data.result) {
+                        alert("已完成打卡!!");
+                        $a.remove();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        };
 
     });
     </script>

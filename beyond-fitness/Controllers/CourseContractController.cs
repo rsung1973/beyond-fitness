@@ -52,7 +52,7 @@ namespace WebHome.Controllers
             return View(item);
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult EditCourseContract(CourseContractViewModel viewModel,bool? viewOnly)
         {
 
@@ -73,6 +73,7 @@ namespace WebHome.Controllers
                 viewModel.Status = item.Status;
                 viewModel.UID = item.CourseContractMember.Select(m => m.UID).ToArray();
                 viewModel.BranchID = item.CourseContractExtension.BranchID;
+                viewModel.Renewal = item.Renewal;
             }
 
             ViewBag.ViewModel = viewModel;
@@ -80,7 +81,7 @@ namespace WebHome.Controllers
             return View("~/Views/CourseContract/Module/EditCourseContract.ascx", item);
         }
 
-        [CoachOrAssistantAuthorize]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult DeleteCourseContract(int contractID)
         {
             bool result = false;
@@ -406,7 +407,7 @@ namespace WebHome.Controllers
             }
 
             var profile = HttpContext.GetUser();
-            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager())
+            if (profile.IsAssistant() || profile.IsManager() || profile.IsViceManager() || profile.IsOfficer())
             {
 
             }
@@ -542,6 +543,7 @@ namespace WebHome.Controllers
             item.PriceID = viewModel.PriceID.Value;
             item.Remark = viewModel.Remark;
             item.FitnessConsultant = viewModel.FitnessConsultant.Value;
+            item.Renewal = viewModel.Renewal;
             //item.Status = viewModel.Status;
             if (viewModel.UID != null && viewModel.UID.Length > 0)
             {
@@ -570,6 +572,12 @@ namespace WebHome.Controllers
             {
                 ModelState.AddModelError("ContractType", "請選擇合約名稱!!");
             }
+
+            if (!viewModel.Renewal.HasValue)
+            {
+                ModelState.AddModelError("Renewal", "請選擇是否為舊學員續約!!");
+            }
+
             if (!viewModel.PriceID.HasValue)
             {
                 ModelState.AddModelError("PriceID", "請選擇課程單價!!");
@@ -1277,7 +1285,7 @@ namespace WebHome.Controllers
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant())
+                if (profile.IsAssistant() || profile.IsOfficer())
                 {
 
                 }
