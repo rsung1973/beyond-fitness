@@ -793,6 +793,9 @@ namespace WebHome.Helper
             DateTime? quarterEnd = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
             DateTime quarterStart = quarterEnd.Value.AddMonths(-3);
 
+            if (models.GetTable<CoachRating>().Any(g => g.CoachID == item.CoachID && g.RatingDate >= quarterEnd))
+                return;
+
             var attendanceCount = models.GetLessonAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
             var PISessionCount = models.GetPISessionAttendance(item.CoachID, quarterStart, ref quarterEnd, null, null).Count();
             attendanceCount += ((PISessionCount + 1) / 2);
@@ -1665,18 +1668,25 @@ namespace WebHome.Helper
             }
         }
 
-        public static IQueryable<LessonTime> LearnerGetUncheckedLessons<TEntity>(this UserProfile profile, ModelSource<TEntity> models)
+        public static IQueryable<LessonTime> LearnerGetUncheckedLessons<TEntity>(this UserProfile profile, ModelSource<TEntity> models,bool includeAfterToday = false)
             where TEntity : class, new()
         {
             return models.GetTable<LessonTime>()
                 .Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
                 .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID))
-                .GetLearnerUncheckedLessons();
+                .GetLearnerUncheckedLessons(includeAfterToday);
         }
 
-        public static IQueryable<LessonTime> GetLearnerUncheckedLessons(this IQueryable<LessonTime> items)
+        public static IQueryable<LessonTime> GetLearnerUncheckedLessons(this IQueryable<LessonTime> items, bool includeAfterToday = false)
         {
-            return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1));
+            if (includeAfterToday)
+            {
+                return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue);
+            }
+            else
+            {
+                return items.Where(l => !l.LessonPlan.CommitAttendance.HasValue && l.ClassTime < DateTime.Today.AddDays(1));
+            }
         }
 
         public static void AssignLessonAttendingCoach(this LessonTime item, ServingCoach coach)
@@ -1760,6 +1770,11 @@ namespace WebHome.Helper
                                 }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
         }
 
+        public static bool IsTrialLesson(this LessonTime item)
+        {
+            return item.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
+                                    || (item.RegisterLesson.RegisterLessonEnterprise != null && item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程);
+        }
         public static IQueryable<LessonTime> TrialLesson(this IQueryable<LessonTime> items)
         {
             return items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程

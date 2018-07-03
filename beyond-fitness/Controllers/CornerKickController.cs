@@ -111,7 +111,7 @@ namespace WebHome.Controllers
             }
 
             viewModel.PID = viewModel.PID.GetEfficientString();
-            if (viewModel.PID == null)
+            if (viewModel.PID == null || !Regex.IsMatch(viewModel.PID, "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*"))
             {
                 ModelState.AddModelError("PID", "電子信箱資料錯誤，請確認後再重新輸入!!");
             }
@@ -149,7 +149,7 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = ModelState;
             }
 
-            if (!item.IsLearner())
+            if (item.UserProfileExtension.CurrentTrial == 1 || !item.IsLearner())
             {
                 ModelState.AddModelError("PID", "您輸入的資料錯誤，請確認後再重新輸入!!");
             }
@@ -230,8 +230,6 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 HttpContext.SignOn(item);
-                List<TimelineEvent> events = new List<TimelineEvent>();
-
                 return View(item);
             }
             else
@@ -248,5 +246,108 @@ namespace WebHome.Controllers
             return View();
         }
 
+        public ActionResult AG001_CheckAttendance(RegisterViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)AG001_Notice(viewModel);
+            UserProfile item = result.Model as UserProfile;
+
+            if(item!=null)
+            {
+                result.ViewName = "AG001_CheckAttendance";
+            }
+
+            return result;
+        }
+
+        [Authorize]
+        public ActionResult AG001_LearnerToCheckAttendance()
+        {
+            var profile = HttpContext.GetUser().LoadInstance(models);
+            return View("AG001_CheckAttendance", profile);
+        }
+
+
+        public ActionResult AG001_AttendanceAccomplished(RegisterViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult AG001_CommitAttendance(LearnerQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser().LoadInstance(models);
+
+            if(viewModel.LessonID!=null && viewModel.LessonID.Length>0)
+            {
+                foreach (var item in models.GetTable<LessonTime>().Where(l => viewModel.LessonID.Contains(l.LessonID)))
+                {
+                    if (item.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID))
+                    {
+                        item.LessonPlan.CommitAttendance = DateTime.Now;
+                        models.SubmitChanges();
+                    }
+                }
+            }
+
+            return View("AG001_CheckAttendance",profile);
+
+        }
+
+        [Authorize]
+        public ActionResult AnswerDailyQuestion()
+        {
+            var profile = HttpContext.GetUser();
+            var item = models.PromptLearnerDailyQuestion(profile);
+            return View("AnswerDailyQuestion", item);
+        }
+
+        [Authorize]
+        public ActionResult CommitAnswerDailyQuestion(DailyQuestionViewModel viewModel)
+        {
+
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.QuestionID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID).FirstOrDefault();
+            if (item == null)
+            {
+                return AnswerDailyQuestion();
+            }
+
+            if (models.GetTable<PDQTask>().Any(t => t.UID == profile.UID
+                 && t.TaskDate >= DateTime.Today && t.TaskDate < DateTime.Today.AddDays(1)
+                 && t.PDQQuestion.GroupID == 6))
+            {
+                return AnswerDailyQuestion();
+            }
+
+            var taskItem = new PDQTask
+            {
+                QuestionID = item.QuestionID,
+                SuggestionID = viewModel.SuggestionID,
+                UID = profile.UID,
+                TaskDate = DateTime.Now
+            };
+            models.GetTable<PDQTask>().InsertOnSubmit(taskItem);
+            models.SubmitChanges();
+
+            if (item.PDQSuggestion.Any(s => s.SuggestionID == viewModel.SuggestionID && s.RightAnswer == true))
+            {
+                if (item.PDQQuestionExtension != null)
+                {
+                    taskItem.PDQTaskBonus = new PDQTaskBonus { };
+                    models.SubmitChanges();
+                }
+            }
+
+            return AnswerDailyQuestion();
+        }
     }
 }

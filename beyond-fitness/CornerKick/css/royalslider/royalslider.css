@@ -1,0 +1,138 @@
+.royalSlider {
+	width: 600px; height: 400px; position: relative; direction: ltr;
+}
+.royalSlider > * {
+	float: left;
+}
+.rsWebkit3d.rsFade .rsSlide {
+	-webkit-transform: none;
+}
+.rsWebkit3d.rsFade img {
+	-webkit-transform: none;
+}
+.rsWebkit3d.rsFade .rsContainer {
+	-webkit-transform: none;
+}
+.rsOverflow {
+	width: 100%; height: 100%; overflow: hidden; float: left; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rsVisibleNearbyWrap {
+	left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rsVisibleNearbyWrap .rsOverflow {
+	left: 0px; top: 0px; position: absolute;
+}
+.rsContainer {
+	width: 100%; height: 100%; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rsArrow {
+	cursor: pointer;
+}
+.rsThumbsArrow {
+	cursor: pointer;
+}
+.rsThumb {
+	float: left; position: relative;
+}
+.rsArrow {
+	transition:opacity 0.3s linear; opacity: 1; -webkit-transition: opacity 0.3s linear; -moz-transition: opacity 0.3s linear; -o-transition: opacity 0.3s linear;
+}
+.rsNav {
+	transition:opacity 0.3s linear; opacity: 1; -webkit-transition: opacity 0.3s linear; -moz-transition: opacity 0.3s linear; -o-transition: opacity 0.3s linear;
+}
+.rsThumbsArrow {
+	transition:opacity 0.3s linear; opacity: 1; -webkit-transition: opacity 0.3s linear; -moz-transition: opacity 0.3s linear; -o-transition: opacity 0.3s linear;
+}
+.rsHidden {
+	transition:visibility 0s linear 0.3s, opacity 0.3s linear; visibility: hidden; opacity: 0; -webkit-transition: visibility 0s linear 0.3s, opacity 0.3s linear; -moz-transition: visibility 0s linear 0.3s, opacity 0.3s linear; -o-transition: visibility 0s linear 0.3s, opacity 0.3s linear;
+}
+.rsGCaption {
+	width: 100%; text-align: center; float: left;
+}
+.rsFullscreen.royalSlider {
+	margin: 0px !important; padding: 0px !important; left: 0px !important; top: 0px !important; width: auto !important; height: auto !important; right: 0px !important; bottom: 0px !important; position: fixed !important; z-index: 2147483647 !important;
+}
+.royalSlider .rsFakePreloader.rsSlide {
+	transition:all; display: none; opacity: 1 !important; -webkit-transition: 0s; -moz-transition: 0s; -o-transition: 0s;
+}
+.rsSlide {
+	left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; display: block; position: absolute;
+}
+.rsAutoHeight.royalSlider {
+	height: auto;
+}
+.rsAutoHeight .rsSlide {
+	height: auto;
+}
+.rsContent {
+	width: 100%; height: 100%; position: relative;
+}
+.rsPreloader {
+	position: absolute; z-index: 0;
+}
+.rsNav {
+	-moz-user-select: -moz-none; -webkit-user-select: none; user-select: none;
+}
+.rsNavItem {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0.25);
+}
+.rsThumbs {
+	overflow: hidden; float: left; position: relative; z-index: 22; cursor: pointer;
+}
+.rsTabs {
+	background: none !important; float: left;
+}
+.rsTabs {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rsThumbs {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rsVideoContainer {
+	width: auto; height: auto; line-height: 0; position: relative;
+}
+.rsVideoFrameHolder {
+	background: rgb(20, 20, 20); left: 0px; top: 0px; position: absolute; opacity: 0; -webkit-transition: .3s;
+}
+.rsVideoActive.rsVideoFrameHolder {
+	opacity: 1;
+}
+.rsVideoContainer iframe {
+	left: 0px; top: 0px; width: 100%; height: 100%; position: absolute; z-index: 50;
+}
+.rsVideoContainer video {
+	left: 0px; top: 0px; width: 100%; height: 100%; position: absolute; z-index: 50;
+}
+.rsVideoContainer embed {
+	left: 0px; top: 0px; width: 100%; height: 100%; position: absolute; z-index: 50;
+}
+.rsVideoContainer .rsVideoObj {
+	left: 0px; top: 0px; width: 100%; height: 100%; position: absolute; z-index: 50;
+}
+.rsIOSVideo.rsVideoContainer iframe {
+	padding-right: 44px; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
+}
+.rsIOSVideo.rsVideoContainer video {
+	padding-right: 44px; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
+}
+.rsIOSVideo.rsVideoContainer embed {
+	padding-right: 44px; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
+}
+.rsABlock {
+	left: 0px; top: 0px; position: absolute; z-index: 15;
+}
+img.rsImg {
+	max-width: none;
+}
+.grab-cursor {
+	
+}
+.grabbing-cursor {
+	
+}
+.rsNoDrag {
+	cursor: auto;
+}
+.rsLink {
+	background: url("blank.gif"); left: 0px; top: 0px; width: 100%; height: 100%; display: block; position: absolute; z-index: 20;
+}

@@ -111,6 +111,7 @@ namespace WebHome.Models.ViewModel
         public String IDNo { get; set; }
         public int? UID { get; set; }
         public int? CoachID { get; set; }
+        public int?[] LessonID { get; set; }
     }
 
     public class PaymentViewModel : InvoiceViewModel

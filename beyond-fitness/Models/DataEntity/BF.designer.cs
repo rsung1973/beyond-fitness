@@ -207,9 +207,6 @@ namespace WebHome.Models.DataEntity
     partial void InsertGroupEvent(GroupEvent instance);
     partial void UpdateGroupEvent(GroupEvent instance);
     partial void DeleteGroupEvent(GroupEvent instance);
-    partial void InsertUserEvent(UserEvent instance);
-    partial void UpdateUserEvent(UserEvent instance);
-    partial void DeleteUserEvent(UserEvent instance);
     partial void InsertCoachWorkplace(CoachWorkplace instance);
     partial void UpdateCoachWorkplace(CoachWorkplace instance);
     partial void DeleteCoachWorkplace(CoachWorkplace instance);
@@ -507,6 +504,12 @@ namespace WebHome.Models.DataEntity
     partial void InsertQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
     partial void UpdateQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
     partial void DeleteQuestionnaireCoachBypass(QuestionnaireCoachBypass instance);
+    partial void InsertUserEvent(UserEvent instance);
+    partial void UpdateUserEvent(UserEvent instance);
+    partial void DeleteUserEvent(UserEvent instance);
+    partial void InsertSystemEventBulletin(SystemEventBulletin instance);
+    partial void UpdateSystemEventBulletin(SystemEventBulletin instance);
+    partial void DeleteSystemEventBulletin(SystemEventBulletin instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1016,14 +1019,6 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<GroupEvent>();
-			}
-		}
-		
-		public System.Data.Linq.Table<UserEvent> UserEvent
-		{
-			get
-			{
-				return this.GetTable<UserEvent>();
 			}
 		}
 		
@@ -1816,6 +1811,22 @@ namespace WebHome.Models.DataEntity
 			get
 			{
 				return this.GetTable<QuestionnaireCoachBypass>();
+			}
+		}
+		
+		public System.Data.Linq.Table<UserEvent> UserEvent
+		{
+			get
+			{
+				return this.GetTable<UserEvent>();
+			}
+		}
+		
+		public System.Data.Linq.Table<SystemEventBulletin> SystemEventBulletin
+		{
+			get
+			{
+				return this.GetTable<SystemEventBulletin>();
 			}
 		}
 		
@@ -5225,8 +5236,6 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<GroupEvent> _GroupEvent;
 		
-		private EntitySet<UserEvent> _UserEvent;
-		
 		private EntitySet<UserSignature> _UserSignature;
 		
 		private EntitySet<CourseContractMember> _CourseContractMember;
@@ -5266,6 +5275,8 @@ namespace WebHome.Models.DataEntity
 		private EntityRef<PersonalExercisePurpose> _PersonalExercisePurpose;
 		
 		private EntitySet<QuestionnaireCoachBypass> _QuestionnaireCoachBypass;
+		
+		private EntitySet<UserEvent> _UserEvent;
 		
 		private EntityRef<Attachment> _Attachment;
 		
@@ -5344,7 +5355,6 @@ namespace WebHome.Models.DataEntity
 			this._BodyDiagnosis = new EntitySet<BodyDiagnosis>(new Action<BodyDiagnosis>(this.attach_BodyDiagnosis), new Action<BodyDiagnosis>(this.detach_BodyDiagnosis));
 			this._ConductedBodyDiagnosis = new EntitySet<BodyDiagnosis>(new Action<BodyDiagnosis>(this.attach_ConductedBodyDiagnosis), new Action<BodyDiagnosis>(this.detach_ConductedBodyDiagnosis));
 			this._GroupEvent = new EntitySet<GroupEvent>(new Action<GroupEvent>(this.attach_GroupEvent), new Action<GroupEvent>(this.detach_GroupEvent));
-			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
 			this._UserSignature = new EntitySet<UserSignature>(new Action<UserSignature>(this.attach_UserSignature), new Action<UserSignature>(this.detach_UserSignature));
 			this._CourseContractMember = new EntitySet<CourseContractMember>(new Action<CourseContractMember>(this.attach_CourseContractMember), new Action<CourseContractMember>(this.detach_CourseContractMember));
 			this._CourseContract = new EntitySet<CourseContract>(new Action<CourseContract>(this.attach_CourseContract), new Action<CourseContract>(this.detach_CourseContract));
@@ -5365,6 +5375,7 @@ namespace WebHome.Models.DataEntity
 			this._ExerciseGameContestant = default(EntityRef<ExerciseGameContestant>);
 			this._PersonalExercisePurpose = default(EntityRef<PersonalExercisePurpose>);
 			this._QuestionnaireCoachBypass = new EntitySet<QuestionnaireCoachBypass>(new Action<QuestionnaireCoachBypass>(this.attach_QuestionnaireCoachBypass), new Action<QuestionnaireCoachBypass>(this.detach_QuestionnaireCoachBypass));
+			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6093,19 +6104,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserEvent", Storage="_UserEvent", ThisKey="UID", OtherKey="UID")]
-		public EntitySet<UserEvent> UserEvent
-		{
-			get
-			{
-				return this._UserEvent;
-			}
-			set
-			{
-				this._UserEvent.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserSignature", Storage="_UserSignature", ThisKey="UID", OtherKey="UID")]
 		public EntitySet<UserSignature> UserSignature
 		{
@@ -6427,6 +6425,19 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._QuestionnaireCoachBypass.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserEvent", Storage="_UserEvent", ThisKey="UID", OtherKey="UID")]
+		public EntitySet<UserEvent> UserEvent
+		{
+			get
+			{
+				return this._UserEvent;
+			}
+			set
+			{
+				this._UserEvent.Assign(value);
 			}
 		}
 		
@@ -6814,18 +6825,6 @@ namespace WebHome.Models.DataEntity
 			entity.UserProfile = null;
 		}
 		
-		private void attach_UserEvent(UserEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = this;
-		}
-		
-		private void detach_UserEvent(UserEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserProfile = null;
-		}
-		
 		private void attach_UserSignature(UserSignature entity)
 		{
 			this.SendPropertyChanging();
@@ -7013,6 +7012,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_QuestionnaireCoachBypass(QuestionnaireCoachBypass entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_UserEvent(UserEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_UserEvent(UserEvent entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -18199,370 +18210,6 @@ namespace WebHome.Models.DataEntity
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserEvent")]
-	public partial class UserEvent : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _EventID;
-		
-		private int _UID;
-		
-		private string _Title;
-		
-		private System.DateTime _StartDate;
-		
-		private System.DateTime _EndDate;
-		
-		private string _ActivityProgram;
-		
-		private string _Accompanist;
-		
-		private System.Nullable<int> _BranchID;
-		
-		private System.Nullable<int> _EventType;
-		
-		private EntitySet<GroupEvent> _GroupEvent;
-		
-		private EntityRef<UserProfile> _UserProfile;
-		
-		private EntityRef<BranchStore> _BranchStore;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnEventIDChanging(int value);
-    partial void OnEventIDChanged();
-    partial void OnUIDChanging(int value);
-    partial void OnUIDChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnStartDateChanging(System.DateTime value);
-    partial void OnStartDateChanged();
-    partial void OnEndDateChanging(System.DateTime value);
-    partial void OnEndDateChanged();
-    partial void OnActivityProgramChanging(string value);
-    partial void OnActivityProgramChanged();
-    partial void OnAccompanistChanging(string value);
-    partial void OnAccompanistChanged();
-    partial void OnBranchIDChanging(System.Nullable<int> value);
-    partial void OnBranchIDChanged();
-    partial void OnEventTypeChanging(System.Nullable<int> value);
-    partial void OnEventTypeChanged();
-    #endregion
-		
-		public UserEvent()
-		{
-			this._GroupEvent = new EntitySet<GroupEvent>(new Action<GroupEvent>(this.attach_GroupEvent), new Action<GroupEvent>(this.detach_GroupEvent));
-			this._UserProfile = default(EntityRef<UserProfile>);
-			this._BranchStore = default(EntityRef<BranchStore>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int EventID
-		{
-			get
-			{
-				return this._EventID;
-			}
-			set
-			{
-				if ((this._EventID != value))
-				{
-					this.OnEventIDChanging(value);
-					this.SendPropertyChanging();
-					this._EventID = value;
-					this.SendPropertyChanged("EventID");
-					this.OnEventIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
-		public int UID
-		{
-			get
-			{
-				return this._UID;
-			}
-			set
-			{
-				if ((this._UID != value))
-				{
-					if (this._UserProfile.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUIDChanging(value);
-					this.SendPropertyChanging();
-					this._UID = value;
-					this.SendPropertyChanged("UID");
-					this.OnUIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
-		public string Title
-		{
-			get
-			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime NOT NULL")]
-		public System.DateTime StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime NOT NULL")]
-		public System.DateTime EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityProgram", DbType="NVarChar(256)")]
-		public string ActivityProgram
-		{
-			get
-			{
-				return this._ActivityProgram;
-			}
-			set
-			{
-				if ((this._ActivityProgram != value))
-				{
-					this.OnActivityProgramChanging(value);
-					this.SendPropertyChanging();
-					this._ActivityProgram = value;
-					this.SendPropertyChanged("ActivityProgram");
-					this.OnActivityProgramChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Accompanist", DbType="NVarChar(256)")]
-		public string Accompanist
-		{
-			get
-			{
-				return this._Accompanist;
-			}
-			set
-			{
-				if ((this._Accompanist != value))
-				{
-					this.OnAccompanistChanging(value);
-					this.SendPropertyChanging();
-					this._Accompanist = value;
-					this.SendPropertyChanged("Accompanist");
-					this.OnAccompanistChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchID", DbType="Int")]
-		public System.Nullable<int> BranchID
-		{
-			get
-			{
-				return this._BranchID;
-			}
-			set
-			{
-				if ((this._BranchID != value))
-				{
-					if (this._BranchStore.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnBranchIDChanging(value);
-					this.SendPropertyChanging();
-					this._BranchID = value;
-					this.SendPropertyChanged("BranchID");
-					this.OnBranchIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType", DbType="Int")]
-		public System.Nullable<int> EventType
-		{
-			get
-			{
-				return this._EventType;
-			}
-			set
-			{
-				if ((this._EventType != value))
-				{
-					this.OnEventTypeChanging(value);
-					this.SendPropertyChanging();
-					this._EventType = value;
-					this.SendPropertyChanged("EventType");
-					this.OnEventTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserEvent_GroupEvent", Storage="_GroupEvent", ThisKey="EventID", OtherKey="EventID")]
-		public EntitySet<GroupEvent> GroupEvent
-		{
-			get
-			{
-				return this._GroupEvent;
-			}
-			set
-			{
-				this._GroupEvent.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserEvent", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
-		public UserProfile UserProfile
-		{
-			get
-			{
-				return this._UserProfile.Entity;
-			}
-			set
-			{
-				UserProfile previousValue = this._UserProfile.Entity;
-				if (((previousValue != value) 
-							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._UserProfile.Entity = null;
-						previousValue.UserEvent.Remove(this);
-					}
-					this._UserProfile.Entity = value;
-					if ((value != null))
-					{
-						value.UserEvent.Add(this);
-						this._UID = value.UID;
-					}
-					else
-					{
-						this._UID = default(int);
-					}
-					this.SendPropertyChanged("UserProfile");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_UserEvent", Storage="_BranchStore", ThisKey="BranchID", OtherKey="BranchID", IsForeignKey=true)]
-		public BranchStore BranchStore
-		{
-			get
-			{
-				return this._BranchStore.Entity;
-			}
-			set
-			{
-				BranchStore previousValue = this._BranchStore.Entity;
-				if (((previousValue != value) 
-							|| (this._BranchStore.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._BranchStore.Entity = null;
-						previousValue.UserEvent.Remove(this);
-					}
-					this._BranchStore.Entity = value;
-					if ((value != null))
-					{
-						value.UserEvent.Add(this);
-						this._BranchID = value.BranchID;
-					}
-					else
-					{
-						this._BranchID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("BranchStore");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_GroupEvent(GroupEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserEvent = this;
-		}
-		
-		private void detach_GroupEvent(GroupEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.UserEvent = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CoachWorkplace")]
 	public partial class CoachWorkplace : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -23028,8 +22675,6 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<RegisterLesson> _RegisterLesson;
 		
-		private EntitySet<UserEvent> _UserEvent;
-		
 		private EntitySet<CoachWorkplace> _CoachWorkplace;
 		
 		private EntitySet<LessonPriceType> _LessonPriceType;
@@ -23041,6 +22686,8 @@ namespace WebHome.Models.DataEntity
 		private EntitySet<EnterpriseCourseContract> _EnterpriseCourseContract;
 		
 		private EntitySet<LessonTime> _LessonTime;
+		
+		private EntitySet<UserEvent> _UserEvent;
 		
 		private EntityRef<UserProfile> _Manager;
 		
@@ -23065,13 +22712,13 @@ namespace WebHome.Models.DataEntity
 		public BranchStore()
 		{
 			this._RegisterLesson = new EntitySet<RegisterLesson>(new Action<RegisterLesson>(this.attach_RegisterLesson), new Action<RegisterLesson>(this.detach_RegisterLesson));
-			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
 			this._CoachWorkplace = new EntitySet<CoachWorkplace>(new Action<CoachWorkplace>(this.attach_CoachWorkplace), new Action<CoachWorkplace>(this.detach_CoachWorkplace));
 			this._LessonPriceType = new EntitySet<LessonPriceType>(new Action<LessonPriceType>(this.attach_LessonPriceType), new Action<LessonPriceType>(this.detach_LessonPriceType));
 			this._PaymentTransaction = new EntitySet<PaymentTransaction>(new Action<PaymentTransaction>(this.attach_PaymentTransaction), new Action<PaymentTransaction>(this.detach_PaymentTransaction));
 			this._CourseContractExtension = new EntitySet<CourseContractExtension>(new Action<CourseContractExtension>(this.attach_CourseContractExtension), new Action<CourseContractExtension>(this.detach_CourseContractExtension));
 			this._EnterpriseCourseContract = new EntitySet<EnterpriseCourseContract>(new Action<EnterpriseCourseContract>(this.attach_EnterpriseCourseContract), new Action<EnterpriseCourseContract>(this.detach_EnterpriseCourseContract));
 			this._LessonTime = new EntitySet<LessonTime>(new Action<LessonTime>(this.attach_LessonTime), new Action<LessonTime>(this.detach_LessonTime));
+			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
 			this._Manager = default(EntityRef<UserProfile>);
 			this._ViceManager = default(EntityRef<UserProfile>);
 			this._Organization = default(EntityRef<Organization>);
@@ -23183,19 +22830,6 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_UserEvent", Storage="_UserEvent", ThisKey="BranchID", OtherKey="BranchID")]
-		public EntitySet<UserEvent> UserEvent
-		{
-			get
-			{
-				return this._UserEvent;
-			}
-			set
-			{
-				this._UserEvent.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_CoachWorkplace", Storage="_CoachWorkplace", ThisKey="BranchID", OtherKey="BranchID")]
 		public EntitySet<CoachWorkplace> CoachWorkplace
 		{
@@ -23271,6 +22905,19 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._LessonTime.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_UserEvent", Storage="_UserEvent", ThisKey="BranchID", OtherKey="BranchID")]
+		public EntitySet<UserEvent> UserEvent
+		{
+			get
+			{
+				return this._UserEvent;
+			}
+			set
+			{
+				this._UserEvent.Assign(value);
 			}
 		}
 		
@@ -23408,18 +23055,6 @@ namespace WebHome.Models.DataEntity
 			entity.BranchStore = null;
 		}
 		
-		private void attach_UserEvent(UserEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.BranchStore = this;
-		}
-		
-		private void detach_UserEvent(UserEvent entity)
-		{
-			this.SendPropertyChanging();
-			entity.BranchStore = null;
-		}
-		
 		private void attach_CoachWorkplace(CoachWorkplace entity)
 		{
 			this.SendPropertyChanging();
@@ -23487,6 +23122,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_LessonTime(LessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = null;
+		}
+		
+		private void attach_UserEvent(UserEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.BranchStore = this;
+		}
+		
+		private void detach_UserEvent(UserEvent entity)
 		{
 			this.SendPropertyChanging();
 			entity.BranchStore = null;
@@ -45349,6 +44996,597 @@ namespace WebHome.Models.DataEntity
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.UserEvent")]
+	public partial class UserEvent : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _EventID;
+		
+		private int _UID;
+		
+		private string _Title;
+		
+		private System.DateTime _StartDate;
+		
+		private System.DateTime _EndDate;
+		
+		private string _ActivityProgram;
+		
+		private string _Accompanist;
+		
+		private System.Nullable<int> _BranchID;
+		
+		private System.Nullable<int> _EventType;
+		
+		private System.Nullable<int> _SystemEventID;
+		
+		private EntitySet<GroupEvent> _GroupEvent;
+		
+		private EntityRef<BranchStore> _BranchStore;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+		private EntityRef<SystemEventBulletin> _SystemEventBulletin;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnEventIDChanging(int value);
+    partial void OnEventIDChanged();
+    partial void OnUIDChanging(int value);
+    partial void OnUIDChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.DateTime value);
+    partial void OnEndDateChanged();
+    partial void OnActivityProgramChanging(string value);
+    partial void OnActivityProgramChanged();
+    partial void OnAccompanistChanging(string value);
+    partial void OnAccompanistChanged();
+    partial void OnBranchIDChanging(System.Nullable<int> value);
+    partial void OnBranchIDChanged();
+    partial void OnEventTypeChanging(System.Nullable<int> value);
+    partial void OnEventTypeChanged();
+    partial void OnSystemEventIDChanging(System.Nullable<int> value);
+    partial void OnSystemEventIDChanged();
+    #endregion
+		
+		public UserEvent()
+		{
+			this._GroupEvent = new EntitySet<GroupEvent>(new Action<GroupEvent>(this.attach_GroupEvent), new Action<GroupEvent>(this.detach_GroupEvent));
+			this._BranchStore = default(EntityRef<BranchStore>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			this._SystemEventBulletin = default(EntityRef<SystemEventBulletin>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int EventID
+		{
+			get
+			{
+				return this._EventID;
+			}
+			set
+			{
+				if ((this._EventID != value))
+				{
+					this.OnEventIDChanging(value);
+					this.SendPropertyChanging();
+					this._EventID = value;
+					this.SendPropertyChanged("EventID");
+					this.OnEventIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="Int NOT NULL")]
+		public int UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime NOT NULL")]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime NOT NULL")]
+		public System.DateTime EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActivityProgram", DbType="NVarChar(256)")]
+		public string ActivityProgram
+		{
+			get
+			{
+				return this._ActivityProgram;
+			}
+			set
+			{
+				if ((this._ActivityProgram != value))
+				{
+					this.OnActivityProgramChanging(value);
+					this.SendPropertyChanging();
+					this._ActivityProgram = value;
+					this.SendPropertyChanged("ActivityProgram");
+					this.OnActivityProgramChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Accompanist", DbType="NVarChar(256)")]
+		public string Accompanist
+		{
+			get
+			{
+				return this._Accompanist;
+			}
+			set
+			{
+				if ((this._Accompanist != value))
+				{
+					this.OnAccompanistChanging(value);
+					this.SendPropertyChanging();
+					this._Accompanist = value;
+					this.SendPropertyChanged("Accompanist");
+					this.OnAccompanistChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchID", DbType="Int")]
+		public System.Nullable<int> BranchID
+		{
+			get
+			{
+				return this._BranchID;
+			}
+			set
+			{
+				if ((this._BranchID != value))
+				{
+					if (this._BranchStore.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIDChanging(value);
+					this.SendPropertyChanging();
+					this._BranchID = value;
+					this.SendPropertyChanged("BranchID");
+					this.OnBranchIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventType", DbType="Int")]
+		public System.Nullable<int> EventType
+		{
+			get
+			{
+				return this._EventType;
+			}
+			set
+			{
+				if ((this._EventType != value))
+				{
+					this.OnEventTypeChanging(value);
+					this.SendPropertyChanging();
+					this._EventType = value;
+					this.SendPropertyChanged("EventType");
+					this.OnEventTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SystemEventID", DbType="Int")]
+		public System.Nullable<int> SystemEventID
+		{
+			get
+			{
+				return this._SystemEventID;
+			}
+			set
+			{
+				if ((this._SystemEventID != value))
+				{
+					if (this._SystemEventBulletin.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnSystemEventIDChanging(value);
+					this.SendPropertyChanging();
+					this._SystemEventID = value;
+					this.SendPropertyChanged("SystemEventID");
+					this.OnSystemEventIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserEvent_GroupEvent", Storage="_GroupEvent", ThisKey="EventID", OtherKey="EventID")]
+		public EntitySet<GroupEvent> GroupEvent
+		{
+			get
+			{
+				return this._GroupEvent;
+			}
+			set
+			{
+				this._GroupEvent.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BranchStore_UserEvent", Storage="_BranchStore", ThisKey="BranchID", OtherKey="BranchID", IsForeignKey=true)]
+		public BranchStore BranchStore
+		{
+			get
+			{
+				return this._BranchStore.Entity;
+			}
+			set
+			{
+				BranchStore previousValue = this._BranchStore.Entity;
+				if (((previousValue != value) 
+							|| (this._BranchStore.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BranchStore.Entity = null;
+						previousValue.UserEvent.Remove(this);
+					}
+					this._BranchStore.Entity = value;
+					if ((value != null))
+					{
+						value.UserEvent.Add(this);
+						this._BranchID = value.BranchID;
+					}
+					else
+					{
+						this._BranchID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("BranchStore");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_UserEvent", Storage="_UserProfile", ThisKey="UID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.UserEvent.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.UserEvent.Add(this);
+						this._UID = value.UID;
+					}
+					else
+					{
+						this._UID = default(int);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SystemEventBulletin_UserEvent", Storage="_SystemEventBulletin", ThisKey="SystemEventID", OtherKey="EventID", IsForeignKey=true, DeleteRule="CASCADE")]
+		public SystemEventBulletin SystemEventBulletin
+		{
+			get
+			{
+				return this._SystemEventBulletin.Entity;
+			}
+			set
+			{
+				SystemEventBulletin previousValue = this._SystemEventBulletin.Entity;
+				if (((previousValue != value) 
+							|| (this._SystemEventBulletin.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._SystemEventBulletin.Entity = null;
+						previousValue.UserEvent.Remove(this);
+					}
+					this._SystemEventBulletin.Entity = value;
+					if ((value != null))
+					{
+						value.UserEvent.Add(this);
+						this._SystemEventID = value.EventID;
+					}
+					else
+					{
+						this._SystemEventID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("SystemEventBulletin");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_GroupEvent(GroupEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserEvent = this;
+		}
+		
+		private void detach_GroupEvent(GroupEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserEvent = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SystemEventBulletin")]
+	public partial class SystemEventBulletin : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _EventID;
+		
+		private string _Title;
+		
+		private System.DateTime _StartDate;
+		
+		private System.DateTime _EndDate;
+		
+		private EntitySet<UserEvent> _UserEvent;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnEventIDChanging(int value);
+    partial void OnEventIDChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.DateTime value);
+    partial void OnEndDateChanged();
+    #endregion
+		
+		public SystemEventBulletin()
+		{
+			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EventID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int EventID
+		{
+			get
+			{
+				return this._EventID;
+			}
+			set
+			{
+				if ((this._EventID != value))
+				{
+					this.OnEventIDChanging(value);
+					this.SendPropertyChanging();
+					this._EventID = value;
+					this.SendPropertyChanged("EventID");
+					this.OnEventIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime NOT NULL")]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime NOT NULL")]
+		public System.DateTime EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SystemEventBulletin_UserEvent", Storage="_UserEvent", ThisKey="EventID", OtherKey="SystemEventID")]
+		public EntitySet<UserEvent> UserEvent
+		{
+			get
+			{
+				return this._UserEvent;
+			}
+			set
+			{
+				this._UserEvent.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_UserEvent(UserEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.SystemEventBulletin = this;
+		}
+		
+		private void detach_UserEvent(UserEvent entity)
+		{
+			this.SendPropertyChanging();
+			entity.SystemEventBulletin = null;
 		}
 	}
 	

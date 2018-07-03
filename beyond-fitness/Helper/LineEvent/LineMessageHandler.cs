@@ -92,6 +92,7 @@ namespace WebHome.Helper.LineEvent
                 List<ImageMapAction> actions = new List<ImageMapAction>();
                 actions.Add(new UriImageMapAction($"{url.Scheme}://{url.Host}:{url.Port}{VirtualPathUtility.ToAbsolute("~/CornerKick/AG001_Index")}?lineID={CurrentProfile.UserId}", new ImageMapArea(0, 0, 720, 360)));
                 actions.Add(new UriImageMapAction($"{url.Scheme}://{url.Host}:{url.Port}{VirtualPathUtility.ToAbsolute("~/CornerKick/AG001_Notice")}?lineID={CurrentProfile.UserId}", new ImageMapArea(720, 520, 320, 520)));
+                actions.Add(new UriImageMapAction($"{url.Scheme}://{url.Host}:{url.Port}{VirtualPathUtility.ToAbsolute("~/CornerKick/AG001_CheckAttendance")}?lineID={CurrentProfile.UserId}", new ImageMapArea(360, 720, 360, 320)));
                 //actions.Add(new MessageImageMapAction("I love LINE!", new ImageMapArea(520, 0, 520, 1040)));
                 replyMessage = new ImageMapMessage(imageUrl, "LINE個人化服務，查詢快速又簡單", new BaseSize(1040, 1040), actions);
             }
