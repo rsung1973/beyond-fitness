@@ -1,0 +1,975 @@
+﻿<!doctype html>
+<html class="no-js">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+      <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+      <title>BEYOND FITNESS 全方位雲端管理</title>
+      <!-- Favicon-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">
+      <!-- Bootstrap -->
+      <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Bootstrap Select Css -->
+      <link href="plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+      <!-- Scrollup-master  -->
+      <link href="plugins/scrollup-master/css/themes/image.css?1" rel="stylesheet" id="scrollUpTheme">
+      <!-- LivIconsevo  -->
+      <link href='plugins/livIconsevo/css/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <!-- Fullcalendar -->
+      <link href="plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
+      <!-- Sweetalert -->
+      <link href="plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="css/main.css?2">
+      <link rel="stylesheet" href="css/color_skins.css">
+   </head>
+   <body class="theme-white">
+      <!-- Page Loader -->
+      <div class="page-loader-wrapper">
+         <div class="loader">
+            <div class="m-t-30"><img class="zmdi-hc-spin" src="plugins/livIconsevo/svg/loader-16.svg" width="48" height="48" alt="BEYOND FITNESS"></div>
+            <p>快馬加鞭處理中...</p>
+         </div>
+      </div>
+      <!-- Overlay For Sidebars -->
+      <div class="overlay"></div>
+      <!-- Top Bar -->
+      <nav class="navbar">
+         <div class="col-12">
+            <div class="navbar-header">
+               <a href="javascript:void(0);" class="bars"></a>
+               <a class="navbar-brand" href="calendar.html"><img src="images/logo.png" width="50" alt="BEYOND FITNESS"><span class="m-l-10">BEYOND FITNESS</span></a>
+            </div>
+            <ul class="nav navbar-nav navbar-left">
+               <li><a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-swap"></i></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+               <li class="dropdown">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                     <i class="zmdi zmdi-cake"></i>
+                     <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-right slideDown">
+                     <li class="header">今日壽星</li>
+                     <li class="body">
+                        <ul class="menu list-unstyled">
+                           <li>
+                              <a href="javascript:void(0);">
+                                 <div class="icon-circle bg-red">
+                                    <img src="images/avatar/genie.jpg" class="rounded-circle img-raised notifacation-fit">
+                                 </div>
+                                 <div class="menu-info">
+                                    <h4><b>蔡欣延</b></h4>
+                                    <p><i class="zmdi zmdi-cake"></i> 25歲 </p>
+                                 </div>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="javascript:void(0);">
+                                 <div class="icon-circle bg-red">
+                                    <img src="images/avatar/garfaild.png" class="rounded-circle img-raised notifacation-fit">
+                                 </div>
+                                 <div class="menu-info">
+                                    <h4><b>林斌凱</b></h4>
+                                    <p><i class="zmdi zmdi-cake"></i> 31歲 </p>
+                                 </div>
+                              </a>
+                           </li>
+                        </ul>
+                     </li>
+                     <li class="footer"> <a href="javascript:void(0);">查看近7天內生日清單</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);" class="fullscreen hidden-sm-down" data-provide="fullscreen" data-close="true"><i class="zmdi zmdi-fullscreen"></i></a>
+               </li>
+               <li><a href="sign-in.html" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a></li>
+            </ul>
+         </div>
+      </nav>
+      <!-- Left Sidebar -->
+      <aside id="leftsidebar" class="sidebar">
+         <div class="menu">
+            <ul class="list">
+               <li>
+                  <div class="user-info">
+                     <div class="image">
+                        <a href="profile.html"><img src="images/avatar/doreen.jpg"></a>
+                     </div>
+                     <div class="detail">
+                        <h4>Doreen Huang</h4>
+                        <small>AFM / P.T 6</small>                        
+                     </div>
+                     <a href="mail-inbox.html" title="本季業績總覽">
+                        <i class="zmdi livicon-evo" data-options="name: trophy.svg; size: 24px; style: original; strokeColor:#05232d; strokeWidth:2px; autoPlay:true"></i>
+                     </a>
+                     <a href="contact.html" title="學員清單">
+                        <i class="zmdi livicon-evo" data-options="name: users.svg; size: 24px; style: original; strokeColor:#05232d; strokeWidth:2px; autoPlay:true"></i>                    
+                     </a>
+                     <a href="contact.html" title="證照資訊">
+                        <i class="zmdi livicon-evo" data-options="name: shield.svg; size: 24px; style: original; strokeColor:#05232d; strokeWidth:2px; autoPlay:true"></i>                    
+                     </a>
+                      
+                     <a href="sign-in.html" title="運動競賽">
+                     <i class="zmdi livicon-evo" data-options="name: rocket.svg; size: 24px; style: original; strokeColor:#05232d; strokeWidth:2px; autoPlay:true"></i>                    
+                     </a>
+                  </div>
+               </li>
+               <li class="header">人員管理</li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-accounts"></i><span>學員管理</span></a>
+                  <ul class="ml-menu">
+                     <li><a href="mail-inbox.html">學員資料維護</a></li>
+                     <li><a href="chat.html">階段性調整計畫報表</a></li>
+                     <li><a href="file-dashboard.html">Beyond幣累積兌換表</a></li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-accounts-outline"></i><span>員工管理</span></a>
+               </li>
+               <li class="header">合約/收款/發票</li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-file-text"></i><span>合約維護</span> </a>
+                  <ul class="ml-menu">
+                     <li><a href="mail-inbox.html">新增合約</a></li>
+                     <li><a href="chat.html">服務申請</a></li>
+                     <li><a href="file-dashboard.html">企業合作方案</a></li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-money"></i><span>收款維護</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="ui_kit.html">新增/作廢收款</a> </li>
+                     <li> <a href="alerts.html">電子發票列印</a> </li>
+                     <li> <a href="badges.html">業績分潤設定</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-folder-star"></i><span>報表查詢</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="ui_kit.html">合約查詢</a> </li>
+                     <li> <a href="buttons.html">收款紀錄查詢</a> </li>
+                     <li> <a href="collapse.html">應收帳款催收表</a> </li>
+                     <li> <a href="collapse.html">信託請款表</a> </li>
+                     <li> <a href="collapse.html">401申報書下載</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>電子發票維護</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="buttons.html">空白電子發票下載</a> </li>
+                     <li> <a href="ui_kit.html">電子發票上傳紀錄查詢</a> </li>
+                     <li> <a href="ui_kit.html">電子發票號碼維護</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-border-color"></i><span>體能顧問服務價目維護</span> </a>                
+               </li>
+               <li class="header">績效管理</li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-calendar-note"></i><span>上課查詢</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="buttons.html">上課統計表</a> </li>
+                     <li> <a href="ui_kit.html">分店上課總覽</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-chart"></i><span>業績查詢</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="buttons.html">業績統計表</a> </li>
+                     <li> <a href="ui_kit.html">分店業績總覽</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-money-box"></i><span>每月薪資統計表</span> </a>                  
+               </li>
+               <li class="header">上稿管理</li>
+               <li>
+                  <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-attachment"></i><span>官網/會員專區</span> </a>
+                  <ul class="ml-menu">
+                     <li> <a href="buttons.html">專業文章</a> </li>
+                     <li> <a href="ui_kit.html">運動小學堂</a> </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-chart"></i><span>每日激勵小語</span> </a>                  
+               </li>
+            </ul>
+         </div>
+      </aside>
+      <!-- Main Content -->
+     
+      <section class="content page-calendar">
+         <div class="block-header">
+            <div class="row">
+               <div class="col-lg-7 col-md-6 col-sm-12">
+                  <h2>我的行事曆<small>你有多久沒有改變你的訓練方式</small>
+                  </h2>
+               </div>
+               <div class="col-lg-5 col-md-6 col-sm-12">
+                  <button class="btn btn-warning btn-icon btn-round float-right m-l-10 custom-boxs-open" type="button">
+                    <i class="zmdi zmdi-pin-assistant"></i>
+                  </button>
+                  <ul class="breadcrumb float-md-right">
+                     <li class="breadcrumb-item active"><i class="zmdi zmdi-home"></i> 首頁 </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!--本月運動時間-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                     <div class="col-lg-12">
+                        <div class="card bg-darkteal">
+                           <div class="body">
+                              <div class="font-20 align-center">
+                                  本月運動：<span class="col-lime counto" data-from="0" data-to="859" data-speed="1000">859</span>分鐘（<span class="col-lime counto" data-from="0" data-to="14" data-speed="1000">14</span>小時:<span class="col-lime counto" data-from="0" data-to="2" data-speed="1000">19</span>分鐘）
+                               </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>           
+         <!--待辦卡片-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                     <div class="col-lg-12">
+                        <div class="card">
+                           <div class="header">
+                              <h2><strong>合約/收款/本月課表</strong> 待辦卡片</h2>
+                              <ul class="header-dropdown">
+                                 <li class="remove">
+                                    <a role="button" class="custom-boxs-close"><i class="zmdi zmdi-close"></i></a>
+                                 </li>
+                              </ul>
+                           </div>
+                           <div class="body">
+                              <div class="col-12">
+                                 <ul class="row profile_state list-unstyled">
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: bell.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>58</h4>
+                                          <span>到期合約</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: pencil.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>5</h4>
+                                          <span>草稿/退件</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: pen.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>10</h4>
+                                          <span>待簽名</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: check.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>10</h4>
+                                          <span>待審核</span>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <hr/>
+                              <div class="col-12">
+                                 <ul class="row profile_state list-unstyled">
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: dislike.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>38</h4>
+                                          <span>課表未完成</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: like.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>200</h4>
+                                          <span>課表已完成</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: remove.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
+                                          <h4>10</h4>
+                                          <span>學員未打卡</span>
+                                       </div>
+                                    </li>
+                                    <li class="col-lg-3 col-md-3 col-sm-3 col-6">
+                                       <div class="body">
+                                          <i class="zmdi livicon-evo" data-options="name: check.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                          <h4>40</h4>
+                                          <span>學員已打卡</span>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>         
+         <!--行事曆-->         
+         <div class="container-fluid">
+            <div class="card">
+               <div class="row">
+                  <div class="col-md-12 col-lg-4 col-xl-4">
+                     <div class="body">
+                        <div class="row clearfix">
+                           <div class="col-md-11 col-lg-12 col-9">
+                              <div class="input-group">
+                                 <input type="text" class="form-control" placeholder="搜尋學員..." id="searchLearner">
+                                 <span class="input-group-addon">
+                                 <i class="zmdi zmdi-search"></i>
+                                 </span>
+                              </div>
+                           </div>
+                           <div class="col-md-1 col-lg-12 col-3">                              
+                              <button class="btn btn-default hidden-lg-up m-t-0 float-right" data-toggle="collapse" data-target="#open-events" aria-expanded="false" aria-controls="collapseExample"><i class="zmdi zmdi-chevron-down"></i></button>
+                           </div>
+                        </div>
+                        <div class="collapse-xs collapse-sm collapse" id="open-events">
+                           <hr>
+                           <div class="event-name b-CoachPI row">
+                              <div class="col-2 text-center">
+                                 <h4>11<span>08</span><span>週三</span></h4>
+                              </div>
+                              <div class="col-10">
+                                 <h6>09:30-10:30 黃政浩(Bill Huang)</h6>
+                                 <p class="col-blush">下肢/核心</p>
+                                 <address><i class="zmdi zmdi-pin"></i> 南京</address>             
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="event-name b-PT row">
+                              <div class="col-2 text-center">
+                                 <h4>11<span>08</span><span>週三</span></h4>
+                              </div>
+                              <div class="col-10">
+                                 <h6>10:30-11:30 宋胖子(小胖)</h6>
+                                 <p class="col-blush">功能性肌力</p>
+                                 <address><i class="zmdi zmdi-pin"></i> 信義</address>
+                              </div>
+                           </div>
+                           <div class="event-name b-PT row">
+                              <div class="col-2 text-center">
+                                 <h4>11<span>08</span><span>週三</span></h4>
+                              </div>
+                              <div class="col-10">
+                                 <h6>12:30-13:30 劉思琳(加菲) <i class="zmdi zmdi-check"></i></h6>
+                                 <p class="col-blush">功能性肌力</p>
+                                 <address><i class="zmdi zmdi-pin"></i> 南京</address>
+                              </div>
+                           </div>
+                           <hr>
+                           <div class="event-name b-custom row">
+                              <div class="col-2 text-center">
+                                 <h4>11<span>08</span><span>週三</span></h4>
+                              </div>
+                              <div class="col-10">
+                                 <h6>16:30-18:00 會議</h6>
+                                 <p class="col-blush">系統需求訪談</p>
+                                 <address><i class="zmdi zmdi-pin"></i> 其他</address>
+                              </div>
+                           </div>
+                          <button class="btn btn-darkteal btn-round waves-effect float-right">載入更多 ...</button>                                                
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-12 col-lg-8 col-xl-8">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-md-8 col-lg-8 col-sm-8 col-12">
+                              <button class="btn btn-default btn-simple btn-icon  btn-icon-mini btn-round waves-effect" id="today" >今</button>
+                              <button class="btn btn-default btn-simple btn-icon  btn-icon-mini btn-round waves-effect" id="td" >天</button>
+                              <button class="btn btn-default btn-simple btn-icon  btn-icon-mini btn-round waves-effect" id="ag">週</button>
+                              <button class="btn btn-default btn-simple btn-icon  btn-icon-mini btn-round waves-effect" id="mt">月</button>
+                           </div>
+                           <div class="col-md-4 col-lg-4 col-sm-4 col-12">
+                              <div class="btn-group float-md-right">
+                                 <button type="button" class="btn btn-default btn-simple dropdown-toggle btn-round" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   <i class="zmdi zmdi-pin-drop"></i>
+                                 <span class="caret"></span>
+                                 </button>
+                                 <ul class="dropdown-menu dropdown-menu-right slideDown">
+                                    <li>
+                                       <a href="javascript:void(0);">南京</a>
+                                    </li>
+                                    <li>
+                                       <a href="javascript:void(0);">信義</a>
+                                    </li>
+                                    <li>
+                                       <a href="javascript:void(0);">忠孝</a>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <div class="btn-group float-md-right">
+                                 <button type="button" class="btn btn-default btn-simple dropdown-toggle btn-round">
+                                   <i class="zmdi zmdi-label"></i>
+                                   <span class="caret"></span>
+                                 </button>                                   
+                              </div>
+                           </div>
+                        </div>
+                        <div id="calendar" class="m-t-20"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- 搜尋學員Modal -->
+      <div class="modal fade" id="searchLearnerModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <a href="" class="closebutton" data-dismiss="modal"></a>
+               </div>
+               <div class="modal-body">
+                  <ul class="new_friend_list list-unstyled row">
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/avatar/garfaild.png" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">劉思琳</h6>
+                           <small class="join_date">加菲</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/avatar/bill.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">黃政浩</h6>
+                           <small class="join_date">比爾</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/avatar/genie.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">陳芷瑜</h6>
+                           <small class="join_date">Genie</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/avatar/noname.png" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date"></small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar1.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar5.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">Matthew</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar1.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar2.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar3.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar4.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar1.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">暱稱</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="">
+                           <img src="images/sm/avatar5.jpg" class="img-thumbnail popfit" alt="User Image">
+                           <h6 class="users_name">真實姓名</h6>
+                           <small class="join_date">懶人鬼</small>
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- P.T/P.I/體驗/教練P.I/S.T 已預約行事曆Modal -->
+      <div class="modal fade" id="bookedSessionEventModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">               
+               <div class="card member-card">
+                  <a href="" class="closebutton" data-dismiss="modal"></a>
+                  <div class="header l-pink">
+                     <h4 class="m-t-10">陳芷瑜(Genie)</h4>
+                  </div>
+                  <div class="member-img">
+                     <a href="profile.html" class="">
+                     <img src="images/avatar/genie.jpg" class="rounded-circle popfit" alt="profile-image">
+                     </a>
+                  </div>
+                  <div class="body">
+                     <div class="col-12">
+                        <p class="text-muted">2018/08/08 17:00~18:00</p>
+                        <address>P.T.session <i class="zmdi zmdi-pin"></i> 南京</address>
+                     </div>
+                     <hr>
+                     <div class="row">
+                        <div class="col-4">
+                           <h5>1</h5>
+                           <small>階段性</small>
+                        </div>
+                        <div class="col-4">
+                           <h5>2/25</h5>
+                           <small>剩餘堂數</small>
+                        </div>
+                        <div class="col-4">
+                           <h5>35</h5>
+                           <small>💰</small>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-darkteal btn-round waves-effect"><i class="zmdi zmdi-edit"></i></button>
+                  <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete"><i class="zmdi zmdi-delete"></i></button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 自訂 已預約行事曆Modal -->
+      <div class="modal fade" id="bookedCustomEventModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <a href="" class="closebutton" data-dismiss="modal"></a>
+               </div>
+               <div class="modal-body">
+                   <div class="card">
+                        <div class="header">
+                            <h2>其他：確認行銷教育端事務</h2>   
+                            <p>2018/08/08 17:00~18:00</p>
+                        </div>
+                        <div class="body">
+                            <ul class="list-unstyled team-info margin-0">
+                                <li>
+                                    <img src="images/avatar/garfaild.png" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/avatar/doreen.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/avatar/genie.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/avatar/bill.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/xs/avatar2.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/xs/avatar3.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/xs/avatar4.jpg" class="popfit">
+                                </li>
+                                <li>
+                                    <img src="images/xs/avatar6.jpg" class="popfit">
+                                </li>
+                            </ul>             
+                        </div>
+                    </div>
+                </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-darkteal btn-round waves-effect"><i class="zmdi zmdi-edit"></i></button>
+                  <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete"><i class="zmdi zmdi-delete"></i></button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Jquery Core Js --> 
+      <script src="bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <script src="bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <!-- LivIconsEvo  -->
+      <script src="plugins/livIconsevo/js/tools/snap.svg-min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/TweenMax.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/DrawSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/MorphSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/verge.min.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.Tools.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.defaults.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.js"></script> 
+      <!-- Scrollup-master  Plugin js-->
+      <script src="plugins/scrollup-master/jquery.scrollUp.min.js"></script>       
+      <!-- Fullcalendar Plugin js --> 
+      <script src="bundles/fullcalendarscripts.bundle.js"></script>
+      <script src="plugins/fullcalendar/locale/zh-tw.js"></script>
+      <!-- SweetAlert Plugin Js --> 
+      <script src="plugins/sweetalert/sweetalert.min.js"></script>
+       <!-- countTo Plugin Js --> 
+      <script src="bundles/countTo.bundle.js"></script>
+       
+      <script src="bundles/mainscripts.bundle.js"></script>
+
+      
+      <script type="text/javascript">
+         $(function () {
+             $.scrollUp({
+                 animation: 'fade',
+                 scrollImg: {
+                     active: true,
+                     type: 'background',
+                     src: 'images/top.png'
+                 }
+             });
+             $(".ls-toggle-btn").click();
+             $('.counto').countTo();        
+         });          
+         /*
+          * FULL CALENDAR JS
+          */
+         
+         if ($("#calendar").length) {
+             var date = new Date();
+             var d = date.getDate();
+             var m = date.getMonth();
+             var y = date.getFullYear();
+         
+             var calendar = $('#calendar').fullCalendar({
+                 draggable: true,
+                 selectable: false,
+                 selectHelper: true,
+                 unselectAuto: false,
+                 disableResizing: false,
+                 allDaySlot: true,
+                 editable: false,
+                 height: "auto",
+                 defaultView: "agendaWeek",
+                 firstDay: 1,
+                 businessHours: {
+                     start: '08:00',
+                     end: '22:00',
+                     dow: [1, 2, 3, 4, 5, 6, 0]
+                 },
+                 minTime: "07:00:00",
+                 maxTime: "23:00:00",
+                 header: {
+                     left: 'prev',
+                     center: 'title',
+                     right: 'next'
+                 },
+                 eventLimit: 3,
+                 events: [{
+                     title: '1',
+                     start: new Date(y, m, d - 3),
+                     description: '體驗課程',
+                     allDay: true,
+                     className: 'b-l b-2x b-finish',
+                 }, {
+                     title: '2',
+                     start: new Date(y, m, d + 2),
+                     description: 'P.T session',
+                     allDay: true,
+                     className: 'b-l b-2x b-PT',
+                 }, {
+                     title: '1',
+                     start: new Date(y, m, d + 1),
+                     description: 'P.I session',
+                     allDay: true,
+                     className: 'b-l b-2x b-PI',
+                 }, {
+                     title: '1',
+                     start: new Date(y, m, d + 0),
+                     description: '體驗課程',
+                     allDay: true,
+                     className: 'b-l b-2x b-PE',
+                 }, {
+                     title: '1',
+                     start: new Date(y, m, d + 2),
+                     description: '教練P.I',
+                     allDay: true,
+                     className: 'b-l b-2x b-CoachPI',
+                 }, {
+                     id: 1,
+                     title: '王大明',
+                     start: new Date(y, m, d + 0, 18, 30),
+                     end: new Date(y, m, d + 0, 19, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-PE',
+                     editable: true,
+                     icon: 'zmdi zmdi-check'
+                 }, {
+                     id: 1,
+                     title: '劉加菲',
+                     start: new Date(y, m, d + 2, 12, 30),
+                     end: new Date(y, m, d + 2, 14, 0),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-PT',
+                     editable: true,
+                     icon: 'zmdi zmdi-check'
+                 }, {
+                     id: 1,
+                     title: '宋胖子',
+                     start: new Date(y, m, d + 2, 10, 30),
+                     end: new Date(y, m, d + 2, 11, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-PT',
+                     icon: '',
+                     editable: true
+         
+                 }, {
+                     id: 1,
+                     title: '陳小瓦',
+                     start: new Date(y, m, d + 1, 12, 00),
+                     end: new Date(y, m, d + 1, 13, 0),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-PI',
+                     icon: 'zmdi zmdi-check',
+                     editable: true
+                 }, {
+                     id: 1,
+                     title: '鄭胖子',
+                     start: new Date(y, m, d - 3, 12, 30),
+                     end: new Date(y, m, d - 3, 13, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-finish',
+                     icon: 'zmdi zmdi-check',
+                     editable: false
+                 }, {
+                     id: 1,
+                     title: '劉思琳',
+                     start: new Date(y, m, d + 0, 12, 30),
+                     end: new Date(y, m, d + 0, 13, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-ST',
+                     icon: 'zmdi zmdi-check',
+                     editable: false
+                 }, {
+                     id: 3,
+                     title: '會議',
+                     start: new Date(y, m, d + 2, 16, 30),
+                     end: new Date(y, m, d + 2, 17, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-custom',
+                     icon: '',
+                     editable: true
+                 }, {
+                     id: 2,
+                     title: '黃政浩',
+                     start: new Date(y, m, d + 2, 9, 30),
+                     end: new Date(y, m, d + 2, 10, 30),
+                     description: '',
+                     allDay: false,
+                     className: 'b-l b-2x b-CoachPI',
+                     icon: '',
+                     editable: true
+                 }],
+         
+         
+                 eventRender: function (event, element, icon) {
+                     if (!event.description == "") {
+                         element.find('.fc-title').append("<br/><span class='ultra-light'>" + event.description + "</span>");
+                     }
+                     if (!event.icon == "") {
+                         element.find('.fc-title').append("<i class='" + event.icon + " '></i>");
+                     }
+                 },
+         
+                 eventClick: function (event, jsEvent, view) {
+                     if (event._allDay == true) {
+                         $('#undolistDialog').dialog('open');
+                     } else {
+                         if (event.id == 1) {
+                             $("#bookedSessionEventModal").modal('show');
+                         } else if (event.id == 3) {
+                             $("#bookedCustomEventModal").modal('show');
+                         }
+                         
+                     }
+                 },
+         
+                 dayClick: function (date, allDay, jsEvent, view) {
+                     var formattedDate = date.toString().replace(" GMT+0000", "");
+                     $('#bookingDialog').dialog('open');
+                     //alert("see, I can get " + formattedDate + " if I _left click_, but try doing this with a right click");
+                 },
+                 windowResize: function (event, ui) {
+                     $('#calendar').fullCalendar('render');
+                 },
+             });
+         
+         }
+         
+         
+         /* hide default buttons */
+         // Previous month action
+         $('#cal-prev').on('click', function () {
+             $('#calendar').fullCalendar('prev');
+         });
+         
+         // Next month action
+         $('#cal-next').on('click', function () {
+             $('#calendar').fullCalendar('next');
+         });
+         
+         // calendar today
+         $('#calendar-buttons #btn-today').click(function () {
+             $('.fc-button-today').click();
+             return false;
+         });
+         
+         
+         // calendar agenda day
+         $('#td').click(function () {
+             $('#calendar').fullCalendar('changeView', 'agendaDay');
+         });
+          
+       // Change to month view
+        $('#mt').on('click',function(){
+            $('#calendar').fullCalendar('changeView', 'month');
+
+            // safari fix
+            $('#content .main').fadeOut(0, function() {
+                setTimeout( function() {
+                    $('#content .main').css({'display':'table'});
+                }, 0);
+            });
+
+        });
+
+        // Change to week view
+        $('#ag').on('click',function(){
+            $('#calendar').fullCalendar( 'changeView', 'agendaWeek');
+
+            // safari fix
+            $('#content .main').fadeOut(0, function() {
+                setTimeout( function() {
+                    $('#content .main').css({'display':'table'});
+                }, 0);
+            });
+
+        });
+
+        // Change to day view
+        $('#td').on('click',function(){
+            $('#calendar').fullCalendar( 'changeView','agendaDay');
+
+            // safari fix
+            $('#content .main').fadeOut(0, function() {
+                setTimeout( function() {
+                    $('#content .main').css({'display':'table'});
+                }, 0);
+            });
+
+        });
+
+        // Change to today view
+        $('#today').on('click',function(){
+            $('#calendar').fullCalendar('today');
+        });          
+          
+         //卡片動態移除顯示
+         $(".custom-boxs-open").fadeOut();
+         $(".custom-boxs-close").on("click", function () {
+            $(this).parents(".card").addClass("closed").fadeOut(100, function(){
+                $(".custom-boxs-open").fadeIn();
+            });
+            
+         });
+          
+         $(".custom-boxs-open").on("click", function () {    
+            $(".custom-boxs-open").fadeOut(100, function(){
+                $(".card").addClass("oepn").fadeIn();
+            });
+            
+         });
+          
+         //搜尋學員
+         $('#searchLearner').keypress(function (event) {
+             var keycode = (event.keyCode ? event.keyCode : event.which);
+             if (keycode == '13') {
+                 $("#searchLearnerModal").modal('show');
+             }
+         }); 
+         //點選事件
+         $('.event-name').on('click', function (event) {
+             if ($(event.currentTarget).hasClass("b-custom")) {
+                 $("#bookedCustomEventModal").modal('show');
+             } else {
+                 $("#bookedSessionEventModal").modal('show');
+             }              
+         });
+
+         //點選刪除按鈕
+//         $('.swal-delete').on('click', function (event) {
+//            swal({
+//                title: "不後悔?",
+//                text: "刪除後資料將無法回覆!",
+//                type: "warning",
+//                showCancelButton: true,
+//                confirmButtonColor: "#DD6B55",
+//                confirmButtonText: "確定, 不後悔",
+//                cancelButtonText: "不, 點錯了",
+//                closeOnConfirm: false,
+//                closeOnCancel: false
+//            }, function (isConfirm) {
+//                if (isConfirm) {                    
+//                    swal("刪除成功!", "資料已經刪除 Bye!", "success");
+//                    event.currentTarget.parentNode.parentNode.remove();
+//                } else {
+//                    swal("取消成功", "你的資料現在非常安全 :)", "error");
+//                }
+//            });              
+//         }); 
+      </script>
+   </body>
+</html>

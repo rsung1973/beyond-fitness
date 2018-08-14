@@ -182,7 +182,8 @@
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
-        Response.Redirect("~/html/login.html");
+        //Response.Redirect("~/html/login.html");
+        Response.Redirect("~/CornerKick/Index");
     }
 
 </script>

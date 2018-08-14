@@ -178,7 +178,7 @@
 </section>
 
 <script>
-    debugger;
+    //debugger;
     function inquireLesson() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
@@ -217,7 +217,7 @@
         $('#queryForm').launchDownload('<%= Url.Action("CreateBranchLessonListXlsx","Achievement") %>');
     }
 
-    debugger;
+    //debugger;
     function showBranchLessonList(params) {
         var formData = $('#queryForm').serializeObject();
         if (params) {

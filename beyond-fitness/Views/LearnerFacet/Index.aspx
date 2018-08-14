@@ -416,6 +416,7 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
 
         _profile = (UserProfile)this.Model;
+        Response.Redirect("~/CornerKick/Index");
     }
 
 </script>

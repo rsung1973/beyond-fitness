@@ -34,7 +34,9 @@
     </div>
     <div class="product-content product-wrap clearfix bg-color-darken">
         <div class="row">
-        <%  foreach (var item in models.GetTable<BonusAwardingItem>().OrderByDescending(b=>b.OrderIndex))
+        <%  foreach (var item in models.GetTable<BonusAwardingItem>()
+                .Where(b=>!b.Status.HasValue || b.Status!=0)
+                .OrderByDescending(b=>b.OrderIndex))
             {
                 %>
             <div class="col-sm-6 col-md-6 col-lg-4">

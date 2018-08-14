@@ -159,7 +159,7 @@
 <%  Html.RenderPartial("~/Views/ClassFacet/Module/PromptQuestionnaire.ascx"); %>
 
 <script>
-    debugger;
+    //debugger;
     function inquireQuestionnaire() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
@@ -183,7 +183,7 @@
         $('#queryForm').launchDownload('<%= Url.Action("CreateLessonListXlsx","Achievement") %>');
     }
 
-    debugger;
+    //debugger;
     function showLessonList(params) {
         var formData = $('#queryForm').serializeObject();
         if (params) {

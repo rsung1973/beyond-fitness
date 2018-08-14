@@ -44,12 +44,17 @@ namespace WebHome.Models.Timeline
 
     public class UserGuideEvent : TimelineEvent
     {
-
+        public IQueryable<UserEvent> GuideEventList { get; set; }
     }
 
     public class ExpiringContractEvent : TimelineEvent
     {
         public CourseContract ExpiringContract { get; set; }
+    }
+
+    public class PromptContractEvent : TimelineEvent
+    {
+        public IQueryable<CourseContract> ContractList { get; set; }
     }
 
 

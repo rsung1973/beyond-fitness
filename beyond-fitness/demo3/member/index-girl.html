@@ -12,8 +12,22 @@
       <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
       <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
       <!-- scrollup-master  -->
-      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
-      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
+      <!-- royalslider -->
+      <link href="css/royalslider/royalslider.css" rel="stylesheet" class="rs-file">
+      <link href="css/preview-assets/reset.css" rel="stylesheet">
+      <link href="css/royalslider/skins/default/rs-default.css" rel="stylesheet" class="rs-file" >
+      <!-- *** Favicons *** -->
+      <!--[if IE]>
+      <link rel="icon"  href="favicons/favicon_16x16.ico" />
+      <![endif]-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
       <!-- STYLE 要放最下面  -->
       <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
    </head>
@@ -27,7 +41,7 @@
                   <ul class="right hide-on-med-and-down">
                      <li>
                         <a href="calendar-girl.html">
-                           <div class="livicon-evo" data-options="name: calendar.svg; size: 40px; style: lines; strokeColor:#fd5c63; strokeWidth:2px; autoPlay:true"></div>
+                        <i class="livicon-evo" data-options="name: calendar.svg; size: 40px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i>
                         </a>
                      </li>
                   </ul>
@@ -35,15 +49,15 @@
                   <ul id="slide-out" class="side-nav">
                      <li>
                         <div class="user-view">
-                           <div class="background"><img src="images/carousel/background4.jpg"></div>
-                           <a href="personal-settings-girl.html"><img class="circle" src="images/avatars/garfaild.png"></a> <a href="personal-settings-girl.html"><span class="white-text name">劉加菲（garfaild）</span></a> <a href="index-marketing.html"><span class="white-text email">登出</span></a> 
+                           <div class="background"><img src="images/carousel/side-background.jpg"></div>
+                           <a href="personal-settings-girl.html"><img class="circle" src="images/avatars/Genie.jpg"></a> <a href="personal-settings-girl.html"><span class="white-text name">劉加菲 68/75</span></a> <a href="index-marketing.html"><span class="white-text email">登出</span></a> 
                         </div>
                      </li>
                      <li><a href="calendar-girl.html">我的行事曆</a></li>
                      <li><a href="notice-girl.html">我的通知 <span class="btn-floating waves-effect waves-light btn-notice red">4</span></a></li>
                      <li><a href="goal-girl.html">我的目標</a></li>
                      <li><a href="personal-settings-girl.html">我的設定</a></li>
-                     <li><a href="points-exchange-girl.html">兌換我的獎品</a></li>
+                     <li><a href="points-exchange-girl.html">兌換我的裝備</a></li>
                      <li><a href="navigation-girl.html">新手上路</a></li>
                      <!--
                         <li><div class="divider"></div></li>
@@ -52,7 +66,7 @@
                         -->
                   </ul>
                   <a href="calendar-girl.html" data-activates="slide-out" class="button-collapse">
-                     <div class="livicon-evo" data-options="name: morph-menu-collapse.svg; size: 40px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></div>
+                  <i class="livicon-evo" data-options="name: morph-menu-collapse.svg; size: 40px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i>
                   </a>
                   <!-- // End of 側邊選單 --> 
                </div>
@@ -81,10 +95,10 @@
                            親愛的，跟著 Beyond 走，新手導航去
                            <i class="material-icons right">arrow_forward</i>
                            </a>
-                        </li>                         
+                        </li>
                         <li>
                            <a href="#">
-                           親愛的，合約即將到期（2018/01/01）
+                           親愛的，合約於2018/01/01到期
                            <i class="livicon-evo right" data-options="name: bell.svg; size: 30px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i>
                            </a>
                         </li>
@@ -116,9 +130,7 @@
                      <div id="" div class="parallax-container" onclick="javascript:window.location.assign('chart-girl.html');">
                         <div class="section no-pad-bot">
                            <div class="container">
-                              <div style="width: 100%; margin: 0 auto 10px;">
-                                 <canvas id="radarChart"></canvas>
-                              </div>
+                              <canvas id="radarChart" class="chart-box"></canvas>
                            </div>
                         </div>
                         <div class="parallax white"></div>
@@ -126,51 +138,55 @@
                   </div>
                   <!-- // End of 體能分析圖 -->                     
                   <!-- 個人目標 -->
-                  <div class="goal-block" onclick="javascript:window.location.assign('goal.html');">
+                  <div class="goal-block" onclick="javascript:window.location.assign('goal-girl.html');">
                      <h3>我的目標</h3>
                      <div id="" class="parallax-container">
                         <div class="section no-pad-bot">
                            <div class="container">
                               <div class="text-area">
-                                 <h4>週期性目標 - 耐力期</h4>
+                                 <h4>週期性目標<br/>耐力期</h4>
                               </div>
                            </div>
                         </div>
-                        <div class="parallax"><img src="images/carousel/background0.jpg" alt="Unsplashed background img 1"></div>
+                        <div class="parallax"><img src="images/carousel/goal-background-girl.jpg" alt="Unsplashed background img 1"></div>
                      </div>
                   </div>
+                  <!-- // End of 個人目標 --> 
                   <!-- // End of 個人目標 --> 
                   <!-- 課表內容 Slider -->
                   <div class="class-block">
                      <h3>課表內容</h3>
                      <!--Slider-->
-                     <div class="carousel carousel-slider center" data-indicators="true">
-                        <div class="carousel-item white-text" onclick="javascript:window.location.assign('lesson-girl.html');">
+                     <div class="royalSlider contentSlider rsDefault" id="class-slider">
+                        <div class="rsTextSlide rsClass">
                            <div class="row valign-wrapper">
-                              <div class="col s5 m4 l5"> <img src="images/avatars/Doreen.jpg" alt="" class="circle responsive-img valign"> </div>
-                              <div class="col s7 m8 l7 text-box"> 
-                                 <span class="black-t18">課程日期 - 2018/05/17 14:00-15:00</span> 
-                                 <span class="black-t12">肌力/燃脂</span> 
-                              </div>
-                           </div>
-                        </div>
-                        <div class="carousel-item white-text" onclick="javascript:window.location.assign('lesson-girl.html');">
-                           <div class="row valign-wrapper">
-                              <div class="col s5 m4 l5"> <img src="images/avatars/Sam.jpg" alt="" class="circle responsive-img valign"> </div>
-                              <div class="col s7 m8 l7 text-box"> 
-                                 <span class="black-t18">課程日期 - 2018/05/21 15:00-16:00</span> 
+                              <div class="col s4 m3 l2"><a href="lesson-girl.html"><img src="images/avatars/Doreen.jpg" alt="" class="circle responsive-img valign"> </a></div>
+                              <div class="col s8 m9 l10 text-box"> 
+                                 <span class="black-t18"><a href="lesson-girl.html">2018/05/21 15:00</a></span> 
                                  <span class="black-t12">功能性整合</span> 
                               </div>
                            </div>
+                           <span class="rsTmb">05/21</span>
                         </div>
-                        <div class="carousel-item white-text" onclick="javascript:window.location.assign('lesson-girl.html');">
+                        <div class="rsTextSlide">
                            <div class="row valign-wrapper">
-                              <div class="col s5 m4 l5"> <img src="images/avatars/Doreen.jpg" alt="" class="circle responsive-img valign"> </div>
-                              <div class="col s7 m8 l7 text-box"> 
-                                 <span class="black-t18">課程日期 - 2018/06/06 16:00-17:00</span> 
+                              <div class="col s4 m3 l2"><a href="lesson-girl.html"><img src="images/avatars/Bill.jpg" alt="" class="circle responsive-img valign"> </a></div>
+                              <div class="col s8 m9 l10 text-box"> 
+                                 <span class="black-t18"><a href="lesson-girl.html">2018/05/28 15:00</a></span> 
+                                 <span class="black-t12">力量 / 整合</span> 
+                              </div>
+                           </div>
+                           <span class="rsTmb">05/28</span>
+                        </div>
+                        <div class="rsTextSlide">
+                           <div class="row valign-wrapper">
+                              <div class="col s4 m3 l2"><a href="lesson-girl.html"> <img src="images/avatars/Sam.jpg" alt="" class="circle responsive-img valign"> </a></div>
+                              <div class="col s8 m9 l10 text-box"> 
+                                 <span class="black-t18"><a href="lesson-girl.html">2018/06/06 15:00</a></span> 
                                  <span class="black-t12"></span> 
                               </div>
                            </div>
+                           <span class="rsTmb">06/06</span>
                         </div>
                      </div>
                      <!-- // End of Slider  --> 
@@ -180,24 +196,45 @@
                   <div class="article-block">
                      <h3>專業文章</h3>
                      <!--Slider-->
-                     <div class="carousel carousel-slider center" data-indicators="true">
-                        <div class="carousel-item white-text bgitem" onclick="javascript:window.location.assign('https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');">
-                           <h2>感冒能運動嗎</h2>
+                     <div class="royalSlider contentSlider rsDefault" id="article-slider">
+                        <div class="rsTextSlide">
+                           <img class="rsImg" src="images/carousel/article-background-1.jpg" data-rsh="" data-rsw="">
+                           <a href="https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');" target="_blank">
+                              <h3>公司都大家一起訂便當，我到底該怎麼吃？</h3>
+                           </a>
                         </div>
-                        <div class="carousel-item white-text bgitem" onclick="javascript:window.location.assign('https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');">
-                           <h2>肌肉痠痛還可以運動嗎</h2>
+                        <div class="rsTextSlide">
+                           <img class="rsImg" src="images/carousel/article-background-2.jpg" data-rsh="" data-rsw="">
+                           <a href="https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');" target="_blank">
+                              <h3>肌肉痠痛還可以運動嗎</h3>
+                           </a>
                         </div>
-                        <div class="carousel-item white-text bgitem" onclick="javascript:window.location.assign('https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');">
-                           <h2>訓練喝肌酸有什麼用處呢</h2>
+                        <div class="rsTextSlide">
+                           <img class="rsImg" src="images/carousel/article-background-3.jpg" data-rsh="" data-rsw="">
+                           <a href="https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');" target="_blank">
+                              <h3>訓練喝肌酸有什麼用處呢</h3>
+                           </a>
+                        </div>
+                        <div class="rsTextSlide">
+                           <img class="rsImg" src="images/carousel/article-background-4.jpg" data-rsh="" data-rsw="">
+                           <a href="https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');" target="_blank">
+                              <h3>感冒能運動嗎</h3>
+                           </a>
+                        </div>
+                        <div class="rsTextSlide">
+                           <img class="rsImg" src="images/carousel/article-background-5.jpg" data-rsh="" data-rsw="">
+                           <a href="https://www.beyond-fitness.com.tw/front-end/single-post.html?id=26215');" target="_blank">
+                              <h3>訓練時聽音樂是否可以獲得有效幫助呢？</h3>
+                           </a>
                         </div>
                      </div>
                      <!-- // End of Slider  --> 
                   </div>
-                  <!-- // End of 專業文章 Slider --> 
+                  <!-- // End of 專業文章 Slider -->
                   <!-- 點數兌換 -->
                   <div class="points-block">
-                     <h3>兌換我的獎品</h3>
-                     <div id="" div class="parallax-container parallax-min" onclick="javascript:window.location.assign('points-exchange.html');">
+                     <h3>運動小學堂</h3>
+                     <div id="" div class="parallax-container parallax-min" onclick="javascript:window.location.assign('qa-nodata.html');">
                         <div class="section no-pad-bot">
                            <div class="container">
                               <div class="points-text-area">
@@ -216,11 +253,13 @@
          </div>
          <!--// End of wrapper-fixed--> 
          <!-- Footer -->
-         <footer class="page-footer teal">
-            <div class="footer-copyright">
-               <div class="container"><a class="brown-text text-lighten-3" href="#">BEYOND FITNESS</a> </div>
-            </div>
-         </footer>
+         <!--
+            <footer class="page-footer teal">
+               <div class="footer-copyright">
+                  <div class="container"><a class="brown-text text-lighten-3" href="#">BEYOND FITNESS</a> </div>
+               </div>
+            </footer>
+            -->
          <!-- // End of Footer --> 
       </div>
       <!--// End of wrapper-->        
@@ -243,72 +282,116 @@
       <script src="js/plugin/countup/countUp.min.js"></script>
       <!--chartjs plugin-->
       <script src="js/plugin/chartjs/chart.min.js"></script>
+      <!-- royalslider -->
+      <script src="js/plugin/royalslider/jquery.royalslider.min.js" class="rs-file"></script>    
       <script> 
-         $(function () {
-             $.scrollUp({
-                 animation: 'fade',
-                 activeOverlay: '#00FFFF',
-                 scrollImg: {
-                     active: true,
-                     type: 'background',
-                     src: '../images/top.png'
-                 }
-             });
-             //countup
-             $('.countuptime').each(function() {
-                 // no need to specify options unless they differ from the defaults
-                 var target = this;
-                 var endVal = parseInt($(this).attr('data-endVal'));
-                 theAnimation = new countUp(target, 0, endVal, 0, 2.5);
-                 theAnimation.start();
-             });   
-         
-         });
-         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
-         $('.image-switch').addClass('active');          
-              
-          
-          var RadarConfig = {
-          type: 'radar',
-          data: {
-            labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
-            datasets: [{
-                label: "分佈圖",
-                backgroundColor: "rgba(253,92,99,.43)",
-               pointBackgroundColor: "rgba(253,92,99,1)",
-                data: [6, 6, 7, 10, 8]
-            }]
-          },
-          options: {
-            legend: {
-               display:false
+        $(function () {
+            $.scrollUp({
+                animation: 'fade',
+                scrollImg: {
+                    active: true,
+                    type: 'background',
+                    src: '../images/top.png'
+                }
+            });
+            //SideNavOpen
+            $('.button-collapse').sideNav({
+                onOpen: function(el) {
+                     $('.dropdown-button').dropdown('close');
+                }
+            });             
+            //countup
+            $('.countuptime').each(function () {
+                // no need to specify options unless they differ from the defaults
+                var target = this;
+                var endVal = parseInt($(this).attr('data-endVal'));
+                theAnimation = new countUp(target, 0, endVal, 0, 2.5);
+                theAnimation.start();
+            });
+            //Slider
+            $('#article-slider').royalSlider({
+                autoHeight: true,
+                arrowsNav: true,
+                arrowsNavAutoHide: false,
+                fadeinLoadedSlide: false,
+                controlNavigationSpacing: 0,
+                controlNavigation: 'none',
+                imageScaleMode: 'none',
+                imageAlignCenter: false,
+                loop: true,
+                loopRewind: true,
+                numImagesToPreload: 5,
+                keyboardNavEnabled: true,
+                usePreloader: false,
+                transitionType: 'fade',
+            });
+
+            $('#class-slider').royalSlider({
+                autoHeight: true,
+                arrowsNav: false,
+                fadeinLoadedSlide: false,
+                controlNavigationSpacing: 0,
+                controlNavigation: 'tabs',
+                imageScaleMode: 'none',
+                imageAlignCenter: false,
+                loop: true,
+                loopRewind: true,
+                numImagesToPreload: 5,
+                keyboardNavEnabled: true,
+                usePreloader: false
+            });
+        });
+
+        var RadarConfig = {
+            type: 'radar',
+            data: {
+                labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
+                datasets: [{
+                    label: "分佈圖",
+                    backgroundColor: "rgba(253,92,99,.43)",
+                    pointBackgroundColor: "rgba(253,92,99,1)",
+                    data: [6, 6, 7, 10, 8]
+                }]
             },
-            
-            scale: {
-              reverse: false,
-                       display: true,
-              ticks: {
-                         showLabelBackdrop: false,
-                beginAtZero: true,
-                         backdropColor: '#0061d2',
-                         maxTicksLimit: 5,
-                         max: 10,
-                         fontSize: 5,
-                         backdropPaddingX: 5,
-                         backdropPaddingY: 5
-              },
-                       gridLines: {
-                           color: "#888888",
-                           lineWidth: 1
-                       },
-                       pointLabels: {
-                           fontSize: 12,
-                           fontColor: "#AAAAAA"
-                       }
+            options: {
+                legend: {
+                    display: false
+                },
+
+                scale: {
+                    reverse: false,
+                    display: true,
+                    ticks: {
+                        showLabelBackdrop: false,
+                        beginAtZero: true,
+                        backdropColor: '#0061d2',
+                        maxTicksLimit: 5,
+                        max: 10,
+                        fontSize: 5,
+                        backdropPaddingX: 5,
+                        backdropPaddingY: 5
+                    },
+                    gridLines: {
+                        color: "#888888",
+                        lineWidth: 1
+                    },
+                    pointLabels: {
+                        fontSize: 12,
+                        fontColor: "#AAAAAA"
+                    }
+                }
             }
-          }
-          };
-          window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
+        };
+        window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
       </script>
    </body>
 </html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84335528-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-84335528-4');
+</script>

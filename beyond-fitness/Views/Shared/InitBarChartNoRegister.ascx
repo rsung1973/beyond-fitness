@@ -15,6 +15,11 @@
         if ($global.chartJS == undefined) {
             loadScript('<%= VirtualPathUtility.ToAbsolute("~/js/plugin/chartjs2_7_2/chart.min.js") %>', function () {
                 $global.chartJS = true;
+
+                if ($global.initGraph) {
+                    $global.initGraph();
+                }
+
             });
         } else {
 

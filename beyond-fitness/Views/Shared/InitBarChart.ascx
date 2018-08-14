@@ -10,7 +10,7 @@
 
 <script>
 
-    debugger;
+    //debugger;
     $(function () {
 
         if ($global.chartJS == undefined) {

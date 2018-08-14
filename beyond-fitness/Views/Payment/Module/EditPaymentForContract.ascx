@@ -79,7 +79,7 @@
                                 $('#contractList').load('<%= Url.Action("ListContractByContractNo","Payment") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val() }, function (data) {
                                 });
                                 console.log('debug...');
-                                $.post('<%= Url.Action("LoadContract", "CourseContract") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val(), 'contractDateFrom': null }, function (data) {
+                                $.post('<%= Url.Action("LoadContract", "CourseContract") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val(), 'contractDateFrom': null, 'contractType': null }, function (data) {
                                     hideLoading();
                                     if ($.isPlainObject(data)) {
                                         if (data.data.length > 0 && !data.data[0].Installment) {

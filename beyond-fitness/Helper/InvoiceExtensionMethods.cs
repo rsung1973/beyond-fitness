@@ -122,6 +122,12 @@ namespace WebHome.Helper
             if (item.InvoiceItem.InvoiceType == (int)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)
                 newItem.InvoiceAllowanceDispatch = new InvoiceAllowanceDispatch { };
             models.GetTable<InvoiceAllowance>().InsertOnSubmit(newItem);
+            item.VoidPayment = new VoidPayment
+            {
+                Remark = remark,
+                Status = (int)Naming.CourseContractStatus.已生效,
+                VoidDate = DateTime.Now
+            };
 
             return newItem;
         }

@@ -69,7 +69,7 @@
                     $('#<%= _dialogID %>').remove();
                 }
             });
-            debugger;
+            //debugger;
             $btnAnswer = $('#<%= _dialogID %> button.btn-primary');
 
             $btnAnswer.on('click', function (evt) {

@@ -12,11 +12,23 @@
       <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
       <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
       <!-- scrollup-master  -->
-      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
-      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
       <!-- datedropper  -->
       <link href='css/datedropper/datedropper.min.css' rel='stylesheet' type='text/css'>
-      <link href='css/datedropper/datedropper.theme.css' rel='stylesheet' type='text/css'>
+      <link href='css/datedropper/datedropper.theme.css' rel='stylesheet' type='text/css'>      
+      <!-- timedropper  -->
+      <link href='css/timedropper/timedropper.min.css' rel='stylesheet' type='text/css'>      
+      <!-- *** Favicons *** -->
+      <!--[if IE]>
+      <link rel="icon"  href="favicons/favicon_16x16.ico" />
+      <![endif]-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
       <!-- STYLE 要放最下面  -->
       <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
    </head>
@@ -29,7 +41,7 @@
                <div class="nav-wrapper container">
                   <!-- BACK --> 
                   <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index.html');">
-                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></div>
+                     <i class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
                   </a>
                   <!-- // End of BACK --> 
                   <a id="logo-container" href="#" class="brand-logo toptitle center" >新增行事曆</a>
@@ -53,42 +65,35 @@
                         <form class="">
                            <div class="row">
                               <!--1-->
-                              <div class="input-field col s12">
-                                 <i class="livicon-evo prefix" data-options="name: pen.svg; size: 30px; style: lines; strokeColor:#0061d2; autoPlay:true"></i>
-                                 <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
-                                 <label for="icon_prefix2">請輸入行事曆內容</label>
+                              <div class="input-field col s12"> 
+                                 <i class="livicon-evo prefix" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                                 <label for="">開始日期</label>
+                                 <input type="text" class="pickdate" data-format="Y/m/d" data-lang="zh" data-modal="true" data-large-default="true" data-large-mode="true" data-theme="teal-navy"/>
                               </div>
                               <!--2-->
                               <div class="input-field col s12"> 
-                                 <i class="livicon-evo prefix" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#0061d2; autoPlay:true"></i>
-                                 <label for="">請選擇開始日期</label>
-                                 <input class="datedropper medium" data-format="Y/m/d" aria-invalid="false" aria-required="true" type="text" data-large-default="false" data-large-mode="true" data-format="" data-jump="" data-max-year="" data-min-year="" data-lang="zh" data-translate-mode="false" data-modal="true" data-theme="dd-navy-blue" data-submit-value="" data-default-date="" ='false'="" data-init-set="false">
-                              </div>
+                                 <i class="livicon-evo prefix" data-options="name: alarm.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                                 <label for="">開始時間</label>
+                                 <input type="text" class="picktime">
+                              </div>                               
                               <!--3-->
                               <div class="input-field col s12"> 
-                                 <i class="livicon-evo prefix" data-format="Y/m/d" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#0061d2; autoPlay:true"></i>
-                                 <label for="">請選擇結束日期</label>
-                                 <input class="datedropper medium" aria-invalid="false" aria-required="true" type="text" data-large-default="false" data-large-mode="true" data-format="" data-jump="" data-max-year="" data-min-year="" data-lang="zh" data-translate-mode="false" data-modal="true" data-theme="dd-navy-blue" data-submit-value="" data-default-date="" ='false'="" data-init-set="false">
-                              </div>
-							   
+                                 <i class="livicon-evo prefix" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                                 <label for="">結束日期</label>
+                                 <input type="text" class="pickdate" data-format="Y/m/d" data-lang="zh" data-modal="true" data-large-default="true" data-large-mode="true" data-theme="teal-navy"/>
+                              </div>							   							   							   
                               <!--4-->
-<!--
                               <div class="input-field col s12"> 
-                                 <i class="livicon-evo prefix" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#0061d2; autoPlay:true"></i>
-                                 <label for="">請選擇開始時間</label>
-                                 <input class="timepicker medium" aria-invalid="false" aria-required="true" type="text" data-large-default="false" data-large-mode="true" data-format="" data-jump="" data-max-year="" data-min-year="" data-lang="zh" data-translate-mode="false" data-modal="true" data-theme="dd-navy-blue" data-submit-value="" data-default-date="" ='false'="" data-init-set="false">
-                              </div>							   
--->
-							   
-                              <!--5-->
-<!--
-                              <div class="input-field col s12"> 
-                                 <i class="livicon-evo prefix" data-options="name: calendar.svg; size: 30px; style: lines; strokeColor:#0061d2; autoPlay:true"></i>
-                                 <label for="">請選擇結束時間</label>
-                                 <input class="timepicker medium" aria-invalid="false" aria-required="true" type="text" data-large-default="false" data-large-mode="true" data-format="" data-jump="" data-max-year="" data-min-year="" data-lang="zh" data-translate-mode="false" data-modal="true" data-theme="dd-navy-blue" data-submit-value="" data-default-date="" ='false'="" data-init-set="false">
+                                 <i class="livicon-evo prefix" data-options="name: alarm.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                                 <label for="">結束時間</label>
+                                 <input type="text" class="picktime">
                               </div>								   
--->
- 
+                               <!--4-->
+                              <div class="input-field col s12">
+                                 <i class="livicon-evo prefix" data-options="name: pen.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                                 <textarea id="icon_prefix2" class="materialize-textarea" maxlength="50" data-length="50"></textarea>
+                                 <label for="icon_prefix2">請輸入行事曆內容</label>
+                              </div>
                            </div>
                         </form>
                      </div>
@@ -132,33 +137,39 @@
       <script src="js/plugin/scrollup-master/jquery.scrollUp.min.js"></script>
       <!--datedropper-->
       <script src="js/plugin/datedropper/datedropper.js"></script> 
+      <!--timedropper-->
+      <script src="js/plugin/timedropper/timedropper.js"></script>        
       <script>
          $(function () {
              $.scrollUp({
                  animation: 'fade',
-                 activeOverlay: '#00FFFF',
                  scrollImg: {
                      active: true,
                      type: 'background',
                      src: '../images/top.png'
                  }
              });
+                      
+                $(".pickdate").dateDropper({
+                });
              
-                $('.datedropper').each(function(){
-                    if($(this).attr('data-submit-value') != ""){
-                    var dte = new Date($(this).attr('data-submit-value'));
-                        var m = dte.getMonth() + 1,
-                            d = dte.getDate(),
-                            y = dte.getFullYear();
-                        var sd = m + '-' + d + '-' + y;
-                        $(this).attr('data-default-date',sd);
-                    }
-                    $(this).dateDropper();
-                });             
-         });
-         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
-         $('.image-switch').addClass('active');                               
+                $(".picktime").timeDropper({
+                    meridians: true,
+                    format: 'HH:mm',
+                    primaryColor: '#0061d2',
+                    borderColor: '#4a4a4a',
+                });
+         });                     
              
       </script>
    </body>
 </html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84335528-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-84335528-4');
+</script>

@@ -16,6 +16,7 @@ using MessagingToolkit.QRCode.Codec;
 using Utility;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
+using WebHome.Models.Timeline;
 using WebHome.Models.ViewModel;
 using WebHome.Properties;
 
@@ -23,9 +24,18 @@ namespace WebHome.Helper
 {
     public static class PortalExtensionMethods
     {
-        public static String ProcessLogin(this Controller controller, UserProfile item)
+        public static String ProcessLogin(this Controller controller, UserProfile item,bool fromLine = false)
         {
             UrlHelper url = new UrlHelper(controller.ControllerContext.RequestContext);
+
+            if(fromLine)
+            {
+                if (item.IsLearner())
+                {
+                    return url.Action("LearnerIndex", "CornerKick");
+                }
+            }
+
             if (item.IsAuthorizedSysAdmin())
             {
                 return url.Action("Index", "CoachFacet", new { KeyID = item.UID.EncryptKey() });
@@ -46,13 +56,17 @@ namespace WebHome.Helper
             {
                 return url.Action("PaymentIndex", "Payment");
             }
+            
 
             switch ((Naming.RoleID)item.UserRole[0].RoleID)
             {
                 case Naming.RoleID.Administrator:
                     return url.Action("Index", "CoachFacet");
 
-                case Naming.RoleID.Coach:
+                case Naming.RoleID.Learner:
+                    return url.Action("LearnerIndex", "CornerKick");
+                    //return fromLine ? url.Action("LearnerIndex", "CornerKick") : url.Action("LearnerIndex", "LearnerFacet");
+
                 case Naming.RoleID.Manager:
                 case Naming.RoleID.ViceManager:
                 case Naming.RoleID.Officer:
@@ -65,8 +79,6 @@ namespace WebHome.Helper
                 case Naming.RoleID.Accounting:
                     return url.Action("TrustIndex", "Accounting");
 
-                case Naming.RoleID.Learner:
-                    return url.Action("LearnerIndex", "LearnerFacet");
 
                 case Naming.RoleID.Servitor:
                     return url.Action("PaymentIndex", "Payment");
@@ -91,12 +103,17 @@ namespace WebHome.Helper
 
             if (models.GetTable<PDQTask>().Count(t => t.UID == profile.UID && t.PDQQuestion.GroupID == 6) >=
                 models.GetTable<RegisterLesson>().Where(r => r.UID == profile.UID && r.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
-                    .Select(r => r.GroupingLesson).Sum(g => g.LessonTime.Count(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null)))
+                    .Join(models.GetTable<GroupingLesson>(), r => r.RegisterGroupID, g => g.GroupID, (r, g) => g)
+                    .Join(models.GetTable<LessonTime>(), g => g.GroupID, l => l.GroupID, (g, l) => l)
+                    .Where(l => l.LessonPlan.CommitAttendance.HasValue || l.LessonAttendance != null).Count())
             {
                 return null;
             }
 
-            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>().Where(q => q.GroupID == 6)
+            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>()
+                .Where(q => q.GroupID == 6)
+                .Join(models.GetTable<UserProfile>().Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked), 
+                    q => q.AskerID, u => u.UID, (q, u) => q)
                 .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
                     q => q.QuestionID, t => t.QuestionID, (q, t) => q);
             int[] items = questItems
@@ -126,7 +143,138 @@ namespace WebHome.Helper
                 .Where(c => !revisionID.Any(r => r == c.ContractID));
             return items;
         }
+
+        public static IQueryable<CourseContract> PromptContract<TEntity>(this ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            var expansionID = models.GetTable<CourseContractRevision>().Where(r => r.Reason == "展延")
+                .Select(r => r.OriginalContract);
+
+            var closedID = models.GetTable<CourseContractRevision>().Where(r => r.Reason == "終止")
+                .Select(r => r.OriginalContract);
+
+            var terminationID = models.GetTable<CourseContractRevision>().Where(r => r.Reason == "終止")
+                .Select(r => r.RevisionID);
+
+            var items = models.GetTable<CourseContract>()
+                .Where(c => c.Expiration >= DateTime.Today || c.RegisterLessonContract.Any())
+                .Where(c => !c.RegisterLessonContract.Any(r => r.RegisterLesson.Attended == (int)Naming.LessonStatus.課程結束))
+                .Where(c => !expansionID.Any(r => r == c.ContractID))
+                .Where(c => !terminationID.Any(r => r == c.ContractID))
+                .Where(c => !closedID.Any(r => r == c.ContractID));
+
+            return items;
+        }
+
+
+        public static LessonAttendanceCheckEvent CheckLessonAttendanceEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var items = profile.LearnerGetUncheckedLessons(models);
+
+            var count = items.Count();
+            if (count > 0)
+            {
+                return new LessonAttendanceCheckEvent
+                {
+                    Profile = profile,
+                    CheckCount = count
+                };
+            }
+            return null;
+        }
+
+        public static DailyQuestionEvent CheckDailyQuestionEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var question = models.PromptLearnerDailyQuestion(profile);
+
+            if (question != null)
+            {
+                return new DailyQuestionEvent
+                {
+                    Profile = profile,
+                    DailyQuestion = question
+                };
+            }
+
+            return null;
+
+        }
+
+        public static UserGuideEvent CheckUserGuideEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<UserEvent>().Where(v => v.StartDate <= DateTime.Today && v.UID == profile.UID)
+                    .Join(models.GetTable<SystemEventBulletin>(), v => v.SystemEventID, b => b.EventID, (v, b) => v);
+            if (items.Count() > 0)
+            {
+                return new UserGuideEvent
+                {
+                    GuideEventList = items,
+                    Profile = profile,
+                };
+            }
+
+            return null;
+        }
+
+        public static ExpiringContractEvent CheckExpiringContractEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var contract = models.PromptExpiringContract().Where(c => c.CourseContractMember.Any(m => m.UID == profile.UID)).FirstOrDefault();
+            if (contract != null)
+            {
+                return new ExpiringContractEvent
+                {
+                    Profile = profile,
+                    ExpiringContract = contract
+                };
+            }
+
+            return null;
+
+        }
+
+        public static PromptContractEvent CheckPromptContractEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var items = models.PromptContract().Where(c => c.CourseContractMember.Any(m => m.UID == profile.UID));
+            if (items.Count()>0)
+            {
+                return new PromptContractEvent
+                {
+                    Profile = profile,
+                    ContractList = items
+                };
+            }
+
+            return null;
+
+        }
+
+
+        public static UserProfile ValiateLogin<TEntity>(this LoginViewModel viewModel, ModelSource<TEntity> models, ModelStateDictionary modelState)
+            where TEntity : class, new()
+        {
+            UserProfile item = models.GetTable<UserProfile>().Where(u => u.PID == viewModel.PID
+                      && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+
+            if (item == null)
+            {
+                modelState.AddModelError("PID", "您輸入的資料錯誤，請確認後再重新輸入!!");
+                return null;
+            }
+
+            if (item.Password != (viewModel.Password).MakePassword())
+            {
+                modelState.AddModelError("PID", "您輸入的資料錯誤，請確認後再重新輸入!!");
+                return null;
+            }
+
+            return item;
+
+        }
     }
-
-
+    
 }

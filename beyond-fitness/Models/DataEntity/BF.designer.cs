@@ -9577,6 +9577,10 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _ConclusionID;
 		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _EndDate;
+		
 		private EntitySet<PDQQuestion> _PDQQuestion;
 		
 		private EntitySet<QuestionnaireRequest> _QuestionnaireRequest;
@@ -9595,6 +9599,10 @@ namespace WebHome.Models.DataEntity
     partial void OnGroupNameChanged();
     partial void OnConclusionIDChanging(System.Nullable<int> value);
     partial void OnConclusionIDChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnEndDateChanged();
     #endregion
 		
 		public PDQGroup()
@@ -9666,6 +9674,46 @@ namespace WebHome.Models.DataEntity
 					this._ConclusionID = value;
 					this.SendPropertyChanged("ConclusionID");
 					this.OnConclusionIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
 				}
 			}
 		}
@@ -15543,6 +15591,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _OrderIndex;
 		
+		private System.Nullable<int> _Status;
+		
 		private EntitySet<LearnerAward> _LearnerAward;
 		
 		private EntityRef<BonusAwardingLesson> _BonusAwardingLesson;
@@ -15567,6 +15617,8 @@ namespace WebHome.Models.DataEntity
     partial void OnExchangeableOnlineChanged();
     partial void OnOrderIndexChanging(System.Nullable<int> value);
     partial void OnOrderIndexChanged();
+    partial void OnStatusChanging(System.Nullable<int> value);
+    partial void OnStatusChanged();
     #endregion
 		
 		public BonusAwardingItem()
@@ -15713,6 +15765,26 @@ namespace WebHome.Models.DataEntity
 					this._OrderIndex = value;
 					this.SendPropertyChanged("OrderIndex");
 					this.OnOrderIndexChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int")]
+		public System.Nullable<int> Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
 				}
 			}
 		}
@@ -26719,7 +26791,7 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int CompanyID
 		{
 			get
@@ -45442,6 +45514,10 @@ namespace WebHome.Models.DataEntity
 		
 		private System.DateTime _EndDate;
 		
+		private string _ActionName;
+		
+		private string _ControllerName;
+		
 		private EntitySet<UserEvent> _UserEvent;
 		
     #region Extensibility Method Definitions
@@ -45456,6 +45532,10 @@ namespace WebHome.Models.DataEntity
     partial void OnStartDateChanged();
     partial void OnEndDateChanging(System.DateTime value);
     partial void OnEndDateChanged();
+    partial void OnActionNameChanging(string value);
+    partial void OnActionNameChanged();
+    partial void OnControllerNameChanging(string value);
+    partial void OnControllerNameChanged();
     #endregion
 		
 		public SystemEventBulletin()
@@ -45540,6 +45620,46 @@ namespace WebHome.Models.DataEntity
 					this._EndDate = value;
 					this.SendPropertyChanged("EndDate");
 					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ActionName", DbType="NVarChar(32)")]
+		public string ActionName
+		{
+			get
+			{
+				return this._ActionName;
+			}
+			set
+			{
+				if ((this._ActionName != value))
+				{
+					this.OnActionNameChanging(value);
+					this.SendPropertyChanging();
+					this._ActionName = value;
+					this.SendPropertyChanged("ActionName");
+					this.OnActionNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ControllerName", DbType="NVarChar(256)")]
+		public string ControllerName
+		{
+			get
+			{
+				return this._ControllerName;
+			}
+			set
+			{
+				if ((this._ControllerName != value))
+				{
+					this.OnControllerNameChanging(value);
+					this.SendPropertyChanging();
+					this._ControllerName = value;
+					this.SendPropertyChanged("ControllerName");
+					this.OnControllerNameChanged();
 				}
 			}
 		}

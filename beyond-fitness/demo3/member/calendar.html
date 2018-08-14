@@ -12,10 +12,20 @@
       <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
       <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
       <!-- scrollup-master  -->
-      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
-      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
       <!-- jalendar  -->
-      <link href="css/jalendar/jalendar.css" rel="stylesheet" type="text/css" />
+      <link href="css/jalendar/jalendar.css" rel="stylesheet" type="text/css" />      
+      <!-- *** Favicons *** -->
+      <!--[if IE]>
+      <link rel="icon"  href="favicons/favicon_16x16.ico" />
+      <![endif]-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
       <!-- STYLE 要放最下面  -->
       <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
    </head>
@@ -29,7 +39,7 @@
                <div class="nav-wrapper container">
                   <!-- BACK --> 
                   <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index.html');">
-                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: lines; strokeColor:#ffffff; strokeWidth:2px; autoPlay:true"></div>
+                     <i class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: lines; strokeColor:#ffffff; strokeWidth:2px; autoPlay:true"></i>
                   </a>
                   <!-- // End of BACK --> 
                   <a id="logo-container" href="#" class="brand-logo toptitle center" >我的行事曆</a>
@@ -43,13 +53,19 @@
                   <div class="row">
                      <div id="mycalendar" class="jalendar">
                         <!-- 若要在放上日期與教練地點 架構為 <a> <span class="right">日期</span> </a> <p>教練 / 地點</p> -->
-                        <div class="added-event type3" data-date="2018-06-01" data-title="06/01 14:00-15:00【體驗】體能顧問：黃政浩 (Bill Huang)"></div>
-                        <div class="added-event type1" data-date="2018-06-06" data-title="06/06 14:00-15:00【P.T】體能顧問：黃政浩 (Bill Huang)"></div>
-                        <div class="added-event type1" data-date="2018-06-05" data-title="06/05 10:30-11:30【P.I】體能顧問：黃政浩 (Bill Huang)"></div>
-                        <div class="added-event type4" data-date="2018-06-07" data-title="06/07 BF美工訪談"></div>
-                        <div class="added-event type1" data-date="2018-06-08" data-title="06/08 16:30-17:30【S.T】"></div>
-                        <div class="added-event type1" data-date="2018-06-12" data-title="06/12 端午節聚會"></div>
-                        <div class="added-event type1" data-date="2018-06-12" data-title="06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type3" data-date="2018-06-01" data-title="2018/06/01 14:00-15:00【體驗檢測】"></div>
+                        <div class="added-event type1" data-date="2018-06-06" data-title="2018/06/06 14:00-15:00【P.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-05" data-title="2018/06/05 10:30-11:30【P.I】"></div>
+                        <div class="added-event type4" data-date="2018-06-07" data-title="2018/06/07 BF美工訪談 🖊"></div>
+                        <div class="added-event type1" data-date="2018-06-08" data-title="2018/06/08 16:30-17:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 端午節聚會"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
+                        <div class="added-event type1" data-date="2018-06-12" data-title="2018/06/12 10:30:11:30【S.T】"></div>
                      </div>
                   </div>
                </form>
@@ -94,7 +110,6 @@
          $(function () {
              $.scrollUp({
                  animation: 'fade',
-                 activeOverlay: '#00FFFF',
                  scrollImg: {
                      active: true,
                      type: 'background',
@@ -102,8 +117,6 @@
                  }
              });
          });
-         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
-         $('.image-switch').addClass('active'); 
           
              $('#mycalendar').jalendar({
                 color: '#ffffff', // Unlimited
@@ -123,3 +136,12 @@
       </script>
    </body>
 </html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84335528-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-84335528-4');
+</script>

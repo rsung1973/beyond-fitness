@@ -441,15 +441,15 @@ namespace WebHome.Controllers
                     T_轉入 = item.ContractTrustTrack.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount(),
                     //B_新增 = item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount).AdjustTrustAmount().ToString(),
                     B_新增 = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0)
-                        .Join(items.Where(t => t.TrustType == "B"), s => s.ContractID, t => t.ContractID, (s, t) => s)
+                        .Join(items.Where(t => t.TrustType == "B").Select(t => t.ContractID).Distinct(), s => s.ContractID, t => t, (s, t) => s)
                         .Select(s => s.CourseContract).Sum(c => c.TotalCost).AdjustTrustAmount(),
-                    N_返還 = 
+                    N_返還 =
                         ((item.ContractTrustTrack.Where(t => t.TrustType == "N")
                             .Select(t => t.LessonTime.RegisterLesson)
                             .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
-                        /*+ (item.ContractTrustTrack.Where(t => t.TrustType == "V")
-                            .Select(t => t.VoidPayment.Payment)
-                            .Sum(p => p.PayoffAmount) ?? 0)*/).AdjustTrustAmount(),
+                            /*+ (item.ContractTrustTrack.Where(t => t.TrustType == "V")
+                                .Select(t => t.VoidPayment.Payment)
+                                .Sum(p => p.PayoffAmount) ?? 0)*/).AdjustTrustAmount(),
                     S_終止 = (-item.ContractTrustTrack.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount)).AdjustTrustAmount(),
                     X_轉讓 = (-item.ContractTrustTrack.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount)).AdjustTrustAmount(),
                     收_付金額 = (item.ContractTrustSettlement.Sum(s => s.BookingTrustAmount) - item.ContractTrustSettlement.Sum(s => s.InitialTrustAmount)).AdjustTrustAmount(),

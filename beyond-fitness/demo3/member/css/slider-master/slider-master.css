@@ -372,19 +372,19 @@ Slider Navigation
 }
 .btn-skip {
     position: absolute;
-    top: 10px;
-    right: 10px;
+/*    top: 10px;*/
+    right: 5px;
     z-index: 9;
+    bottom: 10px;
 }
 .btn-skip a {
     color: #fff;
-    font-size: 16px;
-    width: 80px;
+    width: 50px;
     height: 35px;
     text-align: center;
-    padding: 0 10px;
-    font-size: 16px;
-    margin: 13px 10px;
+    padding: 0 5px;
+    font-size: 14px;
+    margin: 5px 5px;
     border-radius: 100px;
     border: none;
     display: inline-block;
@@ -393,7 +393,7 @@ Slider Navigation
     text-transform: uppercase;
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent;
-    background-color: #0061d2;
+    background-color: #05232d;
 }
 
 

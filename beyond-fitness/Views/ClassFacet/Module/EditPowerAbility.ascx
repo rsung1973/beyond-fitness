@@ -140,7 +140,7 @@
                 }
             });
         }
-        debugger;
+        //debugger;
         var RadarConfig = {
             type: 'radar',
             data: {

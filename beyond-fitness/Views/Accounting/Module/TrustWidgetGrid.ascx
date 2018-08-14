@@ -101,7 +101,7 @@
 </section>
 
 <script>
-    debugger;
+    //debugger;
     function inquireTrust() {
         var event = event || window.event;
         var $form = $(event.target).closest('form');

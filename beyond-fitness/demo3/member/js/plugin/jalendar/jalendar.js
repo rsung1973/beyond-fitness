@@ -24,7 +24,7 @@
             titleColor: null,
             weekColor: null,
             todayColor: null,
-            eventH3Color : null,
+            eventH3Color: null,
             eventColor1: null,
             eventColor2: null,
             eventColor3: null,
@@ -34,7 +34,9 @@
             totalbarColor: null,
             selectingBeforeToday: false,
             selectingAfterToday: false,
-            done: null
+            done: null,
+            monthChanged: null,
+            onEvent: function (eventID) { },
         }, options);
         // Languages            
         var dayNames = {};
@@ -224,9 +226,15 @@
             $this.find(".added-event.type0").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                //var $a = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.attr('onclick', settings.onEvent + "('" + eventID + "');");
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type0").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );                
                 $this.find(".day").has(".type0").addClass("have-event");
@@ -234,9 +242,14 @@
             $this.find(".added-event.type1").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.attr('onclick', settings.onEvent + "('" + eventID + "');");
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type1").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
                 $this.find(".day").has(".type1").addClass("have-event1");
@@ -245,9 +258,14 @@
             $this.find(".added-event.type2").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.attr('onclick', settings.onEvent + "('" + eventID + "');");
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type2").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
 
@@ -256,9 +274,14 @@
             $this.find(".added-event.type3").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.attr('onclick', settings.onEvent + "('" + eventID + "');");
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type3").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
 
@@ -267,9 +290,14 @@
             $this.find(".added-event.type4").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.attr('onclick', settings.onEvent + "('" + eventID + "');");
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type4").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
 
@@ -278,9 +306,16 @@
             $this.find(".added-event.type5").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.on('click', function (event) {
+                        settings.onEvent(eventID);
+                    });
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type5").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
 
@@ -289,9 +324,16 @@
             $this.find(".added-event.type6").each(function(i) {
                 $(this).attr("data-id", i);
                 var d = $(this).attr("data-date");
+                var eventID = $(this).attr("data-event-id");
+                var $eventLink = div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"));
+                if (settings.onEvent) {
+                    $eventLink.on('click', function (event) {
+                        settings.onEvent(eventID);
+                    });
+                }
                 $this.find('.this-month[data-date="' + d + '"]').append(
                     div("div", "event-single type6").attr("data-id", i).append(
-                        div("a", "").attr('href', $(this).attr('data-link')).attr('target', 'blank').text($(this).attr("data-title"))
+                        $eventLink
                     )
                 );
 
@@ -431,11 +473,22 @@
             } else {
                 month++;
             }
-            calcMonth();
-            prevAddEvent();
-            if (settings.type == "range") {
-                isFirstIndexNull();
-                selectedDays();
+            if (settings.monthChanged) {
+                settings.monthChanged(year, month, function () {
+                    calcMonth();
+                    prevAddEvent();
+                    if (settings.type == "range") {
+                        isFirstIndexNull();
+                        selectedDays();
+                    }
+                });
+            } else {
+                calcMonth();
+                prevAddEvent();
+                if (settings.type == "range") {
+                    isFirstIndexNull();
+                    selectedDays();
+                }
             }
         });
         // prev month click action
@@ -447,11 +500,22 @@
             } else {
                 month--;
             }
-            calcMonth();
-            prevAddEvent();
-            if (settings.type == "range") {
-                isFirstIndexNull();
-                selectedDays();
+            if (settings.monthChanged) {
+                settings.monthChanged(year, month, function () {
+                    calcMonth();
+                    prevAddEvent();
+                    if (settings.type == "range") {
+                        isFirstIndexNull();
+                        selectedDays();
+                    }
+                });
+            } else {
+                calcMonth();
+                prevAddEvent();
+                if (settings.type == "range") {
+                    isFirstIndexNull();
+                    selectedDays();
+                }
             }
         });
         $this.on("click", ".close-button", function(event) {
@@ -569,5 +633,7 @@
         $("html").on("click", function() {
             $(".jalendar-input input").removeClass("selected");
         });
+        selectedDays();
+        return this;
     };
 })(jQuery);

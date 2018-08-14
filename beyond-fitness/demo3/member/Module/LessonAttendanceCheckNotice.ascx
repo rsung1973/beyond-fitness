@@ -14,8 +14,8 @@
 <%  if (_item != null)
     { %>
 <li>
-    <i class="livicon-evo" data-options="name: angle-wide-right-alt.svg; size: 30px; style: original;  strokeWidth:2px; autoPlay:true"></i>
-    <a href="<%= Url.Action("AG001_LearnerToCheckAttendance","CornerKick") %>"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，還有 <%= _item.CheckCount %> 堂課沒打卡</a>
+    <i class="livicon-evo prefix" data-options="name: angle-wide-right-alt.svg; size: 30px; style: solid; autoPlay:true"></i>
+    <a href="javascript:gtag('event', '上課打卡', {  'event_category': '連結點擊',  'event_label': '我的通知'});window.location.href = '<%= Url.Action("LearnerToCheckAttendance","CornerKick") %>';"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，還有 <%= _item.CheckCount %> 堂課沒打卡</a>
 </li>
 <%  } %>
 
@@ -35,16 +35,10 @@
         _model = (UserProfile)this.Model;
         _items = (List<TimelineEvent>)ViewBag.UserNotice;
 
-        var items = _model.LearnerGetUncheckedLessons(models);
+        _item = _model.CheckLessonAttendanceEvent(models);
 
-        var count = items.Count();
-        if(count>0)
+        if(_item!=null)
         {
-            _item = new LessonAttendanceCheckEvent
-            {
-                Profile = _model,
-                CheckCount = count
-            };
             _items.Add(_item);
         }
 

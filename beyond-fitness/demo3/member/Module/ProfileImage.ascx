@@ -10,7 +10,7 @@
 
 <img class="<%= ViewBag.ImgClass ?? "circle" %>" src="<%= _model.PictureID.HasValue 
                               ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _model.PictureID + "?stretch=true"
-                              : "images/addImage.png" %>" id="profileImg" />
+                              : ViewBag.NoNameImg ?? "images/avatars/noname.png" %>" id="profileImg" />
 
 <script runat="server">
 

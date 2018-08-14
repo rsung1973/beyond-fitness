@@ -340,6 +340,8 @@
       <Column Name="GroupID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="GroupName" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
       <Column Name="ConclusionID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="PDQGroup_PDQQuestion" Member="PDQQuestion" ThisKey="GroupID" OtherKey="GroupID" Type="PDQQuestion" />
       <Association Name="PDQGroup_QuestionnaireRequest" Member="QuestionnaireRequest" ThisKey="GroupID" OtherKey="GroupID" Type="QuestionnaireRequest" />
       <Association Name="PDQGroup_QuestionnaireGroup" Member="QuestionnaireGroup" ThisKey="GroupID" OtherKey="GroupID" Type="QuestionnaireGroup" Cardinality="One" />
@@ -621,6 +623,7 @@
       <Column Name="Price" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ExchangeableOnline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="OrderIndex" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="BonusAwardingItem_LearnerAward" Member="LearnerAward" ThisKey="ItemID" OtherKey="ItemID" Type="LearnerAward" />
       <Association Name="BonusAwardingItem_BonusAwardingLesson" Member="BonusAwardingLesson" ThisKey="ItemID" OtherKey="ItemID" Type="BonusAwardingLesson" Cardinality="One" />
       <Association Name="BonusAwardingItem_BonusAwardingIndication" Member="BonusAwardingIndication" ThisKey="ItemID" OtherKey="ItemID" Type="BonusAwardingIndication" Cardinality="One" />
@@ -1103,7 +1106,7 @@
       <Column Name="Fax" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="LogoURL" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
       <Column Name="CompanyName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
-      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ReceiptNo" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="Phone" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
       <Column Name="ContactFax" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
@@ -1968,6 +1971,8 @@
       <Column Name="Title" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="EndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ActionName" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="ControllerName" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Association Name="SystemEventBulletin_UserEvent" Member="UserEvent" ThisKey="EventID" OtherKey="SystemEventID" Type="UserEvent" />
     </Type>
   </Table>

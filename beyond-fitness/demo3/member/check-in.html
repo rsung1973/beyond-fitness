@@ -12,8 +12,18 @@
       <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
       <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
       <!-- scrollup-master  -->
-      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
-      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
+      <!-- *** Favicons *** -->
+      <!--[if IE]>
+      <link rel="icon"  href="favicons/favicon_16x16.ico" />
+      <![endif]-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
       <!-- STYLE 要放最下面  -->
       <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
    </head>
@@ -26,7 +36,7 @@
                <div class="nav-wrapper container">
                   <!-- BACK --> 
                   <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index.html');">
-                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></div>
+                     <i class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
                   </a>
                   <!-- // End of BACK --> 
                   <a id="logo-container" href="#" class="brand-logo toptitle center" >上課打卡</a> 
@@ -50,7 +60,7 @@
                            <ul>
                               <li>
                                  <input type="checkbox" id="lesson1" />
-                                 <label for="lesson1"><span class="tag-luminous-vivid-raspberry badge">體驗</span> 2017/05/01 14:00-15:00
+                                 <label for="lesson1"><span class="tag-luminous-vivid-raspberry badge">體驗檢測</span> 2017/05/01 14:00-15:00
                                      <span class="help-text"> 體能顧問：黃政浩 (Bill Huang)</span>
                                  </label>
                               </li>
@@ -116,25 +126,23 @@
          $(function () {
              $.scrollUp({
                  animation: 'fade',
-                 activeOverlay: '#00FFFF',
                  scrollImg: {
                      active: true,
                      type: 'background',
                      src: '../images/top.png'
                  }
              });
-             //countup
-             $('.countuptime').each(function() {
-                 // no need to specify options unless they differ from the defaults
-                 var target = this;
-                 var endVal = parseInt($(this).attr('data-endVal'));
-                 theAnimation = new countUp(target, 0, endVal, 0, 2.5);
-                 theAnimation.start();
-             });   
          
          });
-         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
-         $('.image-switch').addClass('active');    
       </script>       
    </body>
 </html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84335528-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-84335528-4');
+</script>

@@ -348,7 +348,7 @@ namespace WebHome.Controllers
             item.UserProfileExtension.AdministrativeArea = viewModel.AdministrativeArea;
             viewModel.IDNo = viewModel.IDNo.GetEfficientString();
             if (viewModel.IDNo != null)
-                item.UserProfileExtension.IDNo = viewModel.IDNo.ToUpper();
+                item.UserProfileExtension.IDNo = viewModel.IDNo.ConvertToHalfWidthString().ToUpper();
             item.UserProfileExtension.CurrentTrial = viewModel.CurrentTrial;
 
             models.SubmitChanges();
@@ -695,6 +695,12 @@ namespace WebHome.Controllers
                 return View("CourseContractView", item);
             else
                 return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
+        }
+
+        [AllowAnonymous]
+        public ActionResult ViewSampleContract()
+        {
+            return View("SampleCourseContractView");
         }
 
         [AllowAnonymous]
@@ -1212,6 +1218,15 @@ namespace WebHome.Controllers
             }
             else
                 return Json(new { result = false, message = "合約資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetSampleContractPdf()
+        {
+            String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, "SampleContract.pdf");
+            String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewSampleContract") + "?pdf=1";
+            viewUrl.ConvertHtmlToPDF(pdfFile, 20);
+            return File(pdfFile, "application/pdf");
         }
 
         public ActionResult GetContractAmendmentPdf(CourseContractViewModel viewModel)

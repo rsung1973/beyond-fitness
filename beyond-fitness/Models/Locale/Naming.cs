@@ -85,7 +85,8 @@ namespace WebHome.Models.Locale
             ReadyToRegister = 1001,
             Deleted = 1002,
             Checked = 1003,
-            Anonymous = 1004 
+            Anonymous = 1004,
+            Left    =   1005,
         }
 
         public enum MemberStatus
@@ -93,7 +94,8 @@ namespace WebHome.Models.Locale
             尚未註冊 = 1001,
             已停用 = 1002,
             已註冊 = 1003,
-            訪客 = 1004
+            訪客 = 1004,
+            離職 = 1005,
         }
 
         public enum RoleID

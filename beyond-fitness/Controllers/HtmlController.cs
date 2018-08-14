@@ -232,19 +232,12 @@ namespace WebHome.Controllers
 
         public ActionResult LoginByForm(LoginViewModel viewModel, string returnUrl)
         {
-            UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
-                && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+            ViewBag.ViewModel = viewModel;
+
+            UserProfile item = viewModel.ValiateLogin(models, ModelState);
 
             if (item == null)
             {
-                ModelState.AddModelError("PID", "登入資料錯誤!!");
-                ViewBag.ModelState = ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
-            }
-
-            if (item.Password != (viewModel.Password).MakePassword())
-            {
-                ModelState.AddModelError("PID", "登入資料錯誤!!");
                 ViewBag.ModelState = ModelState;
                 return View("~/Views/Shared/ReportInputError.ascx");
             }

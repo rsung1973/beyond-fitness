@@ -38,8 +38,8 @@
             </td>
             <td nowrap="noWrap" class="text-right">
                 <%  totalAmt = item.ContractTrustSettlement.Where(s => s.InitialTrustAmount == 0)
-                            .Join(_model.Where(t => t.TrustType == "B"), s => s.ContractID, t => t.ContractID, (s, t) => s)
-                            .Select(s => s.CourseContract).Sum(c => c.TotalCost);  //item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); 
+                            .Join(_model.Where(t => t.TrustType == "B").Select(t => t.ContractID).Distinct(), s => s.ContractID, t => t, (s, t) => s)
+                            .Select(s => s.CourseContract).Sum(c => c.TotalCost); //item.ContractTrustTrack.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount); 
                     int B_Amt = totalAmt ?? 0;  %>
                 <%= totalAmt.HasValue ? String.Format("{0:##,###,###,##0}",totalAmt.AdjustTrustAmount()) : "--" %>
             </td>

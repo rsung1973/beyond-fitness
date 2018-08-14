@@ -18,6 +18,30 @@
         $('span.help-error-text').remove();
     }
 
+    function loadScript(url, callback) {
+
+        var script = document.createElement("script")
+        script.type = "text/javascript";
+
+        if (script.readyState) {  //IE
+            script.onreadystatechange = function () {
+                if (script.readyState == "loaded" ||
+                        script.readyState == "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {  //Others
+            script.onload = function () {
+                callback();
+            };
+        }
+
+        script.src = url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+
+
     function showLoading(autoHide,onBlock) {
         $.blockUI({
             message:  '<img src="<%= VirtualPathUtility.ToAbsolute("~/img/loading.gif") %>" /><h1>Loading</h1>', 
@@ -94,3 +118,4 @@
 
 
 </script>
+<%  Html.RenderPartial("~/Views/Common/GA.ascx"); %>

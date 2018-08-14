@@ -3,7 +3,7 @@
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <title>BEYOND FITNESS - 兌換我的獎品</title>
+      <title>BEYOND FITNESS - 兌換我的裝備</title>
       <!-- CSS  -->
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!-- materialize  -->
@@ -12,8 +12,18 @@
       <link href='css/livIconsevo/LivIconsEvo.css' rel='stylesheet' type='text/css'>
       <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
       <!-- scrollup-master  -->
-      <link href="css/scrollup-master/themes/tab.css" rel="stylesheet" id="scrollUpTheme">
-      <link href="css/scrollup-master/labs.css" rel="stylesheet">
+      <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
+      <!-- *** Favicons *** -->
+      <!--[if IE]>
+      <link rel="icon"  href="favicons/favicon_16x16.ico" />
+      <![endif]-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
       <!-- STYLE 要放最下面  -->
       <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
    </head>
@@ -26,10 +36,10 @@
                <div class="nav-wrapper container">
                   <!-- BACK --> 
                   <a href="#" class="button-collapse" onclick="javascript:window.location.assign('index.html');">
-                     <div class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></div>
+                     <i class="livicon-evo" data-options="name: angle-wide-left.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
                   </a>
                   <!-- // End of BACK --> 
-                  <a id="logo-container" href="#" class="brand-logo toptitle center" >兌換我的獎品</a> 
+                  <a id="logo-container" href="#" class="brand-logo toptitle center" >兌換我的裝備</a> 
                </div>
             </nav>
             <!-- // End of Header --> 
@@ -41,8 +51,8 @@
                   <div class="registered-forms">
                      <!-- 登入 - TAB -->
                      <ul id="tabs-swipe-demo" class="tabs col s12">
-                        <li class="tab col s6"><a class="active"  href="#test-swipe-1">獎品目錄</a></li>
-                        <li class="tab col s6"><a href="#test-swipe-2">已兌換獎品</a></li>
+                        <li class="tab col s6"><a class="active"  href="#test-swipe-1">裝備目錄</a></li>
+                        <li class="tab col s6"><a href="#test-swipe-2">已兌換裝備</a></li>
                      </ul>
                      <div id="test-swipe-1" class="tab-content acc-content col s12">
                         <!-- QA info -->
@@ -50,24 +60,53 @@
                            <div class="personal-info">
                               <div class="row valign-wrapper">
                                  <div class="col s4 m2">
-                                    <img src="images/avatars/garfaild.png" alt="" class="circle responsive-img valign">
+                                    <img src="images/avatars/Bill.jpg" alt="" class="circle responsive-img valign">
                                  </div>
                                  <div class="col s8 m10 text-box">
-                                    <span class="black-t18">劉加菲</span>
-                                    <span class="black-t12">每一枚金幣都是汗水與淚水的結晶，目前已累積39枚Beyond💰！繼續努力累積，集滿100枚有神秘大禮喔！</span>
+<!--                                    <span class="black-t18">劉加菲</span>-->
+                                     <span class="black-t12">每一枚金幣都是汗水與淚水的結晶，目前已累積<span class="point">39枚</span>Beyond💰！繼續努力累積，集滿100枚有神秘大禮喔！</span>
                                  </div>
                               </div>
                            </div>
                            <!-- 點數選擇 -->
                            <div class="input-field col s12">
                               <select>
-                                 <option value="1" disabled selected>0~15點</option>
-                                 <option value="2">16~30點</option>
-                                 <option value="3">31~45點</option>
+                                 <option value="1" selected>線上兌換</option>
+                                 <option value="2">現場兌換</option>
                               </select>
                            </div>
                            <!-- //End of 點數選擇 -->
-                           <div class="row">
+                           <div class="row">  
+                              <!-- ＩＭＧ -->
+                              <div class="img-block col s12 m6 l6">
+                                 <div id="" class="parallax-container">
+                                    <div class="section no-pad-bot">
+                                       <div class="container">
+                                          <ul class="text-area">
+                                             <li class="white-text left">教練課程</li>
+                                             <li class="right"><span class="point-tag">22點 / 立即兌換</span></li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                    <div class="parallax"><img src="images/commodity/bonus_01.jpg" alt="Unsplashed background img 1"></div>
+                                 </div>
+                              </div>
+                              <!-- // End of ＩＭＧ -->    
+                              <!-- ＩＭＧ -->
+                              <div class="img-block col s12 m6 l6">
+                                 <div id="" class="parallax-container">
+                                    <div class="section no-pad-bot">
+                                       <div class="container">
+                                          <ul class="text-area">
+                                             <li class="white-text left">按摩球（小）</li>
+                                             <li class="right"><span class="point-tag">2點</span></li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                    <div class="parallax"><img src="images/commodity/bonus_12.jpg" alt="Unsplashed background img 1"></div>
+                                 </div>
+                              </div>
+                              <!-- // End of ＩＭＧ -->                               
                               <!-- ＩＭＧ -->
                               <div class="img-block col s12 m6 l6">
                                  <div id="" class="parallax-container">
@@ -134,6 +173,21 @@
                                     <div class="section no-pad-bot">
                                        <div class="container">
                                           <ul class="text-area">
+                                             <li class="white-text left">按摩滾筒（短）</li>
+                                             <li class="right"><span class="point-tag">18點</span></li>
+                                          </ul>
+                                       </div>
+                                    </div>
+                                    <div class="parallax"><img src="images/commodity/bonus_07.jpg" alt="Unsplashed background img 1"></div>
+                                 </div>
+                              </div>
+                              <!-- // End of ＩＭＧ -->                                 
+                              <!-- ＩＭＧ -->
+                              <div class="img-block col s12 m6 l6">
+                                 <div id="" class="parallax-container">
+                                    <div class="section no-pad-bot">
+                                       <div class="container">
+                                          <ul class="text-area">
                                              <li class="white-text left">潮流長帽T</li>
                                              <li class="right"><span class="point-tag">20點</span></li>
                                           </ul>
@@ -142,22 +196,7 @@
                                     <div class="parallax"><img src="images/commodity/bonus_06.jpg" alt="Unsplashed background img 1"></div>
                                  </div>
                               </div>
-                              <!-- // End of ＩＭＧ -->                                
-                              <!-- ＩＭＧ -->
-                              <div class="img-block col s12 m6 l6">
-                                 <div id="" class="parallax-container">
-                                    <div class="section no-pad-bot">
-                                       <div class="container">
-                                          <ul class="text-area">
-                                             <li class="white-text left">按摩滾筒（短）</li>
-                                             <li class="right"><span class="point-tag">18點</span></li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                    <div class="parallax"><img src="images/commodity/bonus_09.jpg" alt="Unsplashed background img 1"></div>
-                                 </div>
-                              </div>
-                              <!-- // End of ＩＭＧ -->    
+                              <!-- // End of ＩＭＧ -->  
                               <!-- ＩＭＧ -->
                               <div class="img-block col s12 m6 l6">
                                  <div id="" class="parallax-container">
@@ -165,29 +204,14 @@
                                        <div class="container">
                                           <ul class="text-area">
                                              <li class="white-text left">教練課程贈送包</li>
-                                             <li class="right"><span class="point-tag">20點 / 兌換</span></li>
+                                             <li class="right"><span class="point-tag">20點</span></li>
                                           </ul>
                                        </div>
                                     </div>
                                     <div class="parallax"><img src="images/commodity/bonus_08.jpg" alt="Unsplashed background img 1"></div>
                                  </div>
                               </div>
-                              <!-- // End of ＩＭＧ -->   
-                              <!-- ＩＭＧ -->
-                              <div class="img-block col s12 m6 l6">
-                                 <div id="" class="parallax-container">
-                                    <div class="section no-pad-bot">
-                                       <div class="container">
-                                          <ul class="text-area">
-                                             <li class="white-text left">教練課程</li>
-                                             <li class="right"><span class="point-tag">22點 / 兌換</span></li>
-                                          </ul>
-                                       </div>
-                                    </div>
-                                    <div class="parallax"><img src="images/commodity/bonus_01.png" alt="Unsplashed background img 1"></div>
-                                 </div>
-                              </div>
-                              <!-- // End of ＩＭＧ -->       
+                              <!-- // End of ＩＭＧ -->                                         
                               <!-- ＩＭＧ -->
                               <div class="img-block col s12 m6 l6">
                                  <div id="" class="parallax-container">
@@ -219,13 +243,23 @@
                               </div>
                               <!-- // End of ＩＭＧ -->                                 
                            </div>
-                           <!-- 問題 -->
+                           <!-- 商品 -->
                         </div>
                         <!--//End of QA info--> 
                      </div>
                      <div id="test-swipe-2" class="tab-content acc-content col s12">
                         <!-- QA info -->
                         <div class="point-content">
+                           <div class="personal-info">
+                              <div class="row valign-wrapper">
+                                 <div class="col s4 m2">
+                                    <img src="images/avatars/noname.png" alt="" class="circle responsive-img valign">
+                                 </div>
+                                 <div class="col s8 m10 text-box">
+                                    <span class="black-t12">您截至為止已兌換的裝備如下，繼續努力累積Beyond💰，蒐集裝備吧！</span>
+                                 </div>
+                              </div>
+                           </div>                            
                            <!-- ＩＭＧ -->
                            <div class="img-block">
                               <div id="" class="parallax-container">
@@ -237,7 +271,7 @@
                                        </ul>
                                     </div>
                                  </div>
-                                 <div class="parallax"><img src="images/commodity/bonus_01.png" alt="Unsplashed background img 1"></div>
+                                 <div class="parallax"><img src="images/commodity/bonus_01.jpg" alt="Unsplashed background img 1"></div>
                               </div>
                            </div>
                            <!-- // End of ＩＭＧ -->
@@ -276,7 +310,6 @@
          $(function () {
              $.scrollUp({
                  animation: 'fade',
-                 activeOverlay: '#00FFFF',
                  scrollImg: {
                      active: true,
                      type: 'background',
@@ -293,8 +326,15 @@
              });   
          
          });
-         $('#scrollUpTheme').attr('href', 'css/scrollup-master/themes/image.css?1.1');
-         $('.image-switch').addClass('active');    
       </script>     
    </body>
 </html>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84335528-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-84335528-4');
+</script>

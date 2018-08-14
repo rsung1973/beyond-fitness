@@ -46,7 +46,14 @@ namespace WebHome.Controllers
                     Activity activity = JsonConvert.DeserializeObject<Activity>(jsonData);
                     foreach (Event lineEvent in activity.Events)
                     {
-                        LineMessageHandler handler = new LineMessageHandler(lineEvent);
+
+                        //if (lineEvent.ReplyToken == "00000000000000000000000000000000"
+                        //    || lineEvent.ReplyToken != "ffffffffffffffffffffffffffffffff")
+                        //{
+                        //    return new EmptyResult();
+                        //}
+
+                        LineMessageHandler handler = new LineMessageHandler(lineEvent, models);
 
                         Profile profile = await handler.GetProfile(lineEvent.Source.UserId);
 
@@ -117,14 +124,22 @@ namespace WebHome.Controllers
         public async Task<ActionResult> GetIcon(String id)
         {
             var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            var path = Server.MapPath("~/images/GitHubIcon/" + id + ".png");
+            var path = Server.MapPath("~/images/GitHubIcon/" + id + ".jpg");
 
             return File(path, "image/png");
         }
-        public async Task<ActionResult> GetImageMap(String id)
+        public async Task<ActionResult> GetMapImage(String id)
         {
             var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-            var path = Server.MapPath("~/images/Map/" + id + ".png");
+            var path = Server.MapPath("~/images/Map/" + id + ".jpg");
+
+            return File(path, "image/png");
+        }
+
+        public async Task<ActionResult> GetBeyondCoinMap(String id)
+        {
+            var root = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            var path = Server.MapPath($"~/images/Map/BeyondCoin{id}.jpg");
 
             return File(path, "image/png");
         }

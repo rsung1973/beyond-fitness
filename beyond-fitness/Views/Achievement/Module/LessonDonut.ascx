@@ -11,7 +11,7 @@
 <canvas id="<%= _chartID %>"></canvas>
 <script>
 
-    debugger;
+    //debugger;
     $(function () {
 
         var ctx = document.getElementById('<%= _chartID %>').getContext('2d');

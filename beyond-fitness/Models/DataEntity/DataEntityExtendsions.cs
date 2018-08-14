@@ -82,6 +82,17 @@ namespace WebHome.Models.DataEntity
             return contract.ContractNo != null ? String.Format("{0}-{1:00}", contract.ContractNo, contract.SequenceNo) : "--";
         }
 
+        public static DateTime? Expiration(this CourseContract contract)
+        {
+            var revision = contract.RevisionList.Where(r => r.Reason == "展期").FirstOrDefault();
+            if (revision != null)
+            {
+                return revision.CourseContract.Expiration;
+            }
+            return contract.Expiration;
+        }
+
+
         public static int? TotalPaidAmount(this CourseContract contract)
         {
             return contract.ContractPayment
@@ -117,6 +128,8 @@ namespace WebHome.Models.DataEntity
                     return "S.T.session";
                 case (int)Naming.LessonPriceStatus.教練PI:
                     return "教練P.I";
+                case (int)Naming.LessonPriceStatus.體驗課程:
+                    return "體驗檢測";
                 default:
                     return ((Naming.LessonPriceStatus)status).ToString();
             }

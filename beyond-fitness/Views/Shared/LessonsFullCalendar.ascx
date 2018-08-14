@@ -77,7 +77,7 @@
                 }
             });
 
-            debugger;
+            //debugger;
             /* hide default buttons */
             $('.fc-toolbar .fc-right, .fc-toolbar .fc-center').hide();
 

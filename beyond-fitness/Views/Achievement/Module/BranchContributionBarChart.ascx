@@ -12,7 +12,7 @@
 <%--<%  Html.RenderPartial("~/Views/Shared/InitBarChart.ascx"); %>--%>
 <script>
 
-    debugger;
+    //debugger;
     $(function () {
 
         var ctx = document.getElementById('<%= _chartID %>').getContext('2d');

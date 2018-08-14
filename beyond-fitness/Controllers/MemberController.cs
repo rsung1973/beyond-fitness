@@ -20,7 +20,7 @@ using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
 {
-    [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
+    [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach })]
     public class MemberController : SampleController<UserProfile>
     {
         public MemberController() : base()
@@ -32,7 +32,7 @@ namespace WebHome.Controllers
         public ActionResult ListCoaches()
         {
             MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
-            if(viewModel==null)
+            if (viewModel == null)
             {
                 viewModel = new MembersQueryViewModel
                 {
@@ -41,10 +41,10 @@ namespace WebHome.Controllers
                 HttpContext.SetCacheValue(CachingKey.MembersQuery, viewModel);
             }
 
-            return View("ListCoaches",viewModel);
+            return View("ListCoaches", viewModel);
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult ListLearners(String byName, String message = null)
         {
 
@@ -76,13 +76,14 @@ namespace WebHome.Controllers
         }
 
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult AddLearner(LearnerViewModel viewModel)
         {
             return View(viewModel);
         }
 
         [HttpPost]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult CommitLearner(LearnerViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
@@ -127,7 +128,7 @@ namespace WebHome.Controllers
                 }
             };
 
-            if(viewModel.Birthday.HasValue)
+            if (viewModel.Birthday.HasValue)
                 item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
             item.UserRole.Add(new UserRole
@@ -138,6 +139,8 @@ namespace WebHome.Controllers
 
             models.EntityList.InsertOnSubmit(item);
             models.SubmitChanges();
+
+            item.InitializeSystemAnnouncement(models);
         }
 
         private String createMemberCode()
@@ -151,12 +154,14 @@ namespace WebHome.Controllers
                 .ToString();
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult AddCoach(CoachViewModel model)
         {
             return View(model);
         }
 
         [HttpPost]
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult CommitCoach(CoachViewModel viewModel)
         {
             if (viewModel.AuthorizedRole == null || viewModel.AuthorizedRole.Length == 0)
@@ -192,7 +197,7 @@ namespace WebHome.Controllers
                 UserProfileExtension = new UserProfileExtension { }
             };
 
-            if(viewModel.Birthday.HasValue)
+            if (viewModel.Birthday.HasValue)
                 item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
             models.DeleteAllOnSubmit<UserRole>(r => r.UID == item.UID);
@@ -212,7 +217,7 @@ namespace WebHome.Controllers
                     || viewModel.AuthorizedRole.Contains((int)Naming.RoleID.Coach)
                     || viewModel.AuthorizedRole.Contains((int)Naming.RoleID.ViceManager))
             {
-                if(item.ServingCoach==null)
+                if (item.ServingCoach == null)
                 {
                     item.ServingCoach = new ServingCoach
                     {
@@ -230,6 +235,7 @@ namespace WebHome.Controllers
             return ListCoaches();
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult CommitMember(CoachViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -256,7 +262,7 @@ namespace WebHome.Controllers
                     UserProfileExtension = new UserProfileExtension { }
                 };
 
-                if(viewModel.Birthday.HasValue)
+                if (viewModel.Birthday.HasValue)
                     item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
                 models.GetTable<UserProfile>().InsertOnSubmit(item);
@@ -346,7 +352,7 @@ namespace WebHome.Controllers
                 });
             }
 
-                ProfessionalLevel professionLevel = null;
+            ProfessionalLevel professionLevel = null;
             if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach
                     || r == (int)Naming.RoleID.Manager
                     || r == (int)Naming.RoleID.ViceManager
@@ -365,7 +371,7 @@ namespace WebHome.Controllers
                     BranchID = viewModel.BranchID.Value
                 });
 
-                if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach) 
+                if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Coach)
                     && viewModel.LevelID.HasValue)
                 {
                     professionLevel = models.GetTable<ProfessionalLevel>().Where(l => l.LevelID == viewModel.LevelID).First();
@@ -390,7 +396,7 @@ namespace WebHome.Controllers
                 }
                 else if (viewModel.AuthorizedRole.Any(r => r == (int)Naming.RoleID.Officer))
                 {
-                    professionLevel =  item.ServingCoach.ProfessionalLevel = models.GetTable<ProfessionalLevel>().Where(p => p.CategoryID == (int)Naming.ProfessionalCategory.Special).FirstOrDefault();
+                    professionLevel = item.ServingCoach.ProfessionalLevel = models.GetTable<ProfessionalLevel>().Where(p => p.CategoryID == (int)Naming.ProfessionalCategory.Special).FirstOrDefault();
                 }
 
             }
@@ -414,6 +420,7 @@ namespace WebHome.Controllers
 
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult EditCoachCertificate(int uid)
         {
 
@@ -428,11 +435,12 @@ namespace WebHome.Controllers
 
         }
 
+        
         public ActionResult ShowCoachCertificate(int coachID)
         {
             ViewResult result = (ViewResult)EditCoachCertificate(coachID);
             ServingCoach item = result.Model as ServingCoach;
-            if(item!=null)
+            if (item != null)
             {
                 result.ViewName = "~/Views/Member/Module/ShowCoachCertificate.ascx";
             }
@@ -440,6 +448,7 @@ namespace WebHome.Controllers
         }
 
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult AddCoachCertificate(int uid)
         {
 
@@ -454,6 +463,7 @@ namespace WebHome.Controllers
 
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult CommitCoachCertificate(CoachCertificateViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -497,6 +507,7 @@ namespace WebHome.Controllers
 
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult DeleteCoachCertificate(CoachCertificateViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -505,7 +516,7 @@ namespace WebHome.Controllers
 
             if (item == null)
             {
-                return Json(new { result = false,message = "資料錯誤!!" });
+                return Json(new { result = false, message = "資料錯誤!!" });
             }
 
             return Json(new { result = true });
@@ -513,7 +524,8 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult CoachCertificateList(int uid,bool? viewOnly)
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
+        public ActionResult CoachCertificateList(int uid, bool? viewOnly)
         {
             var items = models.GetTable<CoachCertificate>().Where(c => c.CoachID == uid);
             ViewBag.ViewOnly = viewOnly;
@@ -593,6 +605,7 @@ namespace WebHome.Controllers
             return ListLearners(null);
 
         }
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult DeleteCoach(int uid)
         {
 
@@ -666,6 +679,7 @@ namespace WebHome.Controllers
 
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer })]
         public ActionResult EnableCoach(int id)
         {
 
@@ -687,7 +701,7 @@ namespace WebHome.Controllers
         }
 
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult EditCoach(int id)
         {
 
@@ -720,12 +734,12 @@ namespace WebHome.Controllers
 
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult EditMember(CoachViewModel viewModel)
         {
 
-            UserProfile item = models.EntityList.Where(u => u.UID == viewModel.UID 
-                && !u.UserRole.Any(r=>r.RoleID==(int)Naming.RoleID.Learner)).FirstOrDefault();
+            UserProfile item = models.EntityList.Where(u => u.UID == viewModel.UID
+                && !u.UserRole.Any(r => r.RoleID == (int)Naming.RoleID.Learner)).FirstOrDefault();
 
             if (item != null)
             {
@@ -734,11 +748,11 @@ namespace WebHome.Controllers
                 viewModel.Phone = item.Phone;
                 viewModel.Email = item.PID;
                 viewModel.RealName = item.RealName;
-                
-                if(item.IsCoach())
+
+                if (item.IsCoach())
                 {
                     viewModel.IsCoach = true;
-                    if(item.ServingCoach.CoachWorkplace.Count>0)
+                    if (item.ServingCoach.CoachWorkplace.Count > 0)
                     {
                         viewModel.BranchID = item.ServingCoach.CoachWorkplace.First().BranchID;
                     }
@@ -750,7 +764,7 @@ namespace WebHome.Controllers
                     viewModel.IsCoach = false;
                 }
 
-                if(item.EmployeeWelfare!=null)
+                if (item.EmployeeWelfare != null)
                 {
                     viewModel.HasGiftLessons = item.EmployeeWelfare.MonthlyGiftLessons > 0;
                     viewModel.MonthlyGiftLessons = item.EmployeeWelfare.MonthlyGiftLessons;
@@ -779,7 +793,7 @@ namespace WebHome.Controllers
 
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult ShowLearner(int id)
         {
             return ShowMember(id);
@@ -787,7 +801,7 @@ namespace WebHome.Controllers
 
 
         [HttpPost]
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult EditCoach(CoachViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
@@ -818,7 +832,7 @@ namespace WebHome.Controllers
                 {
                     ModelState.AddModelError("email", "Email已經是註冊使用者!!");
                     ViewBag.ModelState = ModelState;
-                    return View("EditCoach",viewModel);
+                    return View("EditCoach", viewModel);
                 }
                 item.PID = viewModel.Email;
             }
@@ -860,7 +874,7 @@ namespace WebHome.Controllers
             return ListCoaches();
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult EditLearner(int id)
         {
             UserProfile item = models.EntityList.Where(u => u.UID == id).FirstOrDefault();
@@ -895,7 +909,7 @@ namespace WebHome.Controllers
         }
 
         [HttpPost]
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult EditLearner(LearnerViewModel viewModel)
         {
             if (!this.ModelState.IsValid)
@@ -919,7 +933,7 @@ namespace WebHome.Controllers
             item.Phone = viewModel.Phone;
             item.Birthday = viewModel.Birthday;
             item.BirthdateIndex = null;
-            if(viewModel.Birthday.HasValue)
+            if (viewModel.Birthday.HasValue)
                 item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
 
             if (!String.IsNullOrEmpty(viewModel.Email))
@@ -1097,7 +1111,7 @@ namespace WebHome.Controllers
 
             var item = models.DeleteAny<TuitionInstallment>(t => t.InstallmentID == installmentID);
 
-            if(item==null)
+            if (item == null)
             {
                 return Json(new { result = false, message = "付款資料錯誤!!" });
             }
@@ -1167,7 +1181,7 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult DeleteAchievementShare(int installmentID,int coachID)
+        public ActionResult DeleteAchievementShare(int installmentID, int coachID)
         {
 
             //var item = models.DeleteAny<TuitionAchievement>(t => t.InstallmentID == installmentID
@@ -1188,7 +1202,7 @@ namespace WebHome.Controllers
         }
 
 
-        public ActionResult CommitPayment(int registerID,InstallmentViewModel viewModel)
+        public ActionResult CommitPayment(int registerID, InstallmentViewModel viewModel)
         {
             //RegisterLesson item = models.GetTable<RegisterLesson>()
             //    .Where(u => u.UID == (int?)HttpContext.GetCacheValue(CachingKey.EditMemberUID)
@@ -1348,10 +1362,10 @@ namespace WebHome.Controllers
 
         public ActionResult ChangeRoleList(Naming.RoleID? roleID)
         {
-            if(roleID.HasValue)
+            if (roleID.HasValue)
             {
                 MembersQueryViewModel viewModel = (MembersQueryViewModel)HttpContext.GetCacheValue(CachingKey.MembersQuery);
-                if(viewModel==null)
+                if (viewModel == null)
                 {
                     viewModel = new MembersQueryViewModel { };
                 }
@@ -1427,7 +1441,7 @@ namespace WebHome.Controllers
         [AssistantOrSysAdminAuthorize]
         public ActionResult LessonTuitionInstallment(int id)
         {
-            var item =  models.GetTable<RegisterLesson>().Where(u => u.RegisterID == id).FirstOrDefault();
+            var item = models.GetTable<RegisterLesson>().Where(u => u.RegisterID == id).FirstOrDefault();
 
             if (item == null)
             {
@@ -1572,7 +1586,7 @@ namespace WebHome.Controllers
             return View();
         }
 
-        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
+        
         public ActionResult PDQ(int id, int? groupID)
         {
             UserProfile profile = HttpContext.GetUser();
@@ -1589,7 +1603,7 @@ namespace WebHome.Controllers
             }
 
             ViewBag.GroupID = groupID;
-            switch(groupID)
+            switch (groupID)
             {
                 case 1:
                     ViewBag.Percent = "20%";
@@ -1613,7 +1627,7 @@ namespace WebHome.Controllers
             }
         }
 
-        public ActionResult UpdatePDQ(int id,int groupID,int? goalID, int? styleID, int? levelID)
+        public ActionResult UpdatePDQ(int id, int groupID, int? goalID, int? styleID, int? levelID)
         {
             UserProfile profile = HttpContext.GetUser();
             if (profile == null)
@@ -1651,7 +1665,7 @@ namespace WebHome.Controllers
                 .Where(q => !q.PDQTask.Any(t => t.UID == id)
                     || q.PDQTask.Count(t => t.UID == id && !t.SuggestionID.HasValue && t.PDQAnswer == "") == 1)
                 .OrderBy(q => q.QuestionNo);
-            if(voidAns.Count()>0)
+            if (voidAns.Count() > 0)
             {
                 return Json(new { result = false, message = "請填選第" + String.Join("、", voidAns.Select(q => q.QuestionNo)) + "題答案!!" });
             }

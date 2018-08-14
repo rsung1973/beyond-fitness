@@ -38,6 +38,16 @@ namespace WebHome.Helper
                 }
                 models.SubmitChanges();
             }
+
+            var contract = lesson.RegisterLessonContract?.CourseContract;
+            if (contract != null && contract.RemainedLessonCount() == 0)
+            {
+                foreach(var r in contract.RegisterLessonContract)
+                {
+                    r.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
+                }
+                models.SubmitChanges();
+            }
         }
 
         public static void CheckLearnerQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, RegisterLesson item)
@@ -74,10 +84,11 @@ namespace WebHome.Helper
                 var questItem = item.QuestionnaireRequest.OrderByDescending(q => q.QuestionnaireID).First();
                 checkAttendance = models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID
                     && l.LessonAttendance != null && l.LessonAttendance.CompleteDate > questItem.RequestDate).Count();
-                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1);
+                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1)
+                    && item.Lessons >= countBase * (item.QuestionnaireRequest.Count + 1);
             }
 
-            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) && underCount) || (totalAttendance + 1) == item.Lessons)
+            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) || (totalAttendance + 1) == item.Lessons) && underCount)
             {
                 CreateQuestionnaire(models, item);
             }
@@ -138,10 +149,11 @@ namespace WebHome.Helper
                 var questItem = item.QuestionnaireRequest.OrderByDescending(q => q.QuestionnaireID).First();
                 checkAttendance = models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID
                     && l.LessonAttendance != null && l.LessonAttendance.CompleteDate > questItem.RequestDate).Count();
-                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1);
+                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1)
+                        && item.Lessons >= countBase * (item.QuestionnaireRequest.Count + 1);
             }
 
-            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) && underCount) || (totalAttendance + 1) == item.Lessons)
+            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) || (totalAttendance + 1) == item.Lessons) && underCount)
             {
                 var group = models.GetTable<QuestionnaireGroup>().OrderByDescending(q => q.GroupID).FirstOrDefault();
                 if (group != null && !item.QuestionnaireRequest.Any(q => q.PDQTask.Count == 0))
@@ -521,6 +533,8 @@ namespace WebHome.Helper
 
             models.GetTable<UserProfile>().InsertOnSubmit(item);
             models.SubmitChanges();
+
+            item.InitializeSystemAnnouncement(models);
 
             return item;
         }
@@ -1501,6 +1515,9 @@ namespace WebHome.Helper
 
             if (items.Count() > 0)
             {
+                int? lastSettlementID = models.GetTable<Settlement>().OrderByDescending(s => s.SettlementID)
+                    .FirstOrDefault()?.SettlementID;
+
                 Settlement settlement = new Settlement
                 {
                     SettlementDate = DateTime.Now,
@@ -1510,32 +1527,34 @@ namespace WebHome.Helper
                 models.GetTable<Settlement>().InsertOnSubmit(settlement);
                 models.SubmitChanges();
 
-                models.ExecuteCommand(@"INSERT INTO ContractTrustSettlement
-                       (ContractID, SettlementID, TotalTrustAmount, InitialTrustAmount, BookingTrustAmount, CurrentLiableAmount)
-                        SELECT  s.ContractID, {0}, t.TotalTrustAmount, t.BookingTrustAmount, t.BookingTrustAmount, 0
-                        FROM     (SELECT  a.ContractID, MAX(a.SettlementID) AS SettlementID
-                        FROM     ContractTrustSettlement AS a INNER JOIN
-                                       CourseContract AS b ON a.ContractID = b.ContractID
-                        WHERE   (b.Status = {1})
-                        GROUP BY a.ContractID) AS s INNER JOIN ContractTrustSettlement AS t 
-                            ON s.ContractID = t.ContractID AND s.SettlementID = t.SettlementID",
-                    settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+                if (lastSettlementID.HasValue)
+                {
+                    models.ExecuteCommand(@"INSERT INTO ContractTrustSettlement
+                           (ContractID, SettlementID, TotalTrustAmount, InitialTrustAmount, BookingTrustAmount, CurrentLiableAmount)
+                            SELECT  ContractID, {0}, TotalTrustAmount, BookingTrustAmount, BookingTrustAmount, 0
+                            FROM     ContractTrustSettlement
+                            WHERE   (SettlementID = {1}) AND (ContractID NOT IN
+                                               (SELECT  ContractID
+                                               FROM     ContractTrustTrack
+                                               WHERE   (SettlementID = {1}) AND (TrustType IN ('S', 'X'))))",
+                        settlement.SettlementID, lastSettlementID);
+                }
 
                 models.ExecuteCommand(@"UPDATE CourseContractTrust
-                        SET        CurrentSettlement = {0}
-                        FROM     CourseContractTrust INNER JOIN
-                                       CourseContract ON CourseContractTrust.ContractID = CourseContract.ContractID
-                        WHERE   (CourseContract.Status = {1})", settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+                            SET        CurrentSettlement = ContractTrustSettlement.SettlementID
+                            FROM     CourseContractTrust INNER JOIN
+                                           ContractTrustSettlement ON CourseContractTrust.ContractID = ContractTrustSettlement.ContractID
+                            WHERE   (ContractTrustSettlement.SettlementID = {0})",
+                   settlement.SettlementID);
 
                 models.ExecuteCommand(@"INSERT INTO CourseContractTrust
                                            (ContractID, CurrentSettlement)
-                            SELECT  a.ContractID, b.SettlementID
-                            FROM     CourseContract AS a INNER JOIN
-                                           ContractTrustSettlement AS b ON a.ContractID = b.ContractID
-                            WHERE   (b.SettlementID = {0}) AND (a.ContractID NOT IN
+                            SELECT  ContractID, SettlementID
+                            FROM     ContractTrustSettlement
+                            WHERE   (SettlementID = {0}) AND (ContractID NOT IN
                                                (SELECT  ContractID
-                                               FROM     CourseContractTrust)) AND (a.Status = {1})",
-                    settlement.SettlementID, (int)Naming.CourseContractStatus.已生效);
+                                               FROM     CourseContractTrust))",
+                    settlement.SettlementID);
 
                 foreach (var item in items.GroupBy(t => t.ContractID))
                 {
@@ -1712,93 +1731,6 @@ namespace WebHome.Helper
                 .Join(models.GetTable<TrainingExecution>(), p => p.ExecutionID, x => x.ExecutionID, (p, x) => x)
                 .Join(models.GetTable<TrainingItem>(), x => x.ExecutionID, i => i.ExecutionID, (x, i) => i)
                 .Join(models.GetTable<TrainingItemAids>(), x => x.ItemID, s => s.ItemID, (x, s) => s);
-        }
-
-        public static IQueryable<LessonTime> ByLessonQueryType(this IQueryable<LessonTime> items,Naming.LessonQueryType? query)
-        {
-            switch (query)
-            {
-                case Naming.LessonQueryType.一般課程:
-                    items = items.PTLesson();
-                    break;
-
-                case Naming.LessonQueryType.自主訓練:
-                    //items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
-                    //    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
-                    items = items.Where(l => l.TrainingBySelf == 1);
-                    break;
-                case Naming.LessonQueryType.教練PI:
-                    items = items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.教練PI);
-                    break;
-                case Naming.LessonQueryType.體驗課程:
-                    items = items.TrialLesson();
-                    break;
-
-                case Naming.LessonQueryType.在家訓練:
-                    items = items.Where(l => l.TrainingBySelf == 2);
-                    break;
-            }
-
-            return items;
-        }
-
-        public static int[] PTScope = new int[] {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        //(int)Naming.LessonPriceStatus.企業合作方案,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.點數兌換課程 };
-
-        public static IQueryable<LessonTime> PTLesson(this IQueryable<LessonTime> items)
-        {
-            return items.Where(l => PTScope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                    || (l.RegisterLesson.RegisterLessonEnterprise != null
-                            && (new int?[] 
-                                {
-                                    (int)Naming.LessonPriceStatus.一般課程,
-                                    (int)Naming.LessonPriceStatus.團體學員課程
-                                }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
-        }
-
-        public static IEnumerable<LessonTime> PTLesson(this IEnumerable<LessonTime> items)
-        {
-            return items.Where(l => PTScope.Contains(l.RegisterLesson.LessonPriceType.Status.Value)
-                    || (l.RegisterLesson.RegisterLessonEnterprise != null
-                            && (new int?[]
-                                {
-                                    (int)Naming.LessonPriceStatus.一般課程,
-                                    (int)Naming.LessonPriceStatus.團體學員課程
-                                }).Contains(l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status)));
-        }
-
-        public static bool IsTrialLesson(this LessonTime item)
-        {
-            return item.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (item.RegisterLesson.RegisterLessonEnterprise != null && item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程);
-        }
-        public static IQueryable<LessonTime> TrialLesson(this IQueryable<LessonTime> items)
-        {
-            return items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
-        }
-
-        public static IEnumerable<LessonTime> TrialLesson(this IEnumerable<LessonTime> items)
-        {
-            return items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.體驗課程
-                                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程));
-        }
-
-        public static IQueryable<LessonTime> AllCompleteLesson(this IQueryable<LessonTime> items)
-        {
-            return items                
-                //.Where(t => t.LessonAttendance != null)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自由教練預約)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.教練PI)
-                //.Where(t => t.RegisterLesson.RegisterLessonEnterprise==null 
-                //    || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.體驗課程)
-                //.Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.點數兌換課程)
-                .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
         }
 
     }

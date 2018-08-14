@@ -12,12 +12,16 @@
 <%@ Import Namespace="Newtonsoft.Json" %>
 
 <%  if (_item != null)
-    { %>
+    {
+        var item = _item.GuideEventList.Where(v => v.SystemEventID == __EVENT_ID).FirstOrDefault();
+        if(item!=null)
+        {   %>
 <li>
-    <i class="livicon-evo" data-options="name: angle-wide-right-alt.svg; size: 30px; style: original; strokeWidth:2px; autoPlay:true"></i>
-    <a href="navigation.html"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，跟著 Beyond 走，新手導航去</a>
+    <i class="livicon-evo prefix" data-options="name: angle-wide-right-alt.svg; size: 30px; style: solid; autoPlay:true"></i>
+    <a href="javascript:gtag('event', '新手上路', {  'event_category': '連結點擊',  'event_label': '我的通知'});window.location.href = '<%= Url.Action(item.SystemEventBulletin.ActionName, item.SystemEventBulletin.ControllerName,new { keyID = HttpUtility.UrlEncode(item.EventID.EncryptKey()) }) %>';"><%= _model.UserProfileExtension.Gender == "F" ? "親愛的" : "兄弟" %>，跟著 Beyond 走，新手導航去</a>
 </li>
-<%  } %>
+<%      }
+    } %>
 
 <script runat="server">
 
@@ -27,6 +31,8 @@
     List<TimelineEvent> _items;
     UserGuideEvent _item;
 
+    public const int __EVENT_ID = 1;
+
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
@@ -35,12 +41,12 @@
         _model = (UserProfile)this.Model;
         _items = (List<TimelineEvent>)ViewBag.UserNotice;
 
-        _item = new UserGuideEvent
-        {
-            Profile = _model,
-        };
+        _item = _model.CheckUserGuideEvent(models);
 
-        _items.Add(_item);
+        if(_item!=null)
+        {
+            _items.Add(_item);
+        }
 
     }
 

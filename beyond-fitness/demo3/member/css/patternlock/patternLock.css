@@ -32,7 +32,7 @@
 }
 
 .patt-circ.hovered {
-	border: 3px solid #0061d2;
+	border: 3px solid #05232d;
 }
 
 .patt-hidden .patt-circ.hovered {
@@ -68,7 +68,7 @@
 .patt-lines {
 	border-radius: 20px;
 	height: 10px;
-	background: #0061d2;
+	background: #05232d;
 	opacity: 0.5;
 	position: absolute;
 	transform-origin: 5px 5px;

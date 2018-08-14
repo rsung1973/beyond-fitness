@@ -14,8 +14,8 @@
 <%  if (_item != null)
     { %>
 <li>
-    <i class="livicon-evo" data-options="name: angle-wide-right-alt.svg; size: 30px; style: original; strokeWidth:2px; autoPlay:true"></i>
-    <a href="<%= Url.Action("AnswerDailyQuestion","CornerKick") %>"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，來挑戰運動小學堂</a>
+    <i class="livicon-evo prefix" data-options="name: angle-wide-right-alt.svg; size: 30px; style: solid; autoPlay:true"></i>
+    <a href="javascript:gtag('event', '運動小學堂', {  'event_category': '連結點擊',  'event_label': '我的通知'});window.location.href = '<%= Url.Action("AnswerDailyQuestion","CornerKick") %>';"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，來挑戰運動小學堂</a>
 </li>
 <%  } %>
 
@@ -35,15 +35,10 @@
         _model = (UserProfile)this.Model;
         _items = (List<TimelineEvent>)ViewBag.UserNotice;
 
-        var question = models.PromptLearnerDailyQuestion(_model);
+        _item = _model.CheckDailyQuestionEvent(models);
 
-        if (question!=null)
+        if(_item!=null)
         {
-            _item = new DailyQuestionEvent
-            {
-                Profile = _model,
-                DailyQuestion = question
-            };
             _items.Add(_item);
         }
 

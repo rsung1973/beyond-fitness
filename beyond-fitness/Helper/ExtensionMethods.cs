@@ -64,7 +64,7 @@ namespace WebHome.Helper
             return items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.正常);
         }
 
-        public static void NotifyResetPassword(this ResetPassword item)
+        public static void NotifyResetPassword(this ResetPassword item,String notifyUrl = null)
         {
             ThreadPool.QueueUserWorkItem(t => {
 
@@ -87,7 +87,7 @@ namespace WebHome.Helper
                     using (WebClient client = new WebClient())
                     {
                         client.Encoding = Encoding.UTF8;
-                        message.Body = client.DownloadString(Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Account/NotifyResetPassword") + "?resetID=" + item.ResetID);
+                        message.Body = client.DownloadString((notifyUrl ?? Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/Account/NotifyResetPassword")) + "?resetID=" + item.ResetID);
                     }
 
                         //message.Body = body.ToString();

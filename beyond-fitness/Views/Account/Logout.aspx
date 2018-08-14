@@ -82,6 +82,7 @@
         base.OnInit(e);
         Context.ClearCache();
         //Response.Redirect("~/Account/Login");
-        Response.Redirect("/front-end/index.html");
+        //Response.Redirect("/front-end/index.html");
+        Response.Redirect("~/CornerKick/Index");
     }
 </script>

@@ -281,7 +281,7 @@ namespace Utility
         #endregion
 
         #region ConvertToFullWidthString 轉成全形字串
-        public static char ConverttoFullWidthChar(this char ch)
+        public static char ConvertToFullWidthChar(this char ch)
         {
             for (int i = 0; i < HELFWIDTH_CODE.Length; i++)
             {
@@ -291,17 +291,43 @@ namespace Utility
             return ch;
         }
 
-        public static string ConverttoFullWidthString(this string str)
+        public static string ConvertToFullWidthString(this string str)
         {
             if (!String.IsNullOrEmpty(str))
             {
                 return new String(str.Where(c => c != '\r' && c != '\n' && c != '\t')
-                    .Select(c => c.ConverttoFullWidthChar()).ToArray());
+                    .Select(c => c.ConvertToFullWidthChar()).ToArray());
             }
 
             return str;
         }
         #endregion
+
+        public static char ConvertToHalfWidthChar(this char ch)
+        {
+            for (int i = 0; i < HELFWIDTH_CODE.Length; i++)
+            {
+                if (FULLWIDTH_CODE[i] == ch)
+                    return HELFWIDTH_CODE[i];
+            }
+            return ch;
+        }
+
+        public static string ConvertToHalfWidthString(this string str)
+        {
+            if (!String.IsNullOrEmpty(str))
+            {
+                StringBuilder builder = new StringBuilder(str);
+                for (int i = 0; i < builder.Length; i++)
+                {
+                    builder[i] = ConvertToHalfWidthChar(builder[i]);
+                }
+                return builder.ToString();
+            }
+
+            return str;
+        }
+
 
         #region ConvertMoneyToCNShow
 

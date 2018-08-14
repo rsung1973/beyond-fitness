@@ -14,8 +14,8 @@ namespace WebHome.Models.ViewModel
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "PID")]
+        //[Required]
+        [Display(Name = "電子郵件信箱")]
         //[EmailAddress]
         public string PID { get; set; }
 
@@ -78,8 +78,19 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
-        public string LineID { get; set; }
-
+        public String LineID { get; set; }
+        public String X001
+        {
+            get
+            {
+                return LineID;
+            }
+            set
+            {
+                LineID = value;
+            }
+        }
+        public bool? LearnerSettings { get; set; }
     }
 
     public class PasswordViewModel : QueryViewModel
@@ -99,6 +110,7 @@ namespace WebHome.Models.ViewModel
 
         public String PID { get; set; }
         public int? UID { get; set; }
+        public Guid? UUID { get; set; }
     }
 
     public class LearnerViewModel
@@ -564,7 +576,7 @@ namespace WebHome.Models.ViewModel
         public DateTime? QueryStart { get; set; }
         public DateTime? ClassTime { get; set; }
     }
-    public class LessonTimeBookingViewModel
+    public class LessonTimeBookingViewModel : QueryViewModel
     {
 
         public int? LessonID { get; set; }
@@ -583,7 +595,7 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class UserEventViewModel
+    public class UserEventViewModel : QueryViewModel
     {
         public int? EventID { get; set; }
         public int? UID { get; set; }
@@ -594,6 +606,9 @@ namespace WebHome.Models.ViewModel
         public int[] MemberID { get; set; }
         public String Accompanist { get; set; }
         public int? BranchID { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
+        public bool? CreateNew { get; set; }
 
     }
 
@@ -648,5 +663,7 @@ namespace WebHome.Models.ViewModel
         public int? Status { get; set; }
         public String Keyword { get; set; }
     }
+
+
 
 }

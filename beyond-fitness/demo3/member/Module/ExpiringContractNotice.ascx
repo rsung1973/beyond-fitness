@@ -35,15 +35,10 @@
         _model = (UserProfile)this.Model;
         _items = (List<TimelineEvent>)ViewBag.UserNotice;
 
-        var contract = models.PromptExpiringContract().Where(c => c.CourseContractMember.Any(m => m.UID == _model.UID)).FirstOrDefault();
-        if (contract != null)
-        {
-            _item = new ExpiringContractEvent
-            {
-                Profile = _model,
-                ExpiringContract = contract
-            };
+        _item = _model.CheckExpiringContractEvent(models);
 
+        if(_item!=null)
+        {
             _items.Add(_item);
         }
 

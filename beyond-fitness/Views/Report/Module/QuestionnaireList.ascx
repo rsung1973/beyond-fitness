@@ -14,6 +14,7 @@
         <tr>
             <th data-class="expand">填寫人員</th>
             <th>學員</th>
+            <th>合約編號</th>
             <th>日期</th>
             <th>滿意度</th>
             <th>狀態</th>
@@ -34,6 +35,7 @@
                         Writer.Write("--"); %>
             </td>
             <td><%= item.UserProfile.FullName() %></td>
+            <td><%= item.RegisterLesson.RegisterLessonContract?.CourseContract.ContractNo() %></td>
             <td><%= $"{item.RequestDate:yyyy/MM/dd}" %></td>
             <td class="text-center">
                 <%  var ansSuggestion = item.PDQTask.Where(t => t.PDQQuestion.QuestionNo == 4)

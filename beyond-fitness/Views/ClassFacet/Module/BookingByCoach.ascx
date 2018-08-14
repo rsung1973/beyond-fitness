@@ -128,7 +128,7 @@
 
             $('#lessonType').on('change', function (evt) {
                 var lessonType = $(this).val();
-                debugger;
+                //debugger;
                 switch (lessonType) {
                     case '0':
                         $('.part0').css('display', 'block');
@@ -189,7 +189,7 @@
                 }
             };
 
-            debugger;
+            //debugger;
             $datetime = $('.input_time').datetimepicker({
                 language: 'zh-TW',
                 weekStart: 0,
