@@ -626,8 +626,16 @@
 	transition: all 150ms linear
 }
 
+.theme-white .nav-tabs>.nav-item>.nav-link {
+    color: #05232d!important;
+    font-weight: 800!important;
+}
+
 .theme-white .nav-tabs .nav-link.active {
-	border: 1px solid #0f244a !important
+	border: 1px solid #eee !important;
+    background: #05232d !important;
+    font-weight: 800!important;
+    color: #fff!important;
 }
 
 .theme-white .card .header h2:before {

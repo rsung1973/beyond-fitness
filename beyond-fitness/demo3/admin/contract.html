@@ -1,0 +1,489 @@
+﻿<!doctype html>
+<html class="no-js">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+      <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+      <title>BEYOND FITNESS 全方位雲端管理</title>
+      <!-- Favicon-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">
+      <!-- Bootstrap -->
+      <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Scrollup-master  -->
+      <link href="plugins/scrollup-master/css/themes/image.css?1" rel="stylesheet" id="scrollUpTheme">
+      <!-- LivIconsevo  -->
+      <link href='plugins/livIconsevo/css/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <!-- Bootstrap Select Css -->
+      <link href="plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+      <!-- JQuery DataTable Css -->
+      <link  href="plugins/jquery-datatable/DataTables-1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+      <link  href="plugins/jquery-datatable/Responsive-2.2.2/css/responsive.bootstrap4.min.css" rel="stylesheet">
+      <link  href="plugins/jquery-datatable/FixedColumns-3.2.5/css/fixedColumns.bootstrap4.min.css" rel="stylesheet">
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="css/main.css?1">
+      <link rel="stylesheet" href="css/color_skins.css">
+   </head>
+   <body class="theme-white">
+      <!-- Page Loader -->
+      <div class="page-loader-wrapper">
+         <div class="loader">
+            <div class="m-t-30"><img class="zmdi-hc-spin" src="plugins/livIconsevo/svg/loader-16.svg" width="48" height="48" alt="BEYOND FITNESS"></div>
+            <p>快馬加鞭處理中...</p>
+         </div>
+      </div>
+      <!-- Overlay For Sidebars -->
+      <div class="overlay"></div>
+      <!-- Top Bar -->
+      <nav class="navbar">
+         <div class="col-12">
+            <a href="javascript:void(0);" class="bars"></a>            
+            <ul class="nav navbar-nav navbar-left">
+               <li>
+                  <a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-menu"></i></a>
+               </li>
+            </ul>
+            <a class="navbar-brand" href="index.html"><img src="images/Nav-logo-black.png" width="80" alt="BeyondFitness"></a>      
+            <ul class="nav navbar-nav navbar-right">
+               <li><a href="index.html" class="mega-menu" data-close="true"><i class="zmdi livicon-evo" data-options="name: home.svg; size: 24px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i></a></li>
+            </ul>
+         </div>
+      </nav>
+      <!-- Left Sidebar -->
+      <aside id="leftsidebar" class="sidebar">
+         <div class="menu">
+            <ul class="list">
+               <li>
+                  <div class="user-info">
+                     <div class="image">
+                        <a href="profile.html"><img src="images/avatar/doreen.jpg"></a>
+                     </div>
+                     <div class="detail">
+                        <h4>黃小美</h4>
+                        <small>Doreen Huang</small>                        
+                     </div>
+                  </div>
+               </li>
+               <li>
+                  <a href="calendar.html"><i class="zmdi zmdi-calendar"></i><span>我的行事曆</span></a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-file-text"></i><span>我的合約與收款</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-face"></i><span>我的分店業績</span></a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-accounts-list"></i><span>我的學生</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-accounts-outline"></i><span>我的員工</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-apps"></i><span>我的設定</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-border-color"></i><span>資料維護</span> </a>
+               </li>
+            </ul>
+         </div>
+      </aside>
+      <!-- Main Content -->
+      <section class="content">
+         <div class="block-header">
+            <div class="row">
+               <div class="col-lg-7 col-md-6 col-sm-12">
+                  <h2>我的合約<small>你有多久沒有改變你的訓練方式</small>
+                  </h2>
+               </div>
+               <div class="col-lg-5 col-md-6 col-sm-12">
+                  <button class="btn btn-danger btn-icon btn-round float-right m-l-10 custom-boxs-open" type="button">
+                  <i class="zmdi zmdi-pin-assistant"></i>
+                  </button>
+               </div>
+            </div>
+         </div>
+         <!--我的合約-->
+         <div class="container-fluid">
+            <div class="card widget_2">
+               <div class="header">
+                  <ul class="header-dropdown">
+                     <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                        <ul class="dropdown-menu dropdown-menu-right slideUp float-right xl-pink">
+                           <li><a href="javascript:void(0);">新增合約</a></li>
+                           <li><a href="javascript:void(0);" id="searchCoach">切換體能顧問</a></li>
+                           <li><a href="javascript:void(0);">切換分店</a></li>
+                        </ul>
+                     </li>
+                     <li class="remove">
+                        <a role="button" class="custom-boxs-close"><i class="zmdi zmdi-close"></i></a>
+                     </li>
+                  </ul>
+               </div>
+               <ul class="row clearfix list-unstyled m-b-0">
+                  <li class="col-lg-3 col-md-6 col-sm-12 contract">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">即將過期</h5>
+                              <p class="text-small">
+                                 可展延：20<br/>
+                                 可終止：58 <br/>
+                                 生效中：250
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="col-red">68</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                        <div class="progress m-b-5">
+                           <div class="progress-bar l-green" style="width: 15%"> <span class="sr-only">15%</span> </div>
+                           <div class="progress-bar l-pink progress-bar-striped" style="width: 20%"> <span class="sr-only">20%</span> </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12 contract">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">新增</h5>
+                              <p class="text-small">
+                                 編輯中：5 <br/>
+                                 待簽名：8 <br/>
+                                 待審核：18
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">31</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                        <div class="progress m-b-5">
+                           <div class="progress-bar l-green" style="width: 8%"> <span class="sr-only">8%</span> </div>
+                           <div class="progress-bar l-blue progress-bar-striped" style="width: 25%"> <span class="sr-only">25%</span> </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12 contract">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">服務申請</h5>
+                              <p class="text-small">
+                                 編輯中：0<br/>
+                                 待簽名：8<br/>
+                                 待審核：2
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">10</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                        <div class="progress m-b-5">
+                           <div class="progress-bar l-amber progress-bar-striped" style="width: 80%"> <span class="sr-only">80%</span> </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">新合約</h5>
+                              <p class="text-small">
+                                 今日：0 <br/>
+                                 本週：2 <br/>
+                                 上月：5 <br/>
+                                 幅度：<span class="col-green">12% <i class="zmdi zmdi-trending-up"></i></span> 
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">10</h2>
+                              <small class="info">本月</small>
+                              <p>
+                                <br/>
+                                <button class="btn btn-darkteal btn-icon  btn-icon-mini btn-round waves-effect float-right"><i class="zmdi zmdi-plus"></i></button>
+                               </p>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <!--詳細資料-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <h4 class="card-outbound-header m-l-15">詳細資料</h4>
+               <div class="col-lg-12">
+                  <div class="card">
+                     <div class="header">
+                        <ul class="header-dropdown">
+                           <li class="dropdown">
+                              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                              <ul class="dropdown-menu dropdown-menu-right slideUp float-right xl-pink">
+                                 <li><a href="javascript:void(0);">更多查詢條件</a></li>
+                                 <li><a href="javascript:void(0);">下載報表</a></li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="body">
+                        <div class="table-responsive">
+                           <table class="table table-bordered table-striped dataTable nowrap" style="width:100%">
+                              <thead class="bg-darkteal">
+                                 <tr>
+                                    <th class="xl-blue col-darkteal">合約編號</th>
+                                    <th>分店</th>
+                                    <th>體能顧問</th>
+                                    <th>學生</th>
+                                    <th>合約名稱</th>                                    
+                                    <th>服務項目</th>
+                                    <th>剩餘/購買堂數</th>
+                                    <th>合約金額</th>
+                                    <th>已收金額</th>
+                                    <th>編輯日期</th>
+                                    <th>合約起日</th>
+                                    <th>合約迄日</th>
+                                    <th class="xl-blue col-darkteal">目前狀態</th>                                    
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr>
+                                    <td>CPA201609022358-01</td>
+                                    <td>南京</td>
+                                    <td>胡志達(Peter Hu)</td>
+                                    <td>聶祚君</td>
+                                    <td>1對1體能顧問課程(90分鐘)</td>
+                                    <td>轉讓</td>
+                                    <td>--/--</td>
+                                    <td class="align-right">47,500</td>
+                                    <td class="align-right"></td>
+                                    <td>2018/07/15</td>
+                                    <td>2018/08/02</td>
+                                    <td>2019/02/03</td>
+                                    <td class="more">已生效(*)<i class="zmdi zmdi-more-vert float-right"></i>  
+                                    </td>                                    
+                                 </tr>
+                                 <tr>
+                                    <td>CPA201805011141-01</td>
+                                    <td>信義</td>
+                                    <td>黃伊婷(Doreen Huang)</td>
+                                    <td>張意旻(Linda)</td>
+                                    <td>1對1體能顧問課程(60分鐘)</td>
+                                    <td>終止</td>
+                                    <td> --/--</td>
+                                    <td class="align-right">57,500</td>
+                                    <td class="align-right"></td>
+                                    <td>2018/07/12</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="more">待簽名<i class="zmdi zmdi-more-vert float-right"></i></td>                                    
+                                 </tr>
+                                 <tr role="row" class="odd">
+                                    <td>CPA201801010568-01</td>
+                                    <td>南京</td>
+                                    <td>陳嘉敏(Charming Chen)</td>
+                                    <td>王心瀚</td>
+                                    <td>1對1體能顧問課程(60分鐘)</td>
+                                    <td>終止</td>
+                                    <td>--/--</td>
+                                    <td class="align-right">42,500</td>
+                                    <td class="align-right"></td>   
+                                    <td>2018/07/28</td>
+                                    <td>2018/08/02</td>
+                                    <td>2018/08/02</td>                                                                 
+                                    <td class="more">已生效<i class="zmdi zmdi-more-vert float-right"></i></td>                                    
+                                 </tr>
+                                 <tr>
+                                    <td>CPB201808091588-00</td>
+                                    <td>南京</td>
+                                    <td>李瑞傑(Sam Lee)</td>
+                                    <td>黃振洋(振洋)/林于婷(于婷)</td>
+                                    <td>1對2體能顧問課程(60分鐘)</td>
+                                    <td>新合約</td>
+                                    <td>21/25</td>
+                                    <td class="align-right">63,000</td>
+                                    <td class="align-right">63,000</td>
+                                    <td>2018/07/08</td>
+                                    <td>2018/08/09</td>
+                                    <td>2019/02/10</td>                                    
+                                    <td class="more">已生效<i class="zmdi zmdi-more-vert float-right"></i></td>    
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- #END# Basic Examples -->         
+         </div>
+      </section>
+      <!-- 更多功能Modal -->
+      <div class="modal modal-mini fade" id="moreActionModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h6 class="title">請選擇執行功能</h6>
+                  <a class="closebutton" data-dismiss="modal"></a>
+               </div>
+               <div class="modal-quickmenu-body">
+                  <table class="table">
+                     <tbody>
+                        <tr class="col-blue">
+                           <td>編輯</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>刪除</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>學生簽名</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>主管審核</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>服務申請</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>詳細資訊</td>
+                        </tr>
+                        <tr class="col-blue">
+                           <td>查看電子合約</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Jquery Core Js --> 
+      <script src="bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <script src="bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <!-- LivIconsEvo  -->
+      <script src="plugins/livIconsevo/js/tools/snap.svg-min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/TweenMax.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/DrawSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/MorphSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/verge.min.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.Tools.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.defaults.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.js"></script> 
+      <!-- Scrollup-master Plugin js-->
+      <script src="plugins/scrollup-master/jquery.scrollUp.min.js"></script>   
+      <!-- knob Plugin js-->
+      <script src="bundles/knob.bundle.js"></script>
+      <script src="js/pages/charts/jquery-knob.js"></script>
+      <!-- Jquery DataTable Plugin Js --> 
+      <script src="bundles/datatablescripts.bundle.js"></script>
+      <script src="plugins/jquery-datatable/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+      <script src="plugins/jquery-datatable/FixedColumns-3.2.5/js/dataTables.fixedColumns.min.js"></script>
+      <script src="bundles/mainscripts.bundle.js"></script>
+      <script type="text/javascript">
+         $(function () {
+             $.scrollUp({
+                 animation: 'fade',
+                 scrollImg: {
+                     active: true,
+                     type: 'background',
+                     src: 'images/top.png'
+                 }
+             });
+             $(".ls-toggle-btn").click(); 
+             
+            $('.dataTable').DataTable({
+                "order": [
+                    [0, 'asc'],
+                    [5, 'desc']
+                ],
+                "pageLength": 30,
+                "lengthMenu": [
+                    [30, 50, 100, -1],
+                    [30, 50, 100, "全部"]
+                ],
+                "language": {
+                    "lengthMenu": "每頁顯示 _MENU_ 筆資料",
+                    "zeroRecords": "沒有資料也是種福氣",
+                    "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
+                    "infoEmpty": "顯示 0 到 0 筆的資料",
+                    "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
+                    "loadingRecords": "快馬加鞭處理中...",
+                    "processing": "快馬加鞭處理中...",
+                    "search": "快速搜尋：",
+                    "paginate": {
+                        "first": "第一頁",
+                        "last": "最後一頁",
+                        "next": "下一頁",
+                        "previous": "前一頁"
+                    },
+                },
+                scrollX:        true,
+                scrollCollapse: true,
+                fixedColumns:   {
+                    leftColumns: 1,
+                    rightColumns: 1
+                },
+//                "responsive": {
+//                         details: {
+//                             target: 'tr',
+//                             display: $.fn.dataTable.Responsive.display.modal( {
+//         
+//                             } ),
+//         
+//                             renderer: function ( api, rowIdx, columns ) {
+//                                var data = $.map( columns, function ( col, i ) {
+//                                    return '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+//                                            '<td class="bg-darkteal col-white">'+col.title+'</td> '+
+//                                            '<td>'+col.data+'</td>'+
+//                                        '</tr>';
+//                                } ).join('');
+//         
+//                                return data ?
+//                                    $('<table/>').addClass('table table-bordered table-striped')
+//                                        .append( $('<tbody>').append(data) ) :
+//                                    false;
+//                            }
+//                         }
+//                },                
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('td').click(function () {
+                        if ($(this).hasClass('more')) {
+                            $("#moreActionModal").modal('show');
+                        }
+                    });
+                }
+            });                
+               
+         });    
+          
+          
+         //卡片動態移除顯示
+         $(".custom-boxs-open").fadeOut();
+         $(".custom-boxs-close").on("click", function () {
+            $(this).parents(".card").addClass("closed").fadeOut(100, function(){
+                $(".custom-boxs-open").fadeIn();
+            });
+            
+         });
+         
+         $(".custom-boxs-open").on("click", function () {    
+            $(".custom-boxs-open").fadeOut(100, function(){
+                $(".card").addClass("oepn").fadeIn();
+            });
+            
+         });     
+                           
+         
+      </script>
+   </body>
+</html>

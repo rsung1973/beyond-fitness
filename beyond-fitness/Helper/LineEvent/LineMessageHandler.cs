@@ -16,21 +16,24 @@ namespace WebHome.Helper.LineEvent
 {
     public class LineMessageHandler
     {
-        public const String __SLOGAN = @"感謝您傳送訊息給我！
-很抱歉，這個帳號沒有辦法對用戶個別回覆。
-任何問題歡迎直接聯繫我們 ☎️ 
+        public const String __SLOGAN = @"謝謝您訊息我們喔 😊
 
-信義門市
-📍 11049台北市信義區信義路五段16號2樓之2
-📲 02-27200530
+若有問題需要個別回覆 , 
+歡迎直接聯繫我們  😄
 
-南京門市
-📍 台北市松山區南京東路四段17號B1
-📲 02-2715-2733
+📍信義店 (101大樓對面）
+02-27200530 
+ 
+📍南京店 （小巨蛋旁）
+02-2715-2733 
+ 
+📍忠孝店 （忠孝復興旁）
+02-2776-9932
 
-忠孝門市
-📍 台北市大安區大安路一段75巷21號B1
-📲 02-2776-9932";
+若不方便也請來信公司信箱或是FB訊息，也能精確地幫助您解決問題喔 .
+
+
+祝您有個美好的一天😊";
 
         private Event lineEvent;
         private LineClient lineClient = new LineClient(Settings.Default.ChannelToken);

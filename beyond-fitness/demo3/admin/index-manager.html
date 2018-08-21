@@ -1,0 +1,497 @@
+﻿<!doctype html>
+<html class="no-js">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+      <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+      <title>BEYOND FITNESS 全方位雲端管理</title>
+      <!-- Favicon-->
+      <link rel="icon" href="favicons/favicon_96x96.png">
+      <!-- Specifying a Webpage Icon for Web Clip -->
+      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">
+      <!-- materialize  -->
+      <!--      <link href="plugins/materialize-css/css/materialize.min.css" type="text/css" rel="stylesheet"/>-->
+      <!-- Bootstrap -->
+      <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Bootstrap Select Css -->
+      <link href="plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+      <!-- Scrollup-master  -->
+      <link href="plugins/scrollup-master/css/themes/image.css?1" rel="stylesheet" id="scrollUpTheme">
+      <!-- LivIconsevo  -->
+      <link href='plugins/livIconsevo/css/LivIconsEvo.css' rel='stylesheet' type='text/css'>
+      <!-- Fullcalendar -->
+      <link href="plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
+      <!-- Sweetalert -->
+      <link href="plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="css/main.css?3">
+      <link rel="stylesheet" href="css/color_skins.css">
+   </head>
+   <body class="theme-white">
+      <!-- Page Loader -->
+      <div class="page-loader-wrapper">
+         <div class="loader">
+            <div class="m-t-30"><img class="zmdi-hc-spin" src="plugins/livIconsevo/svg/loader-16.svg" width="48" height="48" alt="BEYOND FITNESS"></div>
+            <p>快馬加鞭處理中...</p>
+         </div>
+      </div>
+      <!-- Overlay For Sidebars -->
+      <div class="overlay"></div>
+      <!-- Top Bar -->
+      <nav class="navbar">
+         <div class="col-12">
+            <a href="javascript:void(0);" class="bars"></a>            
+            <ul class="nav navbar-nav navbar-left">
+               <li>
+                  <a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-menu"></i></a>
+               </li>
+            </ul>
+            <a class="navbar-brand" href="index-manager.html"><img src="images/Nav-logo-black.png" width="80" alt="BeyondFitness"></a>      
+            <ul class="nav navbar-nav navbar-right">
+               <li><a href="calendar.html" class="mega-menu" data-close="true"><i class="zmdi livicon-evo" data-options="name: calendar.svg; size: 24px; style: lines; strokeColor:#0f244a; strokeWidth:2px; autoPlay:true"></i></a></li>
+            </ul>
+         </div>
+      </nav>
+      <!-- Left Sidebar -->
+      <aside id="leftsidebar" class="sidebar">
+         <div class="menu">
+            <ul class="list">
+               <li>
+                  <div class="user-info">
+                     <div class="image">
+                        <a href="profile.html"><img src="images/avatar/doreen.jpg"></a>
+                     </div>
+                     <div class="detail">
+                        <h4>黃小美</h4>
+                        <small>Doreen Huang</small>                        
+                     </div>
+                  </div>
+               </li>
+               <li>
+                  <a href="calendar.html"><i class="zmdi zmdi-calendar"></i><span>我的行事曆</span></a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-file-text"></i><span>我的合約與收款</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-accounts-list"></i><span>我的學生</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-accounts-outline"></i><span>我的員工</span> </a>
+               </li>
+               <li>
+                  <a href="javascript:void(0);"><i class="zmdi zmdi-apps"></i><span>我的設定</span> </a>
+               </li>
+            </ul>
+         </div>
+      </aside>
+      <!-- Main Content -->
+      <section class="content">
+         <div class="block-header">
+            <div class="row">
+               <div class="col-lg-7 col-md-6 col-sm-12">
+                  <h2>卡片總覽<small><a href="#">你有多久沒有改變你的訓練方式 <i class="zmdi zmdi-edit"></i></a></small>
+                  </h2>
+               </div>
+            </div>
+         </div>
+         <!--本月運動時間-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <div class="col-lg-12 col-md-12">
+                  <div class="card bg-darkteal">
+                     <div class="body">
+                        <div class="font-20 align-center">
+                           本月運動：<span class="col-lime counto" data-to="859">859</span>分鐘（<span class="col-lime counto" data-to="14">14</span>小時:<span class="col-lime counto" data-to="19">19</span>分鐘）
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--我的行事曆卡片-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <h4 class="card-outbound-header m-l-15">我的行事曆</h4>
+               <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                     <div class="col-12">
+                        <div class="card">
+                           <div class="body">
+                              <div class="row clearfix">
+                                 <div class="col-md-5 col-12 weather calendar">
+                                    <div class="city">
+                                       <h3>南京/忠孝</h3>
+                                    </div>
+                                    <ul class="row days list-unstyled m-b-0">
+                                       <li>
+                                          <h5>8/11</h5>
+                                          <img src="images/facesmile/ragular.jpg">
+                                          <span class="degrees">5</span>
+                                       </li>
+                                       <li>
+                                          <h5>8/12</h5>
+                                          <img src="images/facesmile/hard.jpg">
+                                          <span class="degrees">8</span>
+                                       </li>
+                                       <li>
+                                          <h5>8/13</h5>
+                                          <img src="images/facesmile/easy.jpg">
+                                          <span class="degrees">0</span>
+                                       </li>
+                                       <li>
+                                          <h5 class="col-pink"><b>8/14</b></h5>
+                                          <img src="images/facesmile/ragular.jpg">
+                                          <span class="degrees">4</span>
+                                       </li>
+                                       <li>
+                                          <h5>8/15</h5>
+                                          <img src="images/facesmile/ragular.jpg">
+                                          <span class="degrees">5</span>
+                                       </li>
+                                       <li>
+                                          <h5>8/16</h5>
+                                          <img src="images/facesmile/hard.jpg">
+                                          <span class="degrees">8</span>
+                                       </li>
+                                       <li>
+                                          <h5>8/17</h5>
+                                          <img src="images/facesmile/hard.jpg">
+                                          <span class="degrees">10</span>
+                                       </li>
+                                    </ul>
+                                 </div>
+                                 <div class="col-md-7 col-12">
+                                    <ul class="row profile_state list-unstyled">
+                                       <li class="col-sm-3 col-6">
+                                          <div class="body">
+                                             <i class="zmdi livicon-evo" data-options="name: gift.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                             <h4>8</h4>
+                                             <span>生日</span>
+                                          </div>
+                                       </li>
+                                       <li class="col-sm-3 col-6">
+                                          <div class="body">
+                                             <i class="zmdi livicon-evo" data-options="name: dislike.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                             <h4>38</h4>
+                                             <span>業障</span>
+                                          </div>
+                                       </li>
+                                       <li class="col-sm-3 col-6">
+                                          <div class="body">
+                                             <i class="zmdi livicon-evo" data-options="name: like.svg; size: 40px; style: original; strokeWidth:2px;"></i>
+                                             <h4>200</h4>
+                                             <span>課表</span>
+                                          </div>
+                                       </li>
+                                       <li class="col-sm-3 col-6">
+                                          <div class="body">
+                                             <i class="zmdi livicon-evo" data-options="name: remove.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
+                                             <h4>10</h4>
+                                             <span>學生未打卡</span>
+                                          </div>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--我的合約與收款卡片-->
+         <div class="container-fluid">
+            <h4 class="card-outbound-header m-l-15">我的合約與收款</h4>
+            <div class="card widget_2">
+               <ul class="row clearfix list-unstyled m-b-0">
+                  <li class="col-lg-3 col-md-6 col-sm-12">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">即將過期</h5>
+                              <p class="text-small">
+                                 可展延：20<br/>
+                                 可終止：58 <br/>
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="col-red">68</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">新增</h5>
+                              <p class="text-small">
+                                 草稿：5 <br/>
+                                 待簽名：8 <br/>
+                                 待審核：18
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">31</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">服務申請</h5>
+                              <p class="text-small">
+                                 草稿：0<br/>
+                                 待簽名：8 <br/>
+                                 待審核：2
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">10</h2>
+                              <small class="info">合約</small>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="col-lg-3 col-md-6 col-sm-12">
+                     <div class="body">
+                        <div class="row">
+                           <div class="col-8">
+                              <h5 class="m-t-0">本日收款</h5>
+                              <p class="text-small">
+                                 收款：5 <br/>
+                                 作廢/折讓：1
+                              </p>
+                           </div>
+                           <div class="col-4 text-right">
+                              <h2 class="">6</h2>
+                              <small class="info"></small>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <!--我的分店業績卡片-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <h4 class="card-outbound-header m-l-15">我的分店業績</h4>
+               <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                     <div class="col-md-4 col-12">
+                        <div class="card">
+                           <div class="header">
+                              <h2><strong>南京</strong> 上課數 <span class="col-green">2% <i class="zmdi zmdi-trending-up"></i></span></h2>
+                           </div>
+                           <div class="body">
+                              <div class="row">
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">今日</small>
+                                    <h5 class="m-b-0 font-14 font-bold">40</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本週</small>
+                                    <h5 class="m-b-0 font-14 font-bold">250</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本月</small>
+                                    <h5 class="m-b-0 font-14 font-bold">1680</h5>
+                                 </div>
+                              </div>
+                              <div class="progress">
+                                 <div class="progress-bar l-amber" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%;"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4 col-12">
+                        <div class="card">
+                           <div class="header">
+                              <h2><strong>南京</strong> 合約 <span class="col-green">37% <i class="zmdi zmdi-trending-up"></i></span></h2>
+                           </div>
+                           <div class="body">
+                              <div class="row">
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">今日</small>
+                                    <h5 class="m-b-0 font-14 font-bold">5</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本週</small>
+                                    <h5 class="m-b-0 font-14 font-bold">15</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本月</small>
+                                    <h5 class="m-b-0 font-14 font-bold">21</h5>
+                                 </div>
+                              </div>
+                              <div class="progress">
+                                 <div class="progress-bar l-turquoise" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%;"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4 col-12">
+                        <div class="card">
+                           <div class="header">
+                              <h2><strong>南京</strong> 業績 <span class="col-red">14% <i class="zmdi zmdi-trending-down"></i></span></h2>
+                           </div>
+                           <div class="body">
+                              <div class="row">
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">今日</small>
+                                    <h5 class="m-b-0 font-14 font-bold">38,000</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本週</small>
+                                    <h5 class="m-b-0 font-14 font-bold">185,500</h5>
+                                 </div>
+                                 <div class="col-sm-4 col-4 m-b-10">
+                                    <small class="text-muted">本月</small>
+                                    <h5 class="m-b-0 font-14 font-bold">324,400</h5>
+                                 </div>
+                              </div>
+                              <div class="progress">
+                                 <div class="progress-bar l-pink" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%;"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--我的業績-->
+         <div class="container-fluid">
+            <div class="row clearfix">
+               <div class="col-lg-12 col-md-12">
+                  <div class="row clearfix">
+                     <div class="col-sm-4 col-12">
+                        <h4 class="card-outbound-header">我的業績</h4>
+                        <div class="parallax-img-card">
+                           <div class="body">
+                              <h4>AFM / P.T 6<br/>2 張證照</h4>
+                           </div>
+                           <div class="parallax"><img src="images/carousel/level-background.jpg"></div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-12">
+                        <h4 class="card-outbound-header">我的比賽</h4>
+                        <div class="parallax-card bg-darkteal">
+                           <div class="body">
+                              <h4>尚未參賽</h4>
+                           </div>
+                           <div class="chart-box">
+                              <canvas id="radarChart" height="150"></canvas>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4 col-12">
+                        <h4 class="card-outbound-header">運動小學堂</h4>
+                        <div class="parallax-img-card">
+                           <div class="body">
+                              <h4>目前已編寫題目卷<span class="col-lime"> 5 </span>張囉！</h4>
+                              <p class="col-white">題目卷答題率已達 <span class="col-lime"> 24%</span>，成績單及格率<span class="col-lime"> 10%</span></p>
+                           </div>
+                           <div class="parallax"><img src="images/carousel/qa-background.jpg"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Jquery Core Js --> 
+      <script src="bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <script src="bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js --> 
+      <!-- LivIconsEvo  -->
+      <script src="plugins/livIconsevo/js/tools/snap.svg-min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/TweenMax.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/DrawSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/MorphSVGPlugin.min.js"></script>
+      <script src="plugins/livIconsevo/js/tools/verge.min.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.Tools.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.defaults.js"></script>
+      <script src="plugins/livIconsevo/js/LivIconsEvo.js"></script> 
+      <!-- Scrollup-master  Plugin js-->
+      <script src="plugins/scrollup-master/jquery.scrollUp.min.js"></script>       
+      <!-- countTo Plugin Js --> 
+      <script src="bundles/countTo.bundle.js"></script>
+      <!--sparkline Plugin Js-->
+      <script src="bundles/chartscripts.bundle.js"></script>
+      <script src="bundles/mainscripts.bundle.js"></script>
+      <script type="text/javascript">
+         $(function () {
+             $.scrollUp({
+                 animation: 'fade',
+                 scrollImg: {
+                     active: true,
+                     type: 'background',
+                     src: 'images/top.png'
+                 }
+             });
+             $(".ls-toggle-btn").click();
+             $('.counto').countTo();        
+         });          
+         /*
+          * FULL CALENDAR JS
+          */        
+          
+         var RadarConfig = {
+             type: 'radar',
+             data: {
+                 labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
+                 datasets: [{
+                     label: "分佈圖",
+                     backgroundColor: "rgba(179,214,255,.8)",
+                     pointBackgroundColor: "rgba(230,241,255,1)",
+                     data: [6, 6, 7, 10, 8]
+                 }]
+             },
+             options: {
+                 legend: {
+                     display: false
+                 },
+         
+                 scale: {
+                     reverse: false,
+                     display: true,
+                     ticks: {
+                         showLabelBackdrop: false,
+                         beginAtZero: true,
+                         backdropColor: '#e6f1ff',
+                         maxTicksLimit: 5,
+                         max: 10,
+                         fontSize: 5,
+                         backdropPaddingX: 5,
+                         backdropPaddingY: 5
+                     },
+                     gridLines: {
+                         color: "#fff",
+                         lineWidth: 1
+                     },
+                     pointLabels: {
+                         fontSize: 12,
+                         fontColor: "#fff"
+                     }
+                 }
+             }
+         };
+         window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
+         $(".calendar").on('click', function (event) {
+             window.location.href = 'calendar.html';
+         });
+      </script>
+   </body>
+</html>

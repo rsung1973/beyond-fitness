@@ -421,15 +421,28 @@ namespace WebHome.Controllers
 
         private void renderToXlsx(IQueryable<UserProfile> items, String tableName,String fileName)
         {
+            models.ExecuteCommand(@"UPDATE RegisterLesson
+                        SET        BranchID = CourseContractExtension.BranchID
+                        FROM     RegisterLesson INNER JOIN
+                                       RegisterLessonContract ON RegisterLesson.RegisterID = RegisterLessonContract.RegisterID INNER JOIN
+                                       CourseContract ON RegisterLessonContract.ContractID = CourseContract.ContractID INNER JOIN
+                                       CourseContractExtension ON CourseContract.ContractID = CourseContractExtension.ContractID
+                        WHERE   (RegisterLesson.BranchID IS NULL)");
 
-            var resultItems = items.Select(u => new {
-                EMail = u.LevelID==(int)Naming.MemberStatus.已註冊 ? u.PID : null,
-                真實姓名 = u.RealName,
-                暱稱 = u.Nickname,
-                性別 = u.UserProfileExtension.Gender == "F" ? "女" : "男",
-                出生 = u.Birthday,
-                聯絡電話 = u.Phone,
-            });
+            var resultItems = items
+                    .Join(models.GetTable<RegisterLesson>().Where(m => m.BranchID.HasValue && m.Attended != (int)Naming.LessonStatus.課程結束)
+                        .GroupBy(r => new { r.UID, r.BranchStore.BranchName }),
+                        u => u.UID, m => m.Key.UID, (u, m) =>
+                                new
+                                {
+                                    EMail = u.LevelID == (int)Naming.MemberStatus.已註冊 ? u.PID : null,
+                                    真實姓名 = u.RealName,
+                                    暱稱 = u.Nickname,
+                                    性別 = u.UserProfileExtension.Gender == "F" ? "女" : "男",
+                                    出生 = u.Birthday,
+                                    聯絡電話 = u.Phone,
+                                    分店 = m.Key.BranchName
+                                });
 
             DataTable details = resultItems.ToDataTable();
             if (!String.IsNullOrEmpty(tableName))
