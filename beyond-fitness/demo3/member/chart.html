@@ -50,55 +50,43 @@
                   <div class="chart-wrap">
                      <!-- Ｃhart -->
                      <ul class="collection">
-                        <!-- Card 1-->
-                        <li class="collection-item avatar">
-                           <!-- 上 -->
+                        <!-- Card 5-->
+                        <li class="collection-item avatar list-box">
+                           <!-- Left -->
                            <div class="row">
-                              <ul class="chart-card">
-                                 <li class="chart-top">
-                                    <span class="title">體能分析</span>
-                                    <canvas id="radarChart" class="chart-box"></canvas>
-                                 </li>
-                                 <!-- 下-->
-                                 <li class="chart-bottom">
-                                    <div class="col s6">
-                                       <ul class="list-2">
-                                          <li>身體質量 6</li>
-                                          <li>相對肌力 6</li>
-                                          <li>爆發力 7</li>
-                                       </ul>
-                                    </div>
-                                    <div class="col s6">
-                                       <ul class="list-3">
-                                          <li>柔軟度 10</li>
-                                          <li>心肺適能 8</li>
-                                       </ul>
-                                    </div>
-                                 </li>
-                              </ul>
+                              <div class="col s12 ">
+                                 <span class="title">累積運動時間</span>
+                                 <div class="bar-chart">
+                                    <canvas id="barchart" ></canvas>
+                                 </div>
+                              </div>
                            </div>
-                        </li>
+                        </li>                         
                         <!-- Card 2-->
                         <li class="collection-item avatar">
                            <!-- 上 -->
                            <div class="row">
                               <ul class="chart-card">
                                  <li class="chart-top">
-                                    <span class="title">累積訓練時間比例</span>
+                                    <span class="title">本月訓練時間比例</span>
                                     <canvas id="stagepei-2" class="chart-box"></canvas>
                                  </li>
                                  <!-- 下-->
                                  <li class="chart-bottom">
                                     <div class="col s6">
                                        <ul class="list-2">
-                                          <li>基本  28%</li>
+                                          <li>基本  28%
+                                              <span class="livicon-evo" data-options="name: arrow-top.svg; size: 20px; style: lines; strokeColor:#ec3b57; strokeWidth:2px; autoPlay:true"></span>
+                                          </li>
                                           <li>運動技巧  11%</li>
                                           <li>肌力  31%</li>
                                        </ul>
                                     </div>
                                     <div class="col s6">
                                        <ul class="list-3">
-                                          <li>心肺  23%</li>
+                                          <li>心肺  23%
+                                              <span class="livicon-evo" data-options="name: arrow-top.svg; size: 20px; style: lines; strokeColor:#ec3b57; strokeWidth:2px; autoPlay:true"></span>
+                                          </li>
                                           <li>恢復  7%</li>
                                        </ul>
                                     </div>
@@ -112,7 +100,10 @@
                            <div class="row">
                               <div class="col s12 "> <span class="title">本月訓練時間</span> </div>
                               <div class="col s12">
-                                  <div class="time-box"><span class="flow-text">14:19<small>小時:分鐘↑</small></span></div>
+                                  <div class="time-box">
+                                      <span class="flow-text">14:19<small>小時:分鐘</small></span>
+                                      <span class="livicon-evo" data-options="name: arrow-top.svg; size: 20px; style: lines; strokeColor:#ec3b57; strokeWidth:2px; autoPlay:true"></span>
+                                </div>
                               </div>
                            </div>
                         </li>
@@ -206,16 +197,32 @@
                               </div>
                            </div>
                         </li>
-                        <!-- Card 5-->
-                        <li class="collection-item avatar list-box">
-                           <!-- Left -->
+                        <!-- Card 1-->
+                        <li class="collection-item avatar">
+                           <!-- 上 -->
                            <div class="row">
-                              <div class="col s12 ">
-                                 <span class="title">累積運動時間</span>
-                                 <div class="bar-chart">
-                                    <canvas id="barchart" ></canvas>
-                                 </div>
-                              </div>
+                              <ul class="chart-card">
+                                 <li class="chart-top">
+                                    <span class="title">體能分析</span>
+                                    <canvas id="radarChart" class="chart-box"></canvas>
+                                 </li>
+                                 <!-- 下-->
+                                 <li class="chart-bottom">
+                                    <div class="col s6">
+                                       <ul class="list-2">
+                                          <li>身體質量 6</li>
+                                          <li>相對肌力 6</li>
+                                          <li>爆發力 7</li>
+                                       </ul>
+                                    </div>
+                                    <div class="col s6">
+                                       <ul class="list-3">
+                                          <li>柔軟度 10</li>
+                                          <li>心肺適能 8</li>
+                                       </ul>
+                                    </div>
+                                 </li>
+                              </ul>
                            </div>
                         </li>
                      </ul>

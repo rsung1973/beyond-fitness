@@ -73,7 +73,7 @@
                               <!--2-->
                               <div class="input-field col s12">
                                  <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
-                                 <textarea id="icon_prefix2" name="PID" class="materialize-textarea" maxlength="30" data-length="30"></textarea>
+                                 <textarea id="icon_prefix2" name="PID" class="materialize-textarea" maxlength="48" data-length="48"></textarea>
                                  <label for="icon_prefix2">請輸入電子郵件信箱<br />
                                  ex：info@beyond-fitness.tw</label>
                               </div>

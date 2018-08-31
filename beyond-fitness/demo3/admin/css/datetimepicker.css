@@ -10,8 +10,6 @@
     color: #fff;
 }
 
-.datetimepicker th:hover.prev,
-.datetimepicker th:hover.next,
-.datetimepicker th:hover.switch {
+.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot th:hover {
     color: #05232d;
 }

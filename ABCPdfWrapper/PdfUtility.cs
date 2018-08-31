@@ -38,6 +38,7 @@ namespace ABCPdfWrapper
                 //theDoc.HtmlOptions.ImageQuality = 101;
 
                 theDoc.Rect.Inset(5, 5);
+                //theDoc.Rect.Inset(5, 5);
 
                 //				XRect rect = theDoc.Rect;
                 //				rect.Bottom += 200;

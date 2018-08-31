@@ -5072,7 +5072,10 @@ img {
 
 .modal-content .modal-header .title {
 	margin-top: 5px;
-	margin-bottom: 0
+	margin-bottom: 0;
+    font-weight: 800;
+    color: #0061d2;
+    font-size: 18px;    
 }
 
 .modal-content .modal-body {
@@ -5083,7 +5086,8 @@ img {
 	line-height: 1.9
 }
 
-.modal-content .modal-quickmenu-body {
+
+.modal-content .modal-popmenu-body {
 	padding-top: 24px;
 	padding-right: 0px;
 	padding-bottom: 0px;
@@ -5092,14 +5096,20 @@ img {
     font-weight: 800;
 }
 
-.modal-content .modal-quickmenu-body .table {
+.modal-content .modal-popmenu-body .table {
     width: 100%;
     max-width: 100%;
     margin-bottom: 0;
 }
 
-.modal-content .modal-quickmenu-body .table td, .table th {
+.modal-content .modal-popmenu-body .table td, .table th {
     padding-left: 30px;
+}
+
+.modal-content .modal-popmenu-body a {
+    color: #4a4a4a;
+    font-weight: 800;
+    font-size: 16px;
 }
 
 .modal-content .modal-footer {
@@ -5131,6 +5141,11 @@ img {
 
 .modal-backdrop {
 	background: rgba(0, 0, 0, 0.3)
+}
+
+.modal.modal-sign .modal-dialog {
+	max-width: 500px;
+	margin: 0 auto
 }
 
 .modal.modal-mini p {
@@ -19263,6 +19278,10 @@ section.content {
 	color: #05232d !important
 }
 
+.col-cyanblue {
+	color: #0061d2 !important
+}
+
 .col-white,
 .social_icon {
 	color: #fff !important
@@ -21405,11 +21424,11 @@ section.content {
 	-moz-border-radius: 8px;
 	-ms-border-radius: 8px;
 	border-radius: 8px;
-	height: 8px
+	height: 12px
 }
 
 .progress .progress-bar {
-	line-height: 8px;
+	line-height: 12px;
 	background-color: #1f91f3
 }
 
@@ -21427,6 +21446,11 @@ section.content {
 
 .progress .progress-bar-danger {
 	background-color: #fb483a
+}
+
+.sr-only {
+    position: relative;
+    color: #05232d;
 }
 
 .irs .irs-min,
@@ -22990,7 +23014,7 @@ section.content {
 }
 
 .dataTables_wrapper {
-	position: relative
+	position: relative;
 }
 
 .dataTables_wrapper select {

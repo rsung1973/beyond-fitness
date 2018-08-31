@@ -16,6 +16,7 @@ using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
+using WebHome.Properties;
 
 namespace WebHome.Controllers
 {
@@ -103,6 +104,13 @@ namespace WebHome.Controllers
         public ActionResult TestDataTable()
         {
             return View();
+        }
+
+        public ActionResult UrlToPDF(String url)
+        {
+            String pdfFile = Path.Combine(Logger.LogDailyPath, $"{Guid.NewGuid()}.pdf");
+            url.ConvertHtmlToPDF(pdfFile, 20);
+            return File(pdfFile, "application/pdf");
         }
 
     }

@@ -79,7 +79,7 @@
                               <!--2-->
                               <div class="input-field col s12">
                                  <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
-                                 <input value="<%= _profile.PID %>" id="PID" name="PID" type="text" <%= ViewBag.LearnerSettings == true ? null : "disabled" %> />
+                                 <input value="<%= _profile.PID %>" id="PID" name="PID" type="text" maxlength="48" <%= ViewBag.LearnerSettings == true ? null : "disabled" %> />
                                  <label class="active" for="email">電子郵件</label> 
                                   <%   if (ViewBag.LearnerSettings == true)
                                         { %>

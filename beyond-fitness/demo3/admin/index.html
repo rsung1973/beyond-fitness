@@ -71,9 +71,6 @@
                   </div>
                </li>
                <li>
-                  <a href="calendar.html"><i class="zmdi zmdi-calendar"></i><span>我的行事曆</span></a>
-               </li>
-               <li>
                   <a href="javascript:void(0);"><i class="zmdi zmdi-file-text"></i><span>我的合約與收款</span> </a>
                </li>
                <li>
@@ -173,21 +170,21 @@
                                              <span>生日</span>
                                           </div>
                                        </li>
-                                       <li class="col-sm-3 col-6">
+                                       <li class="col-sm-3 col-6 calendar-todolist">
                                           <div class="body">
                                              <i class="zmdi livicon-evo" data-options="name: dislike.svg; size: 40px; style: original; strokeWidth:2px;"></i>
                                              <h4>38</h4>
                                              <span>業障</span>
                                           </div>
                                        </li>
-                                       <li class="col-sm-3 col-6">
+                                       <li class="col-sm-3 col-6 calendar-todolist">
                                           <div class="body">
                                              <i class="zmdi livicon-evo" data-options="name: like.svg; size: 40px; style: original; strokeWidth:2px;"></i>
                                              <h4>200</h4>
                                              <span>課表</span>
                                           </div>
                                        </li>
-                                       <li class="col-sm-3 col-6">
+                                       <li class="col-sm-3 col-6 calendar-todolist">
                                           <div class="body">
                                              <i class="zmdi livicon-evo" data-options="name: remove.svg; size: 40px; style: original; strokeWidth:2px; autoPlay:true"></i>
                                              <h4>10</h4>
@@ -206,10 +203,10 @@
          </div>
          <!--我的合約與收款卡片-->
          <div class="container-fluid">
-            <h4 class="card-outbound-header m-l-15">我的合約與收款</h4>
+            <h4 class="card-outbound-header">我的合約與收款</h4>
             <div class="card widget_2">
                 <ul class="row clearfix list-unstyled m-b-0">
-                    <li class="col-lg-3 col-md-6 col-sm-12">
+                    <li class="col-lg-3 col-md-6 col-sm-12 contract">
                         <div class="body">
                             <div class="row">
                                 <div class="col-8">
@@ -217,6 +214,7 @@
                                     <p class="text-small">
                                         可展延：20<br/>
                                         可終止：58 <br/>
+                                        生效中：250
                                     </p>
                                 </div>
                                 <div class="col-4 text-right">
@@ -226,13 +224,13 @@
                             </div>
                         </div>
                     </li>
-                    <li class="col-lg-3 col-md-6 col-sm-12">
+                    <li class="col-lg-3 col-md-6 col-sm-12 contract">
                         <div class="body">
                             <div class="row">
                                 <div class="col-8">
                                     <h5 class="m-t-0">新增</h5>
                                     <p class="text-small">
-                                        草稿：5 <br/>
+                                        編輯中：5 <br/>
                                         待簽名：8 <br/>
                                         待審核：18
                                     </p>
@@ -244,14 +242,14 @@
                             </div>
                         </div>
                     </li>
-                    <li class="col-lg-3 col-md-6 col-sm-12">
+                    <li class="col-lg-3 col-md-6 col-sm-12 contract">
                         <div class="body">
                             <div class="row">
                                 <div class="col-8">
                                     <h5 class="m-t-0">服務申請</h5>
                                     <p class="text-small">
-                                        草稿：0<br/>
-                                        待簽名：8 <br/>
+                                        編輯中：0<br/>
+                                        待簽名：8<br/>
                                         待審核：2
                                     </p>
                                 </div>
@@ -421,7 +419,8 @@
          /*
           * FULL CALENDAR JS
           */        
-          
+         
+         //比賽雷達圖
          var RadarConfig = {
              type: 'radar',
              data: {
@@ -467,6 +466,14 @@
          $(".calendar").on('click', function (event) {
              window.location.href = 'calendar.html';
          });
+          
+         $(".calendar-todolist").on('click', function (event) {
+             window.location.href = 'calendar-todolist.html';
+         });   
+          
+         $(".contract").on('click', function (event) {
+             window.location.href = 'contract.html';
+         });          
       </script>
    </body>
 </html>
