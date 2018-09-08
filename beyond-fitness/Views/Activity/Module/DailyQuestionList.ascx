@@ -13,7 +13,7 @@
         <tr>
             <th data-class="expand">題目</th>
             <th data-hide="phone">答案</th>
-            <th data-hide="phone">建立者</th>
+            <th data-hide="phone">出題者</th>
             <th data-hide="phone">狀態</th>
             <th data-hide="phone">編輯時間</th>
             <th>功能</th>

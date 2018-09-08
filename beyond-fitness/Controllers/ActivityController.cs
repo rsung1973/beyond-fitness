@@ -354,6 +354,10 @@ namespace WebHome.Controllers
                 viewModel.Suggestion = item.PDQSuggestion.Select(s => s.Suggestion).ToArray();
                 viewModel.BonusPoint = item.PDQQuestionExtension.BonusPoint;
             }
+            else if(profile.IsCoach())
+            {
+                viewModel.AskerID = profile.UID;
+            }
 
             return View("~/Views/Activity/Module/EditDailyQuestion.ascx", item);
 
@@ -416,7 +420,6 @@ namespace WebHome.Controllers
                         BonusPoint = 1,
                         CreationTime = DateTime.Now
                     },
-                    AskerID = profile.UID,
                     GroupID = 6,
                     QuestionType = (int)Naming.QuestionType.單選題,
                 };
@@ -429,7 +432,7 @@ namespace WebHome.Controllers
                 }
             }
 
-
+            item.AskerID = viewModel.AskerID ?? profile.UID;
             item.Question = viewModel.Question;
             item.PDQQuestionExtension.CreationTime = DateTime.Now;
             //item.QuestionType = viewModel.QuestionType;

@@ -12,7 +12,23 @@
     <div class="modal-body bg-color-darken txt-color-white no-padding">
         <form action="<%= Url.Action("CommitDailyQuestion","Activity",new { _viewModel.QuestionID }) %>" class="smart-form" method="post" autofocus>
             <fieldset>
-                <section>
+                <section class="col col-6">
+                    <label class="label">出題者</label>
+                    <label class="select">
+                        <select name="AskerID" class="input">
+                            <option value="">請選擇體能顧問</option>
+                            <%  Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", models.GetTable<ServingCoach>()); %>
+                        </select>
+                        <i class="icon-append far fa-keyboard"></i>
+                    </label>
+                    <%  if (_viewModel.AskerID.HasValue)
+                        {%>
+                    <script>
+                        $('#<%= _dialog %> select[name="AskerID"]').val('<%= _viewModel.AskerID %>');
+                    </script>
+                    <%  } %>
+                </section>
+                <section class="col col-6">
                     <label class="label">問題</label>
                     <textarea name="Question" class="form-control" placeholder="最多100個字(不斷行)" rows="3"><%= _viewModel.Question %></textarea>
                 </section>
