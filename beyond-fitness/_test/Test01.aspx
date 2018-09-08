@@ -24,7 +24,20 @@
 </head>
 <body>
     <form id="form1" runat="server">
-
+        <div>
+            <script>
+                (function () {
+                    var cx = '000425864986930980196:dcraga4q5kw';
+                    var gcse = document.createElement('script');
+                    gcse.type = 'text/javascript';
+                    gcse.async = true;
+                    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(gcse, s);
+                })();
+            </script>
+            <gcse:searchbox></gcse:searchbox>
+        </div>
     </form>
 </body>
 </html>

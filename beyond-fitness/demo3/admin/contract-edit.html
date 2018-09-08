@@ -32,8 +32,8 @@
       <link href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
       <link href="css/datetimepicker.css" rel="stylesheet"/>
       <!-- Custom Css -->
-      <link rel="stylesheet" href="css/main.css?1">
-      <link rel="stylesheet" href="css/color_skins.css">
+      <link rel="stylesheet" href="css/main.css?2">
+      <link rel="stylesheet" href="css/color_skins.css?2">
    </head>
    <body class="theme-white">
       <!-- Page Loader -->
@@ -106,7 +106,7 @@
                </div>
                <div class="col-lg-5 col-md-6 col-sm-12">
                   <ul class="breadcrumb float-md-right">
-                     <li class="breadcrumb-item"><a href="contract.html"><i class="zmdi zmdi-file-text"></i> 我的合約</a></li>
+                     <li class="breadcrumb-item"><a href="contract&payment.html"><i class="zmdi zmdi-file-text"></i> 我的合約與收款</a></li>
                   </ul>
                </div>
             </div>
@@ -187,14 +187,14 @@
                   <div class="card">
                      <div class="header">
                         <h2><strong>學生基本資料</strong></h2>
-                        <ul class="header-dropdown">
-                           <li class="dropdown">
-                              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
-                              <ul class="dropdown-menu dropdown-menu-right slideUp float-right xl-blue">
-                                 <li><a href="javascript:void(0);">新增學生</a></li>
-                              </ul>
-                           </li>
-                        </ul>
+                        <div class="col-md-8 col-lg-8 col-8 float-right">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="搜尋學生..." id="searchLearner">
+                                 <span class="input-group-addon">
+                                 <i class="zmdi zmdi-search"></i>
+                                 </span>
+                              </div>
+                           </div>
                      </div>
                      <div class="body">
                         <div class="table-responsive">
@@ -387,16 +387,10 @@
                   <a class="closebutton" data-dismiss="modal"></a>
                </div>
                <div class="modal-popmenu-body">
-                  <table class="table">
-                     <tbody>
-                        <tr>
-                           <td><a href="">編輯資料</a></td>
-                        </tr>
-                        <tr>
-                           <td><a href="javascript:void(0);" class="swal-delete">刪除資料</a></td>
-                        </tr>
-                     </tbody>
-                  </table>
+                  <div class="list-group"> 
+                       <a href="javascript:editLearner();" class="list-group-item">編輯資料</a> 
+                       <a href="javascript:void(0);" class="list-group-item swal-delete">刪除資料</a>
+                   </div>
                </div>
             </div>
          </div>
@@ -410,7 +404,20 @@
                   <a class="closebutton" data-dismiss="modal"></a>
                </div>
                <div class="modal-popmenu-body">
-                  <table class="table table-striped">
+<!--
+                  <div class="list-group"> 
+                       <a href="javascript:editLearner();" class="list-group-item">單堂<span class="badge bg-blush">2,200</span></a> 
+                       <a href="javascript:void(0);" class="list-group-item">單堂（舊會員續約）<span class="badge bg-blush float-right">2,100</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">25堂<span class="badge bg-blush float-right">1,800</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">50堂<span class="badge bg-blush float-right">1,600</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">50堂（舊會員續約）<span class="badge bg-blush float-right">1,500</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">75堂<span class="badge bg-blush float-right">1,500</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">75堂（舊會員續約）<span class="badge bg-blush float-right">1,400</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">【專案】《到府訓練》2016 / 60分鐘<span class="badge bg-blush float-right">2,500</span></a>
+                       <a href="javascript:void(0);" class="list-group-item">【專案】《南京小巨蛋》駱家60分鐘100堂特惠價<span class="badge bg-blush float-right">1,370</span></a>
+                   </div>
+-->
+                   <table class="table table-striped">
                      <tbody>
                         <tr>
                            <td>單堂<span class="badge bg-blush float-right">2,200</span></td>
@@ -444,6 +451,170 @@
                         </tr>
                      </tbody>
                   </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 搜尋學生Modal -->
+      <div class="modal fade" id="searchLearnerModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <a class="closebutton" data-dismiss="modal"></a>
+               </div>
+               <div class="modal-body">
+                  <ul class="new_friend_list list-unstyled row">
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="javascript:editLearner();">
+                           <img src="images/avatar/garfaild.png" class="img-thumbnail popfit">
+                           <h6 class="users_name">劉思琳</h6>
+                           <small class="join_date">加菲</small>
+                        </a>
+                     </li>
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="javascript:editLearner();">
+                           <img src="images/avatar/genie.jpg" class="img-thumbnail popfit">
+                           <h6 class="users_name">陳芷瑜</h6>
+                           <small class="join_date">Genie</small>
+                        </a>
+                     </li>                     
+                     <li class="col-lg-4 col-md-4 col-6">
+                        <a href="javascript:editLearner();">
+                           <img src="images/avatar/avatar.png" class="img-thumbnail popfit">
+                           <h6 class="users_name"></h6>
+                           <small class="join_date">新增學生</small>
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- 編輯學生資料Modal -->
+      <div class="modal fade" id="editLearnerModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+               <a class="closebutton" data-dismiss="modal"></a>
+               <div class="modal-body">
+                  <div class="row clearfix">
+                     <div class="col-12">
+                        <div class="card">
+                           <div class="header">
+                                <h2><strong>基本資料</strong>
+                                    <input id="checkbox22" type="checkbox">
+                                    <label for="checkbox22" class="col-red">主簽約人</label>
+                                 </h2>
+                            </div>
+                           <div class="body">
+                              <div class="row clearfix">
+                                 <div class="col-sm-6 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="真實姓名">
+                                       <span class="input-group-addon">
+                                       <i class="zmdi zmdi-account-circle"></i>
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-6 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="暱稱">
+                                       <span class="input-group-addon">
+                                       <i class="zmdi zmdi-comment-edit"></i>
+                                       </span>
+                                    </div>
+                                 </div>                                                                                                                                  
+                                 <div class="col-sm-3 col-12">
+                                    <div class="input-group">                                       
+                                       <input type="text" class="form-control date" data-date-format="yyyy/mm/dd" readonly="readonly" placeholder="生日" />
+                                       <span class="input-group-addon">
+                                        <i class="zmdi zmdi-time"></i>
+                                       </span>
+                                    </div>
+                                 </div> 
+                                 <div class="col-sm-3 col-12">
+                                    <select class="form-control show-tick">
+                                        <option value="">- 性別 -</option>
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="身分證字號">
+                                       <span class="input-group-addon">
+                                       <i class="zmdi zmdi-text-format"></i>
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-3 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="聯絡電話">
+                                       <span class="input-group-addon">
+                                       <i class="zmdi zmdi-smartphone"></i>
+                                       </span>
+                                    </div>
+                                </div>
+                                 <div class="col-sm-4 col-12">
+                                    <select class="form-control show-tick">
+                                        <option value="">- 請選擇縣市 -</option>
+                                        <option value="1">台北市</option>
+                                        <option value="2">新北市</option>
+                                    </select>
+                                 </div>
+                                 <div class="col-sm-8 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="居住地址">
+                                       <span class="input-group-addon">
+                                       <i class="zmdi zmdi-pin"></i>
+                                       </span>
+                                    </div>
+                                 </div> 
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-12">
+                        <div class="card xl-pink">
+                           <div class="header">
+                                <h2><strong>緊急聯絡人資料</strong></h2>
+                            </div>
+                           <div class="body">
+                              <div class="row clearfix">
+                                 <div class="col-sm-4 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人">
+                                       <span class="input-group-addon xl-pink">
+                                       <i class="zmdi zmdi-account-circle"></i>
+                                       </span>
+                                    </div>
+                                 </div>  
+                                 <div class="col-sm-4 col-12">
+                                    <select class="form-control show-tick">
+                                        <option value="">- 關係 -</option>
+                                        <option value="1">父母</option>
+                                        <option value="3">親子</option>
+                                        <option value="2">夫婦</option>                                
+                                        <option value="4">兄弟姊妹</option>
+                                        <option value="6">朋友</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 col-12">
+                                    <div class="input-group">
+                                       <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人電話">
+                                       <span class="input-group-addon xl-pink">
+                                       <i class="zmdi zmdi-smartphone"></i>
+                                       </span>
+                                    </div>
+                                </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-darkteal btn-round waves-effect"><i class="zmdi zmdi-edit"></i></button>
+                  <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete"><i class="zmdi zmdi-delete"></i></button>
                </div>
             </div>
          </div>
@@ -528,7 +699,7 @@
          //搜尋體能顧問
          $('#searchCoach').on('click', function (event) {
              $("#searchCoachModal").modal('show');
-         });           
+         });                         
          
          // 開啟小日曆
          $('.date').datetimepicker({
@@ -552,6 +723,14 @@
          $('.price').on('click', function (event) {             
              $("#searchPriceModal").modal('hide');
          }); 
+          
+         //搜尋學員
+         $('#searchLearner').keypress(function (event) {
+             var keycode = (event.keyCode ? event.keyCode : event.which);
+             if (keycode == '13') {
+                 $("#searchLearnerModal").modal('show');
+             }
+         });          
           
          //點選刪除按鈕
          $('.swal-delete').on('click', function (event) {
@@ -579,10 +758,14 @@
              window.location.href = 'contract-sign.html';
          });
           
-         //點擊存檔後回到行事曆待辦
+         //點擊取消後回到我的合約與收款
          $(".save").on('click', function (event) {
-             window.location.href = 'contract.html';
-         });          
+             window.location.href = 'contract&payment.html';
+         }); 
+          
+         function editLearner() {
+             $("#editLearnerModal").modal('show');
+         }
                   
       </script>
    </body>

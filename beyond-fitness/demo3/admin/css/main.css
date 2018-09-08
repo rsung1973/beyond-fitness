@@ -19659,6 +19659,10 @@ section.content {
 	background: #eceeef !important
 }
 
+.xl-aliceblue {
+    background: #F4F6F9 !important
+}
+
 .inlineblock,
 .navbar-header,
 .navbar-nav.navbar-left,
@@ -21202,9 +21206,12 @@ section.content {
 	margin-bottom: 1px
 }
 
+
+
 .panel-group .panel .panel-title {
 	font-weight: normal;
-	font-size: 16px
+	font-size: 18px;
+    font-weight: 800;
 }
 
 .panel-group .panel .panel-title a {
@@ -21238,6 +21245,10 @@ section.content {
 
 .panel-group .panel .panel-body {
 	padding: 20px
+}
+
+.panel-group .panel .panel-body.no-padding {
+	padding: 0px !important;
 }
 
 .panel-group .panel-primary .panel-title {
