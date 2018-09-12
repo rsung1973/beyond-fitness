@@ -183,7 +183,7 @@ namespace WebHome.Controllers
                 item.BirthdateIndex = viewModel.Birthday.Value.Month * 100 + viewModel.Birthday.Value.Day;
             }
 
-                if (!this.CreatePassword(viewModel))
+            if (!this.CreatePassword(viewModel))
             {
                 ViewBag.ModelState = ModelState;
                 return View("~/Views/Shared/ReportInputError.ascx");

@@ -311,7 +311,7 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = ModelState;
             }
 
-            if (item.UserProfileExtension.CurrentTrial == 1 || !item.IsLearner())
+            if (item.UserProfileExtension.CurrentTrial == 1 /*|| !item.IsLearner()*/)
             {
                 ModelState.AddModelError("PID", "您輸入的資料錯誤，請確認後再重新輸入!!");
             }

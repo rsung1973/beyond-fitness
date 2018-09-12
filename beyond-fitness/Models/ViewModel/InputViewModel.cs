@@ -295,4 +295,9 @@ namespace WebHome.Models.ViewModel
         public String Question { get; set; }
     }
 
+    public class PromotionQueryViewModel
+    {
+
+    }
+
 }

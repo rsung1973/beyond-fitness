@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -3385,6 +3386,9 @@
     <Content Include="Views\Lessons\BonusLessonSelector.ascx" />
     <Content Include="Views\Lessons\Module\CourseContractAttendeeSelector.ascx" />
     <Content Include="Views\Lessons\Module\TrainingStagePlanView.ascx" />
+    <Content Include="Views\Promotion\BonusPromotionIndex.aspx" />
+    <Content Include="Views\Promotion\Module\BonusPromotionWidgetGrid.ascx" />
+    <Content Include="Views\Promotion\Module\BonusPromotionList.ascx" />
     <Content Include="Views\Report\Module\QuestionnaireList.ascx" />
     <Content Include="Views\Report\Module\QuestionnaireWidgetGrid.ascx" />
     <Content Include="Views\Report\QuestionnaireIndex.aspx" />
@@ -3789,6 +3793,7 @@
     <Compile Include="Controllers\EnterpriseProgramController.cs" />
     <Compile Include="Controllers\ExerciseGameController.cs" />
     <Compile Include="Controllers\LineEventsController.cs" />
+    <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\PublishedController.cs" />
     <Compile Include="Controllers\FitnessDiagnosisController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />

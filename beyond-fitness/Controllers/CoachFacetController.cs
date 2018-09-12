@@ -83,12 +83,22 @@ namespace WebHome.Controllers
 
             IQueryable<LessonTime> dataItems = models.GetTable<LessonTime>();
             IQueryable<UserEvent> eventItems = models.GetTable<UserEvent>().Where(e => e.EventType == 1);
-            if (viewModel.DateFrom.HasValue)
+            if(viewModel.DateFrom.HasValue && viewModel.DateTo.HasValue)
+            {
+                dataItems = dataItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value
+                    && t.ClassTime < viewModel.DateTo.Value.AddDays(1));
+                eventItems = eventItems.Where(t => 
+                    (t.StartDate >= viewModel.DateFrom.Value && t.StartDate < viewModel.DateTo.Value.AddDays(1))
+                    || (t.StartDate >= viewModel.DateFrom.Value && t.StartDate < viewModel.DateTo.Value.AddDays(1))
+                    || (t.EndDate >= viewModel.DateFrom.Value && t.EndDate < viewModel.DateTo.Value.AddDays(1))
+                    || (t.StartDate < viewModel.DateFrom.Value && t.EndDate >= viewModel.DateTo.Value));
+            }
+            else if (viewModel.DateFrom.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value);
                 eventItems = eventItems.Where(t => t.StartDate >= viewModel.DateFrom.Value);
             }
-            if (viewModel.DateTo.HasValue)
+            else if (viewModel.DateTo.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime < viewModel.DateTo.Value.AddDays(1));
                 eventItems = eventItems.Where(t => t.EndDate < viewModel.DateTo.Value.AddDays(1));
@@ -270,6 +280,13 @@ namespace WebHome.Controllers
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }
+
+            models.ExecuteCommand(@"UPDATE RegisterLesson
+                    SET        Attended = {2}
+                    FROM     LessonTime INNER JOIN
+                                   GroupingLesson ON LessonTime.GroupID = GroupingLesson.GroupID INNER JOIN
+                                   RegisterLesson ON GroupingLesson.GroupID = RegisterLesson.RegisterGroupID
+                    WHERE   (LessonTime.LessonID = {0}) AND (RegisterLesson.Attended = {1})",lessonID,(int)Naming.LessonStatus.課程結束,(int)Naming.LessonStatus.上課中);
 
             return View("~/Views/Shared/MessageView.ascx", model: "課程預約已取消!!");
 

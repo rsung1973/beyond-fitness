@@ -36,14 +36,16 @@
     }   %>
 <%
     var eventItems = models.GetTable<UserEvent>()
-        .Where(t => t.StartDate >= startDate && t.StartDate < endDate)
+        .Where(t => (t.StartDate >= startDate && t.StartDate < endDate)
+                || (t.EndDate >= startDate && t.EndDate < endDate)
+                || (t.StartDate < startDate && t.EndDate >= endDate))
         .Where(t => !t.EventType.HasValue)
         .Where(t => !t.SystemEventID.HasValue)
         .Where(t => t.UID == _model.UID);
 
     foreach (var item in eventItems)
     {
-        for (var d = item.StartDate.Date; d < item.EndDate.Date.AddDays(1); d = d.AddDays(1))
+        for (var d = new DateTime(Math.Max(item.StartDate.Date.Ticks,startDate.Value.Ticks)); d < new DateTime(Math.Min(item.EndDate.Date.AddDays(1).Ticks,endDate.Value.Ticks)); d = d.AddDays(1))
         {
             var hasLesson = items.Any(l => l.ClassTime >= d && l.ClassTime < d.AddDays(1));   %>
 <div class="<%= $"added-event type{(hasLesson ? 2 : 4)}" %>" data-date="<%= $"{d:yyyy-MM-dd}" %>" data-title="<%= (item.StartDate-d).TotalHours>0 ? $"{item.StartDate:yyyy-MM-dd HH:mm}" : $"{d:yyyy-MM-dd}" %> <%= item.Title %>" data-event-id="<%= item.EventID %>" data-link="#"></div>

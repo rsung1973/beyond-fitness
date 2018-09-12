@@ -1455,7 +1455,10 @@ namespace WebHome.Controllers
             IEnumerable<CalendarEvent> items = item.BuildVipLessonEvents(models, start, end, learner);
 
             var eventItems = models.GetTable<UserEvent>()
-                .Where(t => t.StartDate >= start && t.EndDate < end.AddDays(1))
+                .Where(v => !v.SystemEventID.HasValue)
+                .Where(t => (t.StartDate >= start && t.StartDate < end.AddDays(1))
+                    || (t.EndDate >= start && t.EndDate < end.AddDays(1))
+                    || (t.StartDate < start && t.EndDate >= end))
                 .Where(t => t.UID == item.UID).ToList();
 
             items = items.Concat(eventItems
@@ -2741,6 +2744,13 @@ namespace WebHome.Controllers
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }
+
+            models.ExecuteCommand(@"UPDATE RegisterLesson
+                    SET        Attended = {2}
+                    FROM     LessonTime INNER JOIN
+                                   GroupingLesson ON LessonTime.GroupID = GroupingLesson.GroupID INNER JOIN
+                                   RegisterLesson ON GroupingLesson.GroupID = RegisterLesson.RegisterGroupID
+                    WHERE   (LessonTime.LessonID = {0}) AND (RegisterLesson.Attended = {1})", lessonID, (int)Naming.LessonStatus.課程結束, (int)Naming.LessonStatus.上課中);
 
             ViewBag.Message = "課程預約已取消!!";
             return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassTime.Value.Date ,message = "課程預約已取消!!" });
