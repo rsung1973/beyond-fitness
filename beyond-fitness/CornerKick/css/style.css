@@ -534,8 +534,17 @@ img.responsive-img.nodata {
 
 /* 文字顏色設定 */
 
+.f-darkgreen {
+	color: #00b300;
+}
+
 .f-green {
 	color: #bcff1f;
+}
+
+.f-red {
+    color: #ec3b57 !important;
+    font-weight: 800;
 }
 
 .bg-boys {
@@ -2572,7 +2581,7 @@ ul.lesson-list li.list-intro {
 .time-box .flow-text {
 	font-size: 64px;
 	font-weight: 400;
-	letter-spacing: 10px;
+	letter-spacing: 6px;
 }
 
 .time-box .flow-text small {

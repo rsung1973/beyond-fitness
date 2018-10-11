@@ -94,7 +94,7 @@
             });
         }
 
-        function removeMember(contractID, uid) {
+        function removeProgramMember(contractID, uid) {
             var event = event || window.event;
             if (confirm('確定刪除此企業方案學員?')) {
                 showLoading();

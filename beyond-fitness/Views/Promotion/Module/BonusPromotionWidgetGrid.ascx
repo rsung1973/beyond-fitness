@@ -32,8 +32,8 @@
                     <span class="widget-icon"><i class="fa fa-table"></i></span>
                     <h2>活動方案列表</h2>
                     <div class="widget-toolbar">
-                        <a href="#" class="btn bg-color-green"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
-                        <a href="#" class="btn btn-primary listProjectDialog_link"><i class="fa fa-fw fa-plus"></i>新增</a>
+                        <a href="#" id="btnDownloadPromotion" onclick="downloadPromotion();" class="btn bg-color-green"><i class="fa fa-fw fa-cloud-download-alt"></i>下載檔案</a>
+                        <a href="#" onclick="editPromotion();" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i>新增</a>
                     </div>
                 </header>
                 <!-- widget div-->
@@ -44,63 +44,15 @@
                     </div>
                     <!-- end widget edit box -->
                     <!-- widget content -->
-                    <div class="widget-body bg-color-darken txt-color-white no-padding">
-                        <table id="giftpoints_dt" class="table table-striped table-bordered table-hover" width="100%">
-                            <thead>
-                                <tr>
-                                    <th data-class="expand">活動名稱</th>
-                                    <th data-hide="phone">活動起日</th>
-                                    <th data-hide="phone">活動迄日</th>
-                                    <th>贈送點數</th>
-                                    <th data-hide="phone">贈送方式</th>
-                                    <th>目前贈送人數</th>
-                                    <th>狀態</th>
-                                    <th data-hide="phone">功能</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>LINE綁定會員帳號活動</td>
-                                    <td nowrap="noWrap" class="text-center">2018/08/15</td>
-                                    <td nowrap="noWrap" class="text-center">--</td>
-                                    <td nowrap="noWrap" class="text-center">2</td>
-                                    <td>程式連結</td>
-                                    <td nowrap="noWrap" class="text-center">--</td>
-                                    <td>待生效</td>
-                                    <td nowrap="noWrap">
-                                        <a href="#" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                         <a href="#" class="btn btn-circle btn-primary listAttendantDialog_link"><i class="fa fa-fw fa fa-lg fa-user-plus" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                         <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa-lg fa-trash-alt" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>加入LINE官方帳號回饋活動</td>
-                                    <td nowrap="noWrap" class="text-center">2018/07/15</td>
-                                    <td nowrap="noWrap" class="text-center">2018/10/15</td>
-                                    <td nowrap="noWrap" class="text-center">1</td>
-                                    <td>手動</td>
-                                    <td nowrap="noWrap" class="text-center">20</td>
-                                    <td>已生效</td>
-                                    <td nowrap="noWrap">
-                                        <a href="#" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                         <a href="#" class="btn btn-circle btn-primary listAttendantDialog_link"><i class="fa fa-fw fa fa-lg fa-user-plus" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>母親節帶著媽咪來運動</td>
-                                    <td nowrap="noWrap" class="text-center">2018/04/20</td>
-                                    <td nowrap="noWrap" class="text-center">2018/05/20</td>
-                                    <td nowrap="noWrap" class="text-center">1</td>
-                                    <td>手動</td>
-                                    <td nowrap="noWrap" class="text-center">55</td>
-                                    <td>已停用</td>
-                                    <td nowrap="noWrap">
-                                        <a href="#" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                         <a href="#" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div id="promotionList" class="widget-body bg-color-darken txt-color-white no-padding">
+                        <%  var items = models.GetTable<PDQGroup>().Join(
+                                models.GetTable<PDQQuestion>().Join(
+                                        models.GetTable<PDQQuestionExtension>()
+                                            .Where(x => x.AwardingAction.HasValue),
+                                        q => q.QuestionID, x => x.QuestionID, (q, x) => q),
+                                    g => g.GroupID, q => q.GroupID, (g, q) => g);
+
+                            Html.RenderPartial("~/Views/Promotion/Module/BonusPromotionList.ascx", items); %>
                     </div>
                     <!-- end widget content -->
                 </div>
@@ -115,34 +67,87 @@
 
 <script>
     //debugger;
-    function inquireTrust() {
+    function editPromotion(keyID) {
         var event = event || window.event;
         var $form = $(event.target).closest('form');
         var formData = $form.serializeObject();
-        $('#btnDownloadTrustTrack').css('display', 'none');
-        $('#btnDownloadTrustSummary').css('display', 'none');
-        //$('#btnDownloadTrustLesson').css('display', 'none');
 
         showLoading();
-        $('#trustList').load('<%= Url.Action("InquireContractTrust","Accounting") %>', formData, function (data) {
+        $.post('<%= Url.Action("EditBonusPromotion", "Promotion") %>', { 'keyID': keyID }, function (data) {
             hideLoading();
+            if ($.isPlainObject(data)) {
+                alert(data.message);
+            } else {
+                $(data).appendTo($('body'));
+            }
         });
-
     }
 
-    function downloadTrustTrack() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreateTrustTrackXlsx","Accounting") %>');
+    function deletePromotion(keyID) {
+        if (!confirm('確定刪除此活動方案?')) {
+            return;
+        }
+        showLoading();
+        $.post('<%= Url.Action("UpdateBonusPromotionStatus", "Promotion",new { Status = Naming.LessonSeriesStatus.已停用, TryToDelete = true }) %>', { 'keyID': keyID }, function (data) {
+            hideLoading();
+            if ($.isPlainObject(data)) {
+                if (data.result) {
+                    alert('活動方案已刪除!!');
+                } else {
+                    alert('活動方案已停用!!');
+                }
+                listPromotion();
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
     }
 
-    function downloadTrustSummary() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreateTrustSummaryXlsx","Accounting") %>');
+    function enablePromotion(keyID) {
+
+        showLoading();
+        $.post('<%= Url.Action("UpdateBonusPromotionStatus", "Promotion",new { Status = Naming.LessonSeriesStatus.已啟用 }) %>', { 'keyID': keyID }, function (data) {
+            hideLoading();
+            if ($.isPlainObject(data)) {
+                if (data.result) {
+                    alert('活動方案已啟用!!');
+                } else {
+                    alert(data.message);
+                }
+                listPromotion();
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
     }
 
-    function downloadTrustLesson() {
-        $('#queryForm').launchDownload('<%= Url.Action("CreateTrustLessonXlsx","Accounting") %>');
+    function editParticipant(keyID) {
+        var event = event || window.event;
+        var $form = $(event.target).closest('form');
+        var formData = $form.serializeObject();
+
+        showLoading();
+        $.post('<%= Url.Action("EditPromotionParticipant", "Promotion") %>', { 'keyID': keyID }, function (data) {
+            hideLoading();
+            if ($.isPlainObject(data)) {
+                alert(data.message);
+            } else {
+                $(data).appendTo($('body'));
+            }
+        });
     }
 
+    function listPromotion() {
+        showLoading();
+        $.post('<%= Url.Action("ListBonusPromotion", "Promotion") %>', { }, function (data) {
+            hideLoading();
+            $('#promotionList').empty().append(data);
+        });
+    }
 
+    function downloadPromotion(keyID) {
+        $('').launchDownload('<%= Url.Action("CreateBonusPromotionXlsx","Promotion") %>', { 'keyID': keyID });
+    }
 
 </script>
 
@@ -151,7 +156,7 @@
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     UserProfile _profile;
-    TrustQueryViewModel _viewModel;
+    PromotionQueryViewModel _viewModel;
 
     protected override void OnInit(EventArgs e)
     {
@@ -159,7 +164,7 @@
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _profile = Context.GetUser();
-        _viewModel = (TrustQueryViewModel)ViewBag.ViewModel;
+        _viewModel = (PromotionQueryViewModel)ViewBag.ViewModel;
     }
 
 </script>

@@ -19,6 +19,18 @@
 
     var total = items.Sum(t => t.TotalMinutes);
 
+    IQueryable<TrainingExecutionStage> compareTo = (IQueryable<TrainingExecutionStage>)ViewBag.CompareTo;
+    var compareToItems = models.GetTable<TrainingStage>()
+        .Select(s => new
+        {
+            s.Stage,
+            TotalMinutes = compareTo.Where(t => t.StageID == s.StageID).Sum(t => t.TotalMinutes) ?? 0
+        }).ToArray();
+
+    var totalCompareTo = compareToItems.Sum(t => t.TotalMinutes);
+    if (totalCompareTo == 0)
+        totalCompareTo = 1m;
+
      %>
 <script>
     $(function () {
@@ -28,6 +40,7 @@
             data: {
                 datasets: [{
                     data: <%= JsonConvert.SerializeObject(items.Select(t=>Math.Round(t.TotalMinutes*100/total)).ToArray()) %>,
+                    dataCompareTo: <%= JsonConvert.SerializeObject(compareToItems.Select(t=>Math.Round(t.TotalMinutes*100/totalCompareTo)).ToArray()) %>,
                     backgroundColor: [
                         'rgba(245, 166, 35, .8)',
                         'rgba(255, 78, 100, .8)',

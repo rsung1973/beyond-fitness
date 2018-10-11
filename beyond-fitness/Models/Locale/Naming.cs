@@ -289,6 +289,12 @@ namespace WebHome.Models.Locale
             近半年 = 5,
             近一年 = 6
         }
+
+        public enum BonusAwardingAction
+        {
+            程式連結 = 1,
+            手動 = 2
+        }
             
     }
 }

@@ -61,6 +61,7 @@ namespace WebHome.Controllers
                 .Where(p => !p.SeriesID.HasValue)
                 .Where(p => p.BranchID.HasValue)
                 .Where(p => p.IsInternalLesson == null)
+                .Where(p => p.IsWelfareGiftLesson == null)
                 .Where(p => p.Status == (int)Naming.LessonPriceStatus.一般課程 || p.Status == (int)Naming.LessonPriceStatus.已刪除);
 
             if (viewModel.Status.HasValue)

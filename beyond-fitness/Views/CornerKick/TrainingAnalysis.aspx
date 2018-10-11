@@ -28,7 +28,7 @@
     <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
     
     <!-- STYLE 要放最下面  -->
-    <link href="css/style.css?1" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css?1.1" type="text/css" rel="stylesheet" media="screen,projection" />
               <link rel="icon" href="favicons/favicon_96x96.png">
       <!-- Specifying a Webpage Icon for Web Clip -->
       <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
@@ -87,61 +87,16 @@
                     <div class="chart-wrap">
                         <!-- Ｃhart -->
                         <ul class="collection">
-                            <!-- Card 1-->
-                            <li class="collection-item avatar">
-                                <!-- 上 -->
+                            <!-- Card 5-->
+                            <li class="collection-item avatar list-box">
+                                <!-- Left -->
                                 <div class="row">
-                                    <ul class="chart-card">
-                                        <li class="chart-top">
-                                            <span class="title">體能分析</span>
-                                            <%  var contestant = _model.ExerciseGameContestant;
-                                                if (contestant != null && contestant.Status == (int)Naming.GeneralStatus.Successful
-                                                        && contestant.ExerciseGameRank.Any(r => r.RankingScore.HasValue))
-                                                {
-                                                    Html.RenderPartial("~/Views/CornerKick/Module/GameRankRadarChart.ascx", contestant);
-                                                }
-                                                else if (_model.PersonalExercisePurpose != null
-                                                    && (_model.PersonalExercisePurpose.Cardiopulmonary.HasValue
-                                                        || _model.PersonalExercisePurpose.Flexibility.HasValue
-                                                        || _model.PersonalExercisePurpose.MuscleStrength.HasValue))
-                                                {
-                                                    Html.RenderPartial("~/Views/CornerKick/Module/BodyPowerAbility.ascx", _model.PersonalExercisePurpose);
-                                                }
-                                                else
-                                                {
-                                                    Html.RenderPartial("~/Views/CornerKick/Module/EmptyGameRankRadarChart.ascx", _model);
-                                                } %>
-                                        </li>
-                                        <!-- 下-->
-                                        <li class="chart-bottom" id="radarChartBottom">
-                                            <div class="col s6">
-                                                <ul class="list-2">
-                                                    <li></li>
-                                                    <li></li>
-                                                    <li></li>
-                                                </ul>
-                                            </div>
-                                            <div class="col s6">
-                                                <ul class="list-3">
-                                                    <li></li>
-                                                    <li></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <script>
-                                        $global.showRadarChartBottom = function () {
-                                            var data = window.myRadar.chart.data;
-                                            var $bottom = $('#radarChartBottom li');
-                                            $bottom.each(function (idx, element) {
-                                                if (idx < data.labels.length) {
-                                                    $(this).text(data.labels[idx] + ' ' + (data.datasets[0].data[idx] || '--'));
-                                                } else {
-                                                    $(this).remove();
-                                                }
-                                            });
-                                        };
-                                    </script>
+                                    <div class="col s12 ">
+                                        <span class="title">累積運動時間</span>
+                                        <div class="bar-chart">
+                                            <%  Html.RenderPartial("~/Views/CornerKick/Module/MonthlyLessonBarChart.ascx", _model); %>
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                             <!-- Card 2-->
@@ -150,7 +105,7 @@
                                 <div class="row">
                                     <ul class="chart-card">
                                         <li class="chart-top">
-                                            <span class="title">累積訓練時間比例</span>
+                                            <span class="title">本月訓練時間比例</span>
                                             <%  Html.RenderPartial("~/Views/CornerKick/Module/TrainingContentAnalysis.ascx", _model); %>
                                         </li>
                                         <!-- 下-->
@@ -177,6 +132,13 @@
                                             $bottom.each(function (idx, element) {
                                                 if (idx < data.labels.length) {
                                                     $(this).text(data.labels[idx] + ' ' + (data.datasets[0].data[idx] ? data.datasets[0].data[idx] + '%' : '--'));
+                                                    if (data.datasets[0].data[idx] < data.datasets[0].dataCompareTo[idx]) {
+                                                        //$(this).append($('<span class="livicon-evo" data-options="name: arrow-down.svg; size: 20px; style: lines; strokeColor:#ec3b57; strokeWidth:2px; autoPlay:true"></span>'));
+                                                        $(this).append('<span class="f-darkgreen">▼</span>');
+                                                    } else if (data.datasets[0].data[idx] > data.datasets[0].dataCompareTo[idx]) {
+                                                        //$(this).append($('<span class="livicon-evo" data-options="name: arrow-top.svg; size: 20px; style: lines; strokeColor:#ec3b57; strokeWidth:2px; autoPlay:true"></span>'));
+                                                        $(this).append('<span class="f-red">▲</span>');
+                                                    }
                                                 }
                                             });
                                         };
@@ -188,13 +150,23 @@
                                 var endDate = DateTime.Today.AddDays(1);
                                 var startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                                 var totalMinutes = _model.TotalLessonMinutes(models, startDate, endDate);
+                                var totalMinutesCompareTo = _model.TotalLessonMinutes(models, startDate.AddMonths(-1), startDate);
+
                             %>
                             <li class="collection-item avatar list-box box-left">
                                 <!-- Left -->
                                 <div class="row">
                                     <div class="col s12 "><span class="title">本月訓練時間</span> </div>
                                     <div class="col s12">
-                                        <div class="time-box"><span class="flow-text"><%= $"{totalMinutes/60:00}" %>:<%= $"{totalMinutes%60:00}" %><small>小時:分鐘</small></span></div>
+                                        <div class="time-box">
+                                            <span class="flow-text">
+                                                <%= $"{totalMinutes/60:00}" %>:<%= $"{totalMinutes%60:00}" %>
+                                                <small>小時:分鐘<%  if (totalMinutes > totalMinutesCompareTo)
+                                                        {%><span class="f-red">▲</span><%  }
+                                                        else if (totalMinutes < totalMinutesCompareTo)
+                                                        {%><span class="f-darkgreen">▼</span><%  } %></small>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -272,16 +244,61 @@
                                     </div>
                                 </div>
                             </li>
-                            <!-- Card 5-->
-                            <li class="collection-item avatar list-box">
-                                <!-- Left -->
+                                <!-- Card 1-->
+                            <li class="collection-item avatar">
+                                <!-- 上 -->
                                 <div class="row">
-                                    <div class="col s12 ">
-                                        <span class="title">累積運動時間</span>
-                                        <div class="bar-chart">
-                                            <%  Html.RenderPartial("~/Views/CornerKick/Module/MonthlyLessonBarChart.ascx", _model); %>
-                                        </div>
-                                    </div>
+                                    <ul class="chart-card">
+                                        <li class="chart-top">
+                                            <span class="title">體能分析</span>
+                                            <%  var contestant = _model.ExerciseGameContestant;
+                                                if (contestant != null && contestant.Status == (int)Naming.GeneralStatus.Successful
+                                                        && contestant.ExerciseGameRank.Any(r => r.RankingScore.HasValue))
+                                                {
+                                                    Html.RenderPartial("~/Views/CornerKick/Module/GameRankRadarChart.ascx", contestant);
+                                                }
+                                                else if (_model.PersonalExercisePurpose != null
+                                                    && (_model.PersonalExercisePurpose.Cardiopulmonary.HasValue
+                                                        || _model.PersonalExercisePurpose.Flexibility.HasValue
+                                                        || _model.PersonalExercisePurpose.MuscleStrength.HasValue))
+                                                {
+                                                    Html.RenderPartial("~/Views/CornerKick/Module/BodyPowerAbility.ascx", _model.PersonalExercisePurpose);
+                                                }
+                                                else
+                                                {
+                                                    Html.RenderPartial("~/Views/CornerKick/Module/EmptyGameRankRadarChart.ascx", _model);
+                                                } %>
+                                        </li>
+                                        <!-- 下-->
+                                        <li class="chart-bottom" id="radarChartBottom">
+                                            <div class="col s6">
+                                                <ul class="list-2">
+                                                    <li></li>
+                                                    <li></li>
+                                                    <li></li>
+                                                </ul>
+                                            </div>
+                                            <div class="col s6">
+                                                <ul class="list-3">
+                                                    <li></li>
+                                                    <li></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <script>
+                                        $global.showRadarChartBottom = function () {
+                                            var data = window.myRadar.chart.data;
+                                            var $bottom = $('#radarChartBottom li');
+                                            $bottom.each(function (idx, element) {
+                                                if (idx < data.labels.length) {
+                                                    $(this).text(data.labels[idx] + ' ' + (data.datasets[0].data[idx] || '--'));
+                                                } else {
+                                                    $(this).remove();
+                                                }
+                                            });
+                                        };
+                                    </script>
                                 </div>
                             </li>
                         </ul>

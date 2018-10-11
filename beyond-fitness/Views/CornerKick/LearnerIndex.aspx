@@ -31,7 +31,7 @@
     <link href="css/preview-assets/reset.css" rel="stylesheet">
     <link href="css/royalslider/skins/default/rs-default.css" rel="stylesheet" class="rs-file">
     <!-- STYLE 要放最下面  -->
-    <link href="css/style.css?1" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css?1.1" type="text/css" rel="stylesheet" media="screen,projection" />
               <link rel="icon" href="favicons/favicon_96x96.png">
       <!-- Specifying a Webpage Icon for Web Clip -->
       <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
@@ -129,6 +129,21 @@
                             <li><a href="javascript:gtag('event', '新手上路', {  'event_category': '下拉式選單點擊',  'event_label': '卡片總覽'});window.location.href = '<%= Url.Action(eventItem.SystemEventBulletin.ActionName,eventItem.SystemEventBulletin.ControllerName,new { keyID =  eventItem.EventID.EncryptKey() }) %>';"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，跟著 Beyond 走，新手導航去 <i class="material-icons right">arrow_forward</i></a> </li>
                             <%      }
                                 }
+                                item = events.Where(v => v is PersonalExercisePurposeEvent && !(v is PersonalExercisePurposeAccomplishedEvent)).FirstOrDefault();
+                                if (item != null)
+                                {
+                                    %>
+                                <li><a href="javascript:gtag('event', '我的目標', {  'event_category': '下拉式選單點擊',  'event_label': '卡片總覽'});window.location.href = '<%= Url.Action("LearnerToCheckTrainingGoal","CornerKick") %>';"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，你教練有新的想法喔，點擊詳閱說明書 <i class="material-icons right">arrow_forward</i></a></li>                            
+                            <%      
+                                }
+                                item = events.Where(v => v is PersonalExercisePurposeAccomplishedEvent).FirstOrDefault();
+                                if (item != null)
+                                {
+                                    %>
+                                <li><a href="javascript:gtag('event', '我的目標', {  'event_category': '下拉式選單點擊',  'event_label': '卡片總覽'});window.location.href = '<%= Url.Action("LearnerTrainingGoal","CornerKick") %>';"><%= _model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟" %>，恭喜成就達成，來回顧血淚史吧!! <i class="material-icons right">arrow_forward</i></a></li>                            
+                            <%      
+                                }
+
                                 item = events.Where(v => v is PromptContractEvent).FirstOrDefault();
                                 if (item != null)
                                 {

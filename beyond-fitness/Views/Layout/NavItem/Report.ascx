@@ -30,7 +30,7 @@
             <a href="<%= Url.Action("QuestionnaireIndex","Report") %>"><i class="fas fa-volume-up fa-spin"></i>階段性調整計畫報表</a>
         </li>
         <li>
-            <a href="<%= Url.Action("BonusAwardList","Report") %>"><i class="fa fa-fw fa-gift"></i>點數兌換表</a>
+            <a href="<%= Url.Action("BonusAwardList","Report") %>"><i class="fa fa-fw fa-gift"></i>Beyond幣累積兌換表</a>
         </li>
         <%--<li>
             <a href="<%= Url.Action("AverageFitness", "Activity") %>"><i class="fas fa-fw fa-file-medical-alt"></i>體能檢測表</a>

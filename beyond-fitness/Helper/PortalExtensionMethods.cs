@@ -132,18 +132,6 @@ namespace WebHome.Helper
             return item;
         }
 
-        public static IQueryable<CourseContract> PromptExpiringContract<TEntity>(this ModelSource<TEntity> models)
-                where TEntity : class, new()
-        {
-            var revisionID = models.GetTable<CourseContractRevision>().Where(r => r.Reason == "展延")
-                .Select(r => r.RevisionID);
-            var items = models.GetTable<CourseContract>()
-                .Where(c => !c.RegisterLessonContract.Any(r => r.RegisterLesson.Attended == (int)Naming.LessonStatus.課程結束))
-                .Where(c => c.Expiration < DateTime.Today.AddMonths(1))
-                .Where(c => !revisionID.Any(r => r == c.ContractID));
-            return items;
-        }
-
         public static IQueryable<CourseContract> PromptContract<TEntity>(this ModelSource<TEntity> models)
             where TEntity : class, new()
         {
@@ -252,6 +240,41 @@ namespace WebHome.Helper
             return null;
 
         }
+
+        public static PersonalExercisePurposeEvent CheckExercisePurposeEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<PersonalExercisePurposeItem>().Where(v => v.UID == profile.UID && !v.NoticeStatus.HasValue);
+            if (items.Count() > 0)
+            {
+                return new PersonalExercisePurposeEvent
+                {
+                    PurposeItemEventList = items,
+                    Profile = profile,
+                };
+            }
+
+            return null;
+        }
+
+        public static PersonalExercisePurposeAccomplishedEvent CheckAccomplishedExercisePurposeEvent<TEntity>(this UserProfile profile, ModelSource<TEntity> models, bool includeAfterToday = false)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<PersonalExercisePurposeItem>()
+                .Where(v => v.UID == profile.UID
+                    && v.CompleteDate >= DateTime.Today.AddDays(-30));
+            if (items.Count() > 0)
+            {
+                return new PersonalExercisePurposeAccomplishedEvent
+                {
+                    PurposeItemEventList = items,
+                    Profile = profile,
+                };
+            }
+
+            return null;
+        }
+
 
 
         public static UserProfile ValiateLogin<TEntity>(this LoginViewModel viewModel, ModelSource<TEntity> models, ModelStateDictionary modelState)

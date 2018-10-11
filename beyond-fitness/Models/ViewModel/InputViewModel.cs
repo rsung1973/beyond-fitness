@@ -269,14 +269,17 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class AwardQueryViewModel
+    public class AwardQueryViewModel : QueryViewModel
     {
         public string UserName { get; set; }
         public int? ActorID { get; set; }
         public int? ItemID { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
-
+        public String PointRange { get; set; }
+        public int? Lower { get; set; }
+        public int? Upper { get; set; }
+        public int? UID { get; set; }
     }
 
     public class ExerciseGameViewModel
@@ -298,6 +301,27 @@ namespace WebHome.Models.ViewModel
     public class PromotionQueryViewModel
     {
 
+    }
+
+    public class PromotionViewModel : QueryViewModel
+    {
+        public int? GroupID { get; set; }
+        public String GroupName { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? QuestionID { get; set; }
+        public String Question { get; set; }
+        public int? BonusPoint { get; set; }
+        public Naming.LessonSeriesStatus? Status { get; set; }
+        public Naming.BonusAwardingAction? AwardingAction { get; set; }
+        public DateTime? CreationTime { get; set; }
+    }
+
+    public class PromotionParticipantViewModel : PromotionViewModel
+    {
+        public int? TaskID { get; set; }
+        public String UserName { get; set; }
+        public int? UID { get; set; }
     }
 
 }

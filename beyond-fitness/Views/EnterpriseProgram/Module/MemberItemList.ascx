@@ -30,7 +30,7 @@
                 <%  if (!item.EnterpriseCourseContract.RegisterLessonEnterprise.Select(t=>t.RegisterLesson)
                             .Where(r=>r.UID==profile.UID).Any(r => r.GroupingLesson.LessonTime.Count > 0))
                     { %>
-                <a onclick="removeMember(<%= item.ContractID %>,<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
+                <a onclick="removeProgramMember(<%= item.ContractID %>,<%= item.UID %>);" class="btn btn-circle bg-color-red delete"><i class="fa fa-fw fa fa-lg fa-trash-alt" aria-hidden="true"></i></a>
                 <%  } %>
             </td>
         </tr>

@@ -46,15 +46,13 @@
     ModelStateDictionary _modelState;
     PromotionQueryViewModel _viewModel;
     UserProfile _model;
-
-
+    
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         _viewModel = (PromotionQueryViewModel)ViewBag.ViewModel;
-        _model = (UserProfile)this.Model;
     }
 
 

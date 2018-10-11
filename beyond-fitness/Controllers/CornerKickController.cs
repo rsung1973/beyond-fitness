@@ -665,6 +665,17 @@ namespace WebHome.Controllers
         }
 
         [Authorize]
+        public ActionResult LearnerToCheckTrainingGoal()
+        {
+            var profile = HttpContext.GetUser().LoadInstance(models);
+            models.ExecuteCommand(@"UPDATE PersonalExercisePurposeItem
+                            SET        NoticeStatus = {0}
+                            WHERE   (UID = {1})", (int)Naming.IncommingMessageStatus.已讀, profile.UID);
+            return View("LearnerTrainingGoal", profile);
+        }
+
+
+        [Authorize]
         public ActionResult StartNavigation(UserEventViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;

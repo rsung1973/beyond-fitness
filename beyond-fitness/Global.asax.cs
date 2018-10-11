@@ -15,6 +15,7 @@ namespace WebHome
 {
     public class Global : HttpApplication
     {
+
         public Global() : base()
         {
             this.AuthenticateRequest += Global_AuthenticateRequest;
@@ -46,7 +47,6 @@ namespace WebHome
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            JobLauncher.StartUp();
         }
 
         void Application_Error(object sender, EventArgs e)

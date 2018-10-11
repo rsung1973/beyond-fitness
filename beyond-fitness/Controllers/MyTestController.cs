@@ -113,6 +113,23 @@ namespace WebHome.Controllers
             return File(pdfFile, "application/pdf");
         }
 
+        public async Task<ActionResult> ConsoleHome(LoginViewModel viewModel, string returnUrl)
+        {
+
+            UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
+                && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+
+            if (item == null)
+            {
+                return View("~/Views/Shared/JsAlert.ascx", model: "登入資料錯誤!!");
+            }
+
+            HttpContext.SignOn(item, viewModel.RememberMe);
+
+            return Redirect("~/ConsoleHome/Index");
+
+        }
+
     }
 
     public class ViewModelA

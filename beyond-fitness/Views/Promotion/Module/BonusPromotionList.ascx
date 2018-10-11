@@ -12,173 +12,71 @@
     <thead>
         <tr>
             <th data-class="expand">活動名稱</th>
-                                    <th data-hide="phone">活動起日</th>
-                                    <th data-hide="phone">活動迄日</th>
-                                    <th>贈送點數</th>
-                                    <th data-hide="phone">贈送方式</th>
-                                    <th>目前贈送人數</th>
-                                    <th>狀態</th>
-                                    <th data-hide="phone">功能</th>
+            <th data-hide="phone">活動起日</th>
+            <th data-hide="phone">活動迄日</th>
+            <th>贈送點數</th>
+            <th data-hide="phone">贈送方式</th>
+            <th>目前贈送人數</th>
+            <th>狀態</th>
+            <th data-hide="phone">功能</th>
         </tr>
     </thead>
     <tbody>
         <%  
-            //System.Diagnostics.Debugger.Launch();
-            //var st = _model.Where(t => t.TrustType == "S").FirstOrDefault();
-            foreach (var item in _model.GroupBy(t => t.ContractID))
+            foreach (var item in _model)
             {
-                var contract = models.GetTable<CourseContract>().Where(c => c.ContractID == item.Key).First();
-                var settlement = models.GetTable<ContractTrustSettlement>().Where(s => s.ContractID == item.Key && s.SettlementID == item.First().SettlementID).First();
-                var initialTrustAmount = settlement.InitialTrustAmount==0 ? contract.TotalCost : settlement.InitialTrustAmount; //settlement.BookingTrustAmount;
-                %>
-            <%  var amt = item.Where(t => t.TrustType == "B").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
-                { %>
-            <tr>
-                <td>B</td>
-                <%--<td></td>--%>
-                <td><%= contract.ContractNo() %></td>
-                <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-                <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address() %></td>
-                <td><%= contract.ContractOwner.Phone %></td>
-                <td><%--<%  if (item.TrustType == Naming.TrustType.T.ToString())
+                var pdqQuest = item.PDQQuestion.First();
+                var pdqExt = pdqQuest.PDQQuestionExtension; %>
+        <tr>
+            <td><%= item.GroupName %></td>
+            <td nowrap="noWrap" class="text-center"><%= item.StartDate.HasValue ? $"{item.StartDate:yyyy/MM/dd}" : "--" %></td>
+            <td nowrap="noWrap" class="text-center"><%= item.EndDate.HasValue ? $"{item.StartDate:yyyy/MM/dd}" : "--" %></td>
+            <td nowrap="noWrap" class="text-center"><%= pdqExt.BonusPoint %></td>
+            <td><%= $"{(Naming.BonusAwardingAction)pdqExt.AwardingAction}" %></td>
+            <td nowrap="noWrap" class="text-center">
+                <%  var appliedCount = pdqQuest.PDQTask.Count(); %>
+                <%= appliedCount %>
+            </td>
+            <td><%  Naming.LessonSeriesStatus status = Naming.LessonSeriesStatus.已啟用;
+                    if(pdqExt.Status.HasValue)
+                    {
+                        status = (Naming.LessonSeriesStatus)pdqExt.Status;
+                        Writer.Write(status);
+                    }
+                    else if(item.StartDate>DateTime.Today)
+                    {
+                        status = Naming.LessonSeriesStatus.準備中;
+                        Writer.Write("待生效");
+                    }
+                    else
+                    {
+                        Writer.Write("已啟用");
+                    }   %>
+            </td>
+            <td nowrap="noWrap">
+                <a href="#" onclick="javascript:editPromotion('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle bg-color-yellow"><i class="fa fa-fw fa fa-lg fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  if (status == Naming.LessonSeriesStatus.已啟用)
+                    {   %>
+                    <%  if (pdqExt.AwardingAction!=(int)Naming.BonusAwardingAction.程式連結)
                         {   %>
-                    <%= item.CourseContract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
-                    <%  } %>--%>
-                </td>
-                <td nowrap="noWrap" class="text-right">
-                    <%  //initialTrustAmount += amt.Value; %>
-                    <%= settlement.InitialTrustAmount == 0 ? String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount()) : null  %>
-                </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
-            </tr>  
-            <%  } %>
-            <%  amt = item.Where(t => t.TrustType == "T").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0)
-                { %>
-            <tr>
-                <td>T</td>
-                <%--<td></td>--%>
-                <td><%= contract.ContractNo() %></td>
-                <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-                <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address() %></td>
-                <td><%= contract.ContractOwner.Phone %></td>
-                <td>
-                    <%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>
-                </td>
-                <td nowrap="noWrap" class="text-right">
-                    <%  //initialTrustAmount += amt.Value; %>
-                    <%= String.Format("{0:##,###,###,##0}", amt.AdjustTrustAmount())   %>
-                </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
-            </tr>
-            <%  } %>
-            <%  amt = item.Where(t => t.TrustType == "N").Select(t => t.LessonTime.RegisterLesson)
-                    .Sum(lesson => lesson.LessonPriceType.ListPrice * lesson.GroupingMemberCount * lesson.GroupingLessonDiscount.PercentageOfDiscount / 100);
-                if (amt.HasValue && amt > 0)
-                { %>
-            <tr>
-            <td>N</td>
-            <%--<td></td>--%>
-            <td><%= contract.ContractNo() %></td>
-            <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-            <td><%= contract.ContractOwner.RealName %></td>
-            <td><%= contract.ContractOwner.Address() %></td>
-            <td><%= contract.ContractOwner.Phone %></td>
-            <td>
+                        <a href="#" onclick="editParticipant('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle btn-primary listAttendantDialog_link"><i class="fa fa-fw fa fa-lg fa-user-plus" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                        <a href="#" onclick="deletePromotion('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa-lg fa-trash-alt" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                    <%  }   %>
+                <%  }
+                    else if(status==Naming.LessonSeriesStatus.已停用)
+                    {   %>
+                        <a href="#"  onclick="enablePromotion('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa-lg fa-check-square" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  }
+                    else
+                    {   %>
+                        <a href="#" onclick="deletePromotion('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle bg-color-red"><i class="fa fa-fw fa-lg fa-trash-alt" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  }
+                    if (appliedCount > 0)
+                    {   %>
+                        <a href="#" id="btnDownloadPromotion" onclick="downloadPromotion('<%= item.GroupID.EncryptKey() %>');" class="btn btn-circle bg-color-green"><i class="fa fa-fw fa-cloud-download-alt" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                <%  } %>
             </td>
-            <td nowrap="noWrap" class="text-right">
-                <%  initialTrustAmount -= amt.Value; %>
-                <%= String.Format("({0:##,###,###,##0})", amt.AdjustTrustAmount())   %>
-            </td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
         </tr>
-            <%  } %>
-            <%  //amt = item.Where(t => t.TrustType == "V")
-                //    .Select(t => t.VoidPayment.Payment)
-                //    .Sum(p => p.PayoffAmount);
-                amt = 0;
-                if (amt.HasValue && amt > 0 && settlement.InitialTrustAmount == 0)
-                { %>
-            <tr>
-            <td>N</td>
-            <%--<td></td>--%>
-            <td><%= contract.ContractNo() %></td>
-            <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-            <td><%= contract.ContractOwner.RealName %></td>
-            <td><%= contract.ContractOwner.Address() %></td>
-            <td><%= contract.ContractOwner.Phone %></td>
-            <td>
-            </td>
-            <td nowrap="noWrap" class="text-right">
-                <%  initialTrustAmount -= amt.Value; %>
-                <%= String.Format("({0:##,###,###,##0})", amt.AdjustTrustAmount())   %>
-            </td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-            <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-            <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
-        </tr>
-            <%  } %>
-        <%  amt = -item.Where(t => t.TrustType == "X").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0)
-                { %>
-            <tr>
-                <td>X</td>
-                <%--<td></td>--%>
-                <td><%= contract.ContractNo() %></td>
-                <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-                <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address() %></td>
-                <td><%= contract.ContractOwner.Phone %></td>
-                <td>
-                    <%--<%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>--%>
-                </td>
-                <td nowrap="noWrap" class="text-right">
-                    <%  initialTrustAmount -= amt.Value; %>
-                    <%= String.Format("({0:##,###,###,##0})", amt.AdjustTrustAmount())   %>
-                </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
-            </tr>
-            <%  } %>
-            <%  amt = -item.Where(t => t.TrustType == "S").Sum(t => t.Payment.PayoffAmount);
-                if (amt.HasValue && amt > 0)
-                { %>
-            <tr>
-                <td>S</td>
-                <%--<td></td>--%>
-                <td><%= contract.ContractNo() %></td>
-                <td><%= contract.ContractOwner.UserProfileExtension.IDNo %></td>
-                <td><%= contract.ContractOwner.RealName %></td>
-                <td><%= contract.ContractOwner.Address() %></td>
-                <td><%= contract.ContractOwner.Phone %></td>
-                <td>
-                    <%--<%= contract.CourseContractExtension.CourseContractRevision.SourceContract.ContractOwner.UserProfileExtension.IDNo %>--%>
-                </td>
-                <td nowrap="noWrap" class="text-right">
-                    <%  initialTrustAmount -= amt.Value; %>
-                    <%= String.Format("({0:##,###,###,##0})", amt.AdjustTrustAmount())   %>
-                </td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", initialTrustAmount.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap" class="text-right"><%= String.Format("{0:##,###,###,##0}", contract.TotalCost.AdjustTrustAmount())   %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.ValidFrom) %></td>
-                <td nowrap="noWrap"><%= String.Format("{0:yyyy/MM/dd}", contract.Expiration) %></td>
-            </tr>
-            <%  } %>
         <%  } %>
     </tbody>
 </table>
@@ -198,8 +96,8 @@
 
         $('#<%= _tableId %>').dataTable({
             //"bPaginate": false,
-            "pageLength": 30,
-            "lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
+            //"pageLength": 30,
+            //"lengthMenu": [[30, 50, 100, -1], [30, 50, 100, "全部"]],
             "ordering": false,
             //"order": [[1,'asc']],
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
@@ -225,7 +123,7 @@
 
 <%  if(_model.Count()>0)
     {  %>
-        $('#btnDownloadTrustTrack').css('display', 'inline');
+        $('#btnDownloadPromotion').css('display', 'inline');
         //$('#btnDownloadTrustLesson').css('display', 'inline');
 <%  }  %>
 
@@ -236,15 +134,15 @@
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    String _tableId = "contractTrust" + DateTime.Now.Ticks;
-    IQueryable<ContractTrustTrack> _model;
+    String _tableId = "pdqGroup" + DateTime.Now.Ticks;
+    IQueryable<PDQGroup> _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<ContractTrustTrack>)this.Model;
+        _model = (IQueryable<PDQGroup>)this.Model;
     }
 
 </script>

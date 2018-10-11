@@ -310,6 +310,13 @@ namespace WebHome.Controllers
             return View();
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach })]
+        public ActionResult BonusPromotionIndex()
+        {
+            return View();
+        }
+
+
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer,(int)Naming.RoleID.Coach })]
         public ActionResult ListBonusAward(AwardQueryViewModel viewModel)
         {
@@ -354,6 +361,52 @@ namespace WebHome.Controllers
             }
 
             return View("~/Views/Report/Module/ListBonusAward.ascx", items);
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach })]
+        public ActionResult ListBonusPromotion(AwardQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            IQueryable<UserProfile> items = models.GetTable<UserProfile>();
+
+            viewModel.UserName = viewModel.UserName.GetEfficientString();
+            if (viewModel.UserName != null)
+            {
+                items = items.Where(c => c.RealName.Contains(viewModel.UserName) || c.Nickname.Contains(viewModel.UserName));
+            }
+
+            if (viewModel.ActorID.HasValue)
+            {
+                items = items
+                    .Join(models.GetTable<LearnerFitnessAdvisor>()
+                        .Where(f => f.CoachID == viewModel.ActorID), 
+                        u => u.UID, f => f.UID, (u, f) => u);
+            }
+
+            var taskItems = models.GetTable<PDQTask>()
+                .Join(models.GetTable<PDQTaskBonus>(),
+                    t => t.TaskID, q => q.TaskID, (t, q) => t)
+                .Join(items, t => t.UID, u => u.UID, (t, u) => t);
+
+            return View("~/Views/Report/Module/ListBonusPromotion.ascx", taskItems);
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach })]
+        public ActionResult ListLearnerBonus(AwardQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            var taskItems = models.GetTable<PDQTask>()
+                .Where(t => t.UID == viewModel.UID)
+                .Join(models.GetTable<PDQTaskBonus>(),
+                    t => t.TaskID, q => q.TaskID, (t, q) => t);
+
+            return View("~/Views/Report/Module/ListLearnerBonus.ascx", taskItems);
         }
 
         public ActionResult QuestionnaireIndex(QuestionnaireQueryViewModel viewModel)

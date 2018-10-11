@@ -45,6 +45,12 @@
             _items.Add(eventItem);
             contractCount = ((PromptContractEvent)eventItem).ContractList.Count() - 1;
         }
+        eventItem = _model.CheckExercisePurposeEvent(models);
+        if (eventItem != null)
+            _items.Add(eventItem);
+        eventItem = _model.CheckAccomplishedExercisePurposeEvent(models);
+        if (eventItem != null)
+            _items.Add(eventItem);
          %>
     <li><a href="javascript:gtag('event', '我的通知', {  'event_category': '連結點擊',  'event_label': '漢堡選單'});window.location.href = '<%= Url.Action("LearnerNotice", "CornerKick") %>';">我的通知 
         <%  if (_items.Count > 0)

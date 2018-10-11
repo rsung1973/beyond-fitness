@@ -18,7 +18,7 @@
     </span>
     <!-- breadcrumb -->
     <ol class="breadcrumb">
-        <li>點數兌換報表</li>
+        <li>Beyond幣累積兌換表</li>
     </ol>
 </asp:Content>
 <asp:Content ID="pageTitle" ContentPlaceHolderID="pageTitle" runat="server">
@@ -79,7 +79,21 @@
                                             <input type="text" name="UserName" class="form-control input" maxlength="20" placeholder="請輸入學員姓名"/>
                                         </label>
                                     </section>
-
+                                    <section class="col col-xs-12 col-sm-4 col-md-4">
+                                            <label class="label">類別</label>
+                                            <label class="select">
+                                               <select class="input" name="queryType" onchange="window.location.href = $(this).val();">
+                                                  <option value="<%= Url.Action("BonusPromotionIndex","Report") %>">累積紀錄</option>
+                                                  <option value="<%= Url.Action("BonusAwardList","Report") %>" selected="selected">兌換紀錄</option>
+                                               </select>
+                                               <i class="icon-append fa fa-gift"></i>
+                                            </label>
+                                    </section>   
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
+                                <div class="row">
                                     <section class="col col-xs-12 col-sm-4 col-md-4">
                                         <label class="label">或依兌換商品查詢</label>
                                         <label class="select">
@@ -93,12 +107,7 @@
                                             <i class="icon-append fa fa-gift"></i>
                                         </label>
                                     </section>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <label class="label"><i class="fa fa-tags"></i>更多查詢條件</label>
-                                <div class="row">
-                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                    <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">請選擇兌換起日</label>
                                         <label class="input">
                                             <i class="icon-append far fa-calendar-alt"></i>
@@ -106,7 +115,7 @@
                                             <input type="text" name="DateFrom" readonly="readonly" class="form-control date form_date" data-date-format="yyyy/mm/dd" placeholder="請點選日曆" value="<%= String.Format("{0:yyyy/MM/dd}",dateFrom) %>" />
                                         </label>
                                     </section>
-                                    <section class="col col-xs-12 col-sm-6 col-md-6">
+                                    <section class="col col-xs-12 col-sm-6 col-md-4">
                                         <label class="label">請選擇兌換迄日</label>
                                         <label class="input">
                                             <i class="icon-append far fa-calendar-alt"></i>

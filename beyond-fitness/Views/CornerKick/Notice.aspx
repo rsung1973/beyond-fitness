@@ -28,7 +28,7 @@
     <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
     
     <!-- STYLE 要放最下面  -->
-    <link href="css/style.css?1" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="css/style.css?1.1" type="text/css" rel="stylesheet" media="screen,projection" />
               <link rel="icon" href="favicons/favicon_96x96.png">
       <!-- Specifying a Webpage Icon for Web Clip -->
       <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
@@ -74,6 +74,8 @@
                                 <%  Html.RenderPartial("~/Views/CornerKick/Module/LessonAttendanceCheckNotice.ascx", _model); %>
                                 <%  Html.RenderPartial("~/Views/CornerKick/Module/DailyQuestionNotice.ascx", _model); %>
                                 <%  Html.RenderPartial("~/Views/CornerKick/Module/UserGuideNotice.ascx", _model); %>
+                                <%  Html.RenderPartial("~/Views/CornerKick/Module/ExercisePurposeCheckNotice.ascx", _model); %>
+                                <%  Html.RenderPartial("~/Views/CornerKick/Module/ExercisePurposeAccomplishedNotice.ascx", _model); %>
                                 <%  Html.RenderPartial("~/Views/CornerKick/Module/PromptContractNotice.ascx", _model); %>
                             </ul>
                         </div>

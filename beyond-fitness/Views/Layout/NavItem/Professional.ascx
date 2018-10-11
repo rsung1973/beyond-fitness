@@ -28,6 +28,12 @@
                     <a href="<%= Url.Action("MotivationalWords","Information") %>"><i class="fas fa-fw fa-lightbulb"></i>每日激勵小語</a>
                 </li>
         <%  } %>
+        <%  if (_userProfile.IsAuthorizedSysAdmin() || _userProfile.IsOfficer() || _userProfile.IsAssistant())
+            { %>
+                <li>
+                    <a href="<%= Url.Action("BonusPromotionIndex","Promotion") %>"><i class="fas fa-fw fa-gift"></i>贈送Beyond幣</a>
+                </li>
+        <%  } %>
     </ul>
 </li>
 <%  } %>

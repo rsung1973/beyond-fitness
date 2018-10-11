@@ -418,6 +418,7 @@
       <Column Name="BonusPoint" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Status" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="CreationTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AwardingAction" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="PDQQuestion_PDQQuestionExtension" Member="PDQQuestion" ThisKey="QuestionID" OtherKey="QuestionID" Type="PDQQuestion" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -663,6 +664,7 @@
   <Table Name="dbo.PDQTaskBonus" Member="PDQTaskBonus">
     <Type Name="PDQTaskBonus">
       <Column Name="TaskID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BonusPoint" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="PDQTaskBonus_BonusExchange" Member="BonusExchange" ThisKey="TaskID" OtherKey="TaskID" Type="BonusExchange" />
       <Association Name="PDQTask_PDQTaskBonus" Member="PDQTask" ThisKey="TaskID" OtherKey="TaskID" Type="PDQTask" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
@@ -1834,6 +1836,7 @@
       <Column Name="UID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PurposeItem" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="CompleteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NoticeStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="PersonalExercisePurpose_PersonalExercisePurposeItem" Member="PersonalExercisePurpose" ThisKey="UID" OtherKey="UID" Type="PersonalExercisePurpose" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>

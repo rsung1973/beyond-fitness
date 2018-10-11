@@ -2736,6 +2736,13 @@ namespace WebHome.Controllers
             //    return RedirectToAction("Coach", "Account", new { lessonDate = lessonDate, message= "請先刪除預編課程!!" });
             //}
 
+            models.ExecuteCommand(@"UPDATE RegisterLesson
+                    SET        Attended = {2}
+                    FROM     LessonTime INNER JOIN
+                                   GroupingLesson ON LessonTime.GroupID = GroupingLesson.GroupID INNER JOIN
+                                   RegisterLesson ON GroupingLesson.GroupID = RegisterLesson.RegisterGroupID
+                    WHERE   (LessonTime.LessonID = {0}) AND (RegisterLesson.Attended = {1})", lessonID, (int)Naming.LessonStatus.課程結束, (int)Naming.LessonStatus.上課中);
+
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
             if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
                 || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/ 
@@ -2744,13 +2751,6 @@ namespace WebHome.Controllers
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }
-
-            models.ExecuteCommand(@"UPDATE RegisterLesson
-                    SET        Attended = {2}
-                    FROM     LessonTime INNER JOIN
-                                   GroupingLesson ON LessonTime.GroupID = GroupingLesson.GroupID INNER JOIN
-                                   RegisterLesson ON GroupingLesson.GroupID = RegisterLesson.RegisterGroupID
-                    WHERE   (LessonTime.LessonID = {0}) AND (RegisterLesson.Attended = {1})", lessonID, (int)Naming.LessonStatus.課程結束, (int)Naming.LessonStatus.上課中);
 
             ViewBag.Message = "課程預約已取消!!";
             return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassTime.Value.Date ,message = "課程預約已取消!!" });

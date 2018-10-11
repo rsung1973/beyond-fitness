@@ -38,12 +38,25 @@
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
         _model = (UserProfile)this.Model;
 
+        DateTime startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
         _items = models.GetTable<RegisterLesson>().Where(f => f.UID == _model.UID)
            .TotalLessons(models)
+           .Where(l => l.ClassTime >= startDate && l.ClassTime < DateTime.Today.AddDays(1))
            .Join(models.GetTable<TrainingPlan>(), l => l.LessonID, p => p.LessonID, (l, p) => p)
            .Join(models.GetTable<TrainingExecution>(), p => p.ExecutionID, x => x.ExecutionID, (p, x) => x)
            .Join(models.GetTable<TrainingExecutionStage>(), x => x.ExecutionID, s => s.ExecutionID, (x, s) => s);
 
+        DateTime lastStart = startDate.AddMonths(-1);
+
+        var compareTo = models.GetTable<RegisterLesson>().Where(f => f.UID == _model.UID)
+           .TotalLessons(models)
+           .Where(l => l.ClassTime >= lastStart && l.ClassTime<startDate)
+           .Join(models.GetTable<TrainingPlan>(), l => l.LessonID, p => p.LessonID, (l, p) => p)
+           .Join(models.GetTable<TrainingExecution>(), p => p.ExecutionID, x => x.ExecutionID, (p, x) => x)
+           .Join(models.GetTable<TrainingExecutionStage>(), x => x.ExecutionID, s => s.ExecutionID, (x, s) => s);
+
+        ViewBag.CompareTo = compareTo;
     }
 
 </script>

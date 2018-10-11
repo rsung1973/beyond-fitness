@@ -11275,6 +11275,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<System.DateTime> _CreationTime;
 		
+		private System.Nullable<int> _AwardingAction;
+		
 		private EntityRef<PDQQuestion> _PDQQuestion;
 		
     #region Extensibility Method Definitions
@@ -11289,6 +11291,8 @@ namespace WebHome.Models.DataEntity
     partial void OnStatusChanged();
     partial void OnCreationTimeChanging(System.Nullable<System.DateTime> value);
     partial void OnCreationTimeChanged();
+    partial void OnAwardingActionChanging(System.Nullable<int> value);
+    partial void OnAwardingActionChanged();
     #endregion
 		
 		public PDQQuestionExtension()
@@ -11377,6 +11381,26 @@ namespace WebHome.Models.DataEntity
 					this._CreationTime = value;
 					this.SendPropertyChanged("CreationTime");
 					this.OnCreationTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AwardingAction", DbType="Int")]
+		public System.Nullable<int> AwardingAction
+		{
+			get
+			{
+				return this._AwardingAction;
+			}
+			set
+			{
+				if ((this._AwardingAction != value))
+				{
+					this.OnAwardingActionChanging(value);
+					this.SendPropertyChanging();
+					this._AwardingAction = value;
+					this.SendPropertyChanged("AwardingAction");
+					this.OnAwardingActionChanged();
 				}
 			}
 		}
@@ -16610,6 +16634,8 @@ namespace WebHome.Models.DataEntity
 		
 		private int _TaskID;
 		
+		private System.Nullable<int> _BonusPoint;
+		
 		private EntitySet<BonusExchange> _BonusExchange;
 		
 		private EntityRef<PDQTask> _PDQTask;
@@ -16620,6 +16646,8 @@ namespace WebHome.Models.DataEntity
     partial void OnCreated();
     partial void OnTaskIDChanging(int value);
     partial void OnTaskIDChanged();
+    partial void OnBonusPointChanging(System.Nullable<int> value);
+    partial void OnBonusPointChanged();
     #endregion
 		
 		public PDQTaskBonus()
@@ -16649,6 +16677,26 @@ namespace WebHome.Models.DataEntity
 					this._TaskID = value;
 					this.SendPropertyChanged("TaskID");
 					this.OnTaskIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BonusPoint", DbType="Int")]
+		public System.Nullable<int> BonusPoint
+		{
+			get
+			{
+				return this._BonusPoint;
+			}
+			set
+			{
+				if ((this._BonusPoint != value))
+				{
+					this.OnBonusPointChanging(value);
+					this.SendPropertyChanging();
+					this._BonusPoint = value;
+					this.SendPropertyChanged("BonusPoint");
+					this.OnBonusPointChanged();
 				}
 			}
 		}
@@ -42419,6 +42467,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<System.DateTime> _CompleteDate;
 		
+		private System.Nullable<int> _NoticeStatus;
+		
 		private EntityRef<PersonalExercisePurpose> _PersonalExercisePurpose;
 		
     #region Extensibility Method Definitions
@@ -42433,6 +42483,8 @@ namespace WebHome.Models.DataEntity
     partial void OnPurposeItemChanged();
     partial void OnCompleteDateChanging(System.Nullable<System.DateTime> value);
     partial void OnCompleteDateChanged();
+    partial void OnNoticeStatusChanging(System.Nullable<int> value);
+    partial void OnNoticeStatusChanged();
     #endregion
 		
 		public PersonalExercisePurposeItem()
@@ -42521,6 +42573,26 @@ namespace WebHome.Models.DataEntity
 					this._CompleteDate = value;
 					this.SendPropertyChanged("CompleteDate");
 					this.OnCompleteDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NoticeStatus", DbType="Int")]
+		public System.Nullable<int> NoticeStatus
+		{
+			get
+			{
+				return this._NoticeStatus;
+			}
+			set
+			{
+				if ((this._NoticeStatus != value))
+				{
+					this.OnNoticeStatusChanging(value);
+					this.SendPropertyChanging();
+					this._NoticeStatus = value;
+					this.SendPropertyChanged("NoticeStatus");
+					this.OnNoticeStatusChanged();
 				}
 			}
 		}
