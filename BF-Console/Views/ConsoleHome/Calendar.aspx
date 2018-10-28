@@ -28,7 +28,7 @@
         });
     </script>  
     <section class="content page-calendar">
-        <%  ViewBag.BlockHeader = "任意門";
+        <%  ViewBag.BlockHeader = "我的行事曆";
             Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.ascx", _model); %>
         <!--行事曆-->
         <div class="container-fluid">

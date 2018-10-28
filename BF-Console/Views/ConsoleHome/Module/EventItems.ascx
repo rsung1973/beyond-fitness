@@ -19,7 +19,7 @@
             {   %>
 <div class="event-name b-CoachPI row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.ClassTime:MM}" %><span><%= $"{item.ClassTime:dd}" %></span><span><%= item.ClassTime.Value.DayOfWeek %></span></h4>
+        <h4><%= $"{item.ClassTime:dd}" %><span><%= $"{item.ClassTime:MM}" %></span><span><%= Naming.DayOfWeek[(int) item.ClassTime.Value.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6><%= item.ClassTime.Value.ToString("HH:mm") %>-<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %> <%= item.RegisterLesson.UserProfile.FullName() %></h6>
@@ -40,7 +40,7 @@
             {   %>
 <div class="event-name b-PE row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.ClassTime:MM}" %><span><%= $"{item.ClassTime:dd}" %></span><span><%= item.ClassTime.Value.DayOfWeek %></span></h4>
+        <h4><%= $"{item.ClassTime:dd}" %><span><%= $"{item.ClassTime:MM}" %></span><span><%= Naming.DayOfWeek[(int) item.ClassTime.Value.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6><%= item.ClassTime.Value.ToString("HH:mm") %>-<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %> <%= item.RegisterLesson.UserProfile.FullName() %>
@@ -63,7 +63,7 @@
             {   %>
 <div class="event-name b-PI row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.ClassTime:MM}" %><span><%= $"{item.ClassTime:dd}" %></span><span><%= item.ClassTime.Value.DayOfWeek %></span></h4>
+        <h4><%= $"{item.ClassTime:dd}" %><span><%= $"{item.ClassTime:MM}" %></span><span><%= Naming.DayOfWeek[(int) item.ClassTime.Value.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6><%= item.ClassTime.Value.ToString("HH:mm") %>-<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %> <%= item.RegisterLesson.UserProfile.FullName() %>
@@ -86,7 +86,7 @@
             {   %>
 <div class="event-name b-ST row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.ClassTime:MM}" %><span><%= $"{item.ClassTime:dd}" %></span><span><%= item.ClassTime.Value.DayOfWeek %></span></h4>
+        <h4><%= $"{item.ClassTime:dd}" %><span><%= $"{item.ClassTime:MM}" %></span><span><%= Naming.DayOfWeek[(int) item.ClassTime.Value.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6><%= item.ClassTime.Value.ToString("HH:mm") %>-<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %> <%= item.RegisterLesson.UserProfile.FullName() %>
@@ -108,7 +108,7 @@
             {   %>
 <div class="event-name b-PT row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.ClassTime:MM}" %><span><%= $"{item.ClassTime:dd}" %></span><span><%= item.ClassTime.Value.DayOfWeek %></span></h4>
+        <h4><%= $"{item.ClassTime:dd}" %><span><%= $"{item.ClassTime:MM}" %></span><span><%= Naming.DayOfWeek[(int) item.ClassTime.Value.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6><%= item.ClassTime.Value.ToString("HH:mm") %>-<%= item.ClassTime.Value.AddMinutes(item.DurationInMinutes.Value).ToString("HH:mm") %> <%= String.Join("、", item.GroupingLesson.RegisterLesson.Select(r => r.UserProfile.RealName)) %>
@@ -127,7 +127,7 @@
         {   %>
 <div class="event-name b-custom row">
     <div class="col-2 text-center">
-        <h4><%= $"{item.StartDate:MM}" %><span><%= $"{item.StartDate:dd}" %></span><span><%= item.StartDate.DayOfWeek %></span></h4>
+        <h4><%= $"{item.StartDate:MM}" %><span><%= $"{item.StartDate:dd}" %></span><span><%= Naming.DayOfWeek[(int)item.StartDate.DayOfWeek] %></span></h4>
     </div>
     <div class="col-10">
         <h6>

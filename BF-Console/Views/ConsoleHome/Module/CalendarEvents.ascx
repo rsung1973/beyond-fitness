@@ -96,7 +96,8 @@
                     start = g.Key.ToString("yyyy-MM-dd"),
                     description = "體驗課程",
                     allDay = true,
-                    className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-PE" } : new string[] { "b-l b-2x b-finish" },
+                    //className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-PE" } : new string[] { "b-l b-2x b-finish" },
+                    className = new string[] { "b-l b-2x b-PE" },
                 });
             }
 
@@ -111,7 +112,8 @@
                     start = g.Key.ToString("yyyy-MM-dd"),
                     description = "P.I session",
                     allDay = true,
-                    className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-PI" } : new string[] { "b-l b-2x b-finish" },
+                    //className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-PI" } : new string[] { "b-l b-2x b-finish" },
+                    className = new string[] { "b-l b-2x b-PI" },
                 });
             }
 
@@ -126,7 +128,8 @@
                     start = g.Key.ToString("yyyy-MM-dd"),
                     description = "教練P.I",
                     allDay = true,
-                    className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-CoachPI" } : new string[] { "b-l b-2x b-finish" },
+                    //className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-CoachPI" } : new string[] { "b-l b-2x b-finish" },
+                    className = new string[] { "b-l b-2x b-CoachPI" },
                 });
             }
 
@@ -141,7 +144,8 @@
                     start = g.Key.ToString("yyyy-MM-dd"),
                     description = "S.T session",
                     allDay = true,
-                    className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-ST" } : new string[] { "b-l b-2x b-finish" },
+                    //className = !items.Any(l => l.LessonAttendance == null) ? new string[] { "b-l b-2x b-ST" } : new string[] { "b-l b-2x b-finish" },
+                    className = new string[] { "b-l b-2x b-ST" },
                 });
             }
 
@@ -154,12 +158,13 @@
                     start = g.Key.ToString("yyyy-MM-dd"),
                     description = "P.T session",
                     allDay = true,
-                    className = g.Key >= DateTime.Today ? new string[] { "b-l b-2x b-PT" } : new string[] { "b-l b-2x b-finish" },
+                    //className = g.Key >= DateTime.Today ? new string[] { "b-l b-2x b-PT" } : new string[] { "b-l b-2x b-finish" },
+                    className = new string[] { "b-l b-2x b-PT" },
                 });
             }
 
         }
-        
+
     }
 
 
