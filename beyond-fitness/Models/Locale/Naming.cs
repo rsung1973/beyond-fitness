@@ -295,6 +295,13 @@ namespace WebHome.Models.Locale
             程式連結 = 1,
             手動 = 2
         }
+
+        public enum BranchName
+        {
+            南京 = 1,
+            信義 = 2,
+            忠孝 = 3
+        }
             
     }
 }

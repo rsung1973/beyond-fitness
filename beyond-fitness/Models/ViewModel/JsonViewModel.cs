@@ -24,4 +24,10 @@ namespace WebHome.Models.ViewModel
         public bool editable { get; set; }
     }
 
+    public class CalendarEventItem
+    {
+        public DateTime? EventTime { get; set; }
+        public Object EventItem { get; set; }
+    }
+
 }

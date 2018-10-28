@@ -33,9 +33,9 @@
     var colors = items
         .Select(s => working.Where(w => w.CoachID == s.Key).Count() > 1
             ? "#a4a4a4"
-            : (work = working.Where(w => w.CoachID == s.Key).First()).BranchID == 1
+            : (work = working.Where(w => w.CoachID == s.Key).First()).BranchID == (int)Naming.BranchName.南京
                 ? "#eeaaaa"
-                : work.BranchID == 2
+                : work.BranchID == (int)Naming.BranchName.忠孝
                     ? "#93e3ff"
                     : "#c5b6e2").ToArray();
 %>

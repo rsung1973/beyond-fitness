@@ -7,27 +7,37 @@
 <%@ Import Namespace="WebHome.Models.ViewModel" %>
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
-<div class="block-header">
-    <div class="row">
-        <div class="col-lg-7 col-md-6 col-sm-12">
-            <h2><%= ViewBag.BlockHeader %><small class="col-cyan"><%  Html.RenderPartial("~/Views/ConsoleHome/Module/InspirationalTitle.ascx", _model); %></small>
-            </h2>
-        </div>
-    </div>
-</div>
+
+<script>
+
+    $(function () {
+
+        if ($global.chartJS == undefined) {
+            loadScript('plugins/chartjs/Chart.bundle.min.js', function () {
+                $global.chartJS = true;
+
+                if ($global.initGraph) {
+                    $global.initGraph();
+                }
+
+            });
+        } else {
+
+        }
+
+    });
+</script>
+
 <script runat="server">
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
-    UserProfile _model;
 
     protected override void OnInit(EventArgs e)
     {
         base.OnInit(e);
         _modelState = (ModelStateDictionary)ViewBag.ModelState;
         models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
     }
-
 
 </script>

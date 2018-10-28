@@ -70,7 +70,7 @@
                               <!--1-->
                               <div class="input-field col s12">
                                  <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
-                                 <input type="text" id="email1" name="PID" maxlength="32" data-length="32"/>
+                                 <input type="text" id="email1" name="PID" maxlength="48" data-length="48"/>
                                  <label for="email1">請輸入電子郵件信箱</label>
                               </div>
                               <!--2-->
@@ -95,7 +95,7 @@
                               <!--1-->
                               <div class="input-field col s12">
                                  <i class="livicon-evo prefix" data-options="name: envelope-put.svg; size: 30px; style: lines;  strokeColor:#05232d; autoPlay:true"></i>
-                                 <input type="text" id="email2" name="PID" maxlength="32" data-length="32" />
+                                 <input type="text" id="email2" name="PID" maxlength="48" data-length="48" />
                                  <label for="email2">請輸入電子郵件信箱</label>
                                  <%--<span class="help-error-text">您輸入的資料錯誤，請確認後再重新輸入</span>--%>
                               </div>

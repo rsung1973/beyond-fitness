@@ -4202,6 +4202,7 @@
     <Content Include="ConsoleHome\plugins\momentjs\ender.js" />
     <Content Include="ConsoleHome\plugins\momentjs\moment.js" />
     <Content Include="ConsoleHome\plugins\momentjs\package.js" />
+    <Content Include="ConsoleHome\plugins\moment\moment.min.js" />
     <Content Include="ConsoleHome\plugins\morrisjs\examples\area-as-line.html" />
     <Content Include="ConsoleHome\plugins\morrisjs\examples\area.html" />
     <Content Include="ConsoleHome\plugins\morrisjs\examples\bar-colors.html" />
@@ -4450,15 +4451,30 @@
     <Content Include="ConsoleHome\plugins\waitme\waitMe.min.js" />
     <Content Include="Global.asax" />
     <Content Include="Views\ConsoleHome\ExerciseBillboard.aspx" />
+    <Content Include="Views\ConsoleHome\Calendar.aspx" />
     <Content Include="Views\ConsoleHome\Index.aspx" />
+    <Content Include="Views\ConsoleHome\Module\AboutAchievement.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutArticle.ascx" />
+    <Content Include="Views\ConsoleHome\Module\RenderLessonCheck.ascx" />
+    <Content Include="Views\ConsoleHome\Module\EventItems.ascx" />
+    <Content Include="Views\ConsoleHome\Module\EventDetails.ascx" />
+    <Content Include="Views\ConsoleHome\Module\CalendarEvents.ascx" />
+    <Content Include="Views\ConsoleHome\Module\MainCalendar.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutDailyQuestion.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutContest.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutInvoice.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutCoach.ascx" />
     <Content Include="Views\ConsoleHome\Module\ExerciseBillboardDetails.ascx" />
     <Content Include="Views\ConsoleHome\Module\ExerciseBillboard.ascx" />
     <Content Include="Views\ConsoleHome\Module\ExerciseDonutChart.ascx" />
     <Content Include="Views\ConsoleHome\Module\CurrentExerciseBillboard.ascx" />
-    <Content Include="Views\ConsoleHome\Module\AbountLearners.ascx" />
+    <Content Include="Views\ConsoleHome\Module\AboutLearners.ascx" />
+    <Content Include="Views\ConsoleHome\Module\TodayLessonsBarChart.ascx" />
+    <Content Include="Views\ConsoleHome\Module\GameRankRadarChart.ascx" />
     <Content Include="Views\ConsoleHome\Module\ProfileImage.ascx" />
     <Content Include="Views\ConsoleHome\Module\InspirationalTitle.ascx" />
     <Content Include="Views\ConsoleHome\Module\BlockHeader.ascx" />
+    <Content Include="Views\ConsoleHome\Shared\InitBarChartNoRegister.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

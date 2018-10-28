@@ -123,6 +123,9 @@
 
         var total = items.Sum(t => t.TotalMinutes);
 
+        if (total == 0)
+            total = 1m;
+
         return $"<div class='sparkline-pie'>{JsonArrayValue(JsonConvert.SerializeObject(items.Select(t => Math.Round(t.TotalMinutes * 100 / total)).ToArray()))}</div>";
 
     }

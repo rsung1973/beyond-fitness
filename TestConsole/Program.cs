@@ -25,8 +25,41 @@ namespace TestConsole
             //doc.Load("SampleData.xml");
             //var items = doc.SelectNodes("//REC[position()=1]/Detail");
             //test3();
-            test4();
+            //test4();
+            test5();
             Console.ReadKey();
+        }
+
+        class KeyData
+        {
+            public int Idx { get; set; }
+            public String[] Data { get; set; }
+        }
+
+        class KeyData2
+        {
+            public int Idx { get; set; }
+            public int Count { get; set; }
+        }
+
+        private static void test5()
+        {
+            var a = new List<int> { 1, 2, 3, 4, 5 };
+            var b = new List<KeyData> {
+                new KeyData { Idx = 1, Data = new String[] {"aaa","AAA" } },
+                new KeyData { Idx = 3, Data = new String[] {"ccc","CCC" } },
+                new KeyData { Idx = 5, Data = new String[] {"eee","EEE" } },
+                new KeyData { Idx = 3, Data = new String[] {"fff","FFF" } }
+            };
+
+            var c = a.GroupJoin(b, o => o, i => i.Idx, (o, i) => new { Key = o, D = i.Select(dd => dd.Data) });
+
+            var d = new List<KeyData2> {
+                new KeyData2 { Idx=1,Count=10},
+                new KeyData2 { Idx=4,Count=40},
+                new KeyData2 { Idx=5,Count=50}
+            };
+            var f = a.GroupJoin(d, o => o, i => i.Idx, (o, i) => i.Select(v => v.Count).FirstOrDefault());
         }
 
         private static void test4()

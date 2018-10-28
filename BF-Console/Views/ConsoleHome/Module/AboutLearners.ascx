@@ -32,23 +32,54 @@
                                         </div>
                                     </div>
                                 </li>
+                                <%  var lessons = models.GetTable<RegisterLesson>().Where(r => r.AdvisorID == _model.UID);
+                                    var readyLessons = lessons.Where(r => r.Attended == (int)Naming.LessonStatus.準備上課);
+                                    var awardingCount = readyLessons.Where(r => models.GetTable<AwardingLesson>().Any(a => a.RegisterID == r.RegisterID)).Count()
+                                                + readyLessons.Where(r => models.GetTable<AwardingLessonGift>().Any(a => a.RegisterID == r.RegisterID)).Count(); %>
                                 <li class="col-sm-4 col-6 calendar-todolist">
                                     <div class="card info-box-2 hover-zoom-effect">
                                         <div class="icon"><i>
                                             <img src="images/lesson/stage1-girl-clear.png" width="75px"></i></div>
                                         <div class="content">
                                             <div class="text">兌換裝備 - P.T Session</div>
-                                            <div class="number">6</div>
+                                            <div class="number"><%= awardingCount %></div>
                                         </div>
                                     </div>
                                 </li>
+                                <%  DateTime firstDay = DateTime.Today.FirstDayOfMonth();
+                                    var attendedLessons = models.GetTable<LessonTime>()
+                                            .Where(l => l.AttendingCoach == _model.UID)
+                                            .Where(l => l.LessonAttendance != null);
+                                    var currentAttendedLessons = attendedLessons
+                                            .Where(l => l.ClassTime >= firstDay)
+                                            .Where(l => l.ClassTime < DateTime.Today.AddDays(1))
+                                            .Join(models.GetTable<GroupingLesson>(), l => l.GroupID, g => g.GroupID, (l, g) => g)
+                                            .Join(lessons, g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
+                                            .GroupBy(r => r.UID).Count();
+                                    var attendedLessonsLastMonth = attendedLessons
+                                            .Where(l => l.ClassTime >= firstDay.AddMonths(-1))
+                                            .Where(l => l.ClassTime < firstDay)
+                                            .Join(models.GetTable<GroupingLesson>(), l => l.GroupID, g => g.GroupID, (l, g) => g)
+                                            .Join(lessons, g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
+                                            .GroupBy(r => r.UID).Count();
+                                    %>
                                 <li class="col-sm-4 col-6 calendar-todolist">
                                     <div class="card info-box-2">
                                         <div class="content">
-                                            <div class="sparkline-pie">12,5</div>
+                                            <div id="sparkline-pie" class="sparkline-pie"><%= attendedLessonsLastMonth %>,<%= currentAttendedLessons %></div>
                                             <div class="text">本月V.S.上月上課學生</div>
-                                            <div class="number"><span class="col-grey">12</span> / <span class="col-amber">5</span></div>
+                                            <div class="number"><span class="col-grey"><%= attendedLessonsLastMonth %></span> / <span class="col-amber"><%= currentAttendedLessons %></span></div>
                                         </div>
+                                        <script>
+                                            //我的學生
+                                            $('#sparkline-pie').sparkline('html', {
+                                                type: 'pie',
+                                                offset: 90,
+                                                width: '75px',
+                                                height: '75px',
+                                                sliceColors: ['#cbd1d9', '#ffe6aa']
+                                            });
+                                        </script>
                                     </div>
                                 </li>
                             </ul>

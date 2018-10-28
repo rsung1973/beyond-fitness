@@ -56,6 +56,7 @@
     <script src="plugins/livIconsevo/js/LivIconsEvo.js"></script>
     <!-- Scrollup-master  Plugin js-->
     <script src="plugins/scrollup-master/jquery.scrollUp.min.js"></script>
+    <script src="plugins/moment/moment.min.js"></script>
     <script src="js/common.js"></script>
 </head>
 <body class="theme-darkteal">
@@ -78,10 +79,10 @@
                     <a href="javascript:void(0);" class="ls-toggle-btn" data-close="true"><i class="zmdi zmdi-menu"></i></a>
                 </li>
             </ul>
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="<%= VirtualPathUtility.ToAbsolute("~/ConsoleHome/Index") %>">
                 <img src="images/logo.png" width="80" alt="BeyondFitness"></a>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="calendar.html" class="mega-menu" data-close="true"><i class="zmdi livicon-evo" data-options="name: calendar.svg; size: 24px; style: lines; strokeColor:#fff; strokeWidth:2px; autoPlay:true"></i></a></li>
+                <li><a href="<%= Url.Action("Calendar","ConsoleHome") %>" class="mega-menu" data-close="true"><i class="zmdi livicon-evo" data-options="name: calendar.svg; size: 24px; style: lines; strokeColor:#fff; strokeWidth:2px; autoPlay:true"></i></a></li>
             </ul>
         </div>
     </nav>

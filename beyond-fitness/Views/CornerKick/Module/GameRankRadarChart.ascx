@@ -30,34 +30,32 @@
                 }]
             },
             options: {
-                legend: {
-                    display: false
-                },
-
-                scale: {
-                    reverse: false,
-                    display: true,
-                    ticks: {
-                        showLabelBackdrop: false,
-                        beginAtZero: true,
-                        backdropColor: '#0061d2',
-                        //maxTicksLimit: 5,
-                        //max: 10,
-                        fontSize: 5,
-                        backdropPaddingX: 5,
-                        backdropPaddingY: 5
-                    },
-                    gridLines: {
-                        color: "#888888",
-                        lineWidth: 1
-                    },
-                    pointLabels: {
-                        fontSize: 12,
-                        fontColor: "#AAAAAA"
-                    }
-                }
-            }
-        };
+                 legend: {
+                     display: false
+                 },
+                 scale: {
+                     reverse: false,
+                     display: true,
+                     ticks: {
+                         showLabelBackdrop: false,
+                         beginAtZero: true,
+                         backdropColor: '#e6f1ff',
+                         maxTicksLimit: 5,
+                         max: 10,
+                         fontSize: 5,
+                         backdropPaddingX: 5,
+                         backdropPaddingY: 5
+                     },
+                     gridLines: {
+                         color: "#fff",
+                         lineWidth: 1
+                     },
+                     pointLabels: {
+                         fontSize: 12,
+                         fontColor: "#fff"
+                     }
+                 }
+             }        };
 
         var initGraph = $global.initGraph;
         $global.initGraph = function() {

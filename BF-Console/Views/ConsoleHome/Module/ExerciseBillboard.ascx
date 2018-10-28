@@ -33,13 +33,13 @@
                     {
                 %>
                 <%  }
-                    else if (w.BranchID == 1)
-                    {   %>
-                <span class='badge round bg-vivid_red'><%= w.BranchStore.BranchName %></span>
-                <%  }
-                    else if (w.BranchID == 2)
+                    else if (w.BranchID == (int)Naming.BranchName.信義)
                     {   %>
                 <span class='badge round bg-purple'><%= w.BranchStore.BranchName %></span>
+                <%  }
+                    else if (w.BranchID == (int)Naming.BranchName.南京)
+                    {   %>
+                <span class='badge round bg-vivid_red'><%= w.BranchStore.BranchName %></span>
                 <%  }
                     else
                     {   %>

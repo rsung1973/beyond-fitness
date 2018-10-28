@@ -19,9 +19,11 @@
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
+    <!--Sparkline Plugin Js-->
+    <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
     <section class="content">
 
-        <%  ViewBag.BlockHeader = "卡片總覽";
+        <%  ViewBag.BlockHeader = "任意門";
             Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.ascx", _model); %>
         <!--本月運動時間-->
         <div class="container-fluid">
@@ -249,7 +251,16 @@
             </div>
         </div>
         <!--我的學生-->
-        <%  Html.RenderPartial("~/Views/ConsoleHome/Module/AbountLearners.ascx", _model); %>        <!--我的業績&我的比賽&運動小學堂-->
+        <%  if (_model.IsCoach())
+            {
+                Html.RenderPartial("~/Views/ConsoleHome/Module/AboutLearners.ascx", _model);
+            }   %>        <!--我的分店業績卡片-->        <%  if (_model.IsOfficer() || _model.IsManager() || _model.IsViceManager())
+            {
+                Html.RenderPartial("~/Views/ConsoleHome/Module/AboutAchievement.ascx", _model);
+            }   %>        <!--我的業績&我的比賽-->        <%  if (_model.IsCoach())
+            {
+                Html.RenderPartial("~/Views/ConsoleHome/Module/AboutCoach.ascx", _model);
+            }   %>        <!--我的業績&我的比賽&運動小學堂-->
         <%--        <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
@@ -291,7 +302,14 @@
                 </div>
             </div>
         </div>--%>
-    </section>
+        <!--我的發票卡片-->
+        <%  if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin())
+            {
+                Html.RenderPartial("~/Views/ConsoleHome/Module/AboutInvoice.ascx", _model);
+            }           %>        <!--專業文章&我的比賽-->        <%  if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin() || _model.IsServitor())
+            {
+                Html.RenderPartial("~/Views/ConsoleHome/Module/AboutArticle.ascx", _model);
+            }           %>    </section>
 </asp:Content>
 
 <asp:Content ID="TailPageJavaScriptInclude" ContentPlaceHolderID="TailPageJavaScriptInclude" runat="server">
@@ -307,69 +325,8 @@
         $(function () {
 
             $('.counto').countTo();
-
-            $('#article-slider').royalSlider({
-                autoHeight: true,
-                arrowsNav: false,
-                fadeinLoadedSlide: false,
-                controlNavigationSpacing: 0,
-                controlNavigation: 'tabs',
-                imageScaleMode: 'none',
-                imageAlignCenter: false,
-                loop: true,
-                loopRewind: true,
-                numImagesToPreload: 5,
-                keyboardNavEnabled: true,
-                usePreloader: false,
-                startSlideId: 2
-            });
+  
         });
-        /*
-         * FULL CALENDAR JS
-         */
-
-        //比賽雷達圖
-        //var RadarConfig = {
-        //    type: 'radar',
-        //    data: {
-        //        labels: ["身體質量", "相對肌力", "爆發力", "柔軟度", "心肺適能"],
-        //        datasets: [{
-        //            label: "分佈圖",
-        //            backgroundColor: "rgba(179,214,255,.8)",
-        //            pointBackgroundColor: "rgba(230,241,255,1)",
-        //            data: [6, 6, 7, 10, 8]
-        //        }]
-        //    },
-        //    options: {
-        //        legend: {
-        //            display: false
-        //        },
-
-        //        scale: {
-        //            reverse: false,
-        //            display: true,
-        //            ticks: {
-        //                showLabelBackdrop: false,
-        //                beginAtZero: true,
-        //                backdropColor: '#e6f1ff',
-        //                maxTicksLimit: 5,
-        //                max: 10,
-        //                fontSize: 5,
-        //                backdropPaddingX: 5,
-        //                backdropPaddingY: 5
-        //            },
-        //            gridLines: {
-        //                color: "#fff",
-        //                lineWidth: 1
-        //            },
-        //            pointLabels: {
-        //                fontSize: 12,
-        //                fontColor: "#fff"
-        //            }
-        //        }
-        //    }
-        //};
-        //window.myRadar = new Chart(document.getElementById("radarChart"), RadarConfig);
         //行事曆
         $(".calendar").on('click', function (event) {
             window.location.href = 'calendar.html';

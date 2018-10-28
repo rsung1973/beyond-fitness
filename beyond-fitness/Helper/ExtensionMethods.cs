@@ -59,9 +59,11 @@ namespace WebHome.Helper
             }
         }
 
-        public static IQueryable<Article> GetNormalArticles(this BFDataContext context, IQueryable<Article> items)
+        public static IQueryable<Article> GetNormalArticles<TEntity>(this ModelSource<TEntity> models)
+            where TEntity : class, new()
         {
-            return items.Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.正常);
+            return models.GetTable<Article>()
+                .Where(a => a.Document.CurrentStep == (int)Naming.DocumentLevelDefinition.正常);
         }
 
         public static void NotifyResetPassword(this ResetPassword item,String notifyUrl = null)

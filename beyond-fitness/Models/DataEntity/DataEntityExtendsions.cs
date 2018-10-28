@@ -41,13 +41,13 @@ namespace WebHome.Models.DataEntity
                     - (item.RegisterGroupID.HasValue ? item.GroupingLesson.LessonTime.Count : item.LessonTime.Count);
         }
 
-        public static int? RemainedLessonCount(this CourseContract item)
+        public static int RemainedLessonCount(this CourseContract item)
         {
             return item.RegisterLessonContract.Count > 0
                     ? item.CourseContractType.ContractCode == "CFA"
-                        ? item.Lessons
+                        ? (item.Lessons ?? 0)
                             - item.RegisterLessonContract.Sum(c => c.RegisterLesson.LessonTime.Count())
-                            - item.RegisterLessonContract.Sum(c => c.RegisterLesson.AttendedLessons)
+                            - (item.RegisterLessonContract.Sum(c => c.RegisterLesson.AttendedLessons) ?? 0)
                         : item.RegisterLessonContract.First().RegisterLesson.RemainedLessonCount()
                     : item.Lessons.Value;
         }

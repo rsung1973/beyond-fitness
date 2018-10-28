@@ -90,6 +90,17 @@ namespace WebHome.Helper
 
             return url.Action("Index", "Account"); ;
         }
+
+        public static IQueryable<PDQQuestion> PromptDailyQuestion<TEntity>(this ModelSource<TEntity> models)
+                    where TEntity : class, new()
+        {
+            return models.GetTable<PDQQuestion>()
+                        .Where(q => q.GroupID == 6)
+                        .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
+                            q => q.QuestionID, t => t.QuestionID, (q, t) => q);
+        }
+
+
         public static PDQQuestion PromptLearnerDailyQuestion<TEntity>(this ModelSource<TEntity> models, UserProfile profile)
                     where TEntity : class, new()
         {
@@ -110,12 +121,9 @@ namespace WebHome.Helper
                 return null;
             }
 
-            IQueryable<PDQQuestion> questItems = models.GetTable<PDQQuestion>()
-                .Where(q => q.GroupID == 6)
+            IQueryable<PDQQuestion> questItems = models.PromptDailyQuestion()
                 .Join(models.GetTable<UserProfile>().Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked), 
-                    q => q.AskerID, u => u.UID, (q, u) => q)
-                .Join(models.GetTable<PDQQuestionExtension>().Where(t => !t.Status.HasValue),
-                    q => q.QuestionID, t => t.QuestionID, (q, t) => q);
+                    q => q.AskerID, u => u.UID, (q, u) => q);
             int[] items = questItems
                 .Select(q => q.QuestionID)
                 .Where(q => !models.GetTable<PDQTask>().Where(t => t.UID == profile.UID).Select(t => t.QuestionID).Contains(q)).ToArray();

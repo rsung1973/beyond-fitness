@@ -30,7 +30,7 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
 
 
-            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
+            var items = models.GetNormalArticles()
                 .OrderByDescending(a => a.Document.DocDate)
                 .Skip(viewModel.CurrentIndex * viewModel.PageSize)
                 .Take(viewModel.PageSize);
@@ -84,7 +84,7 @@ namespace WebHome.Controllers
             ViewBag.PagingModel = viewModel;
 
 
-            var items = models.GetDataContext().GetNormalArticles(models.GetTable<Article>())
+            var items = models.GetNormalArticles()
                 .OrderByDescending(a => a.Document.DocDate);
             //.Skip(viewModel.CurrentIndex * viewModel.PageSize)
             //.Take(viewModel.PageSize);

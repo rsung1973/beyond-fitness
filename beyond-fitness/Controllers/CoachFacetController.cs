@@ -271,21 +271,31 @@ namespace WebHome.Controllers
             //    ViewBag.Message = "請先刪除預編課程!!";
             //    return RedirectToAction("Coach", "Account", new { lessonDate = lessonDate, message= "請先刪除預編課程!!" });
             //}
-
-            models.ExecuteCommand(@"UPDATE RegisterLesson
+            var registerLesson = item.RegisterLesson;
+            var contract = registerLesson.RegisterLessonContract?.CourseContract;
+            if (contract != null && contract.CourseContractType.ContractCode == "CFA")
+            {
+                models.ExecuteCommand(@"UPDATE RegisterLesson
+                    SET                Attended = {2}
+                    FROM            RegisterLessonContract INNER JOIN
+                                                RegisterLesson ON RegisterLessonContract.RegisterID = RegisterLesson.RegisterID
+                    WHERE        (RegisterLesson.Attended = {1}) AND (RegisterLessonContract.ContractID = {0})", contract.ContractID, (int)Naming.LessonStatus.課程結束, (int)Naming.LessonStatus.上課中);
+            }
+            else
+            {
+                models.ExecuteCommand(@"UPDATE RegisterLesson
                     SET        Attended = {2}
                     FROM     LessonTime INNER JOIN
                                    GroupingLesson ON LessonTime.GroupID = GroupingLesson.GroupID INNER JOIN
                                    RegisterLesson ON GroupingLesson.GroupID = RegisterLesson.RegisterGroupID
                     WHERE   (LessonTime.LessonID = {0}) AND (RegisterLesson.Attended = {1})", lessonID, (int)Naming.LessonStatus.課程結束, (int)Naming.LessonStatus.上課中);
-
-
+            }
 
             models.DeleteAny<LessonTime>(l => l.LessonID == lessonID);
-            if (item.RegisterLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
-                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/
-                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI
-                || item.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
+            if (registerLesson.UserProfile.LevelID == (int)Naming.MemberStatusDefinition.Anonymous //團體課
+                || registerLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練  /*自主訓練*/
+                || registerLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI
+                || registerLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
             {
                 models.DeleteAny<RegisterLesson>(l => l.RegisterID == item.RegisterID);
             }
@@ -947,6 +957,10 @@ namespace WebHome.Controllers
         {
 
             ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
 
             UserEvent item = models.GetTable<UserEvent>().Where(l => l.EventID == viewModel.EventID).FirstOrDefault();
             if (item == null)

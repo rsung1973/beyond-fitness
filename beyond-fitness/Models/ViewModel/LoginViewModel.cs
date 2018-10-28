@@ -625,7 +625,7 @@ namespace WebHome.Models.ViewModel
         public String DiagnosisAction { get; set; }
     }
 
-    public class UserEventBookingViewModel
+    public class UserEventBookingViewModel : QueryViewModel
     {
         public int? EventID { get; set; }
         public DateTime? StartDate { get; set; }
