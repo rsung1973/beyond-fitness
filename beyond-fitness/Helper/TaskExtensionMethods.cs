@@ -10,6 +10,7 @@ using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
 using WebHome.Properties;
+using WebHome.Helper.BusinessOperation;
 
 namespace WebHome.Helper
 {
@@ -49,7 +50,7 @@ namespace WebHome.Helper
         }
 
         private static int __InvoiceBusyCount = 0;
-        public static void ProcessContractTranference(this CourseContractRevision item)
+        public static void ProcessContractTransference(this CourseContractRevision item)
         {
             ThreadPool.QueueUserWorkItem(t =>
             {
@@ -298,6 +299,11 @@ namespace WebHome.Helper
                         ///
                         var original = item.SourceContract;
                         var remained = original.RemainedLessonCount();
+                        var returnAmt = original.TotalPaidAmount() - (original.Lessons - remained)
+                                * original.LessonPriceType.ListPrice
+                                * original.CourseContractType.GroupingMemberCount
+                                * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+
                         var balance = original.TotalPaidAmount() - (original.Lessons - original.RemainedLessonCount())
                                 * item.CourseContract.CourseContractExtension.SettlementPrice
                                 * original.CourseContractType.GroupingMemberCount
@@ -332,8 +338,8 @@ namespace WebHome.Helper
                             {
                                 ContractID = item.OriginalContract.Value,
                                 EventDate = balancedPayment.PayoffDate.Value,
-                                Payment = balancedPayment,
-                                TrustType = Naming.TrustType.S.ToString()
+                                TrustType = Naming.TrustType.S.ToString(),
+                                ReturnAmount = returnAmt,
                             });
 
                             //Logger.Debug("RevisionID: " + item.RevisionID);
