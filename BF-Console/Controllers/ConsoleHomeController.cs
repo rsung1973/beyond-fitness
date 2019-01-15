@@ -33,20 +33,114 @@ namespace BFConsole.Controllers
     [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
     public class ConsoleHomeController : SampleController<UserProfile>
     {
+        public const String InputErrorView = "~/Views/ConsoleHome/Shared/ReportInputError.ascx";
+
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
         public ActionResult Index()
         {
-            var profile = HttpContext.GetUser().LoadInstance(models);
-            return View(profile);
+            var profile = HttpContext.GetUser();
+            profile.ReportInputError = InputErrorView;
+            return View(profile.LoadInstance(models));
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult CrossBranchIndex(ExerciseBillboardQueryViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+            return View(profile.LoadInstance(models));
         }
 
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
         public ActionResult Calendar(DailyBookingQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            var profile = HttpContext.GetUser().LoadInstance(models);
+            var profile = HttpContext.GetUser();
+            profile.ReportInputError = InputErrorView;
             viewModel.KeyID = profile.UID.EncryptKey();
-            return View(profile);
+            return View(profile.LoadInstance(models));
+        }
+
+        public ActionResult ContractIndex(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+            profile.ReportInputError = InputErrorView;
+            viewModel.KeyID = profile.UID.EncryptKey();
+            return View(profile.LoadInstance(models));
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult EditCourseContract(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+            var profile = HttpContext.GetUser();
+            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
+            if (item != null)
+            {
+                viewModel.AgentID = item.AgentID;
+                viewModel.ContractType = item.ContractType;
+                viewModel.ContractDate = item.ContractDate;
+                viewModel.Subject = item.Subject;
+                viewModel.ValidFrom = item.ValidFrom;
+                viewModel.Expiration = item.Expiration;
+                viewModel.OwnerID = item.OwnerID;
+                viewModel.SequenceNo = item.SequenceNo;
+                viewModel.Lessons = item.Lessons;
+                viewModel.PriceID = item.PriceID;
+                viewModel.Remark = item.Remark;
+                viewModel.FitnessConsultant = item.FitnessConsultant;
+                viewModel.Status = item.Status;
+                viewModel.UID = item.CourseContractMember.Select(m => m.UID).ToArray();
+                viewModel.BranchID = item.CourseContractExtension.BranchID;
+                viewModel.Renewal = item.Renewal;
+                viewModel.TotalCost = item.TotalCost;
+                if (item.InstallmentID.HasValue)
+                {
+                    viewModel.InstallmentPlan = true;
+                    viewModel.Installments = item.ContractInstallment.Installments;
+                }
+                viewModel.UID = item.CourseContractMember.Select(m => m.UID).ToArray();
+            }
+            else
+            {
+                viewModel.UID = new int[] { };
+                viewModel.AgentID = profile.UID;
+                if(profile.IsCoach())
+                {
+                    viewModel.FitnessConsultant = profile.UID;
+                }
+            }
+
+            ViewBag.ViewModel = viewModel;
+            return View(profile.LoadInstance(models));
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult SignCourseContract(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            var profile = HttpContext.GetUser();
+
+            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.GoBack = true;
+                return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
+            }
+
+            ViewBag.DataItem = item;
+
+            return View(profile.LoadInstance(models));
         }
 
         public ActionResult CalendarEventItems(FullCalendarViewModel viewModel)
@@ -76,7 +170,7 @@ namespace BFConsole.Controllers
 
 
             IQueryable<LessonTime> dataItems = models.GetTable<LessonTime>();
-            IQueryable<UserEvent> eventItems = models.GetTable<UserEvent>().Where(e => e.EventType == 1);
+            IQueryable<UserEvent> eventItems = models.GetTable<UserEvent>().Where(e => !e.SystemEventID.HasValue);
             if (viewModel.DateFrom.HasValue && viewModel.DateTo.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value
@@ -196,6 +290,30 @@ namespace BFConsole.Controllers
 
             Response.ContentType = "application/json";
             return View("~/Views/ConsoleHome/Module/ExerciseBillboardDetails.ascx", items);
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult ApplyContractService(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                result.ViewName = "ApplyContractService";
+            }
+            return result;
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult ReassignFitnessConsultant(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                result.ViewName = "ReassignFitnessConsultant";
+            }
+            return result;
         }
 
 

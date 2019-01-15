@@ -23,11 +23,6 @@ namespace WebHome.Helper
 {
     public static class LessonConsoleExtensionMethods
     {
-        public static DateTime FirstDayOfMonth(this DateTime date)
-        {
-            return new DateTime(date.Year, date.Month, 1);
-        }
-
         public static IQueryable<RegisterLesson> PromptMemberExerciseRegisterLesson<TEntity>(this ModelSource<TEntity> models, IQueryable<RegisterLesson> items = null)
                 where TEntity : class, new()
         {
@@ -35,7 +30,7 @@ namespace WebHome.Helper
                 items = models.GetTable<RegisterLesson>();
 
             items = items.Join(models.GetTable<LessonPriceType>()
-                            .Where(p => p.Status == (int)Naming.DocumentLevelDefinition.教練PI || p.IsWelfareGiftLesson != null),
+                            .Where(p => p.Status == (int)Naming.LessonPriceStatus.教練PI || p.IsWelfareGiftLesson != null),
                             r => r.ClassLevel, p => p.PriceID, (r, p) => r);
 
             return items;

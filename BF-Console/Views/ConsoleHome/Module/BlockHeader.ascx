@@ -13,6 +13,12 @@
             <h2><%= ViewBag.BlockHeader %><small class="col-cyan"><%  Html.RenderPartial("~/Views/ConsoleHome/Module/InspirationalTitle.ascx", _model); %></small>
             </h2>
         </div>
+        <%  Action insertPartial = ViewBag.InsertPartial as Action;
+            if (insertPartial != null)
+            {
+                insertPartial();
+            }
+        %>
     </div>
 </div>
 <script runat="server">

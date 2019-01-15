@@ -14,7 +14,16 @@
 <asp:Content ID="CustomHeader" ContentPlaceHolderID="CustomHeader" runat="server">
     <!-- Fullcalendar -->
     <link href="plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
-
+    <!-- Bootstrap Datetimepick -->
+<%--    <link href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />--%>
+    <%--<link href="css/datetimepicker.css" rel="stylesheet" />--%>
+<!-- SmartCalendar Datetimepick -->
+    <link href="plugins/smartcalendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="css/smartcalendar-2.css" rel="stylesheet" />
+    <!-- Inbox -->
+    <link href="css/inbox.css" rel="stylesheet">
+    <!-- Multi Select Css -->
+    <link href="plugins/multi-select/css/multi-select.css" rel="stylesheet">
 </asp:Content>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -22,11 +31,11 @@
         $(function () {
             $global.viewModel = <%= JsonConvert.SerializeObject(_viewModel) %>;
 
-            for(var i=0;i<$global.onReady.length;i++) {
+            for (var i = 0; i < $global.onReady.length; i++) {
                 $global.onReady[i]();
             }
         });
-    </script>  
+    </script>
     <section class="content page-calendar">
         <%  ViewBag.BlockHeader = "我的行事曆";
             Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.ascx", _model); %>
@@ -93,14 +102,45 @@
     <!-- Fullcalendar Plugin js -->
     <script src="bundles/fullcalendarscripts.bundle.js"></script>
     <script src="plugins/fullcalendar/locale/zh-tw.js"></script>
-    <!-- SweetAlert Plugin Js -->
-    <script src="plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Bootstrap datetimepicker Plugin Js -->
-    <script src="plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-TW.js"></script>
+<%--    <script src="plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-TW.js"></script>--%>
+    <script src="plugins/smartcalendar/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="plugins/smartcalendar/js/locales-datetimepicker/bootstrap-datetimepicker.zh-TW.js"></script>
     <!-- Multi Select Plugin Js -->
     <script src="plugins/multi-select/js/jquery.multi-select.js"></script>
-  
+
+    <script>
+        function showLessonEventModal(keyID, event) {
+            var event = event || window.event;
+            $global.target = $(event.target).closest('div.event-name');
+            showLoading();
+            $.post('<%= Url.Action("ShowLessonEventModal", "ConsoleEvent") %>', { 'keyID': keyID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+        function showUserEventModal(keyID, event) {
+            var event = event || window.event;
+            $global.target = $(event.target).closest('div.event-name');
+            showLoading();
+            $.post('<%= Url.Action("ShowUserEventModal", "ConsoleEvent") %>', { 'keyID': keyID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+    </script>
+
 </asp:Content>
 
 <script runat="server">
