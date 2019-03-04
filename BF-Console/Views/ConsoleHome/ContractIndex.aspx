@@ -55,41 +55,41 @@
                         <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutNewContractsByCoach.ascx", _model); %>
                     </li>
                     <li class="col-lg-3 col-md-6 col-sm-12">
-                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutContractServicesByCoach.ascx", _model); %>
+                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutContractServices.ascx", _model); %>
                     </li>
                     <li class="col-lg-3 col-md-6 col-sm-12">
                         <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutPaymentByCoach.ascx", _model); %>
                     </li>
                 </ul>
-                <ul class="row clearfix list-unstyled m-b-0">
+                <ul class="row clearfix list-unstyled m-b-0"> 
                     <%
                         var newContracts = _effectiveItems
-                            .Where(c=>c.Expiration>=DateTime.Today)
+                            .Where(c => c.Expiration >= DateTime.Today)
                             .Where(c => !c.Renewal.HasValue || c.Renewal == false);
                         var renewContracts = _effectiveItems
-                            .Where(c=>c.Expiration>=DateTime.Today)
-                            .Where(c => c.Renewal.HasValue && c.Renewal == true);%>
-                    <li class="col-lg-9 col-md-6 col-sm-12">
+                            .Where(c => c.Expiration >= DateTime.Today)
+                            .Where(c => c.Renewal.HasValue && c.Renewal == true);
+                        %>
+                    <li class="col-lg-3 col-md-3 col-sm-6">
+                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/ToRenewByCoach.ascx", _model); %>
+                    </li>
+                    <li class="col-lg-3 col-md-3 col-sm-6">
                         <div class="body">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="info-box-2">
-                                        <div class="content">
-                                            <div class="sparkline-pie"><%= newContracts.Count() %>,<%= renewContracts.Count() %></div>
-                                            <h6 class="m-t-20">新約 V.S. 續約</h6>
-                                            <p class="displayblock m-b-0"><span class="col-amber"><%= newContracts.Count() %></span> / <span class="col-grey"><%= renewContracts.Count() %></span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutInstallment.ascx", _effectiveItems); %>
+                                <div class="col-12 text-center">
+                                    <div class="sparkline-pie"><%= newContracts.Count() %>,<%= renewContracts.Count() %></div>
+                                     <h6 class="m-t-20">新約 V.S. 續約</h6>
+                                      <p class="displayblock m-b-0"><span class="col-amber"><%= newContracts.Count() %></span> / <span class="col-grey"><%= renewContracts.Count() %></span></p>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li class="col-lg-3 col-md-6 col-sm-12">
-                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutReceivablesByCoach.ascx", _model); %>
+                    <li class="col-lg-3 col-md-3 col-sm-6">
+                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutInstallment.ascx", _effectiveItems); %>                                    
                     </li>
+                    <li class="col-lg-3 col-md-3 col-sm-6">
+                        <%  Html.RenderPartial("~/Views/ContractConsole/Module/AboutReceivablesByCoach.ascx", _model); %>
+                    </li>                    
                 </ul>
             </div>
         </div>
@@ -119,8 +119,6 @@
     <script src="plugins/jquery-datatable/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
     <script src="plugins/jquery-datatable/FixedColumns-3.2.5/js/dataTables.fixedColumns.min.js"></script>
     <!-- Bootstrap datetimepicker Plugin Js -->
-<%--    <script src="plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-TW.js"></script>--%>
     <script src="plugins/smartcalendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="plugins/smartcalendar/js/locales-datetimepicker/bootstrap-datetimepicker.zh-TW.js"></script>
 
@@ -147,7 +145,7 @@
             offset: 90,
             width: '100px',
             height: '100px',
-            sliceColors: ['#ffe6aa', '#cbd1d9']
+            sliceColors: ['#f8b500', '#5c636e']
         })
 
         //開啟小日曆

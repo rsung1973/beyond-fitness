@@ -63,11 +63,72 @@ namespace BFConsole.Controllers
         public ActionResult ContractIndex(CourseContractQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
+            viewModel.ContractDateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            viewModel.ContractDateTo = viewModel.ContractDateFrom.Value.AddMonths(1).AddDays(-1);
+
             var profile = HttpContext.GetUser();
             profile.ReportInputError = InputErrorView;
             viewModel.KeyID = profile.UID.EncryptKey();
             return View(profile.LoadInstance(models));
         }
+
+        public ActionResult ReportIndex(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)ContractIndex(viewModel);
+            result.ViewName = "ReportIndex";
+            return result;
+
+        }
+
+        public ActionResult EditBlogArticle(BlogArticleQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.DocID = viewModel.DecryptKeyValue();
+            }
+
+            var profile = HttpContext.GetUser().LoadInstance(models);
+
+            var item = models.GetTable<BlogArticle>().Where(b => b.DocID == viewModel.DocID).FirstOrDefault();
+            if (item != null)
+            {
+                viewModel.AuthorID = item.AuthorID;
+                viewModel.Title = item.Title;
+                viewModel.DocDate = item.Document.DocDate;
+                viewModel.TagID = item.BlogTag.Select(t => (int?)t.CategoryID).ToArray();
+            }
+            ViewBag.BlogArticle = item;
+            return View(profile);
+        }
+
+        public ActionResult BlogIndex(BlogArticleQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var profile = HttpContext.GetUser();
+            profile.ReportInputError = InputErrorView;
+            viewModel.KeyID = profile.UID.EncryptKey();
+            return View(profile.LoadInstance(models));
+        }
+
+        public ActionResult BlogArticleList(BlogArticleQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)BlogIndex(viewModel);
+
+            var items = models.GetTable<BlogArticle>()
+                .Where(b => b.BlogTag.Any(c => c.CategoryID == viewModel.CategoryID));
+
+            viewModel.RecordCount = items.Count();
+            viewModel.PageSize = viewModel.PageSize ?? 12;
+            viewModel.PagingSize = viewModel.PagingSize ?? 5;
+            viewModel.CurrentIndex = viewModel.CurrentIndex ?? 0;
+            ViewBag.DataItems = items;
+
+            result.ViewName = "BlogArticleList";
+            return result;
+        }
+
 
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
         public ActionResult EditCourseContract(CourseContractQueryViewModel viewModel)
@@ -141,6 +202,19 @@ namespace BFConsole.Controllers
             ViewBag.DataItem = item;
 
             return View(profile.LoadInstance(models));
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult SignContractService(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+
+            if (ViewBag.DataItem is CourseContract item)
+            {
+                result.ViewName = "SignContractService";
+            }
+
+            return result;
         }
 
         public ActionResult CalendarEventItems(FullCalendarViewModel viewModel)
@@ -316,7 +390,41 @@ namespace BFConsole.Controllers
             return result;
         }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult PostponeContractExpiration(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                result.ViewName = "PostponeContractExpiration";
+            }
+            return result;
+        }
 
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult TransferContract(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                result.ViewName = "TransferContract";
+            }
+            return result;
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult TerminateContract(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                result.ViewName = "TerminateContract";
+            }
+            return result;
+        }
 
     }
 }

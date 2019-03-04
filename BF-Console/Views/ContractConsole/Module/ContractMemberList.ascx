@@ -46,6 +46,10 @@
     debugger;
     $(function () {
 
+        $('#<%= _tableId %>').ready(function () {
+            $(this).resize();
+        });
+
         var theDataTable = null;
         function buildDataTable() {
             theDataTable = $('#<%= _tableId %>').DataTable({

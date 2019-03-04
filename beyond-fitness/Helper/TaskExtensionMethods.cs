@@ -63,6 +63,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已轉讓;
+                        item.SourceContract.ValidTo = DateTime.Now;
                         item.CourseContract.EffectiveDate = DateTime.Now;
                         foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
@@ -87,7 +88,7 @@ namespace WebHome.Helper
                                 PaymentAudit = new Models.DataEntity.PaymentAudit { },
                                 PayoffAmount = -balance,
                                 PayoffDate = DateTime.Today,
-                                Remark = "繳款餘額沖銷",
+                                Remark = $"轉讓",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
                                 TransactionType = (int)Naming.PaymentTransactionType.合約轉讓沖銷
@@ -145,7 +146,7 @@ namespace WebHome.Helper
                                 PaymentAudit = new Models.DataEntity.PaymentAudit { },
                                 PayoffAmount = balance,
                                 PayoffDate = DateTime.Today,
-                                Remark = "餘額轉讓",
+                                Remark = $"轉讓({item.SourceContract.ContractNo()})",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
                                 TransactionType = (int)Naming.PaymentTransactionType.合約轉讓餘額,
@@ -209,7 +210,7 @@ namespace WebHome.Helper
                                 PaymentAudit = new Models.DataEntity.PaymentAudit { },
                                 PayoffAmount = -balance,
                                 PayoffDate = DateTime.Today,
-                                Remark = "繳款餘額沖銷",
+                                Remark = $"轉點",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
                                 TransactionType = (int)Naming.PaymentTransactionType.合約轉點沖銷
@@ -259,7 +260,7 @@ namespace WebHome.Helper
                                 PaymentAudit = new Models.DataEntity.PaymentAudit { },
                                 PayoffAmount = balance,
                                 PayoffDate = DateTime.Today,
-                                Remark = "餘額轉點",
+                                Remark = $"轉點({item.SourceContract.ContractNo()})",
                                 HandlerID = item.CourseContract.AgentID,
                                 PaymentType = "現金",
                                 TransactionType = (int)Naming.PaymentTransactionType.合約轉點餘額,
@@ -290,6 +291,7 @@ namespace WebHome.Helper
                         ///1.變更狀態
                         ///
                         item.SourceContract.Status = (int)Naming.CourseContractStatus.已終止;
+                        item.SourceContract.ValidTo = DateTime.Now;
                         item.CourseContract.EffectiveDate = DateTime.Now;
                         foreach (var lesson in item.SourceContract.RegisterLessonContract)
                         {
@@ -299,52 +301,57 @@ namespace WebHome.Helper
                         ///
                         var original = item.SourceContract;
                         var remained = original.RemainedLessonCount();
-                        var returnAmt = original.TotalPaidAmount() - (original.Lessons - remained)
+                        var calculated = original.Lessons - remained;
+                        var returnAmt = original.TotalPaidAmount() - calculated
                                 * original.LessonPriceType.ListPrice
                                 * original.CourseContractType.GroupingMemberCount
                                 * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
 
-                        var balance = original.TotalPaidAmount() - (original.Lessons - original.RemainedLessonCount())
+                        var refund = original.TotalPaidAmount() - calculated
                                 * item.CourseContract.CourseContractExtension.SettlementPrice
                                 * original.CourseContractType.GroupingMemberCount
                                 * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+
+                        refund = Math.Max(refund ?? 0, 0);
+                        var adjustment = returnAmt - refund;
+
+                        var dummyInvoice = models.GetTable<InvoiceItem>().Where(i => i.No == "--").FirstOrDefault();
                         Payment balancedPayment = null;
-                        if (balance > 0)
+                        balancedPayment = new Payment
                         {
-                            var dummyInvoice = models.GetTable<InvoiceItem>().Where(i => i.No == "--").FirstOrDefault();
-
-                            balancedPayment = new Payment
+                            Status = (int)Naming.CourseContractStatus.已生效,
+                            ContractPayment = new ContractPayment { },
+                            PaymentTransaction = new PaymentTransaction
                             {
-                                Status = (int)Naming.CourseContractStatus.已生效,
-                                ContractPayment = new ContractPayment { },
-                                PaymentTransaction = new PaymentTransaction
-                                {
-                                    BranchID = item.SourceContract.CourseContractExtension.BranchID
-                                },
-                                PaymentAudit = new Models.DataEntity.PaymentAudit { },
-                                PayoffAmount = -balance,
-                                PayoffDate = DateTime.Today,
-                                Remark = "繳款餘額沖銷",
-                                HandlerID = handler!=null ? handler.UID : item.CourseContract.AgentID,
-                                PaymentType = "現金",
-                                TransactionType = (int)Naming.PaymentTransactionType.合約終止沖銷
-                            };
-                            balancedPayment.ContractPayment.ContractID = item.OriginalContract.Value;
-                            if (dummyInvoice != null)
-                                balancedPayment.InvoiceID = dummyInvoice.InvoiceID;
-                            models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
+                                BranchID = item.SourceContract.CourseContractExtension.BranchID
+                            },
+                            PaymentAudit = new Models.DataEntity.PaymentAudit { },
+                            PayoffAmount = -refund,
+                            PayoffDate = DateTime.Today,
+                            Remark = "終止退款",
+                            HandlerID = handler != null ? handler.UID : item.CourseContract.AgentID,
+                            PaymentType = "現金",
+                            TransactionType = (int)Naming.PaymentTransactionType.合約終止沖銷,
+                            AdjustmentAmount = adjustment!=0 ? adjustment : (int?)null,
+                        };
+                        balancedPayment.ContractPayment.ContractID = item.OriginalContract.Value;
+                        if (dummyInvoice != null)
+                            balancedPayment.InvoiceID = dummyInvoice.InvoiceID;
+                        models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
 
-                            models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
-                            {
-                                ContractID = item.OriginalContract.Value,
-                                EventDate = balancedPayment.PayoffDate.Value,
-                                TrustType = Naming.TrustType.S.ToString(),
-                                ReturnAmount = returnAmt,
-                            });
+                        models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                        {
+                            ContractID = item.OriginalContract.Value,
+                            EventDate = balancedPayment.PayoffDate.Value,
+                            TrustType = Naming.TrustType.S.ToString(),
+                            ReturnAmount = returnAmt,
+                        });
 
+                        if (refund > 0)
+                        {
                             //Logger.Debug("RevisionID: " + item.RevisionID);
                             //Logger.Debug("balance: " + balance);
-                            models.CreateAllowanceForContract(original, balance.Value);
+                            models.CreateAllowanceForContract(original, refund.Value);
                         }
 
                         models.SubmitChanges();

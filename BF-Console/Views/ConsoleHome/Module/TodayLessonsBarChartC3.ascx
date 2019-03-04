@@ -33,10 +33,23 @@
             .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
             .ToList();
 
+    var totalData = getDistribution(PTLessons).ToArray();
+    var tempData = getDistribution(PILessons).ToArray();
+    for(int i=0;i<totalData.Length;i++)
+    {
+        totalData[i] += tempData[i];
+    }
+    tempData = getDistribution(TrialLessons).ToArray();
+    for(int i=0;i<totalData.Length;i++)
+    {
+        totalData[i] += tempData[i];
+    }
+
     %>
-<div id="<%= _chartID %>" class="c3"></div>
+<div id="<%= _chartID %>" class="c3 m-t-20"></div>
 <script>
 
+    var totalData = <%= JsonConvert.SerializeObject(totalData) %>;
     $(function () {
         var chart = c3.generate({
             bindto: '#<%= _chartID %>', // id of chart wrapper
@@ -47,22 +60,29 @@
                     ['data2'],
                     ['data3'],
                 ],
+                order: null,
                 type: 'bar', // default type of chart
                 groups: [
                     ['data1', 'data2', 'data3']
                 ],
                 colors: {
-                    'data1': '#ffe6aa',
-                    'data2': '#c5b6e2',
-                    'data3': '#eeaaaa'
+                    'data1': '#3fbac2',
+                    'data2': '#d3d4d8',
+                    'data3': '#65799b'
                 },
                 names: {
                     // name of each serie
                     'data1': 'P.T',
                     'data2': 'P.I',
-                    'data3': '體驗'
+                    'data3': 'T.S'
                 },
-                labels: true,
+                labels: {
+                        format: {
+                            data3: function(v, id, i, j) {
+                                return totalData[i];
+                            },
+                        }
+                    },
             },
             axis: {
                 x: {
@@ -72,7 +92,7 @@
                 },
             },
             bar: {
-                width: 25
+                width: 'auto'
             },
             legend: {
                 show: true, //hide legend

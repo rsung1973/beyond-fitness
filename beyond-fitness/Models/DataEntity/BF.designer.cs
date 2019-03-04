@@ -519,6 +519,18 @@ namespace WebHome.Models.DataEntity
     partial void InsertPreferredLessonTime(PreferredLessonTime instance);
     partial void UpdatePreferredLessonTime(PreferredLessonTime instance);
     partial void DeletePreferredLessonTime(PreferredLessonTime instance);
+    partial void InsertContractMonthlySummary(ContractMonthlySummary instance);
+    partial void UpdateContractMonthlySummary(ContractMonthlySummary instance);
+    partial void DeleteContractMonthlySummary(ContractMonthlySummary instance);
+    partial void InsertBlogArticle(BlogArticle instance);
+    partial void UpdateBlogArticle(BlogArticle instance);
+    partial void DeleteBlogArticle(BlogArticle instance);
+    partial void InsertBlogCategoryDefinition(BlogCategoryDefinition instance);
+    partial void UpdateBlogCategoryDefinition(BlogCategoryDefinition instance);
+    partial void DeleteBlogCategoryDefinition(BlogCategoryDefinition instance);
+    partial void InsertBlogTag(BlogTag instance);
+    partial void UpdateBlogTag(BlogTag instance);
+    partial void DeleteBlogTag(BlogTag instance);
     #endregion
 		
 		public BFDataContext() : 
@@ -1863,6 +1875,38 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		public System.Data.Linq.Table<ContractMonthlySummary> ContractMonthlySummary
+		{
+			get
+			{
+				return this.GetTable<ContractMonthlySummary>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BlogArticle> BlogArticle
+		{
+			get
+			{
+				return this.GetTable<BlogArticle>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BlogCategoryDefinition> BlogCategoryDefinition
+		{
+			get
+			{
+				return this.GetTable<BlogCategoryDefinition>();
+			}
+		}
+		
+		public System.Data.Linq.Table<BlogTag> BlogTag
+		{
+			get
+			{
+				return this.GetTable<BlogTag>();
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InquireVacantNo")]
 		public ISingleResult<InquireVacantNoResult> InquireVacantNo([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SellerID", DbType="Int")] System.Nullable<int> sellerID, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="Year", DbType="Int")] System.Nullable<int> year, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PeriodNo", DbType="Int")] System.Nullable<int> periodNo)
 		{
@@ -2090,6 +2134,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntityRef<InvoiceAllowance> _InvoiceAllowance;
 		
+		private EntityRef<BlogArticle> _BlogArticle;
+		
 		private EntityRef<DocumentType> _DocumentType;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -2120,6 +2166,7 @@ namespace WebHome.Models.DataEntity
 			this._DocumentPrintLog = new EntitySet<DocumentPrintLog>(new Action<DocumentPrintLog>(this.attach_DocumentPrintLog), new Action<DocumentPrintLog>(this.detach_DocumentPrintLog));
 			this._DocumentPrintQueue = default(EntityRef<DocumentPrintQueue>);
 			this._InvoiceAllowance = default(EntityRef<InvoiceAllowance>);
+			this._BlogArticle = default(EntityRef<BlogArticle>);
 			this._DocumentType = default(EntityRef<DocumentType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			OnCreated();
@@ -2413,6 +2460,35 @@ namespace WebHome.Models.DataEntity
 						value.Document = this;
 					}
 					this.SendPropertyChanged("InvoiceAllowance");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_BlogArticle", Storage="_BlogArticle", ThisKey="DocID", OtherKey="DocID", IsUnique=true, IsForeignKey=false)]
+		public BlogArticle BlogArticle
+		{
+			get
+			{
+				return this._BlogArticle.Entity;
+			}
+			set
+			{
+				BlogArticle previousValue = this._BlogArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._BlogArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BlogArticle.Entity = null;
+						previousValue.Document = null;
+					}
+					this._BlogArticle.Entity = value;
+					if ((value != null))
+					{
+						value.Document = this;
+					}
+					this.SendPropertyChanged("BlogArticle");
 				}
 			}
 		}
@@ -5097,6 +5173,8 @@ namespace WebHome.Models.DataEntity
 		
 		private EntitySet<PreferredLessonTime> _PreferredLessonTime;
 		
+		private EntitySet<BlogArticle> _BlogArticle;
+		
 		private EntityRef<Attachment> _Attachment;
 		
 		private EntityRef<LevelExpression> _LevelExpression;
@@ -5196,6 +5274,7 @@ namespace WebHome.Models.DataEntity
 			this._QuestionnaireCoachBypass = new EntitySet<QuestionnaireCoachBypass>(new Action<QuestionnaireCoachBypass>(this.attach_QuestionnaireCoachBypass), new Action<QuestionnaireCoachBypass>(this.detach_QuestionnaireCoachBypass));
 			this._UserEvent = new EntitySet<UserEvent>(new Action<UserEvent>(this.attach_UserEvent), new Action<UserEvent>(this.detach_UserEvent));
 			this._PreferredLessonTime = new EntitySet<PreferredLessonTime>(new Action<PreferredLessonTime>(this.attach_PreferredLessonTime), new Action<PreferredLessonTime>(this.detach_PreferredLessonTime));
+			this._BlogArticle = new EntitySet<BlogArticle>(new Action<BlogArticle>(this.attach_BlogArticle), new Action<BlogArticle>(this.detach_BlogArticle));
 			this._Attachment = default(EntityRef<Attachment>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._UserProfile1 = default(EntityRef<UserProfile>);
@@ -6274,6 +6353,19 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_BlogArticle", Storage="_BlogArticle", ThisKey="UID", OtherKey="AuthorID")]
+		public EntitySet<BlogArticle> BlogArticle
+		{
+			get
+			{
+				return this._BlogArticle;
+			}
+			set
+			{
+				this._BlogArticle.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Attachment_UserProfile", Storage="_Attachment", ThisKey="PictureID", OtherKey="AttachmentID", IsForeignKey=true)]
 		public Attachment Attachment
 		{
@@ -6869,6 +6961,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_PreferredLessonTime(PreferredLessonTime entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = null;
+		}
+		
+		private void attach_BlogArticle(BlogArticle entity)
+		{
+			this.SendPropertyChanging();
+			entity.UserProfile = this;
+		}
+		
+		private void detach_BlogArticle(BlogArticle entity)
 		{
 			this.SendPropertyChanging();
 			entity.UserProfile = null;
@@ -21053,6 +21157,10 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<System.DateTime> _PayoffDue;
 		
+		private System.Nullable<System.DateTime> _ValidTo;
+		
+		private System.Nullable<bool> _Entrusted;
+		
 		private EntitySet<RegisterLessonContract> _RegisterLessonContract;
 		
 		private EntitySet<CourseContractMember> _CourseContractMember;
@@ -21074,6 +21182,8 @@ namespace WebHome.Models.DataEntity
 		private EntitySet<ContractTrustTrack> _ContractTrustTrack;
 		
 		private EntitySet<ContractElement> _ContractElements;
+		
+		private EntitySet<ContractMonthlySummary> _ContractMonthlySummary;
 		
 		private EntityRef<LessonPriceType> _LessonPriceType;
 		
@@ -21135,6 +21245,10 @@ namespace WebHome.Models.DataEntity
     partial void OnInstallmentIDChanged();
     partial void OnPayoffDueChanging(System.Nullable<System.DateTime> value);
     partial void OnPayoffDueChanged();
+    partial void OnValidToChanging(System.Nullable<System.DateTime> value);
+    partial void OnValidToChanged();
+    partial void OnEntrustedChanging(System.Nullable<bool> value);
+    partial void OnEntrustedChanged();
     #endregion
 		
 		public CourseContract()
@@ -21150,6 +21264,7 @@ namespace WebHome.Models.DataEntity
 			this._CourseContractLevel = new EntitySet<CourseContractLevel>(new Action<CourseContractLevel>(this.attach_CourseContractLevel), new Action<CourseContractLevel>(this.detach_CourseContractLevel));
 			this._ContractTrustTrack = new EntitySet<ContractTrustTrack>(new Action<ContractTrustTrack>(this.attach_ContractTrustTrack), new Action<ContractTrustTrack>(this.detach_ContractTrustTrack));
 			this._ContractElements = new EntitySet<ContractElement>(new Action<ContractElement>(this.attach_ContractElements), new Action<ContractElement>(this.detach_ContractElements));
+			this._ContractMonthlySummary = new EntitySet<ContractMonthlySummary>(new Action<ContractMonthlySummary>(this.attach_ContractMonthlySummary), new Action<ContractMonthlySummary>(this.detach_ContractMonthlySummary));
 			this._LessonPriceType = default(EntityRef<LessonPriceType>);
 			this._LevelExpression = default(EntityRef<LevelExpression>);
 			this._ServingCoach = default(EntityRef<ServingCoach>);
@@ -21608,6 +21723,46 @@ namespace WebHome.Models.DataEntity
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ValidTo", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ValidTo
+		{
+			get
+			{
+				return this._ValidTo;
+			}
+			set
+			{
+				if ((this._ValidTo != value))
+				{
+					this.OnValidToChanging(value);
+					this.SendPropertyChanging();
+					this._ValidTo = value;
+					this.SendPropertyChanged("ValidTo");
+					this.OnValidToChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Entrusted", DbType="Bit")]
+		public System.Nullable<bool> Entrusted
+		{
+			get
+			{
+				return this._Entrusted;
+			}
+			set
+			{
+				if ((this._Entrusted != value))
+				{
+					this.OnEntrustedChanging(value);
+					this.SendPropertyChanging();
+					this._Entrusted = value;
+					this.SendPropertyChanged("Entrusted");
+					this.OnEntrustedChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_RegisterLessonContract", Storage="_RegisterLessonContract", ThisKey="ContractID", OtherKey="ContractID")]
 		public EntitySet<RegisterLessonContract> RegisterLessonContract
 		{
@@ -21796,6 +21951,19 @@ namespace WebHome.Models.DataEntity
 			set
 			{
 				this._ContractElements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractMonthlySummary", Storage="_ContractMonthlySummary", ThisKey="ContractID", OtherKey="ContractID")]
+		public EntitySet<ContractMonthlySummary> ContractMonthlySummary
+		{
+			get
+			{
+				return this._ContractMonthlySummary;
+			}
+			set
+			{
+				this._ContractMonthlySummary.Assign(value);
 			}
 		}
 		
@@ -22148,6 +22316,18 @@ namespace WebHome.Models.DataEntity
 		}
 		
 		private void detach_ContractElements(ContractElement entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = null;
+		}
+		
+		private void attach_ContractMonthlySummary(ContractMonthlySummary entity)
+		{
+			this.SendPropertyChanging();
+			entity.CourseContract = this;
+		}
+		
+		private void detach_ContractMonthlySummary(ContractMonthlySummary entity)
 		{
 			this.SendPropertyChanging();
 			entity.CourseContract = null;
@@ -39988,6 +40168,8 @@ namespace WebHome.Models.DataEntity
 		
 		private System.Nullable<int> _AllowanceID;
 		
+		private System.Nullable<int> _AdjustmentAmount;
+		
 		private EntityRef<ContractPayment> _ContractPayment;
 		
 		private EntityRef<TuitionInstallment> _TuitionInstallment;
@@ -40036,6 +40218,8 @@ namespace WebHome.Models.DataEntity
     partial void OnRemarkChanged();
     partial void OnAllowanceIDChanging(System.Nullable<int> value);
     partial void OnAllowanceIDChanged();
+    partial void OnAdjustmentAmountChanging(System.Nullable<int> value);
+    partial void OnAdjustmentAmountChanged();
     #endregion
 		
 		public Payment()
@@ -40267,6 +40451,26 @@ namespace WebHome.Models.DataEntity
 					this._AllowanceID = value;
 					this.SendPropertyChanged("AllowanceID");
 					this.OnAllowanceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdjustmentAmount", DbType="Int")]
+		public System.Nullable<int> AdjustmentAmount
+		{
+			get
+			{
+				return this._AdjustmentAmount;
+			}
+			set
+			{
+				if ((this._AdjustmentAmount != value))
+				{
+					this.OnAdjustmentAmountChanging(value);
+					this.SendPropertyChanging();
+					this._AdjustmentAmount = value;
+					this.SendPropertyChanged("AdjustmentAmount");
+					this.OnAdjustmentAmountChanged();
 				}
 			}
 		}
@@ -46682,6 +46886,827 @@ namespace WebHome.Models.DataEntity
 						this._ApproverID = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ContractMonthlySummary")]
+	public partial class ContractMonthlySummary : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ContractID;
+		
+		private System.DateTime _SettlementDate;
+		
+		private int _TotalPrepaid;
+		
+		private int _TotalLessonCost;
+		
+		private int _RemainedAmount;
+		
+		private System.Nullable<int> _TotalAllowanceAmount;
+		
+		private EntityRef<CourseContract> _CourseContract;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnContractIDChanging(int value);
+    partial void OnContractIDChanged();
+    partial void OnSettlementDateChanging(System.DateTime value);
+    partial void OnSettlementDateChanged();
+    partial void OnTotalPrepaidChanging(int value);
+    partial void OnTotalPrepaidChanged();
+    partial void OnTotalLessonCostChanging(int value);
+    partial void OnTotalLessonCostChanged();
+    partial void OnRemainedAmountChanging(int value);
+    partial void OnRemainedAmountChanged();
+    partial void OnTotalAllowanceAmountChanging(System.Nullable<int> value);
+    partial void OnTotalAllowanceAmountChanged();
+    #endregion
+		
+		public ContractMonthlySummary()
+		{
+			this._CourseContract = default(EntityRef<CourseContract>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContractID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ContractID
+		{
+			get
+			{
+				return this._ContractID;
+			}
+			set
+			{
+				if ((this._ContractID != value))
+				{
+					if (this._CourseContract.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContractIDChanging(value);
+					this.SendPropertyChanging();
+					this._ContractID = value;
+					this.SendPropertyChanged("ContractID");
+					this.OnContractIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SettlementDate", DbType="DateTime NOT NULL", IsPrimaryKey=true)]
+		public System.DateTime SettlementDate
+		{
+			get
+			{
+				return this._SettlementDate;
+			}
+			set
+			{
+				if ((this._SettlementDate != value))
+				{
+					this.OnSettlementDateChanging(value);
+					this.SendPropertyChanging();
+					this._SettlementDate = value;
+					this.SendPropertyChanged("SettlementDate");
+					this.OnSettlementDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalPrepaid", DbType="Int NOT NULL")]
+		public int TotalPrepaid
+		{
+			get
+			{
+				return this._TotalPrepaid;
+			}
+			set
+			{
+				if ((this._TotalPrepaid != value))
+				{
+					this.OnTotalPrepaidChanging(value);
+					this.SendPropertyChanging();
+					this._TotalPrepaid = value;
+					this.SendPropertyChanged("TotalPrepaid");
+					this.OnTotalPrepaidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalLessonCost", DbType="Int NOT NULL")]
+		public int TotalLessonCost
+		{
+			get
+			{
+				return this._TotalLessonCost;
+			}
+			set
+			{
+				if ((this._TotalLessonCost != value))
+				{
+					this.OnTotalLessonCostChanging(value);
+					this.SendPropertyChanging();
+					this._TotalLessonCost = value;
+					this.SendPropertyChanged("TotalLessonCost");
+					this.OnTotalLessonCostChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RemainedAmount", DbType="Int NOT NULL")]
+		public int RemainedAmount
+		{
+			get
+			{
+				return this._RemainedAmount;
+			}
+			set
+			{
+				if ((this._RemainedAmount != value))
+				{
+					this.OnRemainedAmountChanging(value);
+					this.SendPropertyChanging();
+					this._RemainedAmount = value;
+					this.SendPropertyChanged("RemainedAmount");
+					this.OnRemainedAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TotalAllowanceAmount", DbType="Int")]
+		public System.Nullable<int> TotalAllowanceAmount
+		{
+			get
+			{
+				return this._TotalAllowanceAmount;
+			}
+			set
+			{
+				if ((this._TotalAllowanceAmount != value))
+				{
+					this.OnTotalAllowanceAmountChanging(value);
+					this.SendPropertyChanging();
+					this._TotalAllowanceAmount = value;
+					this.SendPropertyChanged("TotalAllowanceAmount");
+					this.OnTotalAllowanceAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="CourseContract_ContractMonthlySummary", Storage="_CourseContract", ThisKey="ContractID", OtherKey="ContractID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public CourseContract CourseContract
+		{
+			get
+			{
+				return this._CourseContract.Entity;
+			}
+			set
+			{
+				CourseContract previousValue = this._CourseContract.Entity;
+				if (((previousValue != value) 
+							|| (this._CourseContract.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._CourseContract.Entity = null;
+						previousValue.ContractMonthlySummary.Remove(this);
+					}
+					this._CourseContract.Entity = value;
+					if ((value != null))
+					{
+						value.ContractMonthlySummary.Add(this);
+						this._ContractID = value.ContractID;
+					}
+					else
+					{
+						this._ContractID = default(int);
+					}
+					this.SendPropertyChanged("CourseContract");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BlogArticle")]
+	public partial class BlogArticle : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private string _Title;
+		
+		private System.Nullable<int> _AuthorID;
+		
+		private string _Subtitle;
+		
+		private string _BlogID;
+		
+		private EntitySet<BlogTag> _BlogTag;
+		
+		private EntityRef<Document> _Document;
+		
+		private EntityRef<UserProfile> _UserProfile;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnAuthorIDChanging(System.Nullable<int> value);
+    partial void OnAuthorIDChanged();
+    partial void OnSubtitleChanging(string value);
+    partial void OnSubtitleChanged();
+    partial void OnBlogIDChanging(string value);
+    partial void OnBlogIDChanged();
+    #endregion
+		
+		public BlogArticle()
+		{
+			this._BlogTag = new EntitySet<BlogTag>(new Action<BlogTag>(this.attach_BlogTag), new Action<BlogTag>(this.detach_BlogTag));
+			this._Document = default(EntityRef<Document>);
+			this._UserProfile = default(EntityRef<UserProfile>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._Document.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Title", DbType="NVarChar(256)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AuthorID", DbType="Int")]
+		public System.Nullable<int> AuthorID
+		{
+			get
+			{
+				return this._AuthorID;
+			}
+			set
+			{
+				if ((this._AuthorID != value))
+				{
+					if (this._UserProfile.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAuthorIDChanging(value);
+					this.SendPropertyChanging();
+					this._AuthorID = value;
+					this.SendPropertyChanged("AuthorID");
+					this.OnAuthorIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Subtitle", DbType="NVarChar(256)")]
+		public string Subtitle
+		{
+			get
+			{
+				return this._Subtitle;
+			}
+			set
+			{
+				if ((this._Subtitle != value))
+				{
+					this.OnSubtitleChanging(value);
+					this.SendPropertyChanging();
+					this._Subtitle = value;
+					this.SendPropertyChanged("Subtitle");
+					this.OnSubtitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BlogID", DbType="NVarChar(64) NOT NULL", CanBeNull=false)]
+		public string BlogID
+		{
+			get
+			{
+				return this._BlogID;
+			}
+			set
+			{
+				if ((this._BlogID != value))
+				{
+					this.OnBlogIDChanging(value);
+					this.SendPropertyChanging();
+					this._BlogID = value;
+					this.SendPropertyChanged("BlogID");
+					this.OnBlogIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BlogArticle_BlogTag", Storage="_BlogTag", ThisKey="DocID", OtherKey="DocID")]
+		public EntitySet<BlogTag> BlogTag
+		{
+			get
+			{
+				return this._BlogTag;
+			}
+			set
+			{
+				this._BlogTag.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Document_BlogArticle", Storage="_Document", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Document Document
+		{
+			get
+			{
+				return this._Document.Entity;
+			}
+			set
+			{
+				Document previousValue = this._Document.Entity;
+				if (((previousValue != value) 
+							|| (this._Document.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Document.Entity = null;
+						previousValue.BlogArticle = null;
+					}
+					this._Document.Entity = value;
+					if ((value != null))
+					{
+						value.BlogArticle = this;
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("Document");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="UserProfile_BlogArticle", Storage="_UserProfile", ThisKey="AuthorID", OtherKey="UID", IsForeignKey=true)]
+		public UserProfile UserProfile
+		{
+			get
+			{
+				return this._UserProfile.Entity;
+			}
+			set
+			{
+				UserProfile previousValue = this._UserProfile.Entity;
+				if (((previousValue != value) 
+							|| (this._UserProfile.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._UserProfile.Entity = null;
+						previousValue.BlogArticle.Remove(this);
+					}
+					this._UserProfile.Entity = value;
+					if ((value != null))
+					{
+						value.BlogArticle.Add(this);
+						this._AuthorID = value.UID;
+					}
+					else
+					{
+						this._AuthorID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("UserProfile");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_BlogTag(BlogTag entity)
+		{
+			this.SendPropertyChanging();
+			entity.BlogArticle = this;
+		}
+		
+		private void detach_BlogTag(BlogTag entity)
+		{
+			this.SendPropertyChanging();
+			entity.BlogArticle = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BlogCategoryDefinition")]
+	public partial class BlogCategoryDefinition : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _CategoryID;
+		
+		private string _Category;
+		
+		private string _Description;
+		
+		private string _CategoryIndication;
+		
+		private EntitySet<BlogTag> _BlogTag;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnCategoryIDChanging(int value);
+    partial void OnCategoryIDChanged();
+    partial void OnCategoryChanging(string value);
+    partial void OnCategoryChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCategoryIndicationChanging(string value);
+    partial void OnCategoryIndicationChanged();
+    #endregion
+		
+		public BlogCategoryDefinition()
+		{
+			this._BlogTag = new EntitySet<BlogTag>(new Action<BlogTag>(this.attach_BlogTag), new Action<BlogTag>(this.detach_BlogTag));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int CategoryID
+		{
+			get
+			{
+				return this._CategoryID;
+			}
+			set
+			{
+				if ((this._CategoryID != value))
+				{
+					this.OnCategoryIDChanging(value);
+					this.SendPropertyChanging();
+					this._CategoryID = value;
+					this.SendPropertyChanged("CategoryID");
+					this.OnCategoryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Category", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
+		public string Category
+		{
+			get
+			{
+				return this._Category;
+			}
+			set
+			{
+				if ((this._Category != value))
+				{
+					this.OnCategoryChanging(value);
+					this.SendPropertyChanging();
+					this._Category = value;
+					this.SendPropertyChanged("Category");
+					this.OnCategoryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(64)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryIndication", DbType="NVarChar(256)")]
+		public string CategoryIndication
+		{
+			get
+			{
+				return this._CategoryIndication;
+			}
+			set
+			{
+				if ((this._CategoryIndication != value))
+				{
+					this.OnCategoryIndicationChanging(value);
+					this.SendPropertyChanging();
+					this._CategoryIndication = value;
+					this.SendPropertyChanged("CategoryIndication");
+					this.OnCategoryIndicationChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BlogCategoryDefinition_BlogTag", Storage="_BlogTag", ThisKey="CategoryID", OtherKey="CategoryID")]
+		public EntitySet<BlogTag> BlogTag
+		{
+			get
+			{
+				return this._BlogTag;
+			}
+			set
+			{
+				this._BlogTag.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_BlogTag(BlogTag entity)
+		{
+			this.SendPropertyChanging();
+			entity.BlogCategoryDefinition = this;
+		}
+		
+		private void detach_BlogTag(BlogTag entity)
+		{
+			this.SendPropertyChanging();
+			entity.BlogCategoryDefinition = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BlogTag")]
+	public partial class BlogTag : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _DocID;
+		
+		private int _CategoryID;
+		
+		private EntityRef<BlogArticle> _BlogArticle;
+		
+		private EntityRef<BlogCategoryDefinition> _BlogCategoryDefinition;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDocIDChanging(int value);
+    partial void OnDocIDChanged();
+    partial void OnCategoryIDChanging(int value);
+    partial void OnCategoryIDChanged();
+    #endregion
+		
+		public BlogTag()
+		{
+			this._BlogArticle = default(EntityRef<BlogArticle>);
+			this._BlogCategoryDefinition = default(EntityRef<BlogCategoryDefinition>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DocID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int DocID
+		{
+			get
+			{
+				return this._DocID;
+			}
+			set
+			{
+				if ((this._DocID != value))
+				{
+					if (this._BlogArticle.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnDocIDChanging(value);
+					this.SendPropertyChanging();
+					this._DocID = value;
+					this.SendPropertyChanged("DocID");
+					this.OnDocIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int CategoryID
+		{
+			get
+			{
+				return this._CategoryID;
+			}
+			set
+			{
+				if ((this._CategoryID != value))
+				{
+					if (this._BlogCategoryDefinition.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCategoryIDChanging(value);
+					this.SendPropertyChanging();
+					this._CategoryID = value;
+					this.SendPropertyChanged("CategoryID");
+					this.OnCategoryIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BlogArticle_BlogTag", Storage="_BlogArticle", ThisKey="DocID", OtherKey="DocID", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public BlogArticle BlogArticle
+		{
+			get
+			{
+				return this._BlogArticle.Entity;
+			}
+			set
+			{
+				BlogArticle previousValue = this._BlogArticle.Entity;
+				if (((previousValue != value) 
+							|| (this._BlogArticle.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BlogArticle.Entity = null;
+						previousValue.BlogTag.Remove(this);
+					}
+					this._BlogArticle.Entity = value;
+					if ((value != null))
+					{
+						value.BlogTag.Add(this);
+						this._DocID = value.DocID;
+					}
+					else
+					{
+						this._DocID = default(int);
+					}
+					this.SendPropertyChanged("BlogArticle");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BlogCategoryDefinition_BlogTag", Storage="_BlogCategoryDefinition", ThisKey="CategoryID", OtherKey="CategoryID", IsForeignKey=true)]
+		public BlogCategoryDefinition BlogCategoryDefinition
+		{
+			get
+			{
+				return this._BlogCategoryDefinition.Entity;
+			}
+			set
+			{
+				BlogCategoryDefinition previousValue = this._BlogCategoryDefinition.Entity;
+				if (((previousValue != value) 
+							|| (this._BlogCategoryDefinition.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._BlogCategoryDefinition.Entity = null;
+						previousValue.BlogTag.Remove(this);
+					}
+					this._BlogCategoryDefinition.Entity = value;
+					if ((value != null))
+					{
+						value.BlogTag.Add(this);
+						this._CategoryID = value.CategoryID;
+					}
+					else
+					{
+						this._CategoryID = default(int);
+					}
+					this.SendPropertyChanged("BlogCategoryDefinition");
 				}
 			}
 		}

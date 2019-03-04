@@ -112,7 +112,19 @@
         </div>
 
     </section>
-    
+    <script>
+        function processContractService(keyID) {
+            showLoading();
+            $.post('<%= Url.Action("ProcessContractService", "ContractConsole") %>', { 'keyID': keyID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="TailPageJavaScriptInclude" ContentPlaceHolderID="TailPageJavaScriptInclude" runat="server">

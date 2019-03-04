@@ -172,8 +172,7 @@ namespace WebHome.Controllers
             {
                 items = models.GetTable<UserProfile>()
                     .Where(l => l.RealName.Contains(userName) || l.Nickname.Contains(userName))
-                    .Where(l => l.UserRole.Any(r=>r.RoleID==(int)Naming.RoleID.Learner 
-                            || r.RoleID==(int)Naming.RoleID.Preliminary))
+                    .FilterByLearner(models, true)
                     .OrderBy(l => l.RealName);
             }
 
@@ -615,62 +614,22 @@ namespace WebHome.Controllers
 
         public ActionResult ConfirmSignatureForAmendment(CourseContractViewModel viewModel, bool? extension)
         {
-            var profile = HttpContext.GetUser();
-            var item = models.GetTable<CourseContractRevision>().Where(c => c.RevisionID == viewModel.RevisionID).FirstOrDefault();
-            if (item != null)
-            {
-                CourseContract contract = item.CourseContract;
-                var owner = contract.CourseContractMember.Where(m => m.UID == contract.OwnerID).First();
+            var item = viewModel.ConfirmContractServiceSignature(this, out String alertMessage, out String pdfFile);
 
-                if (contract.CourseContractType.ContractCode == "CFA")
+            if (item == null)
+            {
+                if (!ModelState.IsValid)
                 {
-                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1)
-                    {
-                        return View("~/Views/Shared/JsAlert.ascx", model: "未完成簽名!!");
-                    }
+                    return View("~/Views/Shared/ReportInputError.ascx");
                 }
                 else
                 {
-
-                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1)
-                    {
-                        return View("~/Views/Shared/JsAlert.ascx", model: "未完成簽名!!");
-                    }
-
-                    //if (contract.CourseContractType.IsGroup == true)
-                    //{
-                    //    if (contract.CourseContractMember.Any(m => m.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1))
-                    //    {
-                    //        return View("~/Views/Shared/JsAlert.ascx", model: "未完成簽名!!");
-                    //    }
-
-                    //    foreach (var m in contract.CourseContractMember)
-                    //    {
-                    //        if (m.UserProfile.CurrentYearsOld() < 18 && owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Guardian") && s.Signature != null) < 1)
-                    //        {
-                    //            return View("~/Views/Shared/JsAlert.ascx", model: "家長/監護人未完成簽名!!");
-                    //        }
-                    //    }
-                    //}
+                    return View("~/Views/Shared/JsAlert.ascx", model: alertMessage);
                 }
-
-                if (extension != true )
-                {
-                    return View("~/Views/Shared/JsAlert.ascx", model: "請勾選合約聲明!!");
-                }
-
-                if (!item.EnableContractAmendment(models, profile))
-                {
-                    return View("~/Views/Shared/JsAlert.ascx", model: "服務狀態錯誤，請重新檢查!!");
-                }
-
-                var pdfFile = item.CreateContractAmendmentPDF(true);
-
-                String contractPDF = pdfFile.Replace(HttpRuntime.AppDomainAppPath, "");
-                return Json(new { result = true, pdf = VirtualPathUtility.ToAbsolute("~/" + contractPDF) });
             }
-            else
-                return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
+
+            return Json(new { result = true, pdf = pdfFile != null ? VirtualPathUtility.ToAbsolute("~/" + pdfFile.Replace(HttpRuntime.AppDomainAppPath, "")) : null });
+
         }
 
         public ActionResult EnableContractAmendment(CourseContractViewModel viewModel)
@@ -794,6 +753,10 @@ namespace WebHome.Controllers
 
         public ActionResult GetContractAmendmentPdf(CourseContractViewModel viewModel)
         {
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.RevisionID = viewModel.DecryptKeyValue();
+            }
             var item = models.GetTable<CourseContractRevision>().Where(c => c.RevisionID == viewModel.RevisionID).FirstOrDefault();
             if (item != null)
             {
@@ -901,7 +864,8 @@ namespace WebHome.Controllers
         public ActionResult InquireContractForAmendment(CourseContractQueryViewModel viewModel)
         {
             IQueryable<CourseContract> items = models.GetTable<CourseContract>()
-                    .Where(c => c.Status == (int)Naming.CourseContractStatus.已生效)
+                    .Where(c => c.Status == (int)Naming.CourseContractStatus.已生效
+                        || c.Status == (int)Naming.CourseContractStatus.已過期)
                     .Where(c => c.SequenceNo == 0);
 
             bool hasCondition = false;
@@ -1012,25 +976,29 @@ namespace WebHome.Controllers
                 if (item.Status >= (int)Naming.CourseContractStatus.已生效)
                     r[7] = item.RemainedLessonCount();
                 r[8] = item.Lessons;
+                r[9] = item.TotalCost;
             }
 
 
-            if(item.Status <= (int)Naming.CourseContractStatus.已生效)
-                r[9] =  item.TotalCost;
+            //if(item.Status <= (int)Naming.CourseContractStatus.已生效)
+            //    r[9] =  item.TotalCost;
 
             var originalPrice = item.OriginalSeriesPrice();
             r[10] = originalPrice != null ? originalPrice.ListPrice : item.LessonPriceType.ListPrice;
             r[11] = item.LessonPriceType.ListPrice;
             var revision = item.CourseContractRevision;
             r[12] = revision == null ? "新合約" : revision.Reason;
-            r[13] = ((Naming.CourseContractStatus)item.Status).ToString();
+            r[13] = ((Naming.ContractQueryStatus)item.Status).ToString();
 
             r[14] = item.Remark;
             if (item.SequenceNo == 0)
             {
                 if (item.Status >= (int)Naming.CourseContractStatus.已生效)
                     r[15] = item.UnfinishedLessonCount();
+                r[16] = item.TotalPaidAmount();
             }
+            r[17] = String.Format("{0:yyyy/MM/dd}", item.ValidTo);
+            r[18] = item.TotalAllowanceAmount();
 
             table.Rows.Add(r);
 
@@ -1059,6 +1027,9 @@ namespace WebHome.Controllers
             table.Columns.Add(new DataColumn("狀態", typeof(String)));
             table.Columns.Add(new DataColumn("備註", typeof(String)));
             table.Columns.Add(new DataColumn("未完成堂數", typeof(int)));
+            table.Columns.Add(new DataColumn("已收金額", typeof(int)));
+            table.Columns.Add(new DataColumn("合約完成日", typeof(String)));
+            table.Columns.Add(new DataColumn("已發生折讓總額", typeof(decimal)));
 
             foreach (var item in items)
             {

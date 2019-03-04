@@ -31,7 +31,7 @@
         <%  foreach (var item in _items)
             {
                 var contract = item.CourseContract; %>
-        <tr>
+        <tr onclick="processContractService('<%= item.RevisionID.EncryptKey() %>');">
             <td><%= item.Reason %></td>
             <td><%= contract.ContractLearner() %></td>
             <td><%= contract.CourseContractExtension.BranchStore.BranchName %></td>
@@ -50,7 +50,7 @@
             </td>
             <td><%= $"{_model.TotalCost:##,###,###,###}" %></td>
             <td><%= $"{_model.TotalPaidAmount():##,###,###,###}" %></td>
-            <td><%= (Naming.ContractQueryStatus)contract.Status %></td>
+            <td><%= (Naming.ContractServiceStatus)contract.Status %></td>
         </tr>
         <%  }   %>
     </tbody>

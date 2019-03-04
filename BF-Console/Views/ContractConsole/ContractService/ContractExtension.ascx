@@ -38,17 +38,26 @@
             </a>
             <%  if (currentItem != null)
                 {   %>
-            <small class="info"><%= (Naming.CourseContractStatus)currentItem.Status %></small>
+            <small class="info"><%= (Naming.ContractServiceStatus)currentItem.Status %></small>
             <%  }
                 else if(applicable)
                 {   %>
             <p>
-                <button class="btn btn-darkteal btn-icon btn-icon-mini btn-round waves-effect float-right" id="extendcontract"><i class="zmdi zmdi-plus"></i></button>
+                <button class="btn btn-darkteal btn-icon btn-icon-mini btn-round waves-effect float-right" onclick="postponeExpiration();"><i class="zmdi zmdi-plus"></i></button>
             </p>
             <%  } %>
         </div>
     </div>
 </div>
+<script>
+    function postponeExpiration() {
+        $('').launchDownload('<%= Url.Action("PostponeContractExpiration", "ConsoleHome") %>',
+            <%= JsonConvert.SerializeObject(new 
+            {
+                KeyID = _model.ContractID.EncryptKey()
+            }) %>);
+    }
+</script>
 
 <script runat="server">
 

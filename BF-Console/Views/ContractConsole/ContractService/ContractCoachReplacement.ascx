@@ -20,10 +20,10 @@
     <div class="row">
         <div class="col-8">
             <h5 class="m-t-0">轉換體能顧問</h5>
-            <%  if (_model.IsContractServiceInProgress(models))
+            <%--<%  if (_model.IsContractServiceInProgress(models))
                 {   %>
             <span class="col-red"><i class="zmdi zmdi-block"></i>服務申請進行中</span>
-            <%  }   %>
+            <%  }   %>--%>
         </div>
         <div class="col-4 text-right">
             <a href="javascript:void();">
@@ -31,7 +31,7 @@
             </a>
             <%  if (currentItem != null)
                 {   %>
-            <small class="info"><%= (Naming.CourseContractStatus)currentItem.Status %></small>
+            <small class="info"><%= (Naming.ContractServiceStatus)currentItem.Status %></small>
             <%  }
                 else if(_model.FitnessConsultant!=_profile.UID && _profile.IsCoach())
                 {   %>

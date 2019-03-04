@@ -819,6 +819,95 @@ namespace WebHome.Helper.BusinessOperation
             }
         }
 
+        public static CourseContract ConfirmContractServiceSignature<TEntity>(this CourseContractViewModel viewModel, SampleController<TEntity> controller, out String alertMessage, out String pdfFile)
+            where TEntity : class, new()
+        {
+            alertMessage = null;
+            pdfFile = null;
+            var ModelState = controller.ModelState;
+            var ViewBag = controller.ViewBag;
+            var HttpContext = controller.HttpContext;
+            var models = controller.DataSource;
+
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<CourseContractRevision>().Where(c => c.RevisionID == viewModel.ContractID).FirstOrDefault();
+            if (item != null)
+            {
+                CourseContract contract = item.CourseContract;
+                var owner = contract.CourseContractMember.Where(m => m.UID == contract.OwnerID).First();
+
+                if (contract.CourseContractType.ContractCode == "CFA")
+                {
+                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1)
+                    {
+                        alertMessage = "未完成簽名!!";
+                        return null;
+                    }
+                }
+                else
+                {
+
+                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1)
+                    {
+                        alertMessage = "未完成簽名!!";
+                        return null;
+                    }
+
+                    //if (contract.CourseContractType.IsGroup == true)
+                    //{
+                    //    if (contract.CourseContractMember.Any(m => m.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1))
+                    //    {
+                    //        return View("~/Views/Shared/JsAlert.ascx", model: "未完成簽名!!");
+                    //    }
+
+                    //    foreach (var m in contract.CourseContractMember)
+                    //    {
+                    //        if (m.UserProfile.CurrentYearsOld() < 18 && owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Guardian") && s.Signature != null) < 1)
+                    //        {
+                    //            return View("~/Views/Shared/JsAlert.ascx", model: "家長/監護人未完成簽名!!");
+                    //        }
+                    //    }
+                    //}
+                }
+
+                if (viewModel.Extension != true)
+                {
+                    alertMessage = "請勾選合約聲明!!";
+                    return null;
+                }
+
+                if (item.Reason == "展延")
+                {
+                    if (viewModel.Booking != true || viewModel.Cancel!=true)
+                    {
+                        alertMessage = "請勾選合約聲明!!";
+                        return null;
+                    }
+                }
+
+                if (!item.EnableContractAmendment(models, profile))
+                {
+                    alertMessage = "服務狀態錯誤，請重新檢查!!";
+                    return null;
+                }
+
+                pdfFile = item.CreateContractAmendmentPDF(true);
+                return contract;
+            }
+            else
+            {
+                alertMessage = "合約資料錯誤!!";
+                return null;
+            }
+        }
+
         public static bool EnableContractAmendment<TEntity>(this CourseContractRevision item,ModelSource<TEntity> models, UserProfile profile,Naming.CourseContractStatus? fromStatus = Naming.CourseContractStatus.待簽名)
             where TEntity : class, new()
         {
@@ -902,10 +991,22 @@ namespace WebHome.Helper.BusinessOperation
             {
                 if (!viewModel.SettlementPrice.HasValue)
                     ModelState.AddModelError("SettlementPrice", "請填入課程單價!!");
+                else
+                {
+
+                    var refund = item.TotalPaidAmount() - item.AttendedLessonCount()
+                            * viewModel.SettlementPrice
+                            * item.CourseContractType.GroupingMemberCount
+                            * item.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+                    if (refund < 0)
+                    {
+                        ModelState.AddModelError("SettlementPrice", "退款差額不可小於零!!");
+                    }
+                }
             }
             else if (viewModel.Reason == "轉讓")
             {
-                if (viewModel.UID == null || viewModel.UID.Length < 1)
+                if (viewModel.UID == null || viewModel.UID.Length < 1 || viewModel.UID[0] <= 0)
                 {
                     ModelState.AddModelError("UID", "請選擇上課學員!!");
                 }

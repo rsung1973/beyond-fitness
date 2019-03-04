@@ -49,7 +49,13 @@
         %>
         <div class="container-fluid">
             <div class="card widget_2">
-                <%  Html.RenderPartial("~/Views/ContractConsole/ContractService/ConsultantAssignment.ascx", _item); %>
+                <%  
+                    ViewBag.ApplyService = (Action<String>)(viewID =>
+                    {
+                        ViewBag.ViewID = viewID;
+                        Html.RenderPartial("~/Views/ContractConsole/ContractService/DoConsultantAssignment.ascx", _item);
+                    });
+                    Html.RenderPartial("~/Views/ContractConsole/ContractService/ApplyContractService.ascx", _item); %>
             </div>
         </div>
 
