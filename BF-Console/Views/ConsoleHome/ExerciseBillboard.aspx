@@ -35,7 +35,7 @@
                             <ul class="header-dropdown">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-right slideUp float-right xl-blue">
+                                    <ul class="dropdown-menu dropdown-menu-right slideUp float-right">
                                         <li><a href="javascript:inquireBillboard();">全部</a></li>
                                         <%  foreach (var b in models.GetTable<BranchStore>())
                                             {   %>
@@ -77,14 +77,14 @@
                                 <span class="m-r-20"><i class="zmdi zmdi-label col-yellow m-r-5"></i>恢復</span>
                             </div>
                             <div class="table-responsive">
-                                <table class="table m-b-0 table-hover nowrap dataTable-exerciserankList" style="width: 100%">
+                                <table class="table table-striped table-custom m-b-0 nowrap dataTable-exerciserankList" style="width:100%">
                                     <thead class="bg-darkteal">
                                         <tr>
-                                            <th class="xl-blue col-darkteal">姓名</th>
+                                            <th>姓名</th>
                                             <th>分店</th>
                                             <th>本月運動 <small>小時:分鐘</small></th>
                                             <th>階段佔比</th>
-                                            <th class="xl-blue col-darkteal">排名</th>
+                                            <th>排名</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -114,16 +114,13 @@
                 "order": [
                     [4, 'asc']
                 ],
-                "lengthChange": true,
-                "pageLength": 30,
-                "lengthMenu": [
-                    [30, 50, 100, -1],
-                    [30, 50, 100, "全部"]
-                ],
+                "bPaginate": false, //翻頁功能
+                "bInfo": true,//頁尾資訊
+                "searching": false,  //搜尋框，不顯示
                 "language": {
                     "lengthMenu": "每頁顯示 _MENU_ 筆資料",
                     "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
+                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
                     "infoEmpty": "顯示 0 到 0 筆的資料",
                     "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
                     "loadingRecords": "快馬加鞭處理中...",
@@ -140,7 +137,6 @@
                 scrollCollapse: true,
                 fixedColumns: {
                     leftColumns: 1,
-                    rightColumns: 1
                 },
                 "columnDefs": [
                     {

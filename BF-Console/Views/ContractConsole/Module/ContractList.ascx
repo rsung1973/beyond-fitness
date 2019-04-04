@@ -18,10 +18,10 @@
             <th>合約名稱</th>
             <th>服務項目</th>
             <th>購買堂數</th>
+            <th>目前狀態</th>
             <th>編輯日期</th>
             <th>合約起日</th>
-            <th>合約迄日</th>
-            <th>目前狀態</th>
+            <th>合約迄日</th>            
         </tr>
     </thead>
     <tbody>
@@ -48,13 +48,15 @@
                                 ? "續約"
                                 : "新約" %></td>
             <td><%= item.Lessons %></td>
+            <td> <%= item.ContractCurrentStatus() %></td>
             <td><%= String.Format("{0:yyyy/MM/dd}", item.ContractDate) %></td>
-            <td><%= String.Format("{0:yyyy/MM/dd}", item.EffectiveDate) %></td>
-            <td><%= String.Format("{0:yyyy/MM/dd}", item.Expiration) %></td>
+            <td><%= String.Format("{0:yyyy/MM/dd}", item.CourseContractRevision == null
+                            ? item.EffectiveDate
+                            : item.CourseContractRevision.SourceContract.EffectiveDate) %></td>
             <td>
-                <%= item.ContractCurrentStatus() %>
+                <%= String.Format("{0:yyyy/MM/dd}", item.Expiration) %>
                 <i class='zmdi zmdi-more-vert float-right'></i>
-            </td>
+            </td>            
         </tr>
         <%  }   %>
     </tbody>
@@ -81,8 +83,8 @@
             "language": {
                 "lengthMenu": "每頁顯示 _MENU_ 筆資料",
                 "zeroRecords": "沒有資料也是種福氣",
-                "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
-                "infoEmpty": "顯示 0 到 0 筆的資料",
+                "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
+                "infoEmpty": "顯示 0 筆的資料",
                 "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
                 "loadingRecords": "快馬加鞭處理中...",
                 "processing": "快馬加鞭處理中...",

@@ -20,30 +20,25 @@
                                 <div class="panel-heading" role="tab" id="headingDetailContract">
                                     <h4 class="panel-title">
                                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordionDetail_contract" href="#collapseDetail_contract" aria-expanded="false" aria-controls="collapseDetail_contract"><i class="material-icons">subject</i> 合約詳細資訊 
-                                            <%  if (_model.Status <= (int)Naming.ContractQueryStatus.待審核)
-                                                {   %>
-                                            <span class="badge bg-orange"><%= _model.ContractCurrentStatus() %></span>
-                                            <%  }
+                                            <%  var bgColor = "bg-cyan";
+                                                if (_model.Status <= (int)Naming.ContractQueryStatus.待審核)
+                                                {
+                                                    bgColor = "bg-orange";
+                                                }
                                                 else if (_model.Status == (int)Naming.CourseContractStatus.已生效)
-                                                {   %>
-                                            <span class="badge bg-green"><%= _model.ContractCurrentStatus() %></span>
-                                            <%  }
-                                                else if (_model.Status == (int)Naming.CourseContractStatus.已過期)
-                                                {   %>
-                                            <span class="badge bg-red">已過期</span>
-                                            <%  }
-                                                else if (_model.Status == (int)Naming.CourseContractStatus.已終止)
-                                                {   %>
-                                            <span class="badge bg-red">已終止</span>
-                                            <%  }
-                                                else if (_model.Status == (int)Naming.CourseContractStatus.已轉讓)
-                                                {   %>
-                                            <span class="badge bg-red">已轉讓</span>
-                                            <%  }
-                                                else if (_model.Status == (int)Naming.CourseContractStatus.已轉點)
-                                                {   %>
-                                            <span class="badge bg-red">已轉點</span>
-                                            <%  }   %>
+                                                { 
+                                                    bgColor = "bg-green";
+                                                }
+                                                else if (_model.Status == (int)Naming.CourseContractStatus.已履行)
+                                                {   
+                                                    bgColor = "bg-darkteal";
+                                                }
+                                                else
+                                                {   
+                                                    bgColor = "bg-red";
+                                                }
+                                            %>
+                                            <span class="<%= $"badge {bgColor}" %>"><%= _model.ContractCurrentStatus() %></span>
                                         </a>
                                     </h4>
                                 </div>
@@ -81,15 +76,20 @@
                                                         <div class="list_td rt"><%= $"{_model.ValidFrom:yyyy/MM/dd}" %></div>
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </li>                                             
                                             <li>
                                                 <div class="list_tb tb2">
                                                     <div class="list_tr">
                                                         <div class="list_td hd">合約迄日</div>
-                                                        <div class="list_td rt col-red"><%= $"{_model.Expiration:yyyy/MM/dd}" %></div>
+                                                         <%  if (_model.ValidTo.HasValue)
+                                                             {   %>
+                                                            <div class="list_td rt col-green"><%= $"{_model.ValidTo:yyyy/MM/dd}" %></div>
+                                                        <% } else { %>
+                                                            <div class="list_td rt col-red"><%= $"{_model.Expiration:yyyy/MM/dd}" %></div>
+                                                        <% } %>
                                                     </div>
                                                 </div>
-                                            </li>
+                                            </li>                                            
                                             <li>
                                                 <div class="list_tb tb2">
                                                     <div class="list_tr">
@@ -121,7 +121,7 @@
                                                             <span class="badge bg-blue">
                                                                 <%  if (_model.LessonPriceType.SeriesID.HasValue)
                                                                     {   %>
-                                                                <%--<%= _model.LessonPriceType.Description %>--%> <%= _model.LessonPriceType.LowerLimit %>堂
+                                                                <%= _model.LessonPriceType.LowerLimit %>堂
                                                                 <%  }
                                                                     else
                                                                     {   %>
@@ -198,6 +198,8 @@
                                 </div>
                             </div>
                             <%  } %>
+                            <%  if (_model.Status >= (int)Naming.CourseContractStatus.已生效)
+                                {   %>
                             <div class="panel xl-pink">
                                 <div class="panel-heading" role="tab" id="headingInvoiceList">
                                     <h4 class="panel-title material-icons"><a role="button" data-toggle="collapse" data-parent="#accordionDetail_contract" href="#collapseInvoiceList" aria-expanded="true" aria-controls="collapseInvoiceList"><i class="material-icons">subject</i> 收款詳細資訊 </a></h4>
@@ -245,17 +247,18 @@
                                                         <div class="list_tb tb2">
                                                             <div class="list_tr">
                                                                 <div class="list_td hd">未收金額</div>
-                                                                <div class="list_td rt col-red"><%= $"{_model.TotalCost-totalPaidAmt:##,###,###,##0}" %></div>
+                                                                <div class="list_td rt col-red"><%= $"{_model.TotalCost - totalPaidAmt:##,###,###,##0}" %></div>
                                                             </div>
                                                         </div>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <div class="col-md-12 col-12">
-                                                <%  Html.RenderPartial("~/Views/ContractConsole/Module/ContractPaymentList.ascx", 
-                                                            models.GetTable<ContractPayment>()
-                                                                .Where(c => c.ContractID == _model.ContractID)
-                                                                .Select(c=>c.Payment)); %>
+                                                <%  Html.RenderPartial("~/Views/ContractConsole/Module/ContractPaymentList.ascx",
+models.GetTable<ContractPayment>()
+.Where(c => c.ContractID == _model.ContractID)
+.Select(c => c.Payment)
+.Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費)); %>
                                             </div>
                                         </div>
                                     </div>
@@ -264,9 +267,9 @@
                             <div class="panel xl-slategray">
                                 <div class="panel-heading" role="tab" id="headingLessonList">
                                     <%  var attended = _model.ContractType == (int)Naming.ContractTypeDefinition.CFA
-                                                                ? _model.RegisterLessonContract.Select(r => r.RegisterLesson).Sum(r => r.AttendedLessons)
-                                                                : _model.RegisterLessonContract.First().RegisterLesson.AttendedLessons; %>
-                                    <h4 class="panel-title material-icons"><a role="button" data-toggle="collapse" data-parent="#accordionDetail_contract" href="#collapseLessonList" aria-expanded="true" aria-controls="collapseLessonList"><i class="material-icons">subject</i> 上課詳細資訊 <%= attended>0 ? $"({attended})" : null %></a></h4>
+                                          ? _model.RegisterLessonContract.Select(r => r.RegisterLesson).Sum(r => r.AttendedLessons)
+                                          : _model.RegisterLessonContract.FirstOrDefault()?.RegisterLesson?.AttendedLessons; %>
+                                    <h4 class="panel-title material-icons"><a role="button" data-toggle="collapse" data-parent="#accordionDetail_contract" href="#collapseLessonList" aria-expanded="true" aria-controls="collapseLessonList"><i class="material-icons">subject</i> 上課詳細資訊 <%= attended > 0 ? $"({attended})" : null %></a></h4>
                                 </div>
                                 <div id="collapseLessonList" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLessonList">
                                     <div class="panel-body no-padding">
@@ -278,6 +281,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <%  } %>
                         </div>
                     </div>
                 </div>

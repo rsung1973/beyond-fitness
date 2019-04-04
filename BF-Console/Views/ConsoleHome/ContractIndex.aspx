@@ -17,8 +17,6 @@
     <link href="plugins/jquery-datatable/Responsive-2.2.2/css/responsive.bootstrap4.min.css" rel="stylesheet">
     <link href="plugins/jquery-datatable/FixedColumns-3.2.5/css/fixedColumns.bootstrap4.min.css" rel="stylesheet">
     <!-- Bootstrap Datetimepick -->
-<%--    <link href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <link href="css/datetimepicker.css" rel="stylesheet" />--%>
     <link href="plugins/smartcalendar/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="css/smartcalendar-2.css" rel="stylesheet" />
 
@@ -229,8 +227,8 @@
                 "language": {
                     "lengthMenu": "每頁顯示 _MENU_ 筆資料",
                     "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
-                    "infoEmpty": "顯示 0 到 0 筆的資料",
+                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
+                    "infoEmpty": "顯示 0 筆的資料",
                     "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
                     "loadingRecords": "快馬加鞭處理中...",
                     "processing": "快馬加鞭處理中...",
@@ -268,8 +266,8 @@
                 "language": {
                     "lengthMenu": "每頁顯示 _MENU_ 筆資料",
                     "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
-                    "infoEmpty": "顯示 0 到 0 筆的資料",
+                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
+                    "infoEmpty": "顯示 0 筆的資料",
                     "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
                     "loadingRecords": "快馬加鞭處理中...",
                     "processing": "快馬加鞭處理中...",
@@ -306,8 +304,8 @@
                 "language": {
                     "lengthMenu": "每頁顯示 _MENU_ 筆資料",
                     "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _PAGE_ / _PAGES_",
-                    "infoEmpty": "顯示 0 到 0 筆的資料",
+                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
+                    "infoEmpty": "顯示 0 筆的資料",
                     "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
                     "loadingRecords": "快馬加鞭處理中...",
                     "processing": "快馬加鞭處理中...",

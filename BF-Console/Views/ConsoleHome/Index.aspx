@@ -35,7 +35,9 @@
                         <div class="body">
                             <%  DateTime monthStart = DateTime.Today.FirstDayOfMonth();
 
-                                var selfTraining = models.PromptMemberExerciseLessons(models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID))
+                                var selfTraining = models.PromptMemberExerciseRegisterLesson()
+                                        .Where(r => r.UID == _model.UID)
+                                        .TotalLessons(models)
                                         .Where(l => l.LessonAttendance != null);
 
                                 var selfTrainingThisMonth = selfTraining.Where(l => l.ClassTime >= monthStart && l.ClassTime < DateTime.Today.AddDays(1));
@@ -195,10 +197,10 @@
         <%  if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin())
             {
                 Html.RenderPartial("~/Views/ConsoleHome/Module/AboutInvoice.ascx", _model);
-            }           %>        <!--專業文章&我的比賽-->        <%  if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin() || _model.IsServitor())
+            }           %>        <!--專業文章&我的比賽--><!--        <%  if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin() || _model.IsServitor())
             {
                 Html.RenderPartial("~/Views/ConsoleHome/Module/AboutStaff.ascx", _model);
-            }           %>    </section>
+            }           %>-->    </section>
 </asp:Content>
 
 <asp:Content ID="TailPageJavaScriptInclude" ContentPlaceHolderID="TailPageJavaScriptInclude" runat="server">
