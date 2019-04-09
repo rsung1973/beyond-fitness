@@ -6089,6 +6089,12 @@
     <Content Include="Views\ContractConsole\ContractService\ContractTransference.ascx" />
     <Content Include="Views\ContractConsole\ContractService\ContractExtension.ascx" />
     <Content Include="Views\ContractConsole\Indication\ContractDetails.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractServicesSummaryByOfficer.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractServicesSummaryByBranch.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractsByBranch.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractsByOfficer.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractServicesByManager.ascx" />
+    <Content Include="Views\ContractConsole\Module\AboutContractServicesByPureCoach.ascx" />
     <Content Include="Views\ContractConsole\Module\AboutContractServicesByCoach.ascx" />
     <Content Include="Views\ContractConsole\Module\AboutContractServicesByBranch.ascx" />
     <Content Include="Views\ContractConsole\Module\AboutContractServicesByOfficer.ascx" />
@@ -6137,7 +6143,6 @@
     <Content Include="Views\MainActivity\Module\MobileMenuItem.ascx" />
     <Content Include="Views\MainActivity\PricingList.aspx" />
     <Content Include="Views\MainActivity\Team.aspx" />
-    <Content Include="Views\MainActivity\Index.aspx" />
     <Content Include="Views\MainActivity\Module\ContactItem.ascx" />
     <Content Include="Views\MainActivity\Module\JoinItem.ascx" />
     <Content Include="Views\MainActivity\Module\MenuItem.ascx" />
@@ -6161,6 +6166,7 @@
     <Compile Include="Controllers\LessonConsoleController.cs" />
     <Compile Include="Controllers\MainActivityController.cs" />
     <Compile Include="Controllers\ReportConsoleController.cs" />
+    <Compile Include="Dummy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -6517,6 +6523,10 @@
     <Content Include="Views\ConsoleHome\Template\MainPage.Master" />
     <Content Include="Views\MainActivity\Template\MainPage.Master" />
     <Content Include="Views\MainActivity\Template\BlogPage.Master" />
+    <Content Include="Views\MainActivity\Template\BlogPage.cshtml" />
+    <Content Include="Views\MainActivity\Template\MainPage.cshtml" />
+    <Content Include="Views\MainActivity\Index.cshtml" />
+    <Content Include="Views\MainActivity\AboutUs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,52 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+
+@section ribbonContent { 
+<span class="ribbon-button-alignment">
+        <span id="refresh" class="btn btn-ribbon">
+            <i class="fa fa-cogs"></i>
+        </span>
+    </span>
+    <!-- breadcrumb -->
+    <ol class="breadcrumb">
+        <li>合約管理</li>
+        <li>服務申請</li>
+    </ol>
+    <!-- end breadcrumb --> 
+}
+@section pageTitle { 
+ 
+}
+@section mainContent { 
+@{ Html.RenderPartial("~/Views/CourseContract/Module/ApplyQuery.ascx",_model);}
+
+    @{ Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx");}
+ 
+}
+
+<script runat="server">
+
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    DailyBookingQueryViewModel _viewModel;
+    UserProfile _model;
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    }
+
+
+</script>

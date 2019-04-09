@@ -1,0 +1,51 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+
+
+<script src="@(VirtualPathUtility.ToAbsolute("~/js/plugin/morris/raphael.min.js"))"></script>
+<script src="@(VirtualPathUtility.ToAbsolute("~/js/plugin/morris/morris.min.js"))"></script>
+
+<script>
+    function drawTrendGraph(placeholder, data) {
+
+        if (!Array.isArray(data) || data.length == 0) {
+            $('#' + placeholder).html('<div class="pie_light"><span>目前尚無資料</span></div>');
+            return;
+        }
+
+        Morris.Line({
+            element: placeholder,
+            data: data,
+            xkey: 'ClassDate',
+            ykeys: ['ActionLearning', 'PostureRedress', 'Training'],
+            labels: ['動作學習', '姿勢矯正', '訓練']
+        })
+
+    }
+
+    function drawFitnessGraph(placeholder, data) {
+
+        if (!Array.isArray(data) || data.length == 0) {
+            $('#' + placeholder).html('<div class="pie_light"><span>目前尚無資料</span></div>');
+            return;
+        }
+
+        Morris.Line({
+            element: placeholder,
+            data: data,
+            xkey: 'ClassDate',
+            ykeys: ['Flexibility', 'Cardiopulmonary', 'Strength', 'Endurance', 'ExplosiveForce', 'SportsPerformance'],
+            labels: ['柔軟度', '心肺', '肌力', '肌耐力', '爆發力', '運動表現']
+        })
+
+    }
+
+</script>
