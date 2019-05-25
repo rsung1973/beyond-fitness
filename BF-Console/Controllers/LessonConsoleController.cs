@@ -28,7 +28,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using WebHome.Security.Authorization;
 
-namespace BFConsole.Controllers
+namespace WebHome.Controllers
 {
     [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
     public class LessonConsoleController : SampleController<UserProfile>
@@ -42,7 +42,7 @@ namespace BFConsole.Controllers
                 viewModel.LessonID = viewModel.DecryptKeyValue();
             }
             var item = models.GetTable<LessonTime>().Where(l => l.LessonID == viewModel.LessonID).FirstOrDefault();
-            return View("~/Views/LessonConsole/ProcessModal/ProcessCrossBranch.ascx", item);
+            return View("~/Views/LessonConsole/ProcessModal/ProcessCrossBranch.cshtml", item);
         }
 
         public ActionResult ShowTodayLessons(LessonTimeBookingViewModel viewModel)
@@ -54,7 +54,21 @@ namespace BFConsole.Controllers
             }
 
             var profile = HttpContext.GetUser();
-            return View("~/Views/LessonConsole/ProcessModal/TodayLessons.ascx", profile.LoadInstance(models));
+            if (!viewModel.BranchID.HasValue)
+            {
+                if (profile.IsManager() || profile.IsViceManager())
+                {
+                    var branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
+                            .FirstOrDefault();
+                    if (branch != null)
+                    {
+                        viewModel.BranchID = branch.BranchID;
+                        viewModel.BranchName = branch.BranchName;
+                    }
+                }
+            }
+
+            return View("~/Views/LessonConsole/ProcessModal/TodayLessons.cshtml", profile.LoadInstance(models));
         }
 
         public ActionResult CommitCrossBranch(LessonTimeBookingViewModel viewModel)
@@ -80,6 +94,27 @@ namespace BFConsole.Controllers
             models.SubmitChanges();
 
             return Json(new { result = true });
+
+        }
+
+        public ActionResult LessonContentDetails(LessonTimeBookingViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.LessonID = viewModel.DecryptKeyValue();
+            }
+
+            LessonTime item = models.GetTable<LessonTime>()
+                    .Where(l => l.LessonID == viewModel.LessonID).FirstOrDefault();
+
+            if (item == null)
+            {
+                return Json(new { result = false, message = "課程資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return View("~/Views/LessonConsole/Module/LessonContentDetails.cshtml", item);
 
         }
 

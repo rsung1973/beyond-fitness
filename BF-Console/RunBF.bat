@@ -1,0 +1,1 @@
+start "BF" "c:\Program Files\IIS Express\iisexpress.exe" /site:beyond-fitness /config:C:\Project\Github\beyond-fitness\.vs\config\applicationhost.config

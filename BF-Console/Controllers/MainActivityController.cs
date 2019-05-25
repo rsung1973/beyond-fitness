@@ -30,7 +30,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using WebHome.Security.Authorization;
 
-namespace BFConsole.Controllers
+namespace WebHome.Controllers
 {
     public class MainActivityController : SampleController<UserProfile>
     {
@@ -128,7 +128,7 @@ namespace BFConsole.Controllers
 
         public ActionResult DropifyUpload()
         {
-            return View("~/Views/ConsoleHome/Shared/DropifyUpload.ascx");
+            return View("~/Views/ConsoleHome/Shared/DropifyUpload.cshtml");
         }
 
         public ActionResult CommitArticle(BlogArticleQueryViewModel viewModel)

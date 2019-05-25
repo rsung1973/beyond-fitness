@@ -29,7 +29,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using WebHome.Security.Authorization;
 
-namespace BFConsole.Controllers
+namespace WebHome.Controllers
 {
     [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
     public class ContractConsoleController : SampleController<UserProfile>
@@ -41,9 +41,8 @@ namespace BFConsole.Controllers
             ViewBag.Contracts = result.Model;
 
             var profile = HttpContext.GetUser();
-            return View("~/Views/ConsoleHome/ContractIndex.aspx", profile.LoadInstance(models));
+            return View("~/Views/ConsoleHome/ContractIndex.cshtml", profile.LoadInstance(models));
         }
-
 
         public ActionResult InquireContract(CourseContractQueryViewModel viewModel)
         {
@@ -52,173 +51,9 @@ namespace BFConsole.Controllers
                 return InquireContractByCustom(viewModel);
             }
 
-            bool hasConditon = false;
-            var profile = HttpContext.GetUser();
-            ViewBag.ViewModel = viewModel;
+            IQueryable<CourseContract> items = viewModel.InquireContract(this, out string alertMessage);
 
-            IQueryable<CourseContract> items;
-
-            if (viewModel.ContractQueryMode == Naming.ContractServiceMode.ContractOnly)
-            {
-                if (viewModel.Status >= (int)Naming.CourseContractStatus.已生效)
-                {
-                    items = models.PromptOriginalContract();
-                }
-                else if(viewModel.PayoffMode.HasValue)
-                {
-                    items = models.PromptAccountingContract();
-                }
-                else
-                {
-                    items = models.PromptContract();
-                }
-            }
-            else if (viewModel.ContractQueryMode == Naming.ContractServiceMode.ServiceOnly)
-            {
-                items = models.PromptContractService();
-            }
-            else
-            {
-                items = models.GetTable<CourseContract>();
-            }
-
-            if (viewModel.PayoffMode == Naming.ContractPayoffMode.Unpaid)
-            {
-                hasConditon = true;
-                items = items
-                    .FilterByToPay(models);
-            }
-            else if (viewModel.PayoffMode == Naming.ContractPayoffMode.Paid)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.ContractPayment.Any());
-            }
-
-            if (viewModel.IncludeTotalUnpaid == true)
-            {
-                Expression<Func<CourseContract, bool>> expr = c => true;
-                Expression<Func<CourseContract, bool>> defaultExpr = expr;
-                if (viewModel.PayoffDueFrom.HasValue)
-                {
-                    hasConditon = true;
-                    expr = expr.And(c => c.PayoffDue >= viewModel.PayoffDueFrom);
-                }
-
-                if (viewModel.PayoffDueTo.HasValue)
-                {
-                    hasConditon = true;
-                    expr = expr.And(c => c.PayoffDue < viewModel.PayoffDueTo);
-                }
-
-                if (defaultExpr != expr)
-                {
-                    expr = expr.Or(c => !c.PayoffDue.HasValue);
-                    items = items.Where(expr);
-                }
-            }
-            else
-            {
-                if (viewModel.PayoffDueFrom.HasValue)
-                {
-                    hasConditon = true;
-                    items = items.Where(c => c.PayoffDue >= viewModel.PayoffDueFrom);
-                }
-
-                if (viewModel.PayoffDueTo.HasValue)
-                {
-                    hasConditon = true;
-                    items = items.Where(c => c.PayoffDue < viewModel.PayoffDueTo);
-                }
-            }
-
-            if (viewModel.Status.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.Status == viewModel.Status);
-            }
-
-            if (viewModel.FitnessConsultant.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.FitnessConsultant == viewModel.FitnessConsultant);
-            }
-
-            if (viewModel.ManagerID.HasValue)
-            {
-                hasConditon = true;
-                items = items.FilterByBranchStoreManager(models, viewModel.ManagerID);
-            }
-
-            if (viewModel.OfficerID.HasValue)
-            {
-                hasConditon = true;
-            }
-
-            if (viewModel.IsExpired == true)
-            {
-                hasConditon = true;
-                items = items.FilterByExpired(models);
-            }
-            else if (viewModel.IsExpired == false)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.Expiration >= DateTime.Today);
-            }
-
-            if (viewModel.EffectiveDateFrom.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.EffectiveDate >= viewModel.EffectiveDateFrom);
-            }
-
-            if (viewModel.EffectiveDateTo.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.EffectiveDate < viewModel.EffectiveDateTo);
-            }
-
-            if (viewModel.ExpirationFrom.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.Expiration >= viewModel.ExpirationFrom);
-            }
-
-            if (viewModel.ExpirationTo.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.Expiration < viewModel.ExpirationTo.Value);
-            }
-
-            if (viewModel.KeyID != null)
-            {
-                viewModel.ContractID = viewModel.DecryptKeyValue();
-            }
-            if (viewModel.ContractID.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.ContractID == viewModel.ContractID);
-            }
-
-            if(viewModel.AlarmCount.HasValue)
-            {
-                hasConditon = true;
-                items = items.FilterByAlarmedContract(models, viewModel.AlarmCount.Value);
-            }
-
-
-            if (hasConditon)
-            {
-
-            }
-            else
-            {
-                items = items.Where(c => false);
-            }
-
-            //if (viewModel.ContractType.HasValue)
-            //    items = items.Where(c => c.ContractType == viewModel.ContractType);
-
-            return View("~/Views/ContractConsole/Module/ContractList.ascx", items);
+            return View("~/Views/ContractConsole/Module/ContractList.cshtml", items);
         }
 
         public ActionResult InquireContractByCustom(CourseContractQueryViewModel viewModel)
@@ -232,11 +67,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Module/CustomContractList.ascx", items);
+            return View("~/Views/ContractConsole/Module/CustomContractList.cshtml", items);
         }
 
         public ActionResult InvokeContractQuery(CourseContractQueryViewModel viewModel)
@@ -245,7 +80,7 @@ namespace BFConsole.Controllers
             //viewModel.ContractDateTo = viewModel.ContractDateFrom.Value.AddMonths(1).AddDays(-1);
             viewModel.ByCustom = true;
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/ContractConsole/ContractModal/ContractQuery.ascx");
+            return View("~/Views/ContractConsole/ContractModal/ContractQuery.cshtml");
         }
 
         public ActionResult ProcessContract(CourseContractQueryViewModel viewModel)
@@ -258,10 +93,10 @@ namespace BFConsole.Controllers
             var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "合約資料錯誤!!");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "合約資料錯誤!!");
             }
 
-            return View("~/Views/ContractConsole/ContractModal/ProcessContract.ascx", item);
+            return View("~/Views/ContractConsole/ContractModal/ProcessContract.cshtml", item);
         }
 
         public ActionResult ProcessContractService(CourseContractQueryViewModel viewModel)
@@ -270,7 +105,7 @@ namespace BFConsole.Controllers
             CourseContract item = result.Model as CourseContract;
             if(item!=null)
             {
-                result.ViewName = "~/Views/ContractConsole/ContractModal/ProcessContractService.ascx";
+                result.ViewName = "~/Views/ContractConsole/ContractModal/ProcessContractService.cshtml";
             }
             return result;
         }
@@ -286,20 +121,22 @@ namespace BFConsole.Controllers
                 return result;
             }
 
-            return View("~/Views/ContractConsole/ContractModal/AboutContractDetails.ascx", item);
+            return View("~/Views/ContractConsole/ContractModal/AboutContractDetails.cshtml", item);
         }
 
         public ActionResult SelectCoach()
         {
             var profile = HttpContext.GetUser();
-            IQueryable<ServingCoach> items = models.GetTable<ServingCoach>();
+            IQueryable<ServingCoach> items = models.GetTable<ServingCoach>()
+                .Join(models.GetTable<UserProfile>().Where(u => u.LevelID != (int)Naming.MemberStatus.已停用), 
+                    s => s.CoachID, u => u.UID, (s, u) => s);
             if (profile.IsOfficer() || profile.IsAssistant() || profile.IsSysAdmin())
             {
 
             }
             else if (profile.IsManager() || profile.IsViceManager())
             {
-                items = profile.GetServingCoachInSameStore(models);
+                items = profile.GetServingCoachInSameStore(models, items);
             }
             else if (profile.IsCoach())
             {
@@ -310,7 +147,7 @@ namespace BFConsole.Controllers
                 items = items.Where(c => false);
             }
 
-            return View("~/Views/ContractConsole/ContractModal/SelectCoach.ascx", items);
+            return View("~/Views/ContractConsole/ContractModal/SelectCoach.cshtml", items);
         }
 
         public ActionResult CommitContract(CourseContractViewModel viewModel)
@@ -324,11 +161,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/CourseContractCommitted.ascx", item);
+            return View("~/Views/ContractConsole/Editing/CourseContractCommitted.cshtml", item);
         }
 
         public ActionResult SaveContract(CourseContractViewModel viewModel)
@@ -342,11 +179,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/CourseContractSaved.ascx", item);
+            return View("~/Views/ContractConsole/Editing/CourseContractSaved.cshtml", item);
         }
 
         public ActionResult ListLessonPrice(CourseContractQueryViewModel viewModel)
@@ -371,7 +208,7 @@ namespace BFConsole.Controllers
                 .Where(p => p.BranchID == viewModel.BranchID)
                 .Where(l => !l.DurationInMinutes.HasValue || l.DurationInMinutes == viewModel.DurationInMinutes);
 
-            return View("~/Views/ContractConsole/ContractModal/ListLessonPrice.ascx", items);
+            return View("~/Views/ContractConsole/ContractModal/ListLessonPrice.cshtml", items);
         }
 
         public ActionResult CalculateTotalCost(CourseContractQueryViewModel viewModel)
@@ -381,7 +218,7 @@ namespace BFConsole.Controllers
             var item = models.GetTable<LessonPriceType>().Where(p => p.PriceID == viewModel.PriceID).FirstOrDefault();
             viewModel.TotalCost = item?.ListPrice * viewModel.Lessons;
 
-            return View("~/Views/ContractConsole/Editing/TotalCostSummary.ascx");
+            return View("~/Views/ContractConsole/Editing/TotalCostSummary.cshtml");
         }
 
         public ActionResult ListContractMember(CourseContractQueryViewModel viewModel)
@@ -392,7 +229,7 @@ namespace BFConsole.Controllers
                 viewModel.UID = viewModel.UID.Distinct().ToArray();
             }
 
-            return View("~/Views/ContractConsole/Editing/ListContractMember.ascx");
+            return View("~/Views/ContractConsole/Editing/ListContractMember.cshtml");
         }
 
         public ActionResult SearchContractMember(String userName)
@@ -402,20 +239,20 @@ namespace BFConsole.Controllers
             {
                 this.ModelState.AddModelError("userName", "請輸入查詢學員!!");
                 ViewBag.ModelState = this.ModelState;
-                return View("~/Views/ConsoleHome/Shared/ReportInputError.ascx");
+                return View("~/Views/ConsoleHome/Shared/ReportInputError.cshtml");
             }
 
-            var items = userName.PromptLearnerByName(models);
+            var items = userName.PromptLearnerByName(models, true);
 
             if (items.Count() > 0)
-                return View("~/Views/ContractConsole/ContractModal/SelectContractMember.ascx", items);
+                return View("~/Views/ContractConsole/ContractModal/SelectContractMember.cshtml", items);
             else
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "Opps！您確定您輸入的資料正確嗎！？");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "Opps！您確定您輸入的資料正確嗎！？");
         }
 
         public ActionResult ProcessContractMember(int uid)
         {
-            return View("~/Views/ContractConsole/ContractModal/ProcessContractMember.ascx", uid);
+            return View("~/Views/ContractConsole/ContractModal/ProcessContractMember.cshtml", uid);
         }
 
         public ActionResult EditContractMember(ContractMemberViewModel viewModel)
@@ -425,7 +262,7 @@ namespace BFConsole.Controllers
             UserProfile item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "Opps！您確定您輸入的資料正確嗎！？");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "Opps！您確定您輸入的資料正確嗎！？");
             }
 
             viewModel.Gender = item.UserProfileExtension.Gender;
@@ -441,7 +278,7 @@ namespace BFConsole.Controllers
             viewModel.Address = item.Address;
             viewModel.Nickname = item.Nickname;
 
-            return View("~/Views/ContractConsole/ContractModal/EditContractMember.ascx");
+            return View("~/Views/ContractConsole/ContractModal/EditContractMember.cshtml");
         }
 
         public ActionResult CommitContractMember(ContractMemberViewModel viewModel)
@@ -455,22 +292,24 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/ContractMemberCommitted.ascx", item);
+            return View("~/Views/ContractConsole/Editing/ContractMemberCommitted.cshtml", item);
 
         }
 
         public ActionResult SignaturePanel(CourseContractSignatureViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/ContractConsole/ContractModal/SignaturePanel.ascx");
+            return View("~/Views/ContractConsole/ContractModal/SignaturePanel.cshtml");
         }
 
         public ActionResult ExecuteContractStatus(CourseContractViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
+
             var item = viewModel.ExecuteContractStatus(this, out String alertMessage);
             if (item == null)
             {
@@ -480,22 +319,23 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/ContractStatusChanged.ascx", item);
+            return View("~/Views/ContractConsole/Editing/ContractStatusChanged.cshtml", item);
         }
 
         public ActionResult EnableContractAmendment(CourseContractViewModel viewModel)
         {
-            var item = viewModel.EnableContractAmendment(this, out String alertMessage, null);
+            ViewBag.ViewModel = viewModel;
+            var item = viewModel.EnableContractAmendment(this, out String alertMessage, viewModel.FromStatus);
             if (item == null)
             {
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
             }
 
-            return View("~/Views/ContractConsole/Editing/ContractStatusChanged.ascx", item);
+            return View("~/Views/ContractConsole/Editing/ContractStatusChanged.cshtml", item);
         }
 
         public ActionResult ConfirmSignature(CourseContractViewModel viewModel)
@@ -509,11 +349,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/CourseContractSigned.ascx", item);
+            return View("~/Views/ContractConsole/Editing/CourseContractSigned.cshtml", item);
         }
 
         public ActionResult ConfirmContractServiceSignature(CourseContractViewModel viewModel)
@@ -527,11 +367,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/CourseContractSigned.ascx", item);
+            return View("~/Views/ContractConsole/Editing/CourseContractSigned.cshtml", item);
         }
 
         public ActionResult EnableContractStatus(CourseContractViewModel viewModel)
@@ -547,15 +387,15 @@ namespace BFConsole.Controllers
                 var pdfFile = item.MakeContractEffective(models, profile, Naming.CourseContractStatus.待審核);
                 if (pdfFile == null)
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "合約狀態錯誤，請重新檢查!!");
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "合約狀態錯誤，請重新檢查!!");
                 }
                 else
                 {
-                    return View("~/Views/ContractConsole/Editing/CourseContractSigned.ascx", item);
+                    return View("~/Views/ContractConsole/Editing/CourseContractSigned.cshtml", item);
                 }
             }
             else
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "合約資料錯誤!!");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "合約資料錯誤!!");
         }
 
         public ActionResult CommitContractService(CourseContractViewModel viewModel)
@@ -569,11 +409,11 @@ namespace BFConsole.Controllers
                 }
                 else
                 {
-                    return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: alertMessage);
+                    return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/ContractServiceCommitted.ascx", item);
+            return View("~/Views/ContractConsole/Editing/ContractServiceCommitted.cshtml", item);
         }
 
         public ActionResult SearchContractOwner(String userName)
@@ -582,13 +422,12 @@ namespace BFConsole.Controllers
 
             if (result.Model is IQueryable<UserProfile> items)
             {
-                result.ViewName = "~/Views/ContractConsole/ContractModal/SelectContractOwner.ascx";
+                result.ViewName = "~/Views/ContractConsole/ContractModal/SelectContractOwner.cshtml";
             }
 
             return result;
 
         }
-
 
     }
 }

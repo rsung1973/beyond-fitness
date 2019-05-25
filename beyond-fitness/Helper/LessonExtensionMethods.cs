@@ -326,6 +326,20 @@ namespace WebHome.Helper
             return items.Where(l => l.TrainingBySelf == 1);
         }
 
+        public static IQueryable<LessonTime> STLesson(this IQueryable<LessonTime> items)
+        {
+            return items.Where(l => l.TrainingBySelf == 2);
+        }
+
+
+        public static IQueryable<LessonTime> LearnerPILesson(this IQueryable<LessonTime> items)
+        {
+            return items.PILesson()
+                .Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練
+                    || (l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練));
+        }
+
+
 
         public static bool IsPISession(this LessonTime item)
         {
@@ -402,7 +416,8 @@ namespace WebHome.Helper
 
             if (!item.ContractTrustTrack.Any(s => s.SettlementID.HasValue))
             {
-                if (item.GroupingLesson.RegisterLesson.Any(r => r.RegisterLessonContract != null && r.RegisterLessonContract.CourseContract.RevisionList.Where(v => v.Reason != "展延").Count() > 0))
+                if (item.GroupingLesson.RegisterLesson.Any(r => r.RegisterLessonContract != null && r.RegisterLessonContract.CourseContract.RevisionList
+                    .Where(v => v.Reason != "展延" && v.Reason != "轉換體能顧問").Count() > 0))
                 {
                     return false;
                 }
@@ -501,6 +516,14 @@ namespace WebHome.Helper
                 .Join(models.GetTable<QuestionnaireRequest>(),
                     r => r.RegisterID, q => q.RegisterID, (r, q) => q)
                 .Where(q => !q.Status.HasValue && !q.PDQTask.Any());
+        }
+
+        public static IQueryable<LessonTime> PromptLearnerLessons<TEntity>(this int learnerID, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<RegisterLesson>().Where(u => u.UID == learnerID)
+                .Join(models.GetTable<GroupingLesson>(), r => r.RegisterGroupID, g => g.GroupID, (r, g) => g)
+                .Join(models.GetTable<LessonTime>(), g => g.GroupID, l => l.GroupID, (g, l) => l);
         }
 
         public static void ProcessBookingWhenCrossBranch<TEntity>(this LessonTime item, ModelSource<TEntity> models)

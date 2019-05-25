@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
-<%@ Import Namespace="BFConsole.Views.MainActivity.Resources" %>
+<%@ Import Namespace="WebHome.Views.MainActivity.Resources" %>
 
 <section class="section-contact">
         <div class="container">

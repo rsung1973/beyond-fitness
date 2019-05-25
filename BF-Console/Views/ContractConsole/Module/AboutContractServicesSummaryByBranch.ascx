@@ -18,7 +18,7 @@
             %>
             <h5 class="m-t-0">服務申請</h5>
             <p class="text-small">
-                今日：<a onclick='showContractList(<%= JsonConvert.SerializeObject(
+                今日：<a href="#" onclick='showContractList(<%= JsonConvert.SerializeObject(
                                 new 
                                 {
                                     ContractQueryMode = Naming.ContractServiceMode.ServiceOnly,
@@ -32,7 +32,7 @@
                     var weekStart = DateTime.Today.FirstDayOfWeek();
                     currentItems = items.Where(c => c.EffectiveDate >= weekStart && c.EffectiveDate < weekStart.AddDays(7));
                     %>
-                本週：<a onclick='showContractList(<%= JsonConvert.SerializeObject(
+                本週：<a href="#" onclick='showContractList(<%= JsonConvert.SerializeObject(
                                 new 
                                 {
                                     ContractQueryMode = Naming.ContractServiceMode.ServiceOnly,
@@ -42,23 +42,8 @@
                                     EffectiveDateTo = weekStart.AddDays(7),
                                 }) %>,<%= currentItems.Count() %>);'><%= currentItems.Count() %></a>
                 <br />
-                <%
-                    currentItems = items.Where(c => c.EffectiveDate >= monthStart && c.EffectiveDate < monthStart.AddMonths(1));
-                %>
-                本月：<a onclick='showContractList(<%= JsonConvert.SerializeObject(
-                                new 
-                                {
-                                    ContractQueryMode = Naming.ContractServiceMode.ServiceOnly,
-                                    ManagerID = _model.UID,
-                                    Status = (int)Naming.CourseContractStatus.已生效,
-                                    EffectiveDateFrom = monthStart,
-                                    EffectiveDateTo = monthStart.AddMonths(1),
-                                }) %>,<%= currentItems.Count() %>);'><%= currentItems.Count() %></a>
-            </p>
-        </div>
-        <div class="col-4 text-right">
-            <%  currentItems = items.Where(c => c.EffectiveDate >= monthStart.AddMonths(-1) && c.EffectiveDate < monthStart); %>
-            <a onclick='showContractList(<%= JsonConvert.SerializeObject(
+                <%  currentItems = items.Where(c => c.EffectiveDate >= monthStart.AddMonths(-1) && c.EffectiveDate < monthStart); %>                
+                上月：<a href="#" onclick='showContractList(<%= JsonConvert.SerializeObject(
                                 new 
                                 {
                                     ContractQueryMode = Naming.ContractServiceMode.ServiceOnly,
@@ -66,10 +51,25 @@
                                     Status = (int)Naming.CourseContractStatus.已生效,
                                     EffectiveDateFrom = monthStart.AddMonths(-1),
                                     EffectiveDateTo = monthStart,
+                                }) %>,<%= currentItems.Count() %>);'><%= currentItems.Count() %></a>
+            </p>
+        </div>
+        <div class="col-4 text-right">
+            <%
+                    currentItems = items.Where(c => c.EffectiveDate >= monthStart && c.EffectiveDate < monthStart.AddMonths(1));
+                %>
+            <a href="#" onclick='showContractList(<%= JsonConvert.SerializeObject(                                
+                                new 
+                                {
+                                    ContractQueryMode = Naming.ContractServiceMode.ServiceOnly,
+                                    ManagerID = _model.UID,
+                                    Status = (int)Naming.CourseContractStatus.已生效,
+                                    EffectiveDateFrom = monthStart,
+                                    EffectiveDateTo = monthStart.AddMonths(1),
                                 }) %>,<%= currentItems.Count() %>);'>
                 <h2><%= currentItems.Count() %></h2>
             </a>
-            <small class="info">上月</small>
+            <small class="info">本月</small>
         </div>
     </div>
 </div>

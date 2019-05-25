@@ -1319,23 +1319,33 @@ namespace WebHome.Helper
             return items;
         }
 
+        public static Func<CourseContract, string> ContractViewUrl { get; set; } = item => 
+            {
+                return $"{Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContract")}?pdf=1&contractID={item.ContractID}";
+            };
+
         public static String CreateContractPDF(this CourseContract item, bool createNew = false)
         {
             String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.ContractNo + ".pdf");
             if (createNew == true || !File.Exists(pdfFile))
             {
-                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContract") + "?pdf=1&contractID=" + item.ContractID;
+                String viewUrl = ContractViewUrl(item);
                 viewUrl.ConvertHtmlToPDF(pdfFile, 20);
             }
             return pdfFile;
         }
+
+        public static Func<CourseContractRevision, string> ContractServiceViewUrl { get; set; } = item =>
+        {
+            return $"{Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment")}?pdf=1&revisionID={item.RevisionID}";
+        };
 
         public static String CreateContractAmendmentPDF(this CourseContractRevision item, bool createNew = false)
         {
             String pdfFile = Path.Combine(GlobalDefinition.ContractPdfPath, item.CourseContract.ContractNo() + ".pdf");
             if (createNew == true || !File.Exists(pdfFile))
             {
-                String viewUrl = Settings.Default.HostDomain + VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContractAmendment") + "?pdf=1&revisionID=" + item.RevisionID;
+                String viewUrl = ContractServiceViewUrl(item);
                 viewUrl.ConvertHtmlToPDF(pdfFile, 20);
             }
             return pdfFile;
@@ -1391,10 +1401,12 @@ namespace WebHome.Helper
                             .Any(m => m.CourseContract.Status >= (int)Naming.CourseContractStatus.已生效);
         }
 
-        public static IQueryable<ServingCoach> GetServingCoachInSameStore<TEntity>(this UserProfile profile, ModelSource<TEntity> models)
+        public static IQueryable<ServingCoach> GetServingCoachInSameStore<TEntity>(this UserProfile profile, ModelSource<TEntity> models, IQueryable<ServingCoach> items = null)
             where TEntity : class, new()
         {
-            return models.GetTable<ServingCoach>()
+            if (items == null)
+                items = models.GetTable<ServingCoach>();
+            return items
                 .Join(models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
                                             .Join(models.GetTable<CoachWorkplace>(),
                                                 b => b.BranchID, w => w.BranchID, (b, w) => w),
@@ -1671,6 +1683,7 @@ namespace WebHome.Helper
         {
             return models.GetTable<LessonTime>()
                 .Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.在家訓練)
+                .Where(l => l.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.教練PI)
                 .Where(l => l.GroupingLesson.RegisterLesson.Any(r => r.UID == profile.UID))
                 .GetLearnerUncheckedLessons(includeAfterToday);
         }

@@ -244,6 +244,11 @@ namespace WebHome.Models.Locale
             已生效 = 1205,
         }
 
+        public enum OperationMode
+        {
+            快速終止 = 1,
+        }
+
 
 
         public enum VoidPaymentStatus

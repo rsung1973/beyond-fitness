@@ -28,7 +28,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using WebHome.Security.Authorization;
 
-namespace BFConsole.Controllers
+namespace WebHome.Controllers
 {
     [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
     public class ConsoleEventController : SampleController<UserProfile>
@@ -46,10 +46,10 @@ namespace BFConsole.Controllers
             var item = models.GetTable<LessonTime>().Where(l => l.LessonID == viewModel.LessonID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "課程資料錯誤!!");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "課程資料錯誤!!");
             }
 
-            return View("~/Views/ConsoleEvent/EventModal/LessonItem.ascx", item);
+            return View("~/Views/ConsoleEvent/EventModal/LessonItem.cshtml", item);
         }
 
         public ActionResult ShowUserEventModal(CalendarEventQueryViewModel viewModel)
@@ -64,10 +64,10 @@ namespace BFConsole.Controllers
             var item = models.GetTable<UserEvent>().Where(l => l.EventID == viewModel.EventID).FirstOrDefault();
             if (item == null)
             {
-                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "自訂行事曆資料錯誤!!");
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "自訂行事曆資料錯誤!!");
             }
 
-            return View("~/Views/ConsoleEvent/EventModal/UserEvent.ascx", item);
+            return View("~/Views/ConsoleEvent/EventModal/UserEvent.cshtml", item);
         }
 
         public ActionResult RevokeBooking(CalendarEventQueryViewModel viewModel)
@@ -130,7 +130,7 @@ namespace BFConsole.Controllers
         public ActionResult AddEvent(CalendarEventQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/ConsoleEvent/EventModal/AddEvent.ascx");
+            return View("~/Views/ConsoleEvent/EventModal/AddEvent.cshtml");
         }
 
         public ActionResult AttendeeSelector(CalendarEventQueryViewModel viewModel)
@@ -142,7 +142,7 @@ namespace BFConsole.Controllers
             {
                 this.ModelState.AddModelError("userName", "請輸入查詢學員!!");
                 ViewBag.ModelState = this.ModelState;
-                return View("~/Views/ConsoleHome/Shared/ReportInputError.ascx");
+                return View("~/Views/ConsoleHome/Shared/ReportInputError.cshtml");
             }
 
             //var lessons = models.GetTable<RegisterLesson>()
@@ -154,7 +154,7 @@ namespace BFConsole.Controllers
             var items = viewModel.UserName.PromptLearnerByName(models, true);
 
             if (items.Count() > 0)
-                return View("~/Views/ConsoleEvent/EventModal/AttendeeSelector.ascx", items);
+                return View("~/Views/ConsoleEvent/EventModal/AttendeeSelector.cshtml", items);
             else
                 return Json(new { result = false, message = "Opps！您確定您輸入的資料正確嗎！？" },JsonRequestBehavior.AllowGet);
         }
@@ -173,7 +173,7 @@ namespace BFConsole.Controllers
                 return Json(new { result = false, message = "學員資料錯誤!!" });
             }
 
-            return View("~/Views/ConsoleEvent/EventModal/BookingLesson.ascx", item);
+            return View("~/Views/ConsoleEvent/EventModal/BookingLesson.cshtml", item);
 
         }
 
@@ -193,7 +193,7 @@ namespace BFConsole.Controllers
                 viewModel.CoachID = item.AttendingCoach;
                 viewModel.RegisterID = item.RegisterID;
             }
-            return View("~/Views/ConsoleEvent/EventModal/BookingCoachPI.ascx", item);
+            return View("~/Views/ConsoleEvent/EventModal/BookingCoachPI.cshtml", item);
 
         }
 
@@ -233,7 +233,7 @@ namespace BFConsole.Controllers
                 viewModel.UID = profile.UID;
             }
 
-            return View("~/Views/ConsoleEvent/EventModal/BookingCustomEvent.ascx");
+            return View("~/Views/ConsoleEvent/EventModal/BookingCustomEvent.cshtml");
         }
 
     }

@@ -8,7 +8,7 @@
 <%@ Import Namespace="WebHome.Models.DataEntity" %>
 <%@ Import Namespace="WebHome.Controllers" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
-<%@ Import Namespace="BFConsole.Views.MainActivity.Resources" %>
+<%@ Import Namespace="WebHome.Views.MainActivity.Resources" %>
 
 <li><a href="<%= Url.Action("AboutUs") %>"><%: NamingItem.AboutUs %></a></li>
 <li><a href="<%= Url.Action("FindUs") %>"><%: NamingItem.FindUs %></a></li>

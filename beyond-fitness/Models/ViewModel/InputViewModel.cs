@@ -54,6 +54,11 @@ namespace WebHome.Models.ViewModel
         public bool? Extension { get; set; }
         public bool? Booking { get; set; }
         public bool? Cancel { get; set; }
+        public String PriceName { get; set; }
+        public int? InstallmentID { get; set; }
+        public int? ManagerID { get; set; }
+        public Naming.OperationMode? OperationMode { get; set; }
+
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -76,7 +81,6 @@ namespace WebHome.Models.ViewModel
         public Naming.ContractPayoffMode? PayoffMode { get; set; }
         public DateTime? PayoffDueFrom { get; set; }
         public DateTime? PayoffDueTo { get; set; }
-        public int? ManagerID { get; set; }
         public int? OfficerID { get; set; }
         public bool? ScrollToView { get; set; }
         public bool? ByCustom { get; set; }

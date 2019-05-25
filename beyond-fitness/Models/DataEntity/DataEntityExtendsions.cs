@@ -195,6 +195,13 @@ namespace WebHome.Models.DataEntity
             return item.Nickname == null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
         }
 
+        public static String FullNameHtml(this UserProfile profile)
+        {
+            return String.Concat($"<span class='hidden-sm-down'>{profile.RealName}",
+                        !String.IsNullOrEmpty(profile.Nickname) ? $"<span class='small'>({profile.Nickname})</span>" : null,
+                        "</span>");
+        }
+
         public static String MaskedName(this String name)
         {
             if (name == null || name.Length < 2)
@@ -278,6 +285,16 @@ namespace WebHome.Models.DataEntity
                     || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉點餘額)
                 .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue)
                 .Sum(c => c.PayoffAmount);
+        }
+
+        public static int? TotalPayoffCount(this CourseContract contract)
+        {
+            return contract.ContractPayment
+                .Select(c => c.Payment)
+                .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉讓餘額
+                    || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉點餘額)
+                .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue).Count();
         }
 
         public static decimal? TotalAllowanceAmount(this CourseContract contract)
@@ -366,6 +383,11 @@ namespace WebHome.Models.DataEntity
                         : item.Description;
         }
 
+        public static int? SeriesSingleLessonPrice(this LessonPriceType item)
+        {
+            return item.CurrentPriceSeries?.AllLessonPrice.Where(p => p.LowerLimit == 1).FirstOrDefault()?.ListPrice;
+        }
+
     }
 
     public partial class UserProfile
@@ -379,8 +401,6 @@ namespace WebHome.Models.DataEntity
         }
 
         public int? DailyQuestionID { get; set; }
-
-        public String ReportInputError { get; set; } = WebHome.Properties.Settings.Default.ReportInputError;
 
     }
 

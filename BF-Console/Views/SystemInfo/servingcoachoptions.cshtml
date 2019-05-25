@@ -7,25 +7,20 @@
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
-
-@foreach (var item in _model)
-    {
-<option value="@(item.CoachID)">@(item.UserProfile.FullName())</option>
-}
-
-
-<script runat="server">
+@{
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     IQueryable<ServingCoach> _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<ServingCoach>)this.Model;
-    }
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<ServingCoach>)this.Model;
+}
+@foreach (var item in _model)
+{
+    <option value="@(item.CoachID)">@(item.UserProfile.FullName())</option>
+}
 
-</script>
+
+

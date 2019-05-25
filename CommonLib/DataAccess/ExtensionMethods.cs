@@ -14,24 +14,38 @@ namespace CommonLib.DataAccess
         {
             DataTable tbl = new DataTable();
             PropertyInfo[] props = null;
+            Type t = typeof(T);
+            props = t.GetProperties();
+            foreach (PropertyInfo pi in props)
+            {
+                Type colType = pi.PropertyType;
+                //針對Nullable<>特別處理
+                if (colType.IsGenericType && colType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    colType = colType.GetGenericArguments()[0];
+                }
+                //建立欄位
+                tbl.Columns.Add(pi.Name, colType);
+            }
+
             foreach (T item in query)
             {
-                if (props == null) //尚未初始化
-                {
-                    Type t = item.GetType();
-                    props = t.GetProperties();
-                    foreach (PropertyInfo pi in props)
-                    {
-                        Type colType = pi.PropertyType;
-                        //針對Nullable<>特別處理
-                        if (colType.IsGenericType && colType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                        {
-                            colType = colType.GetGenericArguments()[0];
-                        }
-                        //建立欄位
-                        tbl.Columns.Add(pi.Name, colType);
-                    }
-                }
+                //if (props == null) //尚未初始化
+                //{
+                //    Type t = item.GetType();
+                //    props = t.GetProperties();
+                //    foreach (PropertyInfo pi in props)
+                //    {
+                //        Type colType = pi.PropertyType;
+                //        //針對Nullable<>特別處理
+                //        if (colType.IsGenericType && colType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                //        {
+                //            colType = colType.GetGenericArguments()[0];
+                //        }
+                //        //建立欄位
+                //        tbl.Columns.Add(pi.Name, colType);
+                //    }
+                //}
                 DataRow row = tbl.NewRow();
                 foreach (PropertyInfo pi in props)
                 {

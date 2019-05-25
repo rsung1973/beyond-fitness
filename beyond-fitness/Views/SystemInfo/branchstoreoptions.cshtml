@@ -7,32 +7,27 @@
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
-
-@{ IQueryable<BranchStore> items= (IQueryable<BranchStore>)ViewBag.DataItems ?? models.GetTable<BranchStore>();}
- @if (ViewBag.IntentStore!=null)
-    {
-        int[] branchID = (int[])ViewBag.IntentStore;
-        items = items.Where(b => branchID.Contains(b.BranchID));
-    }
-
-    @foreach (var b in items)
-    {
-<option value="@(b.BranchID)" @(_model == b.BranchID ? "selected": null)>@(b.BranchName)</option>
-}
-
-
-<script runat="server">
+@{
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     int? _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = this.Model as int?;
-    }
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = this.Model as int?;
+}
+@{ IQueryable<BranchStore> items = (IQueryable<BranchStore>)ViewBag.DataItems ?? models.GetTable<BranchStore>();}
+@if (ViewBag.IntentStore != null)
+{
+    int[] branchID = (int[])ViewBag.IntentStore;
+    items = items.Where(b => branchID.Contains(b.BranchID));
+}
 
-</script>
+@foreach (var b in items)
+{
+    <option value="@(b.BranchID)" @(_model == b.BranchID ? "selected" : null)>@(b.BranchName)</option>
+}
+
+
+

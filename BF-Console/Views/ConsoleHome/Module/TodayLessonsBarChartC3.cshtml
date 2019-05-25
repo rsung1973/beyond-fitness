@@ -1,0 +1,278 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    string _chartID = "lessonsBar" + DateTime.Now.Ticks;
+    IEnumerable<int> _hourIdx;
+    LessonTimeBookingViewModel _viewModel;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+    _hourIdx = Enumerable.Range(7, 16);
+    _viewModel = (LessonTimeBookingViewModel)ViewBag.ViewModel;
+}
+
+@{
+    var items = models.GetTable<LessonTime>().Where(l => l.ClassTime >= _viewModel.ClassTimeStart && l.ClassTime < _viewModel.ClassTimeStart.Value.AddDays(1));
+    if (_viewModel.BranchID.HasValue)
+    {
+        items = items.Where(l => l.BranchID == _viewModel.BranchID);
+    }
+
+    var PTLessons = items.PTLesson()
+            .Select(l => new { Hour = l.ClassTime.Value.Hour, Persons = l.GroupingLesson.RegisterLesson.Count })
+            .GroupBy(h => h.Hour)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Sum(p => p.Persons) })
+            .ToList();
+    var PILessons = items.Where(l => l.TrainingBySelf == 1)
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+    var TrialLessons = items.TrialLesson()
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+
+    var totalData = getDistribution(PTLessons, _hourIdx).ToArray();
+    var tempData = getDistribution(PILessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+    tempData = getDistribution(TrialLessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+}
+<div id="@(_chartID)" class="c3 m-t-20 lessonBar"></div>
+<script>
+
+    var totalData = @Html.Raw(JsonConvert.SerializeObject(totalData));
+    $(function () {
+        c3.chart.internal.fn.additionalConfig = {
+                bar_radiusAll: false,
+                bar_radius: 8,
+                tooltip_format_color: undefined
+
+            };
+
+            c3.chart.internal.fn.generateDrawBar = function(barIndices, isSub) {
+                var $$ = this,
+                    config = $$.config,
+                    getPoints = $$.generateGetBarPoints(barIndices, isSub);
+                return function(d, i) {
+                    // 4 points that make a bar
+                    var points = getPoints(d, i),
+                        groups = config.data_groups,
+                        path = '';
+                    // switch points if axis is rotated, not applicable for sub chart
+                    var indexX = config.axis_rotated ? 1 : 0;
+                    var indexY = config.axis_rotated ? 0 : 1;
+                    var bar_radius = config.bar_radius;
+                    var bar_radiusAll = config.bar_radiusAll;
+                    if (groups && groups.length > 0) {
+                        var lastGrps = [];
+                        groups.forEach(function(group) {
+                            lastGrps.push(group[group.length - 1]);
+                        });
+                        //if(points[0][1] < points[1][1] || points[0][0] > points[1][0] ) {
+                        //  bar_radius = bar_radius*-1;
+                        //}
+                        if ((points[0][1] === points[1][1]) && (points[1][1] === points[2][1]) && (points[2][1] === points[3][1]) ||
+                            (points[0][0] === points[1][0]) && (points[1][0] === points[2][0]) && (points[2][0] === points[3][0])) {
+                            path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                'L' + points[1][indexX] + ',' + (points[1][indexY]) + ' ' +
+                                'L' + (points[2][indexX]) + ',' + points[2][indexY] + ' ' +
+                                'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                'z';
+                            return path;
+                        }
+                        if (lastGrps.indexOf(d.id) > -1 && (config.data_order === null)) {
+                            if (config.axis_rotated) {
+                                path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                    'L' + (points[1][indexX] - bar_radius) + ',' + points[1][indexY] + ' ' +
+                                    'Q' + points[1][indexX] + ',' + points[1][indexY] + ' ' + points[1][indexX] + ',' + (points[1][indexY] + bar_radius) + ' ' +
+                                    'L' + points[2][indexX] + ',' + (points[2][indexY] - bar_radius) + ' ' +
+                                    'Q' + points[2][indexX] + ',' + points[2][indexY] + ' ' + (points[2][indexX] - bar_radius) + ',' + points[2][indexY] + ' ' +
+                                    'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                    'z';
+                            } else {
+                                path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                    'L' + points[1][indexX] + ',' + (points[1][indexY] + bar_radius) + ' ' +
+                                    'Q' + points[1][indexX] + ',' + points[1][indexY] + ' ' + (points[1][indexX] + bar_radius) + ',' + points[1][indexY] + ' ' +
+                                    'L' + (points[2][indexX] - bar_radius) + ',' + points[2][indexY] + ' ' +
+                                    'Q' + points[2][indexX] + ',' + points[2][indexY] + ' ' + points[2][indexX] + ',' + (points[2][indexY] + bar_radius) + ' ' +
+                                    'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                    'z';
+                            }
+                        } else {
+                            if (bar_radiusAll) {
+                                path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                    'L' + (points[1][indexX] + bar_radius) + ',' + (points[1][indexY]) + ' ' +
+                                    'Q' + points[1][indexX] + ',' + points[1][indexY] + ' ' + (points[1][indexX]) + ',' + (points[1][indexY] + bar_radius) + ' ' +
+                                    'L' + (points[2][indexX]) + ',' + (points[2][indexY] - bar_radius) + ' ' +
+                                    'Q' + points[2][indexX] + ',' + points[2][indexY] + ' ' + (points[2][indexX] + bar_radius) + ',' + (points[2][indexY]) + ' ' +
+                                    'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                    'z';
+                            } else {
+                                path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                    'L' + points[1][indexX] + ',' + (points[1][indexY]) + ' ' +
+                                    'L' + (points[2][indexX]) + ',' + points[2][indexY] + ' ' +
+                                    'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                    'z';
+                            }
+                        }
+                    } else {
+                        /*path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                         'L' + points[1][indexX] + ',' + (points[1][indexY]) + ' ' +
+                         'L' + (points[2][indexX]) + ',' + points[2][indexY] + ' ' +
+                         'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                         'z';*/
+                        if (config.axis_rotated) {
+                            path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                'L' + (points[1][indexX] - bar_radius) + ',' + points[1][indexY] + ' ' +
+                                'Q' + points[1][indexX] + ',' + points[1][indexY] + ' ' + points[1][indexX] + ',' + (points[1][indexY] + bar_radius) + ' ' +
+                                'L' + points[2][indexX] + ',' + (points[2][indexY] - bar_radius) + ' ' +
+                                'Q' + points[2][indexX] + ',' + points[2][indexY] + ' ' + (points[2][indexX] - bar_radius) + ',' + points[2][indexY] + ' ' +
+                                'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                'z';
+                        } else {
+                            path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
+                                'L' + points[1][indexX] + ',' + (points[1][indexY] + bar_radius) + ' ' +
+                                'Q' + points[1][indexX] + ',' + points[1][indexY] + ' ' + (points[1][indexX] + bar_radius) + ',' + points[1][indexY] + ' ' +
+                                'L' + (points[2][indexX] - bar_radius) + ',' + points[2][indexY] + ' ' +
+                                'Q' + points[2][indexX] + ',' + points[2][indexY] + ' ' + points[2][indexX] + ',' + (points[2][indexY] + bar_radius) + ' ' +
+                                'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
+                                'z';
+                        }
+                    }
+                    return path;
+                };
+            };
+        var chart = c3.generate({
+            bindto: '#@(_chartID)', // id of chart wrapper
+            data: {
+                columns: [
+                    // each columns data
+                    ['data1'],
+                    ['data2'],
+                    ['data3'],
+                ],
+                order: null,
+                type: 'bar', // default type of chart
+                groups: [
+                    ['data1', 'data2', 'data3']
+                ],
+                colors: {
+                    'data1': '#F58FB0',
+                    'data2': '#C5E1A7',
+                    'data3': '#FFCC84'
+                },
+                names: {
+                    // name of each serie
+                    'data1': 'T.S',
+                    'data2': 'P.I',
+                    'data3': 'P.T'
+                },
+                labels: {
+                        format: {
+                            data3: function(v, id, i, j) {
+                                return totalData[i];
+                            },
+                        }
+                    },
+            },
+            axis: {
+                x: {
+                    type: 'category',
+                    // name of each category
+                    categories: @Html.Raw(JsonConvert.SerializeObject(_hourIdx.Select(h=>$"{h:00}:00"))),
+                },
+            },
+            bar: {
+                width: 'auto'
+            },
+            legend: {
+                show: true, //hide legend
+            },
+            padding: {
+                bottom: 0,
+                top: 0
+            },
+            grid: {
+                x: {
+                    show: false
+                },
+                y: {
+                    show: true
+                }
+            }
+        });
+
+        setTimeout(function () {
+            chart.load({
+                columns: [@Html.Raw(JsonConvert.SerializeObject(getDistributionC3("data1",TrialLessons, _hourIdx)))]
+            });
+        }, 1000);
+
+        setTimeout(function () {
+            chart.load({
+                columns: [@Html.Raw(JsonConvert.SerializeObject(getDistributionC3("data2",PILessons, _hourIdx)))]
+            });
+        }, 1500);
+
+        setTimeout(function () {
+            chart.load({
+                columns: [@Html.Raw(JsonConvert.SerializeObject(getDistributionC3("data3",PTLessons,_hourIdx)))]
+            });
+        }, 2000);
+
+        setTimeout(function () {
+            chart.groups([['data1', 'data2', 'data3']])
+        }, 2500);
+    });
+</script>
+@{ Html.RenderPartial("~/Views/ConsoleHome/Shared/InitBarChartNoRegister.cshtml");}
+
+
+@functions{
+    class _Counting
+    {
+        public int Hour { get; set; }
+        public int Count { get; set; }
+    }
+
+    IEnumerable<int> getDistribution(IEnumerable<_Counting> items, IEnumerable<int> hourIdx)
+    {
+        foreach (var h in hourIdx)
+        {
+            yield return items.Where(i => i.Hour == h).Select(i => i.Count).FirstOrDefault();
+        }
+    }
+
+    IEnumerable<object> getDistributionC3(String columnName, IEnumerable<_Counting> items, IEnumerable<int> hourIdx)
+    {
+        List<object> result = new List<object>();
+        result.Add(columnName);
+        foreach (var h in hourIdx)
+        {
+            result.Add(items.Where(i => i.Hour == h).Select(i => i.Count).FirstOrDefault());
+        }
+        return result;
+    }
+}
+

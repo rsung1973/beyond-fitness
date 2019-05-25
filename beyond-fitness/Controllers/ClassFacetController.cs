@@ -21,6 +21,7 @@ using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
 using WebHome.Models.ViewModel;
+using WebHome.Properties;
 using WebHome.Security.Authorization;
 
 namespace WebHome.Controllers
@@ -144,7 +145,7 @@ namespace WebHome.Controllers
                 var users = models.CheckOverlappingBooking(timeItem, item);
                 if (users.Count() > 0)
                 {
-                    ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
+                    ViewBag.Message = "上課成員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
                     return View("~/Views/Shared/MessageView.ascx");
                 }
             }
@@ -152,7 +153,7 @@ namespace WebHome.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
-                return View(profile.ReportInputError);
+                return View(Settings.Default.ReportInputError);
             }
 
             var changeCoach = item.AttendingCoach != viewModel.CoachID;
@@ -170,11 +171,13 @@ namespace WebHome.Controllers
                                 && !viewModel.AttendeeID.Contains(r.AttendingCoach.Value));
                     models.DeleteAll<RegisterLesson>(r => r.RegisterID != item.RegisterID && r.RegisterGroupID == item.GroupID
                                 && !viewModel.AttendeeID.Contains(r.UID));
-                    foreach (var coachID in viewModel.AttendeeID.Distinct())
+                    foreach (var uid in viewModel.AttendeeID.Distinct())
                     {
-                        if (!models.GetTable<RegisterLesson>().Any(r => r.UID == coachID && r.RegisterGroupID == item.GroupID))
+                        if (!models.GetTable<RegisterLesson>().Any(r => r.UID == uid && r.RegisterGroupID == item.GroupID))
                         {
-                            var coachPI = LessonsController.SpawnCoachPI(item, coachID);
+                            var coachPI = models.GetTable<ServingCoach>().Any(s => s.CoachID == uid)
+                                    ? LessonsController.SpawnCoachPI(item, uid, uid)
+                                    : LessonsController.SpawnCoachPI(item, uid, coach.CoachID);
                             models.GetTable<LessonTime>().InsertOnSubmit(coachPI);
                         }
                     }
@@ -310,7 +313,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "學員資料錯誤!!" });
             }
 
-            profile.RecentStatus = recentStatus;
+            profile.RecentStatus = recentStatus.GetEfficientString();
 
             models.SubmitChanges();
             return Json(new { result = true, message = "資料更新完成!!" });

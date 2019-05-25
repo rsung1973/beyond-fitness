@@ -1,4 +1,6 @@
-﻿@using System.IO
+﻿
+
+@using System.IO
 @using System.Linq.Expressions
 
 @using WebHome.Helper
@@ -7,18 +9,15 @@
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
-@using BFConsole.Views.MainActivity.Resources
+@using WebHome.Views.MainActivity.Resources
 
 @{
-
     ModelSource<UserProfile> models;
     ModelStateDictionary _modelState;
 
     models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
-
 }
-
 <!DOCTYPE html>
 <html lang="@(ViewBag.Lang ?? "zh-TW")">
 <head>
@@ -57,8 +56,10 @@
     <!-- Magnific Popup -->
     <link href="plugins/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
     <!-- Magnific Popup -->
-    <link href="css/main-landing.css?1.0" type="text/css" rel="stylesheet" />
+    <link href="css/main-landing.css?1.2" type="text/css" rel="stylesheet" />
+
     @RenderSection("CustomHeader", false)
+
     <script src="bundles/libscripts.bundle.js"></script>
     <script src="bundles/vendorscripts.bundle.js"></script>
     <!-- Slick carousel javascript -->
@@ -68,7 +69,7 @@
     <!-- WOW Plugin -->
     <script src="js/wow.js"></script>
     <!-- Main Script -->
-    <script src="js/main-landing.js"></script>
+    <script src="js/main-landing.js?1.3"></script>
     <script src="js/common.js?1.5"></script>
 </head>
 
@@ -78,12 +79,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2 col-sm-2 col-xs-12 text-center">
-                    <a href="@(Url.Action("BlogGrid"))" class="logo"><img src="images/logo.png" alt="BeyondFitness"></a>
+                    <a href="javascript:bindTrackingCode('圖文分類', '@(Url.Action("BlogGrid"))', null)" class="logo"><img src="images/logo.png" alt="BeyondFitness"></a>
                 </div>
                 <div class="col-md-10 col-sm-10 col-xs-12">
                     <ul class="left nav-active">
                         <li class="pull-right">
-                            <a href="@(VirtualPathUtility.ToAbsolute("~/Official/Index"))" class="btn btn-default btn-round">@(NamingItem.BlogBack)</a>
+                            <a href="javascript:bindTrackingCode('官方網站', '@(VirtualPathUtility.ToAbsolute("~/Official/Index"))', null)" class="btn btn-default btn-round">@Html.Raw(NamingItem.BlogBack)</a>
                         </li>
                     </ul>
                     <script>
@@ -106,6 +107,7 @@
     <!-- Main Content -->
     @RenderBody()
     @RenderSection("TailPageJavaScriptInclude", false)
+
     <!-- // Footer -->
     <footer id="footer">
         <div class="container">
@@ -115,6 +117,27 @@
             </div>
         </div>
     </footer>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@(WebHome.Properties.Settings.Default.GA_ID_Frontend)"></script>
+    <script type="text/javascript">window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', '@WebHome.Properties.Settings.Default.GA_ID_Frontend');
+
+
+        this.bindTrackingCode = function (gaEventName, linkURL, linkType) {
+            if (gaEventName && typeof gaEventName != "undefined") {
+                gtag("event", gaEventName, { event_category: "連結點擊", event_label: "知識分享" });
+            }
+
+            if (linkURL && typeof linkURL != "undefined") {
+                if (linkType && linkType == '_blank') {
+                    window.open(linkURL);
+                } else {
+                    window.location.href = linkURL;
+                }
+            }
+        }</script>
 </body>
 </html>
-

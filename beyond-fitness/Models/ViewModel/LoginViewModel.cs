@@ -368,6 +368,7 @@ namespace WebHome.Models.ViewModel
         }
 
         public int? StageID { get; set; }
+        public int? Milestone { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -456,6 +457,7 @@ namespace WebHome.Models.ViewModel
         public int? LessonID { get; set; }
         public int? LessonStatus { get; set; }
         public int? BranchID { get; set; }
+        public int? LearnerID { get; set; }
     }
 
     public class LessonPriceViewModel
@@ -580,13 +582,15 @@ namespace WebHome.Models.ViewModel
         public DateTime? QueryStart { get; set; }
         public DateTime? ClassTime { get; set; }
     }
+
     public class LessonTimeBookingViewModel : QueryViewModel
     {
-
         public int? LessonID { get; set; }
         public DateTime? ClassTimeStart { get; set; }
         public DateTime? ClassTimeEnd { get; set; }
-
+        public int? BranchID { get; set; }
+        public String BranchName { get; set; }
+        public String ViewName { get; set; }
     }
 
     public class TrialLearnerViewModel
@@ -614,6 +618,11 @@ namespace WebHome.Models.ViewModel
         public TimeSpan? EndTime { get; set; }
         public bool? CreateNew { get; set; }
         public String Place { get; set; }
+        public int[] AttendeeID
+        {
+            get => MemberID;
+            set => MemberID = value;
+        }
 
     }
 
@@ -647,7 +656,7 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class ExercisePurposeViewModel
+    public class ExercisePurposeViewModel : QueryViewModel
     {
         public int? UID { get; set; }
         public String Purpose { get; set; }
@@ -668,7 +677,5 @@ namespace WebHome.Models.ViewModel
         public int? Status { get; set; }
         public String Keyword { get; set; }
     }
-
-
 
 }

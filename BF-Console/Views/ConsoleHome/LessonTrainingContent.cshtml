@@ -1,0 +1,344 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+@{
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    UserProfile _model;
+    DailyBookingQueryViewModel _viewModel;
+
+    Layout = "~/Views/ConsoleHome/Template/MainPage.cshtml";
+
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _model = (UserProfile)this.Model;
+    _viewModel = (DailyBookingQueryViewModel)ViewBag.ViewModel;
+}
+@{ 
+    LessonTime lessonItem = (LessonTime)ViewBag.DataItem;
+    UserProfile learner = (UserProfile)ViewBag.Learner;
+}
+@section CustomHeader {
+    <!-- Bootstrap Datetimepick -->
+    @*<link href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+    @*<link href="css/datetimepicker.css" rel="stylesheet" />*@
+    <!-- Jquery Nestable -->
+    <link rel="stylesheet" href="plugins/nestable/jquery-nestable.css" />
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="css/customelist.css?2">
+
+}
+
+    <section class="content profile-page">
+        @{ ViewBag.BlockHeader = "編輯課表";
+            ViewBag.InsertPartial = "~/Views/LearnerProfile/Module/ProfileHeader.cshtml";
+            Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);}
+
+        <!--編輯課表-->
+        <div class="container-fluid">
+            <div class="card">
+                <div class="header">
+                    <h2><strong>@(learner.FullName())</strong> - <span class="col-green">@(learner.PersonalExercisePurpose?.PowerAbility ?? "無")</span></h2>
+                    <ul class="header-dropdown">
+                        <li>
+                            <a href="javascript:addFavorite(0);"> <i class="myfavaroit"></i> </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more"></i> </a>
+                            <ul class="dropdown-menu dropdown-menu-right slideUp float-right">
+                                <li><a href="javascript:synchronizeData();">同步課表</a></li>
+                                <li><a href="javascript:addContactBook();">完成上課</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body p-0">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-4 col-xl-4">
+                            <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-12">
+                                        <button class="btn btn-default btn-sm hidden-lg-up m-t-0 float-right" data-toggle="collapse" data-target="#open-events" aria-expanded="false" aria-controls="collapseExample"><i class="zmdi zmdi-chevron-down"></i></button>
+                                    </div>
+                                </div>
+                                <div class="collapse-xs collapse-sm collapse" id="open-events">
+                                    <div class="row clearfix">
+                                        <div class="col-12">
+                                            <ul class="nav nav-tabs-new2 darkteal p-t-0" id="tabs">
+                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#recent">了解學生</a></li>
+                                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mildstone">里程碑</a></li>
+                                            </ul>
+                                            <div class="tab-content p-l-5 p-r-5">
+                                                <div class="tab-pane active" id="recent">
+                                                    @{ 
+                                                        Html.RenderPartial("~/Views/LearnerProfile/Module/RecentStatus.cshtml", learner);
+                                                    }
+                                                </div>
+                                                <div class="tab-pane" id="mildstone">
+                                                    @{
+                                                        Html.RenderPartial("~/Views/LearnerProfile/Module/TrainingMilestone.cshtml", learner);
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="new_timeline">
+                                        <ul>
+                                            <li>
+                                                @{
+                                                    Html.RenderPartial("~/Views/LearnerProfile/Module/TrainingGoal.cshtml", learner);
+                                                }
+                                            </li>
+                                            <li>
+                                                <div class="bullet pink"></div>
+                                                <div class="time">NEXT</div>
+                                                <div class="desc">
+                                                    <a href="learnerprofile-edit.html">
+                                                        <h3 class="col-red">重新了解學生 Go~</h3>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">12/12<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">下肢動作也帶有動態伸展的元素訓練</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">12/05<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">手部不適，降低手部訓練比例</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">11/30<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">功能性肌力</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">11/28<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">維持基本的肌力訓練，加上爆發刺激神經</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">11/19<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">維持基本的肌力訓練，加上爆發刺激神經</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PI"></div>
+                                                <div class="time">11/12<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.I <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">之前膝蓋不舒服，注意訓練時膝蓋壓力是否過大</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">11/05<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">髖部不適，注意訓練狀況</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet PT"></div>
+                                                <div class="time">11/02<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>P.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">功能性肌力</a></h4>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="bullet ST"></div>
+                                                <div class="time">10/31<br />2018</div>
+                                                <div class="desc">
+                                                    <h3>S.T <a href="#" class="btn btn-sm btn-round btn-simple float-right">複製</a></h3>
+                                                    <h4><a href="javascript:viewClass()">功能性肌力</a></h4>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-8 col-xl-8">
+                            <div class="body">
+                                <div class="row">
+                                    @{  Html.RenderPartial("~/Views/LearnerProfile/Module/TrainingExecutionPlan.cshtml", lessonItem);   }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@section TailPageJavaScriptInclude {
+    <!-- Sparkline Plugin Js -->
+    <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
+    <!-- Jquery Nestable -->
+    <script src="plugins/nestable/jquery.nestable.js"></script>
+    <script>
+        $(function () {
+
+            $('.dd').nestable();
+
+        });
+
+        $('.dd').on('change', function () {
+            var $this = $(this);
+            var serializedData = window.JSON.stringify($($this).nestable('serialize'));
+
+            $this.parents('div.body').find('textarea').val(serializedData);
+        });
+
+        //加入我的最愛課表
+        function addFavorite() {
+            if ($(".myfavaroit.like").length > 0) {
+                $(".myfavaroit.like").removeClass("like");
+            } else {
+                $(".myfavaroit").addClass("like");
+            }
+        }
+
+        //編輯近期目標
+        this.addRecentGoal = function () {
+            swal({
+                title: "近期目標",
+                text: "",
+                type: "input",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "確定, 不後悔",
+                cancelButtonText: "不, 點錯了",
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "請輸入20個中英文字"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("你忘了輸入文字嗎!?");
+                    return false
+                }
+                swal("Nice!", "You wrote: " + inputValue, "success");
+            });
+        };
+
+        //近期目標更多功能
+        $('.more').on('click', function () {
+            $("#moreActionModal").modal('show');
+        });
+
+        //點選刪除功能
+        this.deleteData = function () {
+            swal({
+                title: "不後悔?",
+                text: "刪除後資料將無法回覆!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "確定, 不後悔",
+                cancelButtonText: "不, 點錯了",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal("刪除成功!", "資料已經刪除 Bye!", "success");
+                } else {
+                    swal("取消成功", "你的資料現在非常安全 :)", "error");
+                }
+            });
+        };
+
+
+        //編輯完成上課結語
+        this.addContactBook = function () {
+            swal({
+                title: "家庭聯絡簿",
+                text: "",
+                type: "input",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "確定, 不後悔",
+                cancelButtonText: "不, 點錯了",
+                closeOnConfirm: false,
+                animation: "slide-from-top",
+                inputPlaceholder: "請輸入20個中英文字"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError("你忘了輸入文字嗎!?");
+                    return false
+                }
+                swal("Nice!", "You wrote: " + inputValue, "success");
+            });
+        };
+
+        //點選同步課表
+        this.synchronizeData = function () {
+            swal({
+                title: "不後悔?",
+                text: "同步後資料會一模模一樣樣喔!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "確定, 不後悔",
+                cancelButtonText: "不, 點錯了",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    swal("刪除成功!", "資料已經刪除 Bye!", "success");
+                } else {
+                    swal("取消成功", "你的資料現在非常安全 :)", "error");
+                }
+            });
+        };
+
+        //編輯動作資料
+        this.editAction = function () {
+            $("#editActionModal").modal('show');
+        };
+        //編輯休息/組數資料
+        this.editBreak = function () {
+            $("#editBreakModal").modal('show');
+        };
+        //修改休息/組數資料
+        $('.dd-item.dd3-item.list-line').on('click', function () {
+            $("#editBreakModal").modal('show');
+        });
+        //修改動作資料
+        $('.dd-item.dd3-item.list-action').on('click', function () {
+            $("#editActionModal").modal('show');
+        });
+
+        //檢視課表
+        this.viewClass = function () {
+            $("#viewClassModal").modal('show');
+        };
+
+
+    </script>
+}

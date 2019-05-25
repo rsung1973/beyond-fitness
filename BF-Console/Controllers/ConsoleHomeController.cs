@@ -28,12 +28,26 @@ using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using WebHome.Security.Authorization;
 
-namespace BFConsole.Controllers
+namespace WebHome.Controllers
 {
     [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
     public class ConsoleHomeController : SampleController<UserProfile>
     {
-        public const String InputErrorView = "~/Views/ConsoleHome/Shared/ReportInputError.ascx";
+        static ConsoleHomeController()
+        {
+            BusinessExtensionMethods.ContractViewUrl = item => 
+            {
+                return $"{Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CommonHelper/ViewContract")}?pdf=1&contractID={item.ContractID}&t={DateTime.Now.Ticks}";
+            };
+
+            BusinessExtensionMethods.ContractServiceViewUrl = item =>
+            {
+                return $"{Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CommonHelper/ViewContractService")}?pdf=1&revisionID={item.RevisionID}&t={DateTime.Now.Ticks}";
+            };
+
+        }
+
+        public const String InputErrorView = "~/Views/ConsoleHome/Shared/ReportInputError.cshtml";
 
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
         public ActionResult Index(LessonTimeBookingViewModel viewModel)
@@ -45,7 +59,20 @@ namespace BFConsole.Controllers
             }
 
             var profile = HttpContext.GetUser();
-            profile.ReportInputError = InputErrorView;
+            if(!viewModel.BranchID.HasValue)
+            {
+                if (profile.IsManager() || profile.IsViceManager())
+                {
+                    var branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == profile.UID || b.ViceManagerID == profile.UID)
+                            .FirstOrDefault();
+                    if (branch != null)
+                    {
+                        viewModel.BranchID = branch.BranchID;
+                        viewModel.BranchName = branch.BranchName;
+                    }
+                }
+            }
+
             return View(profile.LoadInstance(models));
         }
 
@@ -61,7 +88,6 @@ namespace BFConsole.Controllers
         {
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
-            profile.ReportInputError = InputErrorView;
             viewModel.KeyID = profile.UID.EncryptKey();
             return View(profile.LoadInstance(models));
         }
@@ -73,7 +99,6 @@ namespace BFConsole.Controllers
             viewModel.ContractDateTo = viewModel.ContractDateFrom.Value.AddMonths(1).AddDays(-1);
 
             var profile = HttpContext.GetUser();
-            profile.ReportInputError = InputErrorView;
             viewModel.KeyID = profile.UID.EncryptKey();
             return View(profile.LoadInstance(models));
         }
@@ -113,7 +138,6 @@ namespace BFConsole.Controllers
             ViewBag.ViewModel = viewModel;
 
             var profile = HttpContext.GetUser();
-            profile.ReportInputError = InputErrorView;
             viewModel.KeyID = profile.UID.EncryptKey();
             return View(profile.LoadInstance(models));
         }
@@ -158,6 +182,9 @@ namespace BFConsole.Controllers
                 viewModel.SequenceNo = item.SequenceNo;
                 viewModel.Lessons = item.Lessons;
                 viewModel.PriceID = item.PriceID;
+                viewModel.DurationInMinutes = item.LessonPriceType.DurationInMinutes;
+                var priceType = item.LessonPriceType;
+                viewModel.PriceName = $"{priceType.PriceTypeBundle()}{(priceType.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.舊會員續約) ? "(舊會員續約)" : null)}{string.Format("{0,5:##,###,###,###}", priceType.ListPrice)}";
                 viewModel.Remark = item.Remark;
                 viewModel.FitnessConsultant = item.FitnessConsultant;
                 viewModel.Status = item.Status;
@@ -180,8 +207,12 @@ namespace BFConsole.Controllers
                 {
                     viewModel.FitnessConsultant = profile.UID;
                 }
+                viewModel.ContractType = null;
             }
-
+            if(profile.IsManager() || profile.IsViceManager())
+            {
+                viewModel.ManagerID = profile.UID;
+            }
             ViewBag.ViewModel = viewModel;
             return View(profile.LoadInstance(models));
         }
@@ -202,7 +233,7 @@ namespace BFConsole.Controllers
             if (item == null)
             {
                 ViewBag.GoBack = true;
-                return View("~/Views/Shared/JsAlert.ascx", model: "合約資料錯誤!!");
+                return View("~/Views/Shared/JsAlert.cshtml", model: "合約資料錯誤!!");
             }
 
             ViewBag.DataItem = item;
@@ -226,7 +257,7 @@ namespace BFConsole.Controllers
         public ActionResult CalendarEventItems(FullCalendarViewModel viewModel)
         {
             ViewResult result = (ViewResult)CalendarEvents(viewModel, true);
-            result.ViewName = "~/Views/ConsoleHome/Module/EventItems.ascx";
+            result.ViewName = "~/Views/ConsoleHome/Module/EventItems.cshtml";
             return result;
         }
 
@@ -288,11 +319,13 @@ namespace BFConsole.Controllers
                 eventItems = eventItems.Where(f => false);
             }
 
-            var items = dataItems.Select(d => new CalendarEventItem
-            {
-                EventTime = d.ClassTime,
-                EventItem = d
-            }).ToList();
+            var items = dataItems.GroupBy(l => l.GroupID)
+                .ToList()
+                .Select(d => new CalendarEventItem
+                {
+                    EventTime = d.First().ClassTime,
+                    EventItem = d.First()
+                }).ToList();
 
             items.AddRange(eventItems.Select(v => new CalendarEventItem
             {
@@ -308,7 +341,7 @@ namespace BFConsole.Controllers
             {
                 Response.ContentType = "application/json";
             }
-            return View("~/Views/ConsoleHome/Module/CalendarEvents.ascx", items);
+            return View("~/Views/ConsoleHome/Module/CalendarEvents.cshtml", items);
 
         }
 
@@ -346,7 +379,7 @@ namespace BFConsole.Controllers
                     .Where(l => l.ClassTime >= viewModel.StartDate)
                     .Where(l => l.ClassTime < viewModel.EndDate.Value.AddDays(1));
 
-            return View("~/Views/ConsoleHome/Module/CurrentExerciseBillboard.ascx", items);
+            return View("~/Views/ConsoleHome/Module/CurrentExerciseBillboard.cshtml", items);
         }
 
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
@@ -356,7 +389,7 @@ namespace BFConsole.Controllers
             viewModel.StartDate = queryDate.AddMonths(-1);
             viewModel.EndDate = queryDate.AddDays(-1);
             ViewResult result = (ViewResult)InquireExerciseBillboard(viewModel);
-            result.ViewName = "~/Views/ConsoleHome/Module/ExerciseBillboard.ascx";
+            result.ViewName = "~/Views/ConsoleHome/Module/ExerciseBillboard.cshtml";
             return result;
         }
 
@@ -370,7 +403,7 @@ namespace BFConsole.Controllers
                 return new EmptyResult { };
 
             Response.ContentType = "application/json";
-            return View("~/Views/ConsoleHome/Module/ExerciseBillboardDetails.ascx", items);
+            return View("~/Views/ConsoleHome/Module/ExerciseBillboardDetails.cshtml", items);
         }
 
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
@@ -431,6 +464,81 @@ namespace BFConsole.Controllers
                 result.ViewName = "TerminateContract";
             }
             return result;
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult QuickTerminateContract(CourseContractQueryViewModel viewModel)
+        {
+            var profile = HttpContext.GetUser();
+            ViewResult result = (ViewResult)SignCourseContract(viewModel);
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+            if (item != null)
+            {
+                if (profile.IsCoach())
+                    viewModel.FitnessConsultant = profile.UID;
+                else
+                    viewModel.FitnessConsultant = item.FitnessConsultant;
+                viewModel.OperationMode = Naming.OperationMode.快速終止;
+                viewModel.Status = (int)Naming.CourseContractStatus.待確認;
+                result.ViewName = "QuickTerminateContract";
+            }
+            return result;
+        }
+
+        public ActionResult DailyLessonsBarChart(LessonTimeBookingViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!viewModel.ClassTimeStart.HasValue)
+            {
+                viewModel.ClassTimeStart = DateTime.Today;
+            }
+
+            var profile = HttpContext.GetUser();
+            return View("~/Views/ConsoleHome/Module/TodayLessonsBarChartC3.cshtml", profile.LoadInstance(models));
+        }
+
+        public ActionResult ShowLessonSummary(LessonTimeBookingViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!viewModel.ClassTimeStart.HasValue)
+            {
+                viewModel.ClassTimeStart = DateTime.Today;
+            }
+
+            var profile = HttpContext.GetUser();
+            return View("~/Views/ConsoleHome/Module/AboutLessonSummary.cshtml", profile.LoadInstance(models));
+        }
+
+        [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public ActionResult LearnerProfile(DailyBookingQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.LearnerID = viewModel.DecryptKeyValue();
+            }
+
+            ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
+
+            return View(profile.LoadInstance(models));
+        }
+
+        public ActionResult LessonTrainingContent(DailyBookingQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.LessonID = viewModel.DecryptKeyValue();
+            }
+
+            ViewBag.DataItem = models.GetTable<LessonTime>().Where(u => u.LessonID == viewModel.LessonID).First();
+            ViewBag.Learner = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
+
+            return View(profile.LoadInstance(models));
         }
 
     }
