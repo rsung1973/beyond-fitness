@@ -3285,6 +3285,7 @@ namespace WebHome.Controllers
                 {
                     LessonID = lessonID,
                     PlanStatus = p.PlanStatus,
+                    RegisterID = p.RegisterID,
                     TrainingExecution = new TrainingExecution
                     {
                         Emphasis = null //p.TrainingExecution.Emphasis
@@ -3578,17 +3579,10 @@ namespace WebHome.Controllers
             if (execution == null || createNew)
             {
                 LessonTimeExpansion item = (LessonTimeExpansion)HttpContext.GetCacheValue(CachingKey.Training);
+                var lesson = models.GetTable<LessonTime>().Where(l => l.LessonID == item.LessonID).FirstOrDefault();
 
-                Models.DataEntity.TrainingPlan plan = new TrainingPlan
-                {
-                    LessonID = item.LessonID.Value,
-                    PlanStatus = (int)Naming.DocumentLevelDefinition.暫存
-                };
-                execution = new TrainingExecution
-                {
-                    TrainingPlan = plan
-                };
-                models.GetTable<Models.DataEntity.TrainingPlan>().InsertOnSubmit(plan);
+                TrainingPlan plan = lesson.AssertTrainingPlan(models, Naming.DocumentLevelDefinition.暫存);
+                execution = plan.TrainingExecution;
             }
 
             return execution;

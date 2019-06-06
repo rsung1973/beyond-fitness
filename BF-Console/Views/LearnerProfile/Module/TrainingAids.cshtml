@@ -17,23 +17,32 @@
     _model = (TrainingItem)this.Model;
     TrainingItemViewModel _viewModel = (TrainingItemViewModel)ViewBag.ViewModel;
     TrainingStage _stage = (TrainingStage)ViewBag.TrainingStage;
-    var items = models.GetTable<TrainingStage>().OrderBy(s => s.StageID);
+    var items = models.GetTable<TrainingStage>().OrderBy(s => s.StageID).Take(4);
 }
-
-@foreach (var item in items)
-{
-    <button class="btn btn-raised bg-pink btn-sm btn-round waves-effect" type="button" data-toggle="collapse" data-target="#@($"collapse_{item.StageID}")" aria-expanded="false" aria-controls="@($"collapse_{item.StageID}")"> @(item.Stage)器材 </button>
-}
-@{ 
+@{
     string[] cssClass = new string[]
     {
-        "collapse xl-pink",
-        "collapse show xl-khaki",
-        "collapse xl-seagreen",
-        "collapse xl-blue",
-        ""
+"collapse xl-pink collapse",
+"collapse xl-khaki collapse",
+"collapse xl-seagreen collapse",
+"collapse xl-blue collapse",
+    };
+
+    cssClass[_stage.StageID - 1] += " show";
+
+    string[] btnClass = new string[]
+    {
+"btn btn-raised bg-amber btn-sm btn-round waves-effect",
+"btn btn-raised bg-pink btn-sm btn-round waves-effect",
+"btn btn-raised bg-green btn-sm btn-round waves-effect",
+"btn btn-raised bg-blue btn-sm btn-round waves-effect",
     };
 }
+@foreach (var item in items)
+{
+    <button class="@btnClass[item.StageID-1]" type="button" data-toggle="collapse" data-target="#@($"collapseAid_{item.StageID}")" aria-expanded="false" aria-controls="@($"collapseAid_{item.StageID}")"> @(item.Stage)器材 </button>
+}
+
 @foreach (var item in items)
 {
     if (item.TrainingAids.Where(a => a.Status == (int)Naming.GeneralStatus.Successful)
@@ -41,18 +50,18 @@
     {
         continue;
     }
-    <div class="@(cssClass[item.StageID-1])" id="@($"collapse_{item.StageID}")">
+    <div class="@(cssClass[item.StageID-1])" id="@($"collapseAid_{item.StageID}")">
         <div class="well">
             <div class="row">
                 @foreach (var aid in item.TrainingAids
                             .Where(t => t.Status == (int)Naming.GeneralStatus.Successful))
                 {
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-6">
-                        <div class="checkbox">
-                            <input name="AidID" value="@aid.AidID" type="checkbox"/>
-                            <label for="AidID">@aid.ItemName</label>
-                        </div>
-                    </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+                    <label class="fancy-checkbox custom-bgcolor-green">
+                        <input name="AidID" value="@aid.AidID" type="checkbox" />
+                        <span>@(aid.ItemName)</span>
+                    </label>
+                </div>
                 }
             </div>
         </div>

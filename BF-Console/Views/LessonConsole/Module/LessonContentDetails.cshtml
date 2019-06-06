@@ -16,10 +16,10 @@
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     _model = (LessonTime)this.Model;
-
+    LessonTimeBookingViewModel _viewModel = (LessonTimeBookingViewModel)ViewBag.ViewModel;
 }
 @{
-    TrainingExecution item = _model.TrainingPlan.FirstOrDefault()?.TrainingExecution;
+    TrainingExecution item = _model.AssertTrainingPlan(models, UID: _viewModel.UID)?.TrainingExecution;
 }
 @if (item != null)
 {

@@ -541,5 +541,24 @@ namespace WebHome.Controllers
             return View(profile.LoadInstance(models));
         }
 
+        public ActionResult EditLearnerCharacter(LearnerCharacterViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            UserProfile item = ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).First();
+            if (!viewModel.QuestionnaireID.HasValue)
+            {
+                viewModel.QuestionnaireID = item.UID.AssertQuestionnaire(models, Naming.QuestionnaireGroup.身體心靈密碼).QuestionnaireID;
+            }
+
+            return View(profile.LoadInstance(models));
+        }
+
     }
 }

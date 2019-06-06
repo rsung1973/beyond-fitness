@@ -32,9 +32,9 @@
                     @{
                         ViewBag.ProfileClass = "popfit";
                     }
-                    @foreach (var item in _model.GroupingLesson.RegisterLesson)
+                    @foreach (var item in _model.GroupingLesson.RegisterLesson.Where(r=>r.UID!=learner.UID))
                     {
-                        <li>
+                        <li onclick="$('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { KeyID = _model.LessonID.EncryptKey(),LearnerID = item.UID }))', { });">
                             @{
                                 Html.RenderPartial("~/Views/Common/ProfileImage.cshtml", item.UserProfile);
                             }

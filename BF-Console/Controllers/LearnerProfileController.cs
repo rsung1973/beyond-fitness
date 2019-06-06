@@ -113,7 +113,7 @@ namespace WebHome.Controllers
         public ActionResult LearnerLessonsReviewDetails(DailyBookingQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.LearnerID = viewModel.DecryptKeyValue();
             }
@@ -169,6 +169,7 @@ namespace WebHome.Controllers
                 viewModel.Repeats = item.Repeats;
                 viewModel.DurationInSeconds = item.DurationInMinutes * 60;
                 viewModel.BreakInterval = item.BreakIntervalInSecond;
+                viewModel.PurposeID = item.PurposeID;
 
                 viewModel.AidID = item.TrainingItemAids.Select(s => s.AidID).ToArray();
             }
@@ -181,11 +182,265 @@ namespace WebHome.Controllers
         public ActionResult EditBreakInterval(TrainingItemViewModel viewModel)
         {
             ViewResult result = (ViewResult)EditTrainingItem(viewModel);
-            result.ViewName = "~/Views/Training/Module/EditBreakInterval.ascx";
+            result.ViewName = "~/Views/LearnerProfile/ProfileModal/EditBreakInterval.cshtml";
+            return result;
+        }
+
+        public ActionResult CommitPDQ(PDQTaskItemViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            var question = models.GetTable<PDQQuestion>().Where(q => q.QuestionID == viewModel.QuestionID).FirstOrDefault();
+            if (question == null)
+            {
+                return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (viewModel.QuestionnaireID.HasValue)
+            {
+                models.ExecuteCommand("delete PDQTask where UID = {0} and QuestionID = {1} and QuestionnaireID = {2}",
+                        viewModel.UID, viewModel.QuestionID, viewModel.QuestionnaireID);
+            }
+
+            var item = new PDQTask
+            {
+                PDQAnswer = viewModel.PDQAnswer,
+                TaskDate = DateTime.Now,
+                UID = viewModel.UID.Value,
+                QuestionID = viewModel.QuestionID,
+                QuestionnaireID = viewModel.QuestionnaireID,
+            };
+
+            if (viewModel.SuggestionID != null && viewModel.SuggestionID.Length > 0)
+            {
+                var sugguestion = viewModel.SuggestionID
+                        .Where(s => s.HasValue).ToArray();
+                if (sugguestion.Length > 0)
+                {
+                    if (question.QuestionType == (int)Naming.QuestionType.多重選 || question.QuestionType == (int)Naming.QuestionType.多重選其他)
+                    {
+                        item.PDQTaskItem.AddRange(viewModel.SuggestionID
+                            .Where(s => s.HasValue)
+                            .Select(s => new PDQTaskItem
+                            {
+                                SuggestionID = s.Value
+                            }));
+                    }
+                    else
+                    {
+                        item.SuggestionID = sugguestion[0];
+                    }
+                }
+            }
+
+            models.GetTable<PDQTask>().InsertOnSubmit(item);
+            models.SubmitChanges();
+
+            return Json(new { result = true });
+
+        }
+
+        private ActionResult prepareLearner(ExercisePurposeViewModel viewModel,out UserProfile item)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+            if (item == null)
+            {
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.ascx", model: "學員資料錯誤!!");
+            }
+
+            return null;
+        }
+
+        public ActionResult EditLearnerFeature(ExercisePurposeViewModel viewModel)
+        {
+            ActionResult result = prepareLearner(viewModel, out UserProfile item);
+            if (result != null)
+                return result;
+
+            var purpose = item.PersonalExercisePurpose;
+            if (purpose != null)
+            {
+                viewModel.Purpose = purpose.Purpose.GetEfficientString();
+                viewModel.Ability = purpose.PowerAbility;
+                viewModel.Cardiopulmonary = purpose.Cardiopulmonary;
+                viewModel.Flexibility = purpose.Flexibility;
+                viewModel.MuscleStrength = purpose.MuscleStrength;
+                viewModel.AbilityStyle = purpose.AbilityStyle;
+                viewModel.AbilityLevel = (Naming.PowerAbilityLevel?)purpose.AbilityLevel;
+            }
+
+            return View("~/Views/LearnerProfile/Module/EditLearnerFeature.cshtml", item);
+        }
+
+        public ActionResult EditExercisePurpose(ExercisePurposeViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)EditLearnerFeature(viewModel);
+            if (!(result.Model is UserProfile item))
+                return result;
+
+            result.ViewName = "~/Views/LearnerProfile/Module/EditExercisePurpose.cshtml";
             return result;
         }
 
 
+        public ActionResult CommitLearnerFeature(ExercisePurposeViewModel viewModel)
+        {
+            ActionResult result = prepareLearner(viewModel, out UserProfile item);
+            if (result != null)
+            {
+                return result;
+            }
+
+            viewModel.AbilityStyle = viewModel.AbilityStyle.GetEfficientString();
+            if (viewModel.AbilityStyle == null)
+            {
+                ModelState.AddModelError("AbilityStyle", "請選擇運動類型");
+            }
+
+            if (!viewModel.AbilityLevel.HasValue)
+            {
+                ModelState.AddModelError("AbilityLevel", "請選擇Level");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View(ConsoleHomeController.InputErrorView);
+            }
+
+            if (item.PersonalExercisePurpose == null)
+            {
+                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            viewModel.Ability = $"{viewModel.AbilityStyle}（{viewModel.AbilityLevel}）";
+
+            var purpose = item.PersonalExercisePurpose;
+            //purpose.Purpose = viewModel.Purpose;
+            purpose.PowerAbility = viewModel.Ability;
+            purpose.Flexibility = viewModel.Flexibility;
+            purpose.Cardiopulmonary = viewModel.Cardiopulmonary;
+            purpose.MuscleStrength = viewModel.MuscleStrength;
+            purpose.AbilityStyle = viewModel.AbilityStyle;
+            purpose.AbilityLevel = (int?)viewModel.AbilityLevel;
+
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = viewModel.Ability });
+
+        }
+
+        public ActionResult CommitExercisePurpose(ExercisePurposeViewModel viewModel)
+        {
+            ActionResult result = prepareLearner(viewModel, out UserProfile item);
+            if (result != null)
+            {
+                return result;
+            }
+
+            viewModel.Purpose = viewModel.Items?.Purpose.GetEfficientString();
+            if (viewModel.Purpose == null)
+            {
+                ModelState.AddModelError("Purpose", "週期性目標");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = ModelState;
+                return View(ConsoleHomeController.InputErrorView);
+            }
+
+            if (item.PersonalExercisePurpose == null)
+            {
+                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            var purpose = item.PersonalExercisePurpose;
+            //purpose.Purpose = viewModel.Purpose;
+            purpose.Purpose = viewModel.Purpose;
+
+            if(viewModel.Items!=null)
+            {
+                if (viewModel.Items.ItemID != null)
+                {
+                    foreach (var id in viewModel.Items.ItemID)
+                    {
+                        models.ExecuteCommand("delete PersonalExercisePurposeItem where UID = {0} and ItemID = {1}", item.UID, id);
+                    }
+                }
+                if (viewModel.Items.PurposeItem != null)
+                {
+                    foreach (var p in viewModel.Items.PurposeItem
+                        .Select(i => i.GetEfficientString())
+                        .Where(i => i != null))
+                    {
+                        models.GetTable<PersonalExercisePurposeItem>().InsertOnSubmit(new PersonalExercisePurposeItem
+                        {
+                            PersonalExercisePurpose = purpose,
+                            InitialDate = DateTime.Now,
+                            PurposeItem = p
+                        });
+                    }
+                }
+            }
+
+            models.SubmitChanges();
+
+            return Json(new { result = true, message = viewModel.Purpose });
+
+        }
+
+        public ActionResult CommitLearnerCharacter(LearnerCharacterViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            if (viewModel.QuestionnaireID.HasValue)
+            {
+                var count = models.ExecuteCommand(@"
+                    UPDATE       QuestionnaireRequest
+                    SET                Status = {0}
+                    WHERE        (UID = {1}) AND (QuestionnaireID = {2})", (int)Naming.IncommingMessageStatus.已讀, viewModel.UID, viewModel.QuestionnaireID);
+            }
+
+            return Json(new { result = true });
+
+        }
+
+        public ActionResult SearchLearner(String userName)
+        {
+            userName = userName.GetEfficientString();
+            if (userName == null)
+            {
+                this.ModelState.AddModelError("userName", "請輸入查詢學員!!");
+                ViewBag.ModelState = this.ModelState;
+                return View(ConsoleHomeController.InputErrorView);
+            }
+
+            var items = userName.PromptLearnerByName(models, false);
+
+            if (items.Count() > 0)
+                return View("~/Views/LearnerProfile/ProfileModal/SelectLearnerProfile.cshtml", items);
+            else
+                return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "Opps！您確定您輸入的資料正確嗎！？");
+
+        }
 
     }
 }

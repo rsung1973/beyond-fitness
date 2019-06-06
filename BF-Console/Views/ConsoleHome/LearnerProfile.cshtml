@@ -66,7 +66,7 @@
                             @if (purpose != null)
                                     {
                                         Html.RenderPartial("~/Views/LearnerProfile/Module/PersonalExerciseRadarChart.cshtml", purpose);
-                                <h6 class="col-green text-center">@(purpose.PowerAbility.Substring(0,3)) / @(purpose.Purpose ?? "？")期</h6>
+                                <h6 class="@(purpose.PowerAbliityCss("text-center"))">@(purpose.PowerAbility!=null ? purpose.PowerAbility.Substring(0,3) : "？型") / @(purpose.Purpose ?? "？")期</h6>
                             }
                             else
                             {
@@ -137,143 +137,7 @@
                             @{ Html.RenderPartial("~/Views/LearnerProfile/Module/LearnerUnpaidContractList.cshtml", _learner); }
                             <hr>
                             <div class="event-name b-custom row">
-                                <div class="col-12 p-b-10">
-                                    <ul class="nav nav-tabs-new p-t-0" id="tabs2">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#body">身體密碼</a></li>
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mind">心靈密碼</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-12">
-                                    <div class="tab-content p-l-0 p-r-0">
-                                        <div class="tab-pane active" id="body">
-                                            <div class="cwidget-scroll">
-                                                <ul class="chat-widget m-r-5 clearfix">
-                                                    <li class="left float-left">
-                                                        <img src="images/avatar/noname.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">
-                                                                本人或直系親屬有無任何病史嗎？
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="right">
-                                                        <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">
-                                                                無
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="left float-left">
-                                                        <img src="images/avatar/noname.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">曾經或目前有肌肉或關節相關問題？</span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="right">
-                                                        <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">
-                                                                肩膀、膝蓋、全身壞光光
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="left float-left">
-                                                        <img src="images/avatar/noname.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">請問近一年來有無任何手術經驗（含生產）？</span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="right">
-                                                        <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">
-                                                                左手骨折
-                                                            </span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="left float-left">
-                                                        <img src="images/avatar/noname.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <span class="message">目前有在使用任何藥物？ </span>
-                                                        </div>
-                                                    </li>
-                                                    <li class="right">
-                                                        <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                        <div class="chat-info smallpadding">
-                                                            <label class="fancy-checkbox custom-bgcolor-pink">
-                                                                無
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="mind">
-                                            <ul class="chat-widget m-r-5 clearfix">
-                                                <li class="left float-left">
-                                                    <img src="images/avatar/noname.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">
-                                                            希望增加訓練時間的百分比
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="right">
-                                                    <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">
-                                                            <div class="sparkline-pie float-right inlineblock">20,6,33,12,0</div>
-                                                            柔軟度訓練、體操、脂瘦身（黃區）、靜態伸展
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="left float-left">
-                                                    <img src="images/avatar/noname.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">請問您有特別喜歡的或想學習的器材訓練？</span>
-                                                    </div>
-                                                </li>
-                                                <li class="right">
-                                                    <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">
-                                                            徒手訓練、
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="left float-left">
-                                                    <img src="images/avatar/noname.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">請問您期望訓練後的感覺和想法？</span>
-                                                    </div>
-                                                </li>
-                                                <li class="right">
-                                                    <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">
-                                                            訓練有趣好玩
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="left float-left">
-                                                    <img src="images/avatar/noname.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <span class="message">請問您覺得有獲得改善的部分？ </span>
-                                                    </div>
-                                                </li>
-                                                <li class="right">
-                                                    <img src="images/avatar/garfaild.png" class="rounded-circle">
-                                                    <div class="chat-info smallpadding">
-                                                        <label class="fancy-checkbox custom-bgcolor-pink">
-                                                            體態修飾
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                @{ Html.RenderPartial("~/Views/LearnerProfile/Module/LearnerCharacter.cshtml", _learner); }
                             </div>
                             <button class="btn btn-darkteal waves-effect float-right" onclick="javascript:editProfile();">重新了解學生 GO</button>
                         </div>
@@ -311,5 +175,9 @@
             $('.counto').countTo();
 
         });
+
+        function editProfile() {
+            $('').launchDownload('@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { KeyID = _learner.UID.EncryptKey() })))', {});
+        }
     </script>
 }

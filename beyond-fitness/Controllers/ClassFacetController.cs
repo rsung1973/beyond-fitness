@@ -470,17 +470,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false, message = "請輸入目標最多20個字!!" });
             }
 
-            if (item.PersonalExercisePurpose == null)
-            {
-                item.PersonalExercisePurpose = new PersonalExercisePurpose { };
-            }
-
-            item.PersonalExercisePurpose.PersonalExercisePurposeItem.Add(new PersonalExercisePurposeItem
-            {
-                PurposeItem = viewModel.PurposeItem
-            });
-
-            models.SubmitChanges();
+            item.AssertPurposeItem(models, viewModel.PurposeItem);
 
             return Json(new { result = true });
 

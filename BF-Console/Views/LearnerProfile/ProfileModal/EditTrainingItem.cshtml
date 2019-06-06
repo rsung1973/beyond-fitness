@@ -92,7 +92,6 @@
                                                 <i class="zmdi zmdi-sec-10"></i>
                                             </span>
                                         </div>
-                                        <label class="material-icons help-error-text">clear 請輸入時間</label>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
@@ -100,10 +99,18 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="checkbox">
-                                            <input id="Mildstone" value="Y" type="checkbox" />
-                                            <label for="Mildstone">自動加入里程碑</label>
-                                        </div>
+                                        <label class="fancy-checkbox custom-bgcolor-green">
+                                            <input name="PurposeID" value="@(_viewModel.PurposeID ?? -1)" type="checkbox" />
+                                            <span>自動加入里程碑</span>
+                                        </label>
+                                        @if (_viewModel.PurposeID.HasValue)
+                                        {
+                                            <script>
+                                                $(function () {
+                                                    $('input[name="PurposeID"]').prop('checked', true);
+                                                });
+                                            </script>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -112,37 +119,77 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-darkteal btn-round waves-effect"><i class="zmdi zmdi-edit"></i></button>
-                <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete"><i class="zmdi zmdi-delete"></i></button>
+                <button type="button" class="btn btn-darkteal btn-round waves-effect btnConfirm"><i class="zmdi zmdi-edit"></i></button>
+                <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete btnDelete"><i class="zmdi zmdi-delete"></i></button>
             </div>
         </div>
     </div>
     @{ Html.RenderPartial("~/Views/ConsoleHome/Shared/BSModalScript.cshtml", model: _dialogID);}
+       
+<script>
+    $(function () {
 
-    <script>
-        $(function () {
-            $('.date').datetimepicker({
-                language: 'zh-TW',
-                weekStart: 1,
-                todayBtn: 1,
-                clearBtn: 1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,
-                defaultView: 2,
-                forceParse: 0,
-                defaultDate: '@(String.Format("{0:yyyy-MM-dd}",DateTime.Today))',
-            });
-
-            var viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-            $('#@(_dialogID) button').on('click', function (event) {
-                var $formData = $('#@(_dialogID) form').serializeObject();
-                $global.queryCallback = function () {
-                    $global.closeAllModal();
-                };
-                showContractList($.extend({}, viewModel, $formData), -1);
+        $('#@(_dialogID) button.btnConfirm').on('click', function (element) {
+            clearErrors();
+            var $formData = $('#@(_dialogID)').find('input,select,textarea').serializeObject();
+            $formData.ItemID = $global.viewModel.ItemID;
+            $formData.ExecutionID = $global.viewModel.ExecutionID;
+            $formData.StageID = $global.viewModel.StageID;
+            if (!$('input[name="PurposeID"]').is(':checked')) {
+                delete $formData.PurposeID;
+            }
+            showLoading();
+            $.post('@Html.Raw(Url.Action("CommitTrainingItem", "Training"))', $formData, function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        refreshTrainingContent();
+                    } else {
+                        hideLoading();
+                        swal(data.message);
+                    }
+                } else {
+                    hideLoading();
+                    $(data).appendTo($('body'));
+                }
             });
         });
-    </script>
+
+    });
+</script>
+    @if(_model!=null)
+    {
+        <script>
+            $(function () {
+                $('#@(_dialogID) button.btnDelete').on('click', function () {
+                    swal({
+                        title: "確定刪除此項目?",
+                        text: "課表",
+                        //type: "successful",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "確定, 不後悔",
+                        cancelButtonText: "不, 點錯了",
+                        closeOnConfirm: true,
+                        closeOnCancel: true,
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            showLoading();
+                            $.post('@Html.Raw(Url.Action("DeleteTrainingItem", "Training", new {_viewModel.StageID, _viewModel.ItemID }))', {}, function (data) {
+                                hideLoading();
+                                if ($.isPlainObject(data)) {
+                                    if (data.result) {
+                                        refreshTrainingContent();
+                                    } else {
+                                        swal(data.message);
+                                    }
+                                } else {
+                                    $(data).appendTo($('body'));
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    }
 </div>

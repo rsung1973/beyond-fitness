@@ -93,6 +93,10 @@ namespace WebHome.Controllers
             }
 
             var execution = item.TrainingExecution;
+            if (item.PurposeID.HasValue)
+            {
+                models.ExecuteCommand("delete PersonalExercisePurposeItem where ItemID = {0}", item.PurposeID);
+            }
             models.ExecuteCommand("delete TrainingItem where ItemID = {0}", item.ItemID);
 
             calculateTotalMinutes(execution, viewModel.StageID.Value);
@@ -124,7 +128,7 @@ namespace WebHome.Controllers
 
             if (!viewModel.DurationInSeconds.HasValue)
             {
-                ModelState.AddModelError("DurationInMinutes", "請輸入時間");
+                ModelState.AddModelError("DurationInSeconds", "請輸入時間");
             }
 
             if (!viewModel.TrainingID.HasValue)
@@ -159,7 +163,7 @@ namespace WebHome.Controllers
             item.GoalTurns = viewModel.GoalTurns;
             item.Description = viewModel.Description;
             item.TrainingID = viewModel.TrainingID;
-            item.Remark = viewModel.Remark;
+            item.Remark = viewModel.Remark.GetEfficientString();
             item.DurationInMinutes = viewModel.DurationInMinutes;
 
             models.SubmitChanges();
@@ -175,6 +179,20 @@ namespace WebHome.Controllers
             }
 
             calculateTotalMinutes(execution, viewModel.StageID.Value);
+
+            if (item.PurposeID.HasValue)
+            {
+                if (!viewModel.PurposeID.HasValue)
+                {
+                    models.ExecuteCommand("delete PersonalExercisePurposeItem where ItemID = {0}", item.PurposeID);
+                }
+            }
+            else if (viewModel.PurposeID == -1 && item.Remark != null)
+            {
+                var purpose = item.TrainingExecution.TrainingPlan.LessonTime.RegisterLesson.UserProfile.AssertPurposeItem(models, item.Remark);
+                item.PurposeID = purpose.ItemID;
+                models.SubmitChanges();
+            }
 
             return Json(new { result = true, message = "" });
 

@@ -6812,6 +6812,18 @@
     <Content Include="Views\LearnerProfile\Module\LessonTrainingPlan.cshtml" />
     <Content Include="Views\LearnerProfile\ProfileModal\EditTrainingItem.cshtml" />
     <Content Include="Views\LearnerProfile\Module\TrainingAids.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\EditBreakInterval.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\FavoriteLesson.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\LessonList.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\LessonItems.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\ViewTrainingExecution.cshtml" />
+    <Content Include="Views\ConsoleHome\EditLearnerCharacter.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\PDQItem.cshtml" />
+    <Content Include="Views\LessonConsole\Module\TrainingSparkleDetails.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\EditLearnerFeature.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\EditExercisePurpose.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\LearnerCharacter.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\SelectLearnerProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

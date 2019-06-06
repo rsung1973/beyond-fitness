@@ -388,14 +388,60 @@ namespace WebHome.Helper
                 .Where(t => t.LessonAttendance != null || t.LessonPlan.CommitAttendance.HasValue);
         }
 
-        public static TrainingPlan AssertTrainingPlan<TEntity>(this LessonTime item, ModelSource<TEntity> models)
+        public static TrainingPlan AssertTrainingPlan<TEntity>(this LessonTime item, ModelSource<TEntity> models, Naming.DocumentLevelDefinition? planStatus = null,int? UID = null)
             where TEntity : class, new()
         {
+            if(UID.HasValue)
+            {
+                return item.AssertLearnerTrainingPlan(models, UID.Value, planStatus);
+            }
+
             var plan = item.TrainingPlan.FirstOrDefault();
+            if (plan == null)
+            {
+                foreach (var lesson in item.GroupingLesson.RegisterLesson)
+                {
+                    plan = new TrainingPlan
+                    {
+                        RegisterID = lesson.RegisterID,
+                        PlanStatus = (int?)planStatus,
+                        TrainingExecution = new TrainingExecution
+                        {
+                        }
+                    };
+
+                    item.TrainingPlan.Add(plan);
+                }
+                models.SubmitChanges();
+            }
+
+            return plan;
+
+        }
+
+        public static TrainingPlan AssertLearnerTrainingPlan<TEntity>(this LessonTime item, ModelSource<TEntity> models, int UID, Naming.DocumentLevelDefinition? planStatus = null)
+            where TEntity : class, new()
+        {
+
+            var lesson = item.GroupingLesson.RegisterLesson.Where(r => r.UID == UID).First();
+
+            var plan = item.TrainingPlan.Where(p => p.RegisterID == lesson.RegisterID).FirstOrDefault();
+            if (plan == null)
+            {
+                plan = item.TrainingPlan.Where(t => !t.RegisterID.HasValue).FirstOrDefault();
+                if (plan != null)
+                {
+                    plan.RegisterID = lesson.RegisterID;
+                    models.SubmitChanges();
+                }
+            }
+
             if (plan == null)
             {
                 plan = new TrainingPlan
                 {
+                    RegisterID = lesson.RegisterID,
+                    PlanStatus = (int?)planStatus,
                     TrainingExecution = new TrainingExecution
                     {
                     }
@@ -406,6 +452,26 @@ namespace WebHome.Helper
             }
 
             return plan;
+
+        }
+
+        public static PersonalExercisePurposeItem AssertPurposeItem<TEntity>(this UserProfile profile, ModelSource<TEntity> models,String purposeItem)
+            where TEntity : class, new()
+        {
+            if (profile.PersonalExercisePurpose == null)
+            {
+                profile.PersonalExercisePurpose = new PersonalExercisePurpose { };
+            }
+
+            PersonalExercisePurposeItem item = new PersonalExercisePurposeItem
+            {
+                PurposeItem = purposeItem,
+                InitialDate = DateTime.Now,
+            };
+            profile.PersonalExercisePurpose.PersonalExercisePurposeItem.Add(item);
+            models.SubmitChanges();
+
+            return item;
 
         }
 
@@ -574,6 +640,72 @@ namespace WebHome.Helper
                         l => l.BranchID, b => b.BranchID, (l, b) => l)
                     .Join(models.GetTable<PreferredLessonTime>().Where(p => !p.ApprovalDate.HasValue),
                         l => l.LessonID, p => p.LessonID, (l, p) => l);
+        }
+
+        public static TrainingPlan CloneTrainingPlan<TEntity>(this ModelSource<TEntity> models, TrainingPlan source,TrainingPlan target = null)
+            where TEntity : class, new()
+        {
+            if (source == target || source == null)
+            {
+                return null;
+            }
+
+            if (target == null)
+            {
+                target = new TrainingPlan
+                {
+                    LessonID = source.LessonID,
+                    PlanStatus = source.PlanStatus,
+                    RegisterID = source.RegisterID,
+                    TrainingExecution = new TrainingExecution
+                    {
+                        Emphasis = null //p.TrainingExecution.Emphasis
+                    }
+                };
+                models.GetTable<TrainingPlan>().InsertOnSubmit(target);
+            }
+            else
+            {
+                models.ExecuteCommand("delete TrainingExecutionStage where ExecutionID = {0}", target.ExecutionID);
+                models.ExecuteCommand("delete TrainingItem where ExecutionID = {0}", target.ExecutionID);
+            }
+
+            target.TrainingExecution.TrainingExecutionStage.AddRange(source.TrainingExecution.TrainingExecutionStage
+                .Select(t => new TrainingExecutionStage
+                {
+                    StageID = t.StageID,
+                    TotalMinutes = t.TotalMinutes
+                }));
+
+            foreach (var i in source.TrainingExecution.TrainingItem)
+            {
+                var item = new TrainingItem
+                {
+                    ActualStrength = i.ActualStrength,
+                    ActualTurns = i.ActualTurns,
+                    BreakIntervalInSecond = i.BreakIntervalInSecond,
+                    Description = i.Description,
+                    GoalStrength = i.GoalStrength,
+                    GoalTurns = i.GoalTurns,
+                    Remark = i.Remark,
+                    Repeats = i.Repeats,
+                    Sequence = i.Sequence,
+                    TrainingID = i.TrainingID,
+                    DurationInMinutes = i.DurationInMinutes,
+                };
+
+                target.TrainingExecution.TrainingItem.Add(item);
+                item.TrainingItemAids.AddRange(i.TrainingItemAids
+                    .Select(a => new TrainingItemAids
+                    {
+                        AidID = a.AidID
+                    }));
+
+            }
+
+            models.SubmitChanges();
+            return target;
+
         }
 
     }

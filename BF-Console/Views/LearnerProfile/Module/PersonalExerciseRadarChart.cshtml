@@ -19,64 +19,71 @@
     models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     _item = _model = (PersonalExercisePurpose)this.Model;
 }
-@if (_item != null)
+@if ((bool?)ViewBag.DisableHeight == true)
+{
+    <canvas id="@(_chartID)"></canvas>
+}
+else
 {
     <canvas id="@(_chartID)" height="120"></canvas>
-    <script>
-        $(function () {
-            var RadarConfig = {
-                type: 'radar',
-                data: {
-                    labels: ["相對肌力", "柔軟度", "心肺適能"],
-                    datasets: [{
-                        label: "分佈圖",
-                        backgroundColor: "rgba(179,214,255,.8)",
-                        pointBackgroundColor: "rgba(230,241,255,1)",
-                        data: [@(_item.MuscleStrength ?? 0), @(_item.Flexibility ?? 0), @(_item.Cardiopulmonary ?? 0)]
-                    }]
+}
+<script>
+    $(function () {
+        var RadarConfig = {
+            type: 'radar',
+            data: {
+                labels: ["相對肌力", "柔軟度", "心肺適能"],
+                datasets: [{
+                    label: "分佈圖",
+                    backgroundColor: "rgba(179,214,255,.8)",
+                    pointBackgroundColor: "rgba(230,241,255,1)",
+                    data: [@(_item?.MuscleStrength ?? 0), @(_item?.Flexibility ?? 0), @(_item?.Cardiopulmonary ?? 0)]
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
                 },
-                options: {
-                    legend: {
-                        display: false
-                    },
 
-                    scale: {
-                        reverse: false,
-                        display: true,
-                        ticks: {
-                            showLabelBackdrop: false,
-                            beginAtZero: true,
-                            backdropColor: '#e6f1ff',
-                            maxTicksLimit: 5,
-                            max: 10,
-                            fontSize: 5,
-                            backdropPaddingX: 5,
-                            backdropPaddingY: 5
-                        },
-                        gridLines: {
-                            color: "#fff",
-                            lineWidth: 1
-                        },
-                        pointLabels: {
-                            fontSize: 12,
-                            fontColor: "#fff"
-                        }
+                scale: {
+                    reverse: false,
+                    display: true,
+                    ticks: {
+                        showLabelBackdrop: false,
+                        beginAtZero: true,
+                        backdropColor: '#e6f1ff',
+                        maxTicksLimit: 5,
+                        max: 10,
+                        fontSize: 5,
+                        backdropPaddingX: 5,
+                        backdropPaddingY: 5
+                    },
+                    gridLines: {
+                        color: "#708090",
+                        lineWidth: 1
+                    },
+                    pointLabels: {
+                        fontSize: 12,
+                        fontColor: "#708090"
                     }
                 }
+            }
+        };
+
+        var initGraph = $global.initGraph;
+        $global.initGraph = function () {
+            if (initGraph) {
+                initGraph();
+            }
+            $global.exerciseRadar = new Chart(document.getElementById("@(_chartID)"), RadarConfig);
+            $global.updateExerciseRadar = function (data) {
+                $global.exerciseRadar.data.datasets[0].data = data;
+                $global.exerciseRadar.update(RadarConfig);
             };
+        };
 
-            var initGraph = $global.initGraph;
-            $global.initGraph = function () {
-                if (initGraph) {
-                    initGraph();
-                }
-                window.myRadar = new Chart(document.getElementById("@(_chartID)"), RadarConfig);
-            };
-
-        });
-    </script>
-
-}
+    });
+</script>
 @{ Html.RenderPartial("~/Views/ConsoleHome/Shared/InitBarChartNoRegister.cshtml");}
 
 

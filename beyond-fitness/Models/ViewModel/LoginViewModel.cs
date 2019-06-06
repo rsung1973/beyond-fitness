@@ -149,6 +149,7 @@ namespace WebHome.Models.ViewModel
         public Naming.MemberStatusDefinition? MemberStatus { get; set; }
         public String Address { get; set; }
         public Naming.RoleID? RoleID { get; set; }
+        public int? UID { get; set; }
     }
 
     public class LessonViewModel
@@ -324,6 +325,8 @@ namespace WebHome.Models.ViewModel
 
         public int? ExecutionID { get; set; }
         public String Emphasis { get; set; }
+        public int? UID { get; set; }
+
     }
 
     public class TrainingItemViewModel
@@ -368,7 +371,7 @@ namespace WebHome.Models.ViewModel
         }
 
         public int? StageID { get; set; }
-        public int? Milestone { get; set; }
+        public int? PurposeID { get; set; }
     }
 
     public class TrainingPlanViewModel
@@ -576,11 +579,12 @@ namespace WebHome.Models.ViewModel
         public String QueryType { get; set; } = "default";
     }
 
-    public class LessonQueryViewModel
+    public class LessonQueryViewModel : QueryViewModel
     {
         public int? CoachID { get; set; }
         public DateTime? QueryStart { get; set; }
         public DateTime? ClassTime { get; set; }
+        public int? LearnerID { get; set; }
     }
 
     public class LessonTimeBookingViewModel : QueryViewModel
@@ -591,6 +595,10 @@ namespace WebHome.Models.ViewModel
         public int? BranchID { get; set; }
         public String BranchName { get; set; }
         public String ViewName { get; set; }
+        public int? UID { get; set; }
+        public String Remark { get; set; }
+        public int? CopyFrom { get; set; }
+
     }
 
     public class TrialLearnerViewModel
@@ -667,7 +675,21 @@ namespace WebHome.Models.ViewModel
         public String Ability { get; set; }
         public String Feature { get; set; }
         public int? Point { get; set; }
+        public int? Flexibility { get; set; }
+        public int? Cardiopulmonary { get; set; }
+        public int? MuscleStrength { get; set; }
+        public String AbilityStyle { get; set; }
+        public Naming.PowerAbilityLevel? AbilityLevel { get; set; }
+        public MultiPurposeItemViewModel Items { get; set; }
+    }
 
+    public class MultiPurposeItemViewModel
+    {
+        public int? UID { get; set; }
+        public String Purpose { get; set; }
+        public DateTime?[] CompleteDate { get; set; }
+        public String[] PurposeItem { get; set; }
+        public int?[] ItemID { get; set; }
     }
 
     public class DailyQuestionQueryViewModel : QueryViewModel
@@ -676,6 +698,20 @@ namespace WebHome.Models.ViewModel
         public int? AskerID { get; set; }
         public int? Status { get; set; }
         public String Keyword { get; set; }
+    }
+
+    public class LearnerCharacterViewModel : QueryViewModel
+    {
+        public int? UID { get; set; }
+        public int? QuestionnaireID { get; set; }
+    }
+
+
+    public class PDQTaskItemViewModel : LearnerCharacterViewModel
+    {
+        public int? QuestionID { get; set; }
+        public int?[] SuggestionID { get; set; }
+        public String PDQAnswer { get; set; }
     }
 
 }
