@@ -58,6 +58,12 @@ namespace WebHome.Models.ViewModel
         public int? InstallmentID { get; set; }
         public int? ManagerID { get; set; }
         public Naming.OperationMode? OperationMode { get; set; }
+        public String[] PaymentMethod { get; set; }
+        public Naming.ContractVersion? Version { get; set; }
+        public Naming.Actor? BySelf { get; set; }
+        public int? ProcessingFee { get; set; }
+        public bool? UnpaidExpiring { get; set; }
+        public bool? Unpaid { get; set; }
 
     }
 
@@ -93,7 +99,6 @@ namespace WebHome.Models.ViewModel
 
     public class ContractMemberViewModel : LearnerViewModel
     {
-        public int? UID { get; set; }
         public String EmergencyContactPhone { get; set; }
         public String EmergencyContactPerson { get; set; }
         public String Relationship { get; set; }
@@ -102,6 +107,7 @@ namespace WebHome.Models.ViewModel
         public int? OwnerID { get; set; }
         public int? ContractType { get; set; }
         public string Nickname { get; set; }
+        public bool? ProfileOnly { get; set; }
     }
 
     public class UserSignatureViewModel : QueryViewModel
@@ -135,7 +141,6 @@ namespace WebHome.Models.ViewModel
     public class LearnerQueryViewModel : LearnerViewModel
     {
         public String IDNo { get; set; }
-        public int? UID { get; set; }
         public int? CoachID { get; set; }
         public int?[] LessonID { get; set; }
     }
@@ -165,10 +170,17 @@ namespace WebHome.Models.ViewModel
         public int? CoachID { get; set; }
         public int? ContractID { get; set; }
         public bool? InvoiceNow { get; set; }
+        public int?[] ProductItemID { get; set; }
+
     }
 
     public class PaymentQueryViewModel : PaymentViewModel
     {
+        public PaymentQueryViewModel() : base()
+        {
+            InvoiceType = null;
+        }
+
         public string UserName { get; set; }
         public int? BranchID { get; set; }
         public bool? IsCancelled { get; set; }
@@ -181,6 +193,21 @@ namespace WebHome.Models.ViewModel
             set => PayoffDateFrom = value;
         }
         public bool? BypassCondition { get; set; }
+        public Naming.PaymentTransactionType?[] CompoundType { get; set; }
+        public bool? ScrollToView { get; set; }
+        public bool? HasCancellation
+        {
+            get => IsCancelled;
+            set => IsCancelled = value;
+        }
+        public bool? HasAllowance { get; set; }
+        public bool? HasInvoicePrinted { get; set; }
+        public int? ShareFor { get; set; }
+        public bool? IncomeOnly { get; set; }
+        public bool? HasShare { get; set; }
+        public int? RelatedID { get; set; }
+        public int? TransactionID { get; set; }
+
     }
 
     public class AchievementQueryViewModel : QueryViewModel
@@ -200,6 +227,20 @@ namespace WebHome.Models.ViewModel
         public Naming.QueryIntervalDefinition? QueryInterval { get; set; }
         public bool? BypassCondition { get; set; }
         public bool? DetailsOnly { get; set; }
+    }
+
+    public class CoachBonusViewModel : QueryViewModel
+    {
+        public int? CoachID { get; set; }
+        public int? SettlementID { get; set; }
+        public int? ManagerBonus { get; set; }
+        public int? SpecialBonus { get; set; }
+    }
+
+    public class MonthlyBonusViewModel : AchievementQueryViewModel
+    {
+        public int? ManagerBonus { get; set; }
+        public int? SpecialBonus { get; set; }
     }
 
     public class QuestionnaireQueryViewModel : AchievementQueryViewModel
@@ -378,6 +419,17 @@ namespace WebHome.Models.ViewModel
         public DateTime? DocDate { get; set; }
         public String Title { get; set; }
         public int?[] TagID { get; set; }
+
+    }
+
+    public class AttachmentQueryViewModel : QueryViewModel
+    {
+        public int? AttachmentID { get; set; }
+        public int? id
+        {
+            get => AttachmentID;
+            set => AttachmentID = value;
+        }
 
     }
 

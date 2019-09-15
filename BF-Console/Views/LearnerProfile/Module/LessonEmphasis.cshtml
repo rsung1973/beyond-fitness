@@ -21,8 +21,9 @@
     var plan = _model.AssertTrainingPlan(models, UID: learner.UID);
     var execution = plan.TrainingExecution;
     bool viewOnly = (bool?)ViewBag.ViewOnly == true ? true : false;
+    bool isModal = (bool?)ViewBag.IsModal == true ? true : false;
 }
-<a href="@(viewOnly==true ? "javascript:void(0);" : " javascript:$global.editEmphasis();")">
+<a href="javascript:@(isModal ? "void(0)" : $"$global.editEmphasis('{HttpUtility.JavaScriptStringEncode(execution.Emphasis)}')");">
     <span id="emphasis">@(execution.Emphasis ?? "重點一片空，學生要來踹你了...")</span>
     <i class="zmdi livicon-evo" data-options="name: pencil.svg; size: 30px; style: original; strokeStyle:round; strokeColor:#052333; strokeWidth:2px; autoPlay:true"></i>
 </a>
@@ -31,7 +32,7 @@
     <script>
         $(function () {
             //編輯上課重點
-            $global.editEmphasis = function () {
+            $global.editEmphasis = function (defaultValue) {
                 swal({
                     title: "上課重點",
                     text: "",
@@ -42,7 +43,8 @@
                     cancelButtonText: "不, 點錯了",
                     closeOnConfirm: false,
                     animation: "slide-from-top",
-                    inputPlaceholder: "請輸入20個中英文字"
+                    inputPlaceholder: "請輸入20個中英文字",
+                    inputValue: defaultValue
                 }, function (inputValue) {
                     if (inputValue === false)
                         return false;
@@ -62,7 +64,6 @@
                         if (data.result) {
                             swal("Nice!", "You wrote: " + emphasis, "success");
                             $('#emphasis').text(emphasis);
-                            $global.closeAllModal();
                         } else {
                             swal({
                                 title: "Opps！",
@@ -82,6 +83,17 @@
                 });
             }
 
+        });
+    </script>
+}
+else
+{
+    <script>
+        $(function () {
+            //編輯上課重點
+            $global.editEmphasis = function () {
+                swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+            };
         });
     </script>
 }

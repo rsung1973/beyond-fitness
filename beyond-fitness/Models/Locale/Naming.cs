@@ -71,7 +71,8 @@ namespace WebHome.Models.Locale
             體驗課程 = 1006,
             點數兌換課程 = 1007,
             團體學員課程 = 1008,
-            在家訓練 = 1009
+            在家訓練 = 1009,
+            員工福利課程 = 1010,
         }
 
         public enum LessonPriceFeature
@@ -141,6 +142,18 @@ namespace WebHome.Models.Locale
             "工讀生"
         };
 
+        public static readonly int[] StaffRole = new int[] 
+        {
+            (int)RoleID.Administrator,
+            (int)RoleID.Accounting,
+            (int)RoleID.Assistant,
+            (int)RoleID.Coach,
+            (int)RoleID.Manager,
+            (int)RoleID.Officer,
+            (int)RoleID.Servitor,
+            (int)RoleID.ViceManager,
+        };
+
         public enum LessonStatus
         {
             準備上課 = 100,
@@ -182,6 +195,7 @@ namespace WebHome.Models.Locale
 
         public enum ProfessionalCategory
         {
+            Preliminary = 1100,
             舊制 = 1101,
             新制 = 1102,
             Special = 1103,
@@ -191,8 +205,15 @@ namespace WebHome.Models.Locale
             AFM = 1107
         }
 
+        public static readonly ProfessionalCategory[] ManagerialLevel = new ProfessionalCategory[]
+        {
+            ProfessionalCategory.Special,
+            ProfessionalCategory.FM,
+        };
+
         public enum ProfessionLevelDefinition
         {
+            Preliminary = 0,
             FM_1st = 1,
             AFM_1st = 2,
             Level_5_1st = 14,
@@ -264,7 +285,7 @@ namespace WebHome.Models.Locale
         {
             體能顧問費 = 1,
             自主訓練 = 2,
-            飲品 = 3,
+            食飲品 = 3,
             運動商品 = 4,
             合約轉讓沖銷 = 5,
             合約轉點沖銷 = 6,
@@ -342,9 +363,10 @@ namespace WebHome.Models.Locale
             南京 = 1,
             信義 = 2,
             忠孝 = 3,
-            其他 = 4,
+            東門 = 4,
             璞真,
             甜蜜的家,
+            其他,
         }
 
         public enum ContractTypeDefinition
@@ -388,6 +410,30 @@ namespace WebHome.Models.Locale
             初階 = 1,
             中階 = 2,
             高階 = 3,
+        }
+
+        public enum ContractVersion
+        {
+            Ver2019 = 20190801,
+        }
+
+        public enum Actor
+        {
+            ByOther = 0,
+            BySelf = 1,
+        }
+
+        public enum LessonSettlementStatus
+        {
+            HalfAchievement = 1,
+            FullAchievement = 2,
+        }
+
+        public enum LessonSelfTraining
+        {
+            自主訓練 = 1,
+            在家訓練 = 2,
+            體驗課程 = 3,
         }
 
     }

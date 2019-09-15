@@ -16,7 +16,7 @@ namespace WebHome.Helper
 {
     public static class BusinessExtensionMethods
     {
-        public static void AttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item)
+        public static void AttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item, Naming.QuestionnaireGroup? groupID = null)
                     where TEntity : class, new()
         {
             if (!item.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
@@ -30,8 +30,14 @@ namespace WebHome.Helper
 
                 foreach (var r in item.GroupingLesson.RegisterLesson)
                 {
-                    r.UID.CheckCurrentQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼);
-                    models.CheckLearnerQuestionnaireRequest(r);
+                    if (groupID == Naming.QuestionnaireGroup.身體心靈密碼)
+                    {
+                        r.UID.CheckCurrentQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼);
+                    }
+                    else
+                    {
+                        models.CheckLearnerQuestionnaireRequest(r);
+                    }
                 }
             }
 
@@ -148,8 +154,11 @@ namespace WebHome.Helper
         public static QuestionnaireRequest CheckCurrentQuestionnaireRequest<TEntity>(this int learnerID, ModelSource<TEntity> models, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
             where TEntity : class, new()
         {
-            var lessons = learnerID.PromptLearnerLessons(models)
+            var PT = learnerID.PromptLearnerLessons(models)
                             .PTLesson()
+                            .Where(l => l.LessonAttendance != null);
+            var PI = learnerID.PromptLearnerLessons(models)
+                            .PILesson()
                             .Where(l => l.LessonAttendance != null);
 
             var item = models.GetTable<QuestionnaireRequest>().Where(q => q.UID == learnerID)
@@ -164,10 +173,11 @@ namespace WebHome.Helper
                     return item;
                 }
 
-                lessons = lessons.Where(l => l.ClassTime >= item.RequestDate);
+                PT = PT.Where(l => l.ClassTime >= item.RequestDate);
+                PI = PI.Where(l => l.ClassTime >= item.RequestDate);
             }
 
-            if (lessons.Count() >= 12)
+            if (PT.Count() + PI.Count() >= 12)
             {
                 return learnerID.AssertQuestionnaire(models, groupID);
             }
@@ -237,6 +247,44 @@ namespace WebHome.Helper
                     || f.LessonFitnessAssessmentReport.Count(r => r.FitnessAssessmentItem.ItemID == 17) == 0
                     || f.LessonFitnessAssessmentReport.Count(r => r.FitnessAssessmentItem.GroupID == 3) == 0);
         }
+
+        public static bool CheckToAttendLesson<TEntity>(this LessonTime lessonItem, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+
+            if (lessonItem.LessonAttendance != null)
+            {
+                return false;
+            }
+
+            if(!(lessonItem.ClassTime < DateTime.Today.AddDays(1)))
+            {
+                return false;
+            }
+
+            if (lessonItem.IsSTSession())
+            {
+                return false;
+            }
+
+            if(lessonItem.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練)
+            {
+                return false;
+            }
+
+            bool result = true;
+            if(lessonItem.IsCoachPISession())
+            {
+                result = !models.GetEffectiveQuestionnaireRequest(lessonItem.RegisterLesson.UserProfile, Naming.QuestionnaireGroup.身體心靈密碼).Any();
+            }
+            else 
+            {
+                result = !lessonItem.GetEffectiveQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼).Any();
+            }
+
+            return result;
+        }
+
 
         public static bool IsAttendanceOverdue<TEntity>(this ModelSource<TEntity> models, LessonTime item)
             where TEntity : class, new()
@@ -612,22 +660,35 @@ namespace WebHome.Helper
                 .ToString();
         }
 
-        public static IQueryable<QuestionnaireRequest> GetQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile)
+        public static IQueryable<QuestionnaireRequest> GetQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
             where TEntity : class, new()
         {
-            return models.GetTable<QuestionnaireRequest>().Where(q => q.UID == profile.UID
-                && q.PDQTask.Count == 0 && !q.Status.HasValue);
+            return models.GetTable<QuestionnaireRequest>().Where(q => q.UID == profile.UID)
+                .Where(q => q.PDQTask.Count == 0)
+                .Where(q => q.GroupID == (int)groupID)
+                .Where(q => !q.Status.HasValue);
         }
 
-        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile,Naming.QuestionnaireGroup group)
+        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile,Naming.QuestionnaireGroup groupID)
             where TEntity : class, new()
         {
             return models.GetTable<QuestionnaireRequest>()
                 .Where(q => q.UID == profile.UID)
-                .Where(q => q.GroupID == (int)group)
+                .Where(q => q.GroupID == (int)groupID)
                 .Where(q => !q.Status.HasValue 
                     || q.Status == (int)Naming.IncommingMessageStatus.未讀);
         }
+
+        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this LessonTime item, ModelSource<TEntity> models, Naming.QuestionnaireGroup group)
+            where TEntity : class, new()
+        {
+            return models.GetTable<RegisterLesson>().Where(r => r.RegisterGroupID == item.GroupID)
+                .Join(models.GetTable<QuestionnaireRequest>(), r => r.UID, q => q.UID, (r, q) => q)
+                .Where(q => q.GroupID == (int)group)
+                .Where(q => !q.Status.HasValue
+                    || q.Status == (int)Naming.IncommingMessageStatus.未讀);
+        }
+
 
         public static int? BonusPoint<TEntity>(this UserProfile item, ModelSource<TEntity> models)
             where TEntity : class, new()
@@ -637,6 +698,15 @@ namespace WebHome.Helper
                 .Where(t => !t.BonusExchange.Any())
                 .Sum(x => x.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint);
         }
+
+        public static int? AwardedPoint<TEntity>(this UserProfile item, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            return models.GetTable<PDQTaskBonus>()
+                .Where(t => t.PDQTask.UID == item.UID)
+                .Sum(x => x.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint);
+        }
+
 
         public static IEnumerable<PDQTaskBonus> BonusPointList<TEntity>(this UserProfile item, ModelSource<TEntity> models)
             where TEntity : class, new()
@@ -735,7 +805,7 @@ namespace WebHome.Helper
         public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<LessonTime> items)
             where TEntity : class, new()
         {
-            var lessons = items.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+            var lessons = items.FullAchievementLesson()
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
                         .Where(r => r.IntuitionCharge != null);
@@ -767,7 +837,7 @@ namespace WebHome.Helper
 
             //}
 
-            lessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+            lessons = items.HalfAchievementLesson()
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
                         .Where(r => r.IntuitionCharge != null);
@@ -778,68 +848,212 @@ namespace WebHome.Helper
             return (fullAchievement ?? 0) + (halfAchievement ?? 0);
         }
 
+        public static int CalcLearnerContractAchievement(this IQueryable<LessonTime> items, out int count, bool filterData = true)
+        {
+            var lessonItems = filterData
+                ? items.Where(l => l.RegisterLesson.RegisterLessonContract != null)
+                : items;
+            count = lessonItems.Count();
+            return lessonItems.Sum(l => l.RegisterLesson.LessonPriceType.ListPrice * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0;
+        }
+
+        public static int CalcPISessionAchievement(this IQueryable<LessonTime> items, out int count, bool filterData = true)
+        {
+            var lessonItems = filterData
+                ? items.Where(l => l.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練)
+                : items;
+            count = lessonItems.Count();
+            return lessonItems.Sum(l => l.RegisterLesson.LessonPriceType.ListPrice) ?? 0;
+        }
+
+
+        public static int CalcEnterpriseContractAchievement(this IQueryable<LessonTime> items, out int count, bool filterData = true)
+        {
+            var lessonItems = filterData
+                ? items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null)
+                : items;
+            count = lessonItems.Count();
+            return lessonItems.Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice) ?? 0;
+        }
+
+        public static int CalcEnterprisePISessionAchievement(this IQueryable<LessonTime> items, out int count, bool filterData = true)
+        {
+            var lessonItems = filterData
+                ? items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null && l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.自主訓練)
+                : items;
+            count = lessonItems.Count();
+            return lessonItems.Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice) ?? 0;
+        }
+
+        public static int CalcPTSessionAchievement(this IQueryable<LessonTime> items, out int count)
+        {
+            int subtotal = items.CalcLearnerContractAchievement(out int contractCount) + items.CalcEnterpriseContractAchievement(out int entpCount);
+            count = contractCount + entpCount;
+            return subtotal;
+        }
+
+        public static int CalcLearnerPISessionAchievement(this IQueryable<LessonTime> items, out int count)
+        {
+            int subtotal = items.CalcPISessionAchievement(out count) + items.CalcEnterprisePISessionAchievement(out int entpCount);
+            count += entpCount;
+            return subtotal;
+        }
+
+
         public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<LessonTime> items, out int shares)
             where TEntity : class, new()
         {
             shares = 0;
+
+            var fullAchievement = items.FullAchievementLesson().CalcTuition(models); 
+            var halfAchievement = items.HalfAchievementLesson().CalcTuition(models) / 2;
+
+            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
+            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+
+            shares = items.FullAchievementLesson().CalcTuitionShare(models)
+                + items.HalfAchievementLesson().CalcTuitionShare(models) / 2;
+
+            return fullAchievement + halfAchievement;
+        }
+
+        public static int CalcTuition<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
             var allLessons = items
-                .Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
             var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
             var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
-            var fullAchievement = lessons
-                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
-                + enterpriseLessons
+            var tuition = (lessons
+                .Sum(l => l.LessonPriceType.ListPrice
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+                + (enterpriseLessons
                     .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100);
+                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+            return tuition;
+        }
 
-            allLessons = items.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
+        public static int CalcTuition<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            var allLessons = items
                 .Select(l => l.GroupingLesson)
                         .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
-            lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
-            enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
+            var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
+            var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
-            var halfAchievement = (lessons
-                .Sum(l => l.LessonPriceType.CoachPayoffCreditCard
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100)
-                + enterpriseLessons
+            var tuition = (lessons
+                .Sum(l => l.LessonPriceType.ListPrice
+                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+                + (enterpriseLessons
                     .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100)) / 2;
+                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+            return tuition;
+        }
+
+        public static int CalcTuition<TEntity>(this IQueryable<V_Tuition> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+
+            var lessons = items.Where(r => !r.EnterpriseRegisterID.HasValue);
+            var enterpriseLessons = items.Where(r => r.EnterpriseRegisterID.HasValue);
+
+            var tuition = (lessons
+                .Sum(l => l.ListPrice * l.GroupingMemberCount * l.TuitionIndex
+                    * l.PercentageOfDiscount / 100) ?? 0)
+                + (enterpriseLessons
+                    .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                        * l.PercentageOfDiscount / 100) ?? 0);
+            return (int)tuition;
+        }
+
+        public static int CalcTuition<TEntity>(this IEnumerable<V_Tuition> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+
+            var lessons = items.Where(r => !r.EnterpriseRegisterID.HasValue);
+            var enterpriseLessons = items.Where(r => r.EnterpriseRegisterID.HasValue);
+
+            var tuition = (lessons
+                .Sum(l => l.ListPrice * l.GroupingMemberCount * l.TuitionIndex
+                    * l.PercentageOfDiscount / 100) ?? 0)
+                + (enterpriseLessons
+                    .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                        * l.PercentageOfDiscount / 100) ?? 0);
+            return (int)tuition;
+        }
+
+        public static int CalcTuitionShare<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            int shares = 0;
 
             var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
             var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
 
-            shares = ((int?)courseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
-                .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
+            shares = ((int?)courseItems
+                .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
                     * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
-                + ((int?)courseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
-                .Sum(l => l.RegisterLesson.LessonPriceType.CoachPayoffCreditCard
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) / 2 ?? 0)
-                + ((int?)enterpriseItems.Where(t => t.LessonAttendance != null && t.LessonPlan.CommitAttendance.HasValue)
+                + ((int?)enterpriseItems
                 .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
                     * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
-                + ((int?)enterpriseItems.Where(t => t.LessonAttendance == null || !t.LessonPlan.CommitAttendance.HasValue)
-                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) / 2 ?? 0);
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
 
-            return (fullAchievement ?? 0) + (halfAchievement ?? 0);
+            return shares;
         }
+
+        public static int CalcTuitionShare<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            int shares = 0;
+
+            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
+            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+
+            shares = ((int?)courseItems
+                .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
+                + ((int?)enterpriseItems
+                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
+
+            return shares;
+        }
+
+        public static int CalcTuitionShare<TEntity>(this IQueryable<V_Tuition> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            int shares = 0;
+
+            var courseItems = items.Where(l => !l.EnterpriseRegisterID.HasValue);
+            var enterpriseItems = items.Where(l => l.EnterpriseRegisterID.HasValue);
+
+            shares = ((int?)courseItems
+                .Sum(l => l.ListPrice * l.TuitionIndex
+                    * l.GroupingMemberCount * l.PercentageOfDiscount / 100
+                    * l.MarkedGradeIndex / 100) ?? 0)
+                + ((int?)enterpriseItems
+                .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                    * l.GroupingMemberCount * l.PercentageOfDiscount / 100
+                    * l.MarkedGradeIndex / 100) ?? 0);
+
+            return shares;
+        }
+
 
 
         public static IQueryable<TuitionAchievement> GetTuitionAchievement<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month)
             where TEntity : class, new()
         {
             IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
-                .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+                .FilterByEffective();
             Expression<Func<TuitionAchievement, bool>> queryExpr = c => true;
 
             DateTime? queryDateTo = dateTo;
@@ -1781,6 +1995,7 @@ namespace WebHome.Helper
             }
             item.LessonTimeSettlement.ProfessionalLevelID = coach.LevelID.Value;
             item.LessonTimeSettlement.MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex;
+            item.LessonTimeSettlement.CoachWorkPlace = coach.WorkBranchID();
         }
 
         public static IQueryable<TrainingItemAids> LearnerTrainingAids<TEntity>(this int uid, ModelSource<TEntity> models)
@@ -1823,7 +2038,7 @@ namespace WebHome.Helper
                     var paymentItems = c.ContractPayment.Select(p => p.Payment)
                             .Where(p => p.TransactionType != (int)Naming.PaymentTransactionType.合約終止沖銷)
                             .Where(p => p.PayoffDate < calcDate)
-                            .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue);
+                            .FilterByEffective();
 
                     if (paymentItems.Count() > 0)
                     {

@@ -436,6 +436,13 @@ namespace WebHome.Controllers
             return View();
         }
 
+        public ActionResult DataNotFound(DataItemViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View();
+        }
+
+
         public ActionResult CheckAttendance(RegisterViewModel viewModel)
         {
             ViewResult result = (ViewResult)Notice(viewModel);
@@ -492,6 +499,28 @@ namespace WebHome.Controllers
             var item = models.PromptLearnerDailyQuestion(profile);
             return View("AnswerDailyQuestion", item);
         }
+
+        [Authorize]
+        public ActionResult MyContract()
+        {
+            var profile = HttpContext.GetUser();
+            var items = models.PromptEffectiveContract()
+                .Where(c => c.CourseContractMember.Any(m => m.UID == profile.UID));
+            if (items.Count() > 0)
+            {
+                return View("~/Views/CornerKick/MyContract.cshtml", items);
+            }
+            else
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的合約",
+                    Message = "目前尚未規劃任何訓練，<br/>若有興趣請與您的教練一起規劃訓練內容喔！",
+                };
+                return View("~/Views/CornerKick/DataNotFound.cshtml");
+            }
+        }
+
 
         [Authorize]
         public ActionResult CommitAnswerDailyQuestion(DailyQuestionViewModel viewModel)

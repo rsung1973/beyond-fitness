@@ -36,11 +36,11 @@
     <!-- Jquery Nestable -->
     <link rel="stylesheet" href="plugins/nestable/jquery-nestable.css" />
     <!-- Custom Css -->
-    <link rel="stylesheet" href="css/customelist.css?2">
+    <link rel="stylesheet" href="css/customelist.css?2" />
 
 }
 
-    <section class="content profile-page">
+    <section class="content">
         @{ ViewBag.BlockHeader = "編輯課表";
             ViewBag.InsertPartial = "~/Views/LearnerProfile/Module/ProfileHeader.cshtml";
             Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);}
@@ -49,7 +49,9 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="header">
-                    <h2><strong>@(learner.FullName())</strong> - <span class="@(learner.PersonalExercisePurpose.PowerAbliityCss())">@(learner.PersonalExercisePurpose?.PowerAbility ?? "無")</span></h2>
+                    <h2><strong>@(learner.FullName())</strong> - 
+                        <span class="@(learner.PersonalExercisePurpose.PowerAbliityCss())">@(learner.PersonalExercisePurpose.ExercisePurposeDescription())</span>
+                    </h2>
                     <ul class="header-dropdown">
                         <li>
                             @{
@@ -62,19 +64,20 @@
                                 @{
                                     bool hasSlideItem = false;
                                 }
-                                @if (lessonItem.GroupingLesson.RegisterLesson.Count > 1)
+                                @if (lessonItem.IsCoachPISession())
+                                {
+                                    if (lessonItem.ClassTime >= DateTime.Today && lessonItem.GroupingLesson.LessonTime.Count > 1)
+                                    {
+                                        hasSlideItem = true;
+                                        <li><a href="javascript:cloneCoachPITrainingPlan();">同步課表</a></li>
+                                    }
+                                }
+                                else if (lessonItem.GroupingLesson.RegisterLesson.Count > 1)
                                 {
                                     hasSlideItem = true;
                                     <li><a href="javascript:cloneLearnerTrainingPlan();">同步課表</a></li>
                                 }
-                                else if (lessonItem.ClassTime >= DateTime.Today && lessonItem.GroupingLesson.LessonTime.Count > 1)
-                                {
-                                    hasSlideItem = true;
-                                    <li><a href="javascript:cloneCoachPITrainingPlan();">同步課表</a></li>
-                                }
-                                @if ((lessonItem.RegisterLesson.LessonPriceType.Status != (int)Naming.LessonPriceStatus.自主訓練
-                                        && lessonItem.ClassTime < DateTime.Today.AddDays(1)) && lessonItem.LessonAttendance == null
-                                        && !lessonItem.IsSTSession())
+                                @if (lessonItem.CheckToAttendLesson(models))
                                 {
                                     hasSlideItem = true;
                                     <li><a href="javascript:attendLesson();">完成上課</a></li>
@@ -123,7 +126,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <hr>
                                     <div class="new_timeline">
                                         <ul>
                                             <li>
@@ -137,7 +139,7 @@
                                                     <div class="bullet pink"></div>
                                                     <div class="time">NEXT</div>
                                                     <div class="desc">
-                                                        <a href="@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { questionnaire.QuestionnaireID, KeyID = questionnaire.UID.EncryptKey() })))">
+                                                        <a href="javascript:editLearnerCharacter();">
                                                             <h3 class="col-red">重新了解學生 Go~</h3>
                                                         </a>
                                                     </div>
@@ -172,8 +174,13 @@
     <script>
 
         function refreshTrainingContent() {
-            $('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { KeyID = lessonItem.LessonID.EncryptKey(),LearnerID = learner.UID }))', { });
+            editTrainingContent('@(lessonItem.LessonID.EncryptKey())');
         }
+
+        function editTrainingContent(keyID) {
+            $('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { LearnerID = learner.UID }))', { 'keyID': keyID });
+        }
+
 
         //編輯近期目標
         this.addRecentGoal = function () {
@@ -250,11 +257,12 @@
 
         function commitAttendance(remark) {
             showLoading();
-            $.post('@Html.Raw(Url.Action("AttendLesson", "Attendance"))', { 'keyID': '@(lessonItem.LessonID.EncryptKey())', 'remark': remark }, function (data) {
+            $.post('@Html.Raw(Url.Action("AttendLesson", "Attendance",new { QuestionnaireGroupID = (int)Naming.QuestionnaireGroup.身體心靈密碼 }))', { 'keyID': '@(lessonItem.LessonID.EncryptKey())', 'remark': remark }, function (data) {
                 hideLoading();
                 if ($.isPlainObject(data)) {
                     if (data.result) {
                         swal("Nice!", "You wrote: " + remark, "success");
+                        refreshTrainingContent();
                     } else {
                         swal({
                             title: "Opps！",
@@ -371,6 +379,28 @@
                 }
             });
         };
+
+        function editLearnerCharacter() {
+
+            $('').launchDownload('@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { KeyID = learner.UID.EncryptKey() })))', {});
+
+            @*$global.rejectCharacterDone = function () {
+                $('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { LearnerID =  learner.UID }))', {'keyID':'@(lessonItem.LessonID.EncryptKey())' });
+            };
+
+            $.post('@Html.Raw(Url.Action("ResumeLearnerCharacter", "LearnerProfile"))', { 'keyID': '@(learner.UID.EncryptKey())' }, function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        $('').launchDownload('@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { KeyID = learner.UID.EncryptKey() })))', {});
+                    } else {
+                        swal(data.message);
+                    }
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });*@
+        }
+
 
     </script>
 }

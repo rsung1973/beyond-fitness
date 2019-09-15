@@ -18658,6 +18658,13 @@ textarea:focus {
     margin-bottom: 0px;
 }
 
+.section-branch h1 span{
+    font-weight: 400;
+    color: #f4f6f9;
+    font-style: italic;
+    font-family: sans-serif;
+}
+
 .section-branch a.tel {
     font-size: 20px;
     color: #bfbfbf;
@@ -18722,7 +18729,7 @@ textarea:focus {
     position: relative;
     overflow: hidden;
     text-align: center;
-    height: 60vh;
+    height: 80vh;
     background: #fff;
 }
 
@@ -18746,7 +18753,7 @@ textarea:focus {
 }
 
 .section-faq-content {
-    padding: 0px 0;
+    padding: 20px 20px 20px 20px;
     background: #fff;
 }
 
@@ -19480,10 +19487,12 @@ textarea:focus {
     }
     
     .section-faq {
-        height: 40vh;
+        height: 60vh;
     }
+    
     .section-faq .container:after {
         background: url("../images/landing/banner/banner-QA@768.jpg") center center no-repeat;
+        background-size: cover;
     }    
 
     #main-nav ul li {
@@ -19572,9 +19581,10 @@ textarea:focus {
         font-size: 16px;
         line-height: 22px
     }
-
+    
     .section-faq .container:after {
-        background: url("../images/landing/banner/banner-QA@767.jpg") center center no-repeat;
+        background: url("../images/landing/banner/banner-QA@768.jpg") center center no-repeat;
+        background-size: cover;       
     }    
     
     .section-fun-facts {
@@ -19661,6 +19671,7 @@ textarea:focus {
     .section-faq .container:after {
         top: 40px;
         background: url("../images/landing/banner/banner-QA@575.jpg") center center no-repeat;
+        background-size: cover;
     }  
 
     #ready-to-buy .form-group .btn,
@@ -19684,10 +19695,9 @@ textarea:focus {
 }
 
 @media only screen and (max-width: 574px) {
-    .section-faq .container:after {
-        top: 0px;
-        background: url("../images/landing/banner/banner-QA@574.jpg") center center no-repeat;
-    }  
+    .section-faq {
+        height: 40vh;
+    }
 
 }
 

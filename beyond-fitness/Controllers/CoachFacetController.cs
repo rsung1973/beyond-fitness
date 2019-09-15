@@ -562,7 +562,7 @@ namespace WebHome.Controllers
                 //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
                 ClassTime = viewModel.ClassDate,
                 DurationInMinutes = priceType.DurationInMinutes,
-                TrainingBySelf = viewModel.TrainingBySelf,
+                TrainingBySelf = (int)Naming.LessonSelfTraining.體驗課程,
                 RegisterID = lesson.RegisterID,
                 LessonPlan = new LessonPlan
                 {
@@ -572,7 +572,8 @@ namespace WebHome.Controllers
                 LessonTimeSettlement = new LessonTimeSettlement
                 {
                     ProfessionalLevelID = coach.LevelID.Value,
-                    MarkedGradeIndex = coach.LevelID.HasValue ? coach.ProfessionalLevel.GradeIndex : null
+                    MarkedGradeIndex = coach.LevelID.HasValue ? coach.ProfessionalLevel.GradeIndex : null,
+                    CoachWorkPlace = coach.WorkBranchID(),
                 }
             };
 
@@ -663,6 +664,31 @@ namespace WebHome.Controllers
             {
                 ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
                 return View("~/Views/Shared/MessageView.ascx");
+            }
+
+            foreach (var regles in item.RegisterLesson.GroupingLesson.RegisterLesson)
+            {
+                var contract = regles.RegisterLessonContract?.CourseContract;
+                if (contract != null)
+                {
+                    if (timeItem.ClassTime.Value > contract.Expiration.Value.AddDays(1))
+                    {
+                        ViewBag.Message = "合約尚未生效或已過期!!";
+                        return View("~/Views/Shared/MessageView.ascx");
+                    }
+                }
+                else
+                {
+                    var entpContract = regles.RegisterLessonEnterprise?.EnterpriseCourseContract;
+                    if (entpContract != null)
+                    {
+                        if (timeItem.ClassTime.Value > entpContract.Expiration.Value.AddDays(1))
+                        {
+                            ViewBag.Message = "合約尚未生效或已過期!!";
+                            return View("~/Views/Shared/MessageView.ascx");
+                        }
+                    }
+                }
             }
 
             models.DeleteAll<LessonTimeExpansion>(t => t.LessonID == item.LessonID);
@@ -966,7 +992,7 @@ namespace WebHome.Controllers
             item.EventType = 1;
             if (viewModel.BranchID.HasValue)
             {
-                if ((int)viewModel.BranchID <= (int)Naming.BranchName.忠孝)
+                if ((int)viewModel.BranchID <= (int)Naming.BranchName.東門)
                     item.BranchID = (int)viewModel.BranchID;
                 else
                     item.Place = viewModel.BranchID.ToString();

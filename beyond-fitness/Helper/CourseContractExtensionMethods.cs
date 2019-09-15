@@ -40,6 +40,46 @@ namespace WebHome.Helper
                 .Where(c => c.Expiration < DateTime.Today.AddMonths(1));
         }
 
+        public static IQueryable<CourseContract> PromptUnpaidContract<TEntity>(this ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return models.PromptEffectiveContract().FilterByUnpaidContract(models);
+        }
+
+        public static IQueryable<CourseContract> FilterByUnpaidContract<TEntity>(this IQueryable<CourseContract> contractItems, ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            var items = models.GetTable<ContractPayment>()
+                    .Join(models.GetTable<Payment>().Where(p => p.VoidPayment == null),
+                        c => c.PaymentID, p => p.PaymentID, (c, p) => c);
+
+            return contractItems
+                .Join(models.GetTable<CourseContractExtension>().Where(t => t.Version.HasValue),
+                    c => c.ContractID, t => t.ContractID, (c, t) => c)
+                .Where(c => !items.Any(t => t.ContractID == c.ContractID));
+        }
+
+        public static IQueryable<CourseContract> PromptUnpaidExpiredContract<TEntity>(this ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return models.GetTable<CourseContract>().FilterByUnpaidExpiredContract(models);
+        }
+
+        public static IQueryable<CourseContract> FilterByUnpaidExpiredContract<TEntity>(this IQueryable<CourseContract> contractItems, ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return contractItems.Where(c => c.Status == (int)Naming.CourseContractStatus.已終止)
+                .Where(c => c.Subject == "未付款");
+        }
+
+
+        public static IQueryable<CourseContract> PromptUnpaidExpiringContract<TEntity>(this ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return models.PromptUnpaidContract()
+                .Where(c => c.PayoffDue < DateTime.Today);
+        }
+
         public static IQueryable<CourseContract> PromptEffectiveContract<TEntity>(this ModelSource<TEntity> models)
                 where TEntity : class, new()
         {
@@ -196,8 +236,7 @@ namespace WebHome.Helper
         {
 
             var dataItems = items.GroupJoin(models.GetTable<ContractPayment>()
-                                    .Join(models.GetTable<Payment>()
-                                        .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue),
+                                    .Join(models.GetTable<Payment>().FilterByEffective(),
                                         c => c.PaymentID, p => p.PaymentID, (c, p) => new { c.ContractID, p.PayoffAmount }),
                                     t => t.ContractID, a => a.ContractID, (t, a) => new CourseContractPayment { Contract = t, TotalPaidAmount = a.Sum(s => s.PayoffAmount) });
             return dataItems;
@@ -315,6 +354,36 @@ namespace WebHome.Helper
             return models.PromptEffectiveContract().FilterByAlarmedContract(models, alarmCount);
         }
 
+        public static void ClearUnpaidOverdueContract<TEntity>(this ModelSource<TEntity> models)
+                    where TEntity : class, new()
+        {
+            DateTime checkDate = DateTime.Today.FirstDayOfMonth();
+            var items = models.PromptUnpaidContract()
+                                .Where(c => c.PayoffDue.Value.AddMonths(1) < checkDate)
+                                .Where(c => c.CourseContractExtension.Version.HasValue);
+
+            foreach(var item in items)
+            {
+                item.Status = (int)Naming.CourseContractStatus.已終止;
+                item.ValidTo = checkDate;
+                item.Subject = "未付款";
+            }
+            models.SubmitChanges();
+        }
+
+        public static LessonPriceType ContractOriginalSeriesPrice<TEntity>(this CourseContract item, ModelSource<TEntity> models)
+                    where TEntity : class, new()
+        {
+
+            var seriesItem = models.GetTable<V_LessonUnitPrice>()
+                    .Where(p => p.DurationInMinutes == item.LessonPriceType.DurationInMinutes)
+                    .Where(p => p.BranchID == item.LessonPriceType.BranchID)
+                    .Join(models.GetTable<LessonPriceType>(),
+                        p => p.PriceID, s => s.PriceID, (p, s) => s)
+                    .OrderByDescending(s => s.PriceID);
+
+            return seriesItem.FirstOrDefault();
+        }
 
     }
 }

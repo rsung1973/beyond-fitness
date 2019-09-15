@@ -30,6 +30,7 @@
                 <div class="row">
                     @{
                         ViewBag.ViewOnly = true;
+                        ViewBag.IsModal = true;
                         Html.RenderPartial("~/Views/LearnerProfile/Module/TrainingExecutionPlan.cshtml", _model);
                     }
                 </div>

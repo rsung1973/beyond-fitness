@@ -21,6 +21,7 @@ using CommonLib.MvcExtension;
 using Newtonsoft.Json;
 using Utility;
 using WebHome.Helper;
+using WebHome.Helper.BusinessOperation;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
@@ -144,7 +145,7 @@ namespace WebHome.Controllers
                     剩餘堂數 = item.RemainedLessonCount(),
                     購買堂數 = item.Lessons,
                     應付金額 = item.TotalCost ?? 0,
-                    已付金額 =  item.TotalPaidAmount() ?? 0,
+                    已付金額 =  item.TotalPaidAmount(),
                     欠款金額 =  (item.TotalCost - item.TotalPaidAmount()) ?? 0,
                     已繳期數 = item.ContractPayment.Count,
                 })
@@ -198,98 +199,7 @@ namespace WebHome.Controllers
 
         public ActionResult InquireAchievement(AchievementQueryViewModel viewModel)
         {
-            ViewBag.ViewModel = viewModel;
-
-            if (!viewModel.AchievementDateFrom.HasValue)
-            {
-                if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthFrom))
-                {
-                    viewModel.AchievementDateFrom = DateTime.ParseExact(viewModel.AchievementYearMonthFrom, "yyyy/MM", System.Globalization.CultureInfo.CurrentCulture);
-                }
-                else
-                {
-                    ModelState.AddModelError("AchievementYearMonthFrom", "請選擇查詢月份");
-                }
-            }
-
-            if (!viewModel.AchievementDateTo.HasValue)
-            {
-
-                if (!String.IsNullOrEmpty(viewModel.AchievementYearMonthTo))
-                {
-                    viewModel.AchievementDateTo = DateTime.ParseExact(viewModel.AchievementYearMonthTo, "yyyy/MM", System.Globalization.CultureInfo.CurrentCulture);
-                }
-            }
-
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.ModelState = this.ModelState;
-                return View("~/Views/Shared/ReportInputError.ascx");
-            }
-
-            IQueryable<LessonTime> items = models.GetTable<LessonTime>().AllCompleteLesson();
-
-            var profile = HttpContext.GetUser();
-
-            bool hasConditon = false;
-            if (viewModel.BypassCondition == true)
-            {
-                hasConditon = true;
-            }
-
-            if (viewModel.CoachID.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.AttendingCoach == viewModel.CoachID);
-            }
-
-            if (viewModel.ByCoachID != null && viewModel.ByCoachID.Length > 0)
-            {
-                items = items.Where(c => viewModel.ByCoachID.Contains(c.AttendingCoach));
-            }
-
-            //if (!hasConditon)
-            //{
-            if (viewModel.BranchID.HasValue)
-            {
-                hasConditon = true;
-                items = items.Where(c => c.BranchID == viewModel.BranchID);
-            }
-            //}
-
-
-            if (!hasConditon)
-            {
-                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
-                {
-
-                }
-                else if (profile.IsManager() || profile.IsViceManager())
-                {
-                    var coaches = profile.GetServingCoachInSameStore(models);
-                    items = items.Join(coaches, c => c.AttendingCoach, h => h.CoachID, (c, h) => c);
-                }
-                else if (profile.IsCoach())
-                {
-                    items = items.Where(c => c.AttendingCoach == profile.UID);
-                }
-            }
-
-            if (viewModel.AchievementDateFrom.HasValue)
-            {
-                items = items.Where(c => c.ClassTime >= viewModel.AchievementDateFrom);
-
-                if (!viewModel.AchievementDateTo.HasValue)
-                    viewModel.AchievementDateTo = viewModel.AchievementDateFrom;
-
-            }
-
-            if (viewModel.AchievementDateTo.HasValue)
-            {
-                items = items.Where(c => c.ClassTime < viewModel.AchievementDateTo.Value.AddMonths(1));
-            }
-
+            var items = viewModel.InquireAchievement(this, out string alertMessage);
             return View("~/Views/Accounting/Module/LessonAttendanceAchievementList.ascx", items);
         }
 
@@ -315,8 +225,7 @@ namespace WebHome.Controllers
             }
 
 
-            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
-                .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>().FilterByEffective();
 
             var profile = HttpContext.GetUser();
 
@@ -911,6 +820,23 @@ namespace WebHome.Controllers
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<ActionResult> ExecuteMonthlyPerformanceSettlement(DateTime? settlementDate)
+        {
+            if (!settlementDate.HasValue)
+            {
+                settlementDate = DateTime.Today;
+            }
+
+            await Task.Run(() =>
+            {
+                DateTime execDate = settlementDate.Value;
+                DateTime startDate = execDate.FirstDayOfMonth();
+                models.ExecuteLessonPerformanceSettlement(startDate, startDate.AddMonths(1));
+            });
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult InitializeTrust()
         {
             var items = models.GetTable<RegisterLesson>().Where(r => r.AttendedLessons > 0)
@@ -1058,6 +984,26 @@ namespace WebHome.Controllers
             return new EmptyResult();
         }
 
+        class _LessonSummaryDataItem
+        {
+            public String A { get; set; }
+            public int B { get; set; }
+            public int C { get; set; }
+            public int D { get; set; }
+            public int E { get; set; }
+            public int F { get; set; }
+            public int G { get; set; }
+        }
+
+        class _LessonDataItem
+        {
+            public String A { get; set; }
+            public int B { get; set; }
+            public int C { get; set; }
+            public int D { get; set; }
+        }
+
+
         public ActionResult GetMonthlyLessonsSummary(DateTime? settlementDate,String fileDownloadToken)
         {
             if (!settlementDate.HasValue)
@@ -1068,8 +1014,162 @@ namespace WebHome.Controllers
             var dateFrom = settlementDate.Value.FirstDayOfMonth();
             var dateTo = dateFrom.AddMonths(1);
 
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>()
+                .AllCompleteLesson()
+                .Where(l => l.ClassTime >= dateFrom && l.ClassTime < dateTo);
 
-            IQueryable<int> items = models.GetTable<LessonTime>().Where(l => l.ClassTime >= dateFrom && l.ClassTime < dateTo)
+            DataTable buildSummary(IQueryable<LessonTime> data)
+            {
+                List<_LessonSummaryDataItem> results = new List<_LessonSummaryDataItem>();
+                _LessonSummaryDataItem subtotal = new _LessonSummaryDataItem
+                {
+                    A = "總計"
+                };
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var lessonItems = data.Where(d => d.BranchID == branch.BranchID);
+                    var i = new _LessonSummaryDataItem
+                    {
+                        A = branch.BranchName,
+                        B = lessonItems.Count(),
+                        C = lessonItems.Sum(l=>l.RegisterLesson.LessonPriceType.ListPrice * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0,
+                    };
+                    i.D = i.C * 20 / 100;
+                    i.E = i.C * 80 / 100;
+                    i.F = (int)Math.Round(i.D / 1.05m);
+                    i.G = (int)Math.Round(i.E / 1.05m);
+                    subtotal.B += i.B;
+                    subtotal.C += i.C;
+                    subtotal.D += i.D;
+                    subtotal.E += i.E;
+                    subtotal.F += i.F;
+                    subtotal.G += i.G;
+                    results.Add(i);
+                }
+                results.Add(subtotal);
+                DataTable table = results.ToDataTable();
+                table.Columns[0].ColumnName = "上課場所";
+                table.Columns[1].ColumnName = "上課總數";
+                table.Columns[2].ColumnName = "累計上課金額";
+                table.Columns[3].ColumnName = "信託 20%";
+                table.Columns[4].ColumnName = "信託 80%";
+                table.Columns[5].ColumnName = "信託 (未稅)20%";
+                table.Columns[6].ColumnName = "信託 (未稅)80%";
+                return table;
+            }
+
+            DataTable buildTable(IQueryable<LessonTime> data)
+            {
+                List<_LessonDataItem> results = new List<_LessonDataItem>();
+                _LessonDataItem subtotal = new _LessonDataItem
+                {
+                    A = "總計"
+                };
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var lessonItems = data.Where(d => d.BranchID == branch.BranchID);
+                    var i = new _LessonDataItem
+                    {
+                        A = branch.BranchName,
+                        B = lessonItems.Count(),
+                        C = lessonItems.Sum(l => l.RegisterLesson.LessonPriceType.ListPrice * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0,
+                    };
+                    i.D = (int)Math.Round(i.C / 1.05m);
+                    subtotal.B += i.B;
+                    subtotal.C += i.C;
+                    subtotal.D += i.D;
+                    results.Add(i);
+                }
+                results.Add(subtotal);
+                DataTable table = results.ToDataTable();
+                table.Columns[0].ColumnName = "上課場所";
+                table.Columns[1].ColumnName = "上課總數";
+                table.Columns[2].ColumnName = "累計上課金額";
+                table.Columns[3].ColumnName = "累計上課金額(未稅)";
+                return table;
+            }
+
+            DataTable buildEnterpriseTable(IQueryable<LessonTime> data)
+            {
+                List<_LessonDataItem> results = new List<_LessonDataItem>();
+                _LessonDataItem subtotal = new _LessonDataItem
+                {
+                    A = "總計"
+                };
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var lessonItems = data.Where(d => d.BranchID == branch.BranchID);
+                    var i = new _LessonDataItem
+                    {
+                        A = branch.BranchName,
+                        B = lessonItems.Count(),
+                        C = lessonItems.Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice) ?? 0,
+                    };
+                    i.D = (int)Math.Round(i.C / 1.05m);
+                    subtotal.B += i.B;
+                    subtotal.C += i.C;
+                    subtotal.D += i.D;
+                    results.Add(i);
+                }
+                results.Add(subtotal);
+                DataTable table = results.ToDataTable();
+                table.Columns[0].ColumnName = "上課場所";
+                table.Columns[1].ColumnName = "上課總數";
+                table.Columns[2].ColumnName = "累計上課金額";
+                table.Columns[3].ColumnName = "累計上課金額(未稅)";
+                return table;
+            }
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AppendCookie(new HttpCookie("fileDownloadToken", fileDownloadToken));
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename=LessonsInventorySummary({0:yyyy-MM-dd HH-mm-ss}).xlsx", DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                var dataItems = items.Where(l => l.RegisterLesson.RegisterLessonContract != null)
+                    .Where(l => l.RegisterLesson.RegisterLessonContract.CourseContract.Entrusted == true);
+                var table = buildSummary(dataItems);
+                table.TableName = $"{dateFrom:yyyy-MM} 信託合約上課盤點彙總表";
+                ds.Tables.Add(table);
+
+                dataItems = items.Where(l => l.RegisterLesson.RegisterLessonContract != null)
+                                .Where(l => l.RegisterLesson.RegisterLessonContract.CourseContract.Entrusted == false);
+                table = buildTable(dataItems);
+                table.TableName = $"{dateFrom:yyyy-MM} 非信託合約上課盤點彙總表";
+                ds.Tables.Add(table);
+
+                dataItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+                table = buildEnterpriseTable(dataItems);
+                table.TableName = $"{dateFrom:yyyy-MM} 企業方案上課盤點彙總表";
+                ds.Tables.Add(table);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult GetMonthlyLessonsList(DateTime? settlementDate, String fileDownloadToken)
+        {
+            if (!settlementDate.HasValue)
+            {
+                settlementDate = DateTime.Today;
+            }
+
+            var dateFrom = settlementDate.Value.FirstDayOfMonth();
+            var dateTo = dateFrom.AddMonths(1);
+
+
+            IQueryable<int> items = models.GetTable<LessonTime>()
+                    .AllCompleteLesson()
+                    .Where(l => l.ClassTime >= dateFrom && l.ClassTime < dateTo)
                     .Join(models.GetTable<GroupingLesson>(), l => l.GroupID, g => g.GroupID, (l, g) => g)
                     .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
                     .Join(models.GetTable<RegisterLessonContract>(), r => r.RegisterID, c => c.RegisterID, (r, c) => c.ContractID)
@@ -1090,7 +1190,7 @@ namespace WebHome.Controllers
             foreach (var item in items)
             {
                 var c = models.GetTable<CourseContract>().Where(t => t.ContractID == item).First();
-     
+
                 var r = table.NewRow();
                 r[0] = c.ContractNo();
                 r[1] = c.CourseContractExtension.BranchStore.BranchName;
@@ -1131,6 +1231,547 @@ namespace WebHome.Controllers
             public int? CoachID { get; set; }
             public IGrouping<int?, LessonTime> LessonGroup { get; set; }
             public IGrouping<int, TuitionAchievement> AchievementGroup { get; set; }
+        }
+
+        public ActionResult CreateAchievementShareXlsx(PaymentQueryViewModel viewModel)
+        {
+            viewModel.IncomeOnly = true;
+            if(!viewModel.PayoffDateFrom.HasValue)
+            {
+                viewModel.PayoffDateFrom = DateTime.Today.FirstDayOfMonth();
+            }
+            viewModel.PayoffDateTo = viewModel.PayoffDateFrom.Value.AddMonths(1).AddDays(-1);
+
+            IQueryable<Payment> paymentItems = viewModel.InquirePayment(this, out string alertMessage);
+                                                    //.FilterByEffective();
+            IQueryable<TuitionAchievement> achievementItems = paymentItems.Join(models.GetTable<TuitionAchievement>(),
+                        p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+            if(viewModel.CoachID.HasValue)
+            {
+                achievementItems = achievementItems.Where(t => t.CoachID == viewModel.CoachID);
+            }
+
+            DataTable details = models.CreateAchievementShareList(achievementItems);
+            details.TableName = $"{viewModel.PayoffDateFrom:yyyyMM} 分潤業績明細(含稅)";
+
+            var tableItems = details.Rows.Cast<DataRow>();
+
+            DataTable buildBranchDetails()
+            {
+                //							
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("簽約場所", typeof(String)));
+                table.Columns.Add(new DataColumn("分潤業績", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("新約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("新約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("續約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("續約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品占比(%)", typeof(int)));
+
+                DataRow r;
+
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var branchItems = tableItems.Where(t=>(String)t[6]==branch.BranchName);
+
+                    r = table.NewRow();
+                    r[0] = branch.BranchName;
+                    r[1] = branchItems.Sum(t=>(int)t[2]);
+                    var dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.體能顧問費.ToString());
+                    r[2] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.自主訓練.ToString());
+                    r[8] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.運動商品.ToString()
+                                                || (String)p[3] == Naming.PaymentTransactionType.食飲品.ToString());
+                    r[10] = dataItems.Sum(t => (int)t[2]);
+
+                    decimal total = Math.Max((int)r[1], 1);
+                    r[3] = Math.Round((int)r[2] * 100m / total);
+                    r[9] = Math.Round((int)r[8] * 100m / total);
+                    r[11] = Math.Round((int)r[10] * 100m / total);
+
+                    dataItems = branchItems.Where(p => !p.IsNull(8) && (bool?)p[8] == false);
+                    r[4] = dataItems.Sum(t => (int)t[2]);
+                    dataItems = branchItems.Where(p => !p.IsNull(8) && (bool?)p[8] == true);
+                    r[6] = dataItems.Sum(t => (int)t[2]);
+
+
+                    total = Math.Max((int)r[2], 1);
+                    r[5] = Math.Round((int)r[4] * 100m / total);
+                    r[7] = Math.Round((int)r[6] * 100m / total);
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                foreach (int idx in (new int[] { 1, 2, 4, 6, 8, 10 }))
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                decimal totalAmt = Math.Max((int)r[1], 1);
+                r[3] = Math.Round((int)r[2] * 100m / totalAmt);
+                r[9] = Math.Round((int)r[8] * 100m / totalAmt);
+                r[11] = Math.Round((int)r[10] * 100m / totalAmt);
+
+                totalAmt = Math.Max((int)r[2], 1);
+                r[5] = Math.Round((int)r[4] * 100m / totalAmt);
+                r[7] = Math.Round((int)r[6] * 100m / totalAmt);
+
+                table.Rows.Add(r);
+                return table;
+            }
+
+            DataTable buildCoachBranchDetails()
+            {			
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("分潤業績", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("新約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("新約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("續約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("續約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品占比(%)", typeof(int)));
+
+
+                DataRow r;
+
+                var branchName = models.GetTable<BranchStore>().Select(b => b.BranchName).ToList();
+                branchName.Add("其他");
+                foreach (var branch in branchName)
+                {
+                    var branchItems = tableItems.Where(t => (String)t[7] == branch);
+
+                    r = table.NewRow();
+                    r[0] = branch;
+                    r[1] = branchItems.Sum(t => (int)t[2]);
+                    var dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.體能顧問費.ToString());
+                    r[2] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.自主訓練.ToString());
+                    r[8] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = branchItems.Where(p => (String)p[3] == Naming.PaymentTransactionType.運動商品.ToString()
+                                                || (String)p[3] == Naming.PaymentTransactionType.食飲品.ToString());
+                    r[10] = dataItems.Sum(t => (int)t[2]);
+
+                    decimal total = Math.Max((int)r[1], 1);
+                    r[3] = Math.Round((int)r[2] * 100m / total);
+                    r[9] = Math.Round((int)r[8] * 100m / total);
+                    r[11] = Math.Round((int)r[10] * 100m / total);
+
+                    dataItems = branchItems.Where(p => !p.IsNull(8) && (bool?)p[8] == false);
+                    r[4] = dataItems.Sum(t => (int)t[2]);
+                    dataItems = branchItems.Where(p => !p.IsNull(8) && (bool?)p[8] == true);
+                    r[6] = dataItems.Sum(t => (int)t[2]);
+
+                    total = Math.Max((int)r[2], 1);
+                    r[5] = Math.Round((int)r[4] * 100m / total);
+                    r[7] = Math.Round((int)r[6] * 100m / total);
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                foreach (int idx in (new int[] { 1, 2, 4, 6, 8, 10 }))
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                decimal totalAmt = Math.Max((int)r[1], 1);
+                r[3] = Math.Round((int)r[2] * 100m / totalAmt);
+                r[9] = Math.Round((int)r[8] * 100m / totalAmt);
+                r[11] = Math.Round((int)r[10] * 100m / totalAmt);
+
+                totalAmt = Math.Max((int)r[2], 1);
+                r[5] = Math.Round((int)r[4] * 100m / totalAmt);
+                r[7] = Math.Round((int)r[6] * 100m / totalAmt);
+
+                table.Rows.Add(r);
+
+                return table;
+            }
+
+            DataTable buildCoachDetails()
+            {
+                //							
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("體能顧問", typeof(String)));
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("分潤業績", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("體能顧問費佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("新約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("新約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("續約體能顧問費", typeof(int)));
+                table.Columns.Add(new DataColumn("續約佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I Session佔比(%)", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品", typeof(int)));
+                table.Columns.Add(new DataColumn("其他販售商品占比(%)", typeof(int)));
+
+                DataRow r;
+
+                var coachItems = tableItems.GroupBy(l => (String)l[0])
+                                    .OrderBy(g => g.First()[7]);
+                foreach (var g in coachItems)
+                {
+                    r = table.NewRow();
+
+                    r[0] = g.Key;
+                    r[1] = g.First()[7];
+                    r[2] = g.Sum(t => (int)t[2]);
+                    var dataItems = g.Where(p => (String)p[3] == Naming.PaymentTransactionType.體能顧問費.ToString());
+                    r[3] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = g.Where(p => (String)p[3] == Naming.PaymentTransactionType.自主訓練.ToString());
+                    r[9] = dataItems.Sum(t => (int)t[2]);
+
+                    dataItems = g.Where(p => (String)p[3] == Naming.PaymentTransactionType.運動商品.ToString()
+                                                || (String)p[3] == Naming.PaymentTransactionType.食飲品.ToString());
+                    r[11] = dataItems.Sum(t => (int)t[2]);
+
+                    decimal total = Math.Max((int)r[2], 1);
+                    r[4] = Math.Round((int)r[3] * 100m / total);
+                    r[10] = Math.Round((int)r[9] * 100m / total);
+                    r[12] = Math.Round((int)r[11] * 100m / total);
+
+                    dataItems = g.Where(p => !p.IsNull(8) && (bool?)p[8] == false);
+                    r[5] = dataItems.Sum(t => (int)t[2]);
+                    dataItems = g.Where(p => !p.IsNull(8) && (bool?)p[8] == true);
+                    r[7] = dataItems.Sum(t => (int)t[2]);
+
+                    total = Math.Max((int)r[3], 1);
+                    r[6] = Math.Round((int)r[5] * 100m / total);
+                    r[8] = Math.Round((int)r[7] * 100m / total);
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                foreach (int idx in (new int[] { 2, 3, 5, 7, 9, 11 }))
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                decimal totalAmt = Math.Max((int)r[2], 1);
+                r[4] = Math.Round((int)r[3] * 100m / totalAmt);
+                r[10] = Math.Round((int)r[9] * 100m / totalAmt);
+                r[12] = Math.Round((int)r[11] * 100m / totalAmt);
+
+                totalAmt = Math.Max((int)r[3], 1);
+                r[6] = Math.Round((int)r[5] * 100m / totalAmt);
+                r[8] = Math.Round((int)r[7] * 100m / totalAmt);
+                table.Rows.Add(r);
+                return table;
+            }
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AppendCookie(new HttpCookie("fileDownloadToken", viewModel.FileDownloadToken));
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).xlsx", HttpUtility.UrlEncode("DividedAchievementSummary"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                var table = buildBranchDetails();
+                table.TableName = $"{viewModel.PayoffDateFrom:yyyyMM} 簽約場所彙總(含稅)";
+                ds.Tables.Add(table);
+
+                table = buildCoachBranchDetails();
+                table.TableName = $"{viewModel.PayoffDateFrom:yyyyMM} 體能顧問所屬分店彙總(含稅)";
+                ds.Tables.Add(table);
+
+                table = buildCoachDetails();
+                table.TableName = $"{viewModel.PayoffDateFrom:yyyyMM} 體能顧問彙總(含稅)";
+                ds.Tables.Add(table);
+
+                ds.Tables.Add(details);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
+        public ActionResult CreateMonthlyBonusXlsx(AchievementQueryViewModel viewModel)
+        {
+            if (!viewModel.AchievementDateFrom.HasValue)
+            {
+                viewModel.AchievementDateFrom = DateTime.Today.FirstDayOfMonth();
+            }
+            viewModel.AchievementDateTo = viewModel.AchievementDateFrom.Value.AddMonths(1);
+
+            IQueryable<CoachMonthlySalary> items = viewModel.InquireMonthlySalary(models);
+
+            IEnumerable<CoachMonthlySalary> salaryItems = (IEnumerable<CoachMonthlySalary>)items;
+            var branchItems = models.GetTable<BranchStore>().ToArray();
+            int branchColIdx;
+
+            DataTable buildManagerBonusList()
+            {
+                //						
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("姓名", typeof(String)));
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("職級", typeof(String)));
+                table.Columns.Add(new DataColumn("個人上課數", typeof(decimal)));
+                table.Columns.Add(new DataColumn("分店總上課數", typeof(int)));
+                table.Columns.Add(new DataColumn("總獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("管理獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("特別獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("上課獎金", typeof(int)));
+
+                DataRow r;
+
+                var coachItems = salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.Special
+                                    || s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.FM);
+
+                foreach (var g in coachItems)
+                {
+                    r = table.NewRow();
+
+                    r[0] = g.ServingCoach.UserProfile.FullName();
+                    r[1] = g.BranchStore?.BranchName ?? "其他";
+                    r[2] = g.ProfessionalLevel.LevelName;
+                    r[3] = g.CoachBranchMonthlyBonus.Sum(b => b.AchievementAttendanceCount);
+                    r[4] = g.CoachBranchMonthlyBonus.Where(b => b.BranchTotalAttendanceCount.HasValue)
+                                .Sum(b => b.BranchTotalAttendanceCount);
+                    r[6] = g.ManagerBonus ?? 0;
+                    r[7] = g.SpecialBonus ?? 0;
+
+                    table.Rows.Add(r);
+                }
+                return table;
+            }
+
+            DataTable buildCoachBonusList()
+            {
+                //														
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("姓名", typeof(String)));
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("P.T Level", typeof(String)));
+                table.Columns.Add(new DataColumn("上課數", typeof(decimal)));
+                table.Columns.Add(new DataColumn("上課金額", typeof(int)));
+                table.Columns.Add(new DataColumn("上課獎金抽成(%)", typeof(decimal)));
+                table.Columns.Add(new DataColumn("業績金額", typeof(int)));
+                table.Columns.Add(new DataColumn("業績獎金抽成(%)", typeof(decimal)));
+                table.Columns.Add(new DataColumn("總獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("管理獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("特別獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("月中上課+業績獎金", typeof(int)));
+                table.Columns.Add(new DataColumn("上課總獎金", typeof(int)));
+                branchColIdx = 13;
+                for (int i = 0; i < branchItems.Length; i++)
+                {
+                    table.Columns.Add(new DataColumn($"上課獎金（地點：{branchItems[i].BranchName}）", typeof(int)));
+                }
+                table.Columns.Add(new DataColumn("業績獎金", typeof(int)));
+
+                DataRow r;
+
+                var coachItems = salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.Special
+                                    && s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.FM);
+
+                List<DataRow> rows = new List<DataRow>();
+                foreach (var g in coachItems)
+                {
+                    r = table.NewRow();
+
+                    r[0] = g.ServingCoach.UserProfile.FullName();
+                    r[1] = g.BranchStore?.BranchName ?? "其他";
+                    r[2] = g.ProfessionalLevel.LevelName;
+                    r[3] = g.CoachBranchMonthlyBonus.Sum(b => b.AchievementAttendanceCount);
+                    r[4] = g.CoachBranchMonthlyBonus.Where(b => b.Tuition.HasValue)
+                                .Sum(b => b.Tuition);
+                    r[5] = g.GradeIndex;
+                    r[6] = g.PerformanceAchievement;
+                    r[7] = g.AchievementShareRatio;
+                    r[9] = g.ManagerBonus ?? 0;
+                    r[10] = g.SpecialBonus ?? 0;
+
+                    r[12] = g.CoachBranchMonthlyBonus.Sum(b => b.AttendanceBonus);
+                    for (int i = 0; i < branchItems.Length; i++)
+                    {
+                        var br = g.CoachBranchMonthlyBonus.Where(b => b.BranchID == branchItems[i].BranchID).FirstOrDefault();
+                        if (br != null)
+                        {
+                            if (br.AttendanceBonus.HasValue)
+                            {
+                                r[branchColIdx + i] = br.AttendanceBonus;
+                            }
+                        }
+                    }
+
+                    r[branchColIdx + branchItems.Length] = g.PerformanceAchievement * g.AchievementShareRatio / 100m;
+
+                    rows.Add(r);
+                }
+
+                List<int> taxCol = new List<int> { 4, 6, 12, 17 };
+                for (int i = 0; i < branchItems.Length; i++)
+                {
+                    taxCol.Add(branchColIdx + i);
+                }
+
+                foreach (var t in rows)
+                {
+                    eliminateTax(t, taxCol);
+                    t[12] = 0;
+                    for (int i = 0; i < branchItems.Length; i++)
+                    {
+                        t[12] = (int)t[12] + (int)t[branchColIdx + i];
+                    }
+                    t[11] = (int)t[12] + (int)t[branchColIdx + branchItems.Length];
+                    t[8] = (int)t[9] + (int)t[10] + (int)t[11];
+                }
+                rows.RemoveAll(t => (int)t[8] == 0);
+
+                foreach (var t in rows.OrderBy(t => t[1]))
+                {
+                    table.Rows.Add(t);
+                }
+
+                return table;
+            }
+
+            DataTable buildAttendanceBonusSummary(DataTable source)
+            {
+                //		
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("上課場所", typeof(String)));
+                table.Columns.Add(new DataColumn("上課獎金（含稅）", typeof(int)));
+                table.Columns.Add(new DataColumn("上課獎金（未稅）", typeof(int)));
+
+                DataRow r;
+                var rowItems = source.Rows.Cast<DataRow>();
+                for (int i = 0; i < branchItems.Length; i++)
+                {
+                    r = table.NewRow();
+
+                    r[0] = branchItems[i].BranchName;
+                    r[2] = rowItems.Where(t => t[branchColIdx + i] is int).Sum(t => (int)t[branchColIdx + i]);
+                    r[1] = Math.Round((int)r[2] * 1.05);
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                foreach (int idx in (new int[] { 1, 2 }))
+                {
+                    r[idx] = data.Where(d => d[idx] != DBNull.Value)
+                        .Sum(d => (int?)d[idx]);
+                }
+                table.Rows.Add(r);
+
+                return table;
+            }
+
+            DataTable buildCoachBranchSummary(DataTable source)
+            {
+                //		
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("上課場所", typeof(String)));
+                table.Columns.Add(new DataColumn("業績獎金（含稅）", typeof(int)));
+                table.Columns.Add(new DataColumn("業績獎金（未稅）", typeof(int)));
+
+                DataRow r;
+                var rowItems = source.Rows.Cast<DataRow>();
+                foreach (var g in branchItems)
+                {
+                    r = table.NewRow();
+
+                    r[0] = g.BranchName;
+                    r[2] = rowItems.Where(t => (String)t[1] == g.BranchName).Sum(t => (int)t[branchColIdx + branchItems.Length]);
+                    r[1] = Math.Round((int)r[2] * 1.05);
+                    table.Rows.Add(r);
+                }
+                r = table.NewRow();
+
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                foreach (int idx in (new int[] { 1, 2}))
+                {
+                    r[idx] = data.Where(d => d[idx] != DBNull.Value)
+                        .Sum(d => (int)d[idx]);
+                }
+                table.Rows.Add(r);
+
+                return table;
+            }
+
+            void eliminateTax(DataRow row,IEnumerable<int> colIdx)
+            {
+                foreach (int i in colIdx)
+                {
+                    if (row[i] == DBNull.Value)
+                    {
+                        row[i] = 0;
+                    }
+                    else
+                    {
+                        row[i] = Math.Round((int)row[i] / 1.05);
+                    }
+                }
+            }
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AppendCookie(new HttpCookie("fileDownloadToken", viewModel.FileDownloadToken));
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).xlsx", HttpUtility.UrlEncode("AchievementBonusList"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                var table = buildManagerBonusList();
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 獎金清單 - 主管(未稅)";
+                ds.Tables.Add(table);
+
+                var details = buildCoachBonusList();
+                details.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 獎金清單 - 教練(未稅)";
+                ds.Tables.Add(details);
+
+                table = buildAttendanceBonusSummary(details);
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 上課獎金彙總 - 上課場所";
+                ds.Tables.Add(table);
+
+                table = buildCoachBranchSummary(details);
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 業績獎金彙總 - 教練所屬分店";
+                ds.Tables.Add(table);
+
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
         }
 
         public ActionResult CreateFullAchievementXlsx(AchievementQueryViewModel viewModel)
@@ -1185,14 +1826,8 @@ namespace WebHome.Controllers
                 {
                     var item = g.LessonGroup;
                     var lesson = item.First();
-                    r[1] = item.Count() - (decimal)(item
-                                        .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.自主訓練
-                                            || (t.RegisterLesson.RegisterLessonEnterprise != null
-                                                && t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.DocumentLevelDefinition.自主訓練)).Count()) / 2m;
-                    var lessons = item
-                            .Where(t => t.RegisterLesson.LessonPriceType.Status != (int)Naming.DocumentLevelDefinition.自主訓練)
-                            .Where(t => t.RegisterLesson.RegisterLessonEnterprise == null
-                                || t.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status != (int)Naming.DocumentLevelDefinition.自主訓練);
+                    r[1] = item.Count() - (decimal)(item.LearnerPILesson().Count()) / 2m;
+                    var lessons = item.ExclusivePILesson();
                     r[2] = models.CalcAchievement(lessons, out int shares);
                     r[3] = lesson.LessonTimeSettlement.ProfessionalLevel.LevelName;
                     r[4] = shares;
@@ -1233,6 +1868,286 @@ namespace WebHome.Controllers
             return new EmptyResult();
         }
 
+        public ActionResult CreateAchievementSummaryXlsx(AchievementQueryViewModel viewModel)
+        {
+            var detailsTable = createAchievementDetailsXlsx(viewModel, out IQueryable<LessonTime> items);
+            detailsTable.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 上課明細";
+
+            var tableItems = detailsTable.Rows.Cast<DataRow>();
+            foreach (var item in tableItems
+                                    .Where(l => l[11].Equals((int)Naming.LessonPriceStatus.員工福利課程)
+                                        || l[11].Equals((int)Naming.LessonPriceStatus.點數兌換課程)))
+            {
+                item[5] = item[9] = 0;
+            }
+
+            int?[] PTSessionScope = new int?[]
+            {
+                    (int)Naming.LessonPriceStatus.一般課程,
+                    (int)Naming.LessonPriceStatus.企業合作方案,
+                    (int)Naming.LessonPriceStatus.已刪除
+            };
+
+            DataTable buildBranchDetails()
+            {
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("上課場所", typeof(String)));
+                table.Columns.Add(new DataColumn("P.T上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.T上課金額(含稅)", typeof(int)));  
+                table.Columns.Add(new DataColumn("點數兌換上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("員工福利上課總數", typeof(int)));                
+                table.Columns.Add(new DataColumn("總上課數(P.T+點數+員工)", typeof(int)));
+                table.Columns.Add(new DataColumn("T.S上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I上課總數", typeof(int)));
+                //table.Columns.Add(new DataColumn("P.I計上課金額", typeof(int)));
+
+
+                DataRow r;
+
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var branchItems = items.Where(l => l.BranchID == branch.BranchID);
+                    r = table.NewRow();
+                    r[0] = branch.BranchName;
+
+                    var dataItems = branchItems.PTLesson();
+                    r[2] = dataItems.CalcPTSessionAchievement(out int count);
+                    r[1] = count;                                        
+
+                    dataItems = branchItems.BonusLesson();
+                    r[3] = dataItems.Count();
+
+                    dataItems = branchItems.WelfareGiftLesson();
+                    r[4] = dataItems.Count();
+                    r[5] = (int)r[1] + (int)r[3] + (int)r[4];
+
+                    dataItems = branchItems.TrialLesson();
+                    r[6] = dataItems.Count();
+
+                    dataItems = branchItems.PILesson();
+                    //r[4] = dataItems.CalcLearnerPISessionAchievement(out count);
+                    r[7] = dataItems.Count();;
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                for (int idx = 1; idx <= 7; idx++)
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                table.Rows.Add(r);
+                return table;
+            }
+
+
+            DataTable buildContractBranchDetails()
+            {
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("簽約場所", typeof(String)));
+                table.Columns.Add(new DataColumn("P.T上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.T上課金額(含稅)", typeof(int)));  
+                table.Columns.Add(new DataColumn("點數兌換上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("員工福利上課總數", typeof(int)));                
+                table.Columns.Add(new DataColumn("總上課數(P.T+點數+員工)", typeof(int)));
+                table.Columns.Add(new DataColumn("T.S上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I上課總數", typeof(int)));
+                //table.Columns.Add(new DataColumn("P.I計上課金額", typeof(int)));
+
+                DataRow r;
+
+                foreach (var branch in models.GetTable<BranchStore>())
+                {
+                    var branchItems = tableItems.Where(l => (String)l[2] == branch.BranchName);
+                    r = table.NewRow();
+                    r[0] = branch.BranchName;
+
+                    var dataItems = branchItems.Where(l => PTSessionScope.Contains((int?)l[11]));
+                    r[1] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    r[2] = dataItems.Sum(l => (int)l[9]);                                        
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.點數兌換課程);
+                    r[3] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.員工福利課程);
+                    r[4] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    //P.T + 點數 + 員工
+                    r[5] = (int)r[1] + (int)r[3] + (int)r[4];
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.體驗課程);
+                    r[6] = dataItems.Sum(l => (int)l[6] + (int)l[7]);                    
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.自主訓練);
+                    r[7] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    //r[4] = dataItems.Sum(l => (int)l[9]);
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                for (int idx = 1; idx <= 7; idx++)
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                table.Rows.Add(r);
+                return table;
+            }
+
+            DataTable buildCoachBranchDetails()
+            {
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("P.T上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.T上課金額(含稅）", typeof(int)));  
+                table.Columns.Add(new DataColumn("點數兌換上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("員工福利上課總數", typeof(int)));                
+                table.Columns.Add(new DataColumn("總上課數(P.T+點數+員工)", typeof(int)));
+                table.Columns.Add(new DataColumn("T.S上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I上課總數", typeof(int)));
+                //table.Columns.Add(new DataColumn("P.I計上課金額", typeof(int)));                
+
+                DataRow r;
+
+                var branchName = models.GetTable<BranchStore>().Select(b => b.BranchName).ToList();
+                branchName.Add("其他");
+                foreach (var branch in branchName)
+                {
+                    var branchItems = tableItems.Where(l => (String)l[12] == branch);
+                    r = table.NewRow();
+                    r[0] = branch;
+
+                    var dataItems = branchItems.Where(l => PTSessionScope.Contains((int?)l[11]));
+                    r[1] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    r[2] = dataItems.Sum(l => (int)l[9]);
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.點數兌換課程);
+                    r[3] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.員工福利課程);
+                    r[4] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    //P.T + 點數 + 員工
+                    r[5] = (int)r[1] + (int)r[3] + (int)r[4];
+
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.體驗課程);
+                    r[6] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                                        
+                    dataItems = branchItems.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.自主訓練);
+                    r[7] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    //r[4] = dataItems.Sum(l => (int)l[9]);                    
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                for (int idx = 1; idx <= 7; idx++)
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                table.Rows.Add(r);
+                return table;
+            }
+
+            DataTable buildCoachDetails()
+            {
+                DataTable table = new DataTable();
+                table.Columns.Add(new DataColumn("體能顧問", typeof(String)));
+                table.Columns.Add(new DataColumn("所屬分店", typeof(String)));
+                table.Columns.Add(new DataColumn("P.T上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.T上課金額(含稅）", typeof(int)));  
+                table.Columns.Add(new DataColumn("點數兌換上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("員工福利上課總數", typeof(int)));                
+                table.Columns.Add(new DataColumn("總上課數(P.T+點數+員工)", typeof(int)));
+                table.Columns.Add(new DataColumn("T.S上課總數", typeof(int)));
+                table.Columns.Add(new DataColumn("P.I上課總數", typeof(int)));
+                //table.Columns.Add(new DataColumn("P.I計上課金額", typeof(int)));    
+
+                DataRow r;
+
+                var coachItems = tableItems.GroupBy(l => (String)l[1])
+                                    .OrderBy(g => g.First()[12]);
+                foreach (var coach in coachItems)
+                {
+                    r = table.NewRow();
+                    r[0] = coach.Key;
+                    r[1] = (String)coach.First()[12];
+                    var dataItems = coach.Where(l => PTSessionScope.Contains((int?)l[11]));
+                    r[2] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    r[3] = dataItems.Sum(l => (int)l[9]);
+
+                    dataItems = coach.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.點數兌換課程);
+                    r[4] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    dataItems = coach.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.員工福利課程);
+                    r[5] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    r[6] = (int)r[2] + (int)r[4] + (int)r[5];
+
+                    dataItems = coach.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.體驗課程);
+                    r[7] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+
+                    dataItems = coach.Where(l => (int?)l[11] == (int)Naming.LessonPriceStatus.自主訓練);
+                    r[8] = dataItems.Sum(l => (int)l[6] + (int)l[7]);
+                    //r[5] = dataItems.Sum(l => (int)l[9]);                           
+
+                    table.Rows.Add(r);
+                }
+
+                r = table.NewRow();
+                r[0] = "總計";
+                var data = table.Rows.Cast<DataRow>();
+                for (int idx = 2; idx <= 8; idx++)
+                {
+                    r[idx] = data.Sum(d => (int)d[idx]);
+                }
+                table.Rows.Add(r);
+                return table;
+            }
+
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.AppendCookie(new HttpCookie("fileDownloadToken", viewModel.FileDownloadToken));
+            Response.AddHeader("Cache-control", "max-age=1");
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).xlsx", HttpUtility.UrlEncode("LessonAchievementSummary"), DateTime.Now));
+
+            using (DataSet ds = new DataSet())
+            {
+                var table = buildContractBranchDetails();
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 簽約場所彙總";
+                ds.Tables.Add(table);
+
+                table = buildBranchDetails();
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 上課場所彙總";
+                ds.Tables.Add(table);
+
+                table = buildCoachBranchDetails();
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 體能顧問所屬分店彙總";
+                ds.Tables.Add(table);
+
+                table = buildCoachDetails();
+                table.TableName = $"{viewModel.AchievementDateFrom:yyyyMM} 體能顧問彙總";
+                ds.Tables.Add(table);
+
+                detailsTable.Columns.RemoveAt(11);
+                ds.Tables.Add(detailsTable);
+
+                using (var xls = ds.ConvertToExcel())
+                {
+                    xls.SaveAs(Response.OutputStream);
+                }
+            }
+
+            return new EmptyResult();
+        }
+
 
         public ActionResult CreateAchievementXlsx(AchievementQueryViewModel viewModel)
         {
@@ -1244,7 +2159,7 @@ namespace WebHome.Controllers
             Response.AppendCookie(new HttpCookie("fileDownloadToken", viewModel.FileDownloadToken));
             Response.AddHeader("Cache-control", "max-age=1");
             Response.ContentType = "application/vnd.ms-excel";
-            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).xlsx", HttpUtility.UrlEncode("AchievementReport"), DateTime.Now));
+            Response.AddHeader("Content-Disposition", String.Format("attachment;filename={0}({1:yyyy-MM-dd HH-mm-ss}).xlsx", HttpUtility.UrlEncode("LessonAchievementDetails"), DateTime.Now));
 
             using (DataSet ds = new DataSet())
             {
@@ -1265,7 +2180,9 @@ namespace WebHome.Controllers
                 }
                 if (viewModel.DetailsOnly != false)
                 {
-                    table = createAchievementDetailsXlsx(viewModel);
+                    IQueryable<LessonTime> items;
+                    table = createAchievementDetailsXlsx(viewModel,out items);
+                    table.TableName = String.Format("{0:yyyy-MM-dd}~{1:yyyy-MM-dd}", viewModel.AchievementDateFrom, viewModel.AchievementDateTo.Value.AddMonths(1).AddDays(-1));
                     ds.Tables.Add(table);
                 }
                 if (viewModel.DetailsOnly != true)
@@ -1328,13 +2245,16 @@ namespace WebHome.Controllers
             return table;
         }
 
-        private DataTable createAchievementDetailsXlsx(AchievementQueryViewModel viewModel)
+        private DataTable createAchievementDetailsXlsx(AchievementQueryViewModel viewModel,out IQueryable<LessonTime> items)
         {
             ViewResult result = (ViewResult)InquireAchievement(viewModel);
-            IQueryable<LessonTime> items = (IQueryable<LessonTime>)result.Model;
+            items = (IQueryable<LessonTime>)result.Model;
 
-            return models.CreateLessonAchievementDetails(items);
-
+            IQueryable<V_Tuition> tuitionItems = items
+                .Join(models.GetTable<LessonTimeSettlement>().Where(l => l.SettlementID.HasValue),
+                    l => l.LessonID, t => t.LessonID, (l, t) => l)
+                .Join(models.GetTable<V_Tuition>(), l => l.LessonID, t => t.LessonID, (l, t) => t);
+            return models.CreateLessonAchievementDetails(tuitionItems);
         }
 
         private DataTable createTuitionAchievementXlsx(AchievementQueryViewModel viewModel)

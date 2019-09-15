@@ -39,6 +39,10 @@ namespace WebHome.Controllers
         {
             return View("~/Views/ReportConsole/ReportModal/SelectMonthlyReport.cshtml");
         }
+        public ActionResult SelectCoachMonthlyReport()
+        {
+            return View("~/Views/ReportConsole/ReportModal/SelectCoachMonthlyReport.cshtml");
+        }
 
         public ActionResult SelectPeriodReport()
         {
@@ -302,5 +306,33 @@ namespace WebHome.Controllers
             return new EmptyResult();
         }
 
+        public ActionResult PrepareMonthlyBonus(AchievementQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (!viewModel.AchievementDateFrom.HasValue)
+            {
+                viewModel.AchievementDateFrom = DateTime.Today.FirstDayOfMonth();
+            }
+            viewModel.AchievementDateTo = viewModel.AchievementDateFrom.Value.AddMonths(1);
+
+            IQueryable<CoachMonthlySalary> items = viewModel.InquireMonthlySalary(models);
+
+            return View("~/Views/ReportConsole/Module/PrepareMonthlyBonus.cshtml", items);
+        }
+
+        public ActionResult PrepareAchievementDetails(AchievementQueryViewModel viewModel)
+        {
+            //IQueryable<LessonTime> items = viewModel.InquireAchievement(this, out string alertMessage);
+
+            //items = items.Join(models.GetTable<LessonTimeSettlement>().Where(l => l.SettlementID.HasValue), 
+            //                l => l.LessonID, t => t.LessonID, (l, t) => l);
+
+            //IQueryable<V_Tuition> tuitionItems = items.Join(models.GetTable<V_Tuition>(), l => l.LessonID, t => t.LessonID, (l, t) => t);
+            //return View("~/Views/ReportConsole/Module/PrepareAchievementDetails.cshtml", items);
+            ViewResult result = (ViewResult)PrepareMonthlyBonus(viewModel);
+            result.ViewName = "~/Views/ReportConsole/Module/PrepareAchievementDetails.cshtml";
+            return result;
+        }
     }
 }

@@ -21,7 +21,7 @@
                             <select name="TransactionType">
                                 <option value="1">體能顧問費</option>
                                 <option value="2">自主訓練</option>
-                                <option value="3">飲品</option>
+                                <option value="3">食／飲品</option>
                                 <option value="4">運動商品</option>
                             </select>
                             <i class="icon-append far fa-keyboard"></i>
@@ -42,11 +42,12 @@
                         <label class="select">
                             <select name="SellerID">
                                 <%  BranchStore branch = null;
-                                    if(_profile.IsManager() || _profile.IsViceManager())
-                                    {
-                                        branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == _profile.UID || b.ViceManagerID == _profile.UID).FirstOrDefault();
-                                    }
-                                    else if(_profile.IsCoach())
+                                    //if(_profile.IsManager() || _profile.IsViceManager())
+                                    //{
+                                    //    branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == _profile.UID || b.ViceManagerID == _profile.UID).FirstOrDefault();
+                                    //}
+                                    //else 
+                                    if(_profile.IsCoach())
                                     {
                                         ViewBag.DataItems = models.GetTable<CoachWorkplace>().Where(c => c.CoachID == _profile.UID)
                                                                 .Select(w => w.BranchStore);
@@ -82,7 +83,7 @@
                                 $.post('<%= Url.Action("LoadContract", "CourseContract") %>', { 'contractNo': $('#<%= _dialog %> input[name="ContractNo"]').val(), 'contractDateFrom': null, 'contractType': null }, function (data) {
                                     hideLoading();
                                     if ($.isPlainObject(data)) {
-                                        if (data.data.length > 0 && !data.data[0].Installment) {
+                                        if (data.data.length > 0 /*&& !data.data[0].Installment*/) {
                                             $('input[name="PayoffAmount"]').val(data.data[0].TotalCost);
                                             $('input[name="PayoffAmount"]').prop('readOnly', true);
                                         } else {
@@ -258,7 +259,7 @@
                 formData.InvoiceNow = invoiceNow;
 
                 showLoading();
-                $.post('<%= Url.Action("CommitPaymentForContract","Payment",new { _viewModel.PaymentID }) %>', formData, function (data) {
+                $.post('<%= Url.Action("CommitPaymentForContract","Payment",new { _viewModel.PaymentID, CustomBrief = false }) %>', formData, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {
                         if (data.result) {

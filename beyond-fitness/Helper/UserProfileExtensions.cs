@@ -39,5 +39,16 @@ namespace WebHome.Helper
                         || l.UserRoleAuthorization.Any(r => r.RoleID == (int)Naming.RoleID.Learner));
             }
         }
+
+        public static IQueryable<ServingCoach> PromptEffectiveCoach<TEntity>(this ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return models.GetTable<ServingCoach>()
+                    .Where(c => c.LevelID > (int)Naming.ProfessionLevelDefinition.Preliminary)
+                    .Join(models.GetTable<UserProfile>()
+                            .Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked),
+                        c => c.CoachID, u => u.UID, (c, u) => c);
+        }
+
     }
 }

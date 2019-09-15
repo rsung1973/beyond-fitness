@@ -235,7 +235,7 @@ namespace WebHome.Controllers
 
             var source = copyFrom.AssertLearnerTrainingPlan(models, viewModel.UID.Value);
             var target = copyTo.AssertLearnerTrainingPlan(models, viewModel.UID.Value);
-            models.CloneTrainingPlan(source, target);
+            models.CloneTrainingPlan(source, target, false);
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 
@@ -259,7 +259,7 @@ namespace WebHome.Controllers
                         WHERE        (TrainingPlan.ExecutionID = {0}) AND (UserProfile.UID = {1})", viewModel.ExecutionID, viewModel.UID);
             }
 
-            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = true, message = models.GetTable<FavoriteLesson>().Where(f => f.ExecutionID == viewModel.ExecutionID).Count() }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult InquireLesson(LessonQueryViewModel viewModel)
@@ -267,21 +267,33 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
 
             IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+            IQueryable<LessonTime> coachPI;
             if (viewModel.LearnerID.HasValue)
             {
                 items = viewModel.LearnerID.Value.PromptLearnerLessons(models);
+                coachPI = viewModel.LearnerID.Value.PromptCoachPILessons(models);
+            }
+            else
+            {
+                coachPI = models.GetTable<LessonTime>().Where(l => false);
             }
 
             if (viewModel.CoachID.HasValue)
                 items = items.Where(t => t.AttendingCoach == viewModel.CoachID);
 
             if (viewModel.QueryStart.HasValue)
+            {
                 items = items.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
+                coachPI = coachPI.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
+            }
 
             if (viewModel.ClassTime.HasValue)
+            {
                 items = items.Where(t => t.ClassTime >= viewModel.ClassTime && t.ClassTime < viewModel.ClassTime.Value.AddDays(1));
+                coachPI = coachPI.Where(t => t.ClassTime >= viewModel.ClassTime && t.ClassTime < viewModel.ClassTime.Value.AddDays(1));
+            }
 
-            return View("~/Views/LearnerProfile/Module/LessonItems.cshtml", items);
+            return View("~/Views/LearnerProfile/Module/LessonItems.cshtml", items.Union(coachPI));
         }
 
     }

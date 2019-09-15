@@ -3834,6 +3834,7 @@
     <Compile Include="Helper\CourseContractExtensionMethods.cs" />
     <Compile Include="Helper\DataOperation\DataProcessExtensions.cs" />
     <Compile Include="Helper\Jobs\DailyJob.cs" />
+    <Compile Include="Helper\LessonTimeAchievementHelper.cs" />
     <Compile Include="Helper\UserProfileExtensions.cs" />
     <Compile Include="Helper\PaymentExtensionMethods.cs" />
     <Compile Include="Helper\PromotionExtensionMethods.cs" />
@@ -3959,6 +3960,11 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\CornerKick\MyContract.cshtml" />
+    <Content Include="Views\CornerKick\Module\PromptPayoffDue.cshtml" />
+    <Content Include="Views\CornerKick\DataNotFound.cshtml" />
+    <Content Include="Views\Invoice\Module\InvoiceDispatchLogSummary.cshtml" />
+    <Content Include="Views\Invoice\Module\TurnkeyWidgetGrid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

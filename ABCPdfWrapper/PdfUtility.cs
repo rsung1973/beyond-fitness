@@ -19,6 +19,7 @@ namespace ABCPdfWrapper
             try
             {
                 bool pagedOutput = true;
+                theDoc.HtmlOptions.AddLinks = true;
                 //theDoc.HtmlOptions.PageCacheEnabled = false;
                 //theDoc.HtmlOptions.AddForms = false;
                 //theDoc.HtmlOptions.AddLinks = false;

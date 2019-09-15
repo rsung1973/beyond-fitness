@@ -710,7 +710,7 @@ namespace WebHome.Controllers
 
             IQueryable<LessonTime> lessons = models.GetTable<LessonTime>().AllCompleteLesson();
             IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
-                .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+                .FilterByEffective();
 
             if (viewModel.BranchID.HasValue)
             {
@@ -777,8 +777,10 @@ namespace WebHome.Controllers
 
         private IQueryable<TuitionAchievement> InquireTuitionAchievement(AchievementQueryViewModel viewModel)
         {
-            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
-                .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+            //IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
+            //    .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+
+            IQueryable<TuitionAchievement> items = models.GetTable<Payment>().GetPaymentAchievement(models);
 
             if (viewModel.CoachID.HasValue)
             {

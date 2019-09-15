@@ -152,11 +152,12 @@ namespace WebHome.Controllers
 
         public ActionResult CommitContract(CourseContractViewModel viewModel)
         {
-            var item = viewModel.CommitCourseContract(this, out String alertMessage);
+            var item = viewModel.CommitCourseContract(this, out String alertMessage, true);
             if (item == null)
             {
                 if (!ModelState.IsValid)
                 {
+                    ViewBag.AlertError = true;
                     return View(ConsoleHomeController.InputErrorView);
                 }
                 else
@@ -170,11 +171,12 @@ namespace WebHome.Controllers
 
         public ActionResult SaveContract(CourseContractViewModel viewModel)
         {
-            var item = viewModel.SaveCourseContract(this, out String alertMessage);
+            var item = viewModel.SaveCourseContract(this, out String alertMessage, true);
             if (item == null)
             {
                 if (!ModelState.IsValid)
                 {
+                    ViewBag.AlertError = true;
                     return View(ConsoleHomeController.InputErrorView);
                 }
                 else
@@ -218,6 +220,12 @@ namespace WebHome.Controllers
             var item = models.GetTable<LessonPriceType>().Where(p => p.PriceID == viewModel.PriceID).FirstOrDefault();
             viewModel.TotalCost = item?.ListPrice * viewModel.Lessons;
 
+            var typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == viewModel.ContractType).FirstOrDefault();
+            if (typeItem != null)
+            {
+                viewModel.TotalCost = viewModel.TotalCost * typeItem.GroupingMemberCount * typeItem.GroupingLessonDiscount.PercentageOfDiscount / 100;
+            }
+
             return View("~/Views/ContractConsole/Editing/TotalCostSummary.cshtml");
         }
 
@@ -259,6 +267,11 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
             UserProfile item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
             if (item == null)
             {
@@ -283,7 +296,7 @@ namespace WebHome.Controllers
 
         public ActionResult CommitContractMember(ContractMemberViewModel viewModel)
         {
-            var item = viewModel.CommitContractMember(this, out String alertMessage);
+            var item = viewModel.CommitUserProfile(this, out String alertMessage);
             if (item == null)
             {
                 if (!ModelState.IsValid)
@@ -296,7 +309,15 @@ namespace WebHome.Controllers
                 }
             }
 
-            return View("~/Views/ContractConsole/Editing/ContractMemberCommitted.cshtml", item);
+            if (viewModel.ProfileOnly == true)
+            {
+                return View("~/Views/ContractConsole/Editing/UserProfileCommitted.cshtml", item);
+
+            }
+            else
+            {
+                return View("~/Views/ContractConsole/Editing/ContractMemberCommitted.cshtml", item);
+            }
 
         }
 
@@ -400,7 +421,13 @@ namespace WebHome.Controllers
 
         public ActionResult CommitContractService(CourseContractViewModel viewModel)
         {
-            var item = viewModel.CommitContractService(this, out String alertMessage);
+            String storedPath = null;
+            if (Request.Files.Count > 0)
+            {
+                storedPath = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + Path.GetExtension(Request.Files[0].FileName));
+                Request.Files[0].SaveAs(storedPath);
+            }
+            var item = viewModel.CommitContractService(this, out String alertMessage, storedPath);
             if (item == null)
             {
                 if (!ModelState.IsValid)
@@ -427,6 +454,12 @@ namespace WebHome.Controllers
 
             return result;
 
+        }
+
+        public ActionResult EditPaymentForContract(PaymentViewModel viewModel)
+        {
+            Payment item = viewModel.EditPaymentForContract(this);
+            return View("~/Views/ContractConsole/Module/EditPaymentForContract.cshtml", item);
         }
 
     }

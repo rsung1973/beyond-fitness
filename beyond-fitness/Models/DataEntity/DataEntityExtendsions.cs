@@ -19,6 +19,25 @@ namespace WebHome.Models.DataEntity
             return item.Birthday.HasValue ? (int)((DateTime.Today - item.Birthday.Value).TotalDays / 365) : 999;
         }
 
+        public static bool CheckMinorLearner(this CourseContract item)
+        {
+            if (item.CourseContractType.IsGroup == true)
+            {
+                foreach (var m in item.CourseContractMember)
+                {
+                    if (m.UserProfile.CurrentYearsOld() < 18)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                return item.ContractOwner.CurrentYearsOld() < 18;
+            }
+            return false;
+        }
+
 
         public static String CurrentLessonStatus(this LessonTime item)
         {
@@ -195,9 +214,9 @@ namespace WebHome.Models.DataEntity
             return item.Nickname == null ? item.RealName : item.RealName + "(" + item.Nickname + ")";
         }
 
-        public static String FullNameHtml(this UserProfile profile)
+        public static String FullNameHtml(this UserProfile profile,String css = null)
         {
-            return String.Concat($"<span class='hidden-sm-down'>{profile.RealName}",
+            return String.Concat($"<span class='{css}'>{profile.RealName}",
                         !String.IsNullOrEmpty(profile.Nickname) ? $"<span class='small'>({profile.Nickname})</span>" : null,
                         "</span>");
         }
@@ -276,15 +295,15 @@ namespace WebHome.Models.DataEntity
         }
 
 
-        public static int? TotalPaidAmount(this CourseContract contract)
+        public static int TotalPaidAmount(this CourseContract contract)
         {
             return contract.ContractPayment
                 .Select(c => c.Payment)
                 .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
                     || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉讓餘額
                     || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉點餘額)
-                .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue)
-                .Sum(c => c.PayoffAmount);
+                .FilterByEffective()
+                .Sum(c => c.PayoffAmount) ?? 0;
         }
 
         public static int? TotalPayoffCount(this CourseContract contract)
@@ -294,7 +313,7 @@ namespace WebHome.Models.DataEntity
                 .Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
                     || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉讓餘額
                     || p.TransactionType == (int)Naming.PaymentTransactionType.合約轉點餘額)
-                .Where(p => p.VoidPayment == null || p.AllowanceID.HasValue).Count();
+                .FilterByEffective().Count();
         }
 
         public static decimal? TotalAllowanceAmount(this CourseContract contract)
@@ -345,16 +364,40 @@ namespace WebHome.Models.DataEntity
                     : item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus() + "(企)";
         }
 
+        public static IQueryable<TuitionAchievement> FilterByEffective(this IQueryable<TuitionAchievement> items)
+        {
+            return items
+                    .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+        }
+
+        public static IEnumerable<Payment> FilterByEffective(this IEnumerable<Payment> items)
+        {
+            return items
+                    .Where(t => t.VoidPayment == null || t.AllowanceID.HasValue);
+        }
+
+        public static IEnumerable<TuitionAchievement> FilterByEffective(this IEnumerable<TuitionAchievement> items)
+        {
+            return items
+                    .Where(t => t.Payment.VoidPayment == null || t.Payment.AllowanceID.HasValue);
+        }
+
+        public static IQueryable<Payment> FilterByEffective(this IQueryable<Payment> items)
+        {
+            return items
+                    .Where(t => t.VoidPayment == null || t.AllowanceID.HasValue);
+        }
+
 
         public static decimal? EffectiveAchievement(this Payment item)
         {
-            if (item.VoidPayment != null)
-            {
-                return 0;
-            }
-            else if (item.AllowanceID.HasValue)
+            if (item.AllowanceID.HasValue)
             {
                 return item.PayoffAmount - item.InvoiceAllowance.TotalAmount - item.InvoiceAllowance.TaxAmount;
+            }
+            else if (item.VoidPayment != null)
+            {
+                return 0;
             }
             else
             {
@@ -388,6 +431,57 @@ namespace WebHome.Models.DataEntity
             return item.CurrentPriceSeries?.AllLessonPrice.Where(p => p.LowerLimit == 1).FirstOrDefault()?.ListPrice;
         }
 
+        public static string ExercisePowerAbility(this PersonalExercisePurpose purpose)
+        {
+            return purpose?.PowerAbility != null
+                        ? purpose.PowerAbility.Substring(0, 3)
+                        : "？型";
+        }
+
+        public static string ExercisePurpose(this PersonalExercisePurpose purpose)
+        {
+            return $"{(purpose?.Purpose ?? "？")}期";
+        }
+
+        public static string ExercisePurposeDescription(this PersonalExercisePurpose purpose)
+        {
+            return String.Concat(
+                purpose.ExercisePowerAbility(),
+                " / ",
+                purpose.ExercisePurpose());
+        }
+
+        public static String PayerName(this Payment item, String insteadOfNull = null)
+        {
+            return item.TuitionInstallment != null
+                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : item.ContractPayment != null
+                            ? item.ContractPayment.CourseContract.CourseContractType.IsGroup == true
+                                ? String.Join("/", item.ContractPayment.CourseContract.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
+                                : item.ContractPayment.CourseContract.ContractOwner.FullName()
+                            : insteadOfNull;
+        }
+
+        public static UserProfile Payer(this Payment item)
+        {
+            return item.TuitionInstallment != null
+                        ? item.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile
+                        : item.ContractPayment?.CourseContract.ContractOwner;
+        }
+
+        public static String WorkPlace(this ServingCoach item)
+        {
+            return item.CoachWorkplace.Count == 1
+                            ? item.CoachWorkplace.First().BranchStore.BranchName
+                            : "其他";
+        }
+
+        public static int? WorkBranchID(this ServingCoach item)
+        {
+            return item.CoachWorkplace.Count == 1
+                            ? (int?)item.CoachWorkplace.First().BranchID
+                            : (int?)null;
+        }
     }
 
     public partial class UserProfile

@@ -27,11 +27,16 @@ namespace WebHome.Helper
                 where TEntity : class, new()
         {
             if (items == null)
+            {
                 items = models.GetTable<RegisterLesson>();
+            }
 
-            items = items.Join(models.GetTable<LessonPriceType>()
-                            .Where(p => p.Status == (int)Naming.LessonPriceStatus.教練PI || p.IsWelfareGiftLesson != null),
-                            r => r.ClassLevel, p => p.PriceID, (r, p) => r);
+            var staff = models.GetTable<UserRoleAuthorization>().Where(a => Naming.StaffRole.Contains(a.RoleID));
+
+            items = items.Where(r => staff.Any(s => s.UID == r.UID));
+            //items = items.Join(models.GetTable<LessonPriceType>()
+            //                .Where(p => p.Status == (int)Naming.LessonPriceStatus.教練PI || p.IsWelfareGiftLesson != null),
+            //                r => r.ClassLevel, p => p.PriceID, (r, p) => r);
 
             return items;
         }
@@ -40,7 +45,7 @@ namespace WebHome.Helper
                 where TEntity : class, new()
         {
             return models.PromptMemberExerciseRegisterLesson(items)
-                .TotalLessons(models);
+                .TotalRegisterLessonItems(models);
         }
 
         public static IQueryable<LessonTime> FilterByUserRoleScope<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models, UserProfile profile)
@@ -65,18 +70,18 @@ namespace WebHome.Helper
             }
         }
 
-        public static String PowerAbliityCss(this PersonalExercisePurpose item,String append = null)
+        public static String PowerAbliityCss(this PersonalExercisePurpose item, String append = null)
         {
+            String css = "col-red";
             if (item != null && item.PowerAbility != null)
             {
-                String css = item.PowerAbility.Contains("初")
-                            ? "col-green"
-                            : item.PowerAbility.Contains("中")
-                                ? "col-amber"
-                                : "col-red";
-                return append == null ? css : $"{css} {append}";
+                css = item.PowerAbility.Contains("初")
+                           ? "col-amber"
+                           : item.PowerAbility.Contains("中")
+                               ? "col-green"
+                               : "col-red";
             }
-            return null;
+            return append == null ? css : $"{css} {append}";
         }
 
         public static String PowerAbliityCss(this Naming.PowerAbilityLevel? item, String append = null)
@@ -87,7 +92,7 @@ namespace WebHome.Helper
                             ? "col-amber"
                             : item == Naming.PowerAbilityLevel.高階
                                 ? "col-red"
-                                : null;
+                                : "col-red";
             return append == null ? css : $"{css} {append}";
         }
 

@@ -95,7 +95,7 @@ namespace WebHome.Helper
         {
             var paymentItems = contractItem.ContractPayment.Select(p => p.Payment)
                     .Where(p => p.PayoffAmount > 0)
-                    .Where(p => p.VoidPayment == null)
+                    .FilterByEffective()
                     .Where(p => p.InvoiceID.HasValue)
                     .OrderByDescending(p => p.PaymentID)
                     .ToArray();
@@ -128,6 +128,14 @@ namespace WebHome.Helper
                 Status = (int)Naming.CourseContractStatus.已生效,
                 VoidDate = DateTime.Now
             };
+
+            ///刪除當月已分潤
+            /// 
+            DateTime startDate = DateTime.Today.FirstDayOfMonth();
+            if(item.PayoffDate >= startDate && item.PayoffDate < startDate.AddMonths(1))
+            {
+                models.DeleteAllOnSubmit<TuitionAchievement>(t => t.InstallmentID == item.PaymentID);
+            }
 
             return newItem;
         }

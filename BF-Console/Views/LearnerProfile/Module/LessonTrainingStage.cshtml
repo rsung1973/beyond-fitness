@@ -17,7 +17,7 @@
     _model = (LessonTime)this.Model;
 }
 @{
-    UserProfile learner = (UserProfile)ViewBag.Learner;
+    UserProfile learner = ((UserProfile)ViewBag.Learner).LoadInstance(models);
     var plan = _model.AssertTrainingPlan(models, UID: learner.UID);
     var execution = plan.TrainingExecution;
     TrainingStage stage = (TrainingStage)ViewBag.TrainingStage;
@@ -26,36 +26,40 @@
             .Where(t => t.TrainingType.TrainingStageItem.StageID == stage.StageID)
             .OrderBy(t => t.Sequence);
 
+    String currentID = $"{DateTime.Now.Ticks}";
+
     bool viewOnly = (bool?)ViewBag.ViewOnly == true ? true : false;
+    bool isModal = (bool?)ViewBag.IsModal == true ? true : false;
+    String indication = learner.UserProfileExtension?.Gender == "F" ? "girl" : "boy";
 }
 <div>
-    <div class="card-header" id="@($"heading_{stage.StageID}")">
+    <div class="card-header" id="@($"heading_{stage.StageID}{currentID}")">
         <h3 class="m-b-0">
-            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse_{stage.StageID}")" aria-expanded="true" aria-controls="@($"collapse_{stage.StageID}")">
-                <img src="@($"images/lesson/stage{stage.StageID}-boy.png")" class="img-thumbnail popfit">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse_{stage.StageID}{currentID}")" aria-expanded="true" aria-controls="@($"collapse_{stage.StageID}{currentID}")">
+                <img src="@($"images/lesson/stage{stage.StageID}-{indication}.png")" class="img-thumbnail popfit">
                 @(stage.Stage)
                 @{
                     var duration = execution.TrainingExecutionStage.Where(s => s.StageID == stage.StageID).FirstOrDefault();
                 }
-                @if (duration != null)
-                {
-                    <text>- @(String.Format("{0:.#}", duration.TotalMinutes)) min</text>
-                }
+                - @(String.Format("{0:0.#}", duration?.TotalMinutes ?? 0)) min
             </button>
             <i class="zmdi zmdi-label @(stageColor(stage.StageID)) m-r-5 p-t-50 float-right"></i>
         </h3>
     </div>
-    <div id="@($"collapse_{stage.StageID}")" class="collapse show" aria-labelledby="@($"heading_{stage.StageID}")" data-parent="#accordion">
+    <div id="@($"collapse_{stage.StageID}{currentID}")" class="collapse show" aria-labelledby="@($"heading_{stage.StageID}{currentID}")" data-parent="#accordion">
         <div class="card-body">
             <div class="clearfix m-b-20">
-                <div class="dd nestable-with-handle nestable-dark-theme" id="@($"nestable_{stage.StageID}")">
+                <div class="dd nestable-with-handle nestable-dark-theme" id="@($"nestable_{stage.StageID}{currentID}")">
                     <ol class="dd-list lesson-list">
                         @foreach (var item in items)
                         {
                             if (item.TrainingType.BreakMark != true)
                             {
-                                <li class="dd-item dd3-item list-action" data-id="@(item.ItemID)" onclick="@(viewOnly ? "void(0)" : $"editStageTrainingItem({stage.StageID},{item.ItemID})");">
-                                    <div class="dd-handle dd3-handle"></div>
+                                <li class="dd-item dd3-item list-action" data-id="@(item.ItemID)" onclick="@(isModal ? "void(0)" : $"editStageTrainingItem({stage.StageID},{item.ItemID})");">
+                                    @if (!isModal)
+                                    {
+                                        <div class="dd-handle dd3-handle"></div>
+                                    }
                                     <div class="dd3-content list-item">
                                         <span class="badge bg-blue-grey">@(item.TrainingType.BodyParts)</span>
                                         @foreach (var aid in item.TrainingItemAids)
@@ -83,8 +87,11 @@
                             }
                             else
                             {
-                                <li class="dd-item dd3-item list-line" data-id="@item.ItemID" onclick="@(viewOnly ? "void(0)" : $"editStageBreakInterval({stage.StageID},{item.ItemID})");">
-                                    <div class="dd-handle dd3-handle t--12"></div>
+                                <li class="dd-item dd3-item list-line" data-id="@item.ItemID" onclick="@(isModal ? "void(0)" : $"editStageBreakInterval({stage.StageID},{item.ItemID})");">
+                                    @if (!isModal)
+                                    {
+                                        <div class="dd-handle dd3-handle t--12"></div>
+                                    }
                                     <div class="dd3-content">
                                         <span class="tag-repet badge col-grey">
                                             @if (item.BreakIntervalInSecond != null)
@@ -107,9 +114,9 @@
                     </ol>
                 </div>
             </div>
-            @if (!viewOnly)
-            {
-                <div class="clearfix m-b-0">
+            <div class="clearfix m-b-0">
+                @if (!isModal)
+                {
                     <div class="btn-group float-right" role="group">
                         <a id="btnGroupDrop1" class="dropdown-toggle col-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="zmdi livicon-evo" data-options="name: pencil.svg; size: 40px; style: lines; strokeStyle:round; strokeColor:#f9edee; strokeWidth:2px; autoPlay:true"></i>
@@ -119,19 +126,22 @@
                             <a class="dropdown-item" href="javascript:editStageBreakInterval(@stage.StageID);">新增休息/組數</a>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
 </div>
+@if (viewOnly != true)
+{
 <script>
     $(function () {
-        $('#@($"nestable_{stage.StageID}")').nestable({
+        $('#@($"nestable_{stage.StageID}{currentID}")').nestable({
             group: @(stage.StageID),
             maxDepth: 1
         });
     });
 </script>
+}
 @functions
 {
 

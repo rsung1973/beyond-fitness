@@ -28,7 +28,7 @@
 }
 @if ((bool?)ViewBag.ViewOnly != true)
 {
-<script>
+    <script>
 
     function editStageTrainingItem(stageID, itemID) {
         showLoading();
@@ -79,5 +79,23 @@
         });
     });
 
-</script>
+    </script>
+}
+else
+{
+    <script>
+
+    function editStageTrainingItem(stageID, itemID) {
+        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+    }
+
+    function editStageBreakInterval(stageID, itemID) {
+        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+    }
+
+    $('.dd').on('change', function () {
+        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+    });
+
+    </script>
 }

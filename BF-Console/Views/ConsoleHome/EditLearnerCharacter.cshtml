@@ -103,11 +103,11 @@
                                                         <div class="testimonial-section">
                                                             <h4>Hi，@(_learner.Nickname)您好</h4>
                                                             <p>
-                                                                恭喜您持之以恆的完成了8堂訓練課程，為了讓您未來在更安全的環境中進行有效的訓練<br />
+                                                                恭喜您持之以恆的完成了12堂訓練課程，為了讓您未來在更安全的環境中進行有效的訓練<br />
                                                                 阿呆將與您進行以下的對談，雖然會花費您5分鐘的時間，但是阿呆在過程中可替您規劃出更適合的訓練內容喔！
                                                             </p>
                                                             <p class="text-center p-t-10">
-                                                                <a href="javascript:nextStep(1);">
+                                                                <a href="javascript:startEditingCharacter();">
                                                                     <i class="zmdi livicon-evo " data-options="name: touch.svg; size: 50px; style: original; strokeStyle:round; strokeColor:#052333; strokeWidth:2px; autoPlay:true"></i>
                                                                     LET'S GO~
                                                                 </a>
@@ -456,7 +456,10 @@
             });
 
             if (done > 2) {
-                swal('訓練時間百分比', '最多選擇兩項Stage', 'error');
+                swal('Oooops!你回答太多題喔！', '最多選擇兩項Stage喔！', 'error');
+                return;
+            } else if (done == 0) {
+                swal('Oooops!你忘了回答問題喔！', '請至少勾選一項或填寫其他內容喔！', 'error');
                 return;
             }
             
@@ -466,14 +469,15 @@
                     if (questID.length == done && onDone) {
                         onDone();
                     }
-                });
+                }, null, true);
             });
         }
 
-        function saveCurrent(questID, onDone, maxCount) {
+        function saveCurrent(questID, onDone, maxCount,noChecked) {
             var $formData = $('[data-id="' + questID + '"]').serializeObject();
             $formData.QuestionID = questID;
-            if (maxCount && $formData.SuggestionID && $formData.SuggestionID.length > maxCount) {
+            $formData.NoChecked = noChecked;
+            if (maxCount && Array.isArray($formData.SuggestionID) && $formData.SuggestionID.length > maxCount) {
                 swal('', '最多選擇' + maxCount + '項', 'error');
                 return;
             }
@@ -484,7 +488,7 @@
                             onDone();
                         }
                     } else {
-                        swal("存檔失敗!", data.message, "error");
+                        swal("Oooops!你忘了回答問題喔！", data.message, "error");
                     }
                 } else {
                     $(data).appendTo($('body'));
@@ -500,6 +504,26 @@
                         $('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome",new { KeyID = _learner.UID.EncryptKey() }))', {});
                     } else {
                         swal("", data.message, "error");
+                    }
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+        function startEditingCharacter() {
+            $global.rejectCharacterDone = function () {
+                $('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome"))', { 'keyID': '@(_learner.UID.EncryptKey())' });
+            };
+            $global.resumeCharacter = function () {
+                nextStep(1);
+            };
+            $.post('@Html.Raw(Url.Action("ResumeLearnerCharacter", "LearnerProfile"))', { 'keyID': '@(_learner.UID.EncryptKey())' }, function (data) {
+                if ($.isPlainObject(data)) {
+                    if (data.result) {
+                        nextStep(1);
+                    } else {
+                        swal(data.message);
                     }
                 } else {
                     $(data).appendTo($('body'));

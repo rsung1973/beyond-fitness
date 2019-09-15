@@ -781,7 +781,12 @@ namespace WebHome.Controllers
                     var contract = lesson.RegisterLessonContract.CourseContract;
                     if (contract.Expiration.Value < DateTime.Today)
                     {
-                        return View("~/Views/Shared/MessageView.ascx", model: "學員合約已過期!!");
+                        return View("~/Views/Shared/MessageView.ascx", model: "合約已過期!!");
+                    }
+
+                    if (contract.Expiration.Value.AddDays(1) < viewModel.ClassDate.Value)
+                    {
+                        return View("~/Views/Shared/MessageView.ascx", model: "合約尚未生效或已過期!!");
                     }
 
                     var lessonCount = lesson.GroupingLesson.LessonTime.Count;
@@ -819,7 +824,8 @@ namespace WebHome.Controllers
                 LessonTimeSettlement = new LessonTimeSettlement
                 {
                     ProfessionalLevelID = coach.LevelID.Value,
-                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
+                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex,
+                    CoachWorkPlace = coach.WorkBranchID(),
                 }
             };
             if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Value.Hour))
@@ -1008,7 +1014,8 @@ namespace WebHome.Controllers
                 LessonTimeSettlement = new LessonTimeSettlement
                 {
                     ProfessionalLevelID = coach.LevelID.Value,
-                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
+                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex,
+                    CoachWorkPlace = coach.WorkBranchID(),
                 }
             };
             if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Value.Hour))
@@ -1156,7 +1163,7 @@ namespace WebHome.Controllers
                 //ClassTime = viewModel.ClassDate.Add(viewModel.ClassTime),
                 ClassTime = viewModel.ClassDate,
                 DurationInMinutes = priceType.DurationInMinutes,
-                TrainingBySelf = viewModel.TrainingBySelf,
+                TrainingBySelf = (int)Naming.LessonSelfTraining.體驗課程,
                 RegisterID = lesson.RegisterID,
                 LessonPlan = new LessonPlan
                 {
@@ -1166,7 +1173,8 @@ namespace WebHome.Controllers
                 LessonTimeSettlement = new LessonTimeSettlement
                 {
                     ProfessionalLevelID = coach.LevelID.Value,
-                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex
+                    MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex,
+                    CoachWorkPlace = coach.WorkBranchID(),
                 }
             };
             if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Value.Hour))
@@ -3285,7 +3293,7 @@ namespace WebHome.Controllers
                 {
                     LessonID = lessonID,
                     PlanStatus = p.PlanStatus,
-                    RegisterID = p.RegisterID,
+                    //RegisterID = p.RegisterID,
                     TrainingExecution = new TrainingExecution
                     {
                         Emphasis = null //p.TrainingExecution.Emphasis

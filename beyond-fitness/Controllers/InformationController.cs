@@ -375,6 +375,26 @@ namespace WebHome.Controllers
 
         }
 
+        [AllowAnonymous]
+        public ActionResult GetResourceWithMime(AttachmentQueryViewModel viewModel)
+        {
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.AttachmentID = viewModel.DecryptKeyValue();
+            }
+            var item = models.GetTable<Attachment>().Where(a => a.AttachmentID == viewModel.AttachmentID).FirstOrDefault();
+            if (item != null)
+            {
+                if (System.IO.File.Exists(item.StoredPath))
+                {
+                    return File(item.StoredPath, MimeMapping.GetMimeMapping(Path.GetFileName(item.StoredPath)));
+                }
+            }
+            return new EmptyResult();
+
+        }
+
+
         private void checkOrientation(Bitmap img)
         {
             if (Array.IndexOf(img.PropertyIdList, 274) > -1)

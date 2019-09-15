@@ -103,7 +103,10 @@ namespace WebHome.Controllers
 
         public ActionResult TestDataTable()
         {
-            return View();
+            var item0 = models.GetTable<UserProfile>().OrderBy(u => u.UID).FirstOrDefault();
+            var item1 = models.GetTable<UserProfile>().Where(u => u.UID == 1).FirstOrDefault();
+            var item2 = ((IEnumerable<UserProfile>)models.GetTable<UserProfile>()).Where(u => u.PID.Contains("info")).FirstOrDefault();
+            return new EmptyResult();
         }
 
         public ActionResult UrlToPDF(String url)
@@ -115,9 +118,18 @@ namespace WebHome.Controllers
 
         public async Task<ActionResult> ConsoleHome(LoginViewModel viewModel, string returnUrl)
         {
-
-            UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
-                && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+            ViewBag.ViewModel = viewModel;
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+            UserProfile item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID
+                    && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+            if (item == null)
+            {
+                item = models.EntityList.Where(u => u.PID == viewModel.PID
+                    && u.LevelID == (int)Naming.MemberStatusDefinition.Checked).FirstOrDefault();
+            }
 
             if (item == null)
             {
@@ -128,6 +140,16 @@ namespace WebHome.Controllers
 
             return Redirect("~/ConsoleHome/Index");
 
+        }
+
+        public ActionResult SystemInfo()
+        {
+            return Json(new
+            {
+                Properties.Settings.Default.ReportInputError,
+                ContractViewUrl = BusinessExtensionMethods.ContractViewUrl.ToString(),
+                ContractServiceViewUrl = BusinessExtensionMethods.ContractServiceViewUrl.ToString(),
+            }, JsonRequestBehavior.AllowGet);
         }
 
     }
