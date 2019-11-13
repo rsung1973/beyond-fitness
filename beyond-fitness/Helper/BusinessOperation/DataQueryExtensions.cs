@@ -36,13 +36,18 @@ namespace WebHome.Helper.BusinessOperation
             var HttpContext = controller.HttpContext;
             var models = controller.DataSource;
 
-            ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
             ViewBag.ViewModel = viewModel;
 
+            return viewModel.InquireContract(models);
+        }
+
+        public static IQueryable<CourseContract> InquireContract<TEntity>(this CourseContractQueryViewModel viewModel, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+
             bool hasConditon = false;
-            ViewBag.ViewModel = viewModel;
 
             IQueryable<CourseContract> items;
 
@@ -68,6 +73,12 @@ namespace WebHome.Helper.BusinessOperation
             else
             {
                 items = models.GetTable<CourseContract>();
+            }
+
+            if (viewModel.ContractID.HasValue)
+            {
+                hasConditon = true;
+                items = items.Where(c => c.ContractID == viewModel.ContractID);
             }
 
             if (viewModel.PayoffMode == Naming.ContractPayoffMode.Unpaid)
@@ -210,6 +221,12 @@ namespace WebHome.Helper.BusinessOperation
             {
                 hasConditon = true;
                 items = items.FilterByUnpaidContract(models);
+            }
+
+            viewModel.Subject = viewModel.Subject.GetEfficientString();
+            if (viewModel.Subject != null)
+            {
+                items = items.Where(c => c.Subject == viewModel.Subject);
             }
 
             if (hasConditon)
@@ -576,17 +593,25 @@ namespace WebHome.Helper.BusinessOperation
             PaymentQueryViewModel viewModel = (PaymentQueryViewModel)queryViewModel.Duplicate();
             var profile = HttpContext.GetUser();
 
+            return viewModel.InquirePayment(models);
+        }
+
+        public static IQueryable<Payment> InquirePayment<TEntity>(this PaymentQueryViewModel viewModel, ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+
             IQueryable<Payment> items = models.PromptIncomePayment();
 
             IQueryable<VoidPayment> voidItems = models.GetTable<VoidPayment>();
             IQueryable<InvoiceItem> invoiceItems = models.GetTable<InvoiceItem>();
+            bool hasInvoiceQuery = false;
 
             if (viewModel.PaymentID.HasValue)
             {
                 items = items.Where(p => p.PaymentID == viewModel.PaymentID);
             }
 
-            IQueryable<Payment> buildQueryByUserName(IQueryable<Payment> queryItems,String userName)
+            IQueryable<Payment> buildQueryByUserName(IQueryable<Payment> queryItems, String userName)
             {
                 IQueryable<UserProfile> users = models.GetTable<UserProfile>().Where(c => c.RealName.Contains(userName)
                         || c.Nickname.Contains(userName));
@@ -606,7 +631,7 @@ namespace WebHome.Helper.BusinessOperation
             viewModel.UserName = viewModel.UserName.GetEfficientString();
             if (viewModel.UserName != null)
             {
-                items = buildQueryByUserName(items,viewModel.UserName);
+                items = buildQueryByUserName(items, viewModel.UserName);
             }
 
             IQueryable<Payment> buildQueryByContractNo(IQueryable<Payment> queryItems, String contractNo)
@@ -625,7 +650,7 @@ namespace WebHome.Helper.BusinessOperation
                 }
 
                 IQueryable<ContractPayment> cp = ci.Join(models.GetTable<ContractPayment>(), c => c.ContractID, p => p.ContractID, (m, p) => p);
-                queryItems =queryItems.Join(cp, p => p.PaymentID, c => c.PaymentID, (p, c) => p);
+                queryItems = queryItems.Join(cp, p => p.PaymentID, c => c.PaymentID, (p, c) => p);
 
                 return queryItems;
             }
@@ -671,11 +696,13 @@ namespace WebHome.Helper.BusinessOperation
 
             if (viewModel.InvoiceType.HasValue)
             {
+                hasInvoiceQuery = true;
                 invoiceItems = invoiceItems.Where(c => c.InvoiceType == (byte)viewModel.InvoiceType);
             }
 
             if (viewModel.HasInvoicePrinted.HasValue)
             {
+                hasInvoiceQuery = true;
                 if (viewModel.HasInvoicePrinted == true)
                 {
                     invoiceItems = invoiceItems
@@ -712,6 +739,7 @@ namespace WebHome.Helper.BusinessOperation
             viewModel.InvoiceNo = viewModel.InvoiceNo.GetEfficientString();
             if (viewModel.InvoiceNo != null && Regex.IsMatch(viewModel.InvoiceNo, "[A-Za-z]{2}[0-9]{8}"))
             {
+                hasInvoiceQuery = true;
                 String trackCode = viewModel.InvoiceNo.Substring(0, 2).ToUpper();
                 String no = viewModel.InvoiceNo.Substring(2);
                 invoiceItems = invoiceItems.Where(c => c.TrackCode == trackCode
@@ -728,34 +756,24 @@ namespace WebHome.Helper.BusinessOperation
             viewModel.BuyerReceiptNo = viewModel.BuyerReceiptNo.GetEfficientString();
             if (viewModel.BuyerReceiptNo != null)
             {
+                hasInvoiceQuery = true;
                 invoiceItems = invoiceItems.Where(c => c.InvoiceBuyer.ReceiptNo == viewModel.BuyerReceiptNo);
             }
 
-            bool dateQuery = false;
             IQueryable<InvoiceAllowance> allowanceItems = models.GetTable<InvoiceAllowance>();
             IQueryable<InvoiceCancellation> cancelledItems = models.GetTable<InvoiceCancellation>();
-
+            IQueryable<Payment> result = items;
             if (viewModel.PayoffDateFrom.HasValue)
             {
-                dateQuery = true;
-                items = items.Where(p => p.PayoffDate >= viewModel.PayoffDateFrom);
-                invoiceItems = invoiceItems.Where(i => i.InvoiceDate >= viewModel.PayoffDateFrom);
-                cancelledItems = cancelledItems.Where(i => i.CancelDate >= viewModel.PayoffDateFrom);
-                allowanceItems = allowanceItems.Where(a => a.AllowanceDate >= viewModel.PayoffDateFrom);
-                voidItems = voidItems.Where(v => v.VoidDate >= viewModel.PayoffDateFrom);
+                result = result.Where(p => p.PayoffDate >= viewModel.PayoffDateFrom);
             }
 
             if (viewModel.PayoffDateTo.HasValue)
             {
-                dateQuery = true;
-                items = items.Where(i => i.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
-                invoiceItems = invoiceItems.Where(i => i.InvoiceDate < viewModel.PayoffDateTo.Value.AddDays(1));
-                cancelledItems = cancelledItems.Where(i => i.CancelDate < viewModel.PayoffDateTo.Value.AddDays(1));
-                allowanceItems = allowanceItems.Where(a => a.AllowanceDate < viewModel.PayoffDateTo.Value.AddDays(1));
-                voidItems = voidItems.Where(v => v.VoidDate < viewModel.PayoffDateTo.Value.AddDays(1));
+                result = result.Where(i => i.PayoffDate < viewModel.PayoffDateTo.Value.AddDays(1));
             }
 
-            IQueryable<Payment> result = items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
+            //result = items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
             if (viewModel.ShareFor.HasValue)
             {
                 result = result.Where(p => p.VoidPayment == null)
@@ -765,12 +783,13 @@ namespace WebHome.Helper.BusinessOperation
             {
 
             }
-            else if (dateQuery)
-            {
-                result = result
-                    .Union(result.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p)
-                    .Union(result.Join(voidItems, p => p.PaymentID, c => c.VoidID, (p, c) => p)));
-            }
+            //else if (dateQuery)
+            //{
+            //    result = result
+            //        .Union(items.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p))
+            //        .Union(items.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p)
+            //        .Union(items.Join(voidItems, p => p.PaymentID, c => c.VoidID, (p, c) => p)));
+            //}
 
             if (viewModel.IsCancelled == true)
             {
@@ -780,13 +799,48 @@ namespace WebHome.Helper.BusinessOperation
             }
             else if (viewModel.IsCancelled == false)
             {
-                result = items
+                result = result
                     .Where(p => p.VoidPayment == null /*&& !p.AllowanceID.HasValue*/);
+            }
+
+            if (viewModel.AllowanceDateFrom.HasValue)
+            {
+                viewModel.HasAllowance = true;
+                allowanceItems = allowanceItems.Where(a => a.AllowanceDate >= viewModel.AllowanceDateFrom);
+            }
+
+            if (viewModel.AllowanceDateTo.HasValue)
+            {
+                viewModel.HasAllowance = true;
+                allowanceItems = allowanceItems.Where(a => a.AllowanceDate < viewModel.AllowanceDateTo.Value.AddDays(1));
             }
 
             if (viewModel.HasAllowance == true)
             {
-                result = result.Where(p => p.AllowanceID.HasValue);
+                result = result.Join(allowanceItems, p => p.AllowanceID, a => a.AllowanceID, (p, a) => p);
+            }
+
+            if (viewModel.CancelDateFrom.HasValue)
+            {
+                viewModel.HasCancellation = true;
+                cancelledItems = cancelledItems.Where(i => i.CancelDate >= viewModel.CancelDateFrom);
+            }
+
+            if (viewModel.CancelDateTo.HasValue)
+            {
+                viewModel.HasCancellation = true;
+                cancelledItems = cancelledItems.Where(i => i.CancelDate < viewModel.CancelDateTo.Value.AddDays(1));
+            }
+
+            if (viewModel.HasCancellation == true)
+            {
+                hasInvoiceQuery = true;
+                invoiceItems = invoiceItems.Join(cancelledItems, i => i.InvoiceID, c => c.InvoiceID, (i, c) => i);
+            }
+
+            if (hasInvoiceQuery)
+            {
+                result = result.Join(invoiceItems, p => p.InvoiceID, i => i.InvoiceID, (p, i) => p);
             }
 
             if (viewModel.CustomQuery != null)
@@ -805,11 +859,12 @@ namespace WebHome.Helper.BusinessOperation
                 }
                 else
                 {
-                    result = result.Where(t => !shareItems.Any(s => s.InstallmentID == t.PaymentID));
+                    //result = result.Where(t => !shareItems.Any(s => s.InstallmentID == t.PaymentID));
+                    result = result.Where(t => !t.TuitionAchievement.Any() || t.TuitionAchievement.Sum(a => a.ShareAmount) < t.PayoffAmount);
                 }
             }
 
-            if(viewModel.RelatedID.HasValue)
+            if (viewModel.RelatedID.HasValue)
             {
                 result = result.Where(p => p.HandlerID == viewModel.RelatedID)
                             .Union(result.Where(p => p.ContractPayment.CourseContract.FitnessConsultant == viewModel.RelatedID))
@@ -819,7 +874,7 @@ namespace WebHome.Helper.BusinessOperation
             return result;
         }
 
-        public static IQueryable<LessonTime> InquireAchievement<TEntity>(this AchievementQueryViewModel viewModel, SampleController<TEntity> controller, out String alertMessage)
+        public static IQueryable<V_Tuition> InquireAchievement<TEntity>(this AchievementQueryViewModel viewModel, SampleController<TEntity> controller, out String alertMessage)
                 where TEntity : class, new()
         {
             alertMessage = null;
@@ -838,7 +893,8 @@ namespace WebHome.Helper.BusinessOperation
                 }
                 else
                 {
-                    ModelState.AddModelError("AchievementYearMonthFrom", "請選擇查詢月份");
+                    //ModelState.AddModelError("AchievementYearMonthFrom", "請選擇查詢月份");
+                    viewModel.AchievementDateFrom = DateTime.Today.FirstDayOfMonth().AddMonths(1);
                 }
             }
 
@@ -851,7 +907,25 @@ namespace WebHome.Helper.BusinessOperation
                 }
             }
 
-            IQueryable<LessonTime> items = models.GetTable<LessonTime>().AllCompleteLesson();
+            IQueryable<V_Tuition> items = viewModel.InquireAchievement(models, profile);
+            return items;
+        }
+
+        public static IQueryable<V_Tuition> InquireAchievement<TEntity>(this AchievementQueryViewModel viewModel, ModelSource<TEntity> models,UserProfile profile = null)
+                where TEntity : class, new()
+        {
+
+            IQueryable<V_Tuition> items = models.GetTable<V_Tuition>()
+                                    .Where(v => v.PriceStatus != (int)Naming.DocumentLevelDefinition.教練PI);
+
+            if (viewModel.IgnoreAttendance == true)
+            {
+
+            }
+            else
+            {
+                items = items.FilterByCompleteLesson();
+            }
 
             bool hasConditon = false;
             if (viewModel.BypassCondition == true)
@@ -882,7 +956,11 @@ namespace WebHome.Helper.BusinessOperation
 
             if (!hasConditon)
             {
-                if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
+                if(profile==null)
+                {
+                    items = items.Where(l => false);
+                }
+                else if (profile.IsAssistant() || profile.IsAccounting() || profile.IsOfficer())
                 {
 
                 }

@@ -56,13 +56,10 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12" id="fieldBranch">
-                                        <div>
-                                            <select class="form-control show-tick" name="BranchID">
-                                                <option value="">-- 請選擇地點 --</option>
-                                                @{ Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.cshtml", model: (models.GetTable<CoachWorkplace>().Where(c => c.CoachID == _profile.UID).Select(c => (int?)c.BranchID).FirstOrDefault() ?? -1));}
-
-                                            </select>
-                                        </div>
+                                        <select class="form-control show-tick" name="BranchID">
+                                            <option value="">-- 請選擇地點 --</option>
+                                            @{ Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.cshtml", model: (models.GetTable<CoachWorkplace>().Where(c => c.CoachID == _profile.UID).Select(c => (int?)c.BranchID).FirstOrDefault() ?? -1));}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
@@ -86,17 +83,17 @@
                                                                 </div>
                                                                 @{
                                                                     _pageModel.HasChoice = false;
-                                                                    _pageModel.PDQStatus = _model.IsCompletePDQ();
+                                                                    //_pageModel.PDQStatus = _model.IsCompletePDQ();
                                                                     var contractLessons = _contracts.Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
                                                                                             .Select(r => r.RegisterLesson)
                                                                                             .Where(r => r.UID == _model.UID)
                                                                                             .Where(r => r.Attended != (int)Naming.LessonStatus.課程結束);
                                                                     var enterpriseLessons = _enterpriseContract.Join(models.GetTable<RegisterLessonEnterprise>(), t => t.ContractID, r => r.ContractID, (t, r) => r);
                                                                     var enterpriseLessonItems = enterpriseLessons.Select(r => r.RegisterLesson).Where(r => r.UID == _model.UID);
-                                                                    if (!_pageModel.PDQStatus)
+                                                                    @*if (!_pageModel.PDQStatus)
                                                                     {
                                                                         <p class="msg col-red"><i class="zmdi zmdi-info-outline"></i>PDQ尚未登打或登打不完全</p>
-                                                                    }
+                                                                    }*@
                                                                     @*_pageModel.QuestionnaireStatus =
                                                                         contractLessons.PromptLessonQuestionnaireRequest(models).Count() > 0
                                                                         || enterpriseLessonItems.PromptLessonQuestionnaireRequest(models).Count() > 0;

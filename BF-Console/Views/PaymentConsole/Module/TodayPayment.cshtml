@@ -16,44 +16,51 @@
     _model = (IQueryable<Payment>)this.Model;
 }
 @{
-    PaymentQueryViewModel _viewModel = (PaymentQueryViewModel)ViewBag.ViewModel;
-    IQueryable<Payment> items = _model.Where(p => p.PayoffDate >= DateTime.Today.FirstDayOfMonth());
-    IQueryable<Payment> voidItems =models.GetTable<VoidPayment>().Where(v => v.VoidDate >= DateTime.Today)
-                                            .Join(items, v => v.VoidID, p => p.PaymentID, (v, p) => p);
+    UserProfile _profile = Context.GetUser();
+    IQueryable<Payment> items = _model.Where(p => p.PayoffDate >= DateTime.Today);
+    IQueryable<Payment> voidItems = models.GetTable<VoidPayment>().Where(v => v.VoidDate >= DateTime.Today)
+                                            .Join(_model, v => v.VoidID, p => p.PaymentID, (v, p) => p);
+
+    int? relatedID = null;
+    int? branchID = null;
+    if (_profile.IsAssistant() || _profile.IsOfficer() || _profile.IsServitor())
+    {
+    }
+    else if (_profile.IsManager() || _profile.IsViceManager())
+    {
+        branchID = models.GetTable<BranchStore>().Where(b => b.ManagerID == _profile.UID || b.ViceManagerID == _profile.UID)
+                    .Select(b => b.BranchID).FirstOrDefault();
+    }
+    else
+    {
+        relatedID = _profile.UID;
+    }
 }
-<div class="col-6">
-    <br /><br />
-    <p class="text-small">
-        收款<br />
-        作廢<br />
-        折讓
-    </p>
-</div>
-<div class="col-6 text-right">
-    <h5 class="m-t-0"><span class="col-red">本月</span>金額</h5>
-    <a href="#" onclick='showPaymentList(@Html.Raw(JsonConvert.SerializeObject(
-            new
+    <div class="col-8">
+        <h5 class="m-t-0">本日收款</h5>
+        @{
+            PaymentQueryViewModel tempViewModel = new PaymentQueryViewModel
             {
-                PayoffDateFrom = DateTime.Today.FirstDayOfMonth(),
+                PayoffDateFrom = DateTime.Today,
                 PayoffDateTo = DateTime.Today.AddDays(1),
-                _viewModel.RelatedID,
-                IncomeOnly = true,
-            })));'>@($"{items.Sum(p => p.PayoffAmount) ?? 0:##,###,###,##0}")</a><br />
+                RelatedID = relatedID,
+                BranchID = branchID,
+            };
+            ViewBag.ViewModel = tempViewModel;
+            ViewBag.VoidPayment = voidItems;
+            Html.RenderPartial("~/Views/PaymentConsole/Module/PaymentSummary.cshtml", items);
+        }
+    </div>
+<div class="col-4 text-right">
     <a href="#" onclick='showPaymentList(@Html.Raw(JsonConvert.SerializeObject(
-            new
-            {
-                PayoffDateFrom = DateTime.Today.FirstDayOfMonth(),
-                PayoffDateTo = DateTime.Today.AddDays(1),
-                _viewModel.RelatedID,
-                HasCancellation = true,
-            })));'>@($"{voidItems.ExtractVoidPayment(models,true).Sum(p => p.PayoffAmount) ?? 0:##,###,###,##0}")</a><br />
-    <a href="#" onclick='showPaymentList(@Html.Raw(JsonConvert.SerializeObject(
-            new
-            {
-                PayoffDateFrom = DateTime.Today.FirstDayOfMonth(),
-                PayoffDateTo = DateTime.Today.AddDays(1),
-                _viewModel.RelatedID,
-                HasAllowance = true
-            })));'>@($"{items.ExtractPaymentAllowance(models).Sum(a=>a.TotalAmount) ?? 0:##,###,###,##0}")</a><br />
+        new
+        {
+            PayoffDateFrom = DateTime.Today,
+            RelatedID = relatedID,
+            BranchID = branchID,
+        })));'>
+        <h2>@(items.Count() + voidItems.Count())</h2>
+    </a>
+    <small class="info"></small>
 </div>
 

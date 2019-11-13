@@ -57,7 +57,9 @@
                 <td>@(item.CourseContractType.TypeName)(@(item.LessonPriceType.DurationInMinutes)分鐘)</td>
                 <td>
                     @(item.CourseContractRevision != null
-                                        ? item.CourseContractRevision.Reason
+                                        ? item.CourseContractRevision.OperationMode.HasValue
+                                            ? ((Naming.OperationMode?)item.CourseContractRevision.OperationMode).ToString()
+                                            : item.CourseContractRevision.Reason
                                         : item.Renewal == true
                                             ? "續約"
                                             : "新約")
@@ -81,7 +83,6 @@
                 @(String.Format("{0:yyyy/MM/dd}", item.CourseContractRevision?.Reason == "終止"
                                             ? item.EffectiveDate
                                             : item.Expiration))
-                <i class='zmdi zmdi-more-vert float-right'></i>
             </td>
     </tr>
 }

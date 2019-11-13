@@ -36,111 +36,127 @@
     <div class="card-header" id="@($"heading_{stage.StageID}{currentID}")">
         <h3 class="m-b-0">
             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#@($"collapse_{stage.StageID}{currentID}")" aria-expanded="true" aria-controls="@($"collapse_{stage.StageID}{currentID}")">
-                <img src="@($"images/lesson/stage{stage.StageID}-{indication}.png")" class="img-thumbnail popfit">
+                <img src="@($"images/lesson/stage{stage.StageID}-{indication}-clear.png")" class="img-thumbnail popfit">
                 @(stage.Stage)
                 @{
                     var duration = execution.TrainingExecutionStage.Where(s => s.StageID == stage.StageID).FirstOrDefault();
                 }
                 - @(String.Format("{0:0.#}", duration?.TotalMinutes ?? 0)) min
             </button>
-            <i class="zmdi zmdi-label @(stageColor(stage.StageID)) m-r-5 p-t-50 float-right"></i>
+            @if (!isModal)
+            {
+                <a href="javascript:editStageTrainingItem(@stage.StageID,null,$('#@($"heading_{stage.StageID}{currentID}")'));"><i class="zmdi zmdi-plus-circle-o-duplicate zmdi-hc-lg float-right m-t-25 col-grey"></i></a>
+            }
         </h3>
     </div>
     <div id="@($"collapse_{stage.StageID}{currentID}")" class="collapse show" aria-labelledby="@($"heading_{stage.StageID}{currentID}")" data-parent="#accordion">
         <div class="card-body">
-            <div class="clearfix m-b-20">
-                <div class="dd nestable-with-handle nestable-dark-theme" id="@($"nestable_{stage.StageID}{currentID}")">
-                    <ol class="dd-list lesson-list">
-                        @foreach (var item in items)
+            <div class="dd nestable-with-handle nestable-dark-theme" id="@($"nestable_{stage.StageID}{currentID}")">
+                <ol class="dd-list lesson-list">
+                    @foreach (var item in items)
+                    {
+                        if (item.TrainingType.BreakMark != true)
                         {
-                            if (item.TrainingType.BreakMark != true)
-                            {
-                                <li class="dd-item dd3-item list-action" data-id="@(item.ItemID)" onclick="@(isModal ? "void(0)" : $"editStageTrainingItem({stage.StageID},{item.ItemID})");">
-                                    @if (!isModal)
+                            <li class="dd-item dd3-item list-action" data-id="@(item.ItemID)" onclick="@(isModal ? "void(0)" : $"editStageTrainingItem({stage.StageID},{item.ItemID},$('#heading_{stage.StageID}{currentID}'))");">
+                                @if (!isModal)
+                                {
+                                    <div class="dd-handle dd3-handle"></div>
+                                }
+                                <div class="dd3-content list-item">
+                                    <span class="badge bg-blue-grey">@(item.TrainingType.BodyParts)</span>
+                                    @foreach (var aid in item.TrainingItemAids)
                                     {
-                                        <div class="dd-handle dd3-handle"></div>
+                                        <span class="badge bg-teal">@aid.TrainingAids.ItemName</span>
                                     }
-                                    <div class="dd3-content list-item">
-                                        <span class="badge bg-blue-grey">@(item.TrainingType.BodyParts)</span>
-                                        @foreach (var aid in item.TrainingItemAids)
+                                    @(item.Description)
+                                    <div class="float-right">
+                                        @if (item.GoalStrength != null)
                                         {
-                                            <span class="badge bg-teal">@aid.TrainingAids.ItemName</span>
+                                            <span class="badge bg-black">@(item.GoalStrength)</span>
                                         }
-                                        <div class="float-right">
-                                            @if (item.GoalStrength != null)
-                                            {
-                                                <span class="badge">@(item.GoalStrength)</span>
-                                            }
-                                            @if (item.GoalTurns != null && item.GoalStrength != null)
-                                            {
-                                                <text>X</text>
-                                            }
-                                            @if (item.GoalTurns != null)
-                                            {
-                                                <span class="badge">@(item.GoalTurns)</span>
-                                            }
-                                        </div>
-                                        @(item.Description)
-                                        <span class="list-intro">@(item.Remark)</span>
+                                        @if (item.GoalTurns != null && item.GoalStrength != null)
+                                        {
+                                            <text>X</text>
+                                        }
+                                        @if (item.GoalTurns != null)
+                                        {
+                                            <span class="badge bg-black">@(item.GoalTurns)</span>
+                                        }
                                     </div>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="dd-item dd3-item list-line" data-id="@item.ItemID" onclick="@(isModal ? "void(0)" : $"editStageBreakInterval({stage.StageID},{item.ItemID})");">
-                                    @if (!isModal)
-                                    {
-                                        <div class="dd-handle dd3-handle t--12"></div>
-                                    }
-                                    <div class="dd3-content">
-                                        <span class="tag-repet badge col-grey">
-                                            @if (item.BreakIntervalInSecond != null)
-                                            {
-                                                <text>Break @(item.BreakIntervalInSecond) sec.</text>
-                                            }
-                                            @if (item.BreakIntervalInSecond != null && item.Repeats != null)
-                                            {
-                                                <text> / </text>
-                                            }
-                                            @if (item.Repeats != null)
-                                            {
-                                                <text>Repeat * @(item.Repeats)</text>
-                                            }
-                                        </span>
-                                    </div>
-                                </li>
-                            }
+                                    <span class="list-intro">@(item.Remark)</span>
+                                </div>
+                            </li>
                         }
-                    </ol>
-                </div>
-            </div>
-            <div class="clearfix m-b-0">
-                @if (!isModal)
-                {
-                    <div class="btn-group float-right" role="group">
-                        <a id="btnGroupDrop1" class="dropdown-toggle col-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="zmdi livicon-evo" data-options="name: pencil.svg; size: 40px; style: lines; strokeStyle:round; strokeColor:#f9edee; strokeWidth:2px; autoPlay:true"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="javascript:editStageTrainingItem(@stage.StageID);">新增動作</a>
-                            <a class="dropdown-item" href="javascript:editStageBreakInterval(@stage.StageID);">新增休息/組數</a>
+                        else
+                        {
+                            <li class="dd-item dd3-item list-line" data-id="@item.ItemID" onclick="@(isModal ? "void(0)" : $"editStageBreakInterval({stage.StageID},{item.ItemID},$('#heading_{stage.StageID}{currentID}'))");">
+                                @if (!isModal)
+                                {
+                                    <div class="dd-handle dd3-handle t--12"></div>
+                                }
+                                <div class="dd3-content">
+                                    <span class="tag-repet badge col-grey">
+                                        @if (item.BreakIntervalInSecond != null)
+                                        {
+                                            <text>Break @(item.BreakIntervalInSecond) sec.</text>
+                                        }
+                                        @if (item.BreakIntervalInSecond != null && item.Repeats != null)
+                                        {
+                                            <text> / </text>
+                                        }
+                                        @if (item.Repeats != null)
+                                        {
+                                            <text>Repeat * @(item.Repeats)</text>
+                                        }
+                                    </span>
+                                    @if (item.Remark != null)
+                                    {
+                                        <span class="list-intro">@(item.Remark)</span>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    }
+                </ol>
+            </div>            @*<div class="clearfix m-b-0">
+                    @if (!isModal)
+                    {
+                        <div class="btn-group float-right" role="group">
+                            <a id="btnGroupDrop1" class="dropdown-toggle col-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="zmdi zmdi-plus-circle-o-duplicate zmdi-hc-2x float-right m-t-25 col-grey"></i>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a class="dropdown-item" href="javascript:editStageTrainingItem(@stage.StageID,null,$('#@($"heading_{stage.StageID}{currentID}")'));">新增動作</a>
+                                <a class="dropdown-item" href="javascript:editStageBreakInterval(@stage.StageID,null,$('#@($"heading_{stage.StageID}{currentID}")'));">新增休息/組數</a>
+                            </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>*@
         </div>
     </div>
 </div>
 @if (viewOnly != true)
 {
-<script>
+    <script>
     $(function () {
         $('#@($"nestable_{stage.StageID}{currentID}")').nestable({
             group: @(stage.StageID),
             maxDepth: 1
         });
     });
-</script>
+    </script>
+}
+@if (ViewBag.StageID == stage.StageID)
+{
+    <script>
+        $(function () {
+            var u = navigator.userAgent;
+            var isApple = u.indexOf('iPhone') >= 0 || u.indexOf('iPad') >= 0;
+            if (isApple) {
+                $([document.documentElement, document.body]).scrollTop($('#@($"heading_{stage.StageID}{currentID}")').offset().top);
+            }
+        });
+    </script>
 }
 @functions
 {

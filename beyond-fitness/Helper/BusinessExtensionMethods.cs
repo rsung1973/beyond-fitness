@@ -596,6 +596,7 @@ namespace WebHome.Helper
                     && t.Hour >= intendedBooking.ClassTime.Value.Hour
                     && t.Hour < (intendedBooking.ClassTime.Value.Hour + durationHours)
                     && t.LessonID != originalBooking.LessonID)
+                .Where(t => t.LessonTime.GroupID != originalBooking.GroupID)
                 .Select(r => r.RegisterLesson.UserProfile).Where(u => oriUID.Contains(u.UID));
 
             return overlappingItems;
@@ -624,6 +625,7 @@ namespace WebHome.Helper
                 RealName = viewModel.RealName,
                 Phone = viewModel.Phone,
                 Birthday = viewModel.Birthday,
+                CreateTime = DateTime.Now,
                 UserProfileExtension = new UserProfileExtension
                 {
                     Gender = viewModel.Gender,
@@ -857,6 +859,15 @@ namespace WebHome.Helper
             return lessonItems.Sum(l => l.RegisterLesson.LessonPriceType.ListPrice * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0;
         }
 
+        public static int CalcLearnerContractAchievement(this IQueryable<V_Tuition> items, out int count, bool filterData = true)
+        {
+            var lessonItems = filterData
+                ? items.Where(l => l.ContractID.HasValue || l.EnterpriseContractID.HasValue)
+                : items;
+            count = lessonItems.Count();
+            return lessonItems.Sum(l => l.ListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100) ?? 0;
+        }
+
         public static int CalcPISessionAchievement(this IQueryable<LessonTime> items, out int count, bool filterData = true)
         {
             var lessonItems = filterData
@@ -892,6 +903,13 @@ namespace WebHome.Helper
             return subtotal;
         }
 
+        public static int CalcPTSessionAchievement(this IQueryable<V_Tuition> items, out int count)
+        {
+            int subtotal = items.CalcLearnerContractAchievement(out int contractCount);
+            count = contractCount;
+            return subtotal;
+        }
+
         public static int CalcLearnerPISessionAchievement(this IQueryable<LessonTime> items, out int count)
         {
             int subtotal = items.CalcPISessionAchievement(out count) + items.CalcEnterprisePISessionAchievement(out int entpCount);
@@ -900,16 +918,13 @@ namespace WebHome.Helper
         }
 
 
-        public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<LessonTime> items, out int shares)
+        public static int CalcAchievement<TEntity>(this ModelSource<TEntity> models, IEnumerable<V_Tuition> items, out int shares)
             where TEntity : class, new()
         {
             shares = 0;
 
             var fullAchievement = items.FullAchievementLesson().CalcTuition(models); 
             var halfAchievement = items.HalfAchievementLesson().CalcTuition(models) / 2;
-
-            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
-            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
 
             shares = items.FullAchievementLesson().CalcTuitionShare(models)
                 + items.HalfAchievementLesson().CalcTuitionShare(models) / 2;
@@ -1028,6 +1043,26 @@ namespace WebHome.Helper
         }
 
         public static int CalcTuitionShare<TEntity>(this IQueryable<V_Tuition> items, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            int shares = 0;
+
+            var courseItems = items.Where(l => !l.EnterpriseRegisterID.HasValue);
+            var enterpriseItems = items.Where(l => l.EnterpriseRegisterID.HasValue);
+
+            shares = ((int?)courseItems
+                .Sum(l => l.ListPrice * l.TuitionIndex
+                    * l.GroupingMemberCount * l.PercentageOfDiscount / 100
+                    * l.MarkedGradeIndex / 100) ?? 0)
+                + ((int?)enterpriseItems
+                .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                    * l.GroupingMemberCount * l.PercentageOfDiscount / 100
+                    * l.MarkedGradeIndex / 100) ?? 0);
+
+            return shares;
+        }
+
+        public static int CalcTuitionShare<TEntity>(this IEnumerable<V_Tuition> items, ModelSource<TEntity> models)
             where TEntity : class, new()
         {
             int shares = 0;
@@ -1453,7 +1488,7 @@ namespace WebHome.Helper
             if (agent.IsManager())
             {
                 items = items.Join(models.FilterByBranchStoreManager(models.GetTable<CourseContract>(), agent),
-                    r => r.OriginalContract, c => c.ContractID, (r, c) => r);
+                    r => r.RevisionID, c => c.ContractID, (r, c) => r);
             }
             else if (agent.IsViceManager())
             {

@@ -22,6 +22,7 @@ namespace WebHome.Models.ViewModel
             return (QueryViewModel)this.MemberwiseClone();
         }
         public String CustomQuery { get; set; }
+        public Naming.DataOperationMode? DataOperation { get; set; }
     }
 
     public class LoginViewModel : QueryViewModel
@@ -255,7 +256,7 @@ namespace WebHome.Models.ViewModel
     {
         public LessonTimeViewModel()
         {
-            ClassDate = DateTime.Today;
+            //ClassDate = DateTime.Today;
             //ClassTime = new TimeSpan(8, 0, 0);
             //Duration = 60;
         }
@@ -268,6 +269,19 @@ namespace WebHome.Models.ViewModel
 
         [Display(Name = "上課日期")]
         public DateTime? ClassDate { get; set; }
+        public DateTime? ClassEndTime { get; set; }
+
+        public DateTime? ClassTimeStart
+        {
+            get => ClassDate;
+            set => ClassDate = value;
+        }
+
+        public DateTime? ClassTimeEnd
+        {
+            get => ClassEndTime; 
+            set => ClassEndTime = value;
+        }
 
         //[Required]
         //[Display(Name = "上課時段")]
@@ -380,6 +394,7 @@ namespace WebHome.Models.ViewModel
 
         public int? StageID { get; set; }
         public int? PurposeID { get; set; }
+        public Naming.TrainingItemMode? ItemMode { get; set; }
     }
 
     public class TrainingPlanViewModel

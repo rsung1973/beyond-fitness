@@ -37,6 +37,11 @@ namespace WebHome.Controllers
         // GET: ContractConsole
         public ActionResult ShowContractList(CourseContractQueryViewModel viewModel)
         {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
             ViewResult result = (ViewResult)InquireContract(viewModel);
             ViewBag.Contracts = result.Model;
 
@@ -46,12 +51,14 @@ namespace WebHome.Controllers
 
         public ActionResult InquireContract(CourseContractQueryViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
+
             if(viewModel.ByCustom==true)
             {
                 return InquireContractByCustom(viewModel);
             }
 
-            IQueryable<CourseContract> items = viewModel.InquireContract(this, out string alertMessage);
+            IQueryable<CourseContract> items = viewModel.InquireContract(models);
 
             return View("~/Views/ContractConsole/Module/ContractList.cshtml", items);
         }

@@ -49,6 +49,10 @@ namespace WebHome.Helper
                         || (!l.CommitAttendance.HasValue && l.CoachAttendance.HasValue)
                         || (l.CommitAttendance.HasValue && !l.CoachAttendance.HasValue));
 
+        public IQueryable<V_Tuition> SettlementVainAchievement => LessonItems
+                    .Where(l => !l.CommitAttendance.HasValue)
+                    .Where(l => !l.CoachAttendance.HasValue);
+
         public IQueryable<V_Tuition> SettlementHalfAchievementForShare => ExclusivePILesson
                     .Where(l => (!l.CommitAttendance.HasValue && l.CoachAttendance.HasValue)
                             || (l.CommitAttendance.HasValue && !l.CoachAttendance.HasValue));
@@ -57,6 +61,9 @@ namespace WebHome.Helper
                     .Where(l => l.PriceStatus == (int)Naming.LessonPriceStatus.自主訓練
                         || l.ELStatus == (int)Naming.LessonPriceStatus.自主訓練);
 
+        public IQueryable<V_Tuition> PerformanceCountableLesson => LessonItems
+                    .Where(l => l.CoachAttendance.HasValue
+                        || (!l.CoachAttendance.HasValue && !(l.PriceStatus==(int)Naming.LessonPriceFeature.體驗課程 || l.ELStatus == (int)Naming.LessonPriceFeature.體驗課程)));
 
     }
 }

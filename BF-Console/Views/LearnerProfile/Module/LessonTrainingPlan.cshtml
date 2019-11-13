@@ -15,69 +15,66 @@
     _modelState = (ModelStateDictionary)ViewBag.ModelState;
     models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
     _model = (LessonTime)this.Model;
+    String _viewID = $"plan{DateTime.Now.Ticks}";
 }
 @{
     UserProfile learner = (UserProfile)ViewBag.Learner;
     var plan = _model.AssertTrainingPlan(models, UID: learner.UID);
     var execution = plan.TrainingExecution;
 }
-@foreach (var item in models.GetTable<TrainingStage>())
-{
-    ViewBag.TrainingStage = item;
-    Html.RenderPartial("~/Views/LearnerProfile/Module/LessonTrainingStage.cshtml", _model);
-}
+<div id="@(_viewID)">
+    @{
+        Html.RenderPartial("~/Views/LearnerProfile/Module/LessonTrainingExecution.cshtml", _model);
+    }
+</div>
+
 @if ((bool?)ViewBag.ViewOnly != true)
 {
     <script>
 
-    function editStageTrainingItem(stageID, itemID) {
-        showLoading();
-        $.post('@Html.Raw(Url.Action("EditTrainingItem", "LearnerProfile", new { execution.ExecutionID }))', { 'stageID': stageID, 'itemID': itemID }, function (data) {
-            hideLoading();
-            if ($.isPlainObject(data)) {
-                alert(data.message);
-            } else {
-                $(data).appendTo($('body'));
-            }
-        });
-    }
-
-    function editStageBreakInterval(stageID, itemID) {
-        showLoading();
-        $.post('@Html.Raw(Url.Action("EditBreakInterval", "LearnerProfile", new { execution.ExecutionID }))', { 'stageID': stageID, 'itemID': itemID }, function (data) {
-            hideLoading();
-            if ($.isPlainObject(data)) {
-                alert(data.message);
-            } else {
-                $(data).appendTo($('body'));
-            }
-        });
-    }
-
-
-    $('.dd').on('change', function () {
-        //var $this = $(this);
-        //var serializedData = window.JSON.stringify($($this).nestable('serialize'));
-
-        var itemID = [];
-        $(this).find('[data-id]')
-            .each(function (idx, elmt) {
-                itemID.push($(this).data('id'));
-            });
-
-        showLoading();
-        $.post('@Html.Raw(Url.Action("UpdateStageTrainingItemSequence", "Lessons"))', { 'itemID': itemID }, function (data) {
-            hideLoading();
-            if ($.isPlainObject(data)) {
-                if (data.result) {
+        function refreshTrainingExecution(stageID) {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("LoadTrainingExecution", "LearnerProfile", new { KeyID = _model.LessonID.EncryptKey() }))', { 'learnerID': @(learner.UID), 'stageID': stageID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
                 } else {
-                    swal(data.message);
+                    $('#@(_viewID)').empty()
+                        .append(data);
+                    $('#@(_viewID) .livicon-evo').addLiviconEvo();
                 }
-            } else {
-                $(data).appendTo($('body'));
-            }
-        });
-    });
+            });
+        }
+
+        function editStageTrainingItem(stageID, itemID, $stage) {
+            showLoading();
+            $global.$stage = $stage;
+            $.post('@Html.Raw(Url.Action("EditTrainingItem", "LearnerProfile", new { execution.ExecutionID }))', { 'stageID': stageID, 'itemID': itemID, 'itemMode': itemID != undefined ? @((int)Naming.TrainingItemMode.ForTrainingItem) : null }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+        function editStageBreakInterval(stageID, itemID, $stage) {
+            showLoading();
+            $global.$stage = $stage;
+            $.post('@Html.Raw(Url.Action("EditBreakInterval", "LearnerProfile", new { execution.ExecutionID }))', { 'stageID': stageID, 'itemID': itemID, 'itemMode': @((int)Naming.TrainingItemMode.ForBreakInterval) }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+        function scrollToStage($stage) {
+            $([document.documentElement, document.body]).scrollTop($stage.offset().top);
+        }
 
     </script>
 }
@@ -85,17 +82,13 @@ else
 {
     <script>
 
-    function editStageTrainingItem(stageID, itemID) {
-        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
-    }
+        function editStageTrainingItem(stageID, itemID) {
+            swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+        }
 
-    function editStageBreakInterval(stageID, itemID) {
-        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
-    }
-
-    $('.dd').on('change', function () {
-        swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
-    });
+        function editStageBreakInterval(stageID, itemID) {
+            swal("是不是忘了重新了解學生？", "了解學生後編輯的課表才會更完美喔！");
+        }
 
     </script>
 }

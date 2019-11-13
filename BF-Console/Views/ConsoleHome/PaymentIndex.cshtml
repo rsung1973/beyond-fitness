@@ -58,27 +58,29 @@
         IQueryable<Payment> items = models.PromptIncomePayment();
     }
     <!--我的收款-->
-    @if (!_profile.IsSysAdmin() && (_profile.IsAssistant() || _profile.IsCoach() || _profile.IsServitor()))
-    {
-        Html.RenderPartial("~/Views/PaymentConsole/Module/CoachPaymentView.cshtml", items);
+    @{
+      Html.RenderPartial("~/Views/PaymentConsole/Module/AboutPaymentView.cshtml", items);  
     }
     <!--我的分店收款-->
-    @if (_profile.IsSysAdmin() || _profile.IsAssistant())
+    @{
+        ViewBag.ViewID = $"branch{DateTime.Now.Ticks}";
+    }
+    @if (_profile.IsSysAdmin() || _profile.IsAssistant() || _profile.IsOfficer())
     {
-        <div class="container-fluid">
+        <div class="container-fluid" id="myPayment">
             <h4 class="card-outbound-header">我的分店收款</h4>
-            <div class="row clearfix">
+            <div class="row clearfix" id="@(ViewBag.ViewID)">
                 @{
-                    Html.RenderPartial("~/Views/PaymentConsole/Module/CurrentMonthPaymentView.cshtml", items);
+                    Html.RenderPartial("~/Views/PaymentConsole/Module/AboutBranchPaymentView.cshtml", items);
                 }
             </div>
         </div>
     }
     @if (_profile.IsManager() || _profile.IsViceManager())
     {
-        <div class="container-fluid">
+        <div class="container-fluid" id="myPayment">
             <h4 class="card-outbound-header">我的分店收款</h4>
-            <div class="row clearfix">
+            <div class="row clearfix" id="@(ViewBag.ViewID)">
                 @{
                     Html.RenderPartial("~/Views/PaymentConsole/Module/CurrentMonthBranchPaymentView.cshtml", items);
                 }
@@ -208,6 +210,27 @@
     function printInvoice(invoiceID, printerIP) {
         var event = event || window.event;
         testPrintInvoice(invoiceID, printerIP);
+        $(event.target).after('<span class="list-group-item">已列印</span>').remove();
+    }
+
+    function testPrintAllowance(allowanceID, printerIP) {
+        var event = event || window.event;
+        if (!printerIP || printerIP == '') {
+            printerIP = '192.168.1.200';
+        }
+        @if (!String.IsNullOrEmpty(WebHome.Properties.Settings.Default.PrintInvoiceWebAp))
+        {
+            <text>$('<form>').launchDownload('@Html.Raw(WebHome.Properties.Settings.Default.PrintInvoiceWebAp + Url.Action("PrintAllowanceImageByUID", "Invoice",new { _profile.UID,t = DateTime.Now.Ticks }))', { 'allowanceID': allowanceID, 'printerIP': printerIP }, '_blank');</text>
+        }
+        else
+        {
+            <text>$('<form>').launchDownload('@Html.Raw(Url.Action("PrintAllowanceImage", "Invoice",new { t = DateTime.Now.Ticks }))', { 'allowanceID': allowanceID, 'printerIP': printerIP }, '_blank');</text>
+        }
+    }
+
+    function printAllowance(allowanceID, printerIP) {
+        var event = event || window.event;
+        testPrintAllowance(allowanceID, printerIP);
         $(event.target).after('<span class="list-group-item">已列印</span>').remove();
     }
 

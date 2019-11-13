@@ -336,7 +336,8 @@ namespace WebHome.Controllers
             }
             if (viewModel.UID.HasValue)
             {
-                learnerLessons = learnerLessons.Where(t => t.AttendingCoach == viewModel.UID);
+                learnerLessons = learnerLessons.Where(t => t.AttendingCoach == viewModel.UID
+                                        || t.RegisterLesson.UID == viewModel.UID);
                 coachPI = coachPI.Where(t => t.RegisterLesson.UID == viewModel.UID);
                 eventItems = eventItems.Where(t => t.UID == viewModel.UID
                     || t.GroupEvent.Any(g => g.UID == viewModel.UID));
@@ -691,6 +692,75 @@ namespace WebHome.Controllers
             return result;
         }
 
+        public ActionResult AchievementOverview(MonthlyIndicatorQueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.PeriodID = viewModel.DecryptKeyValue();
+            }
+
+            if(!viewModel.Year.HasValue || !viewModel.Month.HasValue)
+            {
+                viewModel.Year = DateTime.Today.Year;
+                viewModel.Month = DateTime.Today.Month;
+            }
+
+            var item = viewModel.GetAlmostMonthlyIndicator(models, true);
+
+            if (item == null)
+            {
+                return View("~/Views/ConsoleHome/Shared/JsGoback.cshtml", model: "資料尚未設定!!");
+            }
+
+            //if (item == null)
+            //{
+            //    item = models.InitializeMonthlyIndicator(viewModel.Year.Value, viewModel.Month.Value);
+            //}
+
+            //if (viewModel.Year == DateTime.Today.Year && viewModel.Month == DateTime.Today.Month)
+            //{
+            //    item.UpdateMonthlyAchievement(this);
+            //    item.UpdateMonthlyAchievementGoal(models);
+            //}
+
+            ViewBag.ViewModel = viewModel;
+            ViewBag.DataItem = item;
+
+            var profile = HttpContext.GetUser();
+            return View("~/Views/BusinessConsole/AchievementOverview.cshtml", profile.LoadInstance(models));
+        }
+
+        public ActionResult ApplyAchievementGoal(MonthlyIndicatorQueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.PeriodID = viewModel.DecryptKeyValue();
+            }
+
+            if (!viewModel.Year.HasValue || !viewModel.Month.HasValue)
+            {
+                viewModel.Year = DateTime.Today.Year;
+                viewModel.Month = DateTime.Today.Month;
+            }
+
+            var item = viewModel.AssertMonthlyIndicator(models);
+
+            ViewBag.ViewModel = viewModel;
+            ViewBag.DataItem = item;
+
+            var profile = HttpContext.GetUser();
+            return View("~/Views/BusinessConsole/ApplyAchievementGoal.cshtml", profile.LoadInstance(models));
+        }
+
+        public ActionResult AchievementReview(MonthlyIndicatorQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)AchievementOverview(viewModel);
+            if (ViewBag.DataItem != null)
+            {
+                result.ViewName = "~/Views/BusinessConsole/AchievementReview.cshtml";
+            }
+            return result;
+        }
 
     }
 }

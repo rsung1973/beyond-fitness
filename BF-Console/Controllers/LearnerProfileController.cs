@@ -185,7 +185,14 @@ namespace WebHome.Controllers
             }
 
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/LearnerProfile/ProfileModal/EditTrainingItem.cshtml", item);
+            if (item == null)
+            {
+                return View("~/Views/LearnerProfile/ProfileModal/CreateTrainingItem.cshtml", item);
+            }
+            else
+            {
+                return View("~/Views/LearnerProfile/ProfileModal/EditTrainingItem.cshtml", item);
+            }
 
         }
 
@@ -545,7 +552,27 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult ShowLearnerAboutToBirth(int? days)
+        {
+            var items = models.PromptLearnerAboutToBirth(days ?? 14);
+            return View("~/Views/LearnerProfile/ProfileModal/LearnerAboutToBirth.cshtml", items);
+        }
 
+        public ActionResult LoadTrainingExecution(DailyBookingQueryViewModel viewModel,int? stageID)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.LessonID = viewModel.DecryptKeyValue();
+            }
+
+            var item = ViewBag.DataItem = models.GetTable<LessonTime>().Where(u => u.LessonID == viewModel.LessonID).First();
+            ViewBag.Learner = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
+            ViewBag.StageID = stageID;
+
+            return View("~/Views/LearnerProfile/Module/LessonTrainingExecution.cshtml", item);
+        }
 
     }
 }

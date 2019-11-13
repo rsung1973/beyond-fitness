@@ -69,13 +69,15 @@
                                     if (lessonItem.ClassTime >= DateTime.Today && lessonItem.GroupingLesson.LessonTime.Count > 1)
                                     {
                                         hasSlideItem = true;
-                                        <li><a href="javascript:cloneCoachPITrainingPlan();">同步課表</a></li>
+                                        <li><a href="javascript:cloneCoachPITrainingPlan();">我的課表<i class="zmdi zmdi-arrow-right"></i>同伴</a></li>
+                                        <li><a href="javascript:selectToClonePITrainingPlan();">同伴課表<i class="zmdi zmdi-arrow-right"></i>我</a></li>
                                     }
                                 }
                                 else if (lessonItem.GroupingLesson.RegisterLesson.Count > 1)
                                 {
                                     hasSlideItem = true;
-                                    <li><a href="javascript:cloneLearnerTrainingPlan();">同步課表</a></li>
+                                    <li><a href="javascript:cloneLearnerTrainingPlan();">我的課表<i class="zmdi zmdi-arrow-right"></i>同伴</a></li>
+                                    <li><a href="javascript:selectToCloneLearnerTrainingPlan();">同伴課表<i class="zmdi zmdi-arrow-right"></i>我</a></li>
                                 }
                                 @if (lessonItem.CheckToAttendLesson(models))
                                 {
@@ -234,9 +236,14 @@
 
         //編輯完成上課結語
         this.attendLesson = function () {
+            if ($global.emphasis === '') {
+                swal("請先輸入上課重點!?");
+                return false
+            }
+
             swal({
-                title: "家庭聯絡簿",
-                text: "",
+                title: "@(learner.FullName())的家庭聯絡簿",
+                text: "<span class=\"col-blue font-bold\">範例：昨天喝酒精神狀況不好<br/>今天第一次學甩壺鈴<br/>今天沒吃飯就運動狀況不好，下次記得提前吃飽喔</span>",
                 type: "input",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -244,11 +251,12 @@
                 cancelButtonText: "不, 點錯了",
                 closeOnConfirm: false,
                 animation: "slide-from-top",
-                inputPlaceholder: "請輸入20個中英文字"
+                inputPlaceholder: "請輸入20個中英文字",
+                html: true
             }, function (inputValue) {
                 if (inputValue === false) return false;
                 if (inputValue === "") {
-                    swal.showInputError("你忘了輸入文字嗎!?");
+                    swal("你忘了輸入文字嗎!?");
                     return false
                 }
                 commitAttendance(inputValue);
@@ -283,9 +291,9 @@
         }
 
         //點選同步課表
-        this.cloneLearnerTrainingPlan = function () {
+        this.cloneLearnerTrainingPlan = function (viewModel) {
             swal({
-                title: "不後悔?",
+                title: "確定要將這張課表複製同步給同伴，不後悔?",
                 text: "同步後資料會一模模一樣樣喔!",
                 type: "warning",
                 showCancelButton: true,
@@ -297,11 +305,12 @@
             }, function (isConfirm) {
                 if (isConfirm) {
                     showLoading();
-                    $.post('@Html.Raw(Url.Action("CloneLearnerTrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey(),learner.UID }))', {}, function (data) {
+                    $.post('@Html.Raw(Url.Action("CloneLearnerTrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey(),learner.UID }))', viewModel, function (data) {
                         hideLoading();
                         if ($.isPlainObject(data)) {
                             if (data.result) {
                                 swal("同步成功!", "資料已經同步 Bye!", "success");
+                                refreshTrainingContent();
                             } else {
                                 swal("同步失敗!", data.message, "error");
                             }
@@ -315,7 +324,38 @@
             });
         };
 
-        this.cloneCoachPITrainingPlan = function () {
+        function selectToClonePITrainingPlan() {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("SelectToCloneCoachPITrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey() }))', {}, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    swal(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                    $global.doSelect = function (uid, userName) {
+                        cloneCoachPITrainingPlan({ 'CopyFrom': uid });
+                    };
+                }
+            });
+
+        }
+
+        function selectToCloneLearnerTrainingPlan() {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("SelectToCloneLearnerTrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey() }))', { 'UID': @(learner.UID) }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    swal(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                    $global.doSelect = function (uid, userName) {
+                        cloneLearnerTrainingPlan({ 'CopyFrom': uid });
+                    };
+                }
+            });
+        }
+
+        this.cloneCoachPITrainingPlan = function (viewModel) {
             swal({
                 title: "不後悔?",
                 text: "同步後資料會一模模一樣樣喔!",
@@ -329,11 +369,12 @@
             }, function (isConfirm) {
                 if (isConfirm) {
                     showLoading();
-                    $.post('@Html.Raw(Url.Action("CloneCoachPITrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey() }))', {}, function (data) {
+                    $.post('@Html.Raw(Url.Action("CloneCoachPITrainingPlan", "LessonConsole", new { KeyID = lessonItem.LessonID.EncryptKey() }))', viewModel, function (data) {
                         hideLoading();
                         if ($.isPlainObject(data)) {
                             if (data.result) {
                                 swal("同步成功!", "資料已經同步 Bye!", "success");
+                                refreshTrainingContent();
                             } else {
                                 swal("同步失敗!", data.message, "error");
                             }

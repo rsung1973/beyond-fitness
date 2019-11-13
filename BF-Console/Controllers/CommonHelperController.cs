@@ -36,6 +36,7 @@ namespace WebHome.Controllers
         [AllowAnonymous]
         public ActionResult ViewContract(CourseContractViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
             if (viewModel.KeyID != null)
             {
                 viewModel.ContractID = viewModel.DecryptKeyValue();
@@ -52,6 +53,7 @@ namespace WebHome.Controllers
         [AllowAnonymous]
         public ActionResult ViewContractService(CourseContractViewModel viewModel)
         {
+            ViewBag.ViewModel = viewModel;
             if (viewModel.KeyID != null)
             {
                 viewModel.RevisionID = viewModel.DecryptKeyValue();
@@ -62,5 +64,14 @@ namespace WebHome.Controllers
             else
                 return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "合約資料錯誤!!");
         }
+
+        public ActionResult ViewBranchStore(LessonTimeBookingViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            ViewBag.Other = viewModel.BranchName;
+            var item = models.GetTable<BranchStore>().Where(b => b.BranchID == viewModel.BranchID).FirstOrDefault();
+            return View("~/Views/Common/BranchStoreWithOther.cshtml", item);
+        }
+
     }
 }

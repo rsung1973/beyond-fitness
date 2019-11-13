@@ -796,7 +796,7 @@ namespace Utility
         {
             int x = 5; //左邊界 
             int y = 0; //上邊界 
-            int WidLength = 2; //粗BarCode長度 
+            int WidLength = 3; //粗BarCode長度 
             int NarrowLength = 1; //細BarCode長度 
             int BarCodeHeight = 24; //BarCode高度 
             int intSourceLength = strSource.Length;

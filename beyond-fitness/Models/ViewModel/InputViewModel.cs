@@ -64,6 +64,7 @@ namespace WebHome.Models.ViewModel
         public int? ProcessingFee { get; set; }
         public bool? UnpaidExpiring { get; set; }
         public bool? Unpaid { get; set; }
+        public String Pdf { get; set; }
 
     }
 
@@ -197,8 +198,8 @@ namespace WebHome.Models.ViewModel
         public bool? ScrollToView { get; set; }
         public bool? HasCancellation
         {
-            get => IsCancelled;
-            set => IsCancelled = value;
+            get;
+            set;
         }
         public bool? HasAllowance { get; set; }
         public bool? HasInvoicePrinted { get; set; }
@@ -207,6 +208,10 @@ namespace WebHome.Models.ViewModel
         public bool? HasShare { get; set; }
         public int? RelatedID { get; set; }
         public int? TransactionID { get; set; }
+        public DateTime? AllowanceDateFrom { get; set; }
+        public DateTime? AllowanceDateTo { get; set; }
+        public DateTime? CancelDateFrom { get; set; }
+        public DateTime? CancelDateTo { get; set; }
 
     }
 
@@ -227,6 +232,7 @@ namespace WebHome.Models.ViewModel
         public Naming.QueryIntervalDefinition? QueryInterval { get; set; }
         public bool? BypassCondition { get; set; }
         public bool? DetailsOnly { get; set; }
+        public bool? IgnoreAttendance { get; set; }
     }
 
     public class CoachBonusViewModel : QueryViewModel
@@ -431,6 +437,31 @@ namespace WebHome.Models.ViewModel
             set => AttachmentID = value;
         }
 
+    }
+
+    public class MonthlyIndicatorQueryViewModel : QueryViewModel
+    {
+        public int? PeriodID { get; set; }
+        public int? Year { get; set; }
+        public int? Month { get; set; }
+        public int? BranchID { get; set; }
+    }
+
+    public class MonthlySelectorViewModel
+    {
+        public int? RecentCount { get; set; }
+    }
+
+    public class MonthlyCoachRevenueIndicatorQueryViewModel : MonthlyIndicatorQueryViewModel
+    {
+        public int? CoachID { get; set; }
+        public int? AchievementGoal { get; set; }
+        public int? CompleteLessonsGoal { get; set; }
+        public int? AverageLessonPrice { get; set; }
+        public int? BRCount { get; set; }
+        public String RiskPrediction { get; set; }
+        public String Strategy { get; set; }
+        public String Comment { get; set; }
     }
 
 }

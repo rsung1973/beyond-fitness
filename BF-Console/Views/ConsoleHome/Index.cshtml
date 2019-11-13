@@ -40,7 +40,7 @@
     <link href="plugins/royalslider/skins/default/rs-default.css" rel="stylesheet" />
     <link href="css/royalslider.css?1.1" rel="stylesheet" />
     <!-- charts-c3 -->
-    <link href="plugins/charts-c3/plugin_white.css" rel="stylesheet" />
+    <link href="plugins/charts-c3/plugin.css?1.1" rel="stylesheet" />
 }
 
 <!--Sparkline Plugin Js-->
@@ -60,6 +60,8 @@
         Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);}
 
     <!--本月運動時間-->
+    @if (!_model.IsOfficer() || _model.IsCoach())
+    {
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12">
@@ -75,57 +77,58 @@
             </div>
         </div>
     </div>
+    }
     <!--我的行事曆卡片-->
     @if (!_model.IsAuthorizedSysAdmin())
     {
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <h4 class="card-outbound-header m-l-15">我的行事曆</h4>
-                <div class="col-lg-12 col-md-12">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="body">
-                                    <div class="row clearfix">
-                                        <div class="col-md-6 col-12 weather">
-                                            <ul class="row days list-unstyled m-t-20">
-                                                @{ DateTime weekday = DateTime.Today.FirstDayOfWeek();
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <h4 class="card-outbound-header m-l-15">我的行事曆</h4>
+            <div class="col-lg-12 col-md-12">
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-md-6 col-12 weather">
+                                        <ul class="row days list-unstyled m-t-20">
+                                            @{ DateTime weekday = DateTime.Today.FirstDayOfWeek();
 
-                                                    bool includeUserEvent = _model.IsAssistant() || _model.IsSysAdmin() || _model.IsOfficer();
-                                                    IQueryable<UserEvent> userEvents = null;}
-                                                @if (includeUserEvent)
-                                                {
-                                                    userEvents = models.PromptMemberEvents(_model);
-                                                }
+                                            bool includeUserEvent = _model.IsAssistant() || _model.IsSysAdmin() || _model.IsOfficer();
+                                            IQueryable<UserEvent> userEvents = null;}
+                                                                                    @if (includeUserEvent)
+                                            {
+                                                userEvents = models.PromptMemberEvents(_model);
+                                            }
 
-                                                @for (int i = 0; i < 7; i++)
-                                                {
-                                                    DateTime endDate = weekday.AddDays(1);
-                                                    var lessons = _lessons.Where(l => l.ClassTime >= weekday && l.ClassTime < endDate);
-                                                    var lessonCount = lessons.Count();
+                                            @for (int i = 0; i < 7; i++)
+                                                                                        {
+                                                                                            DateTime endDate = weekday.AddDays(1);
+                                            var lessons = _lessons.Where(l => l.ClassTime >= weekday && l.ClassTime < endDate);
+                                            var lessonCount = lessons.Count();
                                                     if (includeUserEvent)
                                                     {
                                                         lessonCount += (userEvents.Where(t => (t.StartDate >= weekday && t.StartDate < endDate)
                                                             || (t.EndDate >= weekday && t.EndDate < endDate)
                                                             || (t.StartDate < weekday && t.EndDate >= endDate)).Count());
                                                     }
-                                                    <li class="@(weekday == DateTime.Today ? "col-pink" : null)" onclick="window.location.href = '@Html.Raw(Url.Action("Calendar", "ConsoleHome", new { DateFrom = weekday, DateTo = endDate }))';">
-                                                        <h5>@($"{weekday:M/d}")</h5>
-                                                        <img src="@(lessonCount < 3
-                                            ? "images/facesmile/easy-1.jpg"
+                                            <li class="@(weekday == DateTime.Today ? "col-pink" : null)" onclick="window.location.href = '@Html.Raw(Url.Action("Calendar", "ConsoleHome", new { DateFrom = weekday, DateTo = endDate }))';">
+                                                <h5>@($"{weekday:M/d}")</h5>
+                                                <img src="@(lessonCount < 3
+                                            ? "images/facesmile/easy-1.png"
                                             : lessonCount > 5
-                                                  ? "images/facesmile/hard-1.jpg"
-                                                  : "images/facesmile/ragular-1.jpg")">
-                                                        <span class="degrees">@(lessonCount)</span>
-                                                    </li>
+                                                  ? "images/facesmile/hard-1.png"
+                                                  : "images/facesmile/regular-1.png")">
+                                                <span class="degrees">@(lessonCount)</span>
+                                            </li>
                                                     weekday = weekday.AddDays(1);
                                                 }
 
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <ul class="row profile_state list-unstyled">
-                                                @if (_model.IsViceManager() || _model.IsManager())
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <ul class="row profile_state list-unstyled">
+                                            @if (_model.IsViceManager() || _model.IsManager())
                                                 {
                                                     ViewBag.Allotment = 3;
                                                 }
@@ -133,16 +136,15 @@
                                                 {
                                                     ViewBag.Allotment = 2;
                                                 }
-                                                @{ Html.RenderPartial("~/Views/ConsoleHome/Module/AboutEditableLessons.cshtml", _model);}
+                                            @{ Html.RenderPartial("~/Views/ConsoleHome/Module/AboutEditableLessons.cshtml", _model);}
 
-                                                @{ Html.RenderPartial("~/Views/ConsoleHome/Module/AboutLearnerUncheckedLessons.cshtml", _model);}
+                                            @{ Html.RenderPartial("~/Views/ConsoleHome/Module/AboutLearnerUncheckedLessons.cshtml", _model);}
 
-                                                @if (_model.IsViceManager() || _model.IsManager())
+                                            @if (_model.IsViceManager() || _model.IsManager())
                                                 {
                                                     Html.RenderPartial("~/Views/ConsoleHome/Module/AboutToApprovePreferredLessons.cshtml", _model);
                                                 }
-                                            </ul>
-                                        </div>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -151,11 +153,12 @@
                 </div>
             </div>
         </div>
+    </div>
     }
     <!--我的合約與收款卡片-->
     <div class="container-fluid">
         <h4 class="card-outbound-header">我的合約與收款</h4>
-        <div class="card widget_2">
+        <div class="card widget_3">
             <ul class="row clearfix list-unstyled m-b-0">
                 <li class="col-lg-4 col-md-6 col-sm-12 contract">
                     @{ Html.RenderPartial("~/Views/ContractConsole/Module/AboutExpiring.cshtml", _model);}
@@ -202,19 +205,20 @@
     {
         Html.RenderPartial("~/Views/ConsoleHome/Module/AboutLearners_1.cshtml", _model);
     }
+    <!--我的發票卡片-->
+    @if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin())
+    {
+        Html.RenderPartial("~/Views/ConsoleHome/Module/AboutInvoice.cshtml", _model);
+    }
     <!--我的分店業績卡片-->
-    @{
+    @if (!_model.IsServitor())
+    {
         Html.RenderPartial("~/Views/ConsoleHome/Module/AboutAchievementC3.cshtml", _model);
     }
     <!--我的業績&我的比賽-->
     @if (_model.IsCoach())
     {
         Html.RenderPartial("~/Views/ConsoleHome/Module/AboutCoach.cshtml", _model);
-    }
-    <!--我的發票卡片-->
-    @if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin())
-    {
-        Html.RenderPartial("~/Views/ConsoleHome/Module/AboutInvoice.cshtml", _model);
     }
     <!--專業文章&我的比賽-->
     @if (_model.IsAssistant() || _model.IsAuthorizedSysAdmin() || _model.IsServitor())

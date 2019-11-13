@@ -25,44 +25,17 @@
         <div class="modal-content">
             <a class="closebutton" data-dismiss="modal"></a>
             <div class="modal-body">
-                <div class="row clearfix">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="header">
-                                <h2><strong>休息/組數資料</strong></h2>
-                            </div>
-                            <div class="body">
-                                <div class="row clearfix">
-                                    <div class="col-sm-6 col-12">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control form-control-danger" placeholder="休息時間" value="@_viewModel.BreakInterval" name="BreakInterval" />
-                                            <span class="input-group-addon">
-                                                秒
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-12">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="組數" value="@(_viewModel.Repeats ?? "1")" name="Repeats" />
-                                            <span class="input-group-addon">
-                                                <i class="zmdi zmdi-collection-item-3"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <textarea rows="4" class="form-control no-resize" placeholder="其他更多說明" name="Remark">@(_viewModel.Remark)</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="card">
+                    <div class="header">
+                        <h2>休息/組數</h2>
+                    </div>
+                    <div class="body">
+                        @{
+                            ViewBag.DialogID = _dialogID;
+                            Html.RenderPartial("~/Views/LearnerProfile/ProfileModal/EditBreakIntervalView.cshtml", _model);
+                        }
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-darkteal btn-round waves-effect btnConfirm"><i class="zmdi zmdi-edit"></i></button>
-                <button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete btnDelete"><i class="zmdi zmdi-delete"></i></button>
             </div>
         </div>
     </div>
@@ -72,6 +45,15 @@
         $(function () {
 
             $global.viewModel = @(Html.Raw(JsonConvert.SerializeObject(_viewModel)));
+
+            var u = navigator.userAgent;
+            var isApple = u.indexOf('iPhone') >= 0 || u.indexOf('iPad') >= 0;
+
+            if (isApple) {
+                $('#@(_dialogID)').on('hidden.bs.modal', function () {
+                    scrollToStage($global.$stage);
+                });
+            }
 
             $('#@(_dialogID) button.btnConfirm').on('click', function (element) {
                 clearErrors();
@@ -83,13 +65,13 @@
                 $.post('@Html.Raw(Url.Action("CommitBreakInterval", "Training"))', $formData, function (data) {
                     if ($.isPlainObject(data)) {
                         if (data.result) {
-                            refreshTrainingContent();
+                            $('#@(_dialogID)').modal('hide');
+                            refreshTrainingExecution(data.StageID);;
                         } else {
                             hideLoading();
                             swal(data.message);
                         }
                     } else {
-                        hideLoading();
                         $(data).appendTo($('body'));
                     }
                 });
@@ -118,7 +100,8 @@
                                 hideLoading();
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
-                                        refreshTrainingContent();
+                                        $('#@(_dialogID)').modal('hide');
+                                        refreshTrainingExecution(data.StageID);
                                     } else {
                                         swal(data.message);
                                     }

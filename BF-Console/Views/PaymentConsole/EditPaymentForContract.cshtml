@@ -53,6 +53,7 @@
 <section class="content">
     @{
         ViewBag.BlockHeader = "編輯收款";
+        ViewBag.InsertPartial = "~/Views/ConsoleHome/Shared/MyContractHeader.cshtml";
         Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);
     }
 
