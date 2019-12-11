@@ -6178,6 +6178,7 @@
     <Compile Include="Controllers\ConsoleEventController.cs" />
     <Compile Include="Controllers\ConsoleHomeController.cs" />
     <Compile Include="Controllers\ContractConsoleController.cs" />
+    <Compile Include="Controllers\InvoiceConsoleController.cs" />
     <Compile Include="Controllers\LearnerProfileController.cs" />
     <Compile Include="Controllers\LessonConsoleController.cs" />
     <Compile Include="Controllers\MainActivityController.cs" />
@@ -6848,6 +6849,18 @@
     <Content Include="Views\BusinessConsole\Module\StrategyAnalysis.cshtml" />
     <Content Include="Views\BusinessConsole\Module\MonthlyBranchStrategyAnalysis.cshtml" />
     <Content Include="Views\ConsoleHome\Shared\JsGoback.cshtml" />
+    <Content Include="Views\BusinessConsole\Module\SelectAchievementReviewInterval.cshtml" />
+    <Content Include="Views\BusinessConsole\Module\AchievementIntervalReview.cshtml" />
+    <Content Include="Views\ConsoleHome\Module\InvoiceSummary.cshtml" />
+    <Content Include="Views\ConsoleHome\Module\InvoiceNoSummary.cshtml" />
+    <Content Include="Views\ConsoleHome\Module\InvoiceNoIntervalList.cshtml" />
+    <Content Include="Views\Common\SelectMonthPeriod.cshtml" />
+    <Content Include="Views\ConsoleHome\Shared\MyInvoiceHeader.cshtml" />
+    <Content Include="Views\InvoiceConsole\InvoiceNoIndex.cshtml" />
+    <Content Include="Views\InvoiceConsole\InvoiceOverview.cshtml" />
+    <Content Include="Views\InvoiceConsole\Module\InvoiceNoIntervalList.cshtml" />
+    <Content Include="Views\InvoiceConsole\Module\PlusIndication.cshtml" />
+    <Content Include="Views\InvoiceConsole\Module\DownloadInvoiceNoIntervalCsv.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1516,6 +1516,8 @@
       <Column Name="TrackCode" Type="System.String" DbType="NVarChar(2) NOT NULL" CanBeNull="false" />
       <Column Name="Year" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="PeriodNo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="StartNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EndNo" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="InvoiceTrackCode_InvoiceTrackCodeAssignment" Member="InvoiceTrackCodeAssignment" ThisKey="TrackID" OtherKey="TrackID" Type="InvoiceTrackCodeAssignment" />
     </Type>
   </Table>

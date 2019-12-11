@@ -23,20 +23,24 @@
 }
 @{ 
     DateTime startDate = DateTime.Today.FirstDayOfMonth();
+    if (startDate.Month % 2 == 0)
+    {
+        startDate = startDate.AddMonths(-1);
+    }
 }
 <div class="modal modal-mini fade" id="@(_dialogID)" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="title">請選擇月份</h6>
+                <h6 class="title">請選擇期別</h6>
                 <a class="closebutton" data-dismiss="modal"></a>
             </div>
             <div class="modal-popmenu-body">
                 <div class="list-group">
                     @for (int i = 0; i < (_viewModel.RecentCount ?? 6); i++)
                     {
-                        DateTime item = startDate.AddMonths(-i);
-                    <a href="javascript:selectTheMonth(@(item.Year),@(item.Month));" class="list-group-item">@(item.Year)年@(item.Month)月</a>
+                        DateTime item = startDate.AddMonths(-i*2);
+                    <a href="javascript:selectTheMonth(@(item.Year),@(item.Month));" class="list-group-item">@(item.Year)年@(item.Month)-@(item.Month+1)月</a>
                     }
                     <div class="list-group-item input-group m-b-0">
                         <input type="text" class="form-control selectMonth" placeholder="自訂月份 YYYYMM" />
@@ -54,7 +58,7 @@
         $('#@(_dialogID) .selectMonth').keypress(function (event) {
             var event = event || window.event;
             var $target = $(event.target);
-             var keycode = (event.keyCode ? event.keyCode : event.which);
+            var keycode = (event.keyCode ? event.keyCode : event.which);
             if (keycode == '13') {
                 var data = $target.val();
                 if (data.length == 6 && data.match(/[0-9]+/)) {

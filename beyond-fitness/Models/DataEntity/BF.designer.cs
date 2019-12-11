@@ -36083,6 +36083,10 @@ namespace WebHome.Models.DataEntity
 		
 		private short _PeriodNo;
 		
+		private System.Nullable<int> _StartNo;
+		
+		private System.Nullable<int> _EndNo;
+		
 		private EntitySet<InvoiceTrackCodeAssignment> _InvoiceTrackCodeAssignment;
 		
     #region Extensibility Method Definitions
@@ -36097,6 +36101,10 @@ namespace WebHome.Models.DataEntity
     partial void OnYearChanged();
     partial void OnPeriodNoChanging(short value);
     partial void OnPeriodNoChanged();
+    partial void OnStartNoChanging(System.Nullable<int> value);
+    partial void OnStartNoChanged();
+    partial void OnEndNoChanging(System.Nullable<int> value);
+    partial void OnEndNoChanged();
     #endregion
 		
 		public InvoiceTrackCode()
@@ -36181,6 +36189,46 @@ namespace WebHome.Models.DataEntity
 					this._PeriodNo = value;
 					this.SendPropertyChanged("PeriodNo");
 					this.OnPeriodNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartNo", DbType="Int")]
+		public System.Nullable<int> StartNo
+		{
+			get
+			{
+				return this._StartNo;
+			}
+			set
+			{
+				if ((this._StartNo != value))
+				{
+					this.OnStartNoChanging(value);
+					this.SendPropertyChanging();
+					this._StartNo = value;
+					this.SendPropertyChanged("StartNo");
+					this.OnStartNoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndNo", DbType="Int")]
+		public System.Nullable<int> EndNo
+		{
+			get
+			{
+				return this._EndNo;
+			}
+			set
+			{
+				if ((this._EndNo != value))
+				{
+					this.OnEndNoChanging(value);
+					this.SendPropertyChanging();
+					this._EndNo = value;
+					this.SendPropertyChanged("EndNo");
+					this.OnEndNoChanged();
 				}
 			}
 		}

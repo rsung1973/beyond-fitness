@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Net;
 using System.Threading;
-
+using System.Globalization;
 
 namespace Utility
 {
@@ -823,6 +823,34 @@ namespace Utility
         }
         #endregion
 
+        public static byte[] FromHexStringToBytes(this String data, int delimitSpace = 0)
+        {
+            int length = (data.Length + delimitSpace + 1) / (2 + delimitSpace);
+            byte[] buf = new byte[length];
+            for (int i = 0; i < length; i++)
+            {
+                buf[i] = Convert.ToByte(data.Substring(i * (2 + delimitSpace), 2), 16);
+            }
+            return buf;
+        }
+
+        public static byte[] HexToByteArray(this string hexString)
+        {
+            byte[] bytes = new byte[hexString.Length / 2];
+
+            for (int i = 0; i < hexString.Length; i += 2)
+            {
+                string s = hexString.Substring(i, 2);
+                bytes[i / 2] = byte.Parse(s, NumberStyles.HexNumber, null);
+            }
+
+            return bytes;
+        }
+
+        public static String ToHexString(this byte[] data, String delimiter = "")
+        {
+            return String.Join(delimiter, data.Select(b => b.ToString("X2")));
+        }
 
     }
 }
