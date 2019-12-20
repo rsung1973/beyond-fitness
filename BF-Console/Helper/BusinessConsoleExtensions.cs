@@ -300,7 +300,7 @@ namespace WebHome.Helper
                     revenueItem.ActualSharedAchievement = tuitionAchievement;
                     revenueItem.RenewContractCount = contractItems.Where(c => c.Renewal == true).Count();
                     revenueItem.NewContractCount = contractItems.Count() - revenueItem.RenewContractCount;
-                    revenueItem.RenewContractSubtotal = contractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost);
+                    revenueItem.RenewContractSubtotal = contractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
                     revenueItem.NewContractSubtotal = contractItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
 
                     revenueItem.ActualCompleteTSCount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程).Count()
@@ -335,7 +335,7 @@ namespace WebHome.Helper
                         revenueItem.ActualSharedAchievement = tuitionAchievement;
                         revenueItem.RenewContractCount = branchContractItems.Where(c => c.Renewal == true).Count();
                         revenueItem.NewContractCount = branchContractItems.Count() - revenueItem.RenewContractCount;
-                        revenueItem.RenewContractSubtotal = branchContractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost);
+                        revenueItem.RenewContractSubtotal = branchContractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
                         revenueItem.NewContractSubtotal = branchContractItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
                         revenueItem.ActualCompleteTSCount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程).Count()
                                         + branchTuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.體驗課程).Count();
