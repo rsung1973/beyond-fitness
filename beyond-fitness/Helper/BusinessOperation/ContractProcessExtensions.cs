@@ -1099,6 +1099,10 @@ namespace WebHome.Helper.BusinessOperation
                     }
                 }
 
+                if (!viewModel.CauseForEnding.HasValue || 0 == viewModel.CauseForEnding)
+                {
+                    ModelState.AddModelError("CauseForEnding", "請選擇終止原因");
+                }
             }
             else if (viewModel.Reason == "轉讓")
             {
@@ -1163,6 +1167,7 @@ namespace WebHome.Helper.BusinessOperation
                 Reason = viewModel.Reason,
                 RevisionNo = item.RevisionList.Count + 1,
                 OperationMode = (int?)viewModel.OperationMode,
+                CauseForEnding = (int) viewModel.CauseForEnding,
             };
             newItem.SequenceNo = newItem.CourseContractRevision.RevisionNo;
             newItem.ContractNo = item.ContractNo;   // + "-" + String.Format("{0:00}", newItem.CourseContractRevision.RevisionNo);
