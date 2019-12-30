@@ -570,6 +570,7 @@ namespace WebHome.Controllers
             var item = ViewBag.DataItem = models.GetTable<LessonTime>().Where(u => u.LessonID == viewModel.LessonID).First();
             ViewBag.Learner = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
             ViewBag.StageID = stageID;
+            ViewBag.ViewID = viewModel.ViewID;
 
             return View("~/Views/LearnerProfile/Module/LessonTrainingExecution.cshtml", item);
         }

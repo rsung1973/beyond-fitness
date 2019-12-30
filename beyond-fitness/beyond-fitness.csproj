@@ -171,6 +171,9 @@
     <Content Include="ajax\website-template.html" />
     <Content Include="asset\css\bootstrap.min.css" />
     <Content Include="asset\js\bootstrap.min.js" />
+    <Content Include="bin\MessagingToolkit.QRCode.dll" />
+    <Content Include="bin\QREncrypter.dll" />
+    <Content Include="bin\ThoughtWorks.QRCode.dll" />
     <Content Include="calendar\responsive-calendar.css" />
     <Content Include="calendar\responsive-calendar.js" />
     <Content Include="calendar\responsive-calendar.min.js" />
@@ -2867,7 +2870,7 @@
     <Content Include="Models\DataEntity\BF.dbml">
       <SubType>Designer</SubType>
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>BF1.designer.cs</LastGenOutput>
+      <LastGenOutput>BF.designer.cs</LastGenOutput>
     </Content>
     <Content Include="Module\Common\CommonScriptInclude.ascx" />
     <Content Include="Module\Common\PageTailScriptInclude.ascx" />
@@ -3869,7 +3872,9 @@
       <DependentUpon>BF.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntity\BF.designer.cs">
-      <DependentUpon>BF.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BF.dbml</DependentUpon>
     </Compile>
     <Compile Include="Models\DataEntity\DataEntityExtendsions.cs" />
     <Compile Include="Models\DataEntity\ModelSource.cs" />

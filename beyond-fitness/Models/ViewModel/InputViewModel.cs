@@ -65,7 +65,7 @@ namespace WebHome.Models.ViewModel
         public bool? UnpaidExpiring { get; set; }
         public bool? Unpaid { get; set; }
         public String Pdf { get; set; }
-        public int? CauseForEnding { get; set; }
+        public Naming.CauseForEnding? CauseForEnding { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel

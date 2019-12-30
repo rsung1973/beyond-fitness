@@ -1099,9 +1099,17 @@ namespace WebHome.Helper.BusinessOperation
                     }
                 }
 
-                if (!viewModel.CauseForEnding.HasValue || 0 == viewModel.CauseForEnding)
+                if (!viewModel.CauseForEnding.HasValue)
                 {
                     ModelState.AddModelError("CauseForEnding", "請選擇終止原因");
+                }
+                else if (viewModel.CauseForEnding == Naming.CauseForEnding.其他)
+                {
+                    viewModel.Remark = viewModel.Remark.GetEfficientString();
+                    if (viewModel.Remark == null)
+                    {
+                        ModelState.AddModelError("Remark", "請填入其他終止原因");
+                    }
                 }
             }
             else if (viewModel.Reason == "轉讓")
@@ -1167,7 +1175,6 @@ namespace WebHome.Helper.BusinessOperation
                 Reason = viewModel.Reason,
                 RevisionNo = item.RevisionList.Count + 1,
                 OperationMode = (int?)viewModel.OperationMode,
-                CauseForEnding = (int) viewModel.CauseForEnding,
             };
             newItem.SequenceNo = newItem.CourseContractRevision.RevisionNo;
             newItem.ContractNo = item.ContractNo;   // + "-" + String.Format("{0:00}", newItem.CourseContractRevision.RevisionNo);

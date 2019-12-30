@@ -6184,6 +6184,7 @@
     <Compile Include="Controllers\MainActivityController.cs" />
     <Compile Include="Controllers\PaymentConsoleController.cs" />
     <Compile Include="Controllers\ReportConsoleController.cs" />
+    <Compile Include="Controllers\TestDataController.cs" />
     <Compile Include="Dummy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -6861,6 +6862,8 @@
     <Content Include="Views\InvoiceConsole\Module\InvoiceNoIntervalList.cshtml" />
     <Content Include="Views\InvoiceConsole\Module\PlusIndication.cshtml" />
     <Content Include="Views\InvoiceConsole\Module\DownloadInvoiceNoIntervalCsv.cshtml" />
+    <Content Include="Views\Error\Http404.cshtml" />
+    <Content Include="Views\TestData\Demo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
