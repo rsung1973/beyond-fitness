@@ -1,0 +1,133 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+    String _chartID = $"coursecontractrevision{DateTime.Now.Ticks}";
+
+    DateTime dateFrom = DateTime.Today.FirstDayOfMonth();
+    DateTime dateTo = DateTime.Today.FirstDayOfMonth().AddMonths(1);
+
+    // var revisions = models.PromptContractRevision(_model, monthStart, monthStart.AddMonths(1));
+
+    IQueryable<CourseContract> items = models.GetTable<CourseContract>();
+
+    items = items.Where(c => c.EffectiveDate >= dateFrom);
+    items = items.Where(c => c.EffectiveDate < dateTo);
+
+    if (_model.IsManager() || _model.IsViceManager())
+    {
+        items.Join(models.GetTable<CourseContractExtension>().Join(
+                models.GetTable<BranchStore>().Where(b => b.ManagerID == _model.UID && b.ViceManagerID == _model.UID), c => c.BranchID, b => b.BranchID, (c, b) => c)
+                , c => c.ContractID, e => e.ContractID, (c, e) => c);
+    }
+
+    var revision = models.GetTable<CourseContractRevision>()
+            .Join(items, r => r.OriginalContract, c => c.ContractID, (r, c) => r)
+            .Join(items, r => r.RevisionID, c => c.ContractID, (r, c) => r).Where(r => r.Reason == "終止");
+
+    var totalCount = revision.Count();
+
+    if (totalCount > 0)
+    {
+        var groups = revision.GroupBy(r => r.CauseForEnding).OrderByDescending(g => g.Count());
+        var theMost = groups.First();
+        var cause = ((Naming.CauseForEnding)theMost.Key).ToString(); 
+       
+        var result = groups.Select(s => new
+        {
+            label = (s.Key == (int) Naming.CauseForEnding.合約到期轉新約 ? Naming.CauseForEnding.合約到期轉新約.ToString()
+                    : s.Key == (int) Naming.CauseForEnding.轉讓 ? Naming.CauseForEnding.轉讓.ToString()
+                    : s.Key == (int) Naming.CauseForEnding.私人原因 ? Naming.CauseForEnding.私人原因.ToString()
+                    : s.Key == (int) Naming.CauseForEnding.更改合約類型 ? Naming.CauseForEnding.更改合約類型.ToString()
+                    : s.Key == (int) Naming.CauseForEnding.簽約後反悔 ? Naming.CauseForEnding.簽約後反悔.ToString() :Naming.CauseForEnding.其他.ToString()),
+            value = Math.Round((s.Count() * 100M) / totalCount,1, MidpointRounding.AwayFromZero) 
+        });
+         
+        var colors = groups.Select(s => s.Key == (int) Naming.CauseForEnding.合約到期轉新約 ? "#ffe699"
+            : s.Key == (int) Naming.CauseForEnding.轉讓 ? "#b0dd91"
+            : s.Key == (int) Naming.CauseForEnding.私人原因 ? "#a989bf"
+            : s.Key == (int) Naming.CauseForEnding.更改合約類型 ? "#93e3ff"
+            : s.Key == (int) Naming.CauseForEnding.簽約後反悔 ? "#f8cbad" : "#a4a4a4").ToArray(); 
+
+        <div class="col-12 col-red">
+            終止原因：<a href="javascript:showDonutChart();">@(cause) @(Math.Round((theMost.Count() * 100M) / totalCount))% <i class="zmdi livicon-evo" data-options="name: hand-right.svg; size: 24px; style: original; autoPlay:true"></i></a>
+        </div> 
+        
+        <!-- 終止原因分析圖Modal -->
+        <div class="modal fade" id="donutChartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>終止原因分析</h5>
+                        <a class="closebutton" data-dismiss="modal"></a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row clearfix">
+                            <div class="col-12">
+                                <div class="card action_bar">
+                                    <div class="body">
+                                        <div class="row clearfix">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                                <div id="donut_chart" class="dashboard-donut-chart"></div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                                <table class="table m-t-15 m-b-0">
+                                                    <tbody>
+                                                        @foreach (var g in groups)
+                                                        {
+                                                        <tr>
+                                                            <td>@(((Naming.CauseForEnding)g.Key).ToString())</td>
+                                                            <td>@(Math.Round(g.Count() * 100M / totalCount))%</td>
+                                                        </tr>                                                            
+                                                        }   
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function showDonutChart() {
+                $("#donutChartModal").modal('show');
+            };
+
+            //顯示終止合約分析圖
+            $('#donutChartModal').on('shown.bs.modal', function () {
+                if (donut_chart != undefined) {
+                    donut_chart = null;
+                }
+                Morris.Donut({
+                    element: 'donut_chart',
+                    data: @Html.Raw(JsonConvert.SerializeObject(result)),
+                    colors: @Html.Raw(JsonConvert.SerializeObject(colors)),
+                    formatter: function (y) {
+                        return y + '%'
+                    }
+                });
+            });
+        </script>  
+    }
+}
+
