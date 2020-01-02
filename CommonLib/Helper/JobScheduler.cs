@@ -76,6 +76,9 @@ namespace CommonLib.Helper
 
         private void doJob(JobItem item, bool nextSchedule = true)
         {
+            if (item.Pending == true)
+                return;
+
             var type = Type.GetType(item.AssemblyQualifiedName);
             IJob job = (IJob)type.Assembly.CreateInstance(type.FullName);
             job.DoJob();
@@ -180,6 +183,7 @@ namespace CommonLib.Helper
         public String AssemblyQualifiedName { get; set; }
         public String Description { get; set; }
         public String LastError { get; set; }
+        public bool? Pending { get; set; }
     }
 
     public interface IJob : IDisposable
