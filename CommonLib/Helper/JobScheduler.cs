@@ -6,6 +6,7 @@ using System.Threading;
 using System.IO;
 using Utility;
 using System.Xml;
+using CommonLib.Properties;
 
 namespace CommonLib.Helper
 {
@@ -25,7 +26,10 @@ namespace CommonLib.Helper
         private JobScheduler(int period)
         {
             initialize();
-            _timer = new Timer(run, null, period, period);
+            if (Settings.Default.EnableJobScheduler)
+            {
+                _timer = new Timer(run, null, period, period);
+            }
         }
 
         private void initialize()

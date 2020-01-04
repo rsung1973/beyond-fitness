@@ -6190,6 +6190,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\BusinessConsoleExtensions.cs" />
+    <Compile Include="Helper\ContractConsoleExtensionMethods.cs" />
     <Compile Include="Helper\LearnerConsoleExtensionMethods.cs" />
     <Compile Include="Helper\LessonConsoleExtensionMethods.cs" />
     <Compile Include="Models\ViewModel\InputQueryViewModel.cs" />
@@ -6864,6 +6865,8 @@
     <Content Include="Views\InvoiceConsole\Module\DownloadInvoiceNoIntervalCsv.cshtml" />
     <Content Include="Views\Error\Http404.cshtml" />
     <Content Include="Views\TestData\Demo.cshtml" />
+    <Content Include="Views\ContractConsole\Module\ShowCauseForEndingDonutChart.cshtml" />
+    <Content Include="Views\ContractConsole\Module\CauseForEnding.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

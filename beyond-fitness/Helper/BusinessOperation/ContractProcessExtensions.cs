@@ -1253,6 +1253,7 @@ namespace WebHome.Helper.BusinessOperation
                     newItem.CourseContractExtension.SettlementPrice = viewModel.SettlementPrice;
                     newItem.CourseContractRevision.BySelf = (int?)viewModel.BySelf;
                     newItem.CourseContractRevision.ProcessingFee = viewModel.ProcessingFee;
+                    newItem.CourseContractRevision.CauseForEnding = (int?)viewModel.CauseForEnding;
 
                     if (viewModel.OperationMode == Naming.OperationMode.快速終止)
                     {
