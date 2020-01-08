@@ -6867,6 +6867,12 @@
     <Content Include="Views\TestData\Demo.cshtml" />
     <Content Include="Views\ContractConsole\Module\ShowCauseForEndingDonutChart.cshtml" />
     <Content Include="Views\ContractConsole\Module\CauseForEnding.cshtml" />
+    <Content Include="Views\ConsoleHome\LearnerProfile2020.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\ShowLearnerBonusDetails.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\ShowLearnerBonusAwards.cshtml" />
+    <Content Include="Views\ConsoleHome\ShowLearnerBonusDetails.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\ShowLearnerBonusCredits.cshtml" />
+    <Content Include="Views\LearnerProfile\Module\ShowLearnerDailyAnswers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

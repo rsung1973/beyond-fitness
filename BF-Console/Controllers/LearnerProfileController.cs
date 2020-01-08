@@ -575,5 +575,54 @@ namespace WebHome.Controllers
             return View("~/Views/LearnerProfile/Module/LessonTrainingExecution.cshtml", item);
         }
 
+        public ActionResult ShowLearnerBonusDetails(LearnerCharacterViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            var profile = models.GetTable<UserProfile>().Where(q => q.UID == viewModel.UID).FirstOrDefault();
+            ViewBag.DataItem = profile;
+
+            if (profile == null)
+            {
+                return Json(new { result = false, message = "資料錯誤!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return View("~/Views/LearnerProfile/ProfileModal/ShowLearnerBonusDetails.cshtml", profile);
+
+        }
+
+        public ActionResult ShowLearnerBonusAwards(LearnerCharacterViewModel viewModel)
+        {
+            var result = ShowLearnerBonusDetails(viewModel);
+            UserProfile item = ViewBag.DataItem as UserProfile;
+            if (item == null)
+                return result;
+
+            return View("~/Views/LearnerProfile/Module/ShowLearnerBonusAwards.cshtml", item);
+        }
+        public ActionResult ShowLearnerBonusCredits(LearnerCharacterViewModel viewModel)
+        {
+            var result = ShowLearnerBonusDetails(viewModel);
+            UserProfile item = ViewBag.DataItem as UserProfile;
+            if (item == null)
+                return result;
+
+            return View("~/Views/LearnerProfile/Module/ShowLearnerBonusCredits.cshtml", item);
+        }
+        public ActionResult ShowLearnerDailyAnswers(LearnerCharacterViewModel viewModel)
+        {
+            var result = ShowLearnerBonusDetails(viewModel);
+            UserProfile item = ViewBag.DataItem as UserProfile;
+            if (item == null)
+                return result;
+
+            return View("~/Views/LearnerProfile/Module/ShowLearnerDailyAnswers.cshtml", item);
+        }
+
+
     }
 }

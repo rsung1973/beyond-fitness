@@ -1099,16 +1099,19 @@ namespace WebHome.Helper.BusinessOperation
                     }
                 }
 
-                if (!viewModel.CauseForEnding.HasValue)
+                if(viewModel.OperationMode != Naming.OperationMode.快速終止)
                 {
-                    ModelState.AddModelError("CauseForEnding", "請選擇終止原因");
-                }
-                else if (viewModel.CauseForEnding == Naming.CauseForEnding.其他)
-                {
-                    viewModel.Remark = viewModel.Remark.GetEfficientString();
-                    if (viewModel.Remark == null)
+                    if (!viewModel.CauseForEnding.HasValue)
                     {
-                        ModelState.AddModelError("Remark", "請填入其他終止原因");
+                        ModelState.AddModelError("CauseForEnding", "請選擇終止原因");
+                    }
+                    else if (viewModel.CauseForEnding == Naming.CauseForEnding.其他)
+                    {
+                        viewModel.Remark = viewModel.Remark.GetEfficientString();
+                        if (viewModel.Remark == null)
+                        {
+                            ModelState.AddModelError("Remark", "請填入其他終止原因");
+                        }
                     }
                 }
             }

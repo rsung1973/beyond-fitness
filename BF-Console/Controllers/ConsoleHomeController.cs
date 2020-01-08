@@ -560,7 +560,7 @@ namespace WebHome.Controllers
 
             ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
 
-            return View(profile.LoadInstance(models));
+            return View("~/Views/ConsoleHome/LearnerProfile2020.cshtml", profile.LoadInstance(models));
         }
 
         public ActionResult LessonTrainingContent(DailyBookingQueryViewModel viewModel)
