@@ -134,22 +134,24 @@ namespace WebHome.Controllers
                 .Select(item => new
                 {
                     合約編號 = item.ContractNo(),
-                    分店 = item.CourseContractExtension.BranchStore.BranchName,
-                    簽約體能顧問 = item.ServingCoach.UserProfile.FullName(),
-                    學員 = item.CourseContractType.IsGroup == true
-                        ? String.Join("/", item.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
-                        : item.ContractOwner.FullName(),
                     合約名稱 = String.Concat(item.CourseContractType.TypeName,
                         "(", item.LessonPriceType.DurationInMinutes, " 分鐘)"),
-                    生效日 = String.Format("{0:yyyy/MM/dd}", item.EffectiveDate),
+                    簽約場所 = item.CourseContractExtension.BranchStore.BranchName,
+                    合約體能顧問 = item.ServingCoach.UserProfile.FullName(),
+                    學生 = item.CourseContractType.IsGroup == true
+                        ? String.Join("/", item.CourseContractMember.Select(m => m.UserProfile).ToArray().Select(u => u.FullName()))
+                        : item.ContractOwner.FullName(),                    
+                    合約生效起日 = String.Format("{0:yyyyMMdd}", item.EffectiveDate),
+                    合約生效迄日 = String.Format("{0:yyyyMMdd}", item.Expiration),
+                    應收款期限 = String.Format("{0:yyyyMMdd}", item.PayoffDue),
+                    合約總價金 = item.TotalCost ?? 0,
                     剩餘堂數 = item.RemainedLessonCount(),
-                    購買堂數 = item.Lessons,
-                    應付金額 = item.TotalCost ?? 0,
-                    已付金額 =  item.TotalPaidAmount(),
-                    欠款金額 =  (item.TotalCost - item.TotalPaidAmount()) ?? 0,
-                    已繳期數 = item.ContractPayment.Count,
+                    購買上課數 = item.Lessons,
+                    累計收款金額 =  item.TotalPaidAmount(),
+                    累計欠款金額 =  (item.TotalCost - item.TotalPaidAmount()) ?? 0,
+                    累計收款次數 = item.ContractPayment.Count,
                 })
-                .Where(r =>  r.欠款金額 != 0);
+                .Where(r =>  r.累計欠款金額 != 0);
 
 
             Response.Clear();
@@ -163,7 +165,7 @@ namespace WebHome.Controllers
             using (DataSet ds = new DataSet())
             {
                 DataTable table = details.ToDataTable();
-                table.TableName = "應收帳款催收表";
+                table.TableName = $"截至 {DateTime.Today:yyyyMMdd} 催收帳款";
                 ds.Tables.Add(table);
 
                 using (var xls = ds.ConvertToExcel())
@@ -390,7 +392,7 @@ namespace WebHome.Controllers
             public DateTime? 契約起日 { get; set; }
             public DateTime? 契約迄日 { get; set; }
             //public int? 應入信託金額 { get; set; }
-            public int? 代墊信託金額 { get; set; }
+            //public int? 代墊信託金額 { get; set; }
         }
 
         public ActionResult CreateTrustTrackXlsx(TrustQueryViewModel viewModel)
@@ -528,11 +530,11 @@ namespace WebHome.Controllers
                         headerItem = reportItem;
                 }
 
-                if (headerItem != null)
-                {
+                //if (headerItem != null)
+                //{
                     //headerItem.應入信託金額 = settlement.BookingTrustAmount.AdjustTrustAmount();
-                    headerItem.代墊信託金額 = settlement.CurrentLiableAmount.AdjustTrustAmount();
-                }
+                    //headerItem.代墊信託金額 = settlement.CurrentLiableAmount.AdjustTrustAmount();
+                //}
 
             }
 
@@ -580,7 +582,7 @@ namespace WebHome.Controllers
                 契約起日 = contract.ValidFrom.Value.Date,
                 契約迄日 = contract.Expiration.Value.Date,
                 //應入信託金額 = null,
-                代墊信託金額 = null,
+                //代墊信託金額 = null,
             };
         }
 
@@ -787,7 +789,7 @@ namespace WebHome.Controllers
 
             DateTime execDate = settlementDate.Value.AddMonths(-1);
             DateTime startDate = new DateTime(execDate.Year, execDate.Month, 1);
-            models.ExecuteSettlement(startDate, startDate.AddMonths(1));
+            models.ExecuteSettlement(startDate, startDate.AddMonths(1), settlementDate);
 
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
@@ -961,7 +963,7 @@ namespace WebHome.Controllers
                 table.Rows.Add(r);
             }
 
-            table.TableName = $"合約盤點表{calcDate.AddDays(-1):yyyy-MM-dd}截止";
+            table.TableName = $"截至 {calcDate.AddDays(-1):yyyyMMdd} 合約盤點表";
 
             Response.Clear();
             Response.ClearContent();
@@ -1133,18 +1135,18 @@ namespace WebHome.Controllers
                 var dataItems = items.Where(l => l.RegisterLesson.RegisterLessonContract != null)
                     .Where(l => l.RegisterLesson.RegisterLessonContract.CourseContract.Entrusted == true);
                 var table = buildSummary(dataItems);
-                table.TableName = $"{dateFrom:yyyy-MM} 信託合約上課盤點彙總表";
+                table.TableName = $"{dateFrom:yyyyMM} 信託合約上課盤點彙總表";
                 ds.Tables.Add(table);
 
                 dataItems = items.Where(l => l.RegisterLesson.RegisterLessonContract != null)
                                 .Where(l => l.RegisterLesson.RegisterLessonContract.CourseContract.Entrusted == false);
                 table = buildTable(dataItems);
-                table.TableName = $"{dateFrom:yyyy-MM} 非信託合約上課盤點彙總表";
+                table.TableName = $"{dateFrom:yyyyMM} 非信託合約上課盤點彙總表";
                 ds.Tables.Add(table);
 
                 dataItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
                 table = buildEnterpriseTable(dataItems);
-                table.TableName = $"{dateFrom:yyyy-MM} 企業方案上課盤點彙總表";
+                table.TableName = $"{dateFrom:yyyyMM} 企業方案上課盤點彙總表";
                 ds.Tables.Add(table);
 
                 using (var xls = ds.ConvertToExcel())
@@ -1527,6 +1529,7 @@ namespace WebHome.Controllers
             IEnumerable<CoachMonthlySalary> salaryItems = (IEnumerable<CoachMonthlySalary>)items;
             var branchItems = models.GetTable<BranchStore>().ToArray();
             int branchColIdx;
+            bool rule2020 = viewModel.AchievementDateFrom >= new DateTime(2020, 1, 1);
 
             DataTable buildManagerBonusList()
             {
@@ -1544,10 +1547,14 @@ namespace WebHome.Controllers
 
                 DataRow r;
 
-                var coachItems = salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.Special
+                var coachItems = rule2020
+                    ? salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.Special
+                                    || s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.FM
+                                    || s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.AFM)
+                    : salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.Special
                                     || s.ServingCoach.ProfessionalLevel.CategoryID == (int)Naming.ProfessionalCategory.FM);
 
-                foreach (var g in coachItems)
+                foreach (var g in coachItems.OrderBy(c => c.WorkPlace))
                 {
                     r = table.NewRow();
 
@@ -1591,7 +1598,11 @@ namespace WebHome.Controllers
 
                 DataRow r;
 
-                var coachItems = salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.Special
+                var coachItems = rule2020
+                    ? salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.Special
+                                    && s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.FM
+                                    && s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.AFM)
+                    : salaryItems.Where(s => s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.Special
                                     && s.ServingCoach.ProfessionalLevel.CategoryID != (int)Naming.ProfessionalCategory.FM);
 
                 List<DataRow> rows = new List<DataRow>();

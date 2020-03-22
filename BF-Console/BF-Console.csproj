@@ -1571,6 +1571,7 @@
     <Content Include="ConsoleHome\images\blog\Category7.jpg" />
     <Content Include="ConsoleHome\images\blog\Category8.jpg" />
     <Content Include="ConsoleHome\images\blog\DefaultTitle.jpg" />
+    <Content Include="ConsoleHome\images\branch.jpg" />
     <Content Include="ConsoleHome\images\carousel\article-background-1.jpg" />
     <Content Include="ConsoleHome\images\carousel\article-background-2.jpg" />
     <Content Include="ConsoleHome\images\carousel\article-background-3.jpg" />
@@ -1587,6 +1588,7 @@
     <Content Include="ConsoleHome\images\certificate\default.jpg" />
     <Content Include="ConsoleHome\images\certificate\EXOS.png" />
     <Content Include="ConsoleHome\images\certificate\NACA.png" />
+    <Content Include="ConsoleHome\images\declaration.png" />
     <Content Include="ConsoleHome\images\ecommerce\merchandise_00.jpg" />
     <Content Include="ConsoleHome\images\ecommerce\merchandise_01.jpg" />
     <Content Include="ConsoleHome\images\ecommerce\merchandise_02.jpg" />
@@ -6873,6 +6875,14 @@
     <Content Include="Views\ConsoleHome\ShowLearnerBonusDetails.cshtml" />
     <Content Include="Views\LearnerProfile\Module\ShowLearnerBonusCredits.cshtml" />
     <Content Include="Views\LearnerProfile\Module\ShowLearnerDailyAnswers.cshtml" />
+    <Content Include="Views\PaymentConsole\Module\EditPaymentDropdown.cshtml" />
+    <Content Include="Views\BusinessConsole\Module\MonthlyTurnoverSparkline.cshtml" />
+    <Content Include="Views\BusinessConsole\Module\MonthlyAveragePrice.cshtml" />
+    <Content Include="Views\LessonConsole\LessonOverview.cshtml" />
+    <Content Include="Views\MainActivity\Module\DeclarationItem.cshtml" />
+    <Content Include="Views\LessonConsole\Module\LessonList.cshtml" />
+    <Content Include="Views\LessonConsole\Module\ProcessLesson.cshtml" />
+    <Content Include="Views\LessonConsole\Module\SelectBranch.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

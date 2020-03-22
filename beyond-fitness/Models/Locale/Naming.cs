@@ -292,6 +292,7 @@ namespace WebHome.Models.Locale
             合約終止沖銷 = 7,
             合約轉點餘額 = 8,
             合約轉讓餘額 = 9,
+            教育訓練  = 10,
 
         }
 
@@ -457,8 +458,21 @@ namespace WebHome.Models.Locale
             轉讓,
             私人原因,
             更改合約類型,
-            簽約後反悔,
+            學生簽約後不付款,
+            教練誤開合約後終止,
+            分期不付款,
             其他,
+        }
+
+        public enum ProfessionalLevelCheck
+        {
+            PT_1 = 4,
+            PT_2 = 5,
+            PT_3 = 0,
+            PT_4 = 1,
+            PT_5 = 2,
+            PT_6 = 3,
+
         }
 
     }

@@ -57,6 +57,7 @@ namespace WebHome.Models.ViewModel
         public String PriceName { get; set; }
         public int? InstallmentID { get; set; }
         public int? ManagerID { get; set; }
+        public int? ViceManagerID { get; set; }
         public Naming.OperationMode? OperationMode { get; set; }
         public String[] PaymentMethod { get; set; }
         public Naming.ContractVersion? Version { get; set; }
@@ -89,7 +90,6 @@ namespace WebHome.Models.ViewModel
         public DateTime? PayoffDueFrom { get; set; }
         public DateTime? PayoffDueTo { get; set; }
         public int? OfficerID { get; set; }
-        public bool? ScrollToView { get; set; }
         public bool? ByCustom { get; set; }
         public bool? IncludeTotalUnpaid { get; set; }
         public int? AlarmCount { get; set; }
@@ -195,7 +195,6 @@ namespace WebHome.Models.ViewModel
         }
         public bool? BypassCondition { get; set; }
         public Naming.PaymentTransactionType?[] CompoundType { get; set; }
-        public bool? ScrollToView { get; set; }
         public bool? HasCancellation
         {
             get;
@@ -417,7 +416,7 @@ namespace WebHome.Models.ViewModel
     {
         public int? CategoryID { get; set; }
         public int? DocID { get; set; }
-        public int? id
+        public new int? id
         {
             get => DocID;
             set => DocID = value;
@@ -432,7 +431,7 @@ namespace WebHome.Models.ViewModel
     public class AttachmentQueryViewModel : QueryViewModel
     {
         public int? AttachmentID { get; set; }
-        public int? id
+        public new int? id
         {
             get => AttachmentID;
             set => AttachmentID = value;
@@ -465,6 +464,25 @@ namespace WebHome.Models.ViewModel
         public String RiskPrediction { get; set; }
         public String Strategy { get; set; }
         public String Comment { get; set; }
+    }
+
+    public class LessonOverviewQueryViewModel : MonthlyIndicatorQueryViewModel
+    {
+        public int? LessonID { get; set; }
+        public int? CoachID { get; set; }
+        public bool? CoachAttended { get; set; }
+        public bool? LearnerCommitted { get; set; }
+        public Naming.LessonQueryType? LessonType { get; set; }
+        public bool? ByManager { get; set; }
+    }
+
+    public class ServingCoachQueryViewModel : QueryViewModel
+    {
+        public int? Allotment { get; set; }
+        public int? AllotmentCoach { get; set; }
+        public bool? SelectAll { get; set; }
+        public String SelectablePartial { get; set; }
+        public int? WorkPlace { get; set; }
     }
 
 }

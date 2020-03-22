@@ -27,6 +27,81 @@ namespace WebHome.Helper.BusinessOperation
 {
     public static class DataQueryExtensions
     {
+        public static IQueryable<LessonTime> InquireLesson<TEntity>(this LessonOverviewQueryViewModel viewModel, ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>();
+
+            if(viewModel.Year.HasValue && viewModel.Month.HasValue)
+            {
+                viewModel.DateFrom = new DateTime(viewModel.Year.Value, viewModel.Month.Value, 1);
+                viewModel.DateTo = viewModel.DateFrom.Value.AddMonths(1);
+            }
+
+            if(viewModel.LessonID.HasValue)
+            {
+                items = items.Where(t => t.LessonID == viewModel.LessonID);
+            }
+
+            if (viewModel.CoachID.HasValue)
+            {
+                items = items.Where(c => c.AttendingCoach == viewModel.CoachID);
+            }
+
+            if (viewModel.BranchID.HasValue)
+            {
+                if (viewModel.ByManager == true)
+                {
+                    var allCoach = models.GetTable<CoachWorkplace>().Where(w => w.BranchID == viewModel.BranchID)
+                                    .Where(w => !models.GetTable<CoachWorkplace>().Where(c => c.CoachID == w.CoachID)
+                                                .Any(c => c.BranchID != viewModel.BranchID))
+                                    .Select(w => w.CoachID);
+                    items = items.Where(c => allCoach.Any(w => w == c.AttendingCoach));
+                }
+                else
+                {
+                    items = items.Where(c => c.BranchID == viewModel.BranchID);
+                }
+            }
+
+            if (viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(c => c.ClassTime >= viewModel.DateFrom);
+            }
+
+            if (viewModel.DateTo.HasValue)
+            {
+                items = items.Where(c => c.ClassTime < viewModel.DateTo);
+            }
+
+            if (viewModel.CoachAttended == true)
+            {
+                items = items.Where(l => l.LessonAttendance != null);
+            }
+            else if (viewModel.CoachAttended == false)
+            {
+                items = items.Where(t => t.LessonAttendance == null);
+            }
+
+            if (viewModel.LearnerCommitted == true)
+            {
+                items = items.Where(t => t.LessonPlan.CommitAttendance.HasValue);
+            }
+            else if (viewModel.LearnerCommitted == false)
+            {
+                items = items.Where(t => !t.LessonPlan.CommitAttendance.HasValue);
+            }
+
+            if(viewModel.LessonType.HasValue)
+            {
+                items = items.ByLessonQueryType(viewModel.LessonType);
+            }
+
+            return items;
+
+        }
+
         public static IQueryable<CourseContract> InquireContract<TEntity>(this CourseContractQueryViewModel viewModel, SampleController<TEntity> controller, out String alertMessage)
             where TEntity : class, new()
         {
@@ -147,6 +222,13 @@ namespace WebHome.Helper.BusinessOperation
                 hasConditon = true;
                 items = items.FilterByBranchStoreManager(models, viewModel.ManagerID);
             }
+            else if (viewModel.ViceManagerID.HasValue)
+            {
+                hasConditon = true;
+                items = items.FilterByBranchStoreManager(models, viewModel.ManagerID)
+                            .Where(c => c.AgentID != viewModel.ViceManagerID);
+            }
+
 
             if (viewModel.OfficerID.HasValue)
             {

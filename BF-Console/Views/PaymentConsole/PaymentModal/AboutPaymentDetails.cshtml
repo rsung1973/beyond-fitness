@@ -74,7 +74,15 @@
                                                 <div class="list_tb tb2">
                                                     <div class="list_tr">
                                                         <div class="list_td hd">品項</div>
-                                                        <div class="list_td rt">@(((Naming.PaymentTransactionType)_model.TransactionType).ToString())</div>
+                                                        <div class="list_td rt">
+                                                            @(((Naming.PaymentTransactionType)_model.TransactionType).ToString())
+                                                            @if (_model.TransactionType == (int)Naming.PaymentTransactionType.運動商品
+                                                                || _model.TransactionType == (int)Naming.PaymentTransactionType.食飲品
+                                                                || _model.TransactionType == (int)Naming.PaymentTransactionType.教育訓練)
+                                                            {
+                                                                <text>(@(String.Join("/", _model.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName))))</text>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </li>
@@ -129,7 +137,7 @@
                                             <li>
                                                 <div class="list_tb tb2">
                                                     <div class="list_tr">
-                                                        <div class="list_td hd">備註</div>
+                                                        <div class="list_td hd">其他增補說明</div>
                                                         <div class="list_td rt">@(_model.Remark)</div>
                                                     </div>
                                                 </div>
@@ -288,7 +296,7 @@
                                                     <li>
                                                         <div class="list_tb tb2">
                                                             <div class="list_tr">
-                                                                <div class="list_td hd">備註</div>
+                                                                <div class="list_td hd">其他增補說明</div>
                                                                 <div class="list_td rt">@(voidItem?.Remark)</div>
                                                             </div>
                                                         </div>

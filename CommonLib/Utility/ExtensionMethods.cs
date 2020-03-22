@@ -22,7 +22,7 @@ using System.Xml.XPath;
 
 using CommonLib.Helper;
 using CommonLib.Properties;
-
+using Newtonsoft.Json;
 
 namespace Utility
 {
@@ -1340,6 +1340,15 @@ namespace Utility
             });
         }
 
+        public static JsonSerializerSettings CommonJsonSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+        };
+
+        public static String JsonStringify(this Object model)
+        {
+            return JsonConvert.SerializeObject(model, CommonJsonSettings);
+        }
 
 
     }
