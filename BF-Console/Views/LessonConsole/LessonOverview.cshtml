@@ -83,9 +83,11 @@
                             $global.commitCoach = function (coachID, coachName, $dialog, others) {
                                 var viewModel = $.extend($global.viewModel, {});
                                 viewModel.CoachID = coachID;
+                                    viewModel.ByManager = false;
                                 viewModel.KeyID = null;
                                 if (others) {
                                     viewModel.BranchID = others.branchID;
+                                    viewModel.ByManager = true;
                                 } else {
                                     if (!coachID) {
                                         viewModel.BranchID = null;
