@@ -229,7 +229,7 @@ namespace WebHome.Controllers
         private decimal calculateDuration(IEnumerable<TrainingItem> items)
         {
             decimal totalDuration = 0, duration = 0;
-            var regex = new Regex("\\d+");
+            var regex = new Regex("[0-9]+");
             foreach (var item in items)
             {
                 if (item.TrainingType.BreakMark == true)

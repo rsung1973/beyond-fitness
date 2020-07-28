@@ -174,6 +174,13 @@ namespace WebHome.Controllers
                 viewModel.TagID = viewModel.TagID.Where(i => i.HasValue).ToArray();
             }
 
+            String blogRoot = Server.MapPath("~/MainActivity/Blog");
+            String blogPath = Path.Combine(blogRoot, blogID);
+            if (Directory.Exists(blogPath))
+            {
+                ModelState.AddModelError("DocDate", "該時間指定的資料夾路徑已存在");
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = ModelState;
@@ -201,6 +208,7 @@ namespace WebHome.Controllers
 
             item.AuthorID = viewModel.AuthorID;
             item.Title = viewModel.Title;
+            item.Subtitle = viewModel.Subtitle.GetEfficientString();
             item.Document.DocDate = viewModel.DocDate.Value;
             item.BlogID = blogID;
 
@@ -211,12 +219,14 @@ namespace WebHome.Controllers
                 models.ExecuteCommand("insert BlogTag (DocID,CategoryID) values ({0},{1})", item.DocID, categoryID);
             }
 
-            String blogRoot = Server.MapPath("~/MainActivity/Blog");
-            String blogPath = Path.Combine(blogRoot, blogID);
             //blogPath.CheckStoredPath();
             if (sourceBlogID != null && sourceBlogID != blogID)
             {
-                Directory.Move(Path.Combine(blogRoot, sourceBlogID), blogPath);
+                String sourcePath = Path.Combine(blogRoot, sourceBlogID);
+                if (Directory.Exists(sourcePath))
+                {
+                    Directory.Move(sourcePath, blogPath);
+                }
             }
 
             return Json(new { result = true, item.DocID, item.BlogID });

@@ -1,0 +1,57 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+@(JsonConvert.SerializeObject(result))
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    IQueryable<CourseContract> _model;
+    AchievementQueryViewModel _viewModel;
+    Object result;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<CourseContract>)this.Model;
+        _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
+
+        var coaches = models.GetTable<UserProfile>().Where(u => _viewModel.ByCoachID.Contains(u.UID));
+        var coachID = coaches.Select(u => u.UID).ToArray();
+
+        var contractItems = _model;
+        var newContractItems = contractItems.Where(t => t.Renewal == false);
+        var renewalContractItems = contractItems.Where(t => t.Renewal == true
+                                    || !t.Renewal.HasValue);
+
+        result = new
+        {
+            labels = coaches.Select(u => u.RealName).ToArray(),
+            datasets = new object[]
+            {
+                new
+                {
+                    label= "續約合約簽訂數",
+                    backgroundColor= "rgba(146, 203, 128, .8)",
+                    data= coachID.Select(c=>renewalContractItems.Where(t=>t.FitnessConsultant==c).Count()).ToArray()
+                },
+                new
+                {
+                    label= "新合約簽訂數",
+                    backgroundColor= "rgba(247, 208, 207, .8)",
+                    data= coachID.Select(c=>newContractItems.Where(t=>t.FitnessConsultant==c).Count()).ToArray()
+                },
+            }
+        };
+    }
+
+</script>

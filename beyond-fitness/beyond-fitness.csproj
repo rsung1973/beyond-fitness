@@ -3976,6 +3976,7 @@
     <Content Include="Views\CornerKick\DataNotFound.cshtml" />
     <Content Include="Views\Invoice\Module\InvoiceDispatchLogSummary.cshtml" />
     <Content Include="Views\Invoice\Module\TurnkeyWidgetGrid.cshtml" />
+    <Content Include="Views\Achievement\Module\CoachCurrentQuarterPerformance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

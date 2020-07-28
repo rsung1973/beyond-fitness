@@ -1,0 +1,42 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+
+@{ var interval = _viewModel.AchievementDateTo - _viewModel.AchievementDateFrom;}
+ @if (interval.HasValue)
+        {
+            if (interval.Value.TotalDays > 31)
+            {
+                Html.RenderPartial("~/Views/Achievement/Module/BranchContributionCountByMonth.ascx", _model);
+            }
+            else
+            {
+                Html.RenderPartial("~/Views/Achievement/Module/BranchContributionCountByDay.ascx", _model);
+            }
+        }
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    String _tableId = "lesson" + DateTime.Now.Ticks;
+    IQueryable<TuitionAchievement> _model;
+    AchievementQueryViewModel _viewModel;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<TuitionAchievement>)this.Model;
+        _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
+    }
+
+</script>

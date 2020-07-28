@@ -1,0 +1,48 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+
+@foreach (var b in models.GetTable<BranchStore>())
+    {
+        ViewBag.BranchStore = b;
+<div class="col col-xs-12 col-sm-6 col-md-4">
+    @{ Html.RenderPartial("~/Views/Achievement/Module/BranchContributionDonut.ascx");}
+
+</div>
+}
+@{ Html.RenderPartial("~/Views/Shared/InitBarChart.ascx");}
+
+<script>
+    $(function () {
+        $global.updateBranchContributionDonuts = function (formData) {
+@foreach (var b in models.GetTable<BranchStore>())
+    {
+            $global.updateBranchDonut[@(b.BranchID)](formData);
+            }
+        };
+    });
+</script>
+
+<script runat="server">
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    IQueryable<TuitionAchievement> _model;
+    AchievementQueryViewModel _viewModel;
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _model = (IQueryable<TuitionAchievement>)this.Model;
+        _viewModel = (AchievementQueryViewModel)ViewBag.ViewModel;
+    }
+
+</script>

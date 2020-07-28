@@ -6883,6 +6883,7 @@
     <Content Include="Views\LessonConsole\Module\LessonList.cshtml" />
     <Content Include="Views\LessonConsole\Module\ProcessLesson.cshtml" />
     <Content Include="Views\LessonConsole\Module\SelectBranch.cshtml" />
+    <Content Include="Views\ConsoleHome\PrepareLearnerCharacter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
