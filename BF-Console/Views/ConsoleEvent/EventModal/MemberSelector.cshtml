@@ -24,11 +24,9 @@
 }
 <div class="modal fade" id="@(_dialogID)" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a class="closebutton" data-dismiss="modal"></a>
-            </div>
+        <div class="modal-content">           
             <div class="modal-body">
+                <a class="closebutton" data-dismiss="modal"></a>
                 <ul class="new_friend_list list-unstyled row">
                     @foreach (var item in _model)
                     {
@@ -37,6 +35,10 @@
                                 @{
                                     ViewBag.ProfileClass = "img-thumbnail popfit";
                                     Html.RenderPartial("~/Views/Common/ProfileImage.cshtml", item);
+                                }
+                                @if (ViewBag.ShowPhone == true)
+                                {
+                                    <small class="phone">@(item.Phone)</small>
                                 }
                                 @if (item.IsTrialLearner())
                                 {

@@ -7,24 +7,18 @@
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
-
-<img class="@(ViewBag.ImgClass ?? "circle")" src="@(_model.PictureID.HasValue 
-                              ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _model.PictureID + "?stretch=true"
-                              : ViewBag.NoNameImg ?? "images/avatars/noname.png")" id="profileImg" />
-
-<script runat="server">
+@{
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     UserProfile _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-    }
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+}
+<img class="@(ViewBag.ImgClass ?? "circle")" src="@(_model.PictureID.HasValue
+                              ? VirtualPathUtility.ToAbsolute("~/Information/GetResource/") + _model.PictureID + "?stretch=true"
+                              : ViewBag.NoNameImg ?? "images/avatars/noname.png")" id="profileImg" />
 
 
-</script>

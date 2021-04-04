@@ -67,13 +67,13 @@
                     @*@{ Html.RenderPartial("~/Views/ConsoleEvent/Module/LessonEmphasis.cshtml", _model);}
                     *@
                     <div class="col-12 align-left">
-                        <p class="col-red">課表重點：@((_model.TrainingPlan.FirstOrDefault()?.TrainingExecution.Emphasis) ?? "重點一片空 ...")</p>
+                        <p class="col-red">課表重點：@((_model.TrainingPlan.FirstOrDefault()?.TrainingExecution.Emphasis) ?? "Unfinished")</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                @*<button type="button" class="btn btn-darkteal btn-round waves-effect" onclick="javascript:$('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { LearnerID = _model.RegisterLesson.UID }))', {'keyID':'@(_model.LessonID.EncryptKey())' });"><i class="zmdi zmdi-edit"></i></button>*@
-                <button type="button" class="btn btn-darkteal btn-round waves-effect" onclick="javascript:$('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome"))', { 'keyID': '@(_model.RegisterLesson.UID.EncryptKey())' });"><i class="zmdi zmdi-edit"></i></button>
+                <button type="button" class="btn btn-darkteal btn-round waves-effect" onclick="javascript:$('').launchDownload('@Html.Raw(Url.Action("LessonTrainingContent", "ConsoleHome",new { LearnerID = _model.RegisterLesson.UID }))', {'keyID':'@(_model.LessonID.EncryptKey())' });"><i class="zmdi zmdi-edit"></i></button>
+                @*<button type="button" class="btn btn-darkteal btn-round waves-effect" onclick="javascript:$('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome"))', { 'keyID': '@(_model.RegisterLesson.UID.EncryptKey())' });"><i class="zmdi zmdi-edit"></i></button>*@
                 @*<button type="button" class="btn btn-simple btn-round waves-effect" onclick="commitEmphasis('@(plan.ExecutionID.EncryptKey())');">更新重點</button>*@
                 @if (_model.RegisterLesson.MasterRegistration == true)
                 {

@@ -185,23 +185,29 @@ namespace WebHome.Controllers
             }
 
             calculateTotalMinutes(execution, viewModel.StageID.Value);
-
+            bool UpdatePurpose = false;
             if (item.PurposeID.HasValue)
             {
-                if (!viewModel.PurposeID.HasValue)
+                if (viewModel.PurposeID.HasValue)
+                {
+                    models.ExecuteCommand("Update PersonalExercisePurposeItem set PurposeItem = {0} where ItemID = {1}", viewModel.Remark, item.PurposeID);
+                }
+                else
                 {
                     models.ExecuteCommand("delete PersonalExercisePurposeItem where ItemID = {0}", item.PurposeID);
                 }
+                UpdatePurpose = true;
             }
             else if (viewModel.PurposeID == -1 && item.Remark != null)
             {
                 var purpose = item.TrainingExecution.TrainingPlan.LessonTime.RegisterLesson.UserProfile.AssertPurposeItem(models, item.Remark);
-                purpose.CompleteDate = DateTime.Now;
+                purpose.CompleteDate = item.TrainingExecution.TrainingPlan.LessonTime.ClassTime;    //DateTime.Now;
                 item.PurposeID = purpose.ItemID;
                 models.SubmitChanges();
+                UpdatePurpose = true;
             }
 
-            return Json(new { result = true, message = "", viewModel.StageID });
+            return Json(new { result = true, message = "", viewModel.StageID, UpdatePurpose });
 
         }
 
@@ -286,7 +292,7 @@ namespace WebHome.Controllers
             viewModel.Emphasis = viewModel.Emphasis.GetEfficientString();
             if(viewModel.Emphasis==null)
             {
-                return Json(new { result = false, message = "重點一片空？!" });
+                return Json(new { result = false, message = "Unfinished？!" });
             }
             else if (viewModel.Emphasis.Length > 20)
             {

@@ -67,6 +67,7 @@ namespace WebHome.Models.ViewModel
         public bool? Unpaid { get; set; }
         public String Pdf { get; set; }
         public Naming.CauseForEnding? CauseForEnding { get; set; }
+        public int? MemberID { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -94,7 +95,6 @@ namespace WebHome.Models.ViewModel
         public bool? IncludeTotalUnpaid { get; set; }
         public int? AlarmCount { get; set; }
         public bool? BypassCondition { get; set; }
-
     }
 
 
@@ -144,6 +144,9 @@ namespace WebHome.Models.ViewModel
         public String IDNo { get; set; }
         public int? CoachID { get; set; }
         public int?[] LessonID { get; set; }
+        public int? BirthIncomingDays { get; set; } = 14;
+        public bool? IncludeTrial { get; set; }
+        public DateTime? BirthDate { get; set; }
     }
 
     public class PaymentViewModel : InvoiceViewModel
@@ -344,7 +347,7 @@ namespace WebHome.Models.ViewModel
         public int? TrackID { get; set; }
     }
 
-    public class AwardQueryViewModel : QueryViewModel
+    public class AwardQueryViewModel : LoginViewModel
     {
         public string UserName { get; set; }
         public int? ActorID { get; set; }
@@ -354,7 +357,8 @@ namespace WebHome.Models.ViewModel
         public String PointRange { get; set; }
         public int? Lower { get; set; }
         public int? Upper { get; set; }
-        public int? UID { get; set; }
+        public String WriteoffCode { get; set; }
+        public bool? ViewAward { get; set; }
     }
 
     public class ExerciseGameViewModel

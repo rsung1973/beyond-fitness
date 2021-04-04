@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 
 namespace WebHome.Models.ViewModel
@@ -27,7 +29,10 @@ namespace WebHome.Models.ViewModel
         public Naming.DataOperationMode? DataOperation { get; set; }
         public String ViewID { get; set; }
         public bool? ScrollToView { get; set; }
-
+        public Naming.MasterVersion? MasterVer { get; set; }
+        [JsonIgnore]
+        public String UrlAction { get; set; }
+        public bool? Confirmed { get; set; }
     }
 
     public class LoginViewModel : QueryViewModel
@@ -53,6 +58,8 @@ namespace WebHome.Models.ViewModel
         public bool RememberMe { get; set; }
 
         public int? UID { get; set; }
+        public String LineID { get; set; }
+
     }
 
     public class FBRegisterViewModel
@@ -98,7 +105,6 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "生日")]
         public DateTime? Birthday { get; set; }
 
-        public String LineID { get; set; }
         public String X001
         {
             get
@@ -113,12 +119,8 @@ namespace WebHome.Models.ViewModel
         public bool? LearnerSettings { get; set; }
     }
 
-    public class PasswordViewModel : QueryViewModel
+    public class PasswordViewModel : LoginViewModel
     {
-
-        [DataType(DataType.Password)]
-        [Display(Name = "密碼")]
-        public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "確認密碼")]
@@ -128,8 +130,6 @@ namespace WebHome.Models.ViewModel
         [Display(Name = "圖形密碼")]
         public string lockPattern { get; set; }
 
-        public String PID { get; set; }
-        public int? UID { get; set; }
         public Guid? UUID { get; set; }
     }
 
@@ -307,6 +307,7 @@ namespace WebHome.Models.ViewModel
         public int? CurrentTrial { get; set; }
         public Naming.LessonPriceStatus? SessionStatus { get; set; }
         public int[] AttendeeID { get; set; }
+        public int? PriceID { get; set; }
 
     }
 
@@ -628,7 +629,13 @@ namespace WebHome.Models.ViewModel
         public String Remark { get; set; }
         public int? CopyFrom { get; set; }
         public Naming.QuestionnaireGroup? QuestionnaireGroupID { get; set; }
-
+        [JsonIgnore]
+        public int? TargetID { get; set; }
+        public String EncTargetID 
+        {
+            get => TargetID.HasValue ? TargetID.Value.EncryptKey() : null;
+            set => TargetID = (value != null ? value.DecryptKeyValue() : (int?)null);
+        }
     }
 
     public class TrialLearnerViewModel
@@ -735,6 +742,8 @@ namespace WebHome.Models.ViewModel
         public int? UID { get; set; }
         public int? QuestionnaireID { get; set; }
         public bool? ToPrepare { get; set; }
+        public QuestionnaireRequest.PartIDEnum? PartID { get; set; }
+        public int? Step { get; set; }
     }
 
 

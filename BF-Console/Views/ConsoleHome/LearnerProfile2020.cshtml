@@ -27,8 +27,8 @@
     <!-- Bootstrap Datetimepick -->
     @*<link href="plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
     @*<link href="css/datetimepicker.css" rel="stylesheet" />*@
-    
-    
+
+
     <link href="css/smartcalendar-2.css" rel="stylesheet" />
     <!-- Inbox -->
     <link href="css/inbox.css" rel="stylesheet">
@@ -44,70 +44,13 @@
 }
 
 <section class="content profile-page">
-    @{ ViewBag.BlockHeader = "X檔案";
-        Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);}
-
-    <!--本月運動時間-->
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-12">
-                <div class="card profile-header bg-darkteal">
-                    <div class="body">
-                        <div class="profile-image inlineblock">
-                            <a href="javascript:editLearner();">
-                                @{
-                                    ViewBag.ProfileClass = "small";
-                                    Html.RenderPartial("~/Views/Common/ProfileImage.cshtml", _learner);
-                                }
-                            </a>
-                        </div>
-                        <div class="float-right">
-                            @{ var purpose = _learner.PersonalExercisePurpose;}
-                            @if (purpose != null && (purpose.Cardiopulmonary.HasValue || purpose.Flexibility.HasValue || purpose.MuscleStrength.HasValue))
-                            {
-                                Html.RenderPartial("~/Views/LearnerProfile/Module/PersonalExerciseRadarChart.cshtml", purpose);
-                            }
-                            else
-                            {
-                                <div class="pie">
-                                    <div class="pie_light small">
-                                        Opps!<br /><span>你很不了解這位學生喔！</span>
-                                    </div>
-                                </div>
-                            }
-                            @if (purpose != null)
-                            {
-                                <h6 class="@(purpose.PowerAbliityCss("text-center"))">@(purpose.PowerAbility != null ? purpose.PowerAbility.Substring(0, 3) : "？型") / @(purpose.Purpose ?? "？")期</h6>
-                            }
-                            else
-                            {
-                                <h6 class="col-pink text-center">？型 / ？期</h6>
-                            }
-                        </div>
-                        <div class="col-white inlineblock">
-                            <strong>@(_learner.FullName())</strong> <span class="font-12"><i class="zmdi zmdi-cake"></i> @(_learner.YearsOld())</span>
-                        </div>
-                        <div class="font-20">
-                            @{ 
-                                Html.RenderPartial("~/Views/LearnerProfile/Module/ExerciseSummary.cshtml", _learner);
-                            }
-                        </div>
-                        <div class="displayblock col-grey">
-                            @{
-                                var answers = _learner.PDQTask.Where(t => t.PDQQuestion.GroupID == 6);
-                                var answerCount = answers.Count();
-                                var rightAns = answers.Where(t => t.SuggestionID.HasValue && t.PDQSuggestion.RightAnswer == true);
-                            }
-                            @****@
-                            @*目前已參加運動小學堂 @(answerCount) 次囉，得點數 @(rightAns.Count()) 點，目前剩餘 @(_learner.BonusPoint(models) ?? 0)點！*@
-                            @*參考=>beyond-fitness/Views/CornerKick/Module/PromptDailyQuestion.ascx*@
-                            已參加運動小學堂 @(answerCount) 次囉，答題正確率已達 <span class="col-green"> 20%</span>，就讀運動幼幼班，再接再厲！<a href="javascript:showBonusDetails();" class="col-tiffany font-underline">目前已累積 39枚 Beyond💰</a>！
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @{
+        ViewBag.BlockHeader = "X檔案";
+        Html.RenderPartial("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);
+    }
+    @{ 
+        Html.RenderPartial("~/Views/ConsoleHome/LearnerProfile/ExerciseDuration.cshtml", _model);
+    }
     <!--行事曆-->
     <div class="container-fluid page-calendar">
         <div class="card">
@@ -146,8 +89,8 @@
                 </div>
                 <div class="col-md-12 col-lg-8 col-xl-8">
                     <div class="body">
-                        @{  Html.RenderPartial("~/Views/LearnerProfile/Module/LearnerLessonsReview.cshtml",_learner);   }
-                        @{  Html.RenderAction("LearnerCalendar", "LearnerProfile", new { LearnerID = _learner.UID });   }
+                        @{ Html.RenderPartial("~/Views/LearnerProfile/Module/LearnerLessonsReview.cshtml", _learner); }
+                        @{ Html.RenderAction("LearnerCalendar", "LearnerProfile", new { LearnerID = _learner.UID }); }
                     </div>
                 </div>
             </div>
@@ -165,6 +108,11 @@
     <script src="bundles/countTo.bundle.js"></script>
     <!-- Sparkline Plugin Js -->
     <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="bundles/datatablescripts.bundle.js"></script>
+    <script src="plugins/jquery-datatable/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/jquery-datatable/FixedColumns-3.2.5/js/dataTables.fixedColumns.min.js"></script>
+
     <script>
         $(function () {
 
@@ -217,3 +165,4 @@
         }
     </script>
 }
+

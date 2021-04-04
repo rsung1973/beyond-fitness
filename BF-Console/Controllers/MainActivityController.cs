@@ -118,6 +118,11 @@ namespace WebHome.Controllers
                 viewModel.DocID = viewModel.DecryptKeyValue();
             }
 
+            if (Request.QueryString.Keys.Count > 0 && Request.QueryString.Keys[0] == null)
+            {
+                ViewBag.ViewModel = viewModel = JsonConvert.DeserializeObject<BlogArticleQueryViewModel>(Request.QueryString[0].DecryptKey());
+            }
+
             var item = models.GetTable<BlogArticle>().Where(b => b.DocID == viewModel.DocID).FirstOrDefault();
             if (item == null)
             {

@@ -1036,8 +1036,8 @@ namespace WebHome.Controllers
                         B = lessonItems.Count(),
                         C = lessonItems.Sum(l=>l.RegisterLesson.LessonPriceType.ListPrice * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0,
                     };
-                    i.D = i.C * 20 / 100;
-                    i.E = i.C * 80 / 100;
+                    i.D = (int)Math.Round(i.C * 20m / 100m);
+                    i.E = (int)Math.Round(i.C * 80m / 100m);
                     i.F = (int)Math.Round(i.D / 1.05m);
                     i.G = (int)Math.Round(i.E / 1.05m);
                     subtotal.B += i.B;

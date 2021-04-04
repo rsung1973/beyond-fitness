@@ -257,6 +257,7 @@ beyond-fitness(20160727)/
 /Update(2017-07-01).sql
 /Update(2017-07-01)-2.sql
 /Update(2017-07-01)-1.sql
+temp/
 
 *.udl
 

@@ -84,26 +84,26 @@
                             .Where(c => c.Expiration >= DateTime.Today)
                             .Where(c => c.Renewal.HasValue && c.Renewal == true);}
 
-                    <li class="col-lg-3 col-md-3 col-sm-6">
+                    @*<li class="col-lg-3 col-md-3 col-sm-6">
                         @{ Html.RenderPartial("~/Views/ContractConsole/Module/ToRenewByCoach.cshtml", _model);}
 
-                    </li>
-                    <li class="col-lg-3 col-md-3 col-sm-6">
+                    </li>*@
+                    <li class="col-lg-4 col-md-4 col-sm-6">
                         <div class="body">
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <div class="sparkline-pie">@(newContracts.Count()),@(renewContracts.Count())</div>
                                     <h6 class="m-t-20">新約 V.S. 續約</h6>
-                                    <p class="displayblock m-b-0"><span class="col-amber">@(newContracts.Count())</span> / <span class="col-grey">@(renewContracts.Count())</span></p>
+                                    <p class="displayblock m-b-0"><span class="col-tiffany">@(newContracts.Count())</span> / @(renewContracts.Count())</p>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li class="col-lg-3 col-md-3 col-sm-6">
+                    <li class="col-lg-4 col-md-4 col-sm-6">
                         @{ Html.RenderPartial("~/Views/ContractConsole/Module/AboutInstallment.cshtml", _effectiveItems);}
 
                     </li>
-                    <li class="col-lg-3 col-md-3 col-sm-6">
+                    <li class="col-lg-4 col-md-4 col-sm-6">
                         @{ Html.RenderPartial("~/Views/ContractConsole/Module/AboutReceivablesByCoach.cshtml", _model);}
 
                     </li>
@@ -159,7 +159,7 @@
             offset: 90,
             width: '100px',
             height: '100px',
-            sliceColors: ['#f8b500', '#5c636e']
+            sliceColors: ['#64c8c0', '#1B2C48']
         })
 
         //開啟小日曆
@@ -173,11 +173,6 @@
             startView: 2,
             forceParse: 0,
             startDate: '@(String.Format("{0:yyyy-MM-dd}",DateTime.Today))'
-        });
-
-        //新增合約
-        $('#editcontract').on('click', function(event) {
-            window.location.href = 'contract-edit.html';
         });
 
 
@@ -246,133 +241,7 @@
         //搜尋體能顧問
         this.showSearchCoach = function() {
             $("#searchCoachModal").modal('show');
-        };
-
-        //顯示合約學生清單
-        $('#detailContractModal').on('shown.bs.modal', function() {
-            if (dtLearner != undefined) {
-                dtLearner.destroy();
-            }
-            dtLearner = $('.dataTable-learner').DataTable({
-                "ajax": 'ajax/data/learnerlist.json',
-                "filter": false,
-                "bPaginate": false,
-                "info": false,
-                "order": [
-                    [0, 'asc'],
-                    [1, 'asc']
-                ],
-                "language": {
-                    "lengthMenu": "每頁顯示 _MENU_ 筆資料",
-                    "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
-                    "infoEmpty": "顯示 0 筆的資料",
-                    "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
-                    "loadingRecords": "快馬加鞭處理中...",
-                    "processing": "快馬加鞭處理中...",
-                    "search": "快速搜尋：",
-                    "paginate": {
-                        "first": "第一頁",
-                        "last": "最後一頁",
-                        "next": "下一頁",
-                        "previous": "前一頁"
-                    },
-                },
-                scrollX: true,
-                scrollCollapse: true,
-                fixedColumns: {
-                    leftColumns: 1,
-                }
-            });
-
-        })
-
-        //顯示合約學生清單
-        $('#collapseLearnerlist').on('shown.bs.collapse', function(event) {
-            if (dtLearner != undefined) {
-                dtLearner.destroy();
-            }
-            dtLearner = $('.dataTable-learner').DataTable({
-                "ajax": 'ajax/data/learnerlist.json',
-                "filter": false,
-                "bPaginate": false,
-                "info": false,
-                "order": [
-                    [0, 'asc'],
-                    [1, 'asc']
-                ],
-                "language": {
-                    "lengthMenu": "每頁顯示 _MENU_ 筆資料",
-                    "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
-                    "infoEmpty": "顯示 0 筆的資料",
-                    "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
-                    "loadingRecords": "快馬加鞭處理中...",
-                    "processing": "快馬加鞭處理中...",
-                    "search": "快速搜尋：",
-                    "paginate": {
-                        "first": "第一頁",
-                        "last": "最後一頁",
-                        "next": "下一頁",
-                        "previous": "前一頁"
-                    },
-                },
-                scrollX: true,
-                scrollCollapse: true,
-                fixedColumns: {
-                    leftColumns: 1,
-                }
-            });
-        })
-
-        //顯示合約已收款發票清單
-        $('#collapseInvoiceList').on('shown.bs.collapse', function(event) {
-            if (dtPaymentList != undefined) {
-                dtPaymentList.destroy();
-            }
-
-            dtPaymentList = $('.dataTable-invoiceList').DataTable({
-                "ajax": 'ajax/data/invoicelist.json',
-                "filter": false,
-                "bPaginate": false,
-                "info": false,
-                "order": [
-                    [0, 'desc'],
-                ],
-                "language": {
-                    "lengthMenu": "每頁顯示 _MENU_ 筆資料",
-                    "zeroRecords": "沒有資料也是種福氣",
-                    "info": "共 _TOTAL_ 筆，目前顯示第 _START_ 至 _END_筆資料",
-                    "infoEmpty": "顯示 0 筆的資料",
-                    "infoFiltered": "(總共從 _MAX_ 筆資料過濾)",
-                    "loadingRecords": "快馬加鞭處理中...",
-                    "processing": "快馬加鞭處理中...",
-                    "search": "快速搜尋：",
-                    "paginate": {
-                        "first": "第一頁",
-                        "last": "最後一頁",
-                        "next": "下一頁",
-                        "previous": "前一頁"
-                    },
-                },
-                scrollX: true,
-                scrollCollapse: true,
-                fixedColumns: {
-                    leftColumns: 1,
-                },
-                "columnDefs": [{
-                        targets: [5, 6, 7],
-                        className: "align-right"
-
-                    },
-                    {
-                        targets: [2, 3, 4, 10],
-                        className: "align-center"
-
-                    }
-                ],
-            });
-        })
+        };        
     </script>
 
 

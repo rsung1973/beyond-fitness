@@ -27,7 +27,7 @@
     }
 
 }
-<table class="table table-striped table-custom nowrap dataTable-setting" style="width:100%">
+<table class="table table-striped table-custom nowrap revenueDT" style="width:100%">
     <thead>
         <tr>
             <th>體能顧問</th>
@@ -84,7 +84,7 @@
             $global.dtCoachIndicator.destroy();
         }
 
-        $global.dtCoachIndicator = $('.dataTable-setting').DataTable({
+        $global.dtCoachIndicator = $('.revenueDT').DataTable({
             "filter": false,
             "bPaginate": false,
             "info": true,
@@ -131,9 +131,10 @@
             var $menu = $btnSelect.find('select');
             $btnSelect.before($menu);
             $btnSelect.remove();
+            $global.dtCoachIndicator.draw();
         }, 1000);
 
-        $('.dataTable-setting').resize();
+        $('.drevenueDT').resize();
 
 
     });

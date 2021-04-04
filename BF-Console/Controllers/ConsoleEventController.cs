@@ -67,6 +67,15 @@ namespace WebHome.Controllers
                 return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: "自訂行事曆資料錯誤!!");
             }
 
+            var profile = HttpContext.GetUser();
+            if (profile.IsAssistant() || item.UID == profile.UID)
+            {
+                return BookingCustomEvent(new UserEventViewModel
+                {
+                    EventID = item.EventID,
+                });
+            }
+
             return View("~/Views/ConsoleEvent/EventModal/UserEvent.cshtml", item);
         }
 
@@ -226,8 +235,16 @@ namespace WebHome.Controllers
                 viewModel.EventID = viewModel.DecryptKeyValue();
             }
 
-            var item = models.GetTable<UserEvent>().Where(v => v.EventID == viewModel.EventID
-                && v.UID == profile.UID).FirstOrDefault();
+            UserEvent item;
+            if(profile.IsAssistant())
+            {
+                item = models.GetTable<UserEvent>().Where(v => v.EventID == viewModel.EventID).FirstOrDefault();
+            }
+            else
+            {
+                item = models.GetTable<UserEvent>().Where(v => v.EventID == viewModel.EventID
+                    && v.UID == profile.UID).FirstOrDefault();
+            }
 
             if (item != null)
             {

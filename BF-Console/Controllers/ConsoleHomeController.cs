@@ -103,7 +103,8 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
             viewModel.KeyID = profile.UID.EncryptKey();
-            return View(profile.LoadInstance(models));
+            //return View(profile.LoadInstance(models));
+            return View("~/Views/ConsoleHome/SimpleCalendar.cshtml", profile.LoadInstance(models));
         }
 
         public ActionResult ContractIndex(CourseContractQueryViewModel viewModel)
@@ -279,7 +280,14 @@ namespace WebHome.Controllers
         public ActionResult CalendarEventItems(FullCalendarViewModel viewModel)
         {
             ViewResult result = (ViewResult)CalendarEvents(viewModel, true);
-            result.ViewName = "~/Views/ConsoleHome/Module/EventItems.cshtml";
+            if(viewModel.MasterVer == Naming.MasterVersion.Ver2020)
+            {
+                result.ViewName = "~/Views/ConsoleHome/Index/Coach/EventItems.cshtml";
+            }
+            else
+            {
+                result.ViewName = "~/Views/ConsoleHome/Module/EventItems.cshtml";
+            }
             return result;
         }
 
@@ -561,8 +569,9 @@ namespace WebHome.Controllers
 
             ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).First();
 
+            return View("~/Views/ConsoleHome/LearnerProfile2020-1.cshtml", profile.LoadInstance(models));
             //return View("~/Views/ConsoleHome/LearnerProfile2020.cshtml", profile.LoadInstance(models));
-            return View("~/Views/ConsoleHome/LearnerProfile.cshtml", profile.LoadInstance(models));
+            //return View("~/Views/ConsoleHome/LearnerProfile.cshtml", profile.LoadInstance(models));
         }
 
         public ActionResult LessonTrainingContent(DailyBookingQueryViewModel viewModel)
@@ -581,14 +590,62 @@ namespace WebHome.Controllers
                 return View("~/Views/ConsoleHome/Shared/JsGoback.cshtml", model: "資料錯誤!!");
             }
 
-            ViewBag.Learner = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).FirstOrDefault();
-            if (ViewBag.Learner == null)
+            UserProfile learner = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.LearnerID).FirstOrDefault();
+            if (learner == null)
             {
-                ViewBag.Learner = item.GroupingLesson.RegisterLesson.First().UserProfile;
+                learner = item.GroupingLesson.RegisterLesson.First().UserProfile;
             }
 
-            return View(profile.LoadInstance(models));
+            ViewBag.Learner = learner;
+
+            models.ExecuteCommand("delete QuestionnaireRequest where Status is null and UID = {0} and GroupID = {1}", learner.UID, (int)Naming.QuestionnaireGroup.身體心靈密碼);
+
+            QuestionnaireRequest questionnaire = models.GetEffectiveQuestionnaireRequest(learner).FirstOrDefault();
+            if (questionnaire == null)
+            {
+                if (!learner.IsTrialLearner() && !models.GetTable<QuestionnaireRequest>()
+                    .Where(q => q.UID == learner.UID)
+                    .Where(q => q.GroupID == (int)Naming.QuestionnaireGroup.身體心靈密碼).Any())
+                {
+                    questionnaire = learner.UID.AssertQuestionnaire(models, profile, Naming.QuestionnaireGroup.身體心靈密碼, QuestionnaireRequest.PartIDEnum.PartA);
+                }
+            }
+            ViewBag.CurrentQuestionnaire = questionnaire;
+
+            return View("~/Views/ConsoleHome/LessonTrainingContent.cshtml", profile.LoadInstance(models));
         }
+
+        //public ActionResult EditLearnerCharacter(LearnerCharacterViewModel viewModel)
+        //{
+        //    ViewBag.ViewModel = viewModel;
+        //    var profile = HttpContext.GetUser();
+
+        //    if (viewModel.KeyID != null)
+        //    {
+        //        viewModel.UID = viewModel.DecryptKeyValue();
+        //    }
+
+        //    UserProfile item = ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).First();
+
+        //    if (viewModel.ToPrepare != true)
+        //    {
+        //        return View("~/Views/ConsoleHome/PrepareLearnerCharacter.cshtml", profile.LoadInstance(models));
+        //    }
+
+        //    QuestionnaireRequest quest = models.GetTable<QuestionnaireRequest>()
+        //            .Where(r => r.UID == viewModel.UID)
+        //            .Where(r => r.QuestionnaireID == viewModel.QuestionnaireID).FirstOrDefault();
+
+        //    if (quest == null)
+        //    {
+        //        quest = item.UID.AssertQuestionnaire(models, Naming.QuestionnaireGroup.身體心靈密碼);
+        //        viewModel.QuestionnaireID = quest.QuestionnaireID;
+        //    }
+
+        //    ViewBag.CurrentQuestionnaire = quest;
+
+        //    return View(profile.LoadInstance(models));
+        //}
 
         public ActionResult EditLearnerCharacter(LearnerCharacterViewModel viewModel)
         {
@@ -602,25 +659,45 @@ namespace WebHome.Controllers
 
             UserProfile item = ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).First();
 
-            if (viewModel.ToPrepare != true)
-            {
-                return View("~/Views/ConsoleHome/PrepareLearnerCharacter.cshtml", profile.LoadInstance(models));
-            }
-
             QuestionnaireRequest quest = models.GetTable<QuestionnaireRequest>()
-                    .Where(r => r.UID == viewModel.UID)
+                    .Where(r => r.UID == item.UID)
                     .Where(r => r.QuestionnaireID == viewModel.QuestionnaireID).FirstOrDefault();
 
             if (quest == null)
             {
-                quest = item.UID.AssertQuestionnaire(models, Naming.QuestionnaireGroup.身體心靈密碼);
-                viewModel.QuestionnaireID = quest.QuestionnaireID;
+                quest = models.GetEffectiveQuestionnaireRequest(item).FirstOrDefault();
             }
 
+            if (quest == null)
+            {
+                quest = item.UID.AssertQuestionnaire(models, profile, Naming.QuestionnaireGroup.身體心靈密碼, QuestionnaireRequest.PartIDEnum.PartA);
+            }
+
+            if (!quest.Status.HasValue)
+            {
+                ViewBag.ReferredTo = models.GetLastCompleteQuestionnaireRequest(item.UID, (Naming.QuestionnaireGroup)quest.GroupID);
+            }
+
+            viewModel.QuestionnaireID = quest.QuestionnaireID;
             ViewBag.CurrentQuestionnaire = quest;
 
-            return View(profile.LoadInstance(models));
+            if (quest.PartID.HasValue || quest.GroupID == (int)Naming.QuestionnaireGroup.滿意度問卷調查_2017)
+            {
+                viewModel.ToPrepare = true;
+            }
+            else
+            {
+                if (viewModel.ToPrepare == true)
+                {
+                    models.ExecuteCommand("delete PDQTask where QuestionnaireID = {0}", quest.QuestionnaireID);
+                    quest.PartID = (int)QuestionnaireRequest.PartIDEnum.PartA;
+                    models.SubmitChanges();
+                }
+            }
+
+            return View("~/Views/ConsoleHome/PrepareLearnerCharacter2021.cshtml", profile.LoadInstance(models));
         }
+
 
         public ActionResult EditPaymentForContract(CourseContractQueryViewModel viewModel)
         {
@@ -876,6 +953,18 @@ namespace WebHome.Controllers
             var profile = HttpContext.GetUser();
             return View("~/Views/LessonConsole/LessonOverview.cshtml", profile.LoadInstance(models));
         }
+
+        public ActionResult ShowEventDate(LessonTimeBookingViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!viewModel.ClassTimeStart.HasValue)
+            {
+                viewModel.ClassTimeStart = DateTime.Today;
+            }
+
+            return View("~/Views/ConsoleHome/Index/Coach/Part_1/EventDate.cshtml");
+        }
+
 
 
     }

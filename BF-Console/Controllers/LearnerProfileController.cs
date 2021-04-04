@@ -46,6 +46,13 @@ namespace WebHome.Controllers
             return View("~/Views/LearnerProfile/Module/LearnerCalendar.cshtml", profile.LoadInstance(models));
         }
 
+        public ActionResult LearnerCalendar2020(DailyBookingQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = HttpContext.GetUser();
+            return View("~/Views/LearnerProfile/Module/LearnerCalendar2020.cshtml", profile.LoadInstance(models));
+        }
+
         public ActionResult LearnerCalendarEvents(FullCalendarViewModel viewModel, bool? toHtml = false)
         {
             ViewBag.ViewModel = viewModel;
@@ -62,7 +69,9 @@ namespace WebHome.Controllers
             IQueryable<LessonTime> coachPI = viewModel.LearnerID.Value.PromptCoachPILessons(models);
             IQueryable<UserEvent> eventItems = models.GetTable<UserEvent>()
                 .Where(e => !e.SystemEventID.HasValue)
-                .Where(e => e.UID == viewModel.LearnerID);
+                .Where(e => e.UID == viewModel.LearnerID
+                    || e.GroupEvent.Any(g => g.UID == viewModel.LearnerID));
+            IQueryable<LessonTime> givingItems = models.GetTable<LessonTime>().Where(l => l.AttendingCoach == viewModel.LearnerID);
             if (viewModel.DateFrom.HasValue && viewModel.DateTo.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value
@@ -74,18 +83,23 @@ namespace WebHome.Controllers
                     || (t.StartDate >= viewModel.DateFrom.Value && t.StartDate < viewModel.DateTo.Value.AddDays(1))
                     || (t.EndDate >= viewModel.DateFrom.Value && t.EndDate < viewModel.DateTo.Value.AddDays(1))
                     || (t.StartDate < viewModel.DateFrom.Value && t.EndDate >= viewModel.DateTo.Value));
+                givingItems = givingItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value
+                    && t.ClassTime < viewModel.DateTo.Value.AddDays(1));
+
             }
             else if (viewModel.DateFrom.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value);
                 coachPI = coachPI.Where(t => t.ClassTime >= viewModel.DateFrom.Value);
                 eventItems = eventItems.Where(t => t.StartDate >= viewModel.DateFrom.Value);
+                givingItems = givingItems.Where(t => t.ClassTime >= viewModel.DateFrom.Value);
             }
             else if (viewModel.DateTo.HasValue)
             {
                 dataItems = dataItems.Where(t => t.ClassTime < viewModel.DateTo.Value.AddDays(1));
                 coachPI = coachPI.Where(t => t.ClassTime < viewModel.DateTo.Value.AddDays(1));
                 eventItems = eventItems.Where(t => t.EndDate < viewModel.DateTo.Value.AddDays(1));
+                givingItems = givingItems.Where(t => t.ClassTime < viewModel.DateTo.Value.AddDays(1));
             }
 
             var items = dataItems
@@ -105,6 +119,12 @@ namespace WebHome.Controllers
             items.AddRange(eventItems.Select(v => new CalendarEventItem
             {
                 EventTime = v.StartDate,
+                EventItem = v
+            }));
+
+            items.AddRange(givingItems.Select(v => new CalendarEventItem
+            {
+                EventTime = v.ClassTime,
                 EventItem = v
             }));
 
@@ -235,6 +255,7 @@ namespace WebHome.Controllers
             {
                 models.ExecuteCommand("delete PDQTask where UID = {0} and QuestionID = {1} and QuestionnaireID = {2}",
                         viewModel.UID, viewModel.QuestionID, viewModel.QuestionnaireID);
+                models.ExecuteCommand("update QuestionnaireRequest set Status = {0} where QuestionnaireID = {1} and Status is null", (int)Naming.IncommingMessageStatus.未讀, viewModel.QuestionnaireID);
             }
 
             var item = new PDQTask
@@ -469,6 +490,8 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
+            var profile = HttpContext.GetUser();
+
             if (viewModel.KeyID != null)
             {
                 viewModel.UID = viewModel.DecryptKeyValue();
@@ -479,7 +502,15 @@ namespace WebHome.Controllers
                 var count = models.ExecuteCommand(@"
                     UPDATE       QuestionnaireRequest
                     SET                Status = {0}
-                    WHERE        (UID = {1}) AND (QuestionnaireID = {2})", (int)Naming.IncommingMessageStatus.已讀, viewModel.UID, viewModel.QuestionnaireID);
+                    WHERE        (UID = {1}) AND (QuestionnaireID = {2})", 
+                    (int)Naming.IncommingMessageStatus.已讀, 
+                    viewModel.UID, 
+                    viewModel.QuestionnaireID);
+
+                models.ExecuteCommand("delete QuestionnaireCoachFinish where QuestionnaireID = {0}", viewModel.QuestionnaireID);
+                models.ExecuteCommand(@"
+                    INSERT INTO QuestionnaireCoachFinish  (QuestionnaireID, UID)
+                    values ({0},{1})", viewModel.QuestionnaireID, profile.UID);
             }
 
             return Json(new { result = true });
@@ -525,6 +556,11 @@ namespace WebHome.Controllers
                 return Json(new { result = true }, JsonRequestBehavior.AllowGet);
             }
 
+            if (!questionnaire.PartID.HasValue && viewModel.PartID == QuestionnaireRequest.PartIDEnum.PartA)
+            {
+                return View("~/Views/ConsoleHome/EditLearnerCharacter/ResumeLearnerCharacterPartA.cshtml", questionnaire);
+            }
+
             return View("~/Views/LearnerProfile/Module/ResumeLearnerCharacter.cshtml", questionnaire);
 
         }
@@ -552,9 +588,27 @@ namespace WebHome.Controllers
 
         }
 
-        public ActionResult ShowLearnerAboutToBirth(int? days)
+        public ActionResult ShowLearnerAboutToBirth(LearnerQueryViewModel viewModel)
         {
-            var items = models.PromptLearnerAboutToBirth(days ?? 14);
+            ViewBag.ViewModel = viewModel;
+            var items = models.PromptLearner(viewModel.IncludeTrial == true);
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.CoachID = viewModel.DecryptKeyValue();
+            }
+
+            if(viewModel.CoachID.HasValue)
+            {
+                var coach = models.GetTable<ServingCoach>().Where(c => c.CoachID == viewModel.CoachID).FirstOrDefault();
+                items = items.FilterLearnerByAdvisor(coach, models);
+            }
+
+            if (viewModel.BirthIncomingDays.HasValue)
+            {
+                items = items.FilterLearnerWithBirthday(DateTime.Today, DateTime.Today.AddDays(viewModel.BirthIncomingDays.Value));
+            }
+
             return View("~/Views/LearnerProfile/ProfileModal/LearnerAboutToBirth.cshtml", items);
         }
 

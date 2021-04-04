@@ -13,6 +13,9 @@ using WebHome.Helper;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Resource;
+using WebHome.Models.MIG3_1.C0401;
+using Newtonsoft.Json;
+using Utility;
 
 namespace TestConsole
 {
@@ -31,6 +34,41 @@ namespace TestConsole
             //test6();
             //test7();
             //test8();
+            //test9();
+
+            System.Diagnostics.Debugger.Launch();
+            //test10();
+
+            JObject json = new JObject();
+            dynamic obj = json;
+            obj.A = "aaa";
+            obj.B = 100;
+            obj.C = new JObject();
+            obj.E = JObject.FromObject(new { D = "TEST", V = "The Value" });
+
+            Console.WriteLine(((object)obj).JsonStringify());
+            obj.E.V = "Hello,World!!";
+            json["E"]["D"] = "KKK";
+            Console.WriteLine(((object)obj).JsonStringify());
+            json["E"]["D"] = 15000;
+            Console.WriteLine(((object)obj).JsonStringify());
+            json["E"]["S"] = JArray.FromObject(new String[] { "AAA", "BBB" });
+            Console.WriteLine(((object)obj).JsonStringify());
+
+            Console.ReadKey();
+        }
+
+        private static void test10()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("G:\\temp\\data.xml");
+            Invoice item = doc.ConvertTo<Invoice>();
+            var data = JsonConvert.SerializeObject(doc);
+            Console.WriteLine(data);
+        }
+
+        private static void test9()
+        {
             String[] contractNo = new string[] {
                 "CPA201608132130",
                 "CPA201608132135",
@@ -136,7 +174,8 @@ namespace TestConsole
                         {
                             InvoiceID = dummyInvoice.InvoiceID,
                             Status = (int)Naming.CourseContractStatus.已生效,
-                            ContractPayment = new ContractPayment {
+                            ContractPayment = new ContractPayment
+                            {
                                 ContractID = item.ContractID
                             },
                             PaymentTransaction = new PaymentTransaction
@@ -164,8 +203,6 @@ namespace TestConsole
                     }
                 }
             }
-
-            Console.ReadKey();
         }
 
         private static void test8()

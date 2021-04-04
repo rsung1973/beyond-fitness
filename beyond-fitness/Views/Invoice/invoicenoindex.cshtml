@@ -1,0 +1,63 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Newtonsoft.Json
+
+@section ribbonContent { 
+<span class="ribbon-button-alignment">
+        <span id="refresh" class="btn btn-ribbon">
+            <i class="fa fa-qrcode"></i>
+        </span>
+    </span>
+    <!-- breadcrumb -->
+    <ol class="breadcrumb">
+        <li>發票管理></li>
+        <li>電子發票號碼維護</li>
+    </ol>
+    <!-- end breadcrumb --> 
+}
+@section pageTitle { 
+ 
+}
+@section mainContent { 
+@{ Html.RenderPartial("~/Views/Invoice/Module/TrackCodeNoWidgetGrid.ascx",_model);}
+
+    <script>
+        $(function () {
+            $global.viewModel = @(JsonConvert.SerializeObject(_viewModel));
+
+            for(var i=0;i<$global.onReady.length;i++) {
+                $global.onReady[i]();
+            }
+        });
+    </script>
+    @{ Html.RenderPartial("~/Views/Shared/ConfirmationDialog.ascx");}
+ 
+}
+
+<script runat="server">
+
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    InvoiceNoViewModel _viewModel;
+    UserProfile _model;
+
+
+    protected override void OnInit(EventArgs e)
+    {
+        base.OnInit(e);
+        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+        _modelState = (ModelStateDictionary)ViewBag.ModelState;
+        _viewModel = (InvoiceNoViewModel)ViewBag.ViewModel;
+        _model = (UserProfile)this.Model;
+    }
+
+
+</script>

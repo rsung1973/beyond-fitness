@@ -16,28 +16,46 @@ namespace WebHome.Helper
 {
     public static class BusinessExtensionMethods
     {
-        public static void AttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item, Naming.QuestionnaireGroup? groupID = null)
+        public static void AttendLesson<TEntity>(this ModelSource<TEntity> models, LessonTime item,UserProfile actor, Naming.QuestionnaireGroup? groupID = null)
                     where TEntity : class, new()
         {
             if (!item.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
             {
                 LessonAttendance attendance = item.LessonAttendance;
                 if (attendance == null)
-                    attendance = item.LessonAttendance = new LessonAttendance { };
+                    attendance = item.LessonAttendance = new LessonAttendance
+                    {
+                        ActorID = actor.UID,
+                    };
                 attendance.CompleteDate = DateTime.Now;
 
                 models.SubmitChanges();
 
-                foreach (var r in item.GroupingLesson.RegisterLesson)
+                if(item.IsPTSession())
                 {
-                    if (groupID == Naming.QuestionnaireGroup.身體心靈密碼)
+                    foreach (var r in item.GroupingLesson.RegisterLesson)
                     {
-                        r.UID.CheckCurrentQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼);
+                        //if (groupID == Naming.QuestionnaireGroup.身體心靈密碼)
+                        //{
+                        //    r.UID.CheckCurrentQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼);
+                        //}
+                        //else
+                        //{
+                        //    models.CheckLearnerQuestionnaireRequest(r);
+                        //}
+                        if (models.GetTable<QuestionnaireRequest>()
+                            .Where(q => q.UID == r.UID)
+                            .Where(q => q.GroupID == (int)Naming.QuestionnaireGroup.身體心靈密碼)
+                            .Any())
+                        {
+                            r.UID.CheckCurrentQuestionnaireRequest(models, actor, Naming.QuestionnaireGroup.滿意度問卷調查_2017);
+                        }
+                        else
+                        {
+                            r.UID.CheckCurrentQuestionnaireRequest(models, actor, Naming.QuestionnaireGroup.身體心靈密碼);
+                        }
                     }
-                    else
-                    {
-                        models.CheckLearnerQuestionnaireRequest(r);
-                    }
+
                 }
             }
 
@@ -59,127 +77,156 @@ namespace WebHome.Helper
                     r.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
                 }
                 contract.Status = (int)Naming.CourseContractStatus.已履行;
-                contract.ValidTo = DateTime.Now;
                 models.SubmitChanges();
-            }
-        }
 
-        public static void CheckLearnerQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, RegisterLesson item)
-            where TEntity : class, new()
-        {
-            if (item.LessonPriceType.ExcludeQuestionnaire.HasValue)
-                return;
-
-            if (item.Lessons <= 10)
-                return;
-
-            int countBase;
-            //if (item.Lessons <= 10)
-            //{
-            //    countBase = item.Lessons;
-            //}
-            //else 
-            if (item.Lessons <= 51)
-            {
-                countBase = item.Lessons / 2;
-            }
-            else
-            {
-                countBase = item.Lessons / 3;
-            }
-
-            int totalAttendance =
-                models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID && l.LessonAttendance != null).Count()
-                    + (item.AttendedLessons ?? 0);
-            int checkAttendance = totalAttendance;
-            bool underCount = true;
-            if (item.QuestionnaireRequest.Count > 0)
-            {
-                var questItem = item.QuestionnaireRequest.OrderByDescending(q => q.QuestionnaireID).First();
-                checkAttendance = models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID
-                    && l.LessonAttendance != null && l.LessonAttendance.CompleteDate > questItem.RequestDate).Count();
-                underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1)
-                    && item.Lessons >= countBase * (item.QuestionnaireRequest.Count + 1);
-            }
-
-            if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) || (totalAttendance + 1) == item.Lessons) && underCount)
-            {
-                CreateQuestionnaire(models, item);
-            }
-
-        }
-
-        public static QuestionnaireRequest CreateQuestionnaire<TEntity>(this ModelSource<TEntity> models, RegisterLesson item,Naming.QuestionnaireGroup? groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017) where TEntity : class, new()
-        {
-            var group = models.GetTable<QuestionnaireGroup>().Where(g => g.GroupID == (int?)groupID).FirstOrDefault();
-            if (group != null && !item.QuestionnaireRequest.Any(q => q.PDQTask.Count == 0))
-            {
-                var questionnaire = new QuestionnaireRequest
+                if (contract.RemainedLessonCount(true) == 0)
                 {
-                    GroupID = group.GroupID,
-                    RegisterID = item.RegisterID,
-                    RequestDate = DateTime.Now,
-                    UID = item.UID
-                };
-                models.GetTable<QuestionnaireRequest>().InsertOnSubmit(questionnaire);
-                models.SubmitChanges();
-
-                return questionnaire;
+                    contract.ValidTo = DateTime.Now;
+                    models.SubmitChanges();
+                }
             }
-            return null;
+
         }
 
-        public static QuestionnaireRequest AssertQuestionnaire<TEntity>(this int learnerID, ModelSource<TEntity> models, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017) 
+        //public static void CheckLearnerQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, RegisterLesson item)
+        //    where TEntity : class, new()
+        //{
+        //    if (item.LessonPriceType.ExcludeQuestionnaire.HasValue)
+        //        return;
+
+        //    if (item.Lessons <= 10)
+        //        return;
+
+        //    int countBase;
+        //    //if (item.Lessons <= 10)
+        //    //{
+        //    //    countBase = item.Lessons;
+        //    //}
+        //    //else 
+        //    if (item.Lessons <= 51)
+        //    {
+        //        countBase = item.Lessons / 2;
+        //    }
+        //    else
+        //    {
+        //        countBase = item.Lessons / 3;
+        //    }
+
+        //    int totalAttendance =
+        //        models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID && l.LessonAttendance != null).Count()
+        //            + (item.AttendedLessons ?? 0);
+        //    int checkAttendance = totalAttendance;
+        //    bool underCount = true;
+        //    if (item.QuestionnaireRequest.Count > 0)
+        //    {
+        //        var questItem = item.QuestionnaireRequest.OrderByDescending(q => q.QuestionnaireID).First();
+        //        checkAttendance = models.GetTable<LessonTime>().Where(l => l.GroupID == item.RegisterGroupID
+        //            && l.LessonAttendance != null && l.LessonAttendance.CompleteDate > questItem.RequestDate).Count();
+        //        underCount = totalAttendance < countBase * (item.QuestionnaireRequest.Count + 1)
+        //            && item.Lessons >= countBase * (item.QuestionnaireRequest.Count + 1);
+        //    }
+
+        //    if (((item.Lessons - totalAttendance >= countBase && checkAttendance >= countBase) || (totalAttendance + 1) == item.Lessons) && underCount)
+        //    {
+        //        CreateQuestionnaire(models, item);
+        //    }
+
+        //}
+
+        //public static QuestionnaireRequest CreateQuestionnaire<TEntity>(this ModelSource<TEntity> models, RegisterLesson item,Naming.QuestionnaireGroup? groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017) where TEntity : class, new()
+        //{
+        //    var group = models.GetTable<QuestionnaireGroup>().Where(g => g.GroupID == (int?)groupID).FirstOrDefault();
+        //    if (group != null && !item.QuestionnaireRequest.Any(q => q.PDQTask.Count == 0))
+        //    {
+        //        var questionnaire = new QuestionnaireRequest
+        //        {
+        //            GroupID = group.GroupID,
+        //            RegisterID = item.RegisterID,
+        //            RequestDate = DateTime.Now,
+        //            UID = item.UID
+        //        };
+        //        models.GetTable<QuestionnaireRequest>().InsertOnSubmit(questionnaire);
+        //        models.SubmitChanges();
+
+        //        return questionnaire;
+        //    }
+        //    return null;
+        //}
+
+        public static QuestionnaireRequest AssertQuestionnaire<TEntity>(this int learnerID, ModelSource<TEntity> models, UserProfile creator, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017, QuestionnaireRequest.PartIDEnum? partID = null)
             where TEntity : class, new()
         {
-            var item = models.GetTable<QuestionnaireRequest>().Where(q => q.UID == learnerID)
-                    .Where(q => q.GroupID == (int)groupID)
-                    .Where(q => !q.Status.HasValue || q.Status == (int)Naming.IncommingMessageStatus.未讀)
-                    .FirstOrDefault();
-
-            if (item == null)
+            lock (typeof(BusinessExtensionMethods))
             {
-                item = new QuestionnaireRequest
+                var item = models.GetEffectiveQuestionnaireRequest(learnerID, groupID)
+                            .FirstOrDefault();
+
+                if (item == null)
                 {
-                    GroupID = (int)groupID,
-                    RequestDate = DateTime.Now,
-                    UID = learnerID
-                };
-                models.GetTable<QuestionnaireRequest>().InsertOnSubmit(item);
-                models.SubmitChanges();
+                    item = new QuestionnaireRequest
+                    {
+                        GroupID = (int)groupID,
+                        RequestDate = DateTime.Now,
+                        UID = learnerID,
+                        PartID = (int?)partID,
+                        CreatorID = creator.UID,
+                    };
+                    models.GetTable<QuestionnaireRequest>().InsertOnSubmit(item);
+                    models.SubmitChanges();
+                }
+                return item;
             }
-            return item;
         }
 
-        public static QuestionnaireRequest CheckCurrentQuestionnaireRequest<TEntity>(this int learnerID, ModelSource<TEntity> models, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
+        public static QuestionnaireRequest CheckCurrentQuestionnaireRequest<TEntity>(this int learnerID, ModelSource<TEntity> models,UserProfile actor, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
             where TEntity : class, new()
         {
+            IQueryable<LessonAttendance> attendance = models.GetTable<LessonAttendance>();
+
             var PT = learnerID.PromptLearnerLessons(models)
-                            .PTLesson()
-                            .Where(l => l.LessonAttendance != null);
+                            .PTLesson();
+
             var PI = learnerID.PromptLearnerLessons(models)
-                            .PILesson()
-                            .Where(l => l.LessonAttendance != null);
+                            .PILesson();
 
             var item = models.GetTable<QuestionnaireRequest>().Where(q => q.UID == learnerID)
-                    .Where(q => q.GroupID == (int)groupID)
+                    .Where(q => q.Status.HasValue)
+                    //.Where(q => q.GroupID == (int)groupID)
                     .OrderByDescending(q => q.QuestionnaireID)
                     .FirstOrDefault();
 
             if (item != null)
             {
-                if(!item.Status.HasValue || item.Status == (int)Naming.IncommingMessageStatus.未讀)
+                if (item.GroupID == (int)groupID)
                 {
-                    return item;
+                    if (item.Status == (int)Naming.IncommingMessageStatus.未讀)
+                    {
+                        return item;
+                    }
                 }
 
-                PT = PT.Where(l => l.ClassTime >= item.RequestDate);
-                PI = PI.Where(l => l.ClassTime >= item.RequestDate);
+                var pdq = item.PDQTask.OrderByDescending(t => t.TaskID).FirstOrDefault();
+
+                if (pdq != null)
+                {
+                    PT = PT.Where(l => l.ClassTime >= pdq.TaskDate);
+                    PI = PI.Where(l => l.ClassTime >= pdq.TaskDate);
+                }
+                else
+                {
+                    PT = PT.Where(l => l.ClassTime >= item.RequestDate);
+                    PI = PI.Where(l => l.ClassTime >= item.RequestDate);
+                }
+
             }
 
-            if (PT.Count() + PI.Count() >= 12)
+            PT = PT.Join(attendance, l => l.LessonID, a => a.LessonID, (l, a) => l);
+            PI = PI.Join(attendance, l => l.LessonID, a => a.LessonID, (l, a) => l);
+
+            //if (PT.Count() + PI.Count() >= 12)
+            if (PT.Count() >= 15)
             {
-                return learnerID.AssertQuestionnaire(models, groupID);
+                return learnerID.AssertQuestionnaire(models, actor, groupID, QuestionnaireRequest.PartIDEnum.PartB);
             }
 
             return null;
@@ -684,15 +731,37 @@ namespace WebHome.Helper
                 .Where(q => !q.Status.HasValue);
         }
 
-        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile,Naming.QuestionnaireGroup groupID)
+        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, UserProfile profile, Naming.QuestionnaireGroup? groupID = null)
+            where TEntity : class, new()
+        {
+            return models.GetEffectiveQuestionnaireRequest(profile.UID, groupID);
+        }
+
+        public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, int uid, Naming.QuestionnaireGroup? groupID = null)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<QuestionnaireRequest>()
+                .Where(q => q.UID == uid)
+                .Where(q => !q.Status.HasValue
+                    || q.Status == (int)Naming.IncommingMessageStatus.未讀);
+            if (groupID.HasValue)
+            {
+                items = items.Where(q => q.GroupID == (int?)groupID);
+            }
+            return items;
+        }
+
+        public static QuestionnaireRequest GetLastCompleteQuestionnaireRequest<TEntity>(this ModelSource<TEntity> models, int uid, Naming.QuestionnaireGroup groupID)
             where TEntity : class, new()
         {
             return models.GetTable<QuestionnaireRequest>()
-                .Where(q => q.UID == profile.UID)
+                .Where(q => q.UID == uid)
                 .Where(q => q.GroupID == (int)groupID)
-                .Where(q => !q.Status.HasValue 
-                    || q.Status == (int)Naming.IncommingMessageStatus.未讀);
+                .Where(q => q.Status == (int)Naming.IncommingMessageStatus.已讀)
+                .OrderByDescending(q => q.QuestionnaireID)
+                .FirstOrDefault();
         }
+
 
         public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest<TEntity>(this LessonTime item, ModelSource<TEntity> models, Naming.QuestionnaireGroup group)
             where TEntity : class, new()
@@ -1251,12 +1320,13 @@ namespace WebHome.Helper
             models.SubmitChanges();
             models.ExecuteCommand("update ServingCoach set LevelID={0} where CoachID={1}", ratingItem.LevelID, item.CoachID);
             models.ExecuteCommand(@"
-                UPDATE LessonTimeSettlement
-                SET        ProfessionalLevelID = ServingCoach.LevelID
-                FROM     LessonTime INNER JOIN
-                               LessonTimeSettlement ON LessonTime.LessonID = LessonTimeSettlement.LessonID INNER JOIN
-                               ServingCoach ON LessonTime.AttendingCoach = ServingCoach.CoachID
-                WHERE   (LessonTime.ClassTime >= {0}) AND (ServingCoach.CoachID = {1}) ", quarterEnd, item.CoachID);
+                UPDATE       LessonTimeSettlement
+                SET                ProfessionalLevelID = ServingCoach.LevelID, MarkedGradeIndex = ProfessionalLevel.GradeIndex
+                FROM            LessonTime INNER JOIN
+                                            LessonTimeSettlement ON LessonTime.LessonID = LessonTimeSettlement.LessonID INNER JOIN
+                                            ServingCoach ON LessonTime.AttendingCoach = ServingCoach.CoachID INNER JOIN
+                                            ProfessionalLevel ON ServingCoach.LevelID = ProfessionalLevel.LevelID
+                WHERE        (LessonTime.ClassTime >= {0}) AND (ServingCoach.CoachID = {1}) ", quarterEnd, item.CoachID);
 
         }
 
@@ -1600,6 +1670,13 @@ namespace WebHome.Helper
             where TEntity : class, new()
         {
             return models.FilterByBranchStoreManager(items, agentID);
+        }
+
+        public static IQueryable<CourseContract> FilterByLearnerMember<TEntity>(this IQueryable<CourseContract> items,ModelSource<TEntity> models,  int? memberID)
+            where TEntity : class, new()
+        {
+            return items.Join(models.GetTable<CourseContractMember>().Where(m => m.UID == memberID),
+                c => c.ContractID, p => p.ContractID, (c, p) => c);
         }
 
         public static IQueryable<CourseContract> GetContractToAllowByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile agent)
@@ -1950,10 +2027,15 @@ namespace WebHome.Helper
             return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.體驗課程).FirstOrDefault();
         }
 
-        public static LessonPriceType CurrentSessionPrice<TEntity>(this ModelSource<TEntity> models, Naming.LessonPriceStatus sessionStatus = Naming.LessonPriceStatus.自主訓練)
+        public static LessonPriceType CurrentSessionPrice<TEntity>(this ModelSource<TEntity> models, Naming.LessonPriceStatus sessionStatus = Naming.LessonPriceStatus.自主訓練,int? priceID = null)
             where TEntity : class, new()
         {
-            return models.GetTable<LessonPriceType>().Where(p => p.Status == (int)sessionStatus).FirstOrDefault();
+            var items = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)sessionStatus);
+            if(priceID.HasValue)
+            {
+                items = items.Where(p => p.PriceID == priceID);
+            }
+            return items.FirstOrDefault();
         }
 
         public static void ExecuteSettlement<TEntity>(this ModelSource<TEntity> models, DateTime startDate, DateTime endExclusiveDate, DateTime? settlementDate = null)

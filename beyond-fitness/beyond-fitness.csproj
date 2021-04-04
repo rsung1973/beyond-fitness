@@ -3166,10 +3166,8 @@
     <Content Include="Views\CoachFacet\Module\VipSelector.ascx" />
     <Content Include="Views\Common\CoachSelectorByRadio.ascx" />
     <Content Include="Views\Common\CoachSelector.ascx" />
-    <Content Include="Views\Common\JQueryHelper.ascx" />
     <Content Include="Views\CornerKick\AttendanceAccomplished.aspx" />
     <Content Include="Views\CornerKick\CheckAttendance.aspx" />
-    <Content Include="Views\CornerKick\EditUserEvent.aspx" />
     <Content Include="Views\CornerKick\Error.aspx" />
     <Content Include="Views\CornerKick\Index.aspx" />
     <Content Include="Views\Common\GA.ascx" />
@@ -3186,7 +3184,6 @@
     <Content Include="Views\CornerKick\Settings.aspx" />
     <Content Include="Views\CornerKick\Unbind.aspx" />
     <Content Include="Views\CornerKick\AnswerDailyQuestion.aspx" />
-    <Content Include="Views\CornerKick\CheckBonusPoint.aspx" />
     <Content Include="Views\CornerKick\ForgetPassword.aspx" />
     <Content Include="Views\CornerKick\LearnerCalendar.aspx" />
     <Content Include="Views\CornerKick\LearnerIndex.aspx" />
@@ -3209,15 +3206,12 @@
     <Content Include="Views\CornerKick\Module\TrainingContentPieChart.ascx" />
     <Content Include="Views\CornerKick\Module\GameRankRadarChart.ascx" />
     <Content Include="Views\CornerKick\Module\PromptDailyQuestion.ascx" />
-    <Content Include="Views\CornerKick\Module\ReturnHome.ascx" />
     <Content Include="Views\CornerKick\Module\RecentArticles.ascx" />
     <Content Include="Views\CornerKick\Module\RecentLessons.ascx" />
     <Content Include="Views\CornerKick\Module\SlideOut.ascx" />
-    <Content Include="Views\CornerKick\Module\ModeGirls.ascx" />
     <Content Include="Views\CornerKick\Module\UserGuideNotice.ascx" />
     <Content Include="Views\CornerKick\Module\DailyQuestionNotice.ascx" />
     <Content Include="Views\CornerKick\Module\LessonAttendanceCheckNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\ProfileImage.ascx" />
     <Content Include="Views\CornerKick\NotifyResetPassword.aspx" />
     <Content Include="Views\CornerKick\ResetPassword.aspx" />
     <Content Include="Views\CornerKick\StartNavigation.aspx" />
@@ -3300,9 +3294,7 @@
     <Content Include="Views\Invoice\Module\EditInvoiceNoIntervalGroup.ascx" />
     <Content Include="Views\Invoice\Module\AllowanceWidgetGrid.ascx" />
     <Content Include="Views\Invoice\Module\TaxCsvWidgetGrid.ascx" />
-    <Content Include="Views\Invoice\PrintAllowanceImage.aspx" />
     <Content Include="Views\Invoice\AllowanceIndex.aspx" />
-    <Content Include="Views\Invoice\PrintInvoiceImage.aspx" />
     <Content Include="Views\Invoice\LoadInvoiceImage.aspx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoInterval.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceBarCode.ascx" />
@@ -3977,6 +3969,21 @@
     <Content Include="Views\Invoice\Module\InvoiceDispatchLogSummary.cshtml" />
     <Content Include="Views\Invoice\Module\TurnkeyWidgetGrid.cshtml" />
     <Content Include="Views\Achievement\Module\CoachCurrentQuarterPerformance.cshtml" />
+    <Content Include="Views\Invoice\PrintInvoiceImage.cshtml" />
+    <Content Include="Views\Invoice\PrintAllowanceImage.cshtml" />
+    <Content Include="Views\CornerKick\CheckBonusPoint.cshtml" />
+    <Content Include="Views\Common\JQueryHelper.cshtml" />
+    <Content Include="Views\Common\GA.cshtml" />
+    <Content Include="Views\CornerKick\Module\ModeGirls.cshtml" />
+    <Content Include="Views\CornerKick\Module\ProfileImage.cshtml" />
+    <Content Include="Views\CornerKick\CheckBonusPoint2021.cshtml" />
+    <Content Include="Views\CornerKick\Shared\MainPage.cshtml" />
+    <Content Include="Views\CornerKick\WriteOffBonusPoint.cshtml" />
+    <Content Include="Views\CornerKick\CheckBonusPoint\AdvisorImage.cshtml" />
+    <Content Include="Views\CornerKick\Shared\ViewModelCommitted.cshtml" />
+    <Content Include="Views\CornerKick\Shared\ReportInputError.cshtml" />
+    <Content Include="Views\CornerKick\Module\ReturnHome.cshtml" />
+    <Content Include="Views\CornerKick\EditUserEvent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

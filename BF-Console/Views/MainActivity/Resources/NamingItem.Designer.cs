@@ -365,6 +365,30 @@ namespace WebHome.Views.MainActivity.Resources {
             }
         }
         
+        public static string FindAnheBranch {
+            get {
+                return ResourceManager.GetString("FindAnheBranch", resourceCulture);
+            }
+        }
+        
+        public static string FindAnheBranchAdd {
+            get {
+                return ResourceManager.GetString("FindAnheBranchAdd", resourceCulture);
+            }
+        }
+        
+        public static string FindAnheBranchDesc1 {
+            get {
+                return ResourceManager.GetString("FindAnheBranchDesc1", resourceCulture);
+            }
+        }
+        
+        public static string FindAnheBranchDesc2 {
+            get {
+                return ResourceManager.GetString("FindAnheBranchDesc2", resourceCulture);
+            }
+        }
+        
         public static string OurTeam {
             get {
                 return ResourceManager.GetString("OurTeam", resourceCulture);
@@ -452,6 +476,18 @@ namespace WebHome.Views.MainActivity.Resources {
         public static string JoinUsJob2Desc {
             get {
                 return ResourceManager.GetString("JoinUsJob2Desc", resourceCulture);
+            }
+        }
+        
+        public static string JoinUsJob3 {
+            get {
+                return ResourceManager.GetString("JoinUsJob3", resourceCulture);
+            }
+        }
+        
+        public static string JoinUsJob4 {
+            get {
+                return ResourceManager.GetString("JoinUsJob4", resourceCulture);
             }
         }
         
