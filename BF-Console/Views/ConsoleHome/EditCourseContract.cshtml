@@ -36,15 +36,6 @@
     <link rel="stylesheet" href="css/customelist.css?1" />
 }
 
-<script>
-        $(function () {
-            $global.viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-
-            for (var i = 0; i < $global.onReady.length; i++) {
-                $global.onReady[i]();
-            }
-        });
-</script>
 <!-- Main Content -->
 <section class="content">
     @{
@@ -110,7 +101,10 @@
                                     <option value="">-- 請選擇上課場所 --</option>
                                 }
                             }
-                            @{ Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.cshtml", model: _viewModel.BranchID);}
+                            @{ 
+                                ViewBag.DataItems = models.PromptRealStore();
+                                Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.cshtml", model: _viewModel.BranchID);
+                            }
                         </select>
                         <script>
                             $(function () {
@@ -337,7 +331,11 @@
                                             $.post('@Html.Raw(Url.Action("LoadInstallmentPlan","CourseContract"))', { 'lessons': lessons, 'installments': installments }, function (data) {
                                                 hideLoading();
                                                 if ($.isPlainObject(data)) {
-                                                    swal(data.message);
+                                                    Swal.fire(
+                                                        'Oops...',
+                                                        data.message,
+                                                        'warning'
+                                                    )
                                                 } else {
                                                     $(data).appendTo($installments);
                                                     $installments.selectpicker('refresh');
@@ -354,6 +352,15 @@
                                     }
                                 </script>
                             </div>
+                            @if (_viewModel.PartialEffectiive == true)
+                            {
+                                <script>
+                                    $(function () {
+                                        $('input[name="InstallmentPlan"]').prop('disabled', true);
+                                        $('select[name="Installments"]').prop('diisabled', true);
+                                    });
+                                </script>
+                            }
                         </div>
                     </div>
                 </li>
@@ -381,7 +388,11 @@
                                     $global.viewModel.Remark = $('textarea[name="Remark"]').val();
                                     $.post('@Html.Raw(Url.Action("SaveContract", "ContractConsole", _viewModel.ContractID))', $global.viewModel, function (data) {
                                         if ($.isPlainObject(data)) {
-                                            swal(data.message);
+                                            Swal.fire(
+                                                'Oops...',
+                                                data.message,
+                                                'warning'
+                                            )
                                         }
                                         else {
                                             $(data).appendTo($('body'));
@@ -394,7 +405,11 @@
                                     $global.viewModel.Remark = $('textarea[name="Remark"]').val();
                                     $.post('@Html.Raw(Url.Action("CommitContract", "ContractConsole", _viewModel.ContractID))', $global.viewModel, function (data) {
                                         if ($.isPlainObject(data)) {
-                                            swal(data.message);
+                                            Swal.fire(
+                                                'Oops...',
+                                                data.message,
+                                                'warning'
+                                            )
                                         }
                                         else {
                                             $(data).appendTo($('body'));
