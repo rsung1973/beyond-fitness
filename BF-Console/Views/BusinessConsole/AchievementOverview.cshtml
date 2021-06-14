@@ -41,15 +41,6 @@
     <link href="plugins/dotdotdot/dotdotdot.css?2.0" rel="stylesheet" />
 }
 
-<script>
-        $(function () {
-            $global.viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-
-            for (var i = 0; i < $global.onReady.length; i++) {
-                $global.onReady[i]();
-            }
-        });
-</script>
 <!-- Main Content -->
 <section class="content">
     @{
@@ -122,7 +113,11 @@
             $.post('@Html.Raw(Url.Action("SelectMonth", "BusinessConsole"))', null, function (data) {
                 //hideLoading();
                 if ($.isPlainObject(data)) {
-                    swal(data.message);
+                    Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'warning'
+                    )
                 } else {
                     $(data).appendTo($('body'));
                 }

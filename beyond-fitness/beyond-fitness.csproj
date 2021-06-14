@@ -428,12 +428,14 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="CornerKick\css\customelist.css" />
     <Content Include="CornerKick\css\datedropper\datedropper.css" />
     <Content Include="CornerKick\css\datedropper\datedropper.min.css" />
     <Content Include="CornerKick\css\datedropper\datedropper.theme.css" />
     <Content Include="CornerKick\css\ionicons\ionicons.css" />
     <Content Include="CornerKick\css\ionicons\ionicons.min.css" />
     <Content Include="CornerKick\css\jalendar\jalendar.css" />
+    <Content Include="CornerKick\css\jSignature\jsignature.css" />
     <Content Include="CornerKick\css\livIconsevo\LivIconsEvo.css" />
     <Content Include="CornerKick\css\materialize.css" />
     <Content Include="CornerKick\css\materialize.min.css" />
@@ -477,6 +479,8 @@
     <Content Include="CornerKick\css\scrollup-master\themes\tab.css" />
     <Content Include="CornerKick\css\slider-master\slider-master.css" />
     <Content Include="CornerKick\css\smartcalendar-2.css" />
+    <Content Include="CornerKick\css\stepper-master\mstepper.css" />
+    <Content Include="CornerKick\css\stepper-master\mstepper.min.css" />
     <Content Include="CornerKick\css\style.css" />
     <Content Include="CornerKick\css\timedropper\timedropper.css" />
     <Content Include="CornerKick\css\timedropper\timedropper.min.css" />
@@ -1933,6 +1937,7 @@
     <Content Include="CornerKick\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="CornerKick\css\royalslider\Thumbs.db" />
     <None Include="images\GitHubIcon\1040.png.bak" />
     <Content Include="images\GitHubIcon\1040.png" />
     <Content Include="images\GitHubIcon\240.png" />
@@ -3174,7 +3179,6 @@
     <Content Include="Views\CornerKick\Module\AutoLogin.ascx" />
     <Content Include="Views\CornerKick\Module\ExercisePurposeAccomplishedNotice.ascx" />
     <Content Include="Views\CornerKick\Module\ExercisePurposeCheckNotice.ascx" />
-    <Content Include="Views\CornerKick\Notice.aspx" />
     <Content Include="Views\CornerKick\NoticeNotFound.aspx" />
     <Content Include="Views\CornerKick\Module\CompleteUserEvent.ascx" />
     <Content Include="Views\CornerKick\Module\PromptContractNotice.ascx" />
@@ -3186,11 +3190,9 @@
     <Content Include="Views\CornerKick\AnswerDailyQuestion.aspx" />
     <Content Include="Views\CornerKick\ForgetPassword.aspx" />
     <Content Include="Views\CornerKick\LearnerCalendar.aspx" />
-    <Content Include="Views\CornerKick\LearnerIndex.aspx" />
     <Content Include="Views\CornerKick\LearnerTrainingGoal.aspx" />
     <Content Include="Views\CornerKick\Login.aspx" />
     <Content Include="Views\CornerKick\Module\AnsweredDailyQuestion.ascx" />
-    <Content Include="Views\CornerKick\Module\LessonContent.ascx" />
     <Content Include="Views\CornerKick\Module\DailyQuestionHistory.ascx" />
     <Content Include="Views\CornerKick\Module\AnsweredQuestionNotFound.ascx" />
     <Content Include="Views\CornerKick\Module\BodyPowerAbility.ascx" />
@@ -3215,7 +3217,6 @@
     <Content Include="Views\CornerKick\NotifyResetPassword.aspx" />
     <Content Include="Views\CornerKick\ResetPassword.aspx" />
     <Content Include="Views\CornerKick\StartNavigation.aspx" />
-    <Content Include="Views\CornerKick\TodayLesson.aspx" />
     <Content Include="Views\CornerKick\TrainingAnalysis.aspx" />
     <Content Include="Views\CourseContract\ApplyAmendment.aspx" />
     <Content Include="Views\CourseContract\CourseContractAmendmentView.aspx" />
@@ -3402,7 +3403,6 @@
     <Content Include="Views\Report\Module\QuestionnaireList.ascx" />
     <Content Include="Views\Report\Module\QuestionnaireWidgetGrid.ascx" />
     <Content Include="Views\Report\QuestionnaireIndex.aspx" />
-    <Content Include="Views\Shared\InitBarChartNoRegister.ascx" />
     <Content Include="Views\Shared\InitBarChart.ascx" />
     <Content Include="Views\Shared\Materialize\ReportInputError.ascx" />
     <Content Include="Views\SiteAction\Officer.ascx" />
@@ -3729,7 +3729,6 @@
     <Content Include="Views\Sample\Sample.ascx" />
     <Content Include="Views\Sample\Sample.aspx" />
     <Content Include="Views\Sample\SampleWithDB.aspx" />
-    <Content Include="Views\Shared\JsAlert.ascx" />
     <Content Include="Views\Shared\MessageDialog.ascx" />
     <Content Include="Views\Shared\MessageView.ascx" />
     <Content Include="Views\Shared\ShowMessage.ascx" />
@@ -3766,12 +3765,10 @@
     <Content Include="Views\SiteAction\Navigation.ascx" />
     <Content Include="Views\SystemInfo\ContractTypeOptions.ascx" />
     <Content Include="Views\SystemInfo\AllStaffOptions.ascx" />
-    <Content Include="Views\SystemInfo\ServingCoachOptions.ascx" />
     <Content Include="Views\SystemInfo\BranchStoreText.ascx" />
     <Content Include="Views\SystemInfo\ConfigureAll.aspx" />
     <Content Include="Views\SystemInfo\EditLessonPrice.aspx" />
     <Content Include="Views\SystemInfo\LessonPriceTypeList.ascx" />
-    <Content Include="Views\SystemInfo\BranchStoreOptions.ascx" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -3795,6 +3792,7 @@
     <Compile Include="Controllers\AchievementController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
+    <Compile Include="Controllers\Base\PaymentBaseController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\ClassFacetController.cs" />
     <Compile Include="Controllers\CornerKickController.cs" />
@@ -3984,6 +3982,17 @@
     <Content Include="Views\CornerKick\Shared\ReportInputError.cshtml" />
     <Content Include="Views\CornerKick\Module\ReturnHome.cshtml" />
     <Content Include="Views\CornerKick\EditUserEvent.cshtml" />
+    <Content Include="Views\SystemInfo\VirtualStoreOptions.cshtml" />
+    <Content Include="Views\CornerKick\TodayLesson.cshtml" />
+    <Content Include="Views\CornerKick\Module\LessonContent.cshtml" />
+    <Content Include="Views\Shared\InitBarChartNoRegister.cshtml" />
+    <Content Include="Views\CornerKick\AbountOnlineLesson.cshtml" />
+    <Content Include="Views\CornerKick\SignCourseContract.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractDataContent.cshtml" />
+    <Content Include="Views\CornerKick\Notice.cshtml" />
+    <Content Include="Views\CornerKick\Module\PromptSignContract.cshtml" />
+    <Content Include="Views\CornerKick\LearnerIndex.cshtml" />
+    <Content Include="Views\CornerKick\Module\SlideOut.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3998,6 +4007,7 @@
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\LessonEvent\" />
     <Folder Include="Views\LineEvents\" />
+    <Folder Include="Views\PaymentBase\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">

@@ -40,15 +40,6 @@
     <link href="plugins/charts-c3/plugin.css?2.0" rel="stylesheet">
 }
 
-<script>
-        $(function () {
-            $global.viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-
-            for (var i = 0; i < $global.onReady.length; i++) {
-                $global.onReady[i]();
-            }
-        });
-</script>
 <!-- Main Content -->
 <section class="content">
     @{
@@ -179,10 +170,18 @@
                 hideLoading();
                 if ($.isPlainObject(data)) {
                     if (data.result) {
-                        swal('設定完成!! ' + data.message);
+                        Swal.fire(
+                            '幹得好',
+                            '設定完成',
+                            'success'
+                        )
                         @*$('').launchDownload('@Html.Raw(Url.Action("InvoiceOverview", "ConsoleHome",new { _viewModel.DateFrom}))', { });*@
                     } else {
-                        swal(data.message);
+                        Swal.fire(
+                            'Oops...',
+                            data.message,
+                            'warning'
+                        )
                     }
                 } else {
                     $(data).appendTo('body').remove();

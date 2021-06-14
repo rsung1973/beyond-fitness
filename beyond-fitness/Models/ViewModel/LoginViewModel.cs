@@ -33,6 +33,7 @@ namespace WebHome.Models.ViewModel
         [JsonIgnore]
         public String UrlAction { get; set; }
         public bool? Confirmed { get; set; }
+        public String AuthCode { get; set; }
     }
 
     public class LoginViewModel : QueryViewModel
@@ -298,7 +299,7 @@ namespace WebHome.Models.ViewModel
 
         public int? UID { get; set; }
 
-        public int? TrainingBySelf { get; set; }
+        public LessonTime.SelfTrainingDefinition? TrainingBySelf { get; set; }
 
         [Display(Name = "上課地點")]
         public int? BranchID { get; set; }
@@ -308,7 +309,7 @@ namespace WebHome.Models.ViewModel
         public Naming.LessonPriceStatus? SessionStatus { get; set; }
         public int[] AttendeeID { get; set; }
         public int? PriceID { get; set; }
-
+        public String Place { get; set; }
     }
 
     public class LessonTimeExpansionViewModel

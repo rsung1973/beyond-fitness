@@ -93,7 +93,11 @@
             $.post('@Html.Raw(Url.Action("ProcessCrossBranch", "LessonConsole"))', { 'keyID': keyID }, function (data) {
                 //hideLoading();
                 if ($.isPlainObject(data)) {
-                    swal(data.message);
+                    Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'warning'
+                    )
                 } else {
                     $(data).appendTo($('body'));
                 }
@@ -105,7 +109,11 @@
             $.post('@Html.Raw(Url.Action("ShowTodayLessons", "LessonConsole"))', classDate, function (data) {
                 //hideLoading();
                 if ($.isPlainObject(data)) {
-                    swal(data.message);
+                    Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'warning'
+                    )
                 } else {
                     $(data).appendTo($('body'));
                 }
@@ -122,7 +130,11 @@
                         if (data.result) {
                             onSuccess();
                         } else {
-                            swal(data.message);
+                            Swal.fire(
+                                    'Oops...',
+                                    data.message,
+                                    'warning'
+                                );
                         }
                     } else {
                         $(data).appendTo($('body'));
@@ -133,8 +145,8 @@
                     text: "完成審核後資料將無法回覆!",
                     confirmButtonText: "確定, 審核通過",
                     cancelButtonText: "不, 點錯了",
-                    confirmed: ['已審核成功!', '資料已經更新 Bye!', 'success'],
-                    cancelled: ['取消成功', '你的資料現在非常安全 :)', 'error'],
+                    confirmed: ['已審核成功!', '資料已經更新 Bye!', 'OK'],
+                    cancelled: ['取消成功', '你的資料現在非常安全 :)', 'OK'],
                     afterConfirmed: function () {
                         window.location.href='@Html.Raw(Url.Action("CrossBranchIndex","ConsoleHome"))';
                     },

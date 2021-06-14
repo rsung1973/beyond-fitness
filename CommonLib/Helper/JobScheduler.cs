@@ -34,24 +34,34 @@ namespace CommonLib.Helper
 
         private void initialize()
         {
-            if (File.Exists(_JobFileName))
+            try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(_JobFileName);
-                _jobItems = doc.ConvertTo<List<JobItem>>();
+                if (File.Exists(_JobFileName))
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(_JobFileName);
+                    _jobItems = doc.ConvertTo<List<JobItem>>();
+                }
             }
-            else
+            catch(Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            if (_jobItems == null)
             {
                 _jobItems = new List<JobItem>();
             }
+
         }
 
         private void run(Object state)
         {
             DateTime now = DateTime.Now;
             bool changed = false;
-            foreach (var item in _jobItems)
+            for (int i = 0; i < _jobItems.Count; i++)
             {
+                var item = _jobItems[i];
                 if (item.Schedule <= now)
                 {
                     try
@@ -84,11 +94,18 @@ namespace CommonLib.Helper
                 return;
 
             var type = Type.GetType(item.AssemblyQualifiedName);
-            IJob job = (IJob)type.Assembly.CreateInstance(type.FullName);
-            job.DoJob();
-            if (nextSchedule)
-                item.Schedule = job.GetScheduleToNextTurn(DateTime.Now);
-            job.Dispose();
+            if (type == null)
+            {
+                _jobItems.Remove(item);
+            }
+            else
+            {
+                IJob job = (IJob)type.Assembly.CreateInstance(type.FullName);
+                job.DoJob();
+                if (nextSchedule)
+                    item.Schedule = job.GetScheduleToNextTurn(item.Schedule);
+                job.Dispose();
+            }
         }
 
         public static void StartUp(int period = 5*60000)
@@ -100,6 +117,27 @@ namespace CommonLib.Helper
                     _instance = new JobScheduler(period);
                 }
             }
+        }
+
+        public static JobItem LaunchJob(int? jobID)
+        {
+            JobItem item = _instance?._jobItems?.Where(j => j.JobID == jobID).FirstOrDefault();
+            if (item != null)
+            {
+                try
+                {
+                    _instance.doJob(item);
+                    item.LastError = null;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex);
+                    item.LastError = ex.ToString();
+                }
+                _instance.saveJob();
+            }
+
+            return item;
         }
 
         public void Dispose()
@@ -114,6 +152,10 @@ namespace CommonLib.Helper
             {
                 if (_instance != null)
                 {
+                    if(File.Exists(_JobFileName))
+                    {
+                        File.Delete(_JobFileName);
+                    }
                     _instance.Dispose();
                     _instance = null;
                 }
@@ -142,12 +184,12 @@ namespace CommonLib.Helper
             }
         }
 
-        public static JobItem[] JobList
+        public static IEnumerable<JobItem> JobList
         {
             get
             {
                 if (_instance != null)
-                    return _instance._jobItems.ToArray();
+                    return _instance._jobItems.AsEnumerable();
                 return null;
             }
         }
@@ -183,11 +225,22 @@ namespace CommonLib.Helper
 
     public class JobItem 
     {
+        public int? JobID { get; set; }
         public DateTime Schedule { get; set; }
         public String AssemblyQualifiedName { get; set; }
         public String Description { get; set; }
         public String LastError { get; set; }
         public bool? Pending { get; set; }
+        public IJob CreateExecutionInstance()
+        {
+            var type = Type.GetType(this.AssemblyQualifiedName);
+            if (type != null)
+            {
+                return (IJob)type.Assembly.CreateInstance(type.FullName);
+            }
+
+            return null;
+        }
     }
 
     public interface IJob : IDisposable

@@ -47,15 +47,6 @@
 
 <!--Sparkline Plugin Js-->
 <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
-<script>
-        $(function () {
-            $global.viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-
-            for (var i = 0; i < $global.onReady.length; i++) {
-                $global.onReady[i]();
-            }
-        });
-</script>
 <section class="content">
 
     @{
@@ -268,18 +259,18 @@
                 viewModel.scrollToView = true;
             }
             if (alertCount && alertCount > 300) {
-                swal({
+                Swal.fire({
                     title: "繼續載入?",
                     text: "讀取大量資料，將影響系統效能!",
-                    type: "warning",
+                    icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "確定, 不後悔",
                     cancelButtonText: "不, 點錯了",
                     closeOnConfirm: true,
                     closeOnCancel: true,
-                }, function (isConfirm) {
-                    if (isConfirm) {
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         showLoading();
                         $('').launchDownload('@Html.Raw(Url.Action("ShowContractList","ContractConsole"))', viewModel);
                     } else {

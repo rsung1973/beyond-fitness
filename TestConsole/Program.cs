@@ -14,8 +14,9 @@ using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Resource;
 using WebHome.Models.MIG3_1.C0401;
-using Newtonsoft.Json;
 using Utility;
+using System.Web;
+using System.Threading;
 
 namespace TestConsole
 {
@@ -36,9 +37,49 @@ namespace TestConsole
             //test8();
             //test9();
 
-            System.Diagnostics.Debugger.Launch();
+            //System.Diagnostics.Debugger.Launch();
             //test10();
 
+            //test11();
+
+            test12();
+
+            //Console.ReadKey();
+        }
+
+        private static void test12()
+        {
+            String urlPattern = "https://maps.google.com/maps/api/geocode/json?sensor=false&address={0}&key=AIzaSyDKXwfddYcgXgjFtAkXt4Iigh0KFe-HfsM&language=zh-TW";
+
+            using (ModelSource<UserProfile> models = new ModelSource<UserProfile>())
+            {
+                var items = models.GetTable<UserProfile>().Where(u => u.Address != null)
+                                .Join(models.GetTable<UserProfileExtension>()
+                                    .Where(t => t.AdministrativeArea != null)
+                                    .Where(t => t.GeoCode == null),
+                                    u => u.UID, t => t.UID, (u, t) => u);
+                using (WebClient client = new WebClient())
+                {
+                    var encoding = new UTF8Encoding(false);
+                    client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                    client.Encoding = encoding;
+
+                    foreach (var item in items)
+                    {
+                        String url = String.Format(urlPattern, HttpUtility.UrlEncode($"{item.UserProfileExtension.AdministrativeArea}{item.Address}"));
+                        Logger.Info(url);
+                        var result = client.DownloadString(url);
+                        item.UserProfileExtension.GeoCode = result;
+                        models.SubmitChanges();
+                        Logger.Info(result);
+                        Thread.Sleep(50);
+                    }
+                }
+            }
+        }
+
+        private static void test11()
+        {
             JObject json = new JObject();
             dynamic obj = json;
             obj.A = "aaa";
@@ -54,8 +95,6 @@ namespace TestConsole
             Console.WriteLine(((object)obj).JsonStringify());
             json["E"]["S"] = JArray.FromObject(new String[] { "AAA", "BBB" });
             Console.WriteLine(((object)obj).JsonStringify());
-
-            Console.ReadKey();
         }
 
         private static void test10()

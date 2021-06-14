@@ -4601,6 +4601,8 @@
     <Content Include="ConsoleHome\plugins\cropper\cropper.js" />
     <Content Include="ConsoleHome\plugins\cropper\cropper.min.css" />
     <Content Include="ConsoleHome\plugins\cropper\cropper.min.js" />
+    <Content Include="ConsoleHome\plugins\datedropper\datedropper.js" />
+    <Content Include="ConsoleHome\plugins\datedropper\datedropper.min.js" />
     <Content Include="ConsoleHome\plugins\dotdotdot\dotdotdot.css" />
     <Content Include="ConsoleHome\plugins\dotdotdot\dotdotdot.js" />
     <Content Include="ConsoleHome\plugins\dropify\css\demo.css" />
@@ -4617,6 +4619,28 @@
     <Content Include="ConsoleHome\plugins\dropzone\min\dropzone-amd-module.min.js" />
     <Content Include="ConsoleHome\plugins\dropzone\min\dropzone.min.css" />
     <Content Include="ConsoleHome\plugins\dropzone\min\dropzone.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.common.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.common.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.esm.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.esm.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.simple.js" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.simple.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\bmap.js" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\bmap.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\dataTool.js" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\dataTool.min.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\macarons.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\macarons_nero.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\area.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\bar.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\graph.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\map.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\pie.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\option\scatter.js" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\thumb.html" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\tool\thumb.js" />
     <Content Include="ConsoleHome\plugins\editable-table\mindmup-editabletable.js" />
     <Content Include="ConsoleHome\plugins\flot-charts\excanvas.js" />
     <Content Include="ConsoleHome\plugins\flot-charts\excanvas.min.js" />
@@ -4756,6 +4780,8 @@
     <Content Include="ConsoleHome\plugins\ion-rangeslider\img\sprite-skin-simple.png" />
     <Content Include="ConsoleHome\plugins\ion-rangeslider\js\ion.rangeSlider.js" />
     <Content Include="ConsoleHome\plugins\ion-rangeslider\js\ion.rangeSlider.min.js" />
+    <Content Include="ConsoleHome\plugins\jalendar\jalendar.js" />
+    <Content Include="ConsoleHome\plugins\jalendar\jalendar.min.js" />
     <Content Include="ConsoleHome\plugins\jquery-cookie\jquery.cookie.js" />
     <Content Include="ConsoleHome\plugins\jquery-countto\jquery.countTo.js" />
     <Content Include="ConsoleHome\plugins\jquery-datatable\AutoFill-2.3.0\css\autoFill.bootstrap.css" />
@@ -5245,6 +5271,9 @@
     <Content Include="ConsoleHome\plugins\livIconsevo\js\tools\snap.svg-min.js" />
     <Content Include="ConsoleHome\plugins\livIconsevo\js\tools\TweenMax.min.js" />
     <Content Include="ConsoleHome\plugins\livIconsevo\js\tools\verge.min.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\LivIconsEvo.defaults.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\LivIconsEvo.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\LivIconsEvo.Tools.js" />
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\adjust.svg" />
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\alarm.svg" />
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\anchor.svg" />
@@ -5625,6 +5654,12 @@
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\wrench.svg" />
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\zoom-in.svg" />
     <Content Include="ConsoleHome\plugins\livIconsevo\svg\zoom-out.svg" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\DrawSVGPlugin.min.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\index.html" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\MorphSVGPlugin.min.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\snap.svg-min.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\TweenMax.min.js" />
+    <Content Include="ConsoleHome\plugins\livIconsevo\tools\verge.min.js" />
     <Content Include="ConsoleHome\plugins\magnific-popup\jquery.magnific-popup.js" />
     <Content Include="ConsoleHome\plugins\magnific-popup\jquery.magnific-popup.min.js" />
     <Content Include="ConsoleHome\plugins\magnific-popup\magnific-popup.css" />
@@ -5635,6 +5670,8 @@
     <Content Include="ConsoleHome\plugins\materialize-css\css\materialize.min.css" />
     <Content Include="ConsoleHome\plugins\materialize-css\js\materialize.js" />
     <Content Include="ConsoleHome\plugins\materialize-css\js\materialize.min.js" />
+    <Content Include="ConsoleHome\plugins\materialize\materialize.js" />
+    <Content Include="ConsoleHome\plugins\materialize\materialize.min.js" />
     <Content Include="ConsoleHome\plugins\material\material-kit.js" />
     <Content Include="ConsoleHome\plugins\material\material.min.js" />
     <Content Include="ConsoleHome\plugins\momentjs\ender.js" />
@@ -5695,6 +5732,12 @@
     <Content Include="ConsoleHome\plugins\nouislider\nouislider.js" />
     <Content Include="ConsoleHome\plugins\nouislider\nouislider.min.css" />
     <Content Include="ConsoleHome\plugins\nouislider\nouislider.min.js" />
+    <Content Include="ConsoleHome\plugins\patternLock\patternLock.js" />
+    <Content Include="ConsoleHome\plugins\patternLock\patternLock.min.js" />
+    <Content Include="ConsoleHome\plugins\preview-assets\highlight.pack.js" />
+    <Content Include="ConsoleHome\plugins\preview-assets\jquery-ui-1.8.22.custom.min.js" />
+    <Content Include="ConsoleHome\plugins\preview-assets\jquery.magnific-popup.js" />
+    <Content Include="ConsoleHome\plugins\preview-assets\masonry\jquery.masonry.min.js" />
     <Content Include="ConsoleHome\plugins\raphael\dev\amdDev.js" />
     <Content Include="ConsoleHome\plugins\raphael\dev\index.js" />
     <Content Include="ConsoleHome\plugins\raphael\dev\require.js" />
@@ -5755,6 +5798,10 @@
     <Content Include="ConsoleHome\plugins\slick\slick.css" />
     <Content Include="ConsoleHome\plugins\slick\slick.js" />
     <Content Include="ConsoleHome\plugins\slick\slick.min.js" />
+    <Content Include="ConsoleHome\plugins\slider-master\jquery.mobile.custom.min.js" />
+    <Content Include="ConsoleHome\plugins\slider-master\main.js" />
+    <Content Include="ConsoleHome\plugins\slider-master\modernizr.js" />
+    <Content Include="ConsoleHome\plugins\slider-master\navi.js" />
     <Content Include="ConsoleHome\plugins\smartcalendar\css\bootstrap-datepicker3.min.css" />
     <Content Include="ConsoleHome\plugins\smartcalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="ConsoleHome\plugins\smartcalendar\css\bootstrap.min.css" />
@@ -5904,14 +5951,26 @@
     <Content Include="ConsoleHome\plugins\smartcalendar\js\locales-datetimepicker\bootstrap-datetimepicker.uk.js" />
     <Content Include="ConsoleHome\plugins\smartcalendar\js\locales-datetimepicker\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="ConsoleHome\plugins\smartcalendar\js\locales-datetimepicker\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="ConsoleHome\plugins\stepper-master\mstepper.js" />
+    <Content Include="ConsoleHome\plugins\stepper-master\mstepper.min.js" />
     <Content Include="ConsoleHome\plugins\summernote\summernote-bs2.css" />
     <Content Include="ConsoleHome\plugins\summernote\summernote-bs3.css" />
     <Content Include="ConsoleHome\plugins\summernote\summernote.css" />
     <Content Include="ConsoleHome\plugins\summernote\summernote.js" />
     <Content Include="ConsoleHome\plugins\summernote\summernote.min.js" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.all.js" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.all.min.js" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.css" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.js" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.min.css" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\sweetalert2.min.js" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\variables.css" />
+    <Content Include="ConsoleHome\plugins\sweetalert2\variables.min.css" />
     <Content Include="ConsoleHome\plugins\sweetalert\sweetalert-dev.js" />
     <Content Include="ConsoleHome\plugins\sweetalert\sweetalert.css" />
     <Content Include="ConsoleHome\plugins\sweetalert\sweetalert.min.js" />
+    <Content Include="ConsoleHome\plugins\timedropper\timedropper.js" />
+    <Content Include="ConsoleHome\plugins\timedropper\timedropper.min.js" />
     <Content Include="ConsoleHome\plugins\timon-stepformwizard\css\gsi-step-indicator.css" />
     <Content Include="ConsoleHome\plugins\timon-stepformwizard\css\parsley.css" />
     <Content Include="ConsoleHome\plugins\timon-stepformwizard\css\parsley.min.css" />
@@ -6090,6 +6149,17 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="MainActivity\Portfolio\Dongmen.json" />
     <Content Include="MainActivity\Pricing\Dongmen.json" />
+    <Content Include="ConsoleHome\plugins\echarts\.DS_Store" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.common.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.esm.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\echarts.simple.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\bmap.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\extension\dataTool.js.map" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\.DS_Store" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\json\westeros.json" />
+    <Content Include="ConsoleHome\plugins\echarts\theme\json\westeros_nero.json" />
+    <Content Include="ConsoleHome\plugins\slider-master\.DS_Store" />
     <None Include="Models\Schemas\SiteMap\sitemap.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -6110,12 +6180,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Views\Blog\Module\CategoryIndication.ascx" />
-    <Content Include="Views\Blog\Module\PlusIndication.ascx" />
-    <Content Include="Views\ConsoleEvent\Module\SearchLearner.ascx" />
-    <Content Include="Views\ConsoleEvent\Module\CoachPIAttendeeSelector.ascx" />
-    <Content Include="Views\ConsoleEvent\Module\RevokeLesson.ascx" />
-    <Content Include="Views\ConsoleEvent\Module\LessonEmphasis.ascx" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -6186,6 +6250,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\InitializeType.cs" />
+    <Compile Include="Controllers\AchievementConsoleController.cs" />
     <Compile Include="Controllers\BonusCreditController.cs" />
     <Compile Include="Controllers\BusinessConsoleController.cs" />
     <Compile Include="Controllers\CommonHelperController.cs" />
@@ -6212,6 +6277,7 @@
     </Compile>
     <Compile Include="Models\ViewModel\InputQueryViewModel.cs" />
     <Compile Include="Models\ViewModel\ViewPageModel.cs" />
+    <Compile Include="Properties\AppSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainActivity\Resources\NamingItem.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -6948,6 +7014,30 @@
     <Content Include="Views\ConsoleHome\EditLearnerCharacter\PDQItemSelection.cshtml" />
     <Content Include="Views\ConsoleHome\CourseContract\RemainedLessonListModal.cshtml" />
     <Content Include="Views\ConsoleHome\CourseContract\RemainedLessonList.cshtml" />
+    <Content Include="Views\ConsoleHome\PromptAuthorization.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\PromptAuthorization.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\PassAuthorization.cshtml" />
+    <Content Include="Views\LearnerProfile\ProfileModal\FailedAuthorization.cshtml" />
+    <Content Include="Views\AchievementConsole\CoachAchievement.cshtml" />
+    <Content Include="Views\ConsoleHome\Index\Coach\Part_1\ProfessionInfo.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\CoachCurrentQuarterAchievement.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\ShowMonthlyCoachRevenueBarChart.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\MonthlyCoachRevenue.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\MonthlyCoachRevenueList.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\InquireMonthlyCoachRevenue.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\SelectChartModal.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\SelectCurveCondition.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\ShowMonthlyCoachRevenueLineChart.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\SelectChartCondition.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\ShowMonthlyCoachRevenueStackChart.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\QueryModalTemplate.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\SelectQueryCondition.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\MonthlyCoachLessonAttendanceList.cshtml" />
+    <Content Include="Views\AchievementConsole\Module\SelectLessonCurve.cshtml" />
+    <Content Include="Views\ConsoleEvent\EventModal\BookingRemoteTrialLesson.cshtml" />
+    <Content Include="Views\PaymentConsole\Module\UnpaidSessionList2021.cshtml" />
+    <Content Include="Views\PaymentConsole\Module\EditPaymentForSession.cshtml" />
+    <Content Include="Views\PaymentConsole\EditPaymentForSession.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

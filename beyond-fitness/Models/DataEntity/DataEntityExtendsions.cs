@@ -226,7 +226,7 @@ namespace WebHome.Models.DataEntity
             if (name == null || name.Length < 2)
                 return name;
             StringBuilder sb = new StringBuilder(name);
-            sb[1] = '○';
+            sb[1] = 'Ｏ';
             return sb.ToString();
         }
 
@@ -359,9 +359,33 @@ namespace WebHome.Models.DataEntity
 
         public static String LessonTypeStatus(this LessonTime item)
         {
-            return item.RegisterLesson.RegisterLessonEnterprise == null
-                    ? item.RegisterLesson.LessonPriceType.Status.LessonTypeStatus()
-                    : item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus() + "(企)";
+            if (item.RegisterLesson.RegisterLessonEnterprise == null)
+            {
+                switch (item.RegisterLesson.LessonPriceType.Status)
+                {
+                    case (int)Naming.LessonPriceStatus.自主訓練:
+                        return "P.I";
+                    case (int)Naming.LessonPriceStatus.一般課程:
+                    case (int)Naming.LessonPriceStatus.團體學員課程:
+                    case (int)Naming.LessonPriceStatus.已刪除:
+                        return "P.T";
+                    case (int)Naming.LessonPriceStatus.在家訓練:
+                        return "S.T";
+                    case (int)Naming.LessonPriceStatus.教練PI:
+                        return "Coach P.I";
+                    case (int)Naming.LessonPriceStatus.體驗課程:
+                        return "T.S";
+                    case (int)Naming.LessonPriceStatus.點數兌換課程:
+                        return item.RegisterLesson.LessonPriceType.SimpleDescription;
+
+                    default:
+                        return item.RegisterLesson.LessonPriceType.Description;
+                }
+            }
+            else
+            {
+                return item.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.EnterpriseLessonType.Status.LessonTypeStatus() + "(企)";
+            }
         }
 
         public static IQueryable<TuitionAchievement> FilterByEffective(this IQueryable<TuitionAchievement> items)
@@ -482,6 +506,19 @@ namespace WebHome.Models.DataEntity
                             ? (int?)item.CoachWorkplace.First().BranchID
                             : (int?)null;
         }
+
+        public static BranchStore CurrentWorkBranch(this ServingCoach item)
+        {
+            return item.CoachWorkplace.Count == 1
+                            ? item.CoachWorkplace.First().BranchStore
+                            : null;
+        }
+
+        public static int? SelectWorkBranchID(this ServingCoach item)
+        {
+            return item.CoachWorkplace.FirstOrDefault()?.BranchID;
+        }
+
     }
 
     public partial class UserProfile
@@ -503,4 +540,80 @@ namespace WebHome.Models.DataEntity
         public CourseContract Contract { get; set; }
         public decimal? TotalPaidAmount { get; set; }
     }
+
+    public partial class UserProfileExtension
+    {
+        public enum VipStatusDefinition
+        {
+            VVIP = 1,
+        }
+    }
+
+    public partial class MonthlyCoachRevenueIndicator
+    {
+        public decimal AttendanceCount => (ActualCompleteLessonCount ?? 0)
+                    + (ActualCompleteTSCount ?? 0)
+                    + (ActualCompletePICount ?? 0M) / 2M;
+    }
+
+    public partial class BranchStore
+    {
+        [Flags]
+        public enum StatusDefinition
+        {
+            CurrentDisabled = 1,
+            VirtualClassroom = 2,
+            GeographicLocation = 4,
+        }
+
+        public bool IsVirtualClassroom()
+        {
+            return (this.Status & (int)StatusDefinition.VirtualClassroom) == (int)StatusDefinition.VirtualClassroom;
+        }
+    }
+
+    public partial class ObjectiveLessonCatalog
+    {
+        public enum CatalogDefinition
+        {
+            OnLine = 1,
+            OnLineFeedback = 2,
+        }
+    }
+
+    public partial class Payment
+    {
+        public String PaymentFor => TransactionType == (int)Naming.PaymentTransactionType.自主訓練
+                    ? TuitionInstallment != null
+                        ? this.TuitionInstallment.IntuitionCharge.RegisterLesson.LessonPriceType.SimpleDescription
+                        : "T.S/P.I"
+                    : String.Concat(((Naming.PaymentTransactionType)this.TransactionType).ToString(),
+                        this.TransactionType == (int)Naming.PaymentTransactionType.運動商品
+                            || this.TransactionType == (int)Naming.PaymentTransactionType.食飲品
+                            || this.TransactionType == (int)Naming.PaymentTransactionType.教育訓練
+                        ? String.Join("/", this.PaymentTransaction.PaymentOrder.Select(p => p.MerchandiseWindow.ProductName))
+                        : null);
+    }
+
+    public partial class LessonPriceType
+    {
+        public String SimpleDescription => Description?.Substring(Description.IndexOf('】') + 1);
+    }
+
+    public partial class RegisterLesson
+    {
+        public bool IsPaid => IntuitionCharge.TuitionInstallment
+            .Any(t => t.Payment.VoidPayment == null || t.Payment.VoidPayment.Status != (int)Naming.CourseContractStatus.已生效);
+    }
+
+    public partial class LessonTime
+    {
+        public enum SelfTrainingDefinition
+        {
+            自主訓練 = 1,
+            在家訓練 = 2,
+            體驗課程 = 3,
+        }
+    }
+         
 }

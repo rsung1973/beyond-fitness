@@ -78,55 +78,61 @@
 
                         @if (_profile.IsOfficer() || _profile.IsManager() || _profile.IsViceManager() || _profile.IsAssistant())
                         {
-                            <div class="panel">
-                                <div class="panel-heading col-amber" role="tab" id="headingListPriceDiscount">
-                                    <h4 class="panel-title material-icons"> <a role="button" data-toggle="collapse" data-parent="#accordionDetail_listprice" href="#collapseListPriceDiscount" aria-expanded="true" aria-controls="collapseListPriceDiscount"> <i class="material-icons">subject</i> 舊生續約價格 </a> </h4>
-                                </div>
-                                <div id="collapseListPriceDiscount" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListPriceDiscount">
-                                    <div class="panel-body no-padding">
-                                        <ul class="mb_list">
-                                            @foreach (var item in _discountItems)
-                                            {
-                                                <li onclick="commitPrice(@(item.PriceID),'@($"{item.ListPrice:##,###,###,###}")元 / @(item.PriceTypeBundle())(舊生續約)',event);">
-                                                    <div class="list_tb tb2">
-                                                        <div class="list_tr hand">
-                                                            <div class="list_td">
-                                                                @(item.PriceTypeBundle())
+                            if (_discountItems.Any())
+                            {
+                                <div class="panel">
+                                    <div class="panel-heading col-amber" role="tab" id="headingListPriceDiscount">
+                                        <h4 class="panel-title material-icons"> <a role="button" data-toggle="collapse" data-parent="#accordionDetail_listprice" href="#collapseListPriceDiscount" aria-expanded="true" aria-controls="collapseListPriceDiscount"> <i class="material-icons">subject</i> 舊生續約價格 </a> </h4>
+                                    </div>
+                                    <div id="collapseListPriceDiscount" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListPriceDiscount">
+                                        <div class="panel-body no-padding">
+                                            <ul class="mb_list">
+                                                @foreach (var item in _discountItems)
+                                                {
+                                                    <li onclick="commitPrice(@(item.PriceID),'@($"{item.ListPrice:##,###,###,###}")元 / @(item.PriceTypeBundle())(舊生續約)',event);">
+                                                        <div class="list_tb tb2">
+                                                            <div class="list_tr hand">
+                                                                <div class="list_td">
+                                                                    @(item.PriceTypeBundle())
+                                                                </div>
+                                                                <div class="list_td rt">@(String.Format("{0,5:##,###,###,###}", item.ListPrice))</div>
                                                             </div>
-                                                            <div class="list_td rt">@(String.Format("{0,5:##,###,###,###}", item.ListPrice))</div>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            }
+                                                    </li>
+                                                }
 
-                                        </ul>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel">
-                                <div class="panel-heading col-pink" role="tab" id="headingSpecialPrice">
-                                    <h4 class="panel-title material-icons"> <a role="button" data-toggle="collapse" data-parent="#accordionDetail_ListPrice" href="#collapseSpecialPrice" aria-expanded="true" aria-controls="collapseSpecialPrice"> <i class="material-icons">subject</i> 特別專案價格 </a> </h4>
-                                </div>
-                                <div id="collapseSpecialPrice" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSpecialPrice">
-                                    <div class="panel-body no-padding">
-                                        <ul class="mb_list xl-pink">
-                                            @foreach (var item in _specialItems)
-                                            {
-                                                <li onclick="commitPrice(@(item.PriceID),'@($"{item.ListPrice:##,###,###,###}")元 / @(item.PriceTypeBundle())',event);">
-                                                    <div class="list_tb tb2">
-                                                        <div class="list_tr hand">
-                                                            <div class="list_td">
-                                                                @(item.PriceTypeBundle())
+                            }
+                            if (_specialItems.Any())
+                            {
+                                <div class="panel">
+                                    <div class="panel-heading col-pink" role="tab" id="headingSpecialPrice">
+                                        <h4 class="panel-title material-icons"> <a role="button" data-toggle="collapse" data-parent="#accordionDetail_ListPrice" href="#collapseSpecialPrice" aria-expanded="true" aria-controls="collapseSpecialPrice"> <i class="material-icons">subject</i> 特別專案價格 </a> </h4>
+                                    </div>
+                                    <div id="collapseSpecialPrice" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSpecialPrice">
+                                        <div class="panel-body no-padding">
+                                            <ul class="mb_list xl-pink">
+                                                @foreach (var item in _specialItems)
+                                                {
+                                                    <li onclick="commitPrice(@(item.PriceID),'@($"{item.ListPrice:##,###,###,###}")元 / @(item.PriceTypeBundle())',event);">
+                                                        <div class="list_tb tb2">
+                                                            <div class="list_tr hand">
+                                                                <div class="list_td">
+                                                                    @(item.PriceTypeBundle())
+                                                                </div>
+                                                                <div class="list_td rt">@(String.Format("{0,5:##,###,###,###}", item.ListPrice))</div>
                                                             </div>
-                                                            <div class="list_td rt">@(String.Format("{0,5:##,###,###,###}", item.ListPrice))</div>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
                     </div>
                 </div>

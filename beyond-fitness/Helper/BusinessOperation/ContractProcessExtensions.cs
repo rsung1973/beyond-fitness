@@ -40,7 +40,7 @@ namespace WebHome.Helper.BusinessOperation
                     //AgentID = profile.UID,  //lessonPrice.BranchStore.ManagerID.Value,
                     CourseContractExtension = new CourseContractExtension
                     {
-                        BranchID = lessonPrice.BranchID.Value,
+                        BranchID = lessonPrice.BranchStore.IsVirtualClassroom() ? profile.ServingCoach.WorkBranchID().Value : lessonPrice.BranchID.Value,
                         Version = (int?)viewModel.Version,
                     }
                 };
@@ -55,7 +55,7 @@ namespace WebHome.Helper.BusinessOperation
             }
             else
             {
-                item.SupervisorID = lessonPrice.BranchStore?.ManagerID;
+                item.SupervisorID = lessonPrice.BranchStore.IsVirtualClassroom() ? profile.ServingCoach.CurrentWorkBranch()?.ManagerID : lessonPrice.BranchStore?.ManagerID;
                 item.Status = (int)Naming.CourseContractStatus.待審核;
             }
 
@@ -80,6 +80,7 @@ namespace WebHome.Helper.BusinessOperation
             item.Renewal = viewModel.Renewal;
             item.CourseContractExtension.PaymentMethod = paymentMethod;
             item.CourseContractExtension.Version = (int?)viewModel.Version;
+            item.CourseContractExtension.SignOnline = viewModel.SignOnline;
 
             if (viewModel.InstallmentPlan == true)
             {
@@ -139,7 +140,7 @@ namespace WebHome.Helper.BusinessOperation
             lessonPrice = null;
             if (!viewModel.ContractType.HasValue)
             {
-                ModelState.AddModelError("ContractType", "請選澤合約類型");
+                ModelState.AddModelError("ContractType", "請選擇合約類型");
             }
             if (!viewModel.BranchID.HasValue)
             {
@@ -160,6 +161,7 @@ namespace WebHome.Helper.BusinessOperation
             {
                 lessonPrice = models.GetTable<LessonPriceType>().Where(l => l.PriceID == viewModel.PriceID).FirstOrDefault();
             }
+
             if (!viewModel.FitnessConsultant.HasValue)
             {
                 ModelState.AddModelError("FitnessConsultant", "請選擇合約負責體能顧問");
@@ -187,25 +189,41 @@ namespace WebHome.Helper.BusinessOperation
             {
                 ModelState.AddModelError("OwnerID", "請再次確認一次合約人數與合約類型是否相符");
             }
+           
         }
 
         public static CourseContract SaveCourseContract<TEntity>(this CourseContractViewModel viewModel, SampleController<TEntity> controller, out String alertMessage,bool checkPayment=false)
                 where TEntity : class, new()
         {
             alertMessage = null;
+            var Request = controller.Request;
             var ModelState = controller.ModelState;
             var ViewBag = controller.ViewBag;
             var HttpContext = controller.HttpContext;
             var models = controller.DataSource;
 
             ViewBag.ViewModel = viewModel;
-            var profile = HttpContext.GetUser();
+            var profile = HttpContext.GetUser().LoadInstance(models);
 
             viewModel.ValidateContractApplication(controller, out LessonPriceType lessonPrice);
 
-            if (lessonPrice != null && !lessonPrice.BranchStore.ManagerID.HasValue)
+            if (lessonPrice != null)
             {
-                ModelState.AddModelError("BranchID", "分店主管消失了！？");
+                if (lessonPrice.BranchStore.IsVirtualClassroom())
+                {
+                    if (profile.ServingCoach?.WorkBranchID() == null)
+                    {
+                        ModelState.AddModelError("BranchID", "無法確定簽約分店!!");
+                    }
+                    else if (viewModel.ContractType != 1)
+                    {
+                        ModelState.AddModelError("ContractType", "遠距只能是1對1體能顧問課程!!");
+                    }
+                }
+                else if (!lessonPrice.BranchStore.ManagerID.HasValue)
+                {
+                    ModelState.AddModelError("BranchID", "該分店未指定店長!!");
+                }
             }
 
             if (viewModel.InstallmentPlan == true)
@@ -237,6 +255,13 @@ namespace WebHome.Helper.BusinessOperation
                 return null;
             }
 
+            String storedPath = null;
+            if (Request.Files.Count > 0)
+            {
+                storedPath = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + Path.GetExtension(Request.Files[0].FileName));
+                Request.Files[0].SaveAs(storedPath);
+            }
+
             if (viewModel.KeyID != null)
             {
                 viewModel.ContractID = viewModel.DecryptKeyValue();
@@ -253,7 +278,7 @@ namespace WebHome.Helper.BusinessOperation
                         BranchID = lessonPrice.BranchID.Value,
                         Version = (int?)viewModel.Version,
                     },
-                    SupervisorID = lessonPrice.BranchStore?.ManagerID,
+                    SupervisorID = lessonPrice.BranchStore.IsVirtualClassroom() ? profile.ServingCoach.CurrentWorkBranch()?.ManagerID : lessonPrice.BranchStore?.ManagerID,
                 };
 
                 item.ExecuteContractStatus(profile, Naming.CourseContractStatus.草稿, null);
@@ -280,8 +305,16 @@ namespace WebHome.Helper.BusinessOperation
             item.Remark = viewModel.Remark;
             item.FitnessConsultant = viewModel.FitnessConsultant.Value;
             item.Renewal = viewModel.Renewal;
+            item.CourseContractExtension.SignOnline = viewModel.SignOnline;
             item.CourseContractExtension.PaymentMethod = paymentMethod;
             item.CourseContractExtension.Version = (int?)viewModel.Version;
+            if (storedPath != null)
+            {
+                item.CourseContractExtension.Attachment = new Attachment
+                {
+                    StoredPath = storedPath,
+                };
+            }
 
             if (viewModel.InstallmentPlan == true)
             {
@@ -318,13 +351,14 @@ namespace WebHome.Helper.BusinessOperation
                 where TEntity : class, new()
         {
             alertMessage = null;
+            var Request = controller.Request;
             var ModelState = controller.ModelState;
             var ViewBag = controller.ViewBag;
             var HttpContext = controller.HttpContext;
             var models = controller.DataSource;
 
             ViewBag.ViewModel = viewModel;
-            var profile = HttpContext.GetUser();
+            var profile = HttpContext.GetUser().LoadInstance(models);
 
             viewModel.ValidateContractApplication(controller, out LessonPriceType lessonPrice);
             if (!viewModel.Lessons.HasValue || viewModel.Lessons < 1)
@@ -332,9 +366,23 @@ namespace WebHome.Helper.BusinessOperation
                 ModelState.AddModelError("Lessons", "請輸入購買堂數");
             }
 
-            if (lessonPrice != null && !lessonPrice.BranchStore.ManagerID.HasValue)
+            if (lessonPrice != null)
             {
-                ModelState.AddModelError("BranchID", "該分店未指定店長!!");
+                if(lessonPrice.BranchStore.IsVirtualClassroom())
+                {
+                    if (profile.ServingCoach?.WorkBranchID() == null)
+                    {
+                        ModelState.AddModelError("BranchID", "無法確定簽約分店!!");
+                    }
+                    else if (viewModel.ContractType != 1)
+                    {
+                        ModelState.AddModelError("ContractType", "遠距只能是1對1體能顧問課程!!");
+                    }
+                }
+                else if (!lessonPrice.BranchStore.ManagerID.HasValue)
+                {
+                    ModelState.AddModelError("BranchID", "該分店未指定店長!!");
+                }
             }
 
             if (viewModel.InstallmentPlan == true)
@@ -380,9 +428,23 @@ namespace WebHome.Helper.BusinessOperation
                 }
             }
 
+            String storedPath = null;
+            if (Request.Files.Count > 0)
+            {
+                storedPath = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + Path.GetExtension(Request.Files[0].FileName));
+                Request.Files[0].SaveAs(storedPath);
+            }
+
             item = models.InitiateCourseContract(viewModel, profile, lessonPrice, paymentMethod: paymentMethod);
             DateTime payoffDue = item.ContractDate.Value.AddMonths(1).FirstDayOfMonth();
             item.PayoffDue = payoffDue.AddDays(-1);
+            if (storedPath != null)
+            {
+                item.CourseContractExtension.Attachment = new Attachment
+                {
+                    StoredPath = storedPath,
+                };
+            }
             models.SubmitChanges();
 
             if (item.InstallmentID.HasValue)
@@ -414,6 +476,13 @@ namespace WebHome.Helper.BusinessOperation
                     var c = models.InitiateCourseContract(viewModel, profile, lessonPrice, item.InstallmentID, paymentMethod);
                     c.PayoffDue = payoffDue.AddDays(-1);
                     //c.Remark = $"{c.Remark}帳款應付期限{payoffDue:yyyy/MM/dd}。";
+                    if (storedPath != null)
+                    {
+                        c.CourseContractExtension.Attachment = new Attachment
+                        {
+                            StoredPath = storedPath,
+                        };
+                    }
                     models.SubmitChanges();
 
                     payoffDue = payoffDue.AddMonths(1);
@@ -797,7 +866,7 @@ namespace WebHome.Helper.BusinessOperation
         }
 
 
-        public static CourseContract ConfirmContractSignature<TEntity>(this CourseContractViewModel viewModel, SampleController<TEntity> controller, out String alertMessage, out String pdfFile)
+        public static CourseContract ConfirmContractSignature<TEntity>(this CourseContractViewModel viewModel, SampleController<TEntity> controller, out String alertMessage, out String pdfFile,CourseContract item = null)
             where TEntity : class, new()
         {
             alertMessage = null;
@@ -810,93 +879,95 @@ namespace WebHome.Helper.BusinessOperation
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
-            if (viewModel.KeyID != null)
+            if (item == null)
             {
-                viewModel.ContractID = viewModel.DecryptKeyValue();
+                if (viewModel.KeyID != null)
+                {
+                    viewModel.ContractID = viewModel.DecryptKeyValue();
+                }
+
+                item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
             }
-            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
-            if (item != null)
-            {
-                var owner = item.CourseContractMember.Where(m => m.UID == item.OwnerID).First();
 
-                if (item.CourseContractType.ContractCode == "CFA")
-                {
-                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 3)
-                    {
-                        alertMessage = "未完成簽名!!";
-                        return null;
-                    }
-                }
-                else
-                {
-
-                    if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 2)
-                    {
-                        alertMessage = "未完成簽名!!";
-                        return null;
-                    }
-
-                    if (item.CourseContractType.IsGroup == true)
-                    {
-                        if (item.CourseContractMember.Any(m => m.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 2))
-                        {
-                            alertMessage = "未完成簽名!!";
-                            return null;
-                        }
-
-                        foreach (var m in item.CourseContractMember)
-                        {
-                            if (m.UserProfile.CurrentYearsOld() < 18 && owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Guardian") && s.Signature != null) < 2)
-                            {
-                                alertMessage = "家長/監護人未完成簽名!!";
-                                return null;
-                            }
-                        }
-                    }
-                }
-
-                if (viewModel.Extension != true || viewModel.Booking != true || viewModel.Cancel != true)
-                {
-                    alertMessage = "請勾選合約聲明!!";
-                    return null;
-                }
-
-                //if (!item.ExecuteContractStatus(profile, Naming.CourseContractStatus.待審核, Naming.CourseContractStatus.待簽名))
-                //{
-                //    alertMessage = "合約狀態錯誤，請重新檢查!!";
-                //    return null;
-                //}
-
-                item.EffectiveDate = DateTime.Now;
-                //item.ValidFrom = DateTime.Today;
-                //item.Expiration = DateTime.Today.AddMonths(18);
-
-                models.SubmitChanges();
-
-                item.MarkContractNo(models);
-
-                pdfFile = item.MakeContractEffective(models, profile);
-
-                //ThreadPool.QueueUserWorkItem(t =>
-                //{
-                //    try
-                //    {
-                //        item.CreateContractPDF();
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Logger.Error(ex);
-                //    }
-                //});
-
-                return item;
-
-            }
-            else
+            if (item == null)
             {
                 alertMessage = "合約資料錯誤!!";
                 return null;
             }
+
+            var owner = item.CourseContractMember.Where(m => m.UID == item.OwnerID).First();
+
+            if (item.CourseContractType.ContractCode == "CFA")
+            {
+                if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 3)
+                {
+                    alertMessage = "未完成簽名!!";
+                    return null;
+                }
+            }
+            else
+            {
+
+                if (owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 2)
+                {
+                    alertMessage = "未完成簽名!!";
+                    return null;
+                }
+
+                if (item.CourseContractType.IsGroup == true)
+                {
+                    if (item.CourseContractMember.Any(m => m.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 2))
+                    {
+                        alertMessage = "未完成簽名!!";
+                        return null;
+                    }
+
+                    foreach (var m in item.CourseContractMember)
+                    {
+                        if (m.UserProfile.CurrentYearsOld() < 18 && owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Guardian") && s.Signature != null) < 2)
+                        {
+                            alertMessage = "家長/監護人未完成簽名!!";
+                            return null;
+                        }
+                    }
+                }
+            }
+
+            if (viewModel.Extension != true || viewModel.Booking != true || viewModel.Cancel != true)
+            {
+                alertMessage = "請勾選合約聲明!!";
+                return null;
+            }
+
+            //if (!item.ExecuteContractStatus(profile, Naming.CourseContractStatus.待審核, Naming.CourseContractStatus.待簽名))
+            //{
+            //    alertMessage = "合約狀態錯誤，請重新檢查!!";
+            //    return null;
+            //}
+
+            item.EffectiveDate = DateTime.Now;
+            //item.ValidFrom = DateTime.Today;
+            //item.Expiration = DateTime.Today.AddMonths(18);
+
+            models.SubmitChanges();
+
+            item.MarkContractNo(models);
+
+            pdfFile = item.MakeContractEffective(models, profile);
+
+            //ThreadPool.QueueUserWorkItem(t =>
+            //{
+            //    try
+            //    {
+            //        item.CreateContractPDF();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Logger.Error(ex);
+            //    }
+            //});
+
+            return item;
         }
 
         public static CourseContract ConfirmContractServiceSignature<TEntity>(this CourseContractViewModel viewModel, SampleController<TEntity> controller, out String alertMessage, out String pdfFile)
@@ -944,14 +1015,14 @@ namespace WebHome.Helper.BusinessOperation
                     //{
                     //    if (contract.CourseContractMember.Any(m => m.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Signature") && s.Signature != null) < 1))
                     //    {
-                    //        return View("~/Views/Shared/JsAlert.ascx", model: "未完成簽名!!");
+                    //        return View("~/Views/Shared/JsAlert.cshtml", model: "未完成簽名!!");
                     //    }
 
                     //    foreach (var m in contract.CourseContractMember)
                     //    {
                     //        if (m.UserProfile.CurrentYearsOld() < 18 && owner.CourseContractSignature.Count(s => s.SignatureName.StartsWith("Guardian") && s.Signature != null) < 1)
                     //        {
-                    //            return View("~/Views/Shared/JsAlert.ascx", model: "家長/監護人未完成簽名!!");
+                    //            return View("~/Views/Shared/JsAlert.cshtml", model: "家長/監護人未完成簽名!!");
                     //        }
                     //    }
                     //}

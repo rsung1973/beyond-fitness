@@ -1071,6 +1071,12 @@ namespace Utility
             return String.IsNullOrEmpty(val) ? null : val;
         }
 
+        public static String GetEfficientString(this String source, String suffix)
+        {
+            String val = source != null ? source.Trim() : null;
+            return String.IsNullOrEmpty(val) ? null : $"{val}{suffix}";
+        }
+
         public static String GetEfficientString(this String source,int startIndex)
         {
             String val = source != null ? source.Trim() : null;
@@ -1350,6 +1356,19 @@ namespace Utility
             return JsonConvert.SerializeObject(model, CommonJsonSettings);
         }
 
+        public static String Mask(this String source,int start, int length, char mask)
+        {
+            return (new StringBuilder(source)).Mask(start, length, mask).ToString();
+        }
+
+        public static StringBuilder Mask(this StringBuilder source,int start,int length,char mask)
+        {
+            for (int i = start; i < start + length && i < source.Length; i++)
+            {
+                source[i] = mask;
+            }
+            return source;
+        }
 
     }
 

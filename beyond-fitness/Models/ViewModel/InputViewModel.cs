@@ -54,6 +54,7 @@ namespace WebHome.Models.ViewModel
         public bool? Extension { get; set; }
         public bool? Booking { get; set; }
         public bool? Cancel { get; set; }
+        public bool? Agree { get; set; }
         public String PriceName { get; set; }
         public int? InstallmentID { get; set; }
         public int? ManagerID { get; set; }
@@ -68,6 +69,8 @@ namespace WebHome.Models.ViewModel
         public String Pdf { get; set; }
         public Naming.CauseForEnding? CauseForEnding { get; set; }
         public int? MemberID { get; set; }
+        public bool? PartialEffectiive { get; set; }
+        public bool?SignOnline { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -115,6 +118,7 @@ namespace WebHome.Models.ViewModel
     {
         public int? UID { get; set; }
         public String Signature { get; set; }
+        public int? SignatureCount { get; set; }
     }
 
 
@@ -469,6 +473,17 @@ namespace WebHome.Models.ViewModel
         public String RiskPrediction { get; set; }
         public String Strategy { get; set; }
         public String Comment { get; set; }
+        public int? ChartType { get; set; }
+        public Naming.SessionTypeDefinition[] SessionType { get; set; }
+
+        public static readonly String[] __SessionName =
+        {
+            "",
+            "P.T",
+            "P.I",
+            "S.T",
+            "T.S",
+        };
     }
 
     public class LessonOverviewQueryViewModel : MonthlyIndicatorQueryViewModel

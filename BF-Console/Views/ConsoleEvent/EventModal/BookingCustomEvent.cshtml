@@ -141,8 +141,18 @@
                         $global.closeAllModal();
                         refreshEvents();
                         refetchCalendarEvents();
+                        Swal.fire(
+                            '幹得好!',
+                            data.message,
+                            'success'
+                        );
+                    } else {
+                        Swal.fire(
+                            'Oops...',
+                            data.message,
+                            'warning'
+                        );
                     }
-                    smartAlert(data.message);
                 } else {
                     $(data).appendTo('body').remove();
                 }

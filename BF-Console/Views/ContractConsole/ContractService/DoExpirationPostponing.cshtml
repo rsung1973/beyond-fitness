@@ -51,7 +51,7 @@
             </script>
         </div>
         <div class="col-12">
-            @{
+            @*@{
                 ViewBag.DropifyExtension = "gif jpg png pdf";
             }
             <script>
@@ -67,7 +67,7 @@
                         'imageFormat': 'Ooops, 上傳檔案是PDF或圖檔嗎？！ ({{ value }} only).'
                     };
                 });
-            </script>
+            </script>*@
             <form enctype="multipart/form-data" method="post">
                 @{
                     Html.RenderPartial("~/Views/ConsoleHome/Shared/DropifyFileUpload.cshtml");
@@ -118,7 +118,11 @@
             success: function (data) {
                 hideLoading();
                 if ($.isPlainObject(data)) {
-                    swal(data.message);
+                    Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'warning'
+                    )
                 }
                 else {
                     $(data).appendTo($('body'));
@@ -128,15 +132,6 @@
                 hideLoading();
             }
         }).submit();
-        @*$.post('@Html.Raw(Url.Action("CommitContractService", "ContractConsole",new { KeyID = _model.ContractID.EncryptKey() }))', viewModel, function (data) {
-            hideLoading();
-            if ($.isPlainObject(data)) {
-                swal(data.message);
-            }
-            else {
-                $(data).appendTo($('body'));
-            }
-        });*@
     }//
 
 </script>

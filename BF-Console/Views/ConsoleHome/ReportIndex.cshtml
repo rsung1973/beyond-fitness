@@ -31,15 +31,6 @@
     <link href="css/smartcalendar-2.css" rel="stylesheet" />
 }
 
-<script>
-        $(function () {
-            $global.viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
-
-            for (var i = 0; i < $global.onReady.length; i++) {
-                $global.onReady[i]();
-            }
-        });
-</script>
 <!-- Main Content -->
 <section class="content file_manager">
     @{ ViewBag.BlockHeader = "我的下載";
@@ -94,8 +85,6 @@
 </section>
 
 @section TailPageJavaScriptInclude {
-    <!-- SweetAlert Plugin Js -->
-    <script src="plugins/sweetalert/sweetalert.min.js"></script>
     <!-- Bootstrap datetimepicker Plugin Js -->
     <script src="plugins/smartcalendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="plugins/smartcalendar/js/locales-datetimepicker/bootstrap-datetimepicker.zh-TW.js"></script>

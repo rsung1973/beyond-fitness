@@ -1,16 +1,26 @@
-
-
 @using System.IO
 @using System.Linq.Expressions
 
 @using WebHome.Helper
-@using WebHome.Models.Locale
 @using WebHome.Models.Locale
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Models.Timeline
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    RegisterViewModel _viewModel;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+    _viewModel = ViewBag.ViewModel as RegisterViewModel;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,18 +36,18 @@
     <link href="css/livIconsevo/LivIconsEvo.css" rel="stylesheet" type="text/css">
     <!-- scrollup-master  -->
     <link href="css/scrollup-master/themes/image.css?1.1" rel="stylesheet" id="scrollUpTheme">
-    
+
     <!--ionicons -->
     <link href='css/ionicons/ionicons.min.css' rel="stylesheet" type="text/css" media="screen" />
     <!-- STYLE 要放最下面  -->
-    <link href="css/style.css?1.2" type="text/css" rel="stylesheet" media="screen,projection" />
-              <link rel="icon" href="favicons/favicon_96x96.png">
-      <!-- Specifying a Webpage Icon for Web Clip -->
-      <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
-      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
-      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
-      <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">       
+    <link href="css/style.css?1.3" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link rel="icon" href="favicons/favicon_96x96.png">
+    <!-- Specifying a Webpage Icon for Web Clip -->
+    <link rel="apple-touch-icon-precomposed" href="favicons/favicon_57x57.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicons/favicon_72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicons/favicon_114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicons/favicon_144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="favicons/favicon_180x180.png">
 
     <script src="js/libs/jquery-2.2.4.min.js"></script>
     <script>
@@ -70,27 +80,29 @@
             <!-- main -->
             <div class="main main-fixed">
                 <div class="container">
-                    @{ LessonTime item = (LessonTime)ViewBag.DataItem;}
- @if (item == null)
-                        {
-                            item = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
-                                .TotalLessons(models).Where(l => l.ClassTime >= DateTime.Today && l.ClassTime < DateTime.Today.AddDays(1)).FirstOrDefault();
-                        }
-
-                        @if (item != null)
-                        {
-                    <!--品牌LOGO -->
-                    <!-- // End of 品牌LOGO -->
-                    @{ Html.RenderPartial("~/Views/CornerKick/Module/LessonContent.ascx", item);}
-
-                    <!-- //End of 登入 - TAB -->
+                    @{
+                        LessonTime item = (LessonTime)ViewBag.DataItem;
                     }
-                        else
-                        {
-                    <img class="responsive-img nodata" src="images/nodata.png" />
-                    <p class="collection center">
-                        <span class="gray-t16">Ooooooops！今日沒有上課耶！</span>
-                    </p>
+                    @if (item == null)
+                    {
+                        item = models.GetTable<RegisterLesson>().Where(r => r.UID == _model.UID)
+                            .TotalLessons(models).Where(l => l.ClassTime >= DateTime.Today && l.ClassTime < DateTime.Today.AddDays(1)).FirstOrDefault();
+                    }
+
+                    @if (item != null)
+                    {
+                        <!--品牌LOGO -->
+                        <!-- // End of 品牌LOGO -->
+                        Html.RenderPartial("~/Views/CornerKick/Module/LessonContent.cshtml", item);
+
+                        <!-- //End of 登入 - TAB -->
+                    }
+                    else
+                    {
+                        <img class="responsive-img nodata" src="images/nodata.png" />
+                        <p class="collection center">
+                            <span class="gray-t16">Ooooooops！今日沒有上課耶！</span>
+                        </p>
                     }
                 </div>
             </div>
@@ -126,7 +138,7 @@
         $(function () {
             $.scrollUp({
                 animation: 'fade',
-                
+
                 scrollImg: {
                     active: true,
                     type: 'background',
@@ -143,8 +155,8 @@
             });
 
         });
-        
-        
+
+
 
     </script>
 </body>
@@ -153,31 +165,15 @@
 
 @{ Html.RenderPartial("~/Views/CornerKick/Module/ModeGirls.cshtml", _model);}
 
-@{ Html.RenderPartial("~/Views/Shared/InitBarChartNoRegister.ascx");}
+@{ Html.RenderPartial("~/Views/Shared/InitBarChartNoRegister.cshtml");}
 
 @if (_viewModel?.LineID != null)
-    {
-<script>
-    gtag('event', '課表內容', {
-        'event_category': '卡片點擊',
-        'event_label': 'LINE圖文選單'
-    });
-</script>
+{
+    <script>
+        gtag('event', '課表內容', {
+            'event_category': '卡片點擊',
+            'event_label': 'LINE圖文選單'
+        });
+    </script>
 }
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    UserProfile _model;
-    RegisterViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-        _viewModel = ViewBag.ViewModel as RegisterViewModel;
-    }
-
-</script>
