@@ -97,9 +97,12 @@
                             <ul>
                                 @{
                                     var lessonItems = lessons
-                                            .Join(models.GetTable<ObjectiveLessonPrice>()
-                                                .Where(c => c.CatalogID == (int)ObjectiveLessonCatalog.CatalogDefinition.OnLineFeedback),
-                                                r => r.ClassLevel, c => c.PriceID, (r, c) => r);
+                                        .Where(r => r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.點數兌換課程);
+
+                                    //var lessonItems = lessons
+                                    //        .Join(models.GetTable<ObjectiveLessonPrice>()
+                                    //            .Where(c => c.CatalogID == (int)ObjectiveLessonCatalog.CatalogDefinition.OnLineFeedback),
+                                    //            r => r.ClassLevel, c => c.PriceID, (r, c) => r);
 
                                     foreach (var item in lessonItems)
                                     {
@@ -109,7 +112,7 @@
                                         }
                                         <li>
                                             <i class="livicon-evo prefix" data-options="name: gift.svg; size: 30px; style: original; autoPlay:true"></i>
-                                            <a>疫情回饋課程 - @(item.RemainedLessonCount())/@(item.Lessons)</a>
+                                            <a>@(item.LessonPriceType.SimpleDescription) - @(item.RemainedLessonCount())/@(item.Lessons)</a>
                                             <div class="desc">
                                                 @{
                                                     if (item.GroupingMemberCount > 1)
@@ -241,17 +244,31 @@
     </script>
 </body>
 </html>
-@{ 
+@{
     Html.RenderPartial("~/Views/Common/JQueryHelper.cshtml");
     Html.RenderPartial("~/Views/CornerKick/Module/ModeGirls.cshtml", profile);
-    }
+}
 
 @helper WriteContractContent(CourseContract item)
 {
-    <span><i class="material-icons">person_pin_circle</i> 上課地點：@(item.CourseContractExtension.BranchStore.BranchName)</span>
+    <span>
+        <i class="material-icons">person_pin_circle</i>
+        @if (item.LessonPriceType.BranchStore.IsVirtualClassroom())
+        {
+            <text>上課場所/簽約分店：遠距/@(item.CourseContractExtension.BranchStore.BranchName)</text>
+        }
+        else
+        {
+            <text>上課場所：@(item.CourseContractExtension.BranchStore.BranchName)</text>
+        }
+    </span>
     <span><i class="material-icons">calendar_today</i> 合約迄日：@($"{item.Expiration:yyyy/MM/dd}")</span>
     if (item.CourseContractMember.Count > 1)
     {
         <span><i class="material-icons">people</i> 合約成員：@(String.Join("、", item.CourseContractMember.Select(m => m.UserProfile.RealName)))</span>
+    }
+    if (item.RevisionList.Any(r => r.Reason == "展延"))
+    {
+        <span class="tag-blue badge">已展延</span>
     }
 }

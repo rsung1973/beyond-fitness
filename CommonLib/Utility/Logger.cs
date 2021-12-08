@@ -20,10 +20,6 @@ namespace Utility
             _instance = CommonLib.Helper.PlugInHelper.GetLogger();
         }
 
-        public static void Shutdown()
-        {
-            _instance.Shutdown();
-        }
 
         public static void Error(object obj)
         {
@@ -61,14 +57,7 @@ namespace Utility
             }
         }
 
-        public static void WriteLog()
-        {
-            _instance.WriteLog();
-        }
+        public static ILogger Instance { get => _instance; }
 
-        public static void SetStream(Stream stream)
-        {
-            _instance.SetStream(stream);
-        }
     }
 }

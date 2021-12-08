@@ -86,6 +86,8 @@ namespace WebHome.Helper
                         RenewContractCount = r.MonthlyRevenueGoal.RenewContractCount,
                         NewContractSubtotal = r.MonthlyRevenueGoal.NewContractSubtotal,
                         RenewContractSubtotal = r.MonthlyRevenueGoal.RenewContractSubtotal,
+                        InstallmentCount = r.MonthlyRevenueGoal.InstallmentCount,
+                        InstallmentSubtotal = r.MonthlyRevenueGoal.InstallmentSubtotal,
                     };
                 }
             }
@@ -134,6 +136,8 @@ namespace WebHome.Helper
                             RenewContractCount = branchGoal.RenewContractCount,
                             NewContractSubtotal = branchGoal.NewContractSubtotal,
                             RenewContractSubtotal = branchGoal.RenewContractSubtotal,
+                            InstallmentCount = branchGoal.InstallmentCount,
+                            InstallmentSubtotal = branchGoal.InstallmentSubtotal,
                         };
                     }
                 }
@@ -293,6 +297,8 @@ namespace WebHome.Helper
                 EffectiveDateTo = item.EndExclusiveDate,
             };
             IQueryable<CourseContract> contractItems = contractQuery.InquireContract(models);
+            IQueryable<CourseContract> installmentItems = contractItems.Where(c => c.Installment.HasValue);
+            IQueryable<CourseContract> nonInstallmentItems = contractItems.Where(c => !c.Installment.HasValue);
 
             int lessonAchievement, tuitionAchievement;
 
@@ -301,6 +307,32 @@ namespace WebHome.Helper
                 lessonAchievement = tuitionItems.Where(t => SessionScopeForAchievement.Contains(t.PriceStatus)).Sum(t => t.ListPrice * t.GroupingMemberCount * t.PercentageOfDiscount / 100) ?? 0;
                 lessonAchievement += (tuitionItems.Where(t => SessionScopeForAchievement.Contains(t.ELStatus)).Sum(l => l.EnterpriseListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100) ?? 0);
                 tuitionAchievement = achievementItems.Sum(a => a.ShareAmount) ?? 0;
+
+                IQueryable<TuitionAchievement> newContractAchievementItems = paymentItems
+                    .Join(models.GetTable<ContractPayment>()
+                            .Join(models.GetTable<CourseContract>()
+                                .Where(t => !t.Installment.HasValue)
+                                .Where(t => !t.Renewal.HasValue || t.Renewal != true),
+                                c => c.ContractID, t => t.ContractID, (c, t) => c),
+                        p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                    .GetPaymentAchievement(models);
+
+                IQueryable<TuitionAchievement> renewContractAchievementItems = paymentItems
+                    .Join(models.GetTable<ContractPayment>()
+                            .Join(models.GetTable<CourseContract>()
+                                .Where(t => !t.Installment.HasValue)
+                                .Where(t => t.Renewal == true),
+                                c => c.ContractID, t => t.ContractID, (c, t) => c),
+                        p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                    .GetPaymentAchievement(models);
+
+                IQueryable<TuitionAchievement> installmentContractAchievementItems = paymentItems
+                    .Join(models.GetTable<ContractPayment>()
+                            .Join(models.GetTable<CourseContract>()
+                                .Where(t => t.Installment.HasValue),
+                                c => c.ContractID, t => t.ContractID, (c, t) => c),
+                        p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                    .GetPaymentAchievement(models);
 
                 var revenueItem = item.MonthlyRevenueIndicator.Where(r => r.MonthlyRevenueGoal != null)
                         .Select(r => r.MonthlyRevenueGoal)
@@ -311,15 +343,21 @@ namespace WebHome.Helper
                                     + tuitionItems.Where(t => SessionScopeForComleteLessonCount.Contains(t.ELStatus)).Count();
                     revenueItem.ActualLessonAchievement = lessonAchievement;
                     revenueItem.ActualSharedAchievement = tuitionAchievement;
-                    revenueItem.RenewContractCount = contractItems.Where(c => c.Renewal == true).Count();
-                    revenueItem.NewContractCount = contractItems.Count() - revenueItem.RenewContractCount;
-                    revenueItem.RenewContractSubtotal = contractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
-                    revenueItem.NewContractSubtotal = contractItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
+                    revenueItem.RenewContractCount = nonInstallmentItems.Where(c => c.Renewal == true).Count();
+                    revenueItem.NewContractCount = nonInstallmentItems.Count() - revenueItem.RenewContractCount;
+                    revenueItem.RenewContractSubtotal = nonInstallmentItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
+                    revenueItem.NewContractSubtotal = nonInstallmentItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
+                    revenueItem.InstallmentCount = installmentItems.Count();
+                    revenueItem.InstallmentSubtotal = installmentItems.Sum(c => c.TotalCost) ?? 0;
 
                     revenueItem.ActualCompleteTSCount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程).Count()
                                     + tuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.體驗課程).Count();
                     revenueItem.ActualCompletePICount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.自主訓練).Count()
                                     + tuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.自主訓練).Count();
+
+                    revenueItem.NewContractAchievement = newContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                    revenueItem.RenewContractAchievement = renewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                    revenueItem.InstallmentAchievement = installmentContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
 
                     models.SubmitChanges();
                 }
@@ -332,6 +370,37 @@ namespace WebHome.Helper
                     var branchTuitionItems = tuitionItems.Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
                     var branchAchievementItems = achievementItems.Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
                     var branchContractItems = contractItems.Where(c => c.CourseContractExtension.BranchID == branchIndicator.BranchID);
+                    var branchInstallmentItems = installmentItems.Where(c => c.CourseContractExtension.BranchID == branchIndicator.BranchID);
+                    var branchNonInstallmentItems = nonInstallmentItems.Where(c => c.CourseContractExtension.BranchID == branchIndicator.BranchID);
+
+                    IQueryable<TuitionAchievement> branchNewContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => !t.Installment.HasValue)
+                                    .Where(t => !t.Renewal.HasValue || t.Renewal != true),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
+
+                    IQueryable<TuitionAchievement> branchRenewContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => !t.Installment.HasValue)
+                                    .Where(t => t.Renewal == true),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
+
+                    IQueryable<TuitionAchievement> branchInstallmentContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => t.Installment.HasValue),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
 
                     var revenueItem = branchIndicator.MonthlyBranchRevenueIndicator
                             .Where(v => v.MonthlyBranchRevenueGoal != null)
@@ -346,14 +415,22 @@ namespace WebHome.Helper
                                         + branchTuitionItems.Where(t => SessionScopeForComleteLessonCount.Contains(t.ELStatus)).Count();
                         revenueItem.ActualLessonAchievement = lessonAchievement;
                         revenueItem.ActualSharedAchievement = tuitionAchievement;
-                        revenueItem.RenewContractCount = branchContractItems.Where(c => c.Renewal == true).Count();
-                        revenueItem.NewContractCount = branchContractItems.Count() - revenueItem.RenewContractCount;
-                        revenueItem.RenewContractSubtotal = branchContractItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
-                        revenueItem.NewContractSubtotal = branchContractItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
+                        revenueItem.RenewContractCount = branchNonInstallmentItems.Where(c => c.Renewal == true).Count();
+                        revenueItem.NewContractCount = branchNonInstallmentItems.Count() - revenueItem.RenewContractCount;
+                        revenueItem.RenewContractSubtotal = branchNonInstallmentItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
+                        revenueItem.NewContractSubtotal = branchNonInstallmentItems.Sum(c => c.TotalCost) - revenueItem.RenewContractSubtotal;
+                        revenueItem.InstallmentCount = branchInstallmentItems.Count();
+                        revenueItem.InstallmentSubtotal = branchInstallmentItems.Sum(c => c.TotalCost) ?? 0;
+
                         revenueItem.ActualCompleteTSCount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程).Count()
                                         + branchTuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.體驗課程).Count();
                         revenueItem.ActualCompletePICount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.自主訓練).Count()
                                         + branchTuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.自主訓練).Count();
+
+                        revenueItem.NewContractAchievement = branchNewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                        revenueItem.RenewContractAchievement = branchRenewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                        revenueItem.InstallmentAchievement = branchInstallmentContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+
 
                         models.SubmitChanges();
                     }
@@ -367,7 +444,40 @@ namespace WebHome.Helper
                     var coachTuitionItems = tuitionItems.Where(t => t.AttendingCoach == coachIndicator.CoachID);
                     var coachAchievementItems = achievementItems.Where(t => t.CoachID == coachIndicator.CoachID);
                     var coachContractItems = contractItems.Where(c => c.FitnessConsultant == coachIndicator.CoachID);
+                    IQueryable<CourseContract> coachInstallmentItems = coachContractItems.Where(c => c.Installment.HasValue);
+                    IQueryable<CourseContract> coachNonInstallmentItems = coachContractItems.Where(c => !c.Installment.HasValue);
+
                     var coachSTItems = STItems.Where(t => t.AttendingCoach == coachIndicator.CoachID);
+
+                    IQueryable<TuitionAchievement> coachNewContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => !t.Installment.HasValue)
+                                    .Where(t => !t.Renewal.HasValue || t.Renewal != true),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachID == coachIndicator.CoachID);
+
+                    IQueryable<TuitionAchievement> coachRenewContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => !t.Installment.HasValue)
+                                    .Where(t => t.Renewal == true),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachID == coachIndicator.CoachID);
+
+                    IQueryable<TuitionAchievement> coachInstallmentContractAchievementItems = paymentItems
+                        .Join(models.GetTable<ContractPayment>()
+                                .Join(models.GetTable<CourseContract>()
+                                    .Where(t => t.Installment.HasValue),
+                                    c => c.ContractID, t => t.ContractID, (c, t) => c),
+                            p => p.PaymentID, c => c.PaymentID, (p, c) => p)
+                        .GetPaymentAchievement(models)
+                        .Where(t => t.CoachID == coachIndicator.CoachID);
+
 
                     lessonAchievement = coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.PriceStatus)).Sum(t => t.ListPrice * t.GroupingMemberCount * t.PercentageOfDiscount / 100) ?? 0;
                     lessonAchievement += (coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.ELStatus)).Sum(l => l.EnterpriseListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100) ?? 0);
@@ -376,12 +486,21 @@ namespace WebHome.Helper
                     coachIndicator.ActualCompleteLessonCount = coachTuitionItems.Where(t => SessionScopeForComleteLessonCount.Contains(t.PriceStatus)).Count()
                                     + coachTuitionItems.Where(t => SessionScopeForComleteLessonCount.Contains(t.ELStatus)).Count();
                     coachIndicator.ActualLessonAchievement = lessonAchievement;
-                    coachIndicator.ActualRenewContractAchievement = coachContractItems.Where(c => c.Renewal == true).Count();
-                    coachIndicator.ActualNewContractAchievement = coachContractItems.Count() - coachIndicator.ActualRenewContractAchievement;
+                    coachIndicator.ActualRenewContractAchievement = coachRenewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                    coachIndicator.ActualNewContractAchievement = coachNewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
                     coachIndicator.ActualCompleteTSCount = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程).Count()
                                     + coachTuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.體驗課程).Count();
                     coachIndicator.ActualCompletePICount = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.自主訓練).Count()
                                     + coachTuitionItems.Where(t => t.ELStatus == (int)Naming.LessonPriceStatus.自主訓練).Count();
+
+                    coachIndicator.InstallmentAchievement = coachInstallmentContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
+                    coachIndicator.RenewContractCount = coachNonInstallmentItems.Where(t => t.Renewal == true).Count();
+                    coachIndicator.NewContractCount = coachNonInstallmentItems.Count() - coachIndicator.RenewContractCount;
+                    coachIndicator.RenewContractSubtotal = coachNonInstallmentItems.Where(c => c.Renewal == true).Sum(c => c.TotalCost) ?? 0;
+                    coachIndicator.NewContractSubtotal = coachNonInstallmentItems.Sum(c => c.TotalCost) - coachIndicator.RenewContractSubtotal;
+                    coachIndicator.InstallmentCount = coachInstallmentItems.Count();
+                    coachIndicator.InstallmentSubtotal = coachInstallmentItems.Sum(c => c.TotalCost) ?? 0;
+
 
                     if (calcAverage == true)
                     {

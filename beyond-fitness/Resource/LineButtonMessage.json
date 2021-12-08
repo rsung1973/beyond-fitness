@@ -1,0 +1,30 @@
+﻿{
+  "to": "U9e2165efa5c0c5176f7447220a487501",
+  "messages": [
+    {
+      "type": "template",
+      "altText": "合約待簽名",
+      "template": {
+        "type": "buttons",
+        "thumbnailImageUrl": "https://www.worthitstudio.idv.tw/img/contract.png",
+        "imageAspectRatio": "rectangle",
+        "imageSize": "cover",
+        "imageBackgroundColor": "#FFFFFF",
+        "title": "您有一張合約等待您簽名",
+        "text": "您有一張合約1對1體能顧問課程(60分鐘)，等待您確認合約內容喔！",
+        "defaultAction": {
+          "type": "uri",
+          "label": "👉點這邊，立即簽署合約",
+          "uri": "http://localhost:7180/CornerKick/Index"
+        },
+        "actions": [
+          {
+            "type": "uri",
+            "label": "👉點這邊，立即簽署合約",
+            "uri": "http://localhost:7180/CornerKick/Index"
+          }
+        ]
+      }
+    }
+  ]
+}

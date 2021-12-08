@@ -6,6 +6,7 @@ using System.Text;
 using CommonLib.Logger.Properties;
 using System.Collections.Generic;
 using CommonLib.PlugInAdapter;
+using CommonLib.Utility;
 
 namespace CommonLib.Logger
 {
@@ -15,18 +16,13 @@ namespace CommonLib.Logger
     public class Logger : IDisposable , ILogger
     {
 
-        private Queue _errQ;
-        private Queue _infoQ;
-        private Queue _dbgQ;
-        private Queue _warnQ;
-
-        private Dictionary<String,Queue> _hashQ;
-
         private bool _disposed = false;
-        private Thread _thread;
         private string _path;
-        private ulong _fileID = 0;
-        private Stream _stream;
+        private long _fileID = 0;
+
+        private LogWriter _err, _nfo, _dbg, _wrn, _tra;
+        private TextWriter _output;
+
 
         public Logger()
         {
@@ -40,54 +36,74 @@ namespace CommonLib.Logger
 
             if (!Directory.Exists(_path))
                 Directory.CreateDirectory(_path);
-            _errQ = new Queue();
-            _infoQ = new Queue();
-            _dbgQ = new Queue();
-            _warnQ = new Queue();
-            _hashQ = new Dictionary<string, Queue>();
-            _hashQ.Add("err", _errQ);
-            _hashQ.Add("nfo", _infoQ);
-            _hashQ.Add("dbg", _dbgQ);
-            _hashQ.Add("wrn", _warnQ);
 
-            _thread = new Thread(new ThreadStart(this.run));
-            _thread.IsBackground = true;
-            _thread.Start();
+            _dbg = new LogWriter(this, "SystemLog.dbg");
+            _err = new LogWriter(this, "SystemLog.err");
+            _nfo = new LogWriter(this, "SystemLog.nfo");
+            _wrn = new LogWriter(this, "SystemLog.wrn");
+            _tra = new LogWriter(this, "SystemLog.trace");
         }
 
-        public void Shutdown()
+        public TextWriter OutputWriter
         {
-            Thread target = _thread;
-            _thread = null;
-            if (Thread.CurrentThread != target)
+            get => _output;
+            set
             {
-                target.Interrupt();
-                target.Join();
+                _output = value;
+                if (value != null)
+                {
+                    _dbg.AppendantWriter.Add(value);
+                    _err.AppendantWriter.Add(value);
+                    _nfo.AppendantWriter.Add(value);
+                    _wrn.AppendantWriter.Add(value);
+                }
             }
         }
 
         public void Error(object obj)
         {
-            _errQ.Enqueue(obj);
-            interrupt();
+            String log = GetLogContent(obj, "err");
+            if (log != null)
+            {
+                _err.WriteLog(log);
+            }
         }
 
         public void Info(object obj)
         {
-            _infoQ.Enqueue(obj);
-            interrupt();
+            String log = GetLogContent(obj, "nfo");
+            if (log != null)
+            {
+                _nfo.WriteLog(log);
+            }
         }
 
 
         public void Warn(object obj)
         {
-            _warnQ.Enqueue(obj);
-            interrupt();
+            String log = GetLogContent(obj, "wrn");
+            if (log != null)
+            {
+                _wrn.WriteLog(log);
+            }
         }
+
         public void Debug(object obj)
         {
-            _dbgQ.Enqueue(obj);
-            interrupt();
+            String log = GetLogContent(obj, "dbg");
+            if (log != null)
+            {
+                _dbg.WriteLog(log);
+            }
+        }
+
+        public void Trace(object obj)
+        {
+            String log = GetLogContent(obj, "err");
+            if (log != null)
+            {
+                _tra.WriteLog(log);
+            }
         }
 
         public string LogPath
@@ -97,104 +113,48 @@ namespace CommonLib.Logger
                 return _path;
             }
         }
-
+        
         public string LogDailyPath
         {
             get
             {
-                string filePath = Path.Combine(_path, String.Format("{0:yyyy}{1}{0:MM}{1}{0:dd}", DateTime.Today, Path.DirectorySeparatorChar));
+                string filePath = _path.GetDateStylePath();
                 if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
                 return filePath;
             }
         }
 
-        private void run()
+        private String GetLogContent(object obj, String qName)
         {
+            if (obj == null)
+                return null;
 
-            while (_thread == Thread.CurrentThread)
+            String result = null;
+            if (obj is ILogObject)
             {
-                try
+                string filePath;
+                if (obj is ILogObject2)
                 {
-                    writeLog();
-
-                    Thread.Sleep(Timeout.Infinite);
-
+                    filePath = ((ILogObject2)obj).GetFileName(LogDailyPath, qName, (ulong)Interlocked.Increment(ref _fileID));
+                    File.WriteAllText(filePath, obj.ToString(), Encoding.UTF8);
+                    return null;
                 }
-                catch (ThreadInterruptedException ex)
+                else
                 {
+                    filePath = String.Format("{0}\\{1:000000000000}_({3}).{2}", LogDailyPath, Interlocked.Increment(ref _fileID), qName, ((ILogObject)obj).Subject);
+                    result = obj.ToString();
 
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
+                    File.AppendAllText(filePath, $"{DateTime.Now:yyyy/MM/dd HH:mm:ss}\r\n", Encoding.UTF8);
+                    File.AppendAllText(filePath, result, Encoding.UTF8);
                 }
             }
-        }
-
-        public void WriteLog()
-        {
-            writeLog();
-        }
-
-        public void SetStream(Stream stream)
-        {
-            _stream = stream;
-        }
-
-        private void writeLog()
-        {
-            foreach (string qName in _hashQ.Keys)
+            else
             {
-                Queue _q = (Queue)_hashQ[qName];
-                while (_q.Count > 0)
-                {
-                    object obj = _q.Dequeue();
-                    string filePath = LogDailyPath;
-
-                    StringBuilder sb = null;
-
-                    if (obj is ILogObject)
-                    {
-                        if (obj is ILogObject2)
-                        {
-                            filePath = ((ILogObject2)obj).GetFileName(filePath, qName, _fileID++);
-                            sb = new StringBuilder(obj.ToString());
-                        }
-                        else
-                        {
-                            filePath = String.Format("{0}\\{1:000000000000}_({3}).{2}", filePath, _fileID++, qName, ((ILogObject)obj).Subject);
-                        }
-                    }
-                    else
-                    {
-                        filePath = String.Format("{0}\\SystemLog.{1}", filePath, qName);
-                    }
-
-                    using (StreamWriter sw = (_stream == null ? new StreamWriter(filePath, true) : new StreamWriter(_stream)))
-                    {
-                        if (sb == null)
-                        {
-                            sw.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-                            sw.WriteLine(obj.ToString());
-                        }
-                        else
-                        {
-                            sw.WriteLine(sb.ToString());
-                        }
-                        sw.Flush();
-                        //                        sw.Close();
-                    }
-                }
+                result = obj.ToString();
             }
-        }
 
-        private void interrupt()
-        {
-            if (_thread != null)
-            {
-                _thread.Interrupt();
-            }
+            return result;
         }
 
 
@@ -220,8 +180,12 @@ namespace CommonLib.Logger
                 {
                     Console.WriteLine("May destructor run ...");
                 }
-                _thread = null;
-                writeLog();
+
+                _dbg.Dispose();
+                _err.Dispose();
+                _nfo.Dispose();
+                _wrn.Dispose();
+
             }
             _disposed = true;
         }

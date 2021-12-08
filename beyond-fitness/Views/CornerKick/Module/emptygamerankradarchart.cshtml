@@ -8,8 +8,19 @@
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
-    <canvas id="@(_chartID)" class="chart-box"></canvas>
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    string _chartID = "radarChart" + DateTime.Now.Ticks;
+    UserProfile _model;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+}
+<canvas id="@(_chartID)" class="chart-box"></canvas>
 <script>
     $(function () {
         var RadarConfig = {
@@ -65,19 +76,5 @@
     });
 </script>
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    string _chartID = "radarChart" + DateTime.Now.Ticks;
-    UserProfile _model;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-    }
-
-</script>

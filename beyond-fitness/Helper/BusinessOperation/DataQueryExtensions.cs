@@ -1166,5 +1166,38 @@ namespace WebHome.Helper.BusinessOperation
             return contractItems;
         }
 
+        public static IQueryable<MonthlyIndicator> InquireMonthlyIndicator(this MonthlyIndicatorQueryViewModel viewModel, GenericManager<BFDataContext> models)
+        {
+            IQueryable<MonthlyIndicator> items = models.GetTable<MonthlyIndicator>();
+            if (viewModel.DateFrom.HasValue)
+            {
+                items = items.Where(m => m.StartDate >= viewModel.DateFrom);
+            }
+
+            if (viewModel.DateTo.HasValue)
+            {
+                items = items.Where(m => m.StartDate < viewModel.DateTo.Value.AddMonths(1));
+            }
+
+            return items;
+        }
+
+        public static IQueryable<MonthlyIndicator> InquireYearlyIndicator(this MonthlyIndicatorQueryViewModel viewModel, GenericManager<BFDataContext> models)
+        {
+            viewModel.DateTo = DateTime.Today;
+            viewModel.DateFrom = new DateTime(DateTime.Today.Year, 1, 1);
+
+            if (viewModel.Year.HasValue)
+            {
+                viewModel.DateFrom = viewModel.DateFrom.Value.AddYears(viewModel.Year.Value);
+            }
+
+            IQueryable<MonthlyIndicator> items = models.GetTable<MonthlyIndicator>();
+            items = items.Where(m => m.StartDate >= viewModel.DateFrom)
+                .Where(m => m.StartDate <= viewModel.DateTo);
+
+            return items;
+        }
+
     }
 }

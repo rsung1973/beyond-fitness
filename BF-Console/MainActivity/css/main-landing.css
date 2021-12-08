@@ -1712,6 +1712,7 @@ ul.list-style1 li::before {
 }
 
 ul.list-style1 li {
+    list-style-position: outside;
     font-size: 16px;
     font-weight: 400;
 }
@@ -18235,6 +18236,12 @@ textarea:focus {
     color: #333333;
 }
 
+.section-features.aliceblue {
+    padding: 100px 0;
+    background: #f4f6f9;
+    color: #333333;
+}
+
 .section-features {
     padding: 100px 0;
     background: 1A1A1A;
@@ -18285,6 +18292,18 @@ textarea:focus {
     line-height: 100px;
     text-align: center;
     color: #fff
+}
+
+.section-features .features-item .icon i {
+    font-size: 42px;
+    width: 42px;
+    display: inline-block;
+    height: 42px;
+    color: #49c5b6;
+}
+
+.section-features .features-content {
+    padding: 10px;
 }
 
 .features-btm {
@@ -18498,6 +18517,24 @@ textarea:focus {
     line-height: 80px;
 }
 
+.section-online.nopadding {
+    width: 100%;
+    padding: 0;
+}
+
+.section-online {
+    width: 70%;
+    position: relative;
+    overflow: hidden;
+    background: url(../images/online2.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0 auto;
+}
+
+
 .section-fun-facts.nopadding {
     width: 100%;
     padding: 0;
@@ -18558,6 +18595,12 @@ textarea:focus {
 
 .section-team {
     padding: 100px 0;
+    background: #fff;
+}
+
+
+.section-onlinesession {
+    padding: 150px 0 60px;
     background: #fff;
 }
 
@@ -18881,6 +18924,21 @@ textarea:focus {
 
 }
 
+.section-faq-content ul.list-style1 li {
+    list-style-position: outside;
+    font-size: 16px;
+    font-weight: 400;
+    padding-left: 1.33em;
+}
+
+.section-faq-content ul.list-style1 li::before {
+    content: "●";
+    display: inline-block;
+    margin: 10px 0px 0px 0px;
+    text-indent: -1.33em;
+    width: 0px;
+}
+
 .section-faq-content ul.list-style3 li {
     font-size: 16px;
     font-weight: 400;
@@ -19020,12 +19078,13 @@ textarea:focus {
     font-weight: 400;
     padding: 10px;
     line-height: 1.75em;
+    margin-left: 10px;
 }
 
 .section-blog .blog-single ul.list-style1 li span {
     font-size: 15px;
     font-weight: 400;
-    padding-left: 2em;
+    /* padding-left: 2em; */
     padding-top: 5px;
     padding-bottom: 5px;
     display: block
@@ -19034,20 +19093,25 @@ textarea:focus {
 .section-blog .blog-single ul.list-style1 li::before {
     font-family: "Font Awesome 5 Free";
     content: "\f0da";
-    display: inline-block;
-    width: 1em;
-    margin: 0 5px 0 5px;
+    /* display: inline-block; */
+    /* width: 1em; */
+    width: 0;
+    margin:0;
     font-size: 16px;
     font-weight: 900;
+    text-indent: -1em;
 }
 
 .section-blog .blog-single ul.list-style2 li::before {
     content: "●";
     display: inline-block;
-    width: 1em;
-    margin: 0 5px 0 5px;
+    /* width: 1em;
+    margin: 0 5px 0 5px; */
     font-size: 14px;
     color: lightsalmon;
+    width: 0px;
+    margin: 0;
+    text-indent: -1.67em;
 }
 
 .section-blog .blog-single ul.list-style2 li.dotgrey::before {
@@ -19057,21 +19121,22 @@ textarea:focus {
 .section-blog .blog-single ul.list-style2 li.checked::before {
     font-family: "Font Awesome 5 Free";
     content: "\f00c";
-    color: aliceblue;
+    color: aliceblue;    
 }
 
 .section-blog .blog-single ul.list-style2 li {
     font-size: 16px;
     font-weight: 800;
     color: #e6e6e6;
-    padding: 10px;
+    padding: 15px;
     line-height: 1.75em;
+    margin-left: 10px;
 }
 
 .section-blog .blog-single ul.list-style2 li span {
     font-size: 15px;
     font-weight: 400;
-    padding-left: 2em;
+    padding-left: 0;
     padding-top: 5px;
     padding-bottom: 5px;
     display: block
@@ -19465,6 +19530,33 @@ textarea:focus {
     padding-left: 2em;
 }
 
+.section-onlinesession.bg-light-gray {
+    padding-top: 80px;
+    background: #f4f6f9;
+}
+.section-onlinesession .icon-wrapper {
+    display: flex;
+    justify-content: center;/*水平置中*/
+    align-items: center; /*垂直置中*/
+    width: 60px;
+    height: 60px;
+    margin-top: 20px;
+}
+
+.section-onlinesession .reason {
+    display: flex;
+    flex-wrap: wrap;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+    border-left: 2px solid #A6C5E4;
+    padding-left: 20px;
+}
+
+.section-onlinesession h3 {
+    font-size: 18px;
+}
+
 #footer {
     padding: 10px 0
 }
@@ -19820,7 +19912,18 @@ textarea:focus {
         padding: 0px 15px;
         margin: 0 auto;
         float: none
+    }    
+
+    .section-onlinesession .icon-wrapper {
+        width: 40px;
+        height: 40px;
+        margin-top: 20px;
     }
+
+    .section-features .features-item .icon-wrapper img {
+        max-width: 60%;
+    }
+    
 }
 
 @media only screen and (max-width: 574px) {
@@ -20684,6 +20787,82 @@ screen and (max-height: 300px) {
     border-radius: 30px;
     -webkit-transition: background-color 0.3s;
     transition: background-color 0.3s
+}
+
+/* ==========================================================================
+Pricing Table Style
+========================================================================== */
+.section-pricing {
+    padding: 80px 0;
+    background: #fff;
+    color: #333333;
+}
+
+.section-pricing .section-title {
+    color: #585b60;
+    font-size: 34px;
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    position: relative;
+}
+
+.pricing2 .body {
+    margin-top: 10px;
+    padding: 10px; 
+    text-align: center; 
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1); 
+    border-radius: .55rem; 
+    overflow: hidden; 
+    background: #f4f7f6;
+}
+.pricing2 .pricing-plan{
+    border-bottom: none;
+    flex-basis: 100%;
+    padding: 25px 0 0 0;
+}
+.pricing2 .pricing-plan .pricing-img {
+    max-width: 100%;
+}
+.pricing2 .pricing-plan .pricing-header {
+    color: #777;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 30px;
+}
+.pricing2 .pricing-plan .pricing-features {
+    letter-spacing: 1px;
+    margin: 50px 0 25px;
+    line-height: 30px;
+    list-style: none;
+}
+.pricing2 .pricing-plan .pricing-price {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+}
+.pricing2 .pricing-plan .btn {
+    margin-top: 20px;
+}
+
+@media only screen and (max-width: 575px) {
+    .pricing2 {
+        width: 340px;
+        max-width: 100%;
+        padding: 0px 15px;
+        margin: 0 auto;
+        float: none
+    }
+
+    .pricing2 .pricing-plan .pricing-img {
+        max-width: 30%;
+    }
+
+    .section-pricing .section-title {
+        font-size: 28px;
+    }    
 }
 
 @media screen and (max-width: 1400px) {

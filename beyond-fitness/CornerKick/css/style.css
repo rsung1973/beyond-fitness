@@ -2828,9 +2828,26 @@ ul.lesson-list li.list-intro {
 	background: #fff;
 }
 
+.contract-wrap .collapsible-header {
+	background-color: #eeeeee;
+}
+
+.contract-wrap .collapsible-header.active {
+	background-color: #2196f3;
+	color: #fff;
+}
+
+.mode-girls .contract-wrap .collapsible-header.active {
+	background-color: #fd5c63;
+}
+
 .contract-wrap .step-content {
 	padding-left: 12px;
 	background: #fff;
+}
+
+.contract-wrap .step-content i {
+    display: inline-block;
 }
 
 .contract-wrap .bottom-area {

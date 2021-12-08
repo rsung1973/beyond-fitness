@@ -10,16 +10,7 @@
 @using WebHome.Models.Timeline
 @using WebHome.Controllers
 @using Newtonsoft.Json
-
-@if (_item != null)
-    {
-<li>
-    <i class="livicon-evo" data-options="name: bell.svg; size: 30px; style: original; strokeWidth:2px; autoPlay:true"></i>
-    <label>@(_model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟")，合約即將到期（@($"{_item.ExpiringContract.Expiration:yyyy/MM/dd}")）</label>
-</li>
-}
-
-<script runat="server">
+@{
 
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
@@ -27,21 +18,27 @@
     List<TimelineEvent> _items;
     ExpiringContractEvent _item;
 
-    protected override void OnInit(EventArgs e)
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (UserProfile)this.Model;
+    _items = (List<TimelineEvent>)ViewBag.UserNotice;
+
+    _item = _model.CheckExpiringContractEvent(models);
+
+    if (_item != null)
     {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (UserProfile)this.Model;
-        _items = (List<TimelineEvent>)ViewBag.UserNotice;
-
-        _item = _model.CheckExpiringContractEvent(models);
-
-        if(_item!=null)
-        {
-            _items.Add(_item);
-        }
-
+        _items.Add(_item);
     }
 
-</script>
+}
+@if (_item != null)
+{
+    <li>
+        <i class="livicon-evo" data-options="name: bell.svg; size: 30px; style: original; strokeWidth:2px; autoPlay:true"></i>
+        <label>@(_model.UserProfileExtension.Gender=="F" ? "親愛的" : "兄弟")，合約即將到期（@($"{_item.ExpiringContract.Expiration:yyyy/MM/dd}")）</label>
+    </li>
+}
+
+
+

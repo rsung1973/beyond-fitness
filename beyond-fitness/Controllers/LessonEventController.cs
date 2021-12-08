@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -54,33 +55,15 @@ namespace WebHome.Controllers
             }
 
             viewModel.Place = viewModel.Place.GetEfficientString();
-            //if (branch?.IsVirtualClassroom() == true)
-            //{
-            //    bool check = false;
-            //    var branchID = branch.BranchID;
-            //    String url = viewModel.Place?.ToLower();
-            //    if (url != null)
-            //    {
-            //        foreach (var c in models.GetTable<ObjectiveLessonLocation>()
-            //                            .Where(l => l.BranchID == branchID)
-            //                            .Where(l => l.CatalogID == (int)ObjectiveLessonCatalog.CatalogDefinition.OnLine)
-            //                            .Where(l => l.PreferredUrl != null))
-            //        {
-            //            if (url.StartsWith(c.PreferredUrl.ToLower()))
-            //            {
-            //                check = true;
-            //                break;
-            //            }
-            //        }
-            //    }
-            //    if(!check)
-            //    {
-            //        ModelState.AddModelError("Place", "請輸入正確會議室連結!!");
-            //    }
-            //}
-
-
+            if (branch?.IsVirtualClassroom() == true)
+            {
+                if (!viewModel.Place.ValidateMeetingRoom(branch, models))
+                {
+                    ModelState.AddModelError("Place", "請輸入正確會議室連結!!");
+                }
+            }
         }
+
         // GET: LessonEvent
         [RoleAuthorize(RoleID = new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach })]
         public ActionResult CommitEnterpriseBookingByCoach(LessonTimeViewModel viewModel)

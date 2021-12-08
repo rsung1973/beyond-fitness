@@ -40,8 +40,7 @@ namespace WebHome.Helper
             }
         }
 
-        public static IQueryable<ServingCoach> PromptEffectiveCoach<TEntity>(this ModelSource<TEntity> models,IQueryable<UserProfile> items = null)
-                where TEntity : class, new()
+        public static IQueryable<ServingCoach> PromptEffectiveCoach(this GenericManager<BFDataContext> models,IQueryable<UserProfile> items = null)
         {
             if (items == null)
             {

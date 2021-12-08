@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 
 namespace WebHome.Models.ViewModel
@@ -25,7 +26,7 @@ namespace WebHome.Models.ViewModel
     public class CourseContractViewModel : QueryViewModel
     {
         public int? ContractID { get; set; }
-        public int? ContractType { get; set; } = 1;
+        public CourseContractType.ContractTypeDefinition? ContractType { get; set; } = CourseContractType.ContractTypeDefinition.CPA;
         public DateTime? ContractDate { get; set; }
         public String Subject { get; set; }
         public DateTime? ValidFrom { get; set; }
@@ -70,7 +71,7 @@ namespace WebHome.Models.ViewModel
         public Naming.CauseForEnding? CauseForEnding { get; set; }
         public int? MemberID { get; set; }
         public bool? PartialEffectiive { get; set; }
-        public bool?SignOnline { get; set; }
+        public bool? SignOnline { get; set; }
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -179,7 +180,7 @@ namespace WebHome.Models.ViewModel
         public int? ContractID { get; set; }
         public bool? InvoiceNow { get; set; }
         public int?[] ProductItemID { get; set; }
-
+        public bool? MyCarrier { get; set; }
     }
 
     public class PaymentQueryViewModel : PaymentViewModel
@@ -219,6 +220,32 @@ namespace WebHome.Models.ViewModel
         public DateTime? CancelDateFrom { get; set; }
         public DateTime? CancelDateTo { get; set; }
 
+    }
+
+    public class PayoffViewModel : PaymentViewModel
+    {
+        public String mid { get; set; }
+        public String tid { get; set; }
+        public String oid { get; set; }
+        public String pan { get; set; }
+        public int? transCode { get; set; }
+        public int? transMode { get; set; }
+        public String transDate { get; set; }
+        public String transTime { get; set; }
+        public String transAmt { get; set; }
+        public String approveCode { get; set; }
+        public String responseCode { get; set; }
+        public String responseMsg { get; set; }
+        public String installmentType { get; set; }
+        public int? installment { get; set; }
+        public int? firstAmt { get; set; }
+        public int? eachAmt { get; set; }
+        public int? fee { get; set; }
+        public String redeemType { get; set; }
+        public int? redeemUsed { get; set; }
+        public int? redeemBalance { get; set; }
+        public int? creditAmt { get; set; }
+        public String secureStatus { get; set; }
     }
 
     public class AchievementQueryViewModel : QueryViewModel
@@ -431,7 +458,6 @@ namespace WebHome.Models.ViewModel
         }
         public int? AuthorID { get; set; }
         public DateTime? DocDate { get; set; }
-        public String Title { get; set; }
         public String Subtitle { get; set; }
         public int?[] TagID { get; set; }
 
@@ -456,6 +482,9 @@ namespace WebHome.Models.ViewModel
         public int? BranchID { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
+        public int? ChartType { get; set; }
+        public Naming.SessionTypeDefinition[] SessionType { get; set; }
+
     }
 
     public class MonthlySelectorViewModel
@@ -473,8 +502,6 @@ namespace WebHome.Models.ViewModel
         public String RiskPrediction { get; set; }
         public String Strategy { get; set; }
         public String Comment { get; set; }
-        public int? ChartType { get; set; }
-        public Naming.SessionTypeDefinition[] SessionType { get; set; }
 
         public static readonly String[] __SessionName =
         {

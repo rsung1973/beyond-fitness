@@ -80,7 +80,7 @@ namespace WebHome.Helper
                             p => p.AllowanceID, a => a.AllowanceID, (p, a) => a);
         }
 
-        public static IQueryable<Payment> ExtractVoidPayment<TEntity>(this IQueryable<Payment> items, ModelSource<TEntity> models,bool currentVoid = false)
+        public static IQueryable<Payment> ExtractVoidPayment<TEntity>(this IQueryable<Payment> items, ModelSource<TEntity> models, bool currentVoid = false)
                     where TEntity : class, new()
         {
             if (currentVoid)
@@ -110,16 +110,30 @@ namespace WebHome.Helper
                     .Where(p => IncomePayment.Contains(p.TransactionType));
         }
 
-        public static IQueryable<TuitionAchievement> GetPaymentAchievement<TEntity>(this IQueryable<Payment> items, ModelSource<TEntity> models,IQueryable<TuitionAchievement> filterItems = null)
+        public static IQueryable<TuitionAchievement> GetPaymentAchievement<TEntity>(this IQueryable<Payment> items, ModelSource<TEntity> models, IQueryable<TuitionAchievement> filterItems = null)
             where TEntity : class, new()
         {
-            if(filterItems==null)
+            if (filterItems == null)
             {
                 filterItems = models.GetTable<TuitionAchievement>();
             }
             return items
                 //.FilterByEffective()
-                .Join(filterItems, 
+                .Join(filterItems,
+                    p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+        }
+
+        public static IQueryable<TuitionAchievement> GetVoidShare(this IQueryable<VoidPayment> items, GenericManager<BFDataContext> models, IQueryable<TuitionAchievement> filterItems = null)
+        {
+            if (filterItems == null)
+            {
+                filterItems = models.GetTable<TuitionAchievement>();
+            }
+
+            return items
+                .Join(models.GetTable<Payment>(), v => v.VoidID, p => p.PaymentID, (v, p) => p)
+                //.FilterByEffective()
+                .Join(filterItems,
                     p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
         }
 
@@ -163,8 +177,18 @@ namespace WebHome.Helper
                 items = models.GetTable<RegisterLesson>();
             }
 
-            return items.Where(r => r.IntuitionCharge.TuitionInstallment.Count == 0
-                    || !r.IntuitionCharge.TuitionInstallment.Any(t => t.Payment.VoidPayment == null || t.Payment.VoidPayment.Status != (int)Naming.CourseContractStatus.已生效));
+            IQueryable<IntuitionCharge> intuitionItems = models.GetTable<IntuitionCharge>()
+                    .Join(models.GetTable<TuitionInstallment>(), c => c.RegisterID, t => t.RegisterID, (c, t) => c);
+            var voidItems = models.GetTable<VoidPayment>()
+                    .Where(v => v.Status == (int)Naming.CourseContractStatus.已生效);
+            IQueryable<IntuitionCharge> paidItems = models.GetTable<Payment>().Where(p => !voidItems.Any(v => v.VoidID == p.PaymentID))
+                    .Join(models.GetTable<TuitionInstallment>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t)
+                    .Join(models.GetTable<IntuitionCharge>(), t => t.RegisterID, c => c.RegisterID, (t, c) => c);
+
+            //return items.Where(r => r.IntuitionCharge.TuitionInstallment.Count == 0
+            //        || !r.IntuitionCharge.TuitionInstallment.Any(t => t.Payment.VoidPayment == null || t.Payment.VoidPayment.Status != (int)Naming.CourseContractStatus.已生效));
+            return items.Where(r => !intuitionItems.Any(c => c.RegisterID == r.RegisterID)
+                            || !paidItems.Any(v => v.RegisterID == r.RegisterID));
         }
 
         public static IQueryable<RegisterLesson> PropmptReceivableTrialLesson<TEntity>(this ModelSource<TEntity> models)

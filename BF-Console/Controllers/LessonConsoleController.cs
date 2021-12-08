@@ -468,7 +468,12 @@ namespace WebHome.Controllers
             {
                 return Json(new { result = false, message = "Unfinished？!" });
             }
-            
+
+            if (!viewModel.Place.ValidateMeetingRoom(item.BranchStore, models))
+            {
+                return Json(new { result = false, message = "請輸入正確會議室連結!!" });
+            }
+
             item.Place = viewModel.Place;
             models.SubmitChanges();
 

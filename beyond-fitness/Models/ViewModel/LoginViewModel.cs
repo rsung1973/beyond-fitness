@@ -34,6 +34,9 @@ namespace WebHome.Models.ViewModel
         public String UrlAction { get; set; }
         public bool? Confirmed { get; set; }
         public String AuthCode { get; set; }
+        [JsonIgnore]
+        public String Title { get; set; }
+        public String AlertMessage { get; set; }
     }
 
     public class LoginViewModel : QueryViewModel
@@ -60,6 +63,7 @@ namespace WebHome.Models.ViewModel
 
         public int? UID { get; set; }
         public String LineID { get; set; }
+        public String Theme { get; set; }
 
     }
 
@@ -653,7 +657,6 @@ namespace WebHome.Models.ViewModel
     {
         public int? EventID { get; set; }
         public int? UID { get; set; }
-        public String Title { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public String ActivityProgram { get; set; }
@@ -756,11 +759,15 @@ namespace WebHome.Models.ViewModel
         public bool? NoChecked { get; set; }
     }
 
-    public class DataItemViewModel
+    public class DataItemViewModel : QueryViewModel
     {
-        public String Title { get; set; }
         public String Message { get; set; }
         public String Assertion { get; set; }
+    }
+
+    public class LineMessageViewModel : DataItemViewModel
+    {
+        public int? UID { get; set; }
     }
 
 }

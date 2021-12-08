@@ -18,12 +18,12 @@ namespace CommonLib.Utility
 
         public override void Write(string message)
         {
-            Logger.Info(message);
+            global::Utility.Logger.Info(message);
         }
 
         public override void WriteLine(string message)
         {
-            Logger.Info(message);
+            global::Utility.Logger.Info(message);
         }
     }
 }

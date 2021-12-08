@@ -8,7 +8,18 @@
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
+@{
 
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    PersonalExercisePurpose _item;
+    string _chartID = "radarChart" + DateTime.Now.Ticks;
+
+
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _item = (PersonalExercisePurpose)this.Model;
+}
 <canvas id="@(_chartID)" class="chart-box"></canvas>
 <script>
     $(function () {
@@ -66,19 +77,4 @@
     });
 </script>
 
-<script runat="server">
 
-    ModelSource<UserProfile> models;
-    ModelStateDictionary _modelState;
-    PersonalExercisePurpose _item;
-    string _chartID = "radarChart" + DateTime.Now.Ticks;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _item = (PersonalExercisePurpose)this.Model;
-    }
-
-</script>

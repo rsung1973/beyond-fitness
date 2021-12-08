@@ -154,6 +154,14 @@ namespace WebHome.Helper
                     : (amount * 2 - 5) / 10;
         }
 
+        public static String TruthValue(this bool? value)
+        {
+            return value == true
+                    ? "是"
+                    : value == false
+                        ? "否"
+                        : null;
+        }
 
     }
 }

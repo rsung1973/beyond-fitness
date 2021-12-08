@@ -10,7 +10,7 @@ using Utility;
 using System.Linq.Expressions;
 using CommonLib.Properties;
 using System.Collections;
-
+using CommonLib.Logger;
 
 namespace CommonLib.DataAccess
 {
@@ -94,7 +94,7 @@ namespace CommonLib.DataAccess
         protected internal bool _isInstance = true;
 
         private bool _bDisposed = false;
-        private LogWritter _logWriter;
+        private SqlLogger _logWriter;
 
         public GenericManager(T db)
         {
@@ -148,8 +148,8 @@ namespace CommonLib.DataAccess
 
             if (_db.Log == null && Settings.Default.SqlLog)
             {
-                _logWriter = new LogWritter();
-                _db.Log = _logWriter.Writter;
+                _logWriter = new SqlLogger { /*IgnoreSelect = Settings.Default.SqlLogIgnoreSelect*/ }; ;
+                _db.Log = _logWriter;
             }
         }
 

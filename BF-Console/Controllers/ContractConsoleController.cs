@@ -209,7 +209,9 @@ namespace WebHome.Controllers
         public ActionResult ListLessonPrice(CourseContractQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if (!viewModel.BranchID.HasValue)
+            var branch = models.GetTable<BranchStore>()
+                .Where(b => b.BranchID == viewModel.BranchID).FirstOrDefault();
+            if (branch == null)
             {
                 ModelState.AddModelError("BranchID", "請選擇上課場所");
             }
@@ -224,9 +226,47 @@ namespace WebHome.Controllers
                 return View(ConsoleHomeController.InputErrorView);
             }
 
-            IQueryable<LessonPriceType> items = models.PromptEffectiveLessonPrice()
-                .Where(p => p.BranchID == viewModel.BranchID)
+            IQueryable<LessonPriceType> items = models.GetTable<LessonPriceType>()
                 .Where(l => !l.DurationInMinutes.HasValue || l.DurationInMinutes == viewModel.DurationInMinutes);
+
+            if(viewModel.ContractType == CourseContractType.ContractTypeDefinition.CGA)
+            {
+                items = items
+                    .Where(p => p.BranchID == viewModel.BranchID)
+                    .Join(models.GetTable<ObjectiveContractLessonPrice>().Where(c => c.ContractType == (int)viewModel.ContractType),
+                        p => p.PriceID, c => c.PriceID, (p, c) => p);
+
+                if(items.Any())
+                {
+                    return View("~/Views/ContractConsole/ContractModal/ListLessonPackagePrice.cshtml", items);
+                }
+                else
+                {
+                    return Json(new { result = false, message = "無相符條件的項目!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else if (viewModel.ContractType == CourseContractType.ContractTypeDefinition.CNA)
+            {
+                items = items
+                    .Where(p => p.BranchID == viewModel.BranchID)
+                    .Join(models.GetTable<ObjectiveContractLessonPrice>().Where(c => c.ContractType == (int)viewModel.ContractType),
+                        p => p.PriceID, c => c.PriceID, (p, c) => p);
+
+                if (items.Any())
+                {
+                    return View("~/Views/ContractConsole/ContractModal/ListLessonBundlePrice.cshtml", items);
+                }
+                else
+                {
+                    return Json(new { result = false, message = "無相符條件的項目!" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                items = models.PromptEffectiveLessonPrice()
+                    .Where(p => p.BranchID == viewModel.BranchID)
+                    .Where(l => !l.DurationInMinutes.HasValue || l.DurationInMinutes == viewModel.DurationInMinutes);
+            }
 
             return View("~/Views/ContractConsole/ContractModal/ListLessonPrice.cshtml", items);
         }
@@ -236,12 +276,23 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
 
             var item = models.GetTable<LessonPriceType>().Where(p => p.PriceID == viewModel.PriceID).FirstOrDefault();
-            viewModel.TotalCost = item?.ListPrice * viewModel.Lessons;
 
-            var typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == viewModel.ContractType).FirstOrDefault();
-            if (typeItem != null)
+            if (item != null)
             {
-                viewModel.TotalCost = viewModel.TotalCost * typeItem.GroupingMemberCount * typeItem.GroupingLessonDiscount.PercentageOfDiscount / 100;
+                if (item.IsPackagePrice)
+                {
+                    viewModel.TotalCost = item.ListPrice;
+                }
+                else
+                {
+                    viewModel.TotalCost = item.ListPrice * viewModel.Lessons;
+
+                    var typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == (int?)viewModel.ContractType).FirstOrDefault();
+                    if (typeItem != null)
+                    {
+                        viewModel.TotalCost = viewModel.TotalCost * typeItem.GroupingMemberCount * typeItem.GroupingLessonDiscount.PercentageOfDiscount / 100;
+                    }
+                }
             }
 
             return View("~/Views/ContractConsole/Editing/TotalCostSummary.cshtml");
@@ -361,6 +412,31 @@ namespace WebHome.Controllers
                     return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
                 }
             }
+            else if (viewModel.FromStatus == Naming.CourseContractStatus.待審核 && viewModel.Status == (int)Naming.CourseContractStatus.待簽名)
+            {
+                if (item.InstallmentID.HasValue)
+                {
+                    var contractItems = item.ContractInstallment.CourseContract.ToArray();
+                    CourseContract nextItem = null;
+                    int idx = 0;
+                    for (; idx < contractItems.Length; idx++)
+                    {
+                        if (contractItems[idx].Status == (int?)viewModel.FromStatus && contractItems[idx].ContractID != item.ContractID)
+                        {
+                            nextItem = contractItems[idx];
+                            break;
+                        }
+                    }
+
+                    if (nextItem != null)
+                    {
+                        viewModel.UrlAction = Url.Action("SignCourseContract", "ConsoleHome");
+                        viewModel.KeyID = nextItem.ContractID.EncryptKey();
+                        viewModel.AlertMessage = $"總共有{contractItems.Length}張分期合約，請繼續第{idx+1}張分期合約的審核!!";
+                        return View("~/Views/ConsoleHome/Shared/ViewModelCommitted.cshtml", viewModel);
+                    }
+                }
+            }
 
             return View("~/Views/ContractConsole/Editing/ContractStatusChanged.cshtml", item);
         }
@@ -389,6 +465,29 @@ namespace WebHome.Controllers
                 else
                 {
                     return View("~/Views/ConsoleHome/Shared/AlertMessage.cshtml", model: alertMessage);
+                }
+            }
+
+            if (item.InstallmentID.HasValue)
+            {
+                var contractItems = item.ContractInstallment.CourseContract.ToArray();
+                CourseContract nextItem = null;
+                int idx = 0;
+                for (; idx < contractItems.Length; idx++)
+                {
+                    if (contractItems[idx].Status != (int?)Naming.CourseContractStatus.已生效 && contractItems[idx].ContractID != item.ContractID)
+                    {
+                        nextItem = contractItems[idx];
+                        break;
+                    }
+                }
+
+                if (nextItem != null)
+                {
+                    viewModel.UrlAction = Url.Action("SignCourseContract", "ConsoleHome");
+                    viewModel.KeyID = nextItem.ContractID.EncryptKey();
+                    viewModel.AlertMessage = $"總共有{contractItems.Length}張分期合約，請繼續第{idx + 1}張分期合約的簽名!!";
+                    return View("~/Views/ConsoleHome/Shared/ViewModelCommitted.cshtml", viewModel);
                 }
             }
 

@@ -15,6 +15,7 @@ using CommonLib.DataAccess;
 using MessagingToolkit.QRCode.Codec;
 using Utility;
 using WebHome.Controllers;
+using WebHome.Helper.BusinessOperation;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
@@ -57,6 +58,22 @@ namespace WebHome.Helper
                 .Join(models.GetTable<CourseContractExtension>().Where(t => t.Version.HasValue),
                     c => c.ContractID, t => t.ContractID, (c, t) => c)
                 .Where(c => !items.Any(t => t.ContractID == c.ContractID));
+        }
+
+        public static IQueryable<CourseContract> GetEarlyUnpaidInstallments<TEntity>(this CourseContract contract,ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            var items = models.GetTable<CourseContract>()
+                .Where(c => c.InstallmentID == contract.InstallmentID)
+                .Where(c => c.ContractID < contract.ContractID);
+
+            return items.FilterByUnpaidContract(models);
+        }
+
+        public static bool HasEarlyUnpaidInstallments<TEntity>(this CourseContract contract, ModelSource<TEntity> models)
+                where TEntity : class, new()
+        {
+            return contract.GetEarlyUnpaidInstallments(models).Any();
         }
 
         public static IQueryable<CourseContract> PromptUnpaidExpiredContract<TEntity>(this ModelSource<TEntity> models)
@@ -315,10 +332,15 @@ namespace WebHome.Helper
         }
 
 
-        public static IQueryable<LessonPriceType> PromptEffectiveLessonPrice<TEntity>(this ModelSource<TEntity> models)
+        public static IQueryable<LessonPriceType> PromptEffectiveLessonPrice<TEntity>(this ModelSource<TEntity> models,IQueryable<LessonPriceType> items = null)
                 where TEntity : class, new()
         {
-            return models.GetTable<LessonPriceType>()
+            if(items==null)
+            {
+                items = models.GetTable<LessonPriceType>();
+            }
+
+            return items
                 .Where(l => l.Status == (int)Naming.LessonSeriesStatus.已啟用)
                 .Where(l => l.LowerLimit.HasValue && (!l.SeriesID.HasValue || l.CurrentPriceSeries.Status == (int)Naming.LessonSeriesStatus.已啟用));
         }
@@ -342,11 +364,11 @@ namespace WebHome.Helper
         public static IQueryable<CourseContract> FilterByAlarmedContract<TEntity>(this IQueryable<CourseContract> items, ModelSource<TEntity> models, int alarmCount)
             where TEntity : class, new()
         {
-            var c0 = items.Where(c => c.ContractType == (int)Naming.ContractTypeDefinition.CFA);
-            var c1 = items.Where(c => c.ContractType != (int)Naming.ContractTypeDefinition.CFA);
+            var c0 = items.Where(c => c.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA);
+            var c1 = items.Where(c => c.ContractType != (int)CourseContractType.ContractTypeDefinition.CFA);
 
             var c2 = c0.Select(c => new { Contract = c, RemainedCount = c.Lessons - c.RegisterLessonContract.Sum(l => l.RegisterLesson.LessonTime.Count()) })
-                        .Concat(c1.Select(c => new { Contract = c, RemainedCount = c.Lessons - c.RegisterLessonContract.First().RegisterLesson.GroupingLesson.LessonTime.Count }));
+                        .Concat(c1.Select(c => new { Contract = c, RemainedCount = c.Lessons - c.RegisterLessonContract.Select(r => r.RegisterLesson).Where(r => r.UID == c.OwnerID).Select(r => r.GroupingLesson.LessonTime).Count() }));
             return c2.Where(c => c.RemainedCount <= alarmCount).Select(c => c.Contract);
         }
 
@@ -371,6 +393,20 @@ namespace WebHome.Helper
                 item.Subject = "已自動終止";
             }
             models.SubmitChanges();
+
+            foreach (var item in items)
+            {
+                item.TerminateRegisterLesson(models);
+            }
+        }
+
+        public static void TerminateRegisterLesson(this CourseContract contract, GenericManager<BFDataContext> models)
+        {
+            models.ExecuteCommand(@"UPDATE       RegisterLesson
+                    SET                Attended = {0}
+                    FROM            RegisterLessonContract INNER JOIN
+                                             RegisterLesson ON RegisterLessonContract.RegisterID = RegisterLesson.RegisterID
+                    WHERE        (RegisterLessonContract.ContractID = {1})", (int)Naming.LessonStatus.課程結束, contract.ContractID);
         }
 
         public static LessonPriceType ContractOriginalSeriesPrice<TEntity>(this CourseContract item, ModelSource<TEntity> models)
@@ -394,7 +430,10 @@ namespace WebHome.Helper
                     .Where(c => c.Status >= (int)Naming.CourseContractStatus.已生效);
         }
 
-
+        public static int? TotalLessonCount(this CourseContract item,GenericManager<BFDataContext> models)
+        {
+            return item.InstallmentID.HasValue ? models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID).Sum(c => c.Lessons) : (item.Lessons ?? item.LessonPriceType?.ExpandActualLessonCount(models));
+        }
 
     }
 }

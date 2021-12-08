@@ -247,6 +247,7 @@ namespace WebHome.Controllers
             }
 
             viewModel.PayoffAmount = lesson.LessonPriceType.ListPrice;
+            viewModel.CarrierId1 = lesson.UserProfile.UserProfileExtension?.CarrierNo;
             return View("~/Views/PaymentConsole/Module/EditPaymentForPI2020.cshtml");
         }
 
@@ -271,6 +272,7 @@ namespace WebHome.Controllers
             }
 
             viewModel.PayoffAmount = lesson.LessonPriceType.ListPrice;
+            viewModel.CarrierId1 = lesson.UserProfile.UserProfileExtension?.CarrierNo;
             return View("~/Views/PaymentConsole/Module/EditPaymentForSession.cshtml", item);
         }
 
@@ -288,7 +290,7 @@ namespace WebHome.Controllers
             else
             {
                 timeItem = lesson.LessonTime.First();
-                viewModel.SellerID = timeItem.BranchStore.IsVirtualClassroom()
+                viewModel.SellerID = timeItem.BranchStore?.IsVirtualClassroom() == true
                     ? timeItem.AsAttendingCoach.SelectWorkBranchID()
                     : timeItem.BranchID.Value;
             }
@@ -374,6 +376,13 @@ namespace WebHome.Controllers
                 if (timeItem.IsPISession())
                 {
                     models.AttendLesson(lesson.LessonTime.First(), profile);
+                }
+
+                if (invoice.InvoiceCarrier != null && viewModel.MyCarrier == true)
+                {
+                    lesson.UserProfile.UserProfileExtension.CarrierType = invoice.InvoiceCarrier.CarrierType;
+                    lesson.UserProfile.UserProfileExtension.CarrierNo = invoice.InvoiceCarrier.CarrierNo;
+                    models.SubmitChanges();
                 }
 
                 TaskExtensionMethods.ProcessInvoiceToGov();

@@ -43,7 +43,7 @@
                         }
                         @if (_model.BranchStore?.IsVirtualClassroom() == true && _model.Place != null)
                         {
-                            <li class="lesson-item"><a href="@Html.Raw(Url.Action("AbountOnlineLesson", "CornerKick", new { keyID = _model.LessonID.EncryptKey() }))">點擊進行視訊</a></li>
+                            <li class="lesson-item"><a href="@Html.Raw(Url.Action("AboutOnlineLesson", "CornerKick", new { keyID = _model.LessonID.EncryptKey() }))">點擊進行視訊</a></li>
                         }
                     </ul>
                 </div>
@@ -170,7 +170,7 @@
                                 <span class="title">本次訓練時間比例</span>
                                 @if (_training != null && _training.TrainingExecutionStage.Sum(t => t.TotalMinutes) > 0)
                                 {
-                                    Html.RenderPartial("~/Views/CornerKick/Module/LessonContentPieChart.ascx", _training);
+                                    Html.RenderPartial("~/Views/CornerKick/Module/LessonContentPieChart.cshtml", _training);
                                 }
                                 else
                                 {

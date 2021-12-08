@@ -7,7 +7,19 @@
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    String _model;
+    RegisterViewModel _viewModel;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = this.Model as String;
+    _viewModel = (RegisterViewModel)ViewBag.ViewModel;
+}
 <script src="js/libs/jquery-2.2.4.min.js"></script>
 @{ Html.RenderPartial("~/Views/Common/JQueryHelper.cshtml");}
 
@@ -20,20 +32,4 @@
     window.location.href = '@(_model ?? Url.Action("LearnerIndex","CornerKick"))';
 </script>
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    String _model;
-    RegisterViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = this.Model as String;
-        _viewModel = (RegisterViewModel)ViewBag.ViewModel;
-    }
-
-</script>

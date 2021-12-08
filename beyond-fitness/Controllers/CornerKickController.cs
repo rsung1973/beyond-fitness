@@ -17,10 +17,12 @@ using System.Web.Security;
 
 using CommonLib.DataAccess;
 using CommonLib.MvcExtension;
+using EPOS;
 using Newtonsoft.Json;
 using Utility;
 using WebHome.Helper;
 using WebHome.Helper.BusinessOperation;
+using WebHome.Helper.MessageOperation;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
@@ -40,7 +42,7 @@ namespace WebHome.Controllers
             {
                 viewModel.LineID = viewModel.KeyID.DecryptKey();
             }
-            return View("Index");
+            return View("~/Views/CornerKick/Index.cshtml");
         }
 
         public ActionResult TestError()
@@ -51,7 +53,7 @@ namespace WebHome.Controllers
         public ActionResult Login(RegisterViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("Login");
+            return View("~/Views/CornerKick/Login.cshtml");
         }
 
         public ActionResult Error(RegisterViewModel viewModel)
@@ -528,6 +530,50 @@ namespace WebHome.Controllers
             }
         }
 
+        public ActionResult ToSignCourseContract(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null)
+            {
+                HttpContext.SignOn(item);
+                return SignCourseContract(viewModel);
+            }
+            else
+            {
+                //ViewBag.Message = "此支裝置尚未設定過專屬服務，請點選下方更多資訊/專屬服務/帳號設定才可使用！";
+                return View("Index");
+            }
+        }
+
+        public ActionResult ToSignContractService(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null)
+            {
+                HttpContext.SignOn(item);
+                return SignContractService(viewModel);
+            }
+            else
+            {
+                //ViewBag.Message = "此支裝置尚未設定過專屬服務，請點選下方更多資訊/專屬服務/帳號設定才可使用！";
+                return View("Index");
+            }
+        }
+
+
+
         [Authorize]
         public ActionResult SignCourseContract(CourseContractQueryViewModel viewModel)
         {
@@ -553,9 +599,59 @@ namespace WebHome.Controllers
                 };
                 return View("~/Views/CornerKick/DataNotFound.cshtml");
             }
+            else if (item.Status != (int)Naming.CourseContractStatus.待簽名)
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的合約",
+                    Message = "合約狀態不符！",
+                };
+                return View("~/Views/CornerKick/ErrorMessage.cshtml");
+            }
 
-            return View("~/Views/CornerKick/SignCourseContract.cshtml", item);
+            ViewBag.DataItem = item;
+            return View("~/Views/CornerKick/SignCourseContract.cshtml", profile.LoadInstance(models));
         }
+
+        [Authorize]
+        public ActionResult SignContractService(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            var profile = HttpContext.GetUser();
+
+            var item = models.GetTable<CourseContract>()
+                .Where(c => c.ContractID == viewModel.ContractID)
+                .Where(c => c.CourseContractMember.Any(m => m.UID == profile.UID))
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的合約",
+                    Message = "目前尚未規劃任何訓練，<br/>若有興趣請與您的教練一起規劃訓練內容喔！",
+                };
+                return View("~/Views/CornerKick/DataNotFound.cshtml");
+            }
+            else if (item.Status != (int)Naming.CourseContractStatus.待簽名)
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的合約",
+                    Message = "合約狀態不符！",
+                };
+                return View("~/Views/CornerKick/ErrorMessage.cshtml");
+            }
+
+            ViewBag.DataItem = item;
+            return View("~/Views/CornerKick/SignContractService.cshtml", profile.LoadInstance(models));
+        }
+
 
         [Authorize]
         public ActionResult ConfirmSignature(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel)
@@ -611,6 +707,56 @@ namespace WebHome.Controllers
                 }
             }
 
+            String jsonData = this.RenderViewToString("~/Views/LineEvents/Message/NotifyToContractPayment.cshtml", item);
+            jsonData.PushLineMessage();
+
+            ViewBag.ViewModel = new QueryViewModel
+            {
+                UrlAction = Url.Action("MyContract"),
+            };
+            return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
+        }
+
+        [Authorize]
+        public ActionResult ConfirmContractServiceSignature(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            if (viewModel.Agree != true)
+            {
+                ModelState.AddModelError("Message", "請勾選同意聲明!!");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            CourseContract item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
+
+            if (item == null)
+            {
+                ModelState.AddModelError("Message", "合約資料錯誤!!");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            item = commitSignature(viewModel, signatureViewModel, item, out String alertMessage);
+            if (item == null)
+            {
+                ModelState.AddModelError("Message", alertMessage);
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            var jsonData = this.RenderViewToString("~/Views/LineEvents/Message/NotifyToCoachBook.cshtml", item);
+            jsonData.PushLineMessage();
+
             ViewBag.ViewModel = new QueryViewModel
             {
                 UrlAction = Url.Action("MyContract"),
@@ -646,7 +792,14 @@ namespace WebHome.Controllers
                 models.SubmitChanges();
             }
 
-            return viewModel.ConfirmContractSignature(this, out alertMessage, out String pdfFile, item);
+            if (item.CourseContractRevision != null)
+            {
+                return viewModel.ConfirmContractServiceSignature(this, out alertMessage, out String pdfFile, item.CourseContractRevision);
+            }
+            else
+            {
+                return viewModel.ConfirmContractSignature(this, out alertMessage, out String pdfFile, item);
+            }
         }
 
         [Authorize]
@@ -903,10 +1056,10 @@ namespace WebHome.Controllers
         }
 
         [Authorize]
-        public ActionResult AbountOnlineLesson(LessonTimeBookingViewModel viewModel)
+        public ActionResult AboutOnlineLesson(LessonTimeBookingViewModel viewModel)
         {
             ViewResult result = (ViewResult)ViewLesson(viewModel);
-            result.ViewName = "~/Views/CornerKick/AbountOnlineLesson.cshtml";
+            result.ViewName = "~/Views/CornerKick/AboutOnlineLesson.cshtml";
 
             return result;
         }
@@ -1292,6 +1445,128 @@ namespace WebHome.Controllers
 
         }
 
+        public ActionResult PayoffOnLine(PaymentViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.PaymentID = viewModel.DecryptKeyValue();
+            }
 
+            var profile = HttpContext.GetUser();
+
+            var item = models.GetTable<Payment>()
+                .Where(c => c.PaymentID == viewModel.PaymentID)
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的付款",
+                    Message = "付款資料錯誤！",
+                };
+                return View("~/Views/CornerKick/DataNotFound.cshtml");
+            }
+
+            PaymentOnLine paymentItem = new PaymentOnLine
+            {
+                PaymentID = item.PaymentID,
+                oid = Guid.NewGuid().ToString(),
+            };
+
+            models.GetTable<PaymentOnLine>().InsertOnSubmit(paymentItem);
+            models.SubmitChanges();
+
+            paymentItem.oid = $"{paymentItem.OrderID:000000000000}";
+            models.SubmitChanges();
+
+            return View("~/Views/CornerKick/PayoffOnLine.cshtml", paymentItem);
+        }
+
+        public ActionResult FrontendPayoff(PayoffViewModel viewModel)
+        {
+            //return CommitPayoff(viewModel);
+            var path = Dump(false);
+            return Content(System.IO.File.ReadAllText(path), "text/plain");
+        }
+
+        public ActionResult CommitPayoff(PayoffViewModel viewModel)
+        {
+            String path = Dump();
+
+            ViewBag.ViewModel = viewModel;
+
+            var profile = HttpContext.GetUser();
+
+            var item = models.GetTable<PaymentOnLine>()
+                .Where(c => c.oid == viewModel.oid)
+                .FirstOrDefault();
+
+            if (item != null)
+            {
+                item.mid = viewModel.mid;
+                item.tid = viewModel.tid;
+                item.oid = viewModel.oid;
+                item.pan = viewModel.pan;
+                item.transCode = viewModel.transCode;
+                item.transMode = viewModel.transMode;
+                item.transDate = viewModel.transDate;
+                item.transTime = viewModel.transTime;
+                item.transAmt = viewModel.transAmt;
+                item.approveCode = viewModel.approveCode;
+                item.responseCode = viewModel.responseCode;
+                item.responseMsg = viewModel.responseMsg;
+                item.installmentType = viewModel.installmentType;
+                item.installment = viewModel.installment;
+                item.firstAmt = viewModel.firstAmt;
+                item.eachAmt = viewModel.eachAmt;
+                item.fee = viewModel.fee;
+                item.redeemType = viewModel.redeemType;
+                item.redeemUsed = viewModel.redeemUsed;
+                item.redeemBalance = viewModel.redeemBalance;
+                item.creditAmt = viewModel.creditAmt;
+                item.secureStatus = viewModel.secureStatus.GetEfficientString();
+
+                models.SubmitChanges();
+
+                if ($"{item.PaymentTransaction.Payment.PayoffAmount}" != item.transAmt)
+                {
+                    int rtnCode = 0;
+                    ApiClient apiClient = new ApiClient();
+
+                    apiClient.clear();
+                    apiClient.setMid(item.mid);
+                    apiClient.setOid(item.oid);
+                    apiClient.setTransCode("01");
+                    apiClient.setDoname("eposuat.sinopac.com");
+                    apiClient.setSecurityId(item.PaymentTransaction.BranchStore.EPOS_SID);
+                    try
+                    {
+                        rtnCode = apiClient.post();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex);
+                    }
+                }
+            }
+
+            //return Content(System.IO.File.ReadAllText(path), "text/plain");
+
+            var result = new
+            {
+                viewModel.mid,
+                viewModel.tid,
+                viewModel.oid,
+                transCode = $"{viewModel.transCode:00}",
+                viewModel.approveCode,
+                viewModel.responseCode,
+            };
+
+            Logger.Info(result.JsonStringify());
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

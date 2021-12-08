@@ -80,8 +80,9 @@
             </tr>
         </tbody>
     </table>
-<script>
+    <script>
     function achievementReview() {
-        $('').launchDownload('@Html.Raw(Url.Action("AchievementReview","ConsoleHome",new { _viewModel?.BranchID, _viewModel?.KeyID,_viewModel?.Year,_viewModel?.Month }))', {});
+        $('').launchDownload('@Html.Raw(Url.Action("RevenueReview","ConsoleHome",new { _viewModel?.BranchID, _viewModel?.Year, _viewModel?.Month }))', {});
+        @*$('').launchDownload('@Html.Raw(Url.Action("AchievementReview","ConsoleHome",new { _viewModel?.BranchID, _viewModel?.KeyID,_viewModel?.Year,_viewModel?.Month }))', {});*@
     }
-</script>
+    </script>

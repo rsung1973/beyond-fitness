@@ -1,0 +1,152 @@
+﻿{
+  "to": "U71f34884baef3615377c40fadcc52ddd",
+  "messages": [
+    {
+      "type": "flex",
+      "altText": "您有一張合約等待您簽名",
+      "contents": {
+        "type": "bubble",
+        "hero": {
+          "type": "image",
+          "url": "https://www.worthitstudio.idv.tw/ConsoleHome/images/line/pushbody_contract_sign.jpg",
+          "size": "full",
+          "aspectRatio": "20:15",
+          "aspectMode": "cover",
+          "offsetTop": "10px"
+        },
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "box",
+              "layout": "vertical",
+              "margin": "lg",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "baseline",
+                  "spacing": "sm",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "合約名稱",
+                      "color": "#aaaaaa",
+                      "size": "sm",
+                      "flex": 3,
+                      "wrap": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "1對1體能顧問課程",
+                      "wrap": true,
+                      "color": "#666666",
+                      "size": "sm",
+                      "flex": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "baseline",
+                  "spacing": "sm",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "上課/簽約分店",
+                      "color": "#aaaaaa",
+                      "size": "sm",
+                      "flex": 3,
+                      "wrap": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "東門",
+                      "wrap": true,
+                      "color": "#666666",
+                      "size": "sm",
+                      "flex": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "baseline",
+                  "spacing": "sm",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "購買堂數",
+                      "color": "#aaaaaa",
+                      "size": "sm",
+                      "flex": 3,
+                      "wrap": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "50",
+                      "wrap": true,
+                      "color": "#666666",
+                      "size": "sm",
+                      "flex": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "baseline",
+                  "spacing": "sm",
+                  "contents": [
+                    {
+                      "type": "text",
+                      "text": "簽約體能顧問",
+                      "color": "#aaaaaa",
+                      "size": "sm",
+                      "flex": 3,
+                      "wrap": true
+                    },
+                    {
+                      "type": "text",
+                      "text": "黃政浩(Bill Huang)",
+                      "wrap": true,
+                      "color": "#666666",
+                      "size": "sm",
+                      "flex": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "sm",
+          "contents": [
+            {
+              "type": "separator",
+              "color": "#d9d9d9"
+            },
+            {
+              "type": "button",
+              "style": "link",
+              "height": "sm",
+              "action": {
+                "type": "uri",
+                "label": "👉立即確認",
+                "uri": "https://localhost:7180/CornerKick/Index"
+              }
+            },
+            {
+              "type": "spacer",
+              "size": "sm"
+            }
+          ],
+          "flex": 0
+        }
+      }
+    }
+  ]
+}

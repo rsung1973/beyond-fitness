@@ -123,6 +123,9 @@
   <data name="FindUs" xml:space="preserve">
     <value>Find Us</value>
   </data>
+  <data name="OnLine" xml:space="preserve">
+    <value>OnLine</value>
+  </data>
   <data name="FAQ" xml:space="preserve">
     <value>Q&amp;A</value>
   </data>
@@ -148,7 +151,7 @@
     <value>Ask Now</value>
   </data>
   <data name="IndexBannerTitle" xml:space="preserve">
-    <value>Your healthy future is now online</value>
+    <value>Our persistence</value>
   </data>
   <data name="IndexBannerSubTitle" xml:space="preserve">
     <value>Is built on each client’s Peace of Mind</value>
@@ -229,10 +232,10 @@
     <value>With more than 300 square meters of professional fitness space combined with a variety of training equipment, you can optimize your training by exercising without restrictions.</value>
   </data>
   <data name="FindXinyiBranch" xml:space="preserve">
-    <value>Xinyi Branch</value>
+    <value>Xinyi Anhe Branch</value>
   </data>
   <data name="FindXinyiBranchAdd" xml:space="preserve">
-    <value>Rm. 2, 2F., No.16, Sec. 5, Xinyi Rd., Xinyi Dist., Taipei City 110, Taiwan</value>
+    <value>B1, No. 81, Sec. 2, Anhe Rd., Da’an Dist., Taipei City 106, Taiwan</value>
   </data>
   <data name="FindXinyiBranchDesc1" xml:space="preserve">
     <value>Across from Taipei 101, right at the MRT Taipei 101/World Trade Center Exit 3.</value>
@@ -268,10 +271,10 @@
     <value>XinyiAnhe Branch</value>
   </data>
   <data name="FindAnheBranchAdd" xml:space="preserve">
-    <value>B1, No. 81, Sec. 2, Anhe Rd., Da’an Dist., Taipei City 106, Taiwan (R.O.C.)</value>
+    <value>B1, No. 81, Sec. 2, Anhe Rd., Da’an Dist., Taipei City 106, Taiwan</value>
   </data>
    <data name="FindAnheBranchDesc1" xml:space="preserve">
-    <value>Dongmen Branch is a 3 mins walk from MRT XinyiAnhe Station exit 2A.Located in the key area of Dunhua-Anhe, adjacent to the Lih-Jen international Private Elementary &amp; Middle School.</value>
+    <value>XinyiAnhe Branch is a 3 mins walk from MRT XinyiAnhe Station exit 2A.Located in the key area of Dunhua-Anhe, adjacent to the Lih-Jen international Private Elementary &amp; Middle School.</value>
   </data>
   <data name="FindAnheBranchDesc2" xml:space="preserve">
     <value>The private training space with 4m high celling and over 727 square meters, provides 25m sports lawn, individual group class venue, sports recovery rooms and comfortable separate shower room, where you are able to enjoy the professional training and service.</value>
@@ -351,6 +354,9 @@
   <data name="OpportunityFeaturesDesc5" xml:space="preserve">
     <value>Combine work and play!</value>
   </data>
+  <data name="OpportunityFeaturesDesc6" xml:space="preserve">
+    <value>Provide labor and health insurance, retirement funds, off-site training, staff dinner gathering, company trip, internal education and training.</value>
+  </data>
   <data name="JoinUsContactTitle" xml:space="preserve">
     <value>Get discovered!</value>
   </data>
@@ -420,6 +426,9 @@
   <data name="FAQQestion22" xml:space="preserve">
     <value>Are there any monthly fee, membership fee or handling charge?</value>
   </data>
+  <data name="FAQQestion23" xml:space="preserve">
+    <value>Price of Virtual Training Course Package？</value>
+  </data>
   <data name="FAQQestion3" xml:space="preserve">
     <value>Why do we stand out?</value>
   </data>
@@ -432,29 +441,38 @@
   <data name="FAQQestion6" xml:space="preserve">
     <value>How to get to Beyond Fitness?</value>
   </data>
+  <data name="FAQQestion7" xml:space="preserve">
+    <value>Am I suitable for nutrition service, sports protection and sport massage?</value>
+  </data>
   <data name="FAQAnswer11" xml:space="preserve">
     <value>Contact us to start your trial course.</value>
   </data>
   <data name="FAQAnswer12" xml:space="preserve">
-    <value>The content is as follows: &lt;li&gt;A careful consultation of your physical condition.&lt;/li&gt;&lt;li&gt;A careful analysis of your exercise habits and lifestyle.&lt;/li&gt;&lt;li&gt;Trainers will bring out your training goals and results, leading you to a personalized program and experience.&lt;/li&gt;&lt;li&gt;Trainers are always by your side customizing your training courses.&lt;/li&gt;</value>
-  </data>
+    <value>The content is as follows: &lt;li&gt;A careful consultation of your physical condition.&lt;/li&gt;&lt;li&gt;A careful analysis of your exercise habits and lifestyle.&lt;/li&gt;&lt;li&gt;Before Online course, trainer will check the hardware and software equipment with you in advance.&lt;/li&gt;&lt;li&gt;Trainers will bring out your training goals and results, leading you to a personalized program and experience.&lt;/li&gt;&lt;li&gt;Trainers are always by your side customizing your training courses.&lt;/li&gt;</value>
+  </data>  
   <data name="FAQAnswer21" xml:space="preserve">
-    <value>Customized courses are charged by the number of courses. Prices range from NTD$1700-1900, according to your workout plans and the number of courses you need.</value>
+    <value>&lt;li&gt;In person one-on-one training fee is charged based on  the number of courses. Price ranges from TWD$1,700 to TWD$1,900.&lt;/li&gt;&lt;li&gt;Online one-on-one training fee is about TWD$1,200 to TWD$1,400 which is calculated based on the number of lessons.&lt;/li&gt;&lt;li&gt;Nutrition course will be reach the best effect with a “monthly” cycle, and the price will be TWD$4,000 per month.&lt;/li&gt;</value>
   </data>
   <data name="FAQAnswer22" xml:space="preserve">
     <value>Beyond fitness provides 1 on 1 customized training. You don’t need to pay any other monthly fee, membership fee or handling charges.</value>
   </data>
+  <data name="FAQAnswer23" xml:space="preserve">
+    <value>&lt;li&gt;Basic package (including nutrition planning): TWD$8,600.&lt;/li&gt;&lt;li&gt;Advanced package (including nutrition planning) : TWD$12,600.&lt;/li&gt;</value>
+  </data>
   <data name="FAQAnswer3" xml:space="preserve">
-    <value>Our team is second to none in the industry. All personnel are qualified for international trainer certification (which must be within the validity period), internal professional team management (performance tests every quarter). With scientific based training as the foundation with systematic records, analysis, we give every customer the most intimate and trustworthy service.</value>
+    <value>Our team is second to none in the industry. Regardless of personal training, nutrition planning, recovery and injury prevention, all relevant personnel must equipped with relevant international and professional certification qualifications (which must be within the validity period), internal professional team management (performance tests every quarter). With scientific based training as the foundation with systematic records, analysis, we give every customer the most intimate and trustworthy service.</value>
   </data>
   <data name="FAQAnswer4" xml:space="preserve">
-    <value>A good personal trainer will customize training programs according to your goals, life schedule, and your status each day, giving you the best training outcomes while avoiding sports injuries.&lt;br/&gt;&lt;br/&gt;It is important to help you make plans for when you're not training. Compared to group training courses, personal training courses focus on your uniqueness and differentiation, customized course provide the most effective training!</value>
+    <value>An excellent one-on-one personal trainer will customize training programs according to your goals, life style, physical condition of the day, helping you achieve goals together.&lt;br/&gt;&lt;br/&gt;It is important to help you organize the rest of the non-exercise time with nutrition intake, fascia relaxation and injury prevention. We focus on your uniqueness and differentiation, and  provide the most effective training!</value>
   </data>
   <data name="FAQAnswer5" xml:space="preserve">
-    <value>Of course! We provide customers who take training courses at Beyond Fitness with registration for self-training. Your trainer will schedule and customize training session (shown as P.I. Session) for you. By registration, we control the number of people to maintain the training venue, offering you the best training experience.</value>
+    <value>Of course! We provide customers who take training courses at Beyond Fitness with registration for self-training. Your trainer will schedule and customize training session (shown as P.I. Session) for you. By registration, the number of people is controlled to maintain the venue to provide you with the best training quality.</value>
   </data>
   <data name="FAQAnswer6" xml:space="preserve">
     <value>Follow the directions below to reach us</value>
+  </data>
+  <data name="FAQAnswer7" xml:space="preserve">
+    <value>&lt;li&gt;Nutrition course is designed for those who value self-health management, need to to lose weight, improve immunity, the three-high chronic disease group, and those who want to increase muscle mass through weight training. Beyond’s nutrition course provides you with good result and services.&lt;/li&gt;&lt;li&gt;Athletic Trainer (Sports protection) provides the most indispensable help to confirm the condition of your joints and muscles throughout your body. If you have sports injuries or joint and muscle-related issue, an athletic trainer can help you return to normal levels.&lt;/li&gt;&lt;li&gt;Our recovery coach team provides sport massage and stretching service which can help relieve stress for people who are prone to soreness such as long-term shoulders, necks, lower back or sitting for a long time.&lt;/li&gt;</value>
   </data>
   <data name="NanjingMRT" xml:space="preserve">
     <value>Green line( Songshan–Xindian) MRT Taipei Arena Station Exit 1</value>
@@ -467,6 +485,9 @@
   </data>
   <data name="DongmenMRT" xml:space="preserve">
     <value>Red line (Tamsui–Xinyi) MRT Dongmen station Exit 3</value>
+  </data>
+  <data name="AnheMRT" xml:space="preserve">
+    <value>Red line (Tamsui–Xinyi) MRT Xinyi Anhe Station Exit 2A</value>
   </data>
   <data name="Walk" xml:space="preserve">
     <value>Drive/Walk</value>
@@ -495,4 +516,46 @@
   <data name="Disclaimer" xml:space="preserve">
     <value>As the requirements and effects of exercise are different for each person, we recommend consultation with a Beyond Fitness trainer, to guarantee the best performance results.</value>
   </data>  
+  <data name="PersonalTrainer" xml:space="preserve">
+    <value>One to one personal trainer</value>
+  </data>  
+  <data name="NutritionCoach" xml:space="preserve">
+    <value>One to one nutrition coach</value>
+  </data>  
+  <data name="OnlinePTTitle" xml:space="preserve">
+    <value>BEYOND ONLINE &lt;br/&gt;Is it suitable for me</value>
+  </data> 
+  <data name="OnlinePTSlogon" xml:space="preserve">
+    <value>Like a friend, &lt;br /&gt;your fitness consultant</value>
+  </data> 
+  <data name="OnlineNCTitle" xml:space="preserve">
+    <value>BEYOND ONLINE &lt;br/&gt; Eat Healthy !</value>
+  </data> 
+  <data name="OnlineNCSlogon" xml:space="preserve">
+    <value>Change your eating habits</value>
+  </data>
+  <data name="OnlineNCFeature1" xml:space="preserve">
+    <value>Your Exclusive Dietitian</value>
+  </data>
+  <data name="OnlineNCFeatureDesc1" xml:space="preserve">
+    <value>A registered dietitian that keeps track of your water intake, sleep schedule, exercising and stress level.</value>
+  </data>
+  <data name="OnlineNCFeature2" xml:space="preserve">
+    <value>Regular Diet Tracking</value>
+  </data>
+  <data name="OnlineNCFeatureDesc2" xml:space="preserve">
+    <value>Log what you eat everyday and your nutritionist will provide guidance on healthy eating habits and what works best for you so that you can achieve your goal.</value>
+  </data>
+  <data name="OnlineNCFeature3" xml:space="preserve">
+    <value>Three Major Nutrients</value>
+  </data>
+  <data name="OnlineNCFeatureDesc3" xml:space="preserve">
+    <value>Analyze your food intake of the 6 Major Food Groups and tailor your diet!</value>
+  </data>
+  <data name="OnlineNCFeature4" xml:space="preserve">
+    <value>Results Report Analysis</value>
+  </data>
+  <data name="OnlineNCFeatureDesc4" xml:space="preserve">
+    <value>Provide monthly data reports, record your body shapes, diet and change of your lifestyle to show that progress has been made.</value>
+  </data>
 </root>

@@ -10,22 +10,19 @@
 @using WebHome.Models.Timeline
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+}
 <img class="responsive-img nodata" src="images/nodata.png">
 <p class="collection center">
     <span class="gray-t16">Oooops！！您沒有參加過小學堂喔！</span>
 </p>
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-    }
-
-</script>

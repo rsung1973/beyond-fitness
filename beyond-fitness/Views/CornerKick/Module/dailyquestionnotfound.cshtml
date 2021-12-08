@@ -10,7 +10,15 @@
 @using WebHome.Models.Timeline
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+}
 <div class="qa-content">
     <img class="responsive-img nodata" src="images/nodata.png">
     <p class="collection center">
@@ -18,16 +26,5 @@
     </p>
 </div>
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-    }
-
-</script>

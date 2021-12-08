@@ -8,14 +8,27 @@
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
-    <canvas id="@(_chartID)" class="chart-box"></canvas>
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    string _chartID = "pieChart" + DateTime.Now.Ticks;
+    TrainingExecution _model;
+
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = this.Model as TrainingExecution;
+
+}
+<canvas id="@(_chartID)" class="chart-box"></canvas>
 @{ var items = models.GetTable<TrainingStage>().ToArray();
-    var total = _model.TrainingExecutionStage.Sum(t=>t.TotalMinutes) ?? 1;}
+    var total = _model.TrainingExecutionStage.Sum(t => t.TotalMinutes) ?? 1;}
 
 <script>
     $(function () {
-        
+
         var PieConfig = {
             type: 'pie',
             data: {
@@ -61,21 +74,5 @@
     });
 </script>
 
-<script runat="server">
-
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    string _chartID = "pieChart" + DateTime.Now.Ticks;
-        TrainingExecution _model;
 
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = this.Model as TrainingExecution;
-
-    }
-
-</script>

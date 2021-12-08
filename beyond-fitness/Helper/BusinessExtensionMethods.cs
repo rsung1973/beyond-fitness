@@ -1014,43 +1014,43 @@ namespace WebHome.Helper
             return fullAchievement + halfAchievement;
         }
 
-        public static int CalcTuition<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
-            where TEntity : class, new()
-        {
-            var allLessons = items
-                .Select(l => l.GroupingLesson)
-                        .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+        //public static int CalcTuition<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
+        //    where TEntity : class, new()
+        //{
+        //    var allLessons = items
+        //        .Select(l => l.GroupingLesson)
+        //                .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
-            var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
-            var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
+        //    var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
+        //    var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
-            var tuition = (lessons
-                .Sum(l => l.LessonPriceType.ListPrice
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
-                + (enterpriseLessons
-                    .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
-            return tuition;
-        }
+        //    var tuition = (lessons
+        //        .Sum(l => l.LessonPriceType.ListPrice
+        //            * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+        //        + (enterpriseLessons
+        //            .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+        //                * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+        //    return tuition;
+        //}
 
-        public static int CalcTuition<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
-            where TEntity : class, new()
-        {
-            var allLessons = items
-                .Select(l => l.GroupingLesson)
-                        .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
+        //public static int CalcTuition<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
+        //    where TEntity : class, new()
+        //{
+        //    var allLessons = items
+        //        .Select(l => l.GroupingLesson)
+        //                .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r);
 
-            var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
-            var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
+        //    var lessons = allLessons.Where(r => r.RegisterLessonEnterprise == null);
+        //    var enterpriseLessons = allLessons.Where(r => r.RegisterLessonEnterprise != null);
 
-            var tuition = (lessons
-                .Sum(l => l.LessonPriceType.ListPrice
-                    * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
-                + (enterpriseLessons
-                    .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                        * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
-            return tuition;
-        }
+        //    var tuition = (lessons
+        //        .Sum(l => l.LessonPriceType.ListPrice
+        //            * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0)
+        //        + (enterpriseLessons
+        //            .Sum(l => l.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+        //                * l.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+        //    return tuition;
+        //}
 
         public static int CalcTuition<TEntity>(this IQueryable<V_Tuition> items, ModelSource<TEntity> models)
             where TEntity : class, new()
@@ -1060,10 +1060,10 @@ namespace WebHome.Helper
             var enterpriseLessons = items.Where(r => r.EnterpriseRegisterID.HasValue);
 
             var tuition = (lessons
-                .Sum(l => l.ListPrice * l.GroupingMemberCount * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.GroupingMemberCount * l.TuitionIndex
                     * l.PercentageOfDiscount / 100) ?? 0)
                 + (enterpriseLessons
-                    .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                    .Sum(l => l.CoachPayoff * l.TuitionIndex
                         * l.PercentageOfDiscount / 100) ?? 0);
             return (int)tuition;
         }
@@ -1076,53 +1076,53 @@ namespace WebHome.Helper
             var enterpriseLessons = items.Where(r => r.EnterpriseRegisterID.HasValue);
 
             var tuition = (lessons
-                .Sum(l => l.ListPrice * l.GroupingMemberCount * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.GroupingMemberCount * l.TuitionIndex
                     * l.PercentageOfDiscount / 100) ?? 0)
                 + (enterpriseLessons
-                    .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                    .Sum(l => l.CoachPayoff * l.TuitionIndex
                         * l.PercentageOfDiscount / 100) ?? 0);
             return (int)tuition;
         }
 
-        public static int CalcTuitionShare<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
-            where TEntity : class, new()
-        {
-            int shares = 0;
+        //public static int CalcTuitionShare<TEntity>(this IEnumerable<LessonTime> items, ModelSource<TEntity> models)
+        //    where TEntity : class, new()
+        //{
+        //    int shares = 0;
 
-            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
-            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+        //    var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
+        //    var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
 
-            shares = ((int?)courseItems
-                .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
-                + ((int?)enterpriseItems
-                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
+        //    shares = ((int?)courseItems
+        //        .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
+        //            * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+        //            * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
+        //        + ((int?)enterpriseItems
+        //        .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+        //            * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+        //            * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
 
-            return shares;
-        }
+        //    return shares;
+        //}
 
-        public static int CalcTuitionShare<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
-            where TEntity : class, new()
-        {
-            int shares = 0;
+        //public static int CalcTuitionShare<TEntity>(this IQueryable<LessonTime> items, ModelSource<TEntity> models)
+        //    where TEntity : class, new()
+        //{
+        //    int shares = 0;
 
-            var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
-            var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
+        //    var courseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
+        //    var enterpriseItems = items.Where(l => l.RegisterLesson.RegisterLessonEnterprise != null);
 
-            shares = ((int?)courseItems
-                .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
-                + ((int?)enterpriseItems
-                .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
-                    * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
-                    * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
+        //    shares = ((int?)courseItems
+        //        .Sum(l => l.RegisterLesson.LessonPriceType.ListPrice
+        //            * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+        //            * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0)
+        //        + ((int?)enterpriseItems
+        //        .Sum(l => l.RegisterLesson.RegisterLessonEnterprise.EnterpriseCourseContent.ListPrice
+        //            * l.RegisterLesson.GroupingMemberCount * l.RegisterLesson.GroupingLessonDiscount.PercentageOfDiscount / 100
+        //            * l.LessonTimeSettlement.MarkedGradeIndex / 100) ?? 0);
 
-            return shares;
-        }
+        //    return shares;
+        //}
 
         public static int CalcTuitionShare<TEntity>(this IQueryable<V_Tuition> items, ModelSource<TEntity> models)
             where TEntity : class, new()
@@ -1133,11 +1133,11 @@ namespace WebHome.Helper
             var enterpriseItems = items.Where(l => l.EnterpriseRegisterID.HasValue);
 
             shares = ((int?)courseItems
-                .Sum(l => l.ListPrice * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)enterpriseItems
-                .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0);
 
@@ -1153,11 +1153,11 @@ namespace WebHome.Helper
             var enterpriseItems = items.Where(l => l.EnterpriseRegisterID.HasValue);
 
             shares = ((int?)courseItems
-                .Sum(l => l.ListPrice * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)enterpriseItems
-                .Sum(l => l.EnterpriseListPrice * l.TuitionIndex
+                .Sum(l => l.CoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0);
 
@@ -1875,6 +1875,17 @@ namespace WebHome.Helper
             return items;
         }
 
+        public static IQueryable<CourseContract> PromptContractServiceToSign<TEntity>(this ModelSource<TEntity> models)
+            where TEntity : class, new()
+        {
+            var items = models.GetTable<CourseContract>()
+                .Where(c => c.CourseContractRevision != null)
+                .Where(c => c.Status == (int)Naming.CourseContractStatus.待簽名);
+
+            return items;
+        }
+
+
         public static IQueryable<CourseContract> GetContractToSignByAgent<TEntity>(this ModelSource<TEntity> models, UserProfile agent)
             where TEntity : class, new()
         {
@@ -2460,19 +2471,10 @@ namespace WebHome.Helper
                         //    .Select(p => p.InvoiceAllowance).Sum(a => a.TotalAmount + a.TaxAmount) ?? 0);
                     }
 
-                    var lessons = c.AttendedLessonCount(calcDate);
-                    if (lessons > 0)
+                    item.TotalLessonCost = c.TotalAttendedCost(calcDate);
+                    if (c.CourseContractType.GroupingLessonDiscount != null)
                     {
-                        hasItem = true;
-                        item.TotalLessonCost = lessons * c.LessonPriceType.ListPrice.Value;
-                        if (c.CourseContractType.GroupingLessonDiscount != null)
-                        {
-                            item.TotalLessonCost = item.TotalLessonCost * c.CourseContractType.GroupingLessonDiscount.GroupingMemberCount * (c.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
-                        }
-                    }
-                    else
-                    {
-                        item.TotalLessonCost = 0;
+                        item.TotalLessonCost = item.TotalLessonCost * c.CourseContractType.GroupingLessonDiscount.GroupingMemberCount * (c.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
                     }
 
                     var allowanceItems = c.ContractPayment.Select(p => p.Payment)

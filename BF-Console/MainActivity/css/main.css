@@ -22021,7 +22021,7 @@ section.content {
 }
 
 
-/* é•·æ¢åœ–*/
+/* 長條圖*/
 
 .chart-box {
     position: relative;
@@ -24548,6 +24548,11 @@ section.content {
     opacity: .5;
 }
 
+.page-calendar .b-PTDistance {
+    background: linear-gradient(270deg, #ff5f6d, #ffc371);
+    border-color: #F5A623 !important
+}
+
 .page-calendar #calendar {
 /*    max-width: 900px*/
 }
@@ -26947,7 +26952,7 @@ section.content {
 /*    border-top: 0;*/
 }
 
-/*ç„¡æ´¾åœ–è³‡æ–™*/
+/*無派圖資料*/
 .pie_chart .pie_light,
 .pie .pie_light {
     text-align: center;
@@ -26977,7 +26982,7 @@ section.content {
     font-weight: bold;
 }
 
-/*ä»»æ„é–€æœ¬æ—¥é ­æ¢*/
+/*任意門本日頭條*/
 .mylearner .user-info {
     padding: 12px 15px;
     position: relative;
@@ -27006,7 +27011,7 @@ section.content {
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2)
 }
 
-/*è¦å¾‹é‹å‹•*/
+/*規律運動*/
 .regular-info {
     padding: 5px 15px 8px 15px;
     position: relative;
@@ -27017,7 +27022,7 @@ section.content {
 }
 
 
-/*ç™¼ç¥¨é¡¯ç¤º*/
+/*發票顯示*/
 .invoice1 .logo,.invoice1 .clientlogo {
     float: left;   
     width: 40px;    
@@ -27288,7 +27293,7 @@ section.content {
 
 /*accordion*/
 
-/* ä¸‹æ‹‰ å°æ¨™ï¼‹é …ç›® */
+/* 下拉 小標＋項目 */
 
 .accordion.custom ul.lesson-box {
 	margin-right: 0px;
@@ -27326,7 +27331,7 @@ section.content {
 	padding: 3px 0;
     display: block;
 }
-/* èª²ç¨‹ä¸‹æ–¹ é …ç›®æ¸…å–® */
+/* 課程下方 項目清單 */
 .accordion.custom span.badge {
 /*    color: #fff;*/
     border-radius: 20px;
@@ -27376,7 +27381,7 @@ section.content {
     font-weight: 800;
 }
 
-/* ç·¨è¼¯èª²ç¨‹ä¸‹æ–¹ é …ç›®æ¸…å–® */
+/* 編輯課程下方 項目清單 */
 
 .accordion.custom ol.lesson-list {
 	padding: 0px 0px;
@@ -27549,7 +27554,7 @@ section.content {
 }
 
 /**
-* å±•é–‹TextArea
+* 展開TextArea
 */
 .decrease,
 .autogrow {
@@ -27650,7 +27655,7 @@ pre {
 .comment-box .ellipsis::after {
 /*
   display: inline;
-  content: "...æ›´å¤šå…§å®¹";
+  content: "...更多內容";
   font-size: 16px;    
 */
     background: #FFF
@@ -28213,7 +28218,7 @@ pre {
     }
 
     .col-md-12 {
-        width: 100%
+        width: 100%;
     }
 
     .col-md-pull-0 {
@@ -28596,7 +28601,7 @@ pre {
 }
 
 /**
-* è¡Œäº‹æ›†é ç´„ä¸Šèª²Mail_Listæ¸…å–®
+* 行事曆預約上課Mail_List清單
 */
 .inbox .mail_list .list-group-item {
 	background: #eceeef;
@@ -28609,7 +28614,7 @@ pre {
 }
 
 /**
-* å…¨ç³»çµ±MultiSelect
+* 全系統MultiSelect
 */
 
 .ms-container .ms-selectable, 

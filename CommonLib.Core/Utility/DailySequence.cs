@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utility
+namespace CommonLib.Core.Utility
 {
     public class DailySequence
     {
@@ -17,7 +17,7 @@ namespace Utility
 
         private DailySequence()
         {
-            _savedFile = Path.Combine(Logger.LogPath, "DailySequence.txt");
+            _savedFile = Path.Combine(FileLogger.Logger.LogPath, "DailySequence.txt");
             try
             {
                 if (File.Exists(_savedFile))
@@ -29,7 +29,7 @@ namespace Utility
             }
             catch(Exception ex)
             {
-                Logger.Error(ex);
+                FileLogger.Logger.Error(ex);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Utility
             }
             catch(Exception ex)
             {
-                Logger.Error(ex);
+                FileLogger.Logger.Error(ex);
             }
         }
     }

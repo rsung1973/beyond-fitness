@@ -22,6 +22,7 @@ using Utility;
 using WebHome.Controllers;
 using WebHome.Helper;
 using WebHome.Helper.BusinessOperation;
+using WebHome.Helper.MessageOperation;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 using WebHome.Models.Timeline;
@@ -170,11 +171,57 @@ namespace WebHome.Controllers
             return Json(new { result = true, message = "資料處理完成!!" }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult TestLineMessage(CourseContractViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.ContractID = viewModel.DecryptHexKeyValue();
+            }
+
+            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).First();
+            var jsonData = this.RenderViewToString(viewModel.UrlAction, item);
+            jsonData.PushLineMessage();
+
+            return Content("OK!!");
+        }
+
         public ActionResult Dump()
         {
-            String fileName = Path.Combine(Logger.LogDailyPath, "request.txt");
+            String fileName = Path.Combine(Logger.LogDailyPath, $"request{DateTime.Now.Ticks}.txt");
             Request.SaveAs(fileName, true);
             return Content(System.IO.File.ReadAllText(fileName), "text/plain");
         }
+
+        public ActionResult Current(int? contractID)
+        {
+            System.Diagnostics.Debugger.Launch();
+            var item = models.GetTable<CourseContract>().Where(c => c.ContractID == contractID).FirstOrDefault();
+            //if (item.CourseContractExtension.SignOnline == true)
+            {
+                String jsonData = this.RenderViewToString("~/Views/LineEvents/Message/NotifyManagerToApproveContract.cshtml", item);
+                jsonData.PushLineMessage();
+                //item.CreateLineReadyToSignContract(models).PushLineMessage();
+            }
+
+            return Content("OK!!");
+        }
+
+        public ActionResult SpecialGivingLesson(CourseContractViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            try
+            {
+                models.RegisterSpecialGivingLesson2021(viewModel.UID);
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return Json(new { result = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 }

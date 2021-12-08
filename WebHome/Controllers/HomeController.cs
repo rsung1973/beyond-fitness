@@ -14,14 +14,14 @@ namespace WebHome.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger) : base()
+        public HomeController(ILogger<HomeController> logger, IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View("~/Views/Home/Index.cshtml");
         }
 
         public IActionResult Privacy()

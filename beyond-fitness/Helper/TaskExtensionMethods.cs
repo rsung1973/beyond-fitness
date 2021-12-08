@@ -114,7 +114,7 @@ namespace WebHome.Helper
                         var contract = models.InitiateCourseContract(
                             new CourseContractViewModel
                             {
-                                ContractType = item.SourceContract.ContractType,
+                                ContractType = (CourseContractType.ContractTypeDefinition)item.SourceContract.ContractType,
                                 Subject = item.SourceContract.Subject,
                                 OwnerID = item.CourseContract.CourseContractMember.First().UID,
                                 Lessons = item.SourceContract.RemainedLessonCount(),
@@ -228,7 +228,7 @@ namespace WebHome.Helper
                         var contract = models.InitiateCourseContract(
                             new CourseContractViewModel
                             {
-                                ContractType = item.SourceContract.ContractType,
+                                ContractType = (CourseContractType.ContractTypeDefinition)item.SourceContract.ContractType,
                                 Subject = item.SourceContract.Subject,
                                 OwnerID = item.CourseContract.CourseContractMember.First().UID,
                                 Lessons = item.SourceContract.RemainedLessonCount(),
@@ -303,19 +303,44 @@ namespace WebHome.Helper
                         var totalPaid = original.TotalPaidAmount();
                         if (totalPaid > 0)
                         {
-                            var remained = original.RemainedLessonCount();
-                            var calculated = original.Lessons - remained;
-                            var returnAmt = totalPaid - calculated
-                                    * original.LessonPriceType.ListPrice
-                                    * original.CourseContractType.GroupingMemberCount
-                                    * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
 
-                            var refund = totalPaid
-                                - (item.ProcessingFee ?? 0)
-                                - (calculated
-                                    * item.CourseContract.CourseContractExtension.SettlementPrice
-                                    * original.CourseContractType.GroupingMemberCount
-                                    * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
+                            int refund;
+                            int? returnAmt;
+
+                            if (original.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA)
+                            {
+                                var lessons = original.CountableRegisterLesson();
+
+                                returnAmt = totalPaid
+                                        - lessons.Where(r => r.LessonPriceType.IsDietaryConsult)
+                                            .Sum(r => r.LessonPriceType.ListPrice * r.LessonTime.Count)
+                                        - lessons.Where(r => !r.LessonPriceType.IsDietaryConsult)
+                                            .Sum(r => r.LessonPriceType.ListPrice * r.LessonTime.Count);
+
+                                refund = totalPaid
+                                    - (item.ProcessingFee ?? 0)
+                                        - (lessons.Select(r => r.LessonPriceType)
+                                            .Where(l => l.IsDietaryConsult).Sum(l => l.ListPrice * l.BundleCount) ?? 0)
+                                        - (lessons.Where(r => !r.LessonPriceType.IsDietaryConsult)
+                                            .Sum(r => item.CourseContract.CourseContractExtension.SettlementPrice * r.LessonTime.Count) ?? 0);
+                            }
+                            else
+                            {
+                                var remained = original.RemainedLessonCount();
+                                var calculated = original.Lessons - remained;
+                                returnAmt = totalPaid - calculated
+                                        * original.LessonPriceType.ListPrice
+                                        * original.CourseContractType.GroupingMemberCount
+                                        * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+
+                                refund = totalPaid
+                                    - (item.ProcessingFee ?? 0)
+                                    - (calculated
+                                        * item.CourseContract.CourseContractExtension.SettlementPrice
+                                        * original.CourseContractType.GroupingMemberCount
+                                        * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100 ?? 0);
+
+                            }
 
                             refund = Math.Max(refund , 0);
                             var adjustment = returnAmt - refund;
@@ -364,7 +389,7 @@ namespace WebHome.Helper
                         }
 
                         models.SubmitChanges();
-
+                        original.TerminateRegisterLesson(models);
                     }
                 }
                 catch (Exception ex)
@@ -399,12 +424,26 @@ namespace WebHome.Helper
                         var totalPaid = original.TotalPaidAmount();
                         if (totalPaid > 0)
                         {
-                            var remained = original.RemainedLessonCount();
-                            var calculated = original.Lessons - remained;
-                            var returnAmt = totalPaid - calculated
-                                    * original.LessonPriceType.ListPrice
-                                    * original.CourseContractType.GroupingMemberCount
-                                    * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+                            int? returnAmt;
+                            if (original.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA)
+                            {
+                                var lessons = original.CountableRegisterLesson();
+                                returnAmt = totalPaid
+                                        - lessons.Where(r => r.LessonPriceType.IsDietaryConsult)
+                                            .Sum(r => r.LessonPriceType.ListPrice * r.LessonTime.Count)
+                                        - lessons.Where(r => !r.LessonPriceType.IsDietaryConsult)
+                                            .Sum(r => r.LessonPriceType.ListPrice * r.LessonTime.Count);
+                            }
+                            else
+                            {
+                                var remained = original.RemainedLessonCount();
+                                var calculated = original.Lessons - remained;
+                                returnAmt = totalPaid - calculated
+                                        * original.LessonPriceType.ListPrice
+                                        * original.CourseContractType.GroupingMemberCount
+                                        * original.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount / 100;
+
+                            }
 
                             var dummyInvoice = models.GetTable<InvoiceItem>().Where(i => i.No == "--").FirstOrDefault();
                             Payment balancedPayment = null;
@@ -444,7 +483,7 @@ namespace WebHome.Helper
                         }
 
                         models.SubmitChanges();
-
+                        original.TerminateRegisterLesson(models);
                     }
                 }
                 catch (Exception ex)

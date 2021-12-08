@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommonLib</RootNamespace>
     <AssemblyName>CommonLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,10 +33,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,6 +77,7 @@
     <Compile Include="DataAccess\LinqDataSource.cs" />
     <Compile Include="DataAccess\LinqToSqlDataSource.cs" />
     <Compile Include="DataAccess\SQLHelper.cs" />
+    <Compile Include="DataAccess\SqlLogger.cs" />
     <Compile Include="Helper\JobScheduler.cs" />
     <Compile Include="Helper\LogTextWriter.cs" />
     <Compile Include="Helper\PlugInHelper.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\LogTraceListener.cs" />
-    <Compile Include="Utility\LogWritter.cs" />
     <Compile Include="Utility\NetTool.cs" />
     <Compile Include="Utility\PredicateBuilder.cs" />
     <Compile Include="Utility\ValueValidity.cs" />
@@ -110,18 +110,22 @@
     <Compile Include="Web\DataModelCache.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonLib.PlugInAdapter\CommonLib.PlugInAdapter.csproj">
-      <Project>{1dc01691-e9ae-4adf-8bbd-5b02fcb5be31}</Project>
-      <Name>CommonLib.PlugInAdapter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">
+      <Project>{C80D4CB7-32FE-4892-8991-583DCD73A286}</Project>
+      <Name>CommonLib.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonLib.PlugInAdapter\CommonLib.PlugInAdapter.csproj">
+      <Project>{94a4cf6d-44fd-4718-943a-58dff3aba315}</Project>
+      <Name>CommonLib.PlugInAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

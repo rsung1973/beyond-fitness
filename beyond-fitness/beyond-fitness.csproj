@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.3.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.3.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +16,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebHome</RootNamespace>
     <AssemblyName>beyond-fitness</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -27,6 +27,7 @@
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
     <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,10 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.9.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.9.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="epos, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\epos.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelNumberFormat, Version=1.0.6.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.6\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
@@ -63,15 +68,12 @@
     </Reference>
     <Reference Include="HtmlRenderer, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlRenderer.Core.1.5.0.6\lib\net45\HtmlRenderer.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlRenderer.WinForms, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlRenderer.WinForms.1.5.0.6\lib\net45\HtmlRenderer.WinForms.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="LineMessagingAPISDK, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LineMessagingAPI.CSharp.1.6.0\lib\LineMessagingAPISDK.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="MessagingToolkit.QRCode, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,8 +83,11 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="QREncrypter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -91,28 +96,49 @@
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration.ConfigurationManager, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.5.0.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.Packaging, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Packaging.4.5.0\lib\net46\System.IO.Packaging.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.InteropServices" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.AccessControl, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.5.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.5.0.0\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Thread" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -139,23 +165,18 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="ThoughtWorks.QRCode, Version=1.0.4128.18795, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\ThoughtWorks.QRCode.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Web.Infrastructure">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="1favicon.ico" />
@@ -171,6 +192,7 @@
     <Content Include="ajax\website-template.html" />
     <Content Include="asset\css\bootstrap.min.css" />
     <Content Include="asset\js\bootstrap.min.js" />
+    <Content Include="bin\epos.dll" />
     <Content Include="bin\MessagingToolkit.QRCode.dll" />
     <Content Include="bin\QREncrypter.dll" />
     <Content Include="bin\ThoughtWorks.QRCode.dll" />
@@ -1927,17 +1949,17 @@
     <Content Include="CornerKick\js\plugin\slider-master\.DS_Store" />
     <Content Include="CornerKick\svg\.DS_Store" />
     <Content Include="CornerKick\svg\ionicons\.DS_Store" />
+    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="CornerKick\css\royalslider\Thumbs.db" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="CornerKick\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="CornerKick\css\royalslider\Thumbs.db" />
     <None Include="images\GitHubIcon\1040.png.bak" />
     <Content Include="images\GitHubIcon\1040.png" />
     <Content Include="images\GitHubIcon\240.png" />
@@ -2055,6 +2077,7 @@
     <Content Include="img\colorblind-friendly\pt2.png" />
     <Content Include="img\colorblind-friendly\pt3.png" />
     <Content Include="img\confidential.png" />
+    <Content Include="img\contract.png" />
     <Content Include="img\cover.png" />
     <Content Include="img\dropzone\spritemap%402x.png" />
     <Content Include="img\dropzone\spritemap.png" />
@@ -2867,6 +2890,7 @@
     <Content Include="js\plugin\x-editable\moment.min.js" />
     <Content Include="js\plugin\x-editable\x-editable.min.js" />
     <Content Include="js\script.js" />
+    <Content Include="js\site.js" />
     <Content Include="lockScreen\app.css" />
     <Content Include="lockScreen\html5-android-pattern-lockScreen.js" />
     <Content Include="lockScreen\html5-android-pattern-lockScreen.min.js" />
@@ -2900,6 +2924,9 @@
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
+    <Content Include="Resource\LineButtonMessage.json" />
+    <Content Include="Resource\LineNotifyToSignContract.json" />
+    <Content Include="Resource\LineNotifyToApproveContract.json" />
     <Content Include="Scripts\esm\popper.min.js.map" />
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
@@ -2916,7 +2943,6 @@
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
     <Content Include="Scripts\jquery.min.map" />
-    <Content Include="packages.config" />
     <None Include="Models\MIG3_1\C0401.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -2944,6 +2970,7 @@
     <None Include="Models\MIG3_1\GenericType_3.1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -3171,53 +3198,7 @@
     <Content Include="Views\CoachFacet\Module\VipSelector.ascx" />
     <Content Include="Views\Common\CoachSelectorByRadio.ascx" />
     <Content Include="Views\Common\CoachSelector.ascx" />
-    <Content Include="Views\CornerKick\AttendanceAccomplished.aspx" />
-    <Content Include="Views\CornerKick\CheckAttendance.aspx" />
-    <Content Include="Views\CornerKick\Error.aspx" />
-    <Content Include="Views\CornerKick\Index.aspx" />
     <Content Include="Views\Common\GA.ascx" />
-    <Content Include="Views\CornerKick\Module\AutoLogin.ascx" />
-    <Content Include="Views\CornerKick\Module\ExercisePurposeAccomplishedNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\ExercisePurposeCheckNotice.ascx" />
-    <Content Include="Views\CornerKick\NoticeNotFound.aspx" />
-    <Content Include="Views\CornerKick\Module\CompleteUserEvent.ascx" />
-    <Content Include="Views\CornerKick\Module\PromptContractNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\LearnerEvents.ascx" />
-    <Content Include="Views\CornerKick\Module\LessonCount.ascx" />
-    <Content Include="Views\CornerKick\Register.aspx" />
-    <Content Include="Views\CornerKick\Settings.aspx" />
-    <Content Include="Views\CornerKick\Unbind.aspx" />
-    <Content Include="Views\CornerKick\AnswerDailyQuestion.aspx" />
-    <Content Include="Views\CornerKick\ForgetPassword.aspx" />
-    <Content Include="Views\CornerKick\LearnerCalendar.aspx" />
-    <Content Include="Views\CornerKick\LearnerTrainingGoal.aspx" />
-    <Content Include="Views\CornerKick\Login.aspx" />
-    <Content Include="Views\CornerKick\Module\AnsweredDailyQuestion.ascx" />
-    <Content Include="Views\CornerKick\Module\DailyQuestionHistory.ascx" />
-    <Content Include="Views\CornerKick\Module\AnsweredQuestionNotFound.ascx" />
-    <Content Include="Views\CornerKick\Module\BodyPowerAbility.ascx" />
-    <Content Include="Views\CornerKick\Module\ExpiringContractNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\DailyQuestion.ascx" />
-    <Content Include="Views\CornerKick\Module\DailyQuestionNotFound.ascx" />
-    <Content Include="Views\CornerKick\Module\BodyFitness.ascx" />
-    <Content Include="Views\CornerKick\Module\EmptyGameRankRadarChart.ascx" />
-    <Content Include="Views\CornerKick\Module\CommitPassword.ascx" />
-    <Content Include="Views\CornerKick\Module\TrainingContentAnalysis.ascx" />
-    <Content Include="Views\CornerKick\Module\MonthlyLessonBarChart.ascx" />
-    <Content Include="Views\CornerKick\Module\LessonContentPieChart.ascx" />
-    <Content Include="Views\CornerKick\Module\TrainingContentPieChart.ascx" />
-    <Content Include="Views\CornerKick\Module\GameRankRadarChart.ascx" />
-    <Content Include="Views\CornerKick\Module\PromptDailyQuestion.ascx" />
-    <Content Include="Views\CornerKick\Module\RecentArticles.ascx" />
-    <Content Include="Views\CornerKick\Module\RecentLessons.ascx" />
-    <Content Include="Views\CornerKick\Module\SlideOut.ascx" />
-    <Content Include="Views\CornerKick\Module\UserGuideNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\DailyQuestionNotice.ascx" />
-    <Content Include="Views\CornerKick\Module\LessonAttendanceCheckNotice.ascx" />
-    <Content Include="Views\CornerKick\NotifyResetPassword.aspx" />
-    <Content Include="Views\CornerKick\ResetPassword.aspx" />
-    <Content Include="Views\CornerKick\StartNavigation.aspx" />
-    <Content Include="Views\CornerKick\TrainingAnalysis.aspx" />
     <Content Include="Views\CourseContract\ApplyAmendment.aspx" />
     <Content Include="Views\CourseContract\CourseContractAmendmentView.aspx" />
     <Content Include="Views\CourseContract\Module\ContractConsultantReassignmentView.ascx" />
@@ -3404,7 +3385,6 @@
     <Content Include="Views\Report\Module\QuestionnaireWidgetGrid.ascx" />
     <Content Include="Views\Report\QuestionnaireIndex.aspx" />
     <Content Include="Views\Shared\InitBarChart.ascx" />
-    <Content Include="Views\Shared\Materialize\ReportInputError.ascx" />
     <Content Include="Views\SiteAction\Officer.ascx" />
     <Content Include="Views\Training\Module\LearnerTrainingAidsList.ascx" />
     <Content Include="Views\Training\Module\LearnerTrainingAidsPie.ascx" />
@@ -3834,6 +3814,7 @@
     <Compile Include="Helper\DataOperation\DataProcessExtensions.cs" />
     <Compile Include="Helper\Jobs\DailyJob.cs" />
     <Compile Include="Helper\LessonTimeAchievementHelper.cs" />
+    <Compile Include="Helper\MessageOperation\MessageExtensions.cs" />
     <Compile Include="Helper\UserProfileExtensions.cs" />
     <Compile Include="Helper\PaymentExtensionMethods.cs" />
     <Compile Include="Helper\PromotionExtensionMethods.cs" />
@@ -3950,17 +3931,6 @@
     <Content Include="Views\Shared\JsAlert.cshtml" />
     <Content Include="Views\SystemInfo\BranchStoreOptions.cshtml" />
     <Content Include="Views\SystemInfo\ServingCoachOptions.cshtml" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
-    <Content Include="Scripts\umd\popper.min.js.map" />
-    <Content Include="Scripts\umd\popper.js.map" />
-    <Content Include="Scripts\umd\popper-utils.min.js.map" />
-    <Content Include="Scripts\umd\popper-utils.js.map" />
-    <Content Include="Scripts\README.md" />
-    <Content Include="Scripts\popper.min.js.map" />
-    <Content Include="Scripts\popper.js.map" />
-    <Content Include="Scripts\popper-utils.min.js.map" />
-    <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\CornerKick\MyContract.cshtml" />
     <Content Include="Views\CornerKick\Module\PromptPayoffDue.cshtml" />
     <Content Include="Views\CornerKick\DataNotFound.cshtml" />
@@ -3986,13 +3956,91 @@
     <Content Include="Views\CornerKick\TodayLesson.cshtml" />
     <Content Include="Views\CornerKick\Module\LessonContent.cshtml" />
     <Content Include="Views\Shared\InitBarChartNoRegister.cshtml" />
-    <Content Include="Views\CornerKick\AbountOnlineLesson.cshtml" />
+    <Content Include="Views\CornerKick\AboutOnlineLesson.cshtml" />
     <Content Include="Views\CornerKick\SignCourseContract.cshtml" />
     <Content Include="Views\CornerKick\Module\ContractDataContent.cshtml" />
     <Content Include="Views\CornerKick\Notice.cshtml" />
     <Content Include="Views\CornerKick\Module\PromptSignContract.cshtml" />
     <Content Include="Views\CornerKick\LearnerIndex.cshtml" />
     <Content Include="Views\CornerKick\Module\SlideOut.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractTermsForCommon.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractTermsForDistance.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractTermsForCGA.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractTermsForCNA.cshtml" />
+    <Content Include="Views\CornerKick\Module\ContractPackageContent.cshtml" />
+    <Content Include="Views\CornerKick\PayoffOnLine.cshtml" />
+    <Content Include="Views\CornerKick\ErrorMessage.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyLearnerToSignContract.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyManagerToApproveContract.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyToContractPayment.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyViceManagerToApproveContract.cshtml" />
+    <Content Include="Views\CornerKick\SignContractService.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyCoachToRejectContract.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyCoachToRejectExtend.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyCoachToSignContract.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyCoachToSignExtend.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyLearnerToSignExtend.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyManagerToApproveExtend.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyViceManagerToApproveExtend.cshtml" />
+    <Content Include="Views\CornerKick\Module\PromptSignContractService.cshtml" />
+    <Content Include="Views\LineEvents\Message\NotifyToCoachBook.cshtml" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\CornerKick\Index.cshtml" />
+    <Content Include="Views\CornerKick\Login.cshtml" />
+    <Content Include="Views\Shared\Materialize\ReportInputError.cshtml" />
+    <Content Include="Views\CornerKick\Error.cshtml" />
+    <Content Include="Views\CornerKick\NoticeNotFound.cshtml" />
+    <Content Include="Views\CornerKick\NotifyResetPassword.cshtml" />
+    <Content Include="Views\CornerKick\ResetPassword.cshtml" />
+    <Content Include="Views\CornerKick\ForgetPassword.cshtml" />
+    <Content Include="Views\CornerKick\Register.cshtml" />
+    <Content Include="Views\CornerKick\Settings.cshtml" />
+    <Content Include="Views\CornerKick\StartNavigation.cshtml" />
+    <Content Include="Views\CornerKick\TrainingAnalysis.cshtml" />
+    <Content Include="Views\CornerKick\Unbind.cshtml" />
+    <Content Include="Views\CornerKick\LearnerTrainingGoal.cshtml" />
+    <Content Include="Views\CornerKick\LearnerCalendar.cshtml" />
+    <Content Include="Views\CornerKick\CheckAttendance.cshtml" />
+    <Content Include="Views\CornerKick\AttendanceAccomplished.cshtml" />
+    <Content Include="Views\CornerKick\AnswerDailyQuestion.cshtml" />
+    <Content Include="Views\CornerKick\Module\AnsweredDailyQuestion.cshtml" />
+    <Content Include="Views\CornerKick\Module\AnsweredQuestionNotFound.cshtml" />
+    <Content Include="Views\CornerKick\Module\AutoLogin.cshtml" />
+    <Content Include="Views\CornerKick\Module\BodyFitness.cshtml" />
+    <Content Include="Views\CornerKick\Module\BodyPowerAbility.cshtml" />
+    <Content Include="Views\CornerKick\Module\CommitPassword.cshtml" />
+    <Content Include="Views\CornerKick\Module\CompleteUserEvent.cshtml" />
+    <Content Include="Views\CornerKick\Module\DailyQuestion.cshtml" />
+    <Content Include="Views\CornerKick\Module\DailyQuestionHistory.cshtml" />
+    <Content Include="Views\CornerKick\Module\DailyQuestionNotFound.cshtml" />
+    <Content Include="Views\CornerKick\Module\DailyQuestionNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\EmptyGameRankRadarChart.cshtml" />
+    <Content Include="Views\CornerKick\Module\ExercisePurposeAccomplishedNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\ExercisePurposeCheckNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\ExpiringContractNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\GameRankRadarChart.cshtml" />
+    <Content Include="Views\CornerKick\Module\LearnerEvents.cshtml" />
+    <Content Include="Views\CornerKick\Module\LessonAttendanceCheckNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\LessonContentPieChart.cshtml" />
+    <Content Include="Views\CornerKick\Module\LessonCount.cshtml" />
+    <Content Include="Views\CornerKick\Module\MonthlyLessonBarChart.cshtml" />
+    <Content Include="Views\CornerKick\Module\PromptContractNotice.cshtml" />
+    <Content Include="Views\CornerKick\Module\PromptDailyQuestion.cshtml" />
+    <Content Include="Views\CornerKick\Module\RecentArticles.cshtml" />
+    <Content Include="Views\CornerKick\Module\RecentLessons.cshtml" />
+    <Content Include="Views\CornerKick\Module\TrainingContentAnalysis.cshtml" />
+    <Content Include="Views\CornerKick\Module\TrainingContentPieChart.cshtml" />
+    <Content Include="Views\CornerKick\Module\UserGuideNotice.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -4006,12 +4054,11 @@
     <Folder Include="js\plugin\tableDnD\" />
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\LessonEvent\" />
-    <Folder Include="Views\LineEvents\" />
     <Folder Include="Views\PaymentBase\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj">
-      <Project>{8146e629-552a-4b36-8711-08ae8245b8fa}</Project>
+      <Project>{c80d4cb7-32fe-4892-8991-583dcd73a286}</Project>
       <Name>CommonLib.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">

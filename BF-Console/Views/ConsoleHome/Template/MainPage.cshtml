@@ -53,7 +53,7 @@
 
     @RenderSection("CustomHeader", false)
     <!-- Custom Css -->
-    <link rel="stylesheet" href="css/main.css?2.6">
+    <link rel="stylesheet" href="css/main.css?2.7">
     <link rel="stylesheet" href="css/color_skins.css?2.5">
     <!-- Jquery Core Js -->
     <script src="bundles/libscripts.bundle.js"></script>
@@ -81,7 +81,7 @@
     <script src="plugins/smartcalendar/js/bootstrap-datetimepicker.min.js"></script>
     <script src="plugins/smartcalendar/js/locales-datetimepicker/bootstrap-datetimepicker.zh-TW.js"></script>
     <script src="plugins/jquery-form/jquery-form.min.js"></script>
-    <script src="js/common.js?1.8"></script>
+    <script src="js/common.js?1.9"></script>
     @if (_viewModel != null)
     {
         <script>
@@ -446,14 +446,14 @@
         }
 
     </script>
-    @if (ViewBag.Message != null)
+    @if (_viewModel?.AlertMessage != null)
     {
         <script>
             $(function () {
                 Swal.fire({
                     icon: 'info',
-                    text: '@(HttpUtility.JavaScriptStringEncode((String)ViewBag.Message))',
-                    confirmButtonText: '確定',
+                    text: '@(HttpUtility.JavaScriptStringEncode(_viewModel.AlertMessage))',
+                    confirmButtonText: '朕知道了',
                 })
             });
         </script>

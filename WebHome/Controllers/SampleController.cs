@@ -1,6 +1,8 @@
 ﻿using CommonLib.DataAccess;
+using CommonLib.Core.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,8 +27,9 @@ namespace WebHome.Controllers
         protected internal bool _dbInstance;
         protected internal GenericManager<BFDataContext> models;
 
-        protected SampleController() : base()
+        protected SampleController(IServiceProvider serviceProvider) : base()
         {
+            ServiceProvider = serviceProvider;
         }
 
         protected override void Dispose(bool disposing)
@@ -36,6 +39,12 @@ namespace WebHome.Controllers
         }
 
         public ModelSource<TEntity> DataSource => _dataSource;
+
+        public IServiceProvider ServiceProvider
+        {
+            get;
+            private set;
+        }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -60,6 +69,24 @@ namespace WebHome.Controllers
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(cultureInfo.Name);
                 ViewBag.Lang = lang;
             }
+        }
+
+        private IViewRenderService _viewRenderService;
+
+        public async Task<string> RenderViewToStringAsync(String viewName,object model)
+        {
+            if (_viewRenderService == null)
+            {
+                _viewRenderService = ServiceProvider.GetRequiredService<IViewRenderService>();
+            }
+            return await _viewRenderService.RenderToStringAsync(viewName, model);
+        }
+
+        protected async Task<string> DumpAsync(bool includeHeader = true)
+        {
+            String fileName = Path.Combine(FileLogger.Logger.LogDailyPath, $"request{DateTime.Now.Ticks}.txt");
+            await Request.SaveAsAsync(fileName, includeHeader);
+            return fileName;
         }
     }
 }

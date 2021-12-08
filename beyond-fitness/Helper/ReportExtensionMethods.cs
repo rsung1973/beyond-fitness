@@ -13,6 +13,7 @@ using WebHome.Models.Locale;
 using WebHome.Models.ViewModel;
 using WebHome.Properties;
 using CommonLib.DataAccess;
+using WebHome.Helper.BusinessOperation;
 
 namespace WebHome.Helper
 {
@@ -74,7 +75,7 @@ namespace WebHome.Helper
                 r[7] = halfCount;
                 r[8] = branch.BranchName;
                 var discount = contract.CourseContractType.GroupingLessonDiscount;
-                r[9] = count * contract.LessonPriceType.ListPrice * discount.GroupingMemberCount * discount.PercentageOfDiscount / 100;
+                r[9] = item.Sum(l => l.RegisterLesson.LessonPriceType.ListPrice) * discount.GroupingMemberCount * discount.PercentageOfDiscount / 100;
                 r[10] = contract.Entrusted == true
                     ? "是"
                     : contract.Entrusted == false
@@ -173,7 +174,7 @@ namespace WebHome.Helper
         {
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("合約編號", typeof(String)));
-            table.Columns.Add(new DataColumn("體能顧問", typeof(String)));
+            table.Columns.Add(new DataColumn("上課體能顧問", typeof(String)));
             table.Columns.Add(new DataColumn("簽約場所", typeof(String)));
             table.Columns.Add(new DataColumn("學生", typeof(String)));
             table.Columns.Add(new DataColumn("合約名稱", typeof(String)));
@@ -187,6 +188,7 @@ namespace WebHome.Helper
             table.Columns.Add(new DataColumn("體能顧問所屬分店", typeof(String)));
             table.Columns.Add(new DataColumn("預約上課數", typeof(int)));
             table.Columns.Add(new DataColumn("SettlementID", typeof(int)));
+            table.Columns.Add(new DataColumn("簽約體能顧問", typeof(String)));
 
             var details = items.Where(t => t.ContractID.HasValue)
                 .GroupBy(t => new
@@ -227,7 +229,7 @@ namespace WebHome.Helper
                 r[7] = item.Join(models.GetTable<Settlement>(), l => l.SettlementID, s => s.SettlementID, (l, s) => new { l.CommitAttendance, s.SettlementDate })
                             .Where(l => l.CommitAttendance <= l.SettlementDate).Count();    //item.Where(l => l.AchievementIndex == 0.5m).Count();
                 r[8] = branch.BranchName;
-                r[9] = item.Sum(l=>l.ListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100);
+                r[9] = item.Sum(l => l.ListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100);
                 r[10] = contract.Entrusted == true
                     ? "是"
                     : contract.Entrusted == false
@@ -244,6 +246,7 @@ namespace WebHome.Helper
                 r[13] = item.Count();
                 if (item.Key.SettlementID.HasValue)
                     r[14] = item.Key.SettlementID;
+                r[15] = contract.ServingCoach.UserProfile.FullName();
                 table.Rows.Add(r);
             }
 
@@ -400,7 +403,34 @@ namespace WebHome.Helper
                 收款日期 = /*item.Payment.VoidPayment == null ?*/ String.Format("{0:yyyy/MM/dd}", item.Payment.PayoffDate)/* : null*/,
                 簽約場所 = item.Payment.PaymentTransaction.BranchStore.BranchName,
                 體能顧問所屬分店 = item.CoachWorkPlace.HasValue ? item.BranchStore.BranchName : "其他",
-                是否續約 = item.Payment.ContractPayment?.CourseContract.Renewal,
+                是否續約 = item.Payment.ContractPayment?.CourseContract.Renewal.TruthValue(),
+                分期期別 = item.Payment.ContractPayment?.CourseContract.GetInstallmentPeriodNo(models),
+            });
+
+            DataTable table = details.ToDataTable();
+            return table;
+        }
+
+        public static DataTable CreateVoidShareList(this GenericManager<BFDataContext> models, IQueryable<TuitionAchievement> items)
+
+        {
+            var details = items.ToArray().Select(item => new
+            {
+                體能顧問 = item.ServingCoach.UserProfile.FullName(),
+                學生 = item.Payment.TuitionInstallment != null
+                        ? item.Payment.TuitionInstallment.IntuitionCharge.RegisterLesson.UserProfile.FullName()
+                        : item.Payment.ContractPayment != null
+                            ? item.Payment.ContractPayment.CourseContract.ContractLearner()
+                            : "--",
+                分潤業績 = -item.VoidShare,
+                類別 = ((Naming.PaymentTransactionType?)item.Payment.TransactionType).ToString(),
+                發票號碼 = item.Payment.InvoiceID.HasValue
+                    ? item.Payment.InvoiceItem.TrackCode + item.Payment.InvoiceItem.No : null,
+                折讓日期 = String.Format("{0:yyyy/MM/dd}", item.Payment.InvoiceAllowance.AllowanceDate),
+                簽約場所 = item.Payment.PaymentTransaction.BranchStore.BranchName,
+                體能顧問所屬分店 = item.CoachWorkPlace.HasValue ? item.BranchStore.BranchName : "其他",
+                是否續約 = item.Payment.ContractPayment?.CourseContract.Renewal.TruthValue(),
+                分期期別 = item.Payment.ContractPayment?.CourseContract.GetInstallmentPeriodNo(models),
             });
 
             DataTable table = details.ToDataTable();
@@ -786,6 +816,106 @@ namespace WebHome.Helper
                 else
                 {
                     calcCoachAchievement();
+                }
+            }
+        }
+
+        public static void ExecuteVoidShareSettlement(this GenericManager<BFDataContext> models, DateTime startDate, DateTime endExclusiveDate)
+
+        {
+            var settlement = models.GetTable<Settlement>().Where(s => startDate <= s.SettlementDate && endExclusiveDate > s.SettlementDate).FirstOrDefault();
+            if (settlement == null)
+                return;
+
+
+            var coachItems = models.PromptEffectiveCoach();
+            var salaryTable = models.GetTable<CoachMonthlySalary>();
+
+            var voidPayment = models.GetTable<VoidPayment>().Where(p => p.VoidDate >= settlement.StartDate && p.VoidDate < settlement.EndExclusiveDate)
+                                .Join(models.GetTable<Payment>().Where(p => p.AllowanceID.HasValue), v => v.VoidID, p => p.PaymentID, (v, p) => p);
+            //.FilterByEffective();
+            foreach (var voidItem in voidPayment)
+            {
+                if (voidItem.TuitionAchievement.Any())
+                {
+                    var voidAmt = (int?)(voidItem.InvoiceAllowance.TotalAmount + voidItem.InvoiceAllowance.TaxAmount);
+                    var totalShare = voidItem.TuitionAchievement.Sum(t => t.ShareAmount) ?? 1;
+
+                    foreach (var t in voidItem.TuitionAchievement)
+                    {
+                        t.VoidShare = voidAmt * t.ShareAmount / totalShare;
+                    }
+                }
+                models.SubmitChanges();
+            }
+
+            var voidTuition = voidPayment
+                                .Join(models.GetTable<TuitionAchievement>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+            foreach (var coach in coachItems)
+            {
+                var salary = salaryTable.Where(s => s.CoachID == coach.CoachID && s.SettlementID == settlement.SettlementID).FirstOrDefault();
+                if (salary == null)
+                {
+                    salary = new CoachMonthlySalary
+                    {
+                        CoachID = coach.CoachID,
+                        SettlementID = settlement.SettlementID,
+                    };
+                    salaryTable.InsertOnSubmit(salary);
+                }
+
+                if (coach.CoachWorkplace.Count == 1)
+                {
+                    salary.WorkPlace = coach.CoachWorkplace.First().BranchID;
+                }
+
+
+                var voidItems = voidTuition.Where(t => t.CoachID == coach.CoachID);
+                salary.VoidShare = voidItems.Sum(t => t.VoidShare) ?? 0;
+
+                models.SubmitChanges();
+
+                BranchStore branch;
+                if (coach.UserProfile.IsOfficer())
+                {
+                    foreach (var g in voidPayment.GroupBy(l => l.PaymentTransaction.BranchID))
+                    {
+                        var branchBonus = salary.CoachBranchMonthlyBonus.Where(b => b.BranchID == g.Key).FirstOrDefault();
+                        if (branchBonus == null)
+                        {
+                            branchBonus = new CoachBranchMonthlyBonus
+                            {
+                                CoachMonthlySalary = salary,
+                                BranchID = g.Key
+                            };
+                        }
+
+                        branchBonus.VoidShare = (int?)voidPayment
+                                .Join(models.GetTable<PaymentTransaction>().Where(t => t.BranchID == g.Key), p => p.PaymentID, t => t.PaymentID, (p, t) => p)
+                                .Join(models.GetTable<InvoiceAllowance>(), p => p.AllowanceID, t => t.AllowanceID, (p, t) => t)
+                                .Sum(a => a.TotalAmount + a.TaxAmount);
+                        models.SubmitChanges();
+                    }
+                }
+                else if ((branch = models.GetTable<BranchStore>().Where(b => b.ManagerID == coach.CoachID || b.ViceManagerID == coach.CoachID).FirstOrDefault()) != null)
+                {
+                    var branchBonus = salary.CoachBranchMonthlyBonus.Where(b => b.BranchID == branch.BranchID).FirstOrDefault();
+                    if (branchBonus == null)
+                    {
+                        branchBonus = new CoachBranchMonthlyBonus
+                        {
+                            CoachMonthlySalary = salary,
+                            BranchID = branch.BranchID
+                        };
+                        salary.CoachBranchMonthlyBonus.Add(branchBonus);
+                    }
+
+                    branchBonus.VoidShare = (int?)voidPayment
+                            .Join(models.GetTable<PaymentTransaction>().Where(t => t.BranchID == branch.BranchID), p => p.PaymentID, t => t.PaymentID, (p, t) => p)
+                            .Join(models.GetTable<InvoiceAllowance>(), p => p.AllowanceID, t => t.AllowanceID, (p, t) => t)
+                            .Sum(a => a.TotalAmount + a.TaxAmount);
+                    models.SubmitChanges();
                 }
             }
         }

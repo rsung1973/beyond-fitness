@@ -10,7 +10,16 @@
 @using WebHome.Models.Timeline
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    PDQQuestion _model;
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (PDQQuestion)this.Model;
+}
 <div class="qa-content">
     <div class="personal-info">
         <div class="row valign-wrapper">
@@ -26,11 +35,11 @@
     <p class="collection"><span class="gray-t16" id="question">@(_model.Question)</span></p>
     <form action="@(Url.Action("CommitAnswerDailyQuestion","CornerKick",new { keyID = _model.QuestionID.EncryptKey() }))" method="post" id="ansForm">
         @foreach (var quest in _model.PDQSuggestion)
-            {
-        <p>
-            <input class="with-gap" name="suggestionID" value="@(quest.SuggestionID)" type="radio" id="ans@(quest.SuggestionID)" />
-            <label for="ans@(quest.SuggestionID)">@(quest.Suggestion)</label>
-        </p>
+        {
+            <p>
+                <input class="with-gap" name="suggestionID" value="@(quest.SuggestionID)" type="radio" id="ans@(quest.SuggestionID)" />
+                <label for="ans@(quest.SuggestionID)">@(quest.Suggestion)</label>
+            </p>
         }
     </form>
     <!-- Button -->
@@ -39,18 +48,4 @@
     </div>
     <!--// End of button-->
 </div>
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    PDQQuestion _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (PDQQuestion)this.Model;
-    }
-
-</script>

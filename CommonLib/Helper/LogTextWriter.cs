@@ -16,12 +16,12 @@ namespace CommonLib.Helper
 
         public override void Write(string value)
         {
-            Logger.Info(value);
+            global::Utility.Logger.Info(value);
         }
 
         public override void WriteLine(string value)
         {
-            Logger.Info(value);
+            global::Utility.Logger.Info(value);
         }
 
     }

@@ -1,15 +1,15 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Data.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 
+using CommonLib.Utility;
 using System.Linq.Expressions;
 using System.Collections;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using CommonLib.Logger;
 
 namespace CommonLib.DataAccess
 {
@@ -17,21 +17,33 @@ namespace CommonLib.DataAccess
     /// UserManager ªººK­n´y­z¡C
     /// </summary>
     public partial class GenericManager<T, TEntity> : GenericManager<T>
-        where T : DbContext, new()
+        where T : DataContext, new()
         where TEntity : class, new()
     {
         protected internal TEntity _entity;
 
         public GenericManager() : base() { }
-        public GenericManager(GenericManager<T> models) : base(models) { }
+        public GenericManager(GenericManager<T> mgr) : base(mgr) { }
 
 
-        public TEntity DataEntity => _entity;
+        public TEntity DataEntity
+        {
+            get
+            {
+                return _entity;
+            }
+        }
 
-        public DbSet<TEntity> EntityList => _db.Set<TEntity>();
+        public Table<TEntity> EntityList
+        {
+            get
+            {
+                return _db.GetTable<TEntity>();
+            }
+        }
 
 
-        protected TEntity InstantiateData(IQueryable<TEntity> values)
+        protected TEntity instantiateData(IQueryable<TEntity> values)
         {
             _entity = values.FirstOrDefault();
             return _entity;
@@ -40,14 +52,14 @@ namespace CommonLib.DataAccess
         public virtual TEntity CreateEntity()
         {
             _entity = new TEntity();
-            EntityList.Add(_entity);
+            EntityList.InsertOnSubmit(_entity);
             return _entity;
         }
 
         public void DeleteEntity()
         {
-            _db.Set<TEntity>().Remove(_entity);
-            _db.SaveChanges();
+            _db.GetTable<TEntity>().DeleteOnSubmit(_entity);
+            _db.SubmitChanges();
             _entity = default(TEntity);
         }
 
@@ -70,15 +82,18 @@ namespace CommonLib.DataAccess
         {
             return DeleteAllOnSubmit<TEntity>(predicate);
         }
+
+
     }
 
     public class GenericManager<T> : IDisposable
-                where T : DbContext, new()
+                where T : DataContext, new()
     {
         protected internal T _db;
         protected internal bool _isInstance = true;
 
         private bool _bDisposed = false;
+        private SqlLogger _logWriter;
 
         public GenericManager(T db)
         {
@@ -90,88 +105,152 @@ namespace CommonLib.DataAccess
         }
 
         public GenericManager()
-            : this(new T())
+            : this(new T(), null)
         {
 
+        }
+
+
+        public GenericManager(IDbConnection connection)
+        {
+            _isInstance = false;
+
+            Type type = typeof(T);
+            T db = (T)type.Assembly.CreateInstance(type.FullName, false, System.Reflection.BindingFlags.CreateInstance, null,
+                new Object[] { connection }, null, null);
+
+            initialize(db, null);
         }
 
         public GenericManager(GenericManager<T> mgr)
         {
             if (mgr != null)
             {
-                _db = mgr.CurrentContext;
+                _db = mgr.DataContext;
                 _isInstance = false;
             }
             else
             {
-                initialize(new T());
+                initialize(new T(), null);
+            }
+        }
+
+        public GenericManager(T db, TextWriter log)
+        {
+            initialize(db, log);
+        }
+
+        private void initialize(T db, TextWriter log)
+        {
+            _db = db;
+            _db.Log = log;
+
+            if (_db.Log == null /*&& Settings.Default.SqlLog*/)
+            {
+                _logWriter = new SqlLogger { /*IgnoreSelect = Settings.Default.SqlLogIgnoreSelect*/ }; 
+                _db.Log = _logWriter;
             }
         }
 
 
-        private void initialize(T db)
+        public IDbConnection Connection
         {
-            _db = db;
+            get { return _db.Connection; }
         }
 
-        internal IDbConnection DbConnection => _db.Database.GetDbConnection();
 
-        internal T CurrentContext => _db;
 
+        public T DataContext
+        {
+            get { return _db; }
+        }
+
+        public GenericManager<U> BridgeManager<U>()
+            where U : DataContext, new()
+        {
+            return new GenericManager<U>(_db.Connection);
+        }
 
         public void SubmitChanges()
         {
-            _db.SaveChanges();
+            _db.SubmitChanges();
         }
 
 
-        public DbSet<TTable> GetTable<TTable>() where TTable : class
+        public DbTransaction EnterTransaction()
         {
-            return _db.Set<TTable>();
+            if (_db.Connection.State != ConnectionState.Open)
+            {
+                _db.Connection.Open();
+            }
+
+            DbTransaction tran = _db.Connection.BeginTransaction();
+            _db.Transaction = tran;
+
+            return tran;
+        }
+
+
+        public DataLoadOptions LoadOptions
+        {
+            get
+            {
+                return DataContext.LoadOptions;
+            }
+            set
+            {
+                DataContext.LoadOptions = value;
+            }
+        }
+
+        public Table<TTable> GetTable<TTable>() where TTable : class
+        {
+            return _db.GetTable<TTable>();
         }
 
         public DbCommand GetCommand(IQueryable query)
         {
-            //var sqlCmd = _db.Database.GetDbConnection().CreateCommand();
-            //sqlCmd.CommandText = query.ToQueryString();
-            //return sqlCmd;
-            return query.CreateDbCommand();
+            return _db.GetCommand(query);
+        }
+
+        public IEnumerable ExecuteQuery(Type elementType, string query, params Object[] parameters)
+        {
+            return _db.ExecuteQuery(elementType, query, parameters);
         }
 
         public IEnumerable<TResult> ExecuteQuery<TResult>(string query, params Object[] parameters)
-            where TResult:class
         {
-            return _db.Set<TResult>().FromSqlRaw(query, parameters);
+            return _db.ExecuteQuery<TResult>(query, parameters);
         }
 
         public int ExecuteCommand(string command, params Object[] parameters)
         {
-            return _db.Database.ExecuteSqlRaw(command, parameters);
+            return _db.ExecuteCommand(command, parameters);
         }
 
         public TSource DeleteAnyOnSubmit<TSource>(Expression<Func<TSource, bool>> predicate) where TSource : class, new()
         {
-            var DbSet = _db.Set<TSource>();
-            TSource item = DbSet.Where(predicate).FirstOrDefault();
+            var table = _db.GetTable<TSource>();
+            TSource item = table.Where(predicate).FirstOrDefault();
             if (item != null)
             {
-                DbSet.Remove(item);
+                table.DeleteOnSubmit(item);
             }
             return item;
         }
 
         public IEnumerable<TSource> DeleteAllOnSubmit<TSource>(Expression<Func<TSource, bool>> predicate) where TSource : class, new()
         {
-            var DbSet = _db.Set<TSource>();
-            IQueryable<TSource> items = DbSet.Where(predicate);
-            DbSet.RemoveRange(items);
+            var table = _db.GetTable<TSource>();
+            IEnumerable<TSource> items = table.Where(predicate);
+            table.DeleteAllOnSubmit(items);
             return items;
         }
 
         public IEnumerable<TSource> DeleteAll<TSource>(Expression<Func<TSource, bool>> predicate) where TSource : class, new()
         {
             IEnumerable<TSource> items = DeleteAllOnSubmit<TSource>(predicate);
-            _db.SaveChanges();
+            _db.SubmitChanges();
             return items;
         }
 
@@ -181,7 +260,7 @@ namespace CommonLib.DataAccess
             TSource item = DeleteAnyOnSubmit<TSource>(predicate);
             if (item != null)
             {
-                _db.SaveChanges();
+                _db.SubmitChanges();
             }
             return item;
         }
@@ -203,6 +282,8 @@ namespace CommonLib.DataAccess
                     if (_isInstance)
                     {
                         _db.Dispose();
+                        if (_logWriter != null)
+                            _logWriter.Dispose();
                     }
                 }
 

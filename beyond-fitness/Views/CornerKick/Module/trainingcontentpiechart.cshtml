@@ -8,14 +8,27 @@
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
-    <canvas id="@(_chartID)" class="chart-box"></canvas>
-@{ var items = models.GetTable<TrainingStage>()
-        .Select(s => new
-        {
-            s.Stage,
-            TotalMinutes = _model.Where(t => t.StageID == s.StageID).Sum(t => t.TotalMinutes) ?? 0
-        }).ToArray();
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    string _chartID = "pieChart" + DateTime.Now.Ticks;
+    IQueryable<TrainingExecutionStage> _model;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (IQueryable<TrainingExecutionStage>)this.Model;
+
+}
+<canvas id="@(_chartID)" class="chart-box"></canvas>
+@{ 
+    var items = models.GetTable<TrainingStage>()
+         .Select(s => new
+         {
+             s.Stage,
+             TotalMinutes = _model.Where(t => t.StageID == s.StageID).Sum(t => t.TotalMinutes) ?? 0
+         }).ToArray();
 
     var total = items.Sum(t => t.TotalMinutes);
 
@@ -27,13 +40,17 @@
             TotalMinutes = compareTo.Where(t => t.StageID == s.StageID).Sum(t => t.TotalMinutes) ?? 0
         }).ToArray();
 
-    var totalCompareTo = compareToItems.Sum(t => t.TotalMinutes);}
- @{ if (totalCompareTo == 0)
-        totalCompareTo = 1m;}
+    var totalCompareTo = compareToItems.Sum(t => t.TotalMinutes);
+    
+    if (totalCompareTo == 0)
+    {
+        totalCompareTo = 1m;
+    }
+}
 
 <script>
     $(function () {
-        
+
         var PieConfig = {
             type: 'pie',
             data: {
@@ -80,20 +97,4 @@
     });
 </script>
 
-<script runat="server">
 
-    ModelStateDictionary _modelState;
-    ModelSource<UserProfile> models;
-    string _chartID = "pieChart" + DateTime.Now.Ticks;
-    IQueryable<TrainingExecutionStage> _model;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (IQueryable<TrainingExecutionStage>)this.Model;
-
-    }
-
-</script>

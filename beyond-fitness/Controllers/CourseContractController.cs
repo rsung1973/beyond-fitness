@@ -26,6 +26,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Security.Authorization;
 using WebHome.Properties;
 using WebHome.Helper.BusinessOperation;
+using WebHome.Helper.MessageOperation;
 
 namespace WebHome.Controllers
 {
@@ -64,7 +65,7 @@ namespace WebHome.Controllers
             var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
             if (item != null)
             {
-                viewModel.ContractType = item.ContractType;
+                viewModel.ContractType = (CourseContractType.ContractTypeDefinition?)item.ContractType;
                 viewModel.ContractDate = item.ContractDate;
                 viewModel.Subject = item.Subject;
                 viewModel.ValidFrom = item.ValidFrom;
@@ -95,17 +96,28 @@ namespace WebHome.Controllers
         public ActionResult DeleteCourseContract(CourseContractViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.ContractID = viewModel.DecryptKeyValue();
             }
 
+            var profile = HttpContext.GetUser();
+
             bool result = false;
             try
             {
-                var item = models.DeleteAny<CourseContract>(d => d.ContractID == viewModel.ContractID);
+                var item = models.GetTable<CourseContract>().Where(d => d.ContractID == viewModel.ContractID).FirstOrDefault();
+
                 if (item != null)
                 {
+                    if (item.CourseContractRevision != null && item.FitnessConsultant != profile.UID)
+                    {
+                        var jsonData = this.RenderViewToString("~/Views/LineEvents/Message/NotifyCoachToRejectExtend.cshtml", item.CourseContractRevision.SourceContract);
+                        jsonData.PushLineMessage();
+                    }
+
+                    models.ExecuteCommand("delete CourseContract where ContractID = {0}", item.ContractID);
+
                     result = true;
                     ClearPreliminaryMember();
                 }
@@ -701,7 +713,7 @@ namespace WebHome.Controllers
                 return Json(new { result = false,message = "請選擇課程單價" }, JsonRequestBehavior.AllowGet);
             }
 
-            var typeItem = models.GetTable<CourseContractType>().Where(c => c.TypeID == viewModel.ContractType).FirstOrDefault();
+            var typeItem = models.GetTable<CourseContractType>().Where(c => c.TypeID == (int?)viewModel.ContractType).FirstOrDefault();
             if (typeItem == null)
             {
                 return Json(new { result = false, message = "請選擇合約名稱" }, JsonRequestBehavior.AllowGet);
@@ -848,7 +860,7 @@ namespace WebHome.Controllers
                 items = items.Where(c => c.Status == viewModel.Status);
 
             if(viewModel.ContractType.HasValue)
-                items = items.Where(c => c.ContractType == viewModel.ContractType);
+                items = items.Where(c => c.ContractType == (int)viewModel.ContractType);
 
             if (viewModel.ContractDateFrom.HasValue)
                 items = items.Where(c => c.ContractDate >= viewModel.ContractDateFrom);

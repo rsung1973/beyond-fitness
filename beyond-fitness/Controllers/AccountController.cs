@@ -490,7 +490,7 @@ namespace WebHome.Controllers
 
         }
 
-        public async Task<ActionResult> QuickLogin(LoginViewModel viewModel, string returnUrl)
+        public ActionResult QuickLogin(LoginViewModel viewModel, string returnUrl)
         {
 
             UserProfile item = models.EntityList.Where(u => u.PID == viewModel.PID
@@ -963,6 +963,126 @@ namespace WebHome.Controllers
 
             return Json(new { result = true });
 
+        }
+
+        public ActionResult ToEditPaymentForContract(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("EditPaymentForContract", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+        }
+        public ActionResult ToSignCourseContract(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("SignCourseContract", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public ActionResult ToSignContractService(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("SignContractService", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public ActionResult ToApplyContractService(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("ApplyContractService", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public ActionResult ToEditCourseContract(CourseContractQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("EditCourseContract", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public ActionResult ToConsoleCalendar(DailyBookingQueryViewModel viewModel, String encUID)
+        {
+            int? uid = null;
+            if (encUID != null)
+            {
+                uid = encUID.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            if (item != null && item.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+            {
+                HttpContext.SignOn(item);
+                return Redirect(Url.Action("Calendar", "ConsoleHome", viewModel));
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
 

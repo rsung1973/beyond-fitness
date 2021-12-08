@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommonLib.PlugInAdapter;
-using CommonLib.Properties;
 
-namespace CommonLib.Helper
+namespace CommonLib.Core.Helper
 {
     public class PlugInHelper
     {
@@ -22,28 +21,12 @@ namespace CommonLib.Helper
         {
             try
             {
-                if (!String.IsNullOrEmpty(Settings.Default.IPdfUtilityImpl))
+                if (!String.IsNullOrEmpty(Startup.Properties["IPdfUtilityImpl"]))
                 {
-                    Type type = Type.GetType(Settings.Default.IPdfUtilityImpl);
+                    Type type = Type.GetType(Startup.Properties["IPdfUtilityImpl"]);
                     if (type.GetInterface("CommonLib.PlugInAdapter.IPdfUtility") != null)
                     {
                         _pdfUtility = (IPdfUtility)type.Assembly.CreateInstance(type.FullName);
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-
-            try
-            {
-                if (!String.IsNullOrEmpty(Settings.Default.ILoggerImpl))
-                {
-                    Type type = Type.GetType(Settings.Default.ILoggerImpl);
-                    if (type.GetInterface("CommonLib.PlugInAdapter.ILogger") != null)
-                    {
-                        _logger = (ILogger)type.Assembly.CreateInstance(type.FullName);
                     }
                 }
             }

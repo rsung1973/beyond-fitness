@@ -20,7 +20,7 @@ namespace CommonLib.Helper
 
         static JobScheduler()
         {
-            _JobFileName = Path.Combine(Logger.LogPath, "JobScheduler.xml");
+            _JobFileName = Path.Combine(global::Utility.Logger.LogPath, "JobScheduler.xml");
         }
 
         private JobScheduler(int period)
@@ -45,7 +45,7 @@ namespace CommonLib.Helper
             }
             catch(Exception ex)
             {
-                Logger.Error(ex);
+                global::Utility.Logger.Error(ex);
             }
 
             if (_jobItems == null)
@@ -71,7 +71,7 @@ namespace CommonLib.Helper
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error(ex);
+                        global::Utility.Logger.Error(ex);
                         item.LastError = ex.ToString();
                     }
                     changed = true;
@@ -131,7 +131,7 @@ namespace CommonLib.Helper
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex);
+                    global::Utility.Logger.Error(ex);
                     item.LastError = ex.ToString();
                 }
                 _instance.saveJob();
@@ -214,7 +214,7 @@ namespace CommonLib.Helper
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(ex);
+                            global::Utility.Logger.Error(ex);
                         }
                     }
                 });

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using WebHome.Models.Locale;
 using CommonLib.DataAccess;
 
 namespace WebHome.Models.DataEntity
@@ -68,6 +70,12 @@ namespace WebHome.Models.DataEntity
         }
 
         public bool InquiryHasError
+        {
+            get;
+            set;
+        }
+
+        public Naming.DataResultMode ResultModel
         {
             get;
             set;
