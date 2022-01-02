@@ -659,7 +659,7 @@ namespace WebHome.Helper
                 LessonItems = models.GetTable<V_Tuition>().Where(l => l.ClassTime >= settlement.StartDate && l.ClassTime < settlement.EndExclusiveDate)
             };
 
-            foreach(var item in helper.SettlementFullAchievement)
+            foreach (var item in helper.SettlementFullAchievement)
             {
                 models.ExecuteCommand("update LessonTimeSettlement set SettlementStatus = {0},SettlementID = {1} where LessonID={2}", (int)Naming.LessonSettlementStatus.FullAchievement, settlement.SettlementID, item.LessonID);
             }
@@ -681,6 +681,9 @@ namespace WebHome.Helper
             var paymentItems = models.GetTable<Payment>().Where(p => p.PayoffDate >= settlement.StartDate && p.PayoffDate < settlement.EndExclusiveDate);
             //.FilterByEffective();
             IQueryable<TuitionAchievement> achievementItems = paymentItems.GetPaymentAchievement(models);
+
+            var voidPayment = models.GetTable<VoidPayment>().Where(p => p.VoidDate >= startDate && p.VoidDate < endExclusiveDate)
+                                .Join(models.GetTable<Payment>().Where(p => p.AllowanceID.HasValue), v => v.VoidID, p => p.PaymentID, (v, p) => p);
 
             foreach (var coach in coachItems)
             {
@@ -768,6 +771,14 @@ namespace WebHome.Helper
                     }
 
                     salary.AchievementShareRatio = shareRatio;
+
+                    var voidTuition = voidPayment
+                        .Join(models.GetTable<TuitionAchievement>()
+                                .Where(t => t.CoachID == coach.CoachID),
+                            p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+                    salary.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+
                     models.SubmitChanges();
                 };
 
@@ -789,6 +800,13 @@ namespace WebHome.Helper
 
                         branchBonus.BranchTotalAttendanceCount = g.Count();
                         branchBonus.BranchTotalTuition = g.CalcTuition(models);
+
+                        var voidTuition = voidPayment
+                            .Join(models.GetTable<PaymentTransaction>().Where(t => t.BranchID == g.Key), p => p.PaymentID, t => t.PaymentID, (p, t) => p)
+                            .Join(models.GetTable<TuitionAchievement>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+                        branchBonus.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+
                         models.SubmitChanges();
                     }
 
@@ -809,6 +827,13 @@ namespace WebHome.Helper
                     var branchItems = countableItems.Where(w => w.WorkPlace == branch.BranchID);
                     branchBonus.BranchTotalAttendanceCount = branchItems.Count();
                     branchBonus.BranchTotalTuition = branchItems.CalcTuition(models);
+
+                    var voidTuition = voidPayment
+                        .Join(models.GetTable<PaymentTransaction>().Where(t => t.BranchID == branch.BranchID), p => p.PaymentID, t => t.PaymentID, (p, t) => p)
+                        .Join(models.GetTable<TuitionAchievement>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+                    branchBonus.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+
                     models.SubmitChanges();
 
                     calcCoachAchievement();
@@ -843,7 +868,7 @@ namespace WebHome.Helper
 
                     foreach (var t in voidItem.TuitionAchievement)
                     {
-                        t.VoidShare = voidAmt * t.ShareAmount / totalShare;
+                        t.VoidShare = (int?)((decimal?)voidAmt * (decimal?)t.ShareAmount / totalShare);
                     }
                 }
                 models.SubmitChanges();

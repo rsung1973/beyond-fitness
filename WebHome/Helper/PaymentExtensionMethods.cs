@@ -151,6 +151,22 @@ namespace WebHome.Helper
             return shareSummary;
         }
 
+        public static IQueryable<TuitionAchievement> GetVoidShare(this MonthlyIndicator indicator, GenericManager<BFDataContext> models, int? coachID)
+        {
+            IQueryable<VoidPayment> voidItems = models.GetTable<VoidPayment>()
+                    .Where(v => v.VoidDate >= indicator.StartDate)
+                    .Where(v => v.VoidDate < indicator.EndExclusiveDate);
+
+            var items = voidItems.GetVoidShare(models);
+            if(coachID.HasValue)
+            {
+                items = items.Where(t => t.CoachID == coachID);
+            }
+            return items;
+
+        }
+
+
 
         public static IQueryable<LessonTime> GetUnpaidPISession(this PaymentQueryViewModel viewModel, GenericManager<BFDataContext> models)
             
@@ -180,16 +196,16 @@ namespace WebHome.Helper
 
             IQueryable<IntuitionCharge> intuitionItems = models.GetTable<IntuitionCharge>()
                     .Join(models.GetTable<TuitionInstallment>(), c => c.RegisterID, t => t.RegisterID, (c, t) => c);
-            IQueryable<IntuitionCharge> voidItems = models.GetTable<VoidPayment>()
-                    .Where(v => v.Status == (int)Naming.CourseContractStatus.已生效)
-                    .Join(models.GetTable<Payment>(), v => v.VoidID, p => p.PaymentID, (v, p) => p)
+            var voidItems = models.GetTable<VoidPayment>()
+                    .Where(v => v.Status == (int)Naming.CourseContractStatus.已生效);
+            IQueryable<IntuitionCharge> paidItems = models.GetTable<Payment>().Where(p => !voidItems.Any(v => v.VoidID == p.PaymentID))
                     .Join(models.GetTable<TuitionInstallment>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t)
                     .Join(models.GetTable<IntuitionCharge>(), t => t.RegisterID, c => c.RegisterID, (t, c) => c);
 
             //return items.Where(r => r.IntuitionCharge.TuitionInstallment.Count == 0
             //        || !r.IntuitionCharge.TuitionInstallment.Any(t => t.Payment.VoidPayment == null || t.Payment.VoidPayment.Status != (int)Naming.CourseContractStatus.已生效));
             return items.Where(r => !intuitionItems.Any(c => c.RegisterID == r.RegisterID)
-                            || voidItems.Any(v => v.RegisterID == r.RegisterID));
+                            || !paidItems.Any(v => v.RegisterID == r.RegisterID));
         }
 
         public static IQueryable<RegisterLesson> PropmptReceivableTrialLesson(this GenericManager<BFDataContext> models)

@@ -24548,11 +24548,6 @@ section.content {
     opacity: .5;
 }
 
-.page-calendar .b-PTDistance {
-    background: linear-gradient(270deg, #ff5f6d, #ffc371);
-    border-color: #F5A623 !important
-}
-
 .page-calendar #calendar {
 /*    max-width: 900px*/
 }

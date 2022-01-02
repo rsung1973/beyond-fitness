@@ -412,6 +412,11 @@ namespace WebHome.Helper
         public static LessonPriceType ContractOriginalSeriesPrice<TEntity>(this CourseContract item, ModelSource<TEntity> models)
                     where TEntity : class, new()
         {
+            var result = item.LessonPriceType.LessonUnitPrice?.PriceTypeItem;
+            if (result != null)
+            {
+                return result;
+            }
 
             var seriesItem = models.GetTable<V_LessonUnitPrice>()
                     .Where(p => p.DurationInMinutes == item.LessonPriceType.DurationInMinutes)
@@ -421,6 +426,10 @@ namespace WebHome.Helper
                     .OrderByDescending(s => s.PriceID);
 
             return seriesItem.FirstOrDefault();
+
+
+            //return item.LessonPriceType.CurrentPriceSeries?.AllLessonPrice.Where(p => p.LowerLimit == 1).FirstOrDefault();
+
         }
 
         public static IQueryable<CourseContract> PartialEffective<TEntity>(this CourseContract item, ModelSource<TEntity> models)

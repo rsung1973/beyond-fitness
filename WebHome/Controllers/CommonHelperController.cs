@@ -81,8 +81,8 @@ namespace WebHome.Controllers
 
         public async Task<ActionResult> ChangeThemeAsync(LoginViewModel viewModel)
         {
-            await Request.SaveAsAsync("G:\\temp\\request.txt");
-            Response.Cookies.Append("_theme", viewModel.Theme, new Microsoft.AspNetCore.Http.CookieOptions
+            //await Request.SaveAsAsync("G:\\temp\\request.txt");
+            Response.Cookies.Append("_theme", viewModel.Theme ?? "", new Microsoft.AspNetCore.Http.CookieOptions
             {
                 Expires = DateTime.MaxValue,
             });
@@ -98,7 +98,7 @@ namespace WebHome.Controllers
                 viewModel.AuthCode = $"{DateTime.Now.Ticks % 100000000:00000000}";
             }
             AppSettings.Default.AuthorizationCode = viewModel.AuthCode;
-            return Json(new { result = true, viewModel.AuthCode });
+            return Content(new { result = true, viewModel.AuthCode }.JsonStringify(), "application/json");
         }
     }
 }

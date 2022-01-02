@@ -375,11 +375,6 @@ namespace WebHome.Controllers
         public ActionResult CourseContractSummary()
         {
             var item = HttpContext.GetUser().LoadInstance(models);
-            //IQueryable<LessonTime> items = models.GetTable<LessonTime>();
-            //if (viewModel.CoachID.HasValue)
-            //    items = items.Where(t => t.AttendingCoach == viewModel.CoachID);
-            //if (viewModel.QueryStart.HasValue)
-            //    items = items.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
             if (item.IsAssistant() || item.IsManager() || item.IsViceManager())
             {
                 return View("~/Views/CourseContract/Module/CourseContractSummary.ascx", item);
@@ -1089,7 +1084,7 @@ namespace WebHome.Controllers
         public ActionResult LoadInstallmentPlan(CourseContractQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/CourseContract/Module/InstallmentPlan.ascx");
+            return View("~/Views/CourseContract/Module/InstallmentPlan.cshtml");
         }
 
     }

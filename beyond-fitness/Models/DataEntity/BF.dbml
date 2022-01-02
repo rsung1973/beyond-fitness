@@ -845,6 +845,9 @@
       <Association Name="LessonPriceType_LessonPricePackage" Member="LessonPricePackage" ThisKey="PriceID" OtherKey="PriceID" Type="LessonPricePackage" />
       <Association Name="LessonPriceType_LessonPricePackage1" Member="AsPackageItem" ThisKey="PriceID" OtherKey="ItemID" Type="LessonPricePackage" />
       <Association Name="LessonPriceType_ObjectiveContractLessonPrice" Member="ObjectiveContractLessonPrice" ThisKey="PriceID" OtherKey="PriceID" Type="ObjectiveContractLessonPrice" />
+      <Association Name="LessonPriceType_CourseContractExtension" Member="CourseContractExtension" ThisKey="PriceID" OtherKey="UnitPriceID" Type="CourseContractExtension" />
+      <Association Name="LessonPriceType_LessonUnitPrice" Member="LessonUnitPrice" ThisKey="PriceID" OtherKey="PriceID" Type="LessonUnitPrice" Cardinality="One" />
+      <Association Name="LessonPriceType_LessonUnitPrice1" Member="AsUnitPrice" ThisKey="PriceID" OtherKey="UnitID" Type="LessonUnitPrice" />
       <Association Name="LessonPriceSeries_LessonPriceType" Member="CurrentPriceSeries" Storage="_PriceSeries" ThisKey="SeriesID" OtherKey="PriceID" Type="LessonPriceSeries" IsForeignKey="true" />
       <Association Name="LevelExpression_LessonPriceType" Member="LevelExpression" ThisKey="Status" OtherKey="LevelID" Type="LevelExpression" IsForeignKey="true" />
       <Association Name="BranchStore_LessonPriceType" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
@@ -2349,6 +2352,7 @@
       <Column Name="InstallmentCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="InstallmentSubtotal" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="InstallmentAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VoidShare" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="BranchStore_MonthlyCoachRevenueIndicator" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
       <Association Name="MonthlyIndicator_MonthlyCoachRevenueIndicator" Member="MonthlyIndicator" ThisKey="PeriodID" OtherKey="PeriodID" Type="MonthlyIndicator" IsForeignKey="true" />
       <Association Name="ProfessionalLevel_MonthlyCoachRevenueIndicator" Member="ProfessionalLevel" ThisKey="LevelID" OtherKey="LevelID" Type="ProfessionalLevel" IsForeignKey="true" />
@@ -2378,6 +2382,7 @@
       <Column Name="NewContractAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="RenewContractAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="InstallmentAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VoidShare" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="MonthlyRevenueIndicator_MonthlyRevenueGoal" Member="MonthlyRevenueIndicator" ThisKey="PeriodID,GradeID" OtherKey="PeriodID,GradeID" Type="MonthlyRevenueIndicator" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -2405,6 +2410,7 @@
       <Column Name="NewContractAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="RenewContractAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="InstallmentAchievement" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VoidShare" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="MonthlyBranchRevenueIndicator_MonthlyBranchRevenueGoal" Member="MonthlyBranchRevenueIndicator" ThisKey="PeriodID,BranchID,GradeID" OtherKey="PeriodID,BranchID,GradeID" Type="MonthlyBranchRevenueIndicator" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
     </Type>
   </Table>
@@ -2503,22 +2509,6 @@
       <Association Name="ObjectiveLessonCatalog_ObjectiveLessonLocation" Member="ObjectiveLessonCatalog" ThisKey="CatalogID" OtherKey="CatalogID" Type="ObjectiveLessonCatalog" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.CourseContractExtension" Member="CourseContractExtension">
-    <Type Name="CourseContractExtension">
-      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="BranchID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="RevisionTrackingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SettlementPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="PaymentMethod" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
-      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="AttachmentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SignOnline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Association Name="Attachment_CourseContractExtension" Member="Attachment" ThisKey="AttachmentID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" DeleteRule="SET NULL" />
-      <Association Name="BranchStore_CourseContractExtension" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
-      <Association Name="CourseContract_CourseContractExtension" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
-      <Association Name="CourseContractRevision_CourseContractExtension" Member="CourseContractRevision" ThisKey="RevisionTrackingID" OtherKey="RevisionID" Type="CourseContractRevision" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.LessonPricePackage" Member="LessonPricePackage">
     <Type Name="LessonPricePackage">
       <Column Name="PriceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -2563,6 +2553,32 @@
       <Column Name="creditAmt" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="secureStatus" Type="System.String" DbType="NVarChar(1)" CanBeNull="true" />
       <Association Name="PaymentTransaction_PaymentOnLine" Member="PaymentTransaction" ThisKey="PaymentID" OtherKey="PaymentID" Type="PaymentTransaction" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CourseContractExtension" Member="CourseContractExtension">
+    <Type Name="CourseContractExtension">
+      <Column Name="ContractID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BranchID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RevisionTrackingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SettlementPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PaymentMethod" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Version" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AttachmentID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SignOnline" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="UnitPriceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Attachment_CourseContractExtension" Member="Attachment" ThisKey="AttachmentID" OtherKey="AttachmentID" Type="Attachment" IsForeignKey="true" DeleteRule="SET NULL" />
+      <Association Name="BranchStore_CourseContractExtension" Member="BranchStore" ThisKey="BranchID" OtherKey="BranchID" Type="BranchStore" IsForeignKey="true" />
+      <Association Name="CourseContract_CourseContractExtension" Member="CourseContract" ThisKey="ContractID" OtherKey="ContractID" Type="CourseContract" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="CourseContractRevision_CourseContractExtension" Member="CourseContractRevision" ThisKey="RevisionTrackingID" OtherKey="RevisionID" Type="CourseContractRevision" IsForeignKey="true" />
+      <Association Name="LessonPriceType_CourseContractExtension" Member="LessonPriceType" ThisKey="UnitPriceID" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LessonUnitPrice" Member="LessonUnitPrice">
+    <Type Name="LessonUnitPrice">
+      <Column Name="PriceID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UnitID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="LessonPriceType_LessonUnitPrice" Member="LessonPriceType" ThisKey="PriceID" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="LessonPriceType_LessonUnitPrice1" Member="PriceTypeItem" ThisKey="UnitID" OtherKey="PriceID" Type="LessonPriceType" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.InquireVacantNo" Method="InquireVacantNo">

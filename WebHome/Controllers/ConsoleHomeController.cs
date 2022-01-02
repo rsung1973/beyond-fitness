@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 using CommonLib.DataAccess;
 
@@ -30,6 +31,7 @@ using WebHome.Models.ViewModel;
 using WebHome.Security.Authorization;
 using WebHome.Properties;
 using System.Data.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebHome.Controllers
 {
@@ -57,6 +59,12 @@ namespace WebHome.Controllers
 
         public const String InputErrorView = "~/Views/ConsoleHome/Shared/ReportInputError.cshtml";
 
+        public Task<ActionResult> MainAsync(LessonTimeBookingViewModel viewModel)
+        {
+            return IndexAsync(viewModel);
+        }
+
+
         [RoleAuthorize(new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
         public async Task<ActionResult> IndexAsync(LessonTimeBookingViewModel viewModel)
         {
@@ -78,7 +86,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            return View(profile.LoadInstance(models));
+            return View("~/Views/ConsoleHome/Index.cshtml", profile.LoadInstance(models));
         }
 
         [RoleAuthorize(new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
@@ -586,7 +594,7 @@ namespace WebHome.Controllers
             return result;
         }
 
-        public async Task<ActionResult> DailyLessonsBarChartAsync(LessonTimeBookingViewModel viewModel)
+        public async Task<ActionResult> DailyLessonsBarChartAsync(LessonTimeBookingViewModel viewModel, String chartType)
         {
             ViewBag.ViewModel = viewModel;
             if (!viewModel.ClassTimeStart.HasValue)
@@ -595,7 +603,14 @@ namespace WebHome.Controllers
             }
 
             var profile = await HttpContext.GetUserAsync();
-            return View("~/Views/ConsoleHome/Module/TodayLessonsBarChartC3.cshtml", profile.LoadInstance(models));
+            if (chartType == "Echart")
+            {
+                return View("~/Views/ConsoleHome/Module/TodayLessonsBarEChart.cshtml", profile.LoadInstance(models));
+            }
+            else
+            {
+                return View("~/Views/ConsoleHome/Module/TodayLessonsBarChartC3.cshtml", profile.LoadInstance(models));
+            }
         }
 
         public async Task<ActionResult> ShowLessonSummaryAsync(LessonTimeBookingViewModel viewModel)
@@ -707,6 +722,24 @@ namespace WebHome.Controllers
                 }
             }
             ViewBag.CurrentQuestionnaire = questionnaire;
+
+            ViewBag.ToCommitLessons = (new LessonOverviewQueryViewModel
+            {
+                CoachID = profile.UID,
+                DateTo = DateTime.Today,
+                CoachAttended = false,
+                CombinedStatus = new Naming.LessonPriceStatus[]
+                        {
+                            Naming.LessonPriceStatus.一般課程,
+                            Naming.LessonPriceStatus.團體學員課程,
+                            Naming.LessonPriceStatus.已刪除,
+                            Naming.LessonPriceStatus.點數兌換課程,
+                            Naming.LessonPriceStatus.員工福利課程,
+                            Naming.LessonPriceStatus.自主訓練,
+                            Naming.LessonPriceStatus.體驗課程,
+                            Naming.LessonPriceStatus.企業合作方案,
+                        },
+            }).InquireLesson(models);
 
             return View("~/Views/ConsoleHome/LessonTrainingContent.cshtml", profile.LoadInstance(models));
         }
@@ -1122,7 +1155,7 @@ namespace WebHome.Controllers
             if(!viewModel.DateFrom.HasValue || !viewModel.DateTo.HasValue)
             {
                 viewModel.DateFrom = idx.AddMonths(-3);
-                viewModel.DateTo = idx.AddMonths(-1);
+                viewModel.DateTo = idx;
             }
 
             ViewBag.DataItem = coachItem;
@@ -1179,8 +1212,45 @@ namespace WebHome.Controllers
             var profile = await HttpContext.GetUserAsync();
             return View("~/Views/BusinessConsole/RevenueReview.cshtml", profile.LoadInstance(models));
 
-
         }
+
+        public async Task<ActionResult> LessonIndexAsync(LessonOverviewQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!viewModel.DateFrom.HasValue)
+            {
+                viewModel.DateFrom = DateTime.Today.FirstDayOfMonth();
+            }
+            if (!viewModel.DateTo.HasValue)
+            {
+                viewModel.DateTo = viewModel.DateFrom.Value.AddMonths(1);
+            }
+
+            var profile = await HttpContext.GetUserAsync();
+            if (!viewModel.CoachID.HasValue)
+            {
+                viewModel.CoachID = profile.UID;
+            }
+
+            var items = viewModel.InquireLesson(models, true);
+            ViewBag.DataItems = items;
+
+            return View("~/Views/LessonConsole/LessonIndex.cshtml", profile.LoadInstance(models));
+        }
+
+        public async Task<ActionResult> ProfileIndexAsync(CoachViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+
+            var profile = await HttpContext.GetUserAsync();
+            if (!viewModel.UID.HasValue)
+            {
+                viewModel.UID = profile.UID;
+            }
+
+            return View("~/Views/ConsoleHome/ProfileIndex.cshtml", profile.LoadInstance(models));
+        }
+
 
     }
 }

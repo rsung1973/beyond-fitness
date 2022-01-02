@@ -1,0 +1,56 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+}
+
+<!-- ui-dialog -->
+<div id="regesterDialog" title="會員註冊" class="bg-color-darken">
+    <div class="panel panel-default bg-color-darken">
+        @{ ViewBag.FormAction = Url.Action("RegisterByMail", "Html");
+            Html.RenderPartial("~/Views/Account/Module/RegisterForm.cshtml");}
+
+    </div>
+    <script>
+        $('#regesterDialog').dialog({
+            //autoOpen: false,
+            resizable: true,
+            modal: true,
+            width: "auto",
+            height: "auto",
+            title: "<h4 class='modal-title'><i class='fa fa-fw fa-user-circle'></i>  會員註冊</h4>",
+            close: function (event, ui) {
+                $('#regesterDialog').remove();
+            }
+        });
+
+        $('#btnSend').on('click', function (evt) {
+
+            var form = $(this)[0].form;
+            if (!validateForm(form))
+                return false;
+
+            showLoading();
+            $($(this)[0].form).ajaxSubmit({
+                success: function (data) {
+                    hideLoading();
+                    $(data).appendTo($('body'));
+                }
+            });
+        });
+    </script>
+</div>
+

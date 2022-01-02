@@ -423,16 +423,25 @@ namespace WebHome.Helper
         public static LessonPriceType ContractOriginalSeriesPrice(this CourseContract item, GenericManager<BFDataContext> models)
                     
         {
+            return item.LessonPriceType.LessonUnitPrice?.PriceTypeItem ?? item.LessonPriceType.GetOriginalSeriesPrice(models);
 
+            //return item.LessonPriceType.CurrentPriceSeries?.AllLessonPrice.Where(p => p.LowerLimit == 1).FirstOrDefault();
+        }
+
+        public static LessonPriceType GetOriginalSeriesPrice(this LessonPriceType priceItem, GenericManager<BFDataContext> models)
+        {
             var seriesItem = models.GetTable<V_LessonUnitPrice>()
-                    .Where(p => p.DurationInMinutes == item.LessonPriceType.DurationInMinutes)
-                    .Where(p => p.BranchID == item.LessonPriceType.BranchID)
+                    .Where(p => p.DurationInMinutes == priceItem.DurationInMinutes)
+                    .Where(p => p.BranchID == priceItem.BranchID)
                     .Join(models.GetTable<LessonPriceType>(),
                         p => p.PriceID, s => s.PriceID, (p, s) => s)
                     .OrderByDescending(s => s.PriceID);
 
             return seriesItem.FirstOrDefault();
+
+            //return item.LessonPriceType.CurrentPriceSeries?.AllLessonPrice.Where(p => p.LowerLimit == 1).FirstOrDefault();
         }
+
 
         public static IQueryable<CourseContract> PartialEffective(this CourseContract item, GenericManager<BFDataContext> models)
             

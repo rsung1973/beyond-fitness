@@ -201,12 +201,7 @@ function showDialog(url, jsonData) {
     });
 }
 
-function selectSingleCheckBox() {
-    var $element = $(event.target);
-    var current = $element.is(':checked');
-    $('input:checkbox[name=' + $element.attr('name') + ']').prop('checked', false);
-    $element.prop('checked', current);
-}
+
 
 
 var $global = {

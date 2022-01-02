@@ -3202,7 +3202,6 @@
     <Content Include="Views\CourseContract\ApplyAmendment.aspx" />
     <Content Include="Views\CourseContract\CourseContractAmendmentView.aspx" />
     <Content Include="Views\CourseContract\Module\ContractConsultantReassignmentView.ascx" />
-    <Content Include="Views\CourseContract\Module\InstallmentPlan.ascx" />
     <Content Include="Views\CourseContract\SampleCourseContractView.aspx" />
     <Content Include="Views\CourseContract\CreateContract.aspx" />
     <Content Include="Views\CourseContract\ContractIndex.aspx" />
@@ -3430,23 +3429,11 @@
     <Content Include="Views\Fitness\MuscleStrengthAssessment.ascx" />
     <Content Include="Views\Fitness\BodyEnergyAssessment.ascx" />
     <Content Include="Views\Fitness\PersonalStrengthAssessment.ascx" />
-    <Content Include="Views\Html\Module\CompleteRegister.ascx" />
-    <Content Include="Views\Html\Module\AutoLogin.ascx" />
-    <Content Include="Views\Html\Module\EditMySelf.ascx" />
-    <Content Include="Views\Html\Module\LearnerDailyQuestion.ascx" />
-    <Content Include="Views\Html\Module\PromptQuestionnaire.ascx" />
-    <Content Include="Views\Html\Module\Questionnaire.ascx" />
-    <Content Include="Views\Html\ResetPass.aspx" />
     <Content Include="Views\LearnerFacet\Module\CheckBonusAward.ascx" />
     <Content Include="Views\LearnerFacet\Module\CompleteUserEvent.ascx" />
     <Content Include="Views\LearnerFacet\Module\CreateUserEvent.ascx" />
     <Content Include="Views\LearnerFacet\Module\LearnerLesson.ascx" />
     <Content Include="Views\LearnerFacet\Module\HealthIndex.ascx" />
-    <Content Include="Views\Html\Module\RegisterByMail.ascx" />
-    <Content Include="Views\Html\Module\Register.ascx" />
-    <Content Include="Views\Html\Module\ForgetPassword.ascx" />
-    <Content Include="Views\Html\Module\Login.ascx" />
-    <Content Include="Views\Html\Module\LoginPhoto.ascx" />
     <Content Include="Views\Information\Blog.aspx" />
     <Content Include="Views\Information\BlogDetail.aspx" />
     <Content Include="Views\Information\ContactUs.aspx" />
@@ -4041,6 +4028,20 @@
     <Content Include="Views\CornerKick\Module\TrainingContentAnalysis.cshtml" />
     <Content Include="Views\CornerKick\Module\TrainingContentPieChart.cshtml" />
     <Content Include="Views\CornerKick\Module\UserGuideNotice.cshtml" />
+    <Content Include="Views\CourseContract\CourseContractView.cshtml" />
+    <Content Include="Views\CourseContract\Module\InstallmentPlan.cshtml" />
+    <Content Include="Views\Html\Module\AutoLogin.cshtml" />
+    <Content Include="Views\Html\Module\CompleteRegister.cshtml" />
+    <Content Include="Views\Html\Module\EditMySelf.cshtml" />
+    <Content Include="Views\Html\Module\ForgetPassword.cshtml" />
+    <Content Include="Views\Html\Module\LearnerDailyQuestion.cshtml" />
+    <Content Include="Views\Html\Module\Login.cshtml" />
+    <Content Include="Views\Html\Module\LoginPhoto.cshtml" />
+    <Content Include="Views\Html\Module\PromptQuestionnaire.cshtml" />
+    <Content Include="Views\Html\Module\Questionnaire.cshtml" />
+    <Content Include="Views\Html\Module\Register.cshtml" />
+    <Content Include="Views\Html\Module\RegisterByMail.cshtml" />
+    <Content Include="Views\Html\ResetPass.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

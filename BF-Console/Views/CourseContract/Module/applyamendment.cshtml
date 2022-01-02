@@ -120,7 +120,7 @@
                     </section>
                     @if (_viewModel.Reason == "展延")
                         {
-                            Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForExtension.ascx");
+                            Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForExtension.cshtml");
                         }
                     <section class="col col-4">
                         @if (_profile.IsAssistant() || _profile.IsManager() || _profile.IsViceManager())
@@ -132,7 +132,7 @@
                                 @{ IQueryable<ServingCoach> items = _profile.IsAssistant()
                     ? models.GetTable<ServingCoach>()
                     : _profile.GetServingCoachInSameStore(models);
-                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.ascx", items);}
+                                    Html.RenderPartial("~/Views/SystemInfo/ServingCoachOptions.cshtml", items);}
 
                             </select>
                             <i class="icon-append far fa-keyboard"></i>
@@ -151,7 +151,7 @@
                 </div>
                 @if (_viewModel.Reason == "轉點")
                     {
-                        Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForMigration.ascx");
+                        Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForMigration.cshtml");
                     }
                     else if (_viewModel.Reason == "終止")
                     {
@@ -184,7 +184,7 @@
             </fieldset>
             @if (_viewModel.Reason == "轉讓")
                     {
-                        Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForTransference.ascx");
+                        Html.RenderPartial("~/Views/CourseContract/Module/ApplyAmendmentForTransference.cshtml");
                     }
             <fieldset>
                 <section>

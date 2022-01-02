@@ -93,7 +93,7 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 HttpContext.SignOn(item);
-                return View("~/Views/CornerKick/Module/AutoLogin.ascx", model: this.ProcessLogin(item));
+                return View("~/Views/CornerKick/Module/AutoLogin.cshtml", model: this.ProcessLogin(item));
             }
 
             return new EmptyResult();
@@ -108,7 +108,7 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 HttpContext.SignOn(item);
-                return View("~/Views/CornerKick/Module/AutoLogin.ascx", model: this.ProcessLogin(item, true));
+                return View("~/Views/CornerKick/Module/AutoLogin.cshtml", model: this.ProcessLogin(item, true));
             }
             else
             {
@@ -271,7 +271,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            return Json(new { result = true, bonus = taskItem!=null }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = true, bonus = taskItem != null }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -360,7 +360,7 @@ namespace WebHome.Controllers
 
 
         [Authorize]
-        public ActionResult Settings(bool? learnerSettings,bool? bonus)
+        public ActionResult Settings(bool? learnerSettings, bool? bonus)
         {
             ViewBag.LearnerSettings = learnerSettings;
             ViewBag.LineBonus = bonus;
@@ -402,11 +402,11 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
             }
-            
+
             item.UserName = viewModel.UserName;
             models.SubmitChanges();
 
-            return View("~/Views/Html/Module/AutoLogin.ascx", model: this.ProcessLogin(item, true));
+            return View("~/Views/Html/Module/AutoLogin.cshtml", model: this.ProcessLogin(item, true));
 
         }
 
@@ -451,7 +451,7 @@ namespace WebHome.Controllers
             ViewResult result = (ViewResult)Notice(viewModel);
             UserProfile item = result.Model as UserProfile;
 
-            if(item!=null)
+            if (item != null)
             {
                 result.ViewName = "CheckAttendance";
             }
@@ -479,7 +479,7 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser().LoadInstance(models);
 
-            if(viewModel.LessonID!=null && viewModel.LessonID.Length>0)
+            if (viewModel.LessonID != null && viewModel.LessonID.Length > 0)
             {
                 foreach (var item in models.GetTable<LessonTime>().Where(l => viewModel.LessonID.Contains(l.LessonID)))
                 {
@@ -491,7 +491,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            return View("CheckAttendance",profile);
+            return View("CheckAttendance", profile);
 
         }
 
@@ -681,9 +681,9 @@ namespace WebHome.Controllers
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
             }
 
-            if(item.InstallmentID.HasValue)
+            if (item.InstallmentID.HasValue)
             {
-                foreach(var c in models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID))
+                foreach (var c in models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID))
                 {
                     var contract = commitSignature(viewModel, signatureViewModel, c, out String alertMessage);
                     if (contract == null)
@@ -764,7 +764,7 @@ namespace WebHome.Controllers
             return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
         }
 
-        private CourseContract commitSignature(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel, CourseContract item,out String alertMessage)
+        private CourseContract commitSignature(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel, CourseContract item, out String alertMessage)
         {
             var profile = HttpContext.GetUser();
 
@@ -809,7 +809,7 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser();
 
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.QuestionID = viewModel.DecryptKeyValue();
             }
@@ -856,7 +856,7 @@ namespace WebHome.Controllers
             return View("~/Views/CornerKick/LearnerIndex.cshtml", profile);
         }
 
-        public ActionResult Logout(RegisterViewModel viewModel,String message = null)
+        public ActionResult Logout(RegisterViewModel viewModel, String message = null)
         {
             this.HttpContext.Logout();
             ViewBag.Message = message;
@@ -952,10 +952,10 @@ namespace WebHome.Controllers
 
             //if (viewModel.UUID != null)
             //{
-                HttpContext.SignOn(item);
+            HttpContext.SignOn(item);
             //}
 
-            return View("~/Views/CornerKick/Module/CommitPassword.ascx", item);
+            return View("~/Views/CornerKick/Module/CommitPassword.cshtml", item);
 
         }
 
@@ -1045,7 +1045,7 @@ namespace WebHome.Controllers
         public ActionResult ViewLesson(LessonTimeBookingViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.LessonID = viewModel.DecryptKeyValue();
             }
@@ -1076,7 +1076,7 @@ namespace WebHome.Controllers
                 ViewBag.ModelState = ModelState;
                 return View("Login");
             }
-            
+
             if (viewModel.Password.ToUpper() == "BEYOND")
             {
                 return View("ResetPassword", item);
@@ -1086,10 +1086,10 @@ namespace WebHome.Controllers
 
             if (!String.IsNullOrEmpty(returnUrl))
             {
-                return View("~/Views/Html/Module/AutoLogin.ascx", model: returnUrl);
+                return View("~/Views/Html/Module/AutoLogin.cshtml", model: returnUrl);
             }
 
-            return View("~/Views/Html/Module/AutoLogin.ascx", model: this.ProcessLogin(item, false));
+            return View("~/Views/Html/Module/AutoLogin.cshtml", model: this.ProcessLogin(item, false));
 
         }
 
@@ -1122,7 +1122,7 @@ namespace WebHome.Controllers
             models.GetTable<ResetPassword>().InsertOnSubmit(toReset);
             models.SubmitChanges();
 
-            toReset.NotifyResetPassword(notifyUrl:$"{WebHome.Properties.Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CornerKick/NotifyResetPassword")}");
+            toReset.NotifyResetPassword(notifyUrl: $"{WebHome.Properties.Settings.Default.HostDomain}{VirtualPathUtility.ToAbsolute("~/CornerKick/NotifyResetPassword")}");
 
             return View("~/Views/Shared/JsAlert.cshtml", model: "重設密碼通知郵件已寄出!!");
 
@@ -1145,7 +1145,7 @@ namespace WebHome.Controllers
         {
             ViewBag.StartDate = dateFrom;
             var profile = HttpContext.GetUser().LoadInstance(models);
-            return View("~/Views/CornerKick/Module/LearnerEvents.ascx", profile);
+            return View("~/Views/CornerKick/Module/LearnerEvents.cshtml", profile);
         }
 
         [Authorize]
@@ -1154,7 +1154,7 @@ namespace WebHome.Controllers
             ViewBag.ViewModel = viewModel;
             var profile = HttpContext.GetUser().LoadInstance(models);
 
-            if(viewModel.KeyID!=null)
+            if (viewModel.KeyID != null)
             {
                 viewModel.EventID = viewModel.DecryptKeyValue();
             }
@@ -1187,7 +1187,7 @@ namespace WebHome.Controllers
                 ModelState.AddModelError("EndDate", "請選擇結束時間!!");
             }
 
-            if(viewModel.StartTime.HasValue)
+            if (viewModel.StartTime.HasValue)
             {
                 viewModel.StartDate = viewModel.StartDate.Value + viewModel.StartTime.Value;
             }
@@ -1231,7 +1231,7 @@ namespace WebHome.Controllers
 
             models.SubmitChanges();
 
-            return View("~/Views/CornerKick/Module/CompleteUserEvent.ascx", item);
+            return View("~/Views/CornerKick/Module/CompleteUserEvent.cshtml", item);
         }
 
         [Authorize]
@@ -1365,7 +1365,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");

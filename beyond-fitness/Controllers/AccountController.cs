@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -445,7 +446,7 @@ namespace WebHome.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
+        public ActionResult Login(LoginViewModel viewModel, string returnUrl)
         {
             //if (!ModelState.IsValid)
             //{
@@ -931,6 +932,11 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
 
+            if (viewModel.KeyID != null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
             var item = models.GetTable<UserProfileExtension>().Where(s => s.UID == viewModel.UID).FirstOrDefault();
 
             if (item != null)
@@ -1084,6 +1090,90 @@ namespace WebHome.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
+        public ActionResult UpdateProfileImage(CoachViewModel viewModel)
+        {
+            UserProfile item = HttpContext.GetUser();
+
+            if (item == null)
+            {
+                return Json(new { result = false, message = "資料錯誤!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            String storePath = Path.Combine(Logger.LogDailyPath, Guid.NewGuid().ToString() + ".dat");
+            if (Request.Files.Count > 0)
+            {
+                Request.Files[0].SaveAs(storePath);
+            }
+            else
+            {
+                return Json(new { result = false, message = "請選擇圖像檔!!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            item = item.LoadInstance(models);
+            if (item.Attachment == null)
+            {
+                item.Attachment = new Attachment
+                {
+
+                };
+            }
+
+            item.Attachment.StoredPath = storePath;
+            models.SubmitChanges();
+
+            return Json(new { result = true, pictureID = item.PictureID });
+        }
+
+        public ActionResult CommitProfile(RegisterViewModel viewModel)
+        {
+            UserProfile item = HttpContext.GetUser();
+            if (item == null)
+            {
+                ModelState.AddModelError("Message", "資料錯誤!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/ConsoleHome/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.EMail = viewModel.EMail.GetEfficientString();
+            if (viewModel.EMail == null)
+            {
+                ModelState.AddModelError("EMail", "請輸入EMAIL");
+            }
+            else if(!Regex.IsMatch(viewModel.EMail, @"^([\w-]+\.)*?[\w-]+@[\w-]+\.([\w-]+\.)*?[\w]+$"))
+            {
+                ModelState.AddModelError("EMail", "EMAIL格式錯誤");
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (item.PID != viewModel.EMail && models.GetTable<UserProfile>().Any(u => u.PID == viewModel.EMail))
+                {
+                    ModelState.AddModelError("EMail", "EMAIL重複");
+                }
+            }
+
+            this.CreatePassword(viewModel);
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/ConsoleHome/Shared/ReportInputError.cshtml");
+            }
+
+            item = item.LoadInstance(models);
+            item.PID = viewModel.EMail;
+            item.Password = (viewModel.Password).MakePassword();
+
+            models.SubmitChanges();
+
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
     }

@@ -40,7 +40,7 @@
                 <%  listItems = learnerMarkAttended(items);
                     if (listItems.Count() > 0)
                     {
-                        if(_viewModel.QueryStart.HasValue)
+                        if(_viewModel.DateFrom.HasValue)
                         {%>
                 <a href="javascript:showLearnerMarkAttended(<%= (int)Naming.LessonQueryType.一般課程 %>,'待辦事項：P.T session(學員已完成)');" class="undolistDialog_link"><u>(<%= listItems.Count() %>)</u></a>
                 <%      }
@@ -163,9 +163,9 @@
         </tr>
         <%  
             IQueryable<QuestionnaireRequest> questionnaireItems = models.GetTable<QuestionnaireRequest>();
-            if (_viewModel.QueryStart.HasValue)
+            if (_viewModel.DateFrom.HasValue)
             {
-                questionnaireItems = questionnaireItems.Where(q => q.RequestDate >= _viewModel.QueryStart && q.RequestDate < _viewModel.QueryStart.Value.AddMonths(1));
+                questionnaireItems = questionnaireItems.Where(q => q.RequestDate >= _viewModel.DateFrom && q.RequestDate < _viewModel.DateFrom.Value.AddMonths(1));
             }
             if (_viewModel.CoachID.HasValue)
             {

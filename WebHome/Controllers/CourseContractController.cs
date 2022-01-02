@@ -357,7 +357,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            return Json(new { result = true, status = item.Status, contractID = item.ContractID });
+            return Content(new { result = true, status = item.Status, contractID = item.ContractID }.JsonStringify(), "application/json");
         }
 
         public async Task<ActionResult> SaveContractAsync(CourseContractViewModel viewModel)
@@ -381,11 +381,6 @@ namespace WebHome.Controllers
         public async Task<ActionResult> CourseContractSummaryAsync()
         {
             var item = (await HttpContext.GetUserAsync()).LoadInstance(models);
-            //IQueryable<LessonTime> items = models.GetTable<LessonTime>();
-            //if (viewModel.CoachID.HasValue)
-            //    items = items.Where(t => t.AttendingCoach == viewModel.CoachID);
-            //if (viewModel.QueryStart.HasValue)
-            //    items = items.Where(t => t.ClassTime >= viewModel.QueryStart && t.ClassTime < viewModel.QueryStart.Value.AddMonths(1));
             if (item.IsAssistant() || item.IsManager() || item.IsViceManager())
             {
                 return View("~/Views/CourseContract/Module/CourseContractSummary.ascx", item);
@@ -1085,7 +1080,7 @@ namespace WebHome.Controllers
         public ActionResult LoadInstallmentPlan(CourseContractQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
-            return View("~/Views/CourseContract/Module/InstallmentPlan.ascx");
+            return View("~/Views/CourseContract/Module/InstallmentPlan.cshtml");
         }
 
     }

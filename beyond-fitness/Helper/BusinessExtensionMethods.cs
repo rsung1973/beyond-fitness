@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonLib.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -1166,32 +1167,33 @@ namespace WebHome.Helper
 
 
 
-        public static IQueryable<TuitionAchievement> GetTuitionAchievement<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month)
+        public static IQueryable<TuitionAchievement> GetTuitionAchievement<TEntity>(this ModelSource<TEntity> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month, bool filterByEffective = true)
             where TEntity : class, new()
         {
-            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>()
-                .FilterByEffective();
-            Expression<Func<TuitionAchievement, bool>> queryExpr = c => true;
+            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>();
+
+            if (filterByEffective == true)
+            {
+                items = items.FilterByEffective();
+            }
 
             DateTime? queryDateTo = dateTo;
 
             if (dateFrom.HasValue)
             {
-                queryExpr = queryExpr.And(i => i.Payment.PayoffDate >= dateFrom);
+                items = items.Where(i => i.Payment.PayoffDate >= dateFrom);
             }
             if (queryDateTo.HasValue)
             {
-                queryExpr = queryExpr.And(i => i.Payment.PayoffDate < queryDateTo.Value.AddDays(1));
+                items = items.Where(i => i.Payment.PayoffDate < queryDateTo.Value.AddDays(1));
             }
             else if (month.HasValue)
             {
                 queryDateTo = dateFrom.Value.AddMonths(month.Value);
-                queryExpr = queryExpr.And(i => i.Payment.PayoffDate < queryDateTo);
+                items = items.Where(i => i.Payment.PayoffDate < queryDateTo);
                 queryDateTo = queryDateTo.Value.AddDays(-1);
                 dateTo = queryDateTo;
             }
-
-            items = items.Where(queryExpr);
 
             if (coachID.HasValue)
             {
@@ -1200,6 +1202,44 @@ namespace WebHome.Helper
 
             return items;
         }
+
+        public static IQueryable<TuitionAchievement> GetVoidTuition(this GenericManager<BFDataContext> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month)
+
+        {
+            IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>();
+
+            IQueryable<VoidPayment> voidItems = models.GetTable<VoidPayment>();
+
+            DateTime? queryDateTo = dateTo;
+
+            if (dateFrom.HasValue)
+            {
+                voidItems = voidItems.Where(v => v.VoidDate >= dateFrom);
+            }
+
+            if (queryDateTo.HasValue)
+            {
+                voidItems = voidItems.Where(v => v.VoidDate < queryDateTo.Value.AddDays(1));
+            }
+            else if (month.HasValue)
+            {
+                queryDateTo = dateFrom.Value.AddMonths(month.Value);
+                voidItems = voidItems.Where(v => v.VoidDate < queryDateTo);
+                queryDateTo = queryDateTo.Value.AddDays(-1);
+                dateTo = queryDateTo;
+            }
+
+            if (coachID.HasValue)
+            {
+                items = items.Where(t => t.CoachID == coachID);
+            }
+
+            items = voidItems.Join(models.GetTable<Payment>(), v => v.VoidID, p => p.PaymentID, (v, p) => p)
+                    .Join(items, p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+
+            return items;
+        }
+
 
         public static void CheckProfessionalLevel2020<TEntity>(this ModelSource<TEntity> models, ServingCoach item)
             where TEntity : class, new()

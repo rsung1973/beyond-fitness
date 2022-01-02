@@ -111,7 +111,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="contractList">
-                        @{ Html.RenderPartial("~/Views/CourseContract/Module/ContractQueryAmendmentList.ascx", models.GetTable<CourseContract>().Where(f => false));}
+                        @{ Html.RenderPartial("~/Views/CourseContract/Module/ContractQueryAmendmentList.cshtml", models.GetTable<CourseContract>().Where(f => false));}
 
                     </div>
                     <!-- end widget content -->

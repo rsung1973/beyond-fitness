@@ -60,7 +60,7 @@
                     <tr>
                         <td>學員簽名：
                             @{ ViewBag.SignatureName = "Signature";
-                                Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);}
+                                Html.RenderPartial("~/Views/CourseContract/Module/SignHere.cshtml", _owner);}
 
                         </td>
                         <td></td>
@@ -75,7 +75,7 @@
                     <tr>
                         <td colspan="2">家長/監護人簽名：
                             @{ ViewBag.SignatureName = "GuardianSignature";
-                                Html.RenderPartial("~/Views/CourseContract/Module/SignHere.ascx", _owner);}
+                                Html.RenderPartial("~/Views/CourseContract/Module/SignHere.cshtml", _owner);}
 
                         </td>
                         <td>簽約體能顧問：<img src="@(_contract.ServingCoach.UserProfile.UserProfileExtension.Signature)" width="200px" class="modifySignDialog_link"/></td>

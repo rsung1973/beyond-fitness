@@ -30,10 +30,10 @@
     <tbody>
         @foreach (var item in _model)
             {
-                Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.ascx", item);
+                Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.cshtml", item);
                 //foreach(var r in item.RevisionList)
                 //{
-                //    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.ascx", r.CourseContract);
+                //    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractDataItem.cshtml", r.CourseContract);
                 //}
             }
     </tbody>

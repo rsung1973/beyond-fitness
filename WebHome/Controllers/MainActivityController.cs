@@ -125,10 +125,10 @@ namespace WebHome.Controllers
                 viewModel.DocID = viewModel.DecryptKeyValue();
             }
 
-            if (Request.QueryString.HasValue)
-            {
-                ViewBag.ViewModel = viewModel = JsonConvert.DeserializeObject<BlogArticleQueryViewModel>(Request.QueryString.Value.DecryptKey());
-            }
+            //if (Request.QueryString.HasValue)
+            //{
+            //    ViewBag.ViewModel = viewModel = JsonConvert.DeserializeObject<BlogArticleQueryViewModel>(Request.QueryString.Value.DecryptKey());
+            //}
 
             var item = models.GetTable<BlogArticle>().Where(b => b.DocID == viewModel.DocID).FirstOrDefault();
             if (item == null)
@@ -241,7 +241,7 @@ namespace WebHome.Controllers
                 }
             }
 
-            return Json(new { result = true, item.DocID, item.BlogID });
+            return Content(new { result = true, item.DocID, item.BlogID }.JsonStringify(), "application/json");
         }
 
         public ActionResult CommitArticleContent(BlogArticleQueryViewModel viewModel)
@@ -288,7 +288,7 @@ namespace WebHome.Controllers
                     }
                     //zip.ExtractToDirectory(blogPath);
                 }
-                return Json(new { result = true, item.DocID, item.BlogID });
+                return Content(new { result = true, item.DocID, item.BlogID }.JsonStringify(), "application/json");
             }
             catch(Exception ex)
             {

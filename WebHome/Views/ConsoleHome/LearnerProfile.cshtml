@@ -18,7 +18,7 @@
 
     Layout = "~/Views/ConsoleHome/Template/MainPage.cshtml";
 
-    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
     _modelState = ViewContext.ModelState;
     _model = (UserProfile)this.Model;
     _viewModel = (DailyBookingQueryViewModel)ViewBag.ViewModel;
@@ -146,8 +146,8 @@
                 </div>
                 <div class="col-md-12 col-lg-8 col-xl-8">
                     <div class="body">
-                        @{  await Html.RenderPartialAsync("~/Views/LearnerProfile/Module/LearnerLessonsReview.cshtml",_learner);   }
-                        @{  await Component.InvokeAsync<LearnerCalendarViewComponent>(new DailyBookingQueryViewModel { LearnerID = _learner.UID });   }
+                        @{  await Html.RenderPartialAsync("~/Views/LearnerProfile/Module/LearnerLessonsReview.cshtml", _learner); }
+                        @(  await Component.InvokeAsync<LearnerCalendarViewComponent>(new DailyBookingQueryViewModel { LearnerID = _learner.UID }))
                     </div>
                 </div>
             </div>
@@ -189,9 +189,9 @@
             $('').launchDownload('@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { KeyID = _learner.UID.EncryptKey() })))', {});
 
             @*$global.rejectCharacterDone = function () {
-                $('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome"))', { 'keyID': '@(_learner.UID.EncryptKey())' });
+                $('').launchDownload('@Html.Raw(Url.Action("LearnerProfile","ConsoleHome"))', { 'keyID': '@Html.Raw(_learner.UID.EncryptKey())' });
             };
-            $.post('@Html.Raw(Url.Action("ResumeLearnerCharacter", "LearnerProfile"))', { 'keyID': '@(_learner.UID.EncryptKey())' }, function (data) {
+            $.post('@Html.Raw(Url.Action("ResumeLearnerCharacter", "LearnerProfile"))', { 'keyID': '@Html.Raw(_learner.UID.EncryptKey())' }, function (data) {
                 if ($.isPlainObject(data)) {
                     if (data.result) {
                         $('').launchDownload('@(Html.Raw(Url.Action("EditLearnerCharacter","ConsoleHome",new { KeyID = _learner.UID.EncryptKey() })))', {});

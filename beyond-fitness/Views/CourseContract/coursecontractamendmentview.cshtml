@@ -35,7 +35,7 @@
 
 
     <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
-    @{ Html.RenderPartial("~/Module/Common/CommonScriptInclude.ascx");}
+    @{ Html.RenderPartial("~/Module/Common/CommonScriptInclude.cshtml");}
 
 
     @{ String basePath = VirtualPathUtility.ToAbsolute("~/");}
@@ -54,27 +54,27 @@
         <div id="content">
             @if (_model.Reason == "展延")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractExtensionView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractExtensionView.cshtml", _model);
                 }
                 else if (_model.Reason == "轉讓")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractTransferenceView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractTransferenceView.cshtml", _model);
                 }
                 else if (_model.Reason == "轉點")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractMigrationView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractMigrationView.cshtml", _model);
                 }
                 else if (_model.Reason == "終止")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractTerminationView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractTerminationView.cshtml", _model);
                 }
                 else if (_model.Reason == "轉換體能顧問")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/ContractConsultantReassignmentView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/ContractConsultantReassignmentView.cshtml", _model);
                 }
                 else if (_model.Reason == "其他")
                 {
-                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractOtherAmendmentView.ascx", _model);
+                    Html.RenderPartial("~/Views/CourseContract/Module/CourseContractOtherAmendmentView.cshtml", _model);
                 }
 
                 @if (ViewBag.ContractAction != null)
@@ -86,7 +86,7 @@
 @*@(_msg)*@
 </body>
 </html>
-@{ Html.RenderPartial("~/Views/Shared/GlobalScript.ascx");}
+@{ Html.RenderPartial("~/Views/Shared/GlobalScript.cshtml");}
 
 <script>
     var done = false;

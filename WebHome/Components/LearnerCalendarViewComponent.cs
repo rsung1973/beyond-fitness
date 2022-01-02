@@ -19,21 +19,34 @@ using WebHome.Models.DataEntity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WebHome.Models.ViewModel;
 using WebHome.Models.Locale;
+using WebHome.Helper;
 
 namespace WebHome.Components
 {
-    public class LearnerCalendarViewComponent : LearnerProfileViewComponent
+    public class LearnerCalendarViewComponent : ViewComponent
     {
 
-        public LearnerCalendarViewComponent() : base()
+        protected ModelSource<UserProfile> models;
+        protected ModelStateDictionary _modelState;
+
+        public LearnerCalendarViewComponent()
         {
 
         }
 
         public Task<IViewComponentResult> InvokeAsync(DailyBookingQueryViewModel viewModel)
         {
+            models = (ModelSource<UserProfile>)HttpContext.Items["Models"];
+            _modelState = ViewContext.ModelState;
+
             return LearnerCalendarAsync(viewModel);
         }
 
+        public async Task<IViewComponentResult> LearnerCalendarAsync(DailyBookingQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = await HttpContext.GetUserAsync();
+            return View("~/Views/LearnerProfile/Module/LearnerCalendar.cshtml", profile.LoadInstance(models));
+        }
     }
 }

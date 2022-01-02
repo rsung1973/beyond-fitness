@@ -203,7 +203,7 @@ namespace WebHome.Models.ViewModel
     }
 
 
-    public class CoachViewModel
+    public class CoachViewModel : QueryViewModel
     {
         public CoachViewModel()
         {
@@ -616,7 +616,7 @@ namespace WebHome.Models.ViewModel
     public class LessonQueryViewModel : QueryViewModel
     {
         public int? CoachID { get; set; }
-        public DateTime? QueryStart { get; set; }
+        public DateTime? DateFrom { get; set; }
         public DateTime? ClassTime { get; set; }
         public int? LearnerID { get; set; }
         public int? ExceptionalID { get; set; }

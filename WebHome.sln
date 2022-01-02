@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib.PlugInAdapter", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib.Utility", "CommonLib.Utility\CommonLib.Utility.csproj", "{21CDED93-7D5D-45F8-8198-9744496969A4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Data.Linq", "DotNetLib\System.Data.Linq\System.Data.Linq.csproj", "{CC31FC54-6D09-489B-9C28-84BF6C50880C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{21CDED93-7D5D-45F8-8198-9744496969A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21CDED93-7D5D-45F8-8198-9744496969A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21CDED93-7D5D-45F8-8198-9744496969A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

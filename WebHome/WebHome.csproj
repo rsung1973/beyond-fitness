@@ -60,9 +60,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Core\CommonLib.Core.csproj" />
+    <ProjectReference Include="..\DotNetLib\System.Data.Linq\System.Data.Linq.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="ABCpdf">
+      <HintPath>bin\Dependencies\Lib\ABCpdf.dll</HintPath>
+    </Reference>
+    <Reference Include="ABCPdfWrapper">
+      <HintPath>bin\Dependencies\Lib\ABCPdfWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="epos">
       <HintPath>bin\Dependencies\Lib\epos.dll</HintPath>
     </Reference>
@@ -74,9 +81,6 @@
     </Reference>
     <Reference Include="QREncrypter">
       <HintPath>bin\Dependencies\Lib\QREncrypter.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.Linq">
-      <HintPath>..\CommonLib.Core\bin\Dependencies\Lib\System.Data.Linq.dll</HintPath>
     </Reference>
     <Reference Include="ThoughtWorks.QRCode">
       <HintPath>bin\Dependencies\Lib\ThoughtWorks.QRCode.dll</HintPath>

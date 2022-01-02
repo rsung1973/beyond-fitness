@@ -1,0 +1,31 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    RegisterViewModel _viewModel;
+    UserProfile _model;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _viewModel = (RegisterViewModel)ViewBag.ViewModel;
+    _model = (UserProfile)this.Model;
+}
+
+<script>
+    $(function () {
+        @*window.location.href = '@(Url.Action("CompleteRegisterReview","Html",new { MemberCode = _model.MemberCode }))';*@
+        window.location.href = '@(Url.Action("LearnerIndex","LearnerFacet"))';
+    });
+</script>
+
+

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -474,13 +475,13 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class MonthlyIndicatorQueryViewModel : QueryViewModel
+    public class MonthlyIndicatorQueryViewModel : LessonQueryViewModel
     {
         public int? PeriodID { get; set; }
         public int? Year { get; set; }
         public int? Month { get; set; }
         public int? BranchID { get; set; }
-        public DateTime? DateFrom { get; set; }
+
         public DateTime? DateTo { get; set; }
         public int? ChartType { get; set; }
         public Naming.SessionTypeDefinition[] SessionType { get; set; }
@@ -494,7 +495,6 @@ namespace WebHome.Models.ViewModel
 
     public class MonthlyCoachRevenueIndicatorQueryViewModel : MonthlyIndicatorQueryViewModel
     {
-        public int? CoachID { get; set; }
         public int? AchievementGoal { get; set; }
         public int? CompleteLessonsGoal { get; set; }
         public int? AverageLessonPrice { get; set; }
@@ -516,11 +516,11 @@ namespace WebHome.Models.ViewModel
     public class LessonOverviewQueryViewModel : MonthlyIndicatorQueryViewModel
     {
         public int? LessonID { get; set; }
-        public int? CoachID { get; set; }
         public bool? CoachAttended { get; set; }
         public bool? LearnerCommitted { get; set; }
         public Naming.LessonQueryType? LessonType { get; set; }
         public bool? ByManager { get; set; }
+        public Naming.LessonPriceStatus[] CombinedStatus { get; set; }
     }
 
     public class ServingCoachQueryViewModel : QueryViewModel
