@@ -11,7 +11,7 @@
 <table id="@(_tableId)" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
-            @{ Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TH.ascx");}
+            @{ Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TH.cshtml");}
 
             <th data-hide="phone">列印次數</th>
             <th>功能</th>
@@ -21,7 +21,7 @@
         @foreach (var item in _model)
             {
         <tr>
-            @{ Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TD.ascx",item);}
+            @{ Html.RenderPartial("~/Views/Payment/Section/PaymentInvoiceList/TD.cshtml",item);}
 
             <td nowrap="noWrap" class="text-right">
                 @if (item.InvoiceItem.InvoiceType == (byte)Naming.InvoiceTypeDefinition.一般稅額計算之電子發票)

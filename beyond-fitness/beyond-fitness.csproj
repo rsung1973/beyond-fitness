@@ -3269,7 +3269,6 @@
     <Content Include="Views\ExerciseGame\Module\EditExerciseResult.ascx" />
     <Content Include="Views\ExerciseGame\Module\TestRecordList.ascx" />
     <Content Include="Views\ExerciseGame\Module\GameWidgetGrid.ascx" />
-    <Content Include="Views\Invoice\CanvasPrintAllowance.aspx" />
     <Content Include="Views\Invoice\Module\InquireInvoiceMedia.ascx" />
     <Content Include="Views\Invoice\Module\DownloadInvoiceNoIntervalCsv.ascx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoIntervalGroup.ascx" />
@@ -3278,15 +3277,11 @@
     <Content Include="Views\Invoice\AllowanceIndex.aspx" />
     <Content Include="Views\Invoice\LoadInvoiceImage.aspx" />
     <Content Include="Views\Invoice\Module\EditInvoiceNoInterval.ascx" />
-    <Content Include="Views\Invoice\Module\InvoiceBarCode.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceDispatchLogSummary.ascx" />
-    <Content Include="Views\Invoice\Module\AllowancePrintView.ascx" />
     <Content Include="Views\Invoice\Module\AllowanceItemList.ascx" />
-    <Content Include="Views\Invoice\Module\InvoiceCanvasView.ascx" />
     <Content Include="Views\Invoice\Module\SimpleInvoiceItemList.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceItemList.ascx" />
     <Content Include="Views\Invoice\Module\InvoicePrintView.ascx" />
-    <Content Include="Views\Invoice\Module\InvoiceQRCode.ascx" />
     <Content Include="Views\Invoice\Module\InvoiceItemSummary.ascx" />
     <Content Include="Views\Invoice\Module\DownloadVacantNoCsv.ascx" />
     <Content Include="Views\Invoice\Module\VacantNoList.ascx" />
@@ -3298,7 +3293,6 @@
     <Content Include="Views\Invoice\Module\PrintInvoiceWidgetGrid.ascx" />
     <Content Include="Views\Invoice\PrintAllowance.aspx" />
     <Content Include="Views\Invoice\CanvasDrawInvoice.aspx" />
-    <Content Include="Views\Invoice\CanvasPrintInvoice.aspx" />
     <Content Include="Views\Invoice\TaxCsvIndex.aspx" />
     <Content Include="Views\Invoice\VacantNoIndex.aspx" />
     <Content Include="Views\Invoice\TurnkeyIndex.aspx" />
@@ -4042,6 +4036,12 @@
     <Content Include="Views\Html\Module\Register.cshtml" />
     <Content Include="Views\Html\Module\RegisterByMail.cshtml" />
     <Content Include="Views\Html\ResetPass.cshtml" />
+    <Content Include="Views\Invoice\CanvasPrintInvoice.cshtml" />
+    <Content Include="Views\Invoice\CanvasPrintAllowance.cshtml" />
+    <Content Include="Views\Invoice\Module\InvoiceCanvasView.cshtml" />
+    <Content Include="Views\Invoice\Module\AllowancePrintView.cshtml" />
+    <Content Include="Views\Invoice\Module\InvoiceBarCode.cshtml" />
+    <Content Include="Views\Invoice\Module\InvoiceQRCode.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

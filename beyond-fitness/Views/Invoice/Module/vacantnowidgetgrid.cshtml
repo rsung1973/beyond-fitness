@@ -133,7 +133,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="vacantNoList" >
-                        @{ Html.RenderPartial("~/Views/Invoice/Module/VacantNoList.ascx", models.GetTable<BranchStore>().Where(b => false));}
+                        @{ Html.RenderPartial("~/Views/Invoice/Module/VacantNoList.cshtml", models.GetTable<BranchStore>().Where(b => false));}
 
                     </div>
                     <!-- end widget content -->

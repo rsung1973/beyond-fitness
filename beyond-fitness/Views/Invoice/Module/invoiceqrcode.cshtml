@@ -1,9 +1,9 @@
 
 @using System.IO
 @using System.Linq.Expressions
+@using System.Text
 
 @using WebHome.Helper
-@using WebHome.Models.Locale
 @using WebHome.Models.Locale
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
@@ -11,15 +11,20 @@
 @using Newtonsoft.Json
 @using Utility
 
-@if (_qrCode!=null)
+@{
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _model = (InvoiceItem)this.Model;
+    _seller = _model.Organization;
+    _isB2C = String.IsNullOrEmpty(_model.InvoiceBuyer.ReceiptNo) || _model.InvoiceBuyer.ReceiptNo == "0000000000";
+
+    if (_model != null)
     {
-        <img class="qrcode" alt="" width="@((bool?)ViewBag.Canvas==true ? "160" : "80")" height="@((bool?)ViewBag.Canvas==true ? "160" : "80")" src="@(_qrCode.CreateQRCodeImageSrc(version:10))" />
-&nbsp;&nbsp;&nbsp;&nbsp;
-        <img class="qrcode" alt="" width="@((bool?)ViewBag.Canvas==true ? "160" : "80")" height="@((bool?)ViewBag.Canvas==true ? "160" : "80")" src="@("**".CreateQRCodeImageSrc())" />
+        getQRCodeContent();
+    }
 }
-
-<script runat="server">
-
+@functions
+{
     ModelStateDictionary _modelState;
     ModelSource<UserProfile> models;
     InvoiceItem _model;
@@ -27,19 +32,6 @@
 
     bool _isB2C;
     String _qrCode;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _model = (InvoiceItem)this.Model;
-        _seller = _model.Organization;
-        _isB2C = String.IsNullOrEmpty(_model.InvoiceBuyer.ReceiptNo) || _model.InvoiceBuyer.ReceiptNo == "0000000000";
-
-        if (_model != null)
-            getQRCodeContent();
-    }
 
     protected void getQRCodeContent()
     {
@@ -92,6 +84,13 @@
 
     }
 
+}
+@if (_qrCode != null)
+{
+    <img class="qrcode" alt="" width="@((bool?)ViewBag.Canvas==true ? "160" : "80")" height="@((bool?)ViewBag.Canvas==true ? "160" : "80")" src="@(_qrCode.CreateQRCodeImageSrc(version:10))" />
+    <text>&nbsp; &nbsp; &nbsp; &nbsp;</text>
+    <img class="qrcode" alt="" width="@((bool?)ViewBag.Canvas==true ? "160" : "80")" height="@((bool?)ViewBag.Canvas==true ? "160" : "80")" src="@("**".CreateQRCodeImageSrc())" />
+}
 
 
-</script>
+

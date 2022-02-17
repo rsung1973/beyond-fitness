@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+    <RootNamespace>WebHome</RootNamespace>
+    <AssemblyName>WebHome</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\MainActivity\**" />
+    <Content Remove="Views\MainActivity\**" />
+    <EmbeddedResource Remove="Views\MainActivity\**" />
+    <None Remove="Views\MainActivity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib.Core\CommonLib.Core.csproj" />
+    <ProjectReference Include="..\CommonLib.Utility\CommonLib.Utility.csproj" />
+    <ProjectReference Include="..\DotNetLib\System.Data.Linq\System.Data.Linq.csproj" />
+    <ProjectReference Include="..\WebHome.Core\WebHome.Core.csproj" />
+    <ProjectReference Include="..\WebHome.MainActivity.View\WebHome.MainActivity.View.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ABCpdf">
+      <HintPath>bin\Dependencies\Lib\ABCpdf.dll</HintPath>
+    </Reference>
+    <Reference Include="ABCPdfWrapper">
+      <HintPath>bin\Dependencies\Lib\ABCPdfWrapper.dll</HintPath>
+    </Reference>
+    <Reference Include="epos">
+      <HintPath>bin\Dependencies\Lib\epos.dll</HintPath>
+    </Reference>
+    <Reference Include="MessagingToolkit.QRCode">
+      <HintPath>bin\Dependencies\Lib\MessagingToolkit.QRCode.dll</HintPath>
+    </Reference>
+    <Reference Include="QREncrypter">
+      <HintPath>bin\Dependencies\Lib\QREncrypter.dll</HintPath>
+    </Reference>
+    <Reference Include="ThoughtWorks.QRCode">
+      <HintPath>bin\Dependencies\Lib\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -49,7 +49,7 @@
                                         <label class="select">
                                             <select class="input" name="BranchID">
                                                 <option value="">全部</option>
-                                                @{ Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.ascx", -1);}
+                                                @{ Html.RenderPartial("~/Views/SystemInfo/BranchStoreOptions.cshtml", -1);}
 
                                             </select>
                                             <i class="icon-append far fa-keyboard"></i>
@@ -144,7 +144,7 @@
                     <!-- end widget edit box -->
                     <!-- widget content -->
                     <div class="widget-body bg-color-darken txt-color-white no-padding" id="trackCodeNoList">
-                        @{ Html.RenderPartial("~/Views/Invoice/Module/TrackCodeNoList.ascx", models.GetTable<InvoiceNoInterval>().Where(t => false));}
+                        @{ Html.RenderPartial("~/Views/Invoice/Module/TrackCodeNoList.cshtml", models.GetTable<InvoiceNoInterval>().Where(t => false));}
 
                     </div>
                     <!-- end widget content -->

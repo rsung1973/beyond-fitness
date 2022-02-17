@@ -1064,7 +1064,7 @@ namespace WebHome.Helper
                 .Sum(l => l.CoachPayoff * l.GroupingMemberCount * l.TuitionIndex
                     * l.PercentageOfDiscount / 100) ?? 0)
                 + (enterpriseLessons
-                    .Sum(l => l.CoachPayoff * l.TuitionIndex
+                    .Sum(l => l.EnterpriseCoachPayoff * l.TuitionIndex
                         * l.PercentageOfDiscount / 100) ?? 0);
             return (int)tuition;
         }
@@ -1080,7 +1080,7 @@ namespace WebHome.Helper
                 .Sum(l => l.CoachPayoff * l.GroupingMemberCount * l.TuitionIndex
                     * l.PercentageOfDiscount / 100) ?? 0)
                 + (enterpriseLessons
-                    .Sum(l => l.CoachPayoff * l.TuitionIndex
+                    .Sum(l => l.EnterpriseCoachPayoff * l.TuitionIndex
                         * l.PercentageOfDiscount / 100) ?? 0);
             return (int)tuition;
         }
@@ -1138,7 +1138,7 @@ namespace WebHome.Helper
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)enterpriseItems
-                .Sum(l => l.CoachPayoff * l.TuitionIndex
+                .Sum(l => l.EnterpriseCoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0);
 
@@ -1158,7 +1158,7 @@ namespace WebHome.Helper
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0)
                 + ((int?)enterpriseItems
-                .Sum(l => l.CoachPayoff * l.TuitionIndex
+                .Sum(l => l.EnterpriseCoachPayoff * l.TuitionIndex
                     * l.GroupingMemberCount * l.PercentageOfDiscount / 100
                     * l.MarkedGradeIndex / 100) ?? 0);
 

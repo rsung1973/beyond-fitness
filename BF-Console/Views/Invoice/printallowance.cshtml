@@ -265,7 +265,7 @@
     <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/js/css3-multi-column.js"))"></script>
     @foreach (var item in _model)
         {
-            Html.RenderPartial("~/Views/Invoice/Module/AllowancePrintView.ascx", item);
+            Html.RenderPartial("~/Views/Invoice/Module/AllowancePrintView.cshtml", item);
         }
 
         @if (_viewModel.UID.HasValue)

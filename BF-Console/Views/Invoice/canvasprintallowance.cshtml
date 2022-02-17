@@ -5,12 +5,23 @@
 
 @using WebHome.Helper
 @using WebHome.Models.Locale
-@using WebHome.Models.Locale
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
 
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    IQueryable<InvoiceAllowance> _model;
+    InvoiceQueryViewModel _viewModel;
+
+
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _model = (IQueryable<InvoiceAllowance>)this.Model;
+    _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+}
 <!DOCTYPE html>
 <html>
 <head runat="server">
@@ -273,41 +284,26 @@
 </head>
 <body>
     @foreach (var item in _model)
-        {
-            Html.RenderPartial("~/Views/Invoice/Module/AllowancePrintView.ascx", item);
-        }
+    {
+        Html.RenderPartial("~/Views/Invoice/Module/AllowancePrintView.cshtml", item);
+    }
 
-        @if (_viewModel.UID.HasValue)
+    @if (_viewModel.UID.HasValue)
+    {
+        foreach (var i in _model)
         {
-            foreach (var i in _model)
+            models.GetTable<DocumentPrintLog>().InsertOnSubmit(new DocumentPrintLog
             {
-                models.GetTable<DocumentPrintLog>().InsertOnSubmit(new DocumentPrintLog
-                {
-                    DocID = i.AllowanceID,
-                    PrintDate = DateTime.Now,
-                    UID = _viewModel.UID.Value
-                });
-            }
-            models.SubmitChanges();
-            models.ExecuteCommand("delete DocumentPrintQueue where UID={0}", _viewModel.UID);
+                DocID = i.AllowanceID,
+                PrintDate = DateTime.Now,
+                UID = _viewModel.UID.Value
+            });
         }
+        models.SubmitChanges();
+        models.ExecuteCommand("delete DocumentPrintQueue where UID={0}", _viewModel.UID);
+    }
 </body>
 </html>
 
-<script runat="server">
 
-    ModelSource<UserProfile> models;
-    ModelStateDictionary _modelState;
-    IQueryable<InvoiceAllowance> _model;
-    InvoiceQueryViewModel _viewModel;
 
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (IQueryable<InvoiceAllowance>)this.Model;
-        _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
-    }
-
-</script>

@@ -5,11 +5,23 @@
 
 @using WebHome.Helper
 @using WebHome.Models.Locale
-@using WebHome.Models.Locale
 @using WebHome.Models.ViewModel
 @using WebHome.Models.DataEntity
 @using WebHome.Controllers
 @using Newtonsoft.Json
+@{
+
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    IQueryable<InvoiceItem> _model;
+    InvoiceQueryViewModel _viewModel;
+
+    models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    _model = (IQueryable<InvoiceItem>)this.Model;
+    _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
+    ViewBag.Canvas = true;
+}
 
 <!DOCTYPE html>
 <html>
@@ -92,68 +104,68 @@
                     padding: 0;
                     padding-top: -5px;
                     padding-left: 0.1cm;
-					padding-bottom: -5px;
+                    padding-bottom: -5px;
                     padding-right: 0.2cm;
                     margin: 0px 0px 0px 0px;
                 }
-				
-				.container .logo {
-					margin-top: -10px;
-					padding-top: -10px;
-				}
 
-                    .container .cutfield p.sign {
-                        font-size: 10pt;
-                        line-height: 1.5;
-                        padding: 0;
-                        padding-top: 2px;
-                        padding-bottom: 2px;
-                        padding-left: 0.2cm;
-                        padding-right: 0.2cm;
-                        margin: 0;
-                        border-top: 1px dashed #808080;
-                        border-bottom: 1px dashed #808080;
-                    }
+            .container .logo {
+                margin-top: -10px;
+                padding-top: -10px;
+            }
 
-                    .container .cutfield p.rule1 {
-                        font-size: 9pt;
-                    }
+            .container .cutfield p.sign {
+                font-size: 10pt;
+                line-height: 1.5;
+                padding: 0;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                padding-left: 0.2cm;
+                padding-right: 0.2cm;
+                margin: 0;
+                border-top: 1px dashed #808080;
+                border-bottom: 1px dashed #808080;
+            }
 
-                    .container .cutfield p.rule {
-                        font-size: 9pt;
-                        padding: 0;
-                        padding-top: 2px;
-                        padding-bottom: 2px;
-                        padding-left: 0.2cm;
-                        padding-right: 0.2cm;
-                        margin: 0;
-                        margin-left: 2em;
-                        text-indent: -2em;
-                    }
+            .container .cutfield p.rule1 {
+                font-size: 9pt;
+            }
 
-                .container .cutfield .code1 {
-                    text-align: center;
-                    padding: 0;
-                    padding-top: 0.2cm;
-                    margin: 0;
+            .container .cutfield p.rule {
+                font-size: 9pt;
+                padding: 0;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                padding-left: 0.2cm;
+                padding-right: 0.2cm;
+                margin: 0;
+                margin-left: 2em;
+                text-indent: -2em;
+            }
+
+            .container .cutfield .code1 {
+                text-align: center;
+                padding: 0;
+                padding-top: 0.2cm;
+                margin: 0;
+            }
+
+            .container .cutfield .code2 {
+                text-align: center;
+                padding: 0;
+                padding-top: 0.3cm;
+                margin: 0;
+            }
+
+                .container .cutfield .code2 img {
+                    /*margin: 0 0.6cm 0 0.6cm;*/
+                    border: none;
                 }
-
-                .container .cutfield .code2 {
-                    text-align: center;
-                    padding: 0;
-                    padding-top: 0.3cm;
-                    margin: 0;
-                }
-
-                    .container .cutfield .code2 img {
-                        /*margin: 0 0.6cm 0 0.6cm;*/
-                        border: none;
-                    }
         /*交易明細*/
-		.listfield {
-			font-size: 26px;
-		}
-		
+        .listfield {
+            font-size: 26px;
+        }
+
         div.listfield {
             /*display:block;*/
             /*width: 720px;*/
@@ -282,42 +294,25 @@
 <body>
     <script type="text/javascript" src="@(VirtualPathUtility.ToAbsolute("~/js/css3-multi-column.js"))"></script>
     @foreach (var item in _model)
-        {
-            Html.RenderPartial("~/Views/Invoice/Module/InvoiceCanvasView.ascx", item);
-        }
+    {
+        Html.RenderPartial("~/Views/Invoice/Module/InvoiceCanvasView.cshtml", item);
+    }
 
-        @if (_viewModel.UID.HasValue)
+    @if (_viewModel.UID.HasValue)
+    {
+        foreach (var i in _model)
         {
-            foreach (var i in _model)
+            models.GetTable<DocumentPrintLog>().InsertOnSubmit(new DocumentPrintLog
             {
-                models.GetTable<DocumentPrintLog>().InsertOnSubmit(new DocumentPrintLog
-                {
-                    DocID = i.InvoiceID,
-                    PrintDate = DateTime.Now,
-                    UID = _viewModel.UID.Value
-                });
-            }
-            models.SubmitChanges();
-            models.ExecuteCommand("delete DocumentPrintQueue where UID={0}", _viewModel.UID);
+                DocID = i.InvoiceID,
+                PrintDate = DateTime.Now,
+                UID = _viewModel.UID.Value
+            });
         }
+        models.SubmitChanges();
+        models.ExecuteCommand("delete DocumentPrintQueue where UID={0}", _viewModel.UID);
+    }
 </body>
 </html>
 
-<script runat="server">
 
-    ModelSource<UserProfile> models;
-    ModelStateDictionary _modelState;
-    IQueryable<InvoiceItem> _model;
-    InvoiceQueryViewModel _viewModel;
-
-    protected override void OnInit(EventArgs e)
-    {
-        base.OnInit(e);
-        models = ((SampleController<UserProfile>)ViewContext.Controller).DataSource;
-        _modelState = (ModelStateDictionary)ViewBag.ModelState;
-        _model = (IQueryable<InvoiceItem>)this.Model;
-        _viewModel = (InvoiceQueryViewModel)ViewBag.ViewModel;
-        ViewBag.Canvas = true;
-    }
-
-</script>

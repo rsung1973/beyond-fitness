@@ -36,11 +36,11 @@
                             賣方 @(_model.InvoiceSeller.ReceiptNo) @(_isB2C ? null : "買方 " + _model.InvoiceBuyer.ReceiptNo)
                         </p>
                         <div class="code1">
-                            @{ Html.RenderPartial("~/Views/Invoice/Module/InvoiceBarCode.ascx",_model);}
+                            @{ Html.RenderPartial("~/Views/Invoice/Module/InvoiceBarCode.cshtml",_model);}
 
                         </div>
                         <div class="code2">
-                            @{ Html.RenderPartial("~/Views/Invoice/Module/InvoiceQRCode.ascx",_model);}
+                            @{ Html.RenderPartial("~/Views/Invoice/Module/InvoiceQRCode.cshtml",_model);}
 
                         </div>
                         <p>
