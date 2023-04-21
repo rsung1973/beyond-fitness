@@ -127,7 +127,7 @@ namespace WebHome.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VM-Venus\\sqlexpress,1433;Initial Catalog=BeyondFitnessProd2;Integrate" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VM-Titan\\sqlexpress,1433;Initial Catalog=BeyondFitnessProd2;Integrate" +
             "d Security=True")]
         public string BFDbConnection {
             get {

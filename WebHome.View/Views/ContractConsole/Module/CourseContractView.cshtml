@@ -50,10 +50,12 @@
                     <tr style="border-width: 1px; border-bottom-style: dashed;">
                         <td colspan="3">學員資料</td>
                     </tr>
-                    @{ IEnumerable
-               <CourseContractMember>
-               items;}
-                    @if (_model.CourseContractType.ContractCode == "CFA")
+                    @{
+                        IEnumerable<CourseContractMember> items;
+                    }
+                    @if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+                        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+                        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
             {
                 items = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID);
             }
@@ -89,7 +91,8 @@
                     <tr>
                         <td colspan="2">名稱：@(_model.CourseContractType.TypeName)(@(_model.LessonPriceType.DurationInMinutes)分鐘)</td>
                         <td>
-                            @if (_model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                            @if (_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                                || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                             {
                                 <text>上課場所/簽約分店：遠距/@(_model.CourseContractExtension.BranchStore.BranchName)</text>
                             }
@@ -399,7 +402,9 @@
         </div>
     </div>
 </div>
-@if (_model.CourseContractType.ContractCode == "CFA")
+@if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
 {
 <div class="row" style="margin-top: 30px; margin-bottom: 20px;">
     <div class="col-md-12">

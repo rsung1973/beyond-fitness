@@ -120,12 +120,12 @@ namespace WebHome.Controllers
                     {
                         if (item.CourseContractRevision.Reason == "展延")
                         {
-                            var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectExtend.cshtml", item.CourseContractRevision.SourceContract);
+                            var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectExtend.cshtml", item);
                             jsonData.PushLineMessage();
                         }
                         else if (item.CourseContractRevision.Reason == "終止")
                         {
-                            var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectTermination.cshtml", item.CourseContractRevision.SourceContract);
+                            var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectTermination.cshtml", item);
                             jsonData.PushLineMessage();
                         }
                         else if (item.CourseContractRevision.Reason == "轉換體能顧問")
@@ -133,12 +133,17 @@ namespace WebHome.Controllers
                             var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectAssignment.cshtml", item);
                             jsonData.PushLineMessage();
                         }
+                        else if (item.CourseContractRevision.Reason == "轉換課程堂數")
+                        {
+                            var jsonData = await this.RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyCoachToRejectExchange.cshtml", item);
+                            jsonData.PushLineMessage();
+                        }
                     }
 
                     models.ExecuteCommand("delete CourseContract where ContractID = {0}", item.ContractID);
 
                     result = true;
-                    ClearPreliminaryMember();
+                    //ClearPreliminaryMember();
                 }
             }
             catch(Exception ex)
@@ -217,75 +222,75 @@ namespace WebHome.Controllers
             return View("~/Views/CourseContract/Module/MemberSelector.ascx", items);
         }
 
-        public ActionResult EditContractMember(ContractMemberViewModel viewModel,int? referenceUID)
-        {
-            ViewBag.ViewModel = viewModel;
+        //public ActionResult EditContractMember(ContractMemberViewModel viewModel,int? referenceUID)
+        //{
+        //    ViewBag.ViewModel = viewModel;
 
-            UserProfile item;
-            if (referenceUID.HasValue)
-            {
-                item = models.GetTable<UserProfile>().Where(u => u.UID == referenceUID).FirstOrDefault();
-                if (item != null)
-                {
-                    viewModel.Address = item.Address;
-                    viewModel.EmergencyContactPhone = item.UserProfileExtension.EmergencyContactPhone;
-                    viewModel.EmergencyContactPerson = item.UserProfileExtension.EmergencyContactPerson;
-                    viewModel.Relationship = item.UserProfileExtension.Relationship;
-                    viewModel.AdministrativeArea = item.UserProfileExtension.AdministrativeArea;
-                }
-            }
-            else
-            {
-                item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
+        //    UserProfile item;
+        //    if (referenceUID.HasValue)
+        //    {
+        //        item = models.GetTable<UserProfile>().Where(u => u.UID == referenceUID).FirstOrDefault();
+        //        if (item != null)
+        //        {
+        //            viewModel.Address = item.Address;
+        //            viewModel.EmergencyContactPhone = item.UserProfileExtension.EmergencyContactPhone;
+        //            viewModel.EmergencyContactPerson = item.UserProfileExtension.EmergencyContactPerson;
+        //            viewModel.Relationship = item.UserProfileExtension.Relationship;
+        //            viewModel.AdministrativeArea = item.UserProfileExtension.AdministrativeArea;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        item = models.GetTable<UserProfile>().Where(u => u.UID == viewModel.UID).FirstOrDefault();
 
-                if (item != null)
-                {
-                    viewModel.Gender = item.UserProfileExtension.Gender;
-                    viewModel.EmergencyContactPhone = item.UserProfileExtension.EmergencyContactPhone;
-                    viewModel.EmergencyContactPerson = item.UserProfileExtension.EmergencyContactPerson;
-                    viewModel.Relationship = item.UserProfileExtension.Relationship;
-                    viewModel.AdministrativeArea = item.UserProfileExtension.AdministrativeArea;
-                    viewModel.IDNo = item.UserProfileExtension.IDNo;
-                    viewModel.Phone = item.Phone;
-                    viewModel.Birthday = item.Birthday;
-                    viewModel.AthleticLevel = item.UserProfileExtension.AthleticLevel;
-                    viewModel.RealName = item.RealName;
-                    viewModel.Address = item.Address;
-                    viewModel.Nickname = item.Nickname;
+        //        if (item != null)
+        //        {
+        //            viewModel.Gender = item.UserProfileExtension.Gender;
+        //            viewModel.EmergencyContactPhone = item.UserProfileExtension.EmergencyContactPhone;
+        //            viewModel.EmergencyContactPerson = item.UserProfileExtension.EmergencyContactPerson;
+        //            viewModel.Relationship = item.UserProfileExtension.Relationship;
+        //            viewModel.AdministrativeArea = item.UserProfileExtension.AdministrativeArea;
+        //            viewModel.IDNo = item.UserProfileExtension.IDNo;
+        //            viewModel.Phone = item.Phone;
+        //            viewModel.Birthday = item.Birthday;
+        //            viewModel.AthleticLevel = item.UserProfileExtension.AthleticLevel;
+        //            viewModel.RealName = item.RealName;
+        //            viewModel.Address = item.Address;
+        //            viewModel.Nickname = item.Nickname;
 
-                }
-            }
+        //        }
+        //    }
 
-            return View("~/Views/CourseContract/Module/EditContractMember.ascx");
-        }
+        //    return View("~/Views/CourseContract/Module/EditContractMember.ascx");
+        //}
 
-        public async Task<ActionResult> CommitContractMemberAsync(ContractMemberViewModel viewModel)
-        {
-            var item = await viewModel.CommitUserProfileAsync(this);
-            if (item == null)
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View("~/Views/Shared/ReportInputError.ascx");
-                }
-                else
-                {
-                    return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: ModelState.ErrorMessage());
-                }
-            }
+        //public async Task<ActionResult> CommitContractMemberAsync(ContractMemberViewModel viewModel)
+        //{
+        //    var item = await viewModel.CommitUserProfileAsync(this);
+        //    if (item == null)
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return View("~/Views/Shared/ReportInputError.ascx");
+        //        }
+        //        else
+        //        {
+        //            return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: ModelState.ErrorMessage());
+        //        }
+        //    }
 
-            return Json(new
-            {
-                result = true,
-                UID = item.UID,
-                RealName = item.RealName,
-                OwnerID = viewModel.OwnerID == -1
-                            ? item.UID
-                            : viewModel.OwnerID.HasValue
-                                ? viewModel.OwnerID
-                                : (int?)null
-            });
-        }
+        //    return Json(new
+        //    {
+        //        result = true,
+        //        UID = item.UID,
+        //        RealName = item.RealName,
+        //        OwnerID = viewModel.OwnerID == -1
+        //                    ? item.UID
+        //                    : viewModel.OwnerID.HasValue
+        //                        ? viewModel.OwnerID
+        //                        : (int?)null
+        //    });
+        //}
 
         public ActionResult GetLessonPriceList(int branchID,int? duration)
         {
@@ -638,25 +643,25 @@ namespace WebHome.Controllers
             return Json(new { result = true });
         }
 
-        public async Task<ActionResult> ConfirmSignatureForAmendmentAsync(CourseContractViewModel viewModel, bool? extension)
-        {
-            var item = await viewModel.ConfirmContractServiceSignatureAsync(this);
+        //public async Task<ActionResult> ConfirmSignatureForAmendmentAsync(CourseContractViewModel viewModel, bool? extension)
+        //{
+        //    var item = await viewModel.ConfirmContractServiceSignatureAsync(this);
 
-            if (item == null)
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View("~/Views/Shared/ReportInputError.ascx");
-                }
-                else
-                {
-                    return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: ModelState.ErrorMessage());
-                }
-            }
+        //    if (item == null)
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return View("~/Views/Shared/ReportInputError.ascx");
+        //        }
+        //        else
+        //        {
+        //            return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: ModelState.ErrorMessage());
+        //        }
+        //    }
 
-            return Json(new { result = true});
+        //    return Json(new { result = true});
 
-        }
+        //}
 
         public async Task<ActionResult> EnableContractAmendmentAsync(CourseContractViewModel viewModel)
         {
@@ -994,7 +999,7 @@ namespace WebHome.Controllers
             r[4] = String.Format("{0:yyyy/MM/dd}", item.EffectiveDate);
             r[5] = String.Format("{0:yyyy/MM/dd}", item.Expiration);
             r[6] = item.CourseContractType.TypeName + "("
-                + item.LessonPriceType.DurationInMinutes + " 分鐘)";
+                + item.CurrentPrice.DurationInMinutes + " 分鐘)";
             if (item.SequenceNo == 0)
             {
                 if (item.Status >= (int)Naming.CourseContractStatus.已生效)
@@ -1008,8 +1013,8 @@ namespace WebHome.Controllers
             //    r[9] =  item.TotalCost;
 
             var originalPrice = item.OriginalSeriesPrice();
-            r[10] = originalPrice != null ? originalPrice.ListPrice : item.LessonPriceType.ListPrice;
-            r[11] = item.LessonPriceType.ListPrice;
+            r[10] = originalPrice != null ? originalPrice.ListPrice : item.CurrentPrice.ListPrice;
+            r[11] = item.CurrentPrice.ListPrice;
             var revision = item.CourseContractRevision;
             r[12] = revision == null ? "新合約" : revision.Reason;
             r[13] = ((Naming.ContractQueryStatus)item.Status).ToString();
@@ -1094,6 +1099,12 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
             return View("~/Views/CourseContract/Module/InstallmentPlan.cshtml");
+        }
+
+        public ActionResult LoadInstallmentPlan2022(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            return View("~/Views/CourseContract/Module/InstallmentPlan2022.cshtml");
         }
 
     }

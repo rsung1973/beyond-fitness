@@ -66,18 +66,14 @@
                         totalCost = _model.TotalCost;
                     }
                 }
-                @if (_model.ContractType != (int)CourseContractType.ContractTypeDefinition.CGA
-                        && _model.ContractType != (int)CourseContractType.ContractTypeDefinition.CNA)
-                {
-                    <li>
-                        <div class="list_tb tb2">
-                            <div class="list_tr">
-                                <div class="list_td hd">購買堂數</div>
-                                <div class="list_td rt">@(totalLessons)</div>
-                            </div>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">購買總堂數</div>
+                            <div class="list_td rt">@(totalLessons)</div>
                         </div>
-                    </li>
-                }
+                    </div>
+                </li>
                 <li>
                     <div class="list_tb tb2">
                         <div class="list_tr">
@@ -122,7 +118,7 @@
                     <div class="list_tb tb2">
                         <div class="list_tr">
                             <div class="list_td hd">上課場所</div>
-                            <div class="list_td rt">@(_model.LessonPriceType.BranchStore.IsVirtualClassroom() ? "遠距" : _model.CourseContractExtension?.BranchStore.BranchName)</div>
+                            <div class="list_td rt">@(_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true ? "遠距" : _model.CourseContractExtension?.BranchStore.BranchName)</div>
                         </div>
                     </div>
                 </li>
@@ -145,6 +141,7 @@
             {
                 int idx = 1;
                 <ul class="mb_list">
+                    <li class="tit"><i class="zmdi zmdi-folder-star-alt"></i> 分期資訊</li>
                     <li>
                         <div class="list_tb tb2">
                             <div class="list_tr tit">
@@ -172,7 +169,9 @@
     </li>
     @{
         IEnumerable<CourseContractMember> items;
-        if (_model.CourseContractType.ContractCode == "CFA")
+        if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
         {
             items = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID);
         }
@@ -248,7 +247,9 @@
                     </li>
                 </ul>
             }
-            @if (_model.CourseContractType.ContractCode == "CFA")
+            @if (true || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+                || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+                || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
             {
                 <p class="black-t12">本人同意並授權以下人員得使用本人與超越體能顧問有限公司購買之體能顧問服務課程，任一人員(含本人)使用體能顧問服務，皆需計入體能顧問服務次數內，並應共同遵守合約及特約條款之規定</p>
 
@@ -297,7 +298,8 @@
                         await Html.RenderPartialAsync("~/Views/CornerKick/Module/ContractTermsForCNA.cshtml");
                         break;
                     default:
-                        if (_model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                        if (_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                            || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                         {
                             await Html.RenderPartialAsync("~/Views/CornerKick/Module/ContractTermsForDistance.cshtml");
                         }

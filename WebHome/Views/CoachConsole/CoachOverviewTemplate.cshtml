@@ -1,0 +1,323 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Newtonsoft.Json
+@functions
+{
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+    UserProfile _model;
+    LessonQueryViewModel _viewModel;
+    IQueryable<ServingCoach> coachItems;
+}
+@{
+
+    Layout = "~/Views/ConsoleHome/Template/MainPage.cshtml";
+
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _modelState = ViewContext.ModelState;
+    _model = (UserProfile)this.Model;
+    _viewModel = (LessonQueryViewModel)ViewBag.ViewModel;
+
+     coachItems = models.PromptEffectiveCoach()
+                    .Where(c => !c.LeavedDate.HasValue);
+
+    if (_viewModel.BranchID.HasValue)
+    {
+        coachItems = coachItems.Join(models.GetTable<V_WorkPlace>().Where(w => w.WorkPlace == _viewModel.BranchID),
+            c => c.CoachID, w => w.CoachID, (c, w) => c);
+    }
+
+}
+@{
+    BranchStore _item = (BranchStore)ViewBag.DataItem;
+}
+@section CustomHeader {
+    <!-- JQuery DataTable Css -->
+    <link href="plugins/jquery-datatable/DataTables-1.10.18/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="plugins/jquery-datatable/Responsive-2.2.2/css/responsive.bootstrap4.min.css" rel="stylesheet">
+    <link href="plugins/jquery-datatable/FixedColumns-3.2.5/css/fixedColumns.bootstrap4.min.css" rel="stylesheet">
+    <!-- Bootstrap Datetimepick -->
+    <link href="css/smartcalendar-2.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="css/customelist.css?2.0" />
+    <!-- charts-c3 -->
+    <link href="plugins/charts-c3/plugin.css?2.0" rel="stylesheet">
+    <!-- dotdotdot JS -->
+    <link href="plugins/dotdotdot/dotdotdot.css?2.0" rel="stylesheet" />
+}
+
+    <!-- Main Content -->
+    <section class="content">
+    @{
+        ViewBag.BlockHeader = "我的教練";
+        await Html.RenderPartialAsync("~/Views/ConsoleHome/Module/BlockHeader.cshtml", _model);
+    }
+    <!--目標與達成率-->
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="card">
+                    <div class="body">
+                        <div class="row">
+                            <div class="card top_counter">
+                                <div class="col-sm-12">
+                                    <div class="body p-10">
+                                        <div class="icon">
+                                            <i class="zmdi livicon-evo" data-options="name: legal.svg; size: 30px; style: original; autoPlay:true"></i>
+                                        </div>
+                                        <div class="content">
+                                            <div class="text col-red">證照待審</div>
+                                            <h5 class="number col-red"><a id="certCount" href="javascript:showCertList();">@((_item?.BranchID).CoachCertificateToApproveByBranch(models).Count())</a></h5>
+                                            <script>
+                                                function showCertList() {
+                                                    showLoading();
+                                                    $.post('@Html.Raw(Url.Action("ShowCoachCertificateReady", "CoachConsole"))', $global.viewModel, function (data) {
+                                                        hideLoading();
+                                                        if ($.isPlainObject(data)) {
+                                                            alert(data.message);
+                                                        } else {
+                                                            $('#dataList').empty()
+                                                                .append($(data));
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card top_counter">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="body p-10">
+                                        <div class="icon">
+                                            <i class="zmdi livicon-evo"
+                                               data-options="name: users.svg; size: 30px; style: original; autoPlay:true"></i>
+                                        </div>
+                                        <div class="content">
+                                            <div class="text">分店教練</div>
+                                            <h5 class="number"><a href="javascript:showCoachList();">@(coachItems.Count())</a></h5>
+                                            <script>
+                                                function showCoachList() {
+                                                    showLoading();
+                                                    $.post('@Html.Raw(Url.Action("ShowCoachMonthlyPerformance", "CoachConsole"))', $global.viewModel, function (data) {
+                                                        hideLoading();
+                                                        if ($.isPlainObject(data)) {
+                                                            alert(data.message);
+                                                        } else {
+                                                            $('#dataList').empty()
+                                                                .append($(data));
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card top_counter">
+                                @{
+                                    ShowBranchLearner();
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>P.T Level</strong></h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-swap"></i> </a>
+                                <ul class="dropdown-menu dropdown-menu-right slideUp float-right">
+                                    <li><a href="javascript:showCoachOverview();">全部</a></li>
+                                    @foreach (var branch in models.PromptRealStore())
+                                    {
+                                        <li><a href="javascript:showCoachOverview(@(branch.BranchID));">@(branch.BranchName)</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                        <script>
+                            function showCoachOverview(branchID) {
+                                $('').launchDownload('@Html.Raw(Url.Action("CoachOverview", "ConsoleHome"))', { 'branchID': branchID });
+                            }
+                        </script>
+                    </div>
+                    <div class="body">
+                        <div class="row clearfix">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 hidden-sm-down">
+                                @{
+                                    await Html.RenderPartialAsync("~/Views/CoachConsole/Module/CoachLevelChart.cshtml");
+                                }
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                @{
+                                    await Html.RenderPartialAsync("~/Views/CoachConsole/Module/CoachLevelList.cshtml");
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--詳細資料-->
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <h4 class="card-outbound-header m-l-15">詳細資料</h4>
+            <div class="col-lg-12" id="dataList">
+                @RenderSection("DataList")
+            </div>
+        </div>
+        <!-- #END# Basic Examples -->
+    </div>
+    <script>
+
+        $(function () {
+            $global.doSelect = function (year, month) {
+                $('').launchDownload('@Html.Raw(Url.Action("CoachOverview", "ConsoleHome"))', { 'branchID': '@(_viewModel.BranchID)' });
+            };
+        });
+
+        function processCoachView(keyID) {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("ProcessCoachView", "CoachConsole"))', { 'keyID': keyID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+        function processCoachCertificate(keyID) {
+            showLoading();
+            $.post('@Html.Raw(Url.Action("ProcessCoachCertificateView", "CoachConsole"))', { 'keyID': keyID }, function (data) {
+                hideLoading();
+                if ($.isPlainObject(data)) {
+                    alert(data.message);
+                } else {
+                    $(data).appendTo($('body'));
+                }
+            });
+        }
+
+    </script>
+</section>
+
+
+@section TailPageJavaScriptInclude {
+    <!-- Echart Js -->
+    <script src="plugins/echarts/echarts.min.js"></script>
+    <!-- Echart Template Js -->
+    <script src="plugins/echarts/theme/macarons.js"></script>
+    <script src="plugins/echarts/theme/macarons_nero.js"></script>
+    <!--Sparkline Plugin Js-->
+    <script src="plugins/jquery-sparkline/jquery.sparkline.js"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="bundles/datatablescripts.bundle.js"></script>
+    <script src="plugins/jquery-datatable/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/jquery-datatable/FixedColumns-3.2.5/js/dataTables.fixedColumns.min.js"></script>
+    <!--Gauge Plugin Js-->
+    <script src="plugins/gauge/gauge.min.js"></script>
+    <!-- dotdotodt Js -->
+    <script src="plugins/dotdotdot/dotdotdot.js"></script>
+    <!-- ChartC3 Js -->
+    <script src="bundles/cs.bundles.js"></script>
+
+    @{
+        await Html.RenderPartialAsync("~/Views/ConsoleHome/Shared/KnobJS.cshtml");
+    }
+
+    <script>
+        $(function () {
+            //var $body = $('body');
+            //if ($body.hasClass('theme-nero')) {
+            //    $.getScript('plugins/echarts/theme/nero/macarons.js', function (script, textStatus,jqXHR) {
+            //        if ($global.echarts.showChart) {
+            //            $global.echarts.showChart();
+            //        }
+            //    });
+            //} else {
+            //    $.getScript('plugins/echarts/theme/macarons.js', function (script, textStatus, jqXHR) {
+            //        if ($global.echarts.showChart) {
+            //            $global.echarts.showChart();
+            //        }
+            //    });
+            //}
+
+            window.onresize = function () {
+                if ($global.echarts.myChart) {
+                    $global.echarts.myChart.resize();
+                }
+            };
+        });
+    </script>
+
+}
+
+@functions
+{
+    void ShowBranchLearner()
+    {
+        var effectiveItems = models.PromptEffectiveContract();
+        var effectiveLearners = models.GetTable<CourseContractMember>()
+                                    .Join(effectiveItems, m => m.ContractID, c => c.ContractID, (m, c) => m);
+        var learners = models.GetTable<LearnerFitnessAdvisor>().Where(l => coachItems.Any(c => c.CoachID == l.CoachID));
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="body p-10">
+                <div class="icon">
+                    <i class="zmdi livicon-evo"
+                   data-options="name: star.svg; size: 30px; style: original; autoPlay:true"></i>
+                </div>
+                <div class="content">
+                    <div class="text">主教練學生<small>(合約)</small></div>
+                    <h5 class="number">
+                        @(models.GetTable<LearnerCoachProperty>()
+                            .Where(p => effectiveLearners.Any(f => f.UID == p.UID))
+                            .Where(p => p.PropertyID == (int)LearnerCoachProperty.PropertyType.PrimaryCoach)
+                            .Where(p => coachItems.Any(c=>c.CoachID == p.CoachID)).Count())
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="body p-10">
+                <div class="icon">
+                    <i class="zmdi livicon-evo"
+                   data-options="name: star-half.svg; size: 30px; style: original; autoPlay:true"></i>
+                </div>
+                <div class="content">
+                    <div class="text">所屬學生<small>(合約)</small></div>
+                    <h5 class="number">@(learners.Count(l => effectiveLearners.Any(f => f.UID == l.UID)))</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="body p-10">
+                <div class="icon">
+                    <i class="zmdi livicon-evo"
+                   data-options="name: lightning.svg; size: 30px; style: original; autoPlay:true"></i>
+                </div>
+                <div class="content">
+                    <div class="text">所屬學生<small>(無)</small></div>
+                    <h5 class="number">@(learners.Count(l => !effectiveLearners.Any(f => f.UID == l.UID)))</h5>
+                </div>
+            </div>
+        </div>
+    }
+}

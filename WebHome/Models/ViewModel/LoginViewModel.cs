@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using CommonLib.Utility;
 using WebHome.Models.DataEntity;
 using WebHome.Models.Locale;
 
@@ -25,6 +26,22 @@ namespace WebHome.Models.ViewModel
         {
             return (QueryViewModel)this.MemberwiseClone();
         }
+
+        public T Deserialize<T>()
+            where T : QueryViewModel
+        {
+            if (KeyID != null)
+            {
+                return JsonConvert.DeserializeObject<T>(KeyID.DecryptKey());
+            }
+            return null;
+        }
+
+        public String Serialize()
+        {
+            return this.JsonStringify().EncryptKey();
+        }
+
         public String CustomQuery { get; set; }
         public Naming.DataOperationMode? DataOperation { get; set; }
         public String ViewID { get; set; }
@@ -43,6 +60,7 @@ namespace WebHome.Models.ViewModel
             get => AlertMessage;
             set => AlertMessage = value;
         }
+        public String UseVersion { get; set; }
     }
 
     public class LoginViewModel : QueryViewModel
@@ -167,7 +185,8 @@ namespace WebHome.Models.ViewModel
 
         public String Gender { get; set; }
 
-        public int? LevelID { get; set; } 
+        public int? LevelID { get; set; }
+        public bool IsAdult => Birthday.HasValue && Birthday <= DateTime.Today.AddYears(-18);
 
     }
 
@@ -191,6 +210,9 @@ namespace WebHome.Models.ViewModel
         public String EmergencyContactPhone { get; set; }
         public String Relationship { get; set; }
         public String AdministrativeArea { get; set; }
+        public int? RelationID { get; set; }
+        public String RelationMemo { get; set; }
+
     }
 
     public class LessonViewModel
@@ -319,6 +341,8 @@ namespace WebHome.Models.ViewModel
         public int[] AttendeeID { get; set; }
         public int? PriceID { get; set; }
         public String Place { get; set; }
+        public Naming.ContractVersion? Version { get; set; }
+
     }
 
     public class LessonTimeExpansionViewModel
@@ -636,13 +660,12 @@ namespace WebHome.Models.ViewModel
         public String QueryType { get; set; } = "default";
     }
 
-    public class LessonQueryViewModel : QueryViewModel
+    public class LessonQueryViewModel : CoachQueryViewModel
     {
         private DateTime? dateTo;
         private DateTime? classTime;
         private DateTime? dateFrom;
 
-        public int? CoachID { get; set; }
         public DateTime? DateFrom { get => dateFrom?.CurrentLocalTime(); set => dateFrom = value; }
         public DateTime? ClassTime { get => classTime?.CurrentLocalTime(); set => classTime = value; }
         public int? LearnerID { get; set; }
@@ -653,6 +676,22 @@ namespace WebHome.Models.ViewModel
             get;
             set;
         }
+    }
+
+    public class CoachQueryViewModel : QueryViewModel
+    {
+
+        public int? CoachID { get; set; }
+        public int? BranchID { get; set; }
+        public bool? Employed { get; set; }
+    }
+
+    public class CoachLearnerQueryViewModel : CoachQueryViewModel
+    {
+        public int? UID { get; set; }
+        public bool? ForPrimary { get; set; }
+        public bool? WithContract { get; set; }
+        public int?[] LearnerID { get; set; }
     }
 
     public class LessonTimeBookingViewModel : QueryViewModel
@@ -739,13 +778,13 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class CoachCertificateViewModel
+    public class CoachCertificateViewModel : SelectItemQueryViewModel
     {
         private DateTime? expiration;
 
         public int? CertificateID { get; set; }
         public DateTime? Expiration { get => expiration?.CurrentLocalTime(); set => expiration = value; }
-        public int? UID { get; set; }
+        public int? CoachID { get; set; }
 
     }
 

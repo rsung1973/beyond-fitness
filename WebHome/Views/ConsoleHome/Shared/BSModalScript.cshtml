@@ -38,7 +38,7 @@
             $('#@(_dialogID)').modal('hide');
             if (closeModal) {
                 closeModal();
-                $global.closeAllModal = null;
+                $global.closeAllModal = function() { };
             }
         };
 
@@ -49,12 +49,31 @@
             };
         }
 
+        if ($global.dialogStack === undefined) {
+            $global.dialogStack = [];
+        }
+
         $global.appliedDialog['@(_dialogID)'] = $('#@(_dialogID)');
+        $global.dialogStack.push('@(_dialogID)');
 
         if ($global.hideAllModal === undefined) {
             $global.hideAllModal = function () {
                 for (var id in $global.appliedDialog) {
-                    $global.appliedDialog[id].modal('hide');
+                    try {
+                        $global.appliedDialog[id].modal('hide');
+                    } catch (ex) {
+                        console.log(ex);
+                    }
+                }
+            };
+        }
+
+        if ($global.hideTopmost === undefined) {
+            $global.hideTopmost = function () {
+                var topMost = $global.dialogStack.pop();
+                if (topMost !== undefined) {
+                    $global.appliedDialog[topMost].modal('hide');
+                    delete $global.appliedDialog[topMost];
                 }
             };
         }

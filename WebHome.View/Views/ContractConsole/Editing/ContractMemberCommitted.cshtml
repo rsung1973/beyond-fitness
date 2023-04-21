@@ -14,17 +14,17 @@
     ModelSource<UserProfile> models;
     ContractMemberViewModel _viewModel;
 
-
-
     _modelState = ViewContext.ModelState;
     models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
     _viewModel = (ContractMemberViewModel)ViewBag.ViewModel;
+    var renewal = models.GetTable<CourseContractMember>().Any(m => m.UID == _viewModel.OwnerID);
 }
 
 <script>
     $(function () {
-        $('#@(_viewModel.DialogID)').modal('hide');
+        $global.hideTopmost();
         $global.viewModel.OwnerID = @(_viewModel.OwnerID.HasValue ? _viewModel.OwnerID.ToString() : "null");
+        updateRenewal(@(renewal ? "true" : "false"));
         if ($global.commitContractMemberOnce) {
             $global.commitContractMemberOnce();
             $global.commitContractMemberOnce = null;

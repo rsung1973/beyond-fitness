@@ -1,0 +1,66 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using WebHome.Properties
+@using WebHome.Helper.BusinessOperation
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    CourseContract _model;
+    DateTime? _signatureDate;
+    CourseContractMember _owner;
+
+
+    CourseContractViewModel _viewModel = (CourseContractViewModel)ViewBag.ViewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (CourseContract)this.Model;
+    _owner = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID).First();
+    var item = _model.CourseContractLevel.Where(l => l.LevelID == (int)Naming.CourseContractStatus.待審核).FirstOrDefault();
+    if (item != null)
+    {
+        _signatureDate = item.LevelDate;
+    }
+    else
+    {
+        _signatureDate = DateTime.Now;
+    }
+}
+@{
+    await Html.RenderPartialAsync("~/Views/ContractConsole/Module/ContractGDPRAgreement.cshtml", _model);
+}
+<table class="table">
+    <tbody>
+        <tr>
+            <td colspan="3">
+                此致<br />超越體能顧問有限公司
+            </td>
+            @if (_viewModel.Pdf == "1")
+            {
+                <td rowspan="2" width="150px" class="p-0 text-right"><img src="images/sign/seal.png" width="150px" /></td>
+            }
+        </tr>
+        <tr>
+            <td>主簽約姓名：<u>@(_model.ContractOwner.RealName)</u></td>
+            <td>身分證字號：<u>@(_model.ContractOwner.UserProfileExtension.IDNo)</u></td>
+            <td>日期： <u>@(String.Format("{0:yyyy/MM/dd}", _signatureDate))</u></td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                ※與BF間權利義務關係解除後，為與台端保有日後再次提供服務之機會，請同意個人資料電子文件永久保存。<br />簽名：
+                @{
+                    ViewBag.SignatureName = "SignatureGDPR";
+                    await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

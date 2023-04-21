@@ -1,0 +1,379 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Newtonsoft.Json
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    CourseContract _model;
+
+
+    _modelState = (ModelStateDictionary)ViewBag.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];
+    _model = (CourseContract)this.Model;
+}
+<ul class="collapsible popout" data-collapsible="accordion">
+    <li data-idx="0">
+        <div class="collapsible-header">
+            <i class="material-icons">subdirectory_arrow_right</i>
+            Step1.確認合約資料
+        </div>
+        <div class="collapsible-body">
+            <ul class="mb_list">
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">合約名稱</div>
+                            <div class="list_td rt">@(_model.ContractName())</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">合約起日</div>
+                            <div class="list_td rt">@($"{_model.ValidFrom:yyyy/MM/dd}")</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">合約迄日</div>
+                            <div class="list_td rt col-red">@($"{_model.ValidTo ?? _model.Expiration:yyyy/MM/dd}")</div>
+                        </div>
+                    </div>
+                </li>
+                @{
+                    var installment = models.GetTable<CourseContract>().Where(c => c.InstallmentID == _model.InstallmentID);
+                    int? totalLessons, totalCost;
+                    if (_model.InstallmentID.HasValue)
+                    {
+                        totalLessons = installment.Sum(c => c.Lessons);
+                        totalCost = installment.Sum(c => c.TotalCost);
+                    }
+                    else
+                    {
+                        totalLessons = _model.Lessons;
+                        totalCost = _model.TotalCost;
+                    }
+                }
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">購買總堂數</div>
+                            <div class="list_td rt">@(totalLessons)</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">專業顧問建置與諮詢費</div>
+                            <div class="list_td rt">@(String.Format("{0:##,###,###,###}", (totalCost * 8 + 5) / 10))</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">教練課程費</div>
+                            <div class="list_td rt">@(String.Format("{0:##,###,###,###}", (totalCost * 2 + 5) / 10))</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">專業顧問服務總費用</div>
+                            <div class="list_td rt">@(String.Format("{0:##,###,###,###}", totalCost))</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">合約體能顧問</div>
+                            <div class="list_td rt">@(_model.ServingCoach.UserProfile.FullName())</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">簽約分店</div>
+                            <div class="list_td rt">@(_model.CourseContractExtension?.BranchStore.BranchName)</div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="list_tb tb2">
+                        <div class="list_tr">
+                            <div class="list_td hd">上課場所</div>
+                            <div class="list_td rt">@(_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true ? "遠距" : _model.CourseContractExtension?.BranchStore.BranchName)</div>
+                        </div>
+                    </div>
+                </li>
+                @if (_model.InstallmentID.HasValue)
+                {
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">分期期數</div>
+                                <div class="list_td rt">@(_model.ContractInstallment?.Installments)</div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            @{
+                if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA
+                    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGB
+                    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGC
+                    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF)
+                {
+                    List<CourseContractOrder> lessonItems = installment.Any()
+                        ? installment.SelectMany(c => c.CourseContractOrder).ToList()
+                        : _model.CourseContractOrder.ToList();
+
+                    <ul class="mb_list">
+                        <li class="tit"><i class="zmdi zmdi-folder-star-alt"></i> 複合式服務合約資訊</li>
+                        @{
+                            foreach (var g in lessonItems.GroupBy(l => l.PriceID)
+                                .OrderBy(v => v.First().SeqNo))
+                            {
+                                var order = g.First();
+                                var priceItem = order.LessonPriceType;
+
+                                <li>
+                                    <div class="list_tb tb2">
+                                        <div class="list_tr">
+                                            <div class="list_td hd">
+                                                @if (order.Title != null)
+                                                {
+                                                    <span class="f-red">@($"{(order.SeqNo > 0 ? "加購" : null)}")</span>
+                                                }
+                                                @{
+                                                    BuildLessonOrder(priceItem);
+                                                }
+                                            </div>
+                                            <div class="list_td rt">@(g.Sum(o=>o.Lessons))</div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                </ul>
+                }
+            }
+
+            @if (_model.InstallmentID.HasValue)
+            {
+                int idx = 1;
+                <ul class="mb_list">
+                    <li class="tit"><i class="zmdi zmdi-folder-star-alt"></i> 分期資訊</li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr hd_ct">
+                                <div class="list_td">期數</div>
+                                <div class="list_td">應付款日</div>
+                                <div class="list_td">金額</div>
+                            </div>
+                        </div>
+                    </li>
+                    @foreach (var item in installment.OrderBy(c => c.ContractID))
+                    {
+                        <li>
+                            <div class="list_tb tb2">
+                                <div class="list_tr">
+                                    <div class="list_td hd_ct">@(idx++)</div>
+                                    <div class="list_td rt">@($"{item.PayoffDue:yyyy/MM/dd}")</div>
+                                    <div class="list_td rt">@($"{item.TotalCost:##,###,###,###}")</div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </li>
+    @{
+        IEnumerable<CourseContractMember> items;
+        if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
+        {
+            items = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID);
+        }
+        else
+        {
+            items = _model.CourseContractMember;
+        }
+    }
+    <li data-idx="1">
+        <div class="collapsible-header">
+            <i class="material-icons">subdirectory_arrow_right</i>
+            Step2.確認學生資料
+        </div>
+        <div class="collapsible-body">
+            @foreach (var m in items)
+            {
+                <ul class="mb_list">
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">姓名</div>
+                                <div class="list_td rt">@(m.UserProfile.RealName)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">身份證字號/護照號碼</div>
+                                <div class="list_td rt">@(m.UserProfile.UserProfileExtension.IDNo)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">性別</div>
+                                <div class="list_td rt">@(m.UserProfile.UserProfileExtension.Gender == "F" ? "女" : "男")</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">緊急聯絡人姓名</div>
+                                <div class="list_td rt col-red">@(m.UserProfile.UserProfileExtension.EmergencyContactPerson)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">關係</div>
+                                <div class="list_td rt">@(m.UserProfile.UserProfileExtension.Relationship)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">緊急聯絡電話</div>
+                                <div class="list_td rt">@(m.UserProfile.UserProfileExtension.EmergencyContactPhone)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr">
+                                <div class="list_td hd">聯絡地址</div>
+                                <div class="list_td rt">@(m.UserProfile.Address())</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+            @if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
+            {
+                    <p class="black-t12">本人同意並授權以下人員得使用本人與超越體能顧問有限公司購買之體能/健康顧問服務課程，任一人員(含本人)使用體能顧問服務，皆需計入體能/健康顧問服務次數內，並應共同遵守合約及特約條款之規定</p>
+
+                <ul class="mb_list">
+                        <li class="tit"><i class="zmdi zmdi-folder-star-alt"></i> 學員名單</li>
+                    <li>
+                        <div class="list_tb tb2">
+                            <div class="list_tr hd_ct">
+                                <div class="list_td">姓名</div>
+                                <div class="list_td">身分證字號</div>
+                                <div class="list_td">性別</div>
+                            </div>
+                        </div>
+                    </li>
+                    @foreach (var m in _model.CourseContractMember)
+                    {
+                        <li>
+                            <div class="list_tb tb2">
+                                <div class="list_tr">
+                                    <div class="list_td hd_p20">
+                                        @(m.UserProfile.RealName)
+                                    </div>
+                                    <div class="list_td hd_p20">@(m.UserProfile.UserProfileExtension.IDNo)</div>
+                                    <div class="list_td">@(m.UserProfile.UserProfileExtension.Gender == "F" ? "女" : "男")</div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+            }
+        </div>
+    </li>
+    <li data-idx="2">
+        <div class="collapsible-header">
+            <i class="material-icons">subdirectory_arrow_right</i>
+            Step3.確認訓練特約條款
+        </div>
+        <div class="collapsible-body terms">
+            <div class="row">
+                <div class="col s12">
+                    <div class="scroll-container">
+                        @{
+                            await Html.RenderPartialAsync("~/Views/ContractConsole/Module/ContractTerms.cshtml", _model);
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+<script>
+    $(function() {
+        $global.hasViewedDetails = false;
+        $('.scroll-container').scroll(function() {
+            //scroll-container捲軸高度
+            var scrollHeight = $('.scroll-container').prop('scrollHeight');
+            //scroll-container顯示高度
+            var height = $('.scroll-container').height();
+            //捲到底的高度
+            var total = scrollHeight - height * 2;
+
+            if ($('.scroll-container').scrollTop() > total) {
+                $global.hasViewedDetails = true;
+            }
+        });
+    });
+</script>
+
+@functions
+{
+    void BuildLessonOrder(LessonPriceType priceItem)
+    {
+        switch ((Naming.LessonPriceStatus?)priceItem.Status)
+        {
+            case Naming.LessonPriceStatus.營養課程:
+    <text>S.D Session《一個月 / @($"{priceItem.ListPrice*(priceItem.BundleCount??1):##,###,###,###}")》</text>
+                            break;
+                        case Naming.LessonPriceStatus.運動恢復課程:
+    <text>S.R Session《@(priceItem.DurationInMinutes)分鐘 / @($"{priceItem.ListPrice*(priceItem.BundleCount??1):##,###,###,###}")》</text>
+                            break;
+                        case Naming.LessonPriceStatus.運動防護課程:
+    <text>A.T Session《@(priceItem.DurationInMinutes)分鐘 / @($"{priceItem.ListPrice*(priceItem.BundleCount??1):##,###,###,###}")》</text>
+                            break;
+                        default:
+    <text>P.T Session《@(priceItem.DurationInMinutes)分鐘 / @($"{priceItem.ListPrice*(priceItem.BundleCount??1):##,###,###,###}")》</text>
+                            break;
+        }
+    }
+}

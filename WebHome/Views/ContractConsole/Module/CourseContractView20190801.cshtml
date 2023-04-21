@@ -53,7 +53,9 @@
                     @{
                         IEnumerable<CourseContractMember> items;
                     }
-                    @if (_model.CourseContractType.ContractCode == "CFA")
+                    @if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+                        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+                        || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
                     {
                         items = _model.CourseContractMember.Where(m => m.UID == _model.OwnerID);
                     }
@@ -89,7 +91,8 @@
                     <tr>
                         <td colspan="2">名稱：@(_model.CourseContractType.TypeName)(@(_model.LessonPriceType.DurationInMinutes)分鐘)</td>
                         <td>
-                            @if (_model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                            @if (_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                                    || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                             {
                                 <text>上課場所/簽約分店：遠距/@(_model.CourseContractExtension.BranchStore.BranchName)</text>
                             }
@@ -167,9 +170,8 @@
                             </td>
                         }
                     <td>
-                        @if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA
-                            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CNA
-                            || _model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                        @if (_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                                || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                         {
                             <text>若未於上述使用期限內完成課程堂數者不得展延。</text>
                         }
@@ -250,16 +252,18 @@
                         <td class="p-t-0">
                             學員簽名：
                             @{ ViewBag.SignatureName = "Signature";}
-                            @if (_model.CourseContractType.IsGroup == true)
-                            {
-                                foreach (var m in _model.CourseContractMember)
-                                {
-                                    await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", m);
-                                }
-                            }
-                            else
-                            {
-                                await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                            @{
+                                //if (_model.CourseContractType.IsGroup == true)
+                                //{
+                                //    foreach (var m in _model.CourseContractMember)
+                                //    {
+                                //        await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", m);
+                                //    }
+                                //}
+                                //else
+                                //{
+                                    await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                                //}
                             }
                         </td>
                         <td class="p-0">
@@ -317,7 +321,8 @@
                         await Html.RenderPartialAsync("~/Views/ContractConsole/Module/ContractTermsForCNA.cshtml");
                         break;
                     default:
-                        if (_model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                        if (_model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                            || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                         {
                             await Html.RenderPartialAsync("~/Views/ContractConsole/Module/ContractTermsForDistance.cshtml");
                         }
@@ -333,16 +338,18 @@
                     <td>
                         學員簽名：
                         @{ ViewBag.SignatureName = "Signature1";}
-                    @if (_model.CourseContractType.IsGroup == true)
-                    {
-                        foreach (var m in _model.CourseContractMember)
-                        {
-                            await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", m);
-                        }
-                    }
-                        else
-                        {
-                            await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                        @{
+                            //if (_model.CourseContractType.IsGroup == true)
+                            //{
+                            //    foreach (var m in _model.CourseContractMember)
+                            //    {
+                            //        await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", m);
+                            //    }
+                            //}
+                            //else
+                            //{
+                                await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                            //}
                         }
                 日期：@(String.Format("{0:yyyy/MM/dd}", _signatureDate))
             </td>
@@ -359,15 +366,17 @@
                         {
                             <text>家長/監護人簽名：</text>
                             ViewBag.SignatureName = "GuardianSignature1";
-                    await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
-                }
+                            await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
+                        }
                     </td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-@if (_model.CourseContractType.ContractCode == "CFA")
+@if (_model.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA
+    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+    || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF)
 {
     <div class="row" style="margin-top: 30px; margin-bottom: 20px;">
         <div class="col-md-12">
@@ -404,7 +413,8 @@
                         <tr>
                             <td class="text-right">
                                 簽名：
-                                @{ ViewBag.SignatureName = "Signature2";
+                                @{ 
+                                    ViewBag.SignatureName = "Signature2";
                                     await Html.RenderPartialAsync("~/Views/ContractConsole/Module/SignHere.cshtml", _owner);
                                 }
                                 日期：@(String.Format("{0:yyyy/MM/dd}", _signatureDate))

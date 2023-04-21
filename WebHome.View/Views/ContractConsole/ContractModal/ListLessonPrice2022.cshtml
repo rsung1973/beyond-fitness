@@ -1,0 +1,40 @@
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Newtonsoft.Json
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    IQueryable<LessonPriceType> _model;
+    CourseContractQueryViewModel _viewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (IQueryable<LessonPriceType>)this.Model;
+    _viewModel = (CourseContractQueryViewModel)ViewBag.ViewModel;
+    LessonPriceType customPrice = ViewBag.CustomPrice as LessonPriceType;
+}
+@if (customPrice != null)
+{
+    <script>
+        $(function () {
+            $global.commitPrice = function (priceID, priceName, lessons) {
+                resetPricePackage();
+                $global.viewModel.PriceID = @(customPrice.PriceID);
+                $('#searchPrice').attr('placeholder', priceName);
+                var $viewModel = $.extend({},$global.viewModel);
+                $viewModel.PriceID = priceID;
+                $('#pricePackage').load('@Html.Raw(Url.Action("ListPackagePrice","ContractConsole"))', $viewModel);
+            };
+        });
+    </script>
+
+    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractModal/ListLessonPrice.cshtml", _model);
+}
+

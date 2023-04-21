@@ -1,0 +1,46 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using WebHome.Properties
+@using WebHome.Helper.BusinessOperation
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    CourseContract _model;
+
+    CourseContractViewModel _viewModel = (CourseContractViewModel)ViewBag.ViewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (CourseContract)this.Model;
+}
+<div class="@(_viewModel.Pdf=="1" ? "font-size: 13px;" : "scroll-container")">
+    @{
+        await Html.RenderPartialAsync("~/Views/ContractConsole/Module/ContractTerms.cshtml");
+    }
+</div>
+<script>
+$(function(){
+    $global.hasViewedDetails = false;
+	$('.scroll-container').scroll(function(){ 
+		//scroll-container捲軸高度
+		var scrollHeight = $('.scroll-container').prop('scrollHeight');
+		//scroll-container顯示高度
+		var height = $('.scroll-container').height();
+		//捲到底的高度
+		var total = scrollHeight-height * 2;
+		
+		if($('.scroll-container').scrollTop() > total ) { 
+			    $global.hasViewedDetails = true;
+		} 
+	});
+});
+
+</script>

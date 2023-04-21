@@ -31,7 +31,7 @@
                                       .Select(r => r.CourseContract)
                                       .Where(c => c.Status < (int)Naming.CourseContractStatus.已生效)
                                       .FirstOrDefault();
-    var bookingCount = _model.CountableRegisterLesson().Sum(r => r.GroupingLesson.LessonTime.Count());
+    var bookingCount = _model.AttendedLessonCount();
     var contractCost = _model.TotalCost / _model.Lessons * bookingCount;
     var totalPaid = _model.TotalPaidAmount();
     var applicable = true;
@@ -72,9 +72,9 @@
                 <small class="info">@((Naming.ContractServiceStatus)currentItem.Status)</small>
             }
             else if ((_model.Status == (int)Naming.CourseContractStatus.已過期 
-                            || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA
                             || _model.ContractType == (int)CourseContractType.ContractTypeDefinition.CNA
-                            || _model.LessonPriceType.BranchStore.IsVirtualClassroom())
+                            || _model.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                            || _model.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                         && applicable && (_profile.IsCoach() || _profile.IsAssistant() || _profile.IsAuthorizedSysAdmin()))
             {
                 <small class="info">不退款</small>

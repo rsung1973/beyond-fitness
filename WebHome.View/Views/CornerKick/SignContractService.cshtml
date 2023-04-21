@@ -33,7 +33,7 @@
 @section CustomHeader
 {
     <!-- Custom List -->
-    <link href="css/customelist.css?1.0" rel="stylesheet" />
+    <link href="css/customelist.css?2.0" rel="stylesheet" />
     <!-- jSignature-->
     <link href="css/jSignature/jsignature.css" rel="stylesheet" />
 }
@@ -74,12 +74,12 @@
                         <div class="list_td rt f-red">@($"{_item.ValidTo ?? _item.Expiration:yyyy/MM/dd}")</div>
                     </div>
                 </div>
-            </li>
+            </li>            
             <li>
                 <div class="list_tb tb2">
                     <div class="list_tr">
                         <div class="list_td hd">購買堂數</div>
-                        <div class="list_td rt">@(originalContract.Lessons ?? originalContract.LessonPriceType?.ExpandActualLessonCount(models))</div>
+                        <div class="list_td rt">@(originalContract.Lessons)</div>
                     </div>
                 </div>
             </li>
@@ -87,6 +87,14 @@
                 <div class="list_tb tb2">
                     <div class="list_tr">
                         <div class="list_td hd">剩餘堂數</div>
+                        <div class="list_td rt">@(originalContract.RemainedLessonCount())</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="list_tb tb2">
+                    <div class="list_tr">
+                        <div class="list_td hd">截至@($"{_item.ContractDate:yyyy/MM/dd}")剩餘堂數</div>
                         <div class="list_td rt">@(originalContract.RemainedLessonCount())</div>
                     </div>
                 </div>
@@ -102,7 +110,8 @@
             <li>
                 <div class="list_tb tb2">
                     <div class="list_tr">
-                        @if (_item.LessonPriceType.BranchStore.IsVirtualClassroom())
+                        @if (_item.LessonPriceType.BranchStore?.IsVirtualClassroom() == true
+                            || _item.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true)
                         {
                             <div class="list_td hd">上課/簽約分店</div>
                             <div class="list_td rt">遠距/@(_item.CourseContractExtension.BranchStore.BranchName)</div>
@@ -129,7 +138,66 @@
                 </li>
             }
         </ul>
+            @{
+                if (_item.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA
+                    || _item.ContractType == (int)CourseContractType.ContractTypeDefinition.CGB
+                    || _item.ContractType == (int)CourseContractType.ContractTypeDefinition.CGC
+                    || _item.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF)
+                {
+                    <ul class="mb_list">
+                        <li class="tit"><i class="zmdi zmdi-folder-star-alt"></i> 截至@($"{_item.ContractDate:yyyy/MM/dd}") 複合式服務合約資訊</li>
+                        @{
+                            foreach (var rc in originalContract.RegisterLessonContract.OrderBy(c=>c.Title))
+                            {
+                                var registerItem = rc.RegisterLesson;
+                                var priceItem = registerItem.LessonPriceType;
+                                if(registerItem.RegisterLessonSharing!=null
+                                    && registerItem.RegisterLessonSharing.ShareID!=registerItem.RegisterID)
+                                {
+                                    continue;
+                                }
+                                <li>
+                                    <div class="list_tb tb2">
+                                        <div class="list_tr">
+                                            <div class="list_td hd">
+                                                <span class="f-red">@(rc.Title)</span>
+                                                @{
+                                                    switch((Naming.LessonPriceStatus?)priceItem.Status)
+                                                    {
+                                                        case Naming.LessonPriceStatus.營養課程:
+                                                            <text>S.D Session《一個月》</text>
+                                                            break;
+                                                        case Naming.LessonPriceStatus.運動恢復課程:
+                                                            <text>S.R Session《@(priceItem.DurationInMinutes)分鐘》</text>
+                                                            break;
+                                                        case Naming.LessonPriceStatus.運動防護課程:
+                                                            <text>A.T Session《@(priceItem.DurationInMinutes)分鐘》</text>
+                                                            break;
+                                                        default:
+                                                            <text>P.T Session《@(priceItem.DurationInMinutes)分鐘》</text>
+                                                            break;
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="list_td rt"><span class="col-red">@(registerItem.RemainedLessonCount()/(priceItem.BundleCount??1))</span> / @(registerItem.Lessons/(priceItem.BundleCount??1))</div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                </ul>
+                }
+            }
         <div class="tearms-content-extend">
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="livicon-evo prefix"
+                       data-options="name: unlock.svg; size: 30px; style: lines; strokeColor:#05232d; autoPlay:true"></i>
+                    <input value="@($"{_item.CourseContractExtension.SignerPIN?.Substring(0,3)}")" name="SignerPIN" type="text" class="validate" maxlength="10" data-length="10" />
+                    <label class="active" for="nickname">請輸入動態密碼</label>
+                    @*<span class="help-error-text">動態密碼輸入錯誤，請確認後再重新輸入</span>*@
+                </div>
+            </div>
             <div class="row">
                 <div class="col s12">
                     <input type="checkbox" id="agree1" name="Extension" value="true" />
@@ -142,16 +210,16 @@
                     <label for="agree2">合約僅能展延乙次，逾期失效。</label>
                 </div>
             </div>
-            <div class="row">
+            @* <div class="row">
                 <div class="col s12">
                     <input type="checkbox" id="agree3" name="Cancel" value="true" />
                     <label for="agree3">展延後不得申請轉讓及退費</label>
                 </div>
-            </div>
+            </div> *@
             <div class="row">
                 <div class="col s12">
                     <input type="checkbox" id="agree4" name="Agree" value="true" />
-                    <label for="agree4"><span class="f-red">已詳閱上述各項記載、申請服務之項目及各項特約條款，並同意以遵循以上條款。</span> </label>
+                    <label for="agree4"><span class="f-red">我已閱讀並同意超越體能顧問有限公司隱私政策、服務條款、相關使用及展延合約，即表示即日起您同意接受本合約正面及背面條款之相關約束及其責任。</span> </label>
                 </div>
             </div>
             <div class="row">
@@ -229,14 +297,17 @@
             function confirmSignature() {
 
                 if ($("#signature").jSignature('getData', 'native').length < 1) {
-                    alert('請簽名!!');
+                    alert('請在上方簽上您的正楷大名!!');
                     return;
                 }
 
                 var viewModel = $('input,select,textArea').serializeObject();
                 viewModel.Signature = $("#signature").jSignature("getData");
                 viewModel.SignatureName = 'Signature';
-                viewModel.SignatureCount = @(_item.CourseContractType.ContractCode == "CFA" ? 3 : 2);
+                viewModel.SignatureCount = @(_item.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA 
+                                    || _item.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF 
+                                    || _item.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF 
+                                ? 3 : 2);
 
                 showLoading();
                 $.post('@Html.Raw(Url.Action("ConfirmContractServiceSignature", "CornerKick",new { KeyID = _item.ContractID.EncryptKey() }))', viewModel, function (data) {

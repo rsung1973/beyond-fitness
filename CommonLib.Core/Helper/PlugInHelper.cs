@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using CommonLib.Core.Utility;
 using CommonLib.PlugInAdapter;
@@ -37,10 +38,33 @@ namespace CommonLib.Core.Helper
                         FileLogger.Logger.Warn("Pdf Utility intent type not found => " + Startup.Properties["IPdfUtilityImpl"]);
                     }
                 }
-            }
-            catch
-            {
 
+                if (_pdfUtility == null)
+                {
+                    if (!String.IsNullOrEmpty(Startup.Properties["IPdfUtilityImplAssembly"]))
+                    {
+                        FileLogger.Logger.Info("Pdf Utility intent assembly => " + Startup.Properties["IPdfUtilityImplAssembly"]);
+
+                        var assembly = Assembly.LoadFrom(Startup.Properties["IPdfUtilityImplAssembly"]);
+                        if (assembly != null)
+                        {
+                            Type type = assembly.GetType(Startup.Properties["IPdfUtilityImplType"]);
+                            if (type != null && type.GetInterface("CommonLib.PlugInAdapter.IPdfUtility") != null)
+                            {
+                                _pdfUtility = (IPdfUtility)assembly.CreateInstance(type.FullName);
+                                FileLogger.Logger.Info("Pdf Utility => " + _pdfUtility.GetType().FullName);
+                            }
+                            else
+                            {
+                                FileLogger.Logger.Warn($"Pdf Utility intent type not found => {Startup.Properties["IPdfUtilityImplType"]},{Startup.Properties["IPdfUtilityImplAssembly"]}");
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                FileLogger.Logger.Error(ex);
             }
         }
 

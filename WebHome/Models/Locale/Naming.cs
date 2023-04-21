@@ -73,10 +73,14 @@ namespace WebHome.Models.Locale
             團體學員課程 = 1008,
             在家訓練 = 1009,
             員工福利課程 = 1010,
+            營養課程 = 1012,
+            運動防護課程 = 1013,
+            運動恢復課程 = 1014,
         }
 
         public enum LessonPriceFeature
         {
+            一般課程 = 1,
             自主訓練 = 103,
             自由教練預約 = 1004,
             教練PI = 1005,
@@ -84,6 +88,14 @@ namespace WebHome.Models.Locale
             點數兌換課程 = 1007,
             舊會員續約 = 1008,
             半堂計算 = 1011,
+            營養課程 = 1012,
+            運動防護課程 = 1013,
+            運動恢復課程 = 1014,
+            一對一課程 = 1015,
+            BundlePackage = 1016,
+            特別專案 = 1017,
+			BEYOND推廣課 = 1018,
+            單堂現場付款 = 1019,
         }
 
         public enum LessonSeriesStatus
@@ -212,6 +224,7 @@ namespace WebHome.Models.Locale
             AFM = 1107,
             FES = 1108,
             Health = 1109,
+            Health_SD = 1110,
         }
 
         public static readonly ProfessionalCategory[] ManagerialLevel = new ProfessionalCategory[]
@@ -301,7 +314,8 @@ namespace WebHome.Models.Locale
             合約終止沖銷 = 7,
             合約轉點餘額 = 8,
             合約轉讓餘額 = 9,
-            教育訓練 = 10,
+            各項費用 = 10,
+            終止手續費 = 11,
 
         }
 
@@ -418,6 +432,7 @@ namespace WebHome.Models.Locale
         public enum ContractVersion
         {
             Ver2019 = 20190801,
+            Ver2022 = 20220601,
         }
 
         public enum Actor
@@ -457,15 +472,16 @@ namespace WebHome.Models.Locale
         public enum CauseForEnding
         {
             合約到期轉新約 = 1,
-            轉讓,
+            轉讓第三人,
             私人原因,
             更改合約類型,
-            學生簽約後不付款,
+            學生簽約後反悔,
             教練誤開合約後終止,
             分期不付款,
             其他,
             所屬教練離職,
             新冠肺炎疫情,
+            不宜運動,
         }
 
         public enum ProfessionalLevelCheck
@@ -490,7 +506,21 @@ namespace WebHome.Models.Locale
             PI = 2,
             ST = 3,
             TS = 4,
+            AT = 5,
+            SR = 6,
+            SD = 7,
         }
+
+        public static readonly string[] LevelName =
+        {
+            "P.T 0",
+            "P.T 1",
+            "P.T 2",
+            "P.T 3",
+            "P.T 4",
+            "P.T 5",
+            "P.T 6",
+        };
 
     }
 }

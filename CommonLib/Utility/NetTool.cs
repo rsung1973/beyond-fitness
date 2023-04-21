@@ -15,14 +15,8 @@ namespace Utility
     /// <summary>
     /// NetTool 的摘要描述。
     /// </summary>
-    public class NetTool
+    public static class NetTool
     {
-        private NetTool()
-        {
-            //
-            // TODO: 在此加入建構函式的程式碼
-            //
-        }
 
         public static HttpWebResponse GetUrlResponse(string url)
         {
@@ -229,6 +223,14 @@ namespace Utility
             }
 
             return true;
+        }
+
+        public static String GetString(this WebResponse response,Encoding encoding)
+        {
+            using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }

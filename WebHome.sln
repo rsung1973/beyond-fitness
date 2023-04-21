@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebHome", "WebHome\WebHome.csproj", "{8AF3ADC7-B4C2-4DCE-88DC-359891D05F8C}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib.Utility", "CommonLib.Utility\CommonLib.Utility.csproj", "{21CDED93-7D5D-45F8-8198-9744496969A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Data.Linq", "DotNetLib\System.Data.Linq\System.Data.Linq.csproj", "{CC31FC54-6D09-489B-9C28-84BF6C50880C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExternalPdfWrapper", "ExternalPdfWrapper\ExternalPdfWrapper.csproj", "{AB4610F8-1232-40BD-BBC0-E33ECE53B8DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC31FC54-6D09-489B-9C28-84BF6C50880C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4610F8-1232-40BD-BBC0-E33ECE53B8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4610F8-1232-40BD-BBC0-E33ECE53B8DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4610F8-1232-40BD-BBC0-E33ECE53B8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4610F8-1232-40BD-BBC0-E33ECE53B8DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

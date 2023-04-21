@@ -1,0 +1,34 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
+@using Newtonsoft.Json
+@{
+    Layout = "~/Views/BusinessConsole/Module2021/InitMultipleEchartsTemplate.cshtml";
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    LessonTimeBookingViewModel _viewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (UserProfile)this.Model;
+    _viewModel = (LessonTimeBookingViewModel)ViewBag.ViewModel;
+    ViewBag.UseStyle = "macarons";
+}
+
+@section ChartOption
+{
+    @{
+        await Html.RenderPartialAsync("~/Views/ConsoleHome/Module/MonthlyLessonHeatmapOption.cshtml");
+    }
+}
+
+

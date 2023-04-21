@@ -9,6 +9,7 @@
 @using WebHome.Controllers
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 @using Newtonsoft.Json
+@using CommonLib.Utility
 @{
 
     ModelStateDictionary _modelState;
@@ -22,211 +23,382 @@
     models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
     _viewModel = (ContractMemberViewModel)ViewBag.ViewModel;
     _viewModel.DialogID = _dialogID;
+
+    UserRelationship _relation = _model.AsRelationship.Where(r => r.RelationFor == (int)UserRelationship.RelationForDefinition.NotMySelfPhone)
+        .FirstOrDefault();
+
 }
 <div class="modal fade" id="@(_dialogID)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header learnerprofile">
-                @{
-                    List<String> roles = new List<string>();
-                    if(_model.IsTrialLearner())
-                    {
-                        roles.Add("體驗");
+                <h5>
+                    @{                    
+                        if (_model.IsEmployee())
+                        {
+                            <text>員工</text>
+                        } else {
+                            <text>學生</text>
+                        }              
+
+                        List<String> roleStatus= new List<string>(); 
+
+                        if (_model.IsTrialLearner()){
+                            roleStatus.Add("體驗");
+                        } else if (_model.IsLearner()) {
+                            roleStatus.Add("正式");
+                        }
+                        
+                        if (_model.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
+                        {
+                            roleStatus.Add("幽靈");
+                        }                    
                     }
-                    if(_model.IsLearner())
-                    {
-                        roles.Add("正式學生");
-                    }
-                    if(_model.IsEmployee())
-                    {
-                        roles.Add("員工");
+                        <small class="badge bg-blue-grey">@Html.Raw(String.Join("/",roleStatus))</small>                        
+                </h5>
+                <div class="flot-right">
+                 @if (_viewModel.ProfileOnly != true)
+                 {
+                     <label class="fancy-checkbox custom-bgcolor-pink">
+                        <input type="checkbox" name="OwnerID" value="@(_viewModel.UID)" checked="@(!_viewModel.OwnerID.HasValue || _viewModel.OwnerID == _viewModel.UID)">
+                        <span class="col-red">主簽約人</span>
+                     </label>
+                } else {
+                    if(_model.IsContractOwner(models)) {
+                        <span class="social_icon bg-blue">主簽</span>
                     }
                 }
-                <h5>
-                    @Html.Raw(String.Join("/",roles)) 
-                    @if (_model.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
-                    {
-                        <small class="badge bg-blue-grey">幽靈</small>
-                    }
-                </h5>
+                @if (_model.IsVIP)
+                {
+                    <span class="social_icon bg-amber">VIP</span>
+                }
+                @if (_model.IsAnonymous)
+                {
+                    <span class="social_icon bg-darkteal">幽</span>
+                }
+                </div>
                 @* <span class="social_icon bg-amber">BR</span> *@
                 <a class="closebutton" data-dismiss="modal"></a>
             </div>
-            <div class="card">
-                <div class="body">
-                    <ul class="nav nav-tabs-new2 p-t-0" id="pointTabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" data-id="basicTab"
-                               href="#basicTab">基本資料</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-id="loginTab"
-                               href="#loginTab">登入設定</a>
-                        </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-id="brTab"
-                               href="#brTab">B.R.設定</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-id="coachListTab"
-                               href="#coachListTab">所屬體能顧問</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-id="qrcodeTab"
-                               href="#qrcodeTab">會員卡</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-id="moreTab"
-                               href="#moreTab">更多設定</a>
-                        </li> *@
-                    </ul>
-                    <div class="tab-content p-l-5 p-r-5">
-                        <div class="tab-pane active" id="basicTab">
-                            <div class="body">
-                                <div class="row clearfix">
-                                    <div class="col-12">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-6 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="真實姓名" name="RealName" value="@(_viewModel.RealName)" />
-                                                    <span class="input-group-addon">
-                                                        <i class="zmdi zmdi-account-circle"></i>
-                                                    </span>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs-new p-t-0" id="pointTabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" data-id="basicTab"
+                                   href="#basicTab">基本資料</a>
+                            </li>
+                            @if (_model.LevelID == (int)Naming.MemberStatusDefinition.Checked
+                               || _model.LevelID == (int)Naming.MemberStatusDefinition.Deleted
+                               || _model.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" data-id="loginTab"
+                                       href="#loginTab">登入設定</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-id="coachListTab"
+                                   href="#coachListTab">體能顧問</a>
+                            </li>
+                            @*<li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-id="brTab"
+                                href="#brTab">B.R.</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-id="qrcodeTab"
+                                href="#qrcodeTab">二維條碼</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-id="moreTab"
+                                href="#moreTab">更多設定</a>
+                                </li> *@
+                        </ul>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <div class="tab-content p-l-5 p-r-5 p-t-10">
+                            <div class="tab-pane active" id="basicTab">
+                                <div class="body">
+                                    <div class="row clearfix">
+                                        <div class="col-12">
+                                            <div class="row clearfix">
+                                                <div class="col-sm-6 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger" placeholder="真實姓名" name="RealName" value="@(_viewModel.RealName)" />
+                                                        <span class="input-group-addon">
+                                                            <i class="zmdi zmdi-account-circle"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="暱稱" name="Nickname" value="@(_viewModel.Nickname)" />
-                                                    <span class="input-group-addon">
-                                                        <i class="zmdi zmdi-comment-edit"></i>
-                                                    </span>
+                                                <div class="col-sm-6 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger" placeholder="暱稱" name="Nickname" value="@(_viewModel.Nickname)" />
+                                                        <span class="input-group-addon">
+                                                            <i class="zmdi zmdi-comment-edit"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control date" data-date-format="yyyy/mm/dd" readonly="readonly" placeholder="出生" name="Birthday" value="@($"{_viewModel.Birthday:yyyy/MM/dd}")" />
-                                                    <span class="input-group-addon xl-slategray">
-                                                        <i class="zmdi zmdi-time"></i>
-                                                    </span>
+                                                <div class="col-sm-6 col-md-6 col-lg-4 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control date" data-date-format="yyyy/mm/dd" readonly="readonly" placeholder="出生" name="Birthday" value="@($"{_viewModel.Birthday:yyyy/MM/dd}")" />
+                                                        <span class="input-group-addon xl-slategray">
+                                                            <i class="zmdi zmdi-time"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3 col-12">
-                                                <select class="form-control show-tick" name="Gender">
-                                                    <option value="">- 請選擇性別 -</option>
-                                                    <option value="M">男</option>
-                                                    <option value="F">女</option>
-                                                </select>
-                                                <script>
-                                                    $('select[name="Gender"]').val('@Html.Raw(_viewModel.Gender)')
-                                                </script>
-                                            </div>
-                                            <div class="col-sm-3 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="身分證字號/護照號碼" name="IDNo" value="@(_viewModel.IDNo)" />
-                                                    <span class="input-group-addon">
-                                                        <i class="zmdi zmdi-text-format"></i>
-                                                    </span>
+                                                <div class="col-sm-6 col-md-6 col-lg-4 col-12">
+                                                    <select class="form-control show-tick" name="Gender">
+                                                        <option value="">- 請選擇性別 -</option>
+                                                        <option value="M">男</option>
+                                                        <option value="F">女</option>
+                                                    </select>
+                                                    <script>
+                                                        $('select[name="Gender"]').val('@Html.Raw(_viewModel.Gender)')
+                                                    </script>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="聯絡電話" name="Phone" value="@(_viewModel.Phone)" />
-                                                    <span class="input-group-addon">
-                                                        <i class="zmdi zmdi-smartphone"></i>
-                                                    </span>
+                                                <div class="col-sm-6 col-md-6 col-lg-4 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger" placeholder="身分證字號/護照號碼" name="IDNo" value="@(_viewModel.IDNo)" />
+                                                        <span class="input-group-addon">
+                                                            <i class="zmdi zmdi-text-format"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 col-12">
-                                                <select class="form-control show-tick" name="AdministrativeArea">
-                                                    <option value="">- 請選擇縣市 -</option>
-                                                    <option value="基隆市">基隆市</option>
-                                                    <option value="臺北市">臺北市</option>
-                                                    <option value="新北市">新北市</option>
-                                                    <option value="桃園市">桃園市</option>
-                                                    <option value="新竹市">新竹市</option>
-                                                    <option value="新竹縣">新竹縣</option>
-                                                    <option value="苗栗縣">苗栗縣</option>
-                                                    <option value="臺中市">臺中市</option>
-                                                    <option value="彰化縣">彰化縣</option>
-                                                    <option value="南投縣">南投縣</option>
-                                                    <option value="雲林縣">雲林縣</option>
-                                                    <option value="嘉義市">嘉義市</option>
-                                                    <option value="嘉義縣">嘉義縣</option>
-                                                    <option value="臺南市">臺南市</option>
-                                                    <option value="高雄市">高雄市</option>
-                                                    <option value="屏東縣">屏東縣</option>
-                                                    <option value="臺東縣">臺東縣</option>
-                                                    <option value="花蓮縣">花蓮縣</option>
-                                                    <option value="宜蘭縣">宜蘭縣</option>
-                                                    <option value="澎湖縣">澎湖縣</option>
-                                                    <option value="金門縣">金門縣</option>
-                                                    <option value="連江縣">連江縣</option>
-                                                </select>
-                                                <script>
-                                                    $(function () {
-                                                        $('select[name="AdministrativeArea"]').val('@Html.Raw(_viewModel.AdministrativeArea)');
-                                                    });
-                                                </script>
-                                                @*<label class="material-icons help-error-text">clear 請選擇縣市</label>*@
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <textarea rows="4" class="form-control no-resize" name="Address" placeholder="居住地址">@(_viewModel.Address)</textarea>
+                                                <div class="col-sm-6 col-12">
+                                                    <select class="form-control show-tick" name="AdministrativeArea">
+                                                        <option value="">- 請選擇縣市 -</option>
+                                                        <option value="基隆市">基隆市</option>
+                                                        <option value="臺北市">臺北市</option>
+                                                        <option value="新北市">新北市</option>
+                                                        <option value="桃園市">桃園市</option>
+                                                        <option value="新竹市">新竹市</option>
+                                                        <option value="新竹縣">新竹縣</option>
+                                                        <option value="苗栗縣">苗栗縣</option>
+                                                        <option value="臺中市">臺中市</option>
+                                                        <option value="彰化縣">彰化縣</option>
+                                                        <option value="南投縣">南投縣</option>
+                                                        <option value="雲林縣">雲林縣</option>
+                                                        <option value="嘉義市">嘉義市</option>
+                                                        <option value="嘉義縣">嘉義縣</option>
+                                                        <option value="臺南市">臺南市</option>
+                                                        <option value="高雄市">高雄市</option>
+                                                        <option value="屏東縣">屏東縣</option>
+                                                        <option value="臺東縣">臺東縣</option>
+                                                        <option value="花蓮縣">花蓮縣</option>
+                                                        <option value="宜蘭縣">宜蘭縣</option>
+                                                        <option value="澎湖縣">澎湖縣</option>
+                                                        <option value="金門縣">金門縣</option>
+                                                        <option value="連江縣">連江縣</option>
+                                                    </select>
+                                                    <script>
+                                                        $(function () {
+                                                            $('select[name="AdministrativeArea"]').val('@Html.Raw(_viewModel.AdministrativeArea)');
+                                                        });
+                                                    </script>
                                                 </div>
-                                                @*<label class="material-icons help-error-text">clear 請輸入居住地址</label>*@
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <textarea rows="4" class="form-control no-resize" name="Address" placeholder="居住地址">@(_viewModel.Address)</textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-12 xl-pink">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-4 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人" name="EmergencyContactPerson" value="@(_viewModel.EmergencyContactPerson)" />
-                                                    <span class="input-group-addon xl-pink">
-                                                        <i class="zmdi zmdi-account-circle"></i>
-                                                    </span>
+                                        <div class="col-12 xl-seagreen">
+                                            <div class="row clearfix">
+                                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="PhoneType" value="0" onclick="javascript:selectSingleCheckBox();" checked="@(_model.CurrentYearsOld()>=18 && _relation==null)" />
+                                                        <span>本人手機</span>
+                                                    </label>
                                                 </div>
-                                                @*<label class="material-icons help-error-text">clear 請輸入緊急聯絡人</label>*@
+                                                <div class="col-md-7 col-sm-6 col-xs-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger"
+                                                               placeholder="本人手機" name="Phone" value="@(_viewModel.Phone)" />
+                                                        <span class="input-group-addon">
+                                                            <i class="zmdi zmdi-smartphone"></i>
+                                                        </span>
+                                                    </div>
+                                                    @*<label class="material-icons help-error-text">
+                                                        clear
+                                                        請輸入本人手機
+                                                        </label>*@
+                                                </div>
                                             </div>
-                                            <div class="col-sm-4 col-12">
-                                                <select class="form-control show-tick" name="Relationship">
-                                                    <option value="">- 請選擇關係 -</option>
-                                                    <option>父母</option>
-                                                    <option>親子</option>
-                                                    <option>夫婦</option>
-                                                    <option>兄弟姊妹</option>
-                                                    <option>朋友</option>
-                                                </select>
+                                            <div class="row clearfix for-relation">
+                                                <div class="col-12">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="PhoneType" value="1" onclick="javascript:selectSingleCheckBox();" checked="@(_relation!=null)" />
+                                                        <span id="@($"{_dialogID}_relation")">@Html.Raw(_relation != null ? $"非本人手機 - {_relation.UserProfile.RealName}({_relation.UserProfile.Phone})" : "非本人手機")</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @{
+                                                if (_relation != null)
+                                                {
+                                                    <script>
+                                                        $(function () {
+                                                            $global.viewModel.RelationID = @(_relation.LeaderID);
+                                                        });
+                                                    </script>
+                                                }
+                                                else
+                                                {
+                                                    <script>
+                                                        $(function() {
+                                                            delete $global.viewModel.RelationID;
+                                                        });
+                                                    </script>
+                                                }
+                                            }
+                                            <script>
+                                                function commitRelationship(info) {
+                                                    $global.viewModel.RelationID = info.UID;
+                                                    $global.hideTopmost();
+                                                    $('#@($"{_dialogID}_relation")').text('非本人手機 - ' + info.RealName + '(' + info.Phone + ')');
+                                                }
+                                            </script>
+                                            <div class="row clearfix p-t-10 for-relation">
+                                                <div class="col-sm-6 col-12">
+                                                    <div class="input-group">
+                                                        @{
+                                                            await Html.RenderPartialAsync("~/Views/LearnerProfile/Module/SearchLeader.cshtml");
+                                                        }
+                                                    </div>
+                                                    @*<label class="material-icons help-error-text">
+                                                        clear
+                                                        請選擇聯絡人
+                                                        </label>*@
+                                                </div>
+                                                <div class="col-sm-6 col-12">
+                                                    <select class="form-control show-tick" name="RelationMemo">
+                                                        <option value="">- 請選擇關係 -</option>
+                                                        <option>父母</option>
+                                                        <option>親子</option>
+                                                        <option>夫婦</option>
+                                                        <option>兄弟姊妹</option>
+                                                        <option>朋友</option>
+                                                        <option>情侶</option>
+                                                    </select>
+                                                    @*<label class="material-icons help-error-text">
+                                                        clear
+                                                        請選擇關係
+                                                        </label>*@
+                                                </div>
+                                            </div>
+                                            @if(_relation!=null)
+                                            {
                                                 <script>
-                                                    $(function () {
-                                                        $('select[name="Relationship"]').val('@Html.Raw(_viewModel.Relationship)');
+                                                    $(function(){
+                                                        $('#@(_dialogID) select[name="RelationMemo"]').val('@Html.Raw(_relation.Memo)');
                                                     });
+                                                    function checkRelation(enabled) {
+                                                        $('#@(_dialogID) .for-relation').find('input,select,textarea').prop('disabled', true);
+                                                        if (enabled) {
+                                                            $('#@(_dialogID) .for-relation').find('input,select,textarea').prop('disabled', false);
+                                                        }
+                                                    }
                                                 </script>
-                                                @*<label class="material-icons help-error-text">clear 請選擇關係</label>*@
-                                            </div>
-                                            <div class="col-sm-4 col-12">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人電話" name="EmergencyContactPhone" value="@(_viewModel.EmergencyContactPhone)" />
-                                                    <span class="input-group-addon xl-pink">
-                                                        <i class="zmdi zmdi-smartphone"></i>
-                                                    </span>
+                                            }
+                                            else
+                                            {
+                                                <script>
+                                                    function checkRelation(enabled) {
+                                                        $('#@(_dialogID) .for-relation').css('display', 'none');
+                                                        if (enabled) {
+                                                            $('#@(_dialogID) .for-relation').css('display', 'block');
+                                                        }
+                                                    }
+                                                </script>                                                
+                                            }
+                                            <script>
+                                                function usePhoneRelation() {
+                                                    var legalDate = '@($"{DateTime.Today.AddYears(-18):yyyy-MM-dd}")';
+                                                    var birthday = $('#@(_dialogID) input[name="Birthday"]').val();
+                                                    checkRelation(birthday > legalDate);
+                                                }
+                                                $(function () {
+                                                    $('#@(_dialogID) input[name="Birthday"]').on('changeDate', function () {
+                                                        usePhoneRelation();
+                                                    });
+                                                    usePhoneRelation();
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="col-12 p-t-10 xl-pink">
+                                            <div class="row clearfix">
+                                                <div class="col-sm-4 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人" name="EmergencyContactPerson" value="@(_viewModel.EmergencyContactPerson)" />
+                                                        <span class="input-group-addon xl-pink">
+                                                            <i class="zmdi zmdi-account-circle"></i>
+                                                        </span>
+                                                    </div>
+                                                    @*<label class="material-icons help-error-text">clear
+                                                        請輸入緊急聯絡人</label>*@
                                                 </div>
-                                                @*<label class="material-icons help-error-text">clear 請輸入緊急聯絡人電話</label>*@
+                                                <div class="col-sm-4 col-12">
+                                                    <select class="form-control show-tick" name="Relationship">
+                                                        <option value="">- 請選擇關係 -</option>
+                                                        <option>父母</option>
+                                                        <option>親子</option>
+                                                        <option>夫婦</option>
+                                                        <option>兄弟姊妹</option>
+                                                        <option>朋友</option>
+                                                    </select>
+                                                    <script>
+                                                        $(function () {
+                                                            $('select[name="Relationship"]').val('@Html.Raw(_viewModel.Relationship)');
+                                                        });
+                                                    </script>
+                                                    @*<label class="material-icons help-error-text">clear
+                                                        請選擇關係</label>*@
+                                                </div>
+                                                <div class="col-sm-4 col-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-danger" placeholder="緊急聯絡人電話" name="EmergencyContactPhone" value="@(_viewModel.EmergencyContactPhone)" />
+                                                        <span class="input-group-addon xl-pink">
+                                                            <i class="zmdi zmdi-smartphone"></i>
+                                                        </span>
+                                                    </div>
+                                                    @*<label class="material-icons help-error-text">
+                                                        clear
+                                                        請輸入緊急聯絡人手機</label>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="footer">
+                                    @if (_viewModel.ProfileOnly == true)
+                                    {
+                                        <button type="button" class="btn btn-darkteal btn-round waves-effect float-right" onclick="commitContractMember();">更新資本資料</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-darkteal btn-round waves-effect" onclick="commitContractMember();">確定，不後悔</button>
+                                        @*<button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete">刪除資料</button>*@
+                                    }
+                                </div>
                             </div>
-                            <div class="footer">
-                                <button type="button" class="btn btn-darkteal btn-round waves-effect float-right" onclick="commitContractMember();">更新資本資料</button>
-                                @*<button type="button" class="btn btn-danger btn-round btn-simple btn-round waves-effect waves-red swal-delete">刪除資料</button>*@
+                            @if (_model.LevelID == (int)Naming.MemberStatusDefinition.Checked
+                               || _model.LevelID == (int)Naming.MemberStatusDefinition.Deleted
+                               || _model.LevelID == (int)Naming.MemberStatusDefinition.Anonymous)
+                            {
+                                <div class="tab-pane" id="loginTab">
+                                    @{
+                                        await Html.RenderPartialAsync("~/Views/ContractConsole/ContractModal/ResetMemberPassword.cshtml", _model);
+                                    }
+                                </div>
+                            }
+                            <div class="tab-pane" id="coachListTab">
+                                @{
+                                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractModal/FitnessAdvisorList.cshtml", _model);
+                                }
                             </div>
                         </div>
-                        <div class="tab-pane" id="loginTab">
-                            @{
-                                await Html.RenderPartialAsync("~/Views/ContractConsole/ContractModal/ResetMemberPassword.cshtml", _model);
-                            }
-                        </div>                        
                     </div>
                 </div>
             </div>
@@ -243,8 +415,11 @@
 
         function commitContractMember() {
             clearErrors();
-            var viewModel = @Html.Raw(JsonConvert.SerializeObject(_viewModel));
+            var viewModel = @Html.Raw(_viewModel.JsonStringify());
             var $formData = $('#@(_dialogID) input,select,textarea').serializeObject();
+            if($global.viewModel.RelationID !== undefined) {
+                $formData.RelationID = $global.viewModel.RelationID;
+            }
             showLoading();
             $.post('@Html.Raw(Url.Action("CommitContractMember", "ContractConsole"))', $.extend({}, viewModel, $formData), function (data) {
                 hideLoading();

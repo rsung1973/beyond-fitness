@@ -128,7 +128,16 @@ namespace WebHome.Controllers
             viewModel.ContractDateFrom = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             viewModel.ContractDateTo = viewModel.ContractDateFrom.Value.AddMonths(1).AddDays(-1);
 
-            var profile = await HttpContext.GetUserAsync();
+            UserProfile currentCoach = null;
+            if (viewModel.KeyID != null)
+            {
+                var uid = viewModel.DecryptKeyValue();
+                currentCoach = models.GetTable<UserProfile>().Where(u => u.UID == uid).FirstOrDefault();
+            }
+
+            ViewBag.CurrentCoach = currentCoach;
+
+            UserProfile profile = await HttpContext.GetUserAsync();
             viewModel.KeyID = profile.UID.EncryptKey();
             return View(profile.LoadInstance(models));
         }
@@ -201,13 +210,29 @@ namespace WebHome.Controllers
             {
                 viewModel.ContractID = viewModel.DecryptKeyValue();
             }
-            viewModel.Version = Naming.ContractVersion.Ver2019;
+            viewModel.Version = Naming.ContractVersion.Ver2022;
             var profile = await HttpContext.GetUserAsync();
             var item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
             if (item != null)
             {
+                ViewBag.DataItem = item;
                 viewModel.AgentID = item.AgentID;
-                viewModel.ContractType = (CourseContractType.ContractTypeDefinition?)item.ContractType;
+                viewModel.KeyID = item.ContractID.EncryptKey();
+                if(item.CourseContractType.IsCombination)
+                {
+                    viewModel.ContractType = CourseContractType.ContractTypeDefinition.CGA_Aux;
+                    viewModel.ContractTypeAux = (CourseContractType.ContractTypeDefinition?)item.ContractType;
+                }
+                else if (item.CourseContractType.IsVirtualCourse)
+                {
+                    viewModel.ContractType = CourseContractType.ContractTypeDefinition.CVA_Aux;
+                    viewModel.ContractTypeAux = (CourseContractType.ContractTypeDefinition?)(item.ContractType - CourseContractType.OffsetFromCGA2CVA);
+                }
+                else
+                {
+                    viewModel.ContractType = (CourseContractType.ContractTypeDefinition?)item.ContractType;
+                }
+                viewModel.PriceAdjustment = (CourseContractExtension.UnitPriceAdjustmentDefinition?)item.CourseContractExtension.UnitPriceAdjustmentType;
                 viewModel.ContractDate = item.ContractDate;
                 viewModel.Subject = item.Subject;
                 viewModel.ValidFrom = item.ValidFrom;
@@ -216,15 +241,30 @@ namespace WebHome.Controllers
                 viewModel.SequenceNo = item.SequenceNo;
                 viewModel.Lessons = item.Lessons;
                 viewModel.PriceID = item.PriceID;
+                if (item.CourseContractOrder.Any())
+                {
+                    var priceType = item.CourseContractOrder.OrderBy(o => o.SeqNo)
+                        .First().LessonPriceType;
+                    viewModel.PriceName = $"{priceType.PriceTypeBundle()} / {(priceType.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.舊會員續約) ? "(舊會員續約)" : null)}{string.Format("{0,5:##,###,###,###}", priceType.ListPrice)}";
+                    viewModel.BranchID = item.CourseContractExtension.BranchID;
+                    viewModel.OrderPriceID = new int?[] { priceType.PriceID };
+                }
+                else
+                {
+                    var priceType = item.LessonPriceType;
+                    viewModel.PriceName = $"{priceType.PriceTypeBundle()}{(priceType.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.舊會員續約) ? "(舊會員續約)" : null)}{string.Format("{0,5:##,###,###,###}", priceType.ListPrice)}";
+                    viewModel.BranchID = priceType.BranchStore?.IsVirtualClassroom() == true ? priceType.BranchID : item.CourseContractExtension.BranchID;
+                }
                 viewModel.DurationInMinutes = item.LessonPriceType.DurationInMinutes;
-                var priceType = item.LessonPriceType;
-                viewModel.PriceName = $"{priceType.PriceTypeBundle()}{(priceType.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.舊會員續約) ? "(舊會員續約)" : null)}{string.Format("{0,5:##,###,###,###}", priceType.ListPrice)}";
                 viewModel.Remark = item.Remark;
                 viewModel.FitnessConsultant = item.FitnessConsultant;
                 viewModel.Status = item.Status;
                 viewModel.UID = item.CourseContractMember.Select(m => m.UID).ToArray();
-                viewModel.BranchID = priceType.BranchStore.IsVirtualClassroom() ? priceType.BranchID : item.CourseContractExtension.BranchID;
                 viewModel.Renewal = item.Renewal;
+                viewModel.CheckBRCoach = item.CourseContractExtension.BRByCoach.HasValue;
+                viewModel.BRCoach = item.CourseContractExtension.BRByCoach;
+                viewModel.CheckBRLearner = item.CourseContractExtension.BRByLearner.HasValue;
+                viewModel.BRLearner = item.CourseContractExtension.BRByLearner;
                 viewModel.TotalCost = item.TotalCost;
                 if (item.InstallmentID.HasValue)
                 {
@@ -254,7 +294,7 @@ namespace WebHome.Controllers
                 viewModel.ManagerID = profile.UID;
             }
             ViewBag.ViewModel = viewModel;
-            return View(profile.LoadInstance(models));
+            return View("~/Views/ConsoleHome/EditCourseContract2023.cshtml", profile.LoadInstance(models));
         }
 
         [RoleAuthorize(new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
@@ -503,7 +543,7 @@ namespace WebHome.Controllers
                 return result;
             }
 
-            result.ViewName = "ApplyContractService";
+            result.ViewName = "~/Views/ConsoleHome/ApplyContractService2022.cshtml";
             return result;
         }
 
@@ -534,6 +574,22 @@ namespace WebHome.Controllers
             }
 
             result.ViewName = "PostponeContractExpiration";
+            viewModel.Version = (Naming.ContractVersion?)item.CourseContractExtension.Version;
+            return result;
+        }
+
+        [RoleAuthorize(new int[] { (int)Naming.RoleID.Administrator, (int)Naming.RoleID.Assistant, (int)Naming.RoleID.Officer, (int)Naming.RoleID.Coach, (int)Naming.RoleID.Servitor })]
+        public async Task<ActionResult> ExchangeContractLessonAsync(CourseContractQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)(await LoadCourseContractAsync(viewModel));
+            CourseContract item = (CourseContract)ViewBag.DataItem;
+
+            if (item == null)
+            {
+                return result;
+            }
+
+            result.ViewName = "ExchangeContractLesson";
             viewModel.Version = (Naming.ContractVersion?)item.CourseContractExtension.Version;
             return result;
         }
@@ -605,12 +661,24 @@ namespace WebHome.Controllers
             var profile = await HttpContext.GetUserAsync();
             if (chartType == "Echart")
             {
-                return View("~/Views/ConsoleHome/Module/TodayLessonsBarEChart.cshtml", profile.LoadInstance(models));
+                return View("~/Views/ConsoleHome/Module/DailyLessonsBarChart.cshtml", profile.LoadInstance(models));
             }
             else
             {
                 return View("~/Views/ConsoleHome/Module/TodayLessonsBarChartC3.cshtml", profile.LoadInstance(models));
             }
+        }
+
+        public async Task<ActionResult> WeeklyLessonsBarChartAsync(LessonTimeBookingViewModel viewModel, String chartType)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (!viewModel.ClassTimeStart.HasValue)
+            {
+                viewModel.ClassTimeStart = DateTime.Today;
+            }
+
+            var profile = await HttpContext.GetUserAsync();
+            return View("~/Views/ConsoleHome/Module/WeeklyLessonsBarChart.cshtml", profile.LoadInstance(models));
         }
 
         public async Task<ActionResult> ShowLessonSummaryAsync(LessonTimeBookingViewModel viewModel)
@@ -665,9 +733,9 @@ namespace WebHome.Controllers
                 tmpID = viewModel.DecryptKeyValue();
             }
 
-            var item = ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == tmpID).First();
+            UserProfile item = ViewBag.DataItem = models.GetTable<UserProfile>().Where(u => u.UID == tmpID).First();
 
-            if (item.UserProfileExtension.VipStatus == (int)UserProfileExtension.VipStatusDefinition.VVIP)
+            if (item.IsVIP)
             {
                 viewModel.AuthCode = viewModel.AuthCode.GetEfficientString();
                 if (viewModel.AuthCode == null)
@@ -738,6 +806,9 @@ namespace WebHome.Controllers
                             Naming.LessonPriceStatus.自主訓練,
                             Naming.LessonPriceStatus.體驗課程,
                             Naming.LessonPriceStatus.企業合作方案,
+                            Naming.LessonPriceStatus.營養課程,
+                            Naming.LessonPriceStatus.運動恢復課程,
+                            Naming.LessonPriceStatus.運動防護課程,
                         },
             }).InquireLesson(models);
 
@@ -876,6 +947,13 @@ namespace WebHome.Controllers
         {
             ViewResult result = (ViewResult)(await PaymentIndexAsync(viewModel));
             result.ViewName = "~/Views/PaymentConsole/EditPaymentForSession.cshtml";
+            return result;
+        }
+
+        public async Task<ActionResult> EditPaymentForTerminationChargeAsync(PaymentQueryViewModel viewModel)
+        {
+            ViewResult result = (ViewResult)(await PaymentIndexAsync(viewModel));
+            result.ViewName = "~/Views/PaymentConsole/EditPaymentForTerminationCharge.cshtml";
             return result;
         }
 
@@ -1158,6 +1236,32 @@ namespace WebHome.Controllers
                 viewModel.DateTo = idx;
             }
 
+            if (viewModel.ChartType == 2 && viewModel.SessionType == null)
+            {
+                if(coachItem.ServingCoach.UserProfile.IsHealthCare())
+                {
+                    viewModel.SessionType = new Naming.SessionTypeDefinition[]
+                    {
+                        Naming.SessionTypeDefinition.AT,
+                        Naming.SessionTypeDefinition.TS,
+                        Naming.SessionTypeDefinition.ST,
+                        Naming.SessionTypeDefinition.SR,
+                        Naming.SessionTypeDefinition.SD,
+                    };
+                }
+                else
+                {
+                    viewModel.SessionType = new Naming.SessionTypeDefinition[]
+                    {
+                        Naming.SessionTypeDefinition.PT,
+                        Naming.SessionTypeDefinition.PI,
+                        Naming.SessionTypeDefinition.AT,
+                        Naming.SessionTypeDefinition.TS,
+                        Naming.SessionTypeDefinition.ST,
+                    };
+                }
+            }
+
             ViewBag.DataItem = coachItem;
 
             var profile = await HttpContext.GetUserAsync();
@@ -1227,6 +1331,12 @@ namespace WebHome.Controllers
             }
 
             var profile = await HttpContext.GetUserAsync();
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.CoachID = viewModel.DecryptKeyValue();
+            }
+
             if (!viewModel.CoachID.HasValue)
             {
                 viewModel.CoachID = profile.UID;
@@ -1273,6 +1383,94 @@ namespace WebHome.Controllers
             return Json(new { result = true, message = profile.UID.EncryptKey() });
         }
 
+        public async Task<ActionResult> CoachOverviewAsync(LessonQueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.BranchID = viewModel.DecryptKeyValue();
+            }
+
+            BranchStore item = null;
+            if(viewModel.BranchID.HasValue)
+            {
+                item = models.GetTable<BranchStore>().Where(b => b.BranchID == viewModel.BranchID)
+                        .FirstOrDefault();
+            }
+           
+
+            ViewBag.ViewModel = viewModel;
+            ViewBag.DataItem = item;
+
+            var profile = await HttpContext.GetUserAsync();
+            return View("~/Views/CoachConsole/CoachOverview2023.cshtml", profile.LoadInstance(models));
+        }
+
+        public async Task<ActionResult> CoachCertificateReadyAsync(LessonQueryViewModel viewModel)
+        {
+            ViewResult result = await CoachOverviewAsync(viewModel) as ViewResult;
+            result.ViewName = "~/Views/CoachConsole/CoachCertificateReady.cshtml";
+            return result;
+        }
+
+        public async Task<ActionResult> LearnerOverviewAsync(CoachLearnerQueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.CoachID = viewModel.DecryptKeyValue();
+            }
+            ViewBag.ViewModel = viewModel;
+
+            ServingCoach item = models.GetTable<ServingCoach>().Where(b => b.CoachID == viewModel.CoachID)
+                        .FirstOrDefault();
+
+            if (item == null)
+            {
+                return View("~/Views/ConsoleHome/Shared/JsGoback.cshtml", model: "教練不存在!!");
+            }
+
+            ViewBag.DataItem = item;
+
+            var profile = await HttpContext.GetUserAsync();
+            return View("~/Views/LearnerConsole/LearnerOverview.cshtml", profile.LoadInstance(models));
+        }
+
+        public async Task<ActionResult> AssessmentOverviewAsync(MonthlyIndicatorQueryViewModel viewModel)
+        {
+            if (viewModel.KeyID != null)
+            {
+                viewModel.PeriodID = viewModel.DecryptKeyValue();
+            }
+
+            if (!viewModel.Year.HasValue || !viewModel.Month.HasValue)
+            {
+                viewModel.Year = DateTime.Today.Year;
+                viewModel.Month = DateTime.Today.Month;
+            }
+
+            var item = viewModel.GetAlmostMonthlyIndicator(models, true);
+
+            if (item == null)
+            {
+                return View("~/Views/ConsoleHome/Shared/JsGoback.cshtml", model: "資料尚未設定!!");
+            }
+
+            //if (item == null)
+            //{
+            //    item = models.InitializeMonthlyIndicator(viewModel.Year.Value, viewModel.Month.Value);
+            //}
+
+            //if (viewModel.Year == DateTime.Today.Year && viewModel.Month == DateTime.Today.Month)
+            //{
+            //    item.UpdateMonthlyAchievement(this);
+            //    item.UpdateMonthlyAchievementGoal(models);
+            //}
+
+            ViewBag.ViewModel = viewModel;
+            ViewBag.DataItem = item;
+
+            var profile = await HttpContext.GetUserAsync();
+            return View("~/Views/CoachConsole/AssessmentOverview.cshtml", profile.LoadInstance(models));
+        }
 
     }
 }

@@ -396,7 +396,26 @@ namespace WebHome.Controllers
                 }
                 else if(lesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.點數兌換課程)
                 {
-                    return await CommitBonusLessonAsync(viewModel);
+                    var result = await CommitBonusLessonAsync(viewModel);
+                    var item = ViewBag.LessonItem as LessonTime;
+                    if (item != null)
+                    {
+                        if (item.RegisterLesson.LessonPriceType.ForDietary == true)
+                        {
+                            viewModel.ClassDate = viewModel.ClassDate.Value.AddMonths(1);
+                            result = await CommitBonusLessonAsync(viewModel);
+                            LessonTime nextItem = ViewBag.LessonItem as LessonTime;
+
+                            if (nextItem == null)
+                            {
+                                models.ExecuteCommand("delete LessonTime where LessonID = {0}", item.LessonID);
+                                return Json(new { result = false, message = "預約未完成，請重新預約!!" });
+                            }
+
+                        }
+                    }
+
+                    return result;
                 }
             }
 
@@ -406,7 +425,14 @@ namespace WebHome.Controllers
             }
             else
             {
-                return await CommitCourseContractBookingByCoachAsync(viewModel);
+                if (viewModel.Version == Naming.ContractVersion.Ver2022)
+                {
+                    return CommitCourseContractBookingByCoach2022(viewModel);
+                }
+                else
+                {
+                    return await CommitCourseContractBookingByCoachAsync(viewModel);
+                }
             }
         }
 
@@ -519,20 +545,31 @@ namespace WebHome.Controllers
                         return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "合約尚未生效或已過期!!");
                     }
 
-                    var lessonCount = lesson.GroupingLesson.LessonTime.Count;
-                    if (contract.CourseContractType.ContractCode == "CFA")
-                    {
-                        lessonCount = contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count());
-                    }
+                    var lessonCount = lesson.AttendedLessonCount();
+                    //var lessonCount = lesson.GroupingLesson.LessonTime.Count;
+                    //if (contract.CourseContractType.ContractCode == "CFA"
+                    //        || contract.CourseContractType.ContractCode == "CGF"
+                    //        || contract.CourseContractType.ContractCode == "CVF")
+                    //{
+                    //    lessonCount = contract.RegisterLessonContract.Sum(c => c.RegisterLesson.GroupingLesson.LessonTime.Count());
+                    //}
 
-                    if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+                    //if (lessonCount + (lesson.AttendedLessons ?? 0) >= lesson.Lessons)
+                    //{
+                    //    return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "學員上課堂數已滿!!");
+                    //}
+
+                    if (lessonCount >= lesson.Lessons)
                     {
                         return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "學員上課堂數已滿!!");
                     }
 
-                    if (contract.TotalCost / contract.Lessons * lessonCount > contract.ContractPayment.Sum(c => c.Payment.PayoffAmount))
+                    if (lesson.ClassLevel == contract.PriceID)
                     {
-                        return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "學員繳款餘額不足!!");
+                        if (contract.TotalCost / contract.Lessons * lessonCount > contract.ContractPayment.Sum(c => c.Payment.PayoffAmount))
+                        {
+                            return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "學員繳款餘額不足!!");
+                        }
                     }
                 }
             }
@@ -562,7 +599,7 @@ namespace WebHome.Controllers
                     MarkedGradeIndex = coach.ProfessionalLevel.GradeIndex,
                     CoachWorkPlace = coach.WorkBranchID(),
                 },
-                Place = branch.IsVirtualClassroom() ? viewModel.Place : null,
+                Place = branch?.IsVirtualClassroom() == true ? viewModel.Place : null,
             };
             if (models.GetTable<DailyWorkingHour>().Any(d => d.Hour == viewModel.ClassDate.Value.Hour))
                 timeItem.HourOfClassTime = viewModel.ClassDate.Value.Hour;
@@ -574,7 +611,7 @@ namespace WebHome.Controllers
             else
             {
                 var users = models.CheckOverlapedBooking(timeItem, lesson);
-                if (users.Count() > 0)
+                if (users.Any())
                 {
                     ViewBag.Message = "學員(" + String.Join("、", users.Select(u => u.RealName)) + ")上課時間重複!!";
                     return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml");
@@ -633,6 +670,50 @@ namespace WebHome.Controllers
             {
                 ApplicationLogging.CreateLogger<LessonsController>().LogError(ex, ex.Message);
                 return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "預約未完成，請重新預約!!");
+            }
+
+            return Json(new { result = true, message = "上課時間預約完成!!" });
+        }
+
+        public ActionResult CommitCourseContractBookingByCoach2022(LessonTimeViewModel viewModel)
+        {
+            LessonTime item;
+            LessonPriceType priceType = null;
+            if (viewModel.SessionStatus.HasValue)
+            {
+                priceType = models.CurrentSessionPrice(viewModel.SessionStatus.Value, viewModel.PriceID);
+            }
+
+            if(priceType.IsSingleCharge)
+            {
+                item = viewModel.CommitSingleCourseBookingByCoach(this, priceType);
+            }
+            else
+            {
+                item = viewModel.CommitCourseContractBookingByCoach(this);
+            }
+
+            if (item != null)
+            {
+                if (item.RegisterLesson.LessonPriceType.ForDietary == true)
+                {
+                    viewModel.ClassDate = viewModel.ClassDate.Value.AddMonths(1);
+                    LessonTime nextItem = viewModel.CommitCourseContractBookingByCoach(this);
+
+                    if (nextItem == null)
+                    {
+                        models.ExecuteCommand("delete LessonTime where LessonID = {0}", item.LessonID);
+                        ModelState.AddModelError("Message", "預約未完成，請重新預約!!");
+                        item = null;
+                    }
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                ViewBag.AlertError = true;
+                return View("~/Views/ConsoleHome/Shared/ReportInputError.cshtml");
             }
 
             return Json(new { result = true, message = "上課時間預約完成!!" });
@@ -724,6 +805,7 @@ namespace WebHome.Controllers
         public async Task<ActionResult> CommitBonusLessonAsync(LessonTimeViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
+            ViewBag.LessonItem = null;
             var profile = await HttpContext.GetUserAsync();
 
             ValidateCommonBooking(viewModel, out ServingCoach coach, out BranchStore branch);
@@ -836,7 +918,7 @@ namespace WebHome.Controllers
                 return View("~/Views/ConsoleHome/Shared/JsAlert.cshtml", model: "預約未完成，請重新預約!!");
             }
 
-
+            ViewBag.LessonItem = timeItem;
 
             return Json(new { result = true, message = "上課時間預約完成!!" });
         }
@@ -935,14 +1017,14 @@ namespace WebHome.Controllers
 
             DailyBookingQueryViewModel viewModel = (DailyBookingQueryViewModel)HttpContext.GetCacheValue("DailyBookingQuery");
 
-            var dataItems = models.GetTable<LessonTimeExpansion>()
-                .Where(t => t.ClassDate >= start && t.ClassDate < end.AddDays(1));
+            var dataItems = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= start && t.ClassTime < end.AddDays(1));
 
             IQueryable<LessonTime> timeItems = models.GetTable<LessonTime>();
 
             if(viewModel!=null && viewModel.BranchID.HasValue)
             {
-                dataItems = dataItems.Where(t => t.LessonTime.BranchID == viewModel.BranchID);
+                dataItems = dataItems.Where(t => t.BranchID == viewModel.BranchID);
                 timeItems = timeItems.Where(l => l.BranchID==viewModel.BranchID);
             }
 
@@ -984,11 +1066,11 @@ namespace WebHome.Controllers
                         });
 
                 items = items.Concat(dataItems
-                    .Where(t => !t.LessonTime.TrainingBySelf.HasValue || t.LessonTime.TrainingBySelf == 0)
+                    .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
                     .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.正常
                         || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.已刪除
                     || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.點數兌換課程)
-                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .Select(t => new { ClassDate = t.ClassTime.Value.Date, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
                     {
@@ -1003,7 +1085,7 @@ namespace WebHome.Controllers
 
                 items = items.Concat(dataItems
                     .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI)
-                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .Select(t => new { ClassDate = t.ClassTime.Value.Date, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
                     {
@@ -1017,8 +1099,8 @@ namespace WebHome.Controllers
                     }));
 
                 items = items.Concat(dataItems
-                    .Where(t => t.LessonTime.TrainingBySelf == 1)
-                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .Where(t => t.TrainingBySelf == 1)
+                    .Select(t => new { ClassDate = t.ClassTime.Value.Date, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
                     {
@@ -1032,8 +1114,8 @@ namespace WebHome.Controllers
                 }));
 
                 items = items.Concat(dataItems
-                    .Where(t => t.LessonTime.TrainingBySelf == 2)
-                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .Where(t => t.TrainingBySelf == 2)
+                    .Select(t => new { ClassDate = t.ClassTime.Value.Date, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
                     {
@@ -1048,7 +1130,7 @@ namespace WebHome.Controllers
 
                 items = items.Concat(dataItems
                     .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程)
-                    .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                    .Select(t => new { ClassDate = t.ClassTime.Value.Date, t.RegisterLesson.UID }).ToList()
                     .GroupBy(t => t.ClassDate)
                     .Select(g => new CalendarEvent
                     {
@@ -1071,9 +1153,11 @@ namespace WebHome.Controllers
         [AllowAnonymous]
         public ActionResult DailyLearnerCount(DateTime date)
         {
-            var items = models.GetTable<LessonTimeExpansion>()
-                .Where(t => t.ClassDate >= date.Date && t.ClassDate < date.AddDays(1))
-                .Select(t => t.RegisterLesson.UID)
+            var items = models.GetTable<LessonTime>()
+                .Where(t => t.ClassTime >= date.Date && t.ClassTime < date.AddDays(1))
+                .Join(models.GetTable<GroupingLesson>(), t => t.GroupID, l => l.GroupID, (t, l) => l)
+                .Join(models.GetTable<RegisterLesson>(), g => g.GroupID, r => r.RegisterGroupID, (g, r) => r)
+                .Select(t => t.UID)
                 .Distinct();
 
             return Content(items.Count().ToString());
@@ -1329,7 +1413,7 @@ namespace WebHome.Controllers
             }
 
             var items = models.GetTable<LessonTime>().Where(queryExpr)
-                .Select(t => t.LessonTimeExpansion.OrderBy(l => l.Hour).First());
+                .Join(models.GetTable<LessonTimeExpansion>(), t => t.LessonID, p => p.LessonID, (t, p) => p);
 
             return getBookingListJson(items);
         }
@@ -1344,7 +1428,10 @@ namespace WebHome.Controllers
                 .Select(g => new
                 {
                     timezone = String.Format("{0:00}:00 - {1:00}:00", g.Key.Hour, g.Key.Hour + 1),
-                    count = g.Sum(t => t.RegisterLesson.GroupingMemberCount),
+                    count = g.ToArray()
+                        .Select(p=>p.LessonTime.RegisterLesson)
+                        .GroupBy(r=>r.RegisterID)
+                        .Sum(t => t.First().GroupingMemberCount),
                     booktime = "--",
                     hour = g.Key.Hour,
                     function = "",
@@ -1543,8 +1630,9 @@ namespace WebHome.Controllers
 
         private ActionResult getQueryBookingListJson(IQueryable<LessonTimeExpansion> items)
         {
-            var listItems = items.Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
-                    .GroupBy(t => t.ClassDate);
+            var listItems = items
+                    .GroupBy(t => t.ClassDate)
+                    .ToList();
 
             return Json(new
             {
@@ -1552,7 +1640,9 @@ namespace WebHome.Controllers
                 .Select(g => new
                 {
                     timezone = g.Key.ToString("yyyy/MM/dd"),
-                    count = g.Distinct().Count(),
+                    count = g.Select(p=>p.LessonTime.RegisterLesson)
+                                .GroupBy(r=>r.RegisterID)
+                                .Sum(t => t.First().GroupingMemberCount),
                     booktime = "--",
                     hour = g.Key.Hour,
                     function = "",
@@ -1601,7 +1691,6 @@ namespace WebHome.Controllers
             ops.LoadWith<LessonTime>(i => i.LessonPlan);
             ops.LoadWith<LessonTime>(i => i.RegisterLesson);
             ops.LoadWith<RegisterLesson>(i => i.UserProfile);
-            ops.LoadWith<LessonTimeExpansion>(i => i.RegisterLesson);
             models.DataContext.LoadOptions = ops;
             IQueryable<LessonTime> items = models.GetTable<LessonTime>();
 
@@ -1671,13 +1760,15 @@ namespace WebHome.Controllers
 
             var items = lessons.Join(models.GetTable<LessonTimeExpansion>(),
                 t => t.LessonID, l => l.LessonID, (t, l) => l)
-                .Select(t => new { t.ClassDate, t.RegisterLesson.UID }).ToList()
+                .ToList()
                 .GroupBy(t => t.ClassDate);
 
             return Json(items.Select(g => new
             {
                 x = g.Key.ToString("MM/dd"),
-                y = g.Distinct().Count()
+                y = g.Select(p=>p.LessonTime.RegisterLesson)
+                        .GroupBy(r=>r.RegisterID)
+                        .Sum(t => t.First().GroupingMemberCount)
             }).OrderBy(o => o.x).ToArray());
 
         }
@@ -2301,11 +2392,11 @@ namespace WebHome.Controllers
                 }
                 if (category == "coach")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
+                    items = items.Where(t => t.LessonTime.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
                 }
                 else if (category == "trial")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程);
+                    items = items.Where(t => t.LessonTime.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程);
                 }
 
                 items = items.Where(t => t.LessonTime.AttendingCoach == profile.UID)
@@ -2328,11 +2419,11 @@ namespace WebHome.Controllers
                 }
                 if (category == "coach")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
+                    items = items.Where(t => t.LessonTime.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.教練PI);
                 }
                 else if (category == "trial")
                 {
-                    items = items.Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程);
+                    items = items.Where(t => t.LessonTime.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.體驗課程);
                 }
 
 
@@ -2404,7 +2495,7 @@ namespace WebHome.Controllers
         public ActionResult PreviewLesson(LessonTimeExpansionViewModel viewModel)
         {
             var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
-                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+                && l.LessonTime.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
 
             //return View(item);
             ViewBag.PreviewLesson = true;
@@ -2415,7 +2506,7 @@ namespace WebHome.Controllers
         public ActionResult PreviewLessonTime(LessonTimeExpansionViewModel viewModel)
         {
             var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
-                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
+                && l.LessonTime.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).First();
 
             return View("~/Views/Lessons/LessonTime/DataItem.aspx", item);
 
@@ -2528,7 +2619,7 @@ namespace WebHome.Controllers
         {
 
             var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
-                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).FirstOrDefault();
+                && l.LessonTime.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).FirstOrDefault();
 
             if (item == null)
             {
@@ -2549,7 +2640,7 @@ namespace WebHome.Controllers
         {
 
             var item = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == viewModel.ClassDate
-                && l.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).FirstOrDefault();
+                && l.LessonTime.RegisterID == viewModel.RegisterID && l.Hour == viewModel.Hour).FirstOrDefault();
 
             if (item == null)
             {
@@ -2616,7 +2707,7 @@ namespace WebHome.Controllers
             models.SubmitChanges();
 
             HttpContext.RemoveCache("Training");
-            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.RegisterID, lessonID = item.LessonID });
+            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.LessonTime.RegisterID, lessonID = item.LessonID });
         }
 
         public ActionResult CompletePlan()
@@ -2629,7 +2720,7 @@ namespace WebHome.Controllers
             }
 
             HttpContext.RemoveCache("Training");
-            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.RegisterID, lessonID = item.LessonID });
+            return RedirectToAction("Coach", "Account", new { lessonDate = item.ClassDate, hour = item.Hour, registerID = item.LessonTime.RegisterID, lessonID = item.LessonID });
         }
 
         public ActionResult CommitPlan(TrainingPlanViewModel viewModel)
@@ -2706,9 +2797,8 @@ namespace WebHome.Controllers
             if (item != null)
             {
                 model = models.GetTable<LessonTimeExpansion>()
-                    .Where(l => l.ClassDate == item.ClassDate
-                        && l.RegisterID == item.RegisterID
-                        && l.Hour == item.Hour).FirstOrDefault();
+                    .Where(l => l.ExpansionID == item.ExpansionID)
+                    .FirstOrDefault();
             }
 
             if (model == null)
@@ -2731,9 +2821,7 @@ namespace WebHome.Controllers
             models.DeleteAny<TrainingPlan>(t => t.ExecutionID == id && t.LessonID == item.LessonID);
 
             LessonTimeExpansion model = models.GetTable<LessonTimeExpansion>()
-                .Where(l => l.ClassDate == item.ClassDate
-                    && l.RegisterID == item.RegisterID 
-                    && l.Hour == item.Hour).First();
+                .Where(l => l.ExpansionID == item.ExpansionID).First();
 
             return View("TrainingExecutionPlan", model);
         }
@@ -3189,8 +3277,8 @@ namespace WebHome.Controllers
         public virtual ActionResult CompleteTraining()
         {
             LessonTimeExpansion cacheItem = (LessonTimeExpansion)HttpContext.GetCacheValue("Training");
-            var timeItem = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == cacheItem.ClassDate
-                && l.RegisterID == cacheItem.RegisterID && l.Hour == cacheItem.Hour).First();
+            var timeItem = models.GetTable<LessonTimeExpansion>()
+                .Where(l => l.ExpansionID == cacheItem.ExpansionID).First();
 
             ViewBag.DataItem = timeItem.LessonTime;
             return View("TrainingPlan", timeItem);
@@ -3202,8 +3290,8 @@ namespace WebHome.Controllers
             LessonTimeExpansion cacheItem = (LessonTimeExpansion)HttpContext.GetCacheValue("Training");
             if (cacheItem == null)
                 return Content("資料錯誤!!");
-            var timeItem = models.GetTable<LessonTimeExpansion>().Where(l => l.ClassDate == cacheItem.ClassDate
-                && l.RegisterID == cacheItem.RegisterID && l.Hour == cacheItem.Hour).First();
+            var timeItem = models.GetTable<LessonTimeExpansion>()
+                .Where(l => l.ExpansionID == cacheItem.ExpansionID).First();
 
             return View(timeItem);
 

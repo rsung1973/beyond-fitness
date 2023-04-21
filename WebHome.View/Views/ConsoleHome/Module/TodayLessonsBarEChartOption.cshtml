@@ -1,0 +1,216 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
+@using Newtonsoft.Json
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    string _chartID = ViewBag.ChartID = "lessonsBar";
+    IEnumerable<int> _hourIdx;
+    LessonTimeBookingViewModel _viewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (UserProfile)this.Model;
+    _hourIdx = Enumerable.Range(7, 16);
+    _viewModel = (LessonTimeBookingViewModel)ViewBag.ViewModel;
+}
+
+@{
+    var items = models.GetTable<V_Tuition>().Where(l => l.ClassTime >= _viewModel.ClassTimeStart && l.ClassTime < _viewModel.ClassTimeStart.Value.AddDays(1));
+    if (_viewModel.BranchID.HasValue)
+    {
+        items = items.Where(l => l.BranchID == _viewModel.BranchID);
+    }
+
+    LessonTimeAchievementHelper helper = new LessonTimeAchievementHelper(models)
+            {
+                LessonItems = items
+            };
+
+    var SRLessons = items.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程)
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+
+    var SDLessons = items.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程)
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+
+    var PTLessons = helper.PTSession
+            .Select(l => new { Hour = l.ClassTime.Value.Hour, Persons = l.GroupingMemberCount })
+            .GroupBy(h => h.Hour)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Sum(p => p.Persons) })
+            .ToList();
+
+    var PILessons = helper.PILesson
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+
+    var TrialLessons = items.TrialLesson()
+            .Select(l => l.ClassTime.Value.Hour)
+            .GroupBy(h => h)
+            .Select(g => new _Counting { Hour = g.Key, Count = g.Count() })
+            .ToList();
+
+    var totalData = getDistribution(PTLessons, _hourIdx).ToArray();
+    var tempData = getDistribution(PILessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+    tempData = getDistribution(TrialLessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+    tempData = getDistribution(SRLessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+    tempData = getDistribution(SDLessons, _hourIdx).ToArray();
+    for (int i = 0; i < totalData.Length; i++)
+    {
+        totalData[i] += tempData[i];
+    }
+}
+<script>
+
+    $global.echarts.option['@(_chartID)'] = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            left: 'center',
+            data: ["P.T", "T.S", "P.I", "S.R", "S.D"],            
+        },
+        xAxis: [
+            {
+                type: 'category',
+                name: '時段',
+                nameLocation: 'middle',
+                nameGap: 20,
+                data: @Html.Raw(JsonConvert.SerializeObject(_hourIdx.Select(h=>$"{h:00}"))),
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '人數',
+                nameLocation: 'middle',
+                nameGap: 20
+            }
+        ],
+        series: [
+            {
+                name: '總計',
+                type: 'bar',
+                barGap: '-100%',         // 左移100%，stack不再与上面两个在一列
+                lable: {
+                    normal: {
+                        show: true,
+                        position: 'top',       //  位置设为top
+                        textStyle: { color: '#07a2a4' }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: 'rgba(128, 128, 128, 0.3)'    // 仍为透明
+                    }
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(totalData)),
+            },
+            {
+                name: 'P.T',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false,
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(getDistribution(PTLessons, _hourIdx).ToArray())),
+            },
+            {
+                name: 'T.S',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false,
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(getDistribution(TrialLessons, _hourIdx).ToArray())),
+            },
+            {
+                name: 'P.I',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false,
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(getDistribution(PILessons, _hourIdx).ToArray())),
+            },
+            {
+                name: 'S.R',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false,
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(getDistribution(SRLessons, _hourIdx).ToArray())),
+            },
+            {
+                name: 'S.D',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: false,
+                },
+                data: @Html.Raw(JsonConvert.SerializeObject(getDistribution(SDLessons, _hourIdx).ToArray())),
+            }
+        ],
+        color: ['#ffe599', '#f3c4b6', '#b6d7a8', '#c6d9f1', '#d9d9d9'],
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+    };
+
+</script>
+
+@functions
+{
+
+    class _Counting
+    {
+        public int Hour { get; set; }
+        public int Count { get; set; }
+    }
+
+    IEnumerable<int> getDistribution(IEnumerable<_Counting> items, IEnumerable<int> hourIdx)
+    {
+        foreach (var h in hourIdx)
+        {
+            yield return items.Where(i => i.Hour == h).Select(i => i.Count).FirstOrDefault();
+        }
+    }
+
+}
+

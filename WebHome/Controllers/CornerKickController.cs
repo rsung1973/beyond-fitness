@@ -98,7 +98,9 @@ namespace WebHome.Controllers
         {
             ViewBag.ViewModel = viewModel;
             var item = models.GetTable<UserProfileExtension>().Where(u => u.LineID == viewModel.LineID)
-                    .Select(u => u.UserProfile).FirstOrDefault();
+                    .Select(u => u.UserProfile)
+                    .Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+                    .FirstOrDefault();
 
             if (item != null)
             {
@@ -180,8 +182,12 @@ namespace WebHome.Controllers
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
             }
 
-            UserProfile item = models.GetTable<UserProfile>().Where(u => u.MemberCode == viewModel.MemberCode
-                || u.UserProfileExtension.IDNo == viewModel.MemberCode).FirstOrDefault();
+            UserProfile item = models.GetTable<UserProfile>()
+                .Where(u => u.MemberCode == viewModel.MemberCode
+                        || u.UserProfileExtension.IDNo == viewModel.MemberCode)
+                .Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked
+                    || u.LevelID == (int)Naming.MemberStatusDefinition.ReadyToRegister)
+                .FirstOrDefault();
 
             if (item == null)
             {
@@ -259,7 +265,10 @@ namespace WebHome.Controllers
                         QuestionID = quest.QuestionID,
                         UID = item.UID,
                         TaskDate = DateTime.Now,
-                        PDQTaskBonus = new PDQTaskBonus { },
+                        PDQTaskBonus = new PDQTaskBonus 
+                        {
+                            BonusPoint = quest.PDQQuestionExtension.BonusPoint ?? 1,
+                        },
                     };
                     models.GetTable<PDQTask>().InsertOnSubmit(taskItem);
                     models.SubmitChanges();
@@ -413,7 +422,9 @@ namespace WebHome.Controllers
                 viewModel.LineID = viewModel.KeyID.DecryptKey();
             }
             var item = models.GetTable<UserProfileExtension>().Where(u => u.LineID == viewModel.LineID)
-                    .Select(u => u.UserProfile).FirstOrDefault();
+                    .Select(u => u.UserProfile)
+                    .Where(u => u.LevelID == (int)Naming.MemberStatusDefinition.Checked)
+                    .FirstOrDefault();
 
             if (item != null)
             {
@@ -443,8 +454,14 @@ namespace WebHome.Controllers
 
         public async Task<ActionResult> CheckAttendanceAsync(RegisterViewModel viewModel)
         {
+            UserProfile item = await HttpContext.GetUserAsync();
+            if (item != null)
+            {
+                return View("CheckAttendance", item.LoadInstance(models));
+            }
+
             ViewResult result = (ViewResult)await NoticeAsync(viewModel);
-            UserProfile item = result.Model as UserProfile;
+            item = result.Model as UserProfile;
 
             if(item!=null)
             {
@@ -489,6 +506,100 @@ namespace WebHome.Controllers
             return View("CheckAttendance",profile);
 
         }
+
+        [Authorize]
+        public async Task<ActionResult> ConfirmAttendanceAsync(LearnerQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = (await HttpContext.GetUserAsync()).LoadInstance(models);
+
+            int? lessonID = viewModel?.LessonID?[0];
+            if (viewModel.KeyID != null)
+            {
+                lessonID = viewModel.DecryptKeyValue();
+            }
+
+            var item = models.GetTable<LessonTime>().Where(l => l.LessonID == lessonID)
+                    .FirstOrDefault();
+            if (item != null)
+            {
+                ViewBag.DataItem = item;
+                return View("ConfirmAttendance", profile);
+            }
+
+            return View("CheckAttendance", profile);
+
+        }
+
+        [Authorize]
+        public async Task<ActionResult> WriteOffAttendanceAsync(LearnerQueryViewModel viewModel)
+        {
+            ViewResult result = await ConfirmAttendanceAsync(viewModel) as ViewResult;
+            LessonTime item = ViewBag.DataItem as LessonTime;
+
+            if (item == null)
+            {
+                return result;
+            }
+
+            viewModel.WriteoffCode = viewModel.WriteoffCode.GetEfficientString();
+            if (item.AsAttendingCoach.UserProfile.Phone != viewModel.WriteoffCode)
+            {
+                ModelState.AddModelError("WriteoffCode", "兌換核銷密碼欄位資料錯誤，請確認後再重新輸入");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            item.LessonPlan.CommitAttendance = DateTime.Now;
+            item.LessonPlan.Remark = $"{item.AsAttendingCoach.UserProfile.FullName()}治療完成";
+            var execution = item.TrainingPlan.FirstOrDefault()?.TrainingExecution;
+            if (execution != null)
+            {
+                execution.Emphasis = "AT課程";
+            }
+            models.SubmitChanges();
+
+            models.AttendLesson(item, item.AsAttendingCoach.UserProfile);
+            return Json(new { result = true });
+        }
+
+
+        [Authorize]
+        public async Task<ActionResult> CommitCurrentUserEventAsync(UserEventViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = (await HttpContext.GetUserAsync()).LoadInstance(models);
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.EventID = viewModel.DecryptKeyValue();
+            }
+
+            var eventItem = models.GetTable<UserEvent>()
+                    .Where(v => v.EventID == viewModel.EventID)
+                    .Where(v => v.UID == profile.UID)
+                    .FirstOrDefault();
+
+            if (eventItem != null)
+            {
+                if (eventItem.UserEventCommitment == null)
+                {
+                    eventItem.UserEventCommitment = new UserEventCommitment
+                    {
+                        CommitmentDate = DateTime.Now,
+                    };
+                    models.SubmitChanges();
+                }
+            }
+
+            return View("~/Views/CornerKick/LearnerIndex.cshtml", profile);
+
+        }
+
 
         [Authorize]
         public async Task<ActionResult> AnswerDailyQuestionAsync()
@@ -609,6 +720,36 @@ namespace WebHome.Controllers
         }
 
         [Authorize]
+        public async Task<ActionResult> SignGDPRAgreementAsync(CourseContractQueryViewModel viewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            var profile = await HttpContext.GetUserAsync();
+
+            var item = models.GetTable<CourseContract>()
+                .Where(c => c.ContractID == viewModel.ContractID)
+                .Where(c => c.CourseContractMember.Any(m => m.UID == profile.UID))
+                .FirstOrDefault();
+
+            if (item == null)
+            {
+                ViewBag.ViewModel = new DataItemViewModel
+                {
+                    Title = "我的合約",
+                    Message = "目前尚未規劃任何訓練，<br/>若有興趣請與您的教練一起規劃訓練內容喔！",
+                };
+                return View("~/Views/CornerKick/DataNotFound.cshtml");
+            }
+
+            ViewBag.DataItem = item;
+            return View("~/Views/CornerKick/SignGDPRAgreement.cshtml", profile.LoadInstance(models));
+        }
+
+        [Authorize]
         public async Task<ActionResult> SignContractServiceAsync(CourseContractQueryViewModel viewModel)
         {
             ViewBag.ViewModel = viewModel;
@@ -652,10 +793,34 @@ namespace WebHome.Controllers
         public async Task<ActionResult> ConfirmSignatureAsync(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel)
         {
             ViewBag.ViewModel = viewModel;
+            var profile = await HttpContext.GetUserAsync();
 
             if (viewModel.Agree != true)
             {
-                ModelState.AddModelError("Message", "請勾選同意聲明!!");
+                ModelState.AddModelError("Message", "請閱讀並同意BF隱私政策、服務條款、相關使用及消費合約，即表示即日起您同意接受本合約正面及背面條款之相關約束及其責任");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+            else if (viewModel.Booking != true)
+            {
+                ModelState.AddModelError("Message", "請閱讀並同意第8條服務預約之規定");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+            else if (viewModel.Extension != true)
+            {
+                ModelState.AddModelError("Message", "請閱讀並同意第9條體能/健康顧問服務期間與一般展延之申請之規定");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.SignerPIN = viewModel.SignerPIN.GetEfficientString();
+            if (viewModel.SignerPIN == null)
+            {
+                ModelState.AddModelError("SignerPIN", "動態密碼輸入錯誤，請確認後再重新輸入");
                 ViewBag.AlertError = true;
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
@@ -676,9 +841,83 @@ namespace WebHome.Controllers
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
             }
 
-            if(item.InstallmentID.HasValue)
+            if (viewModel.SignerPIN != item.CourseContractExtension.SignerPIN)
+            {
+                ModelState.AddModelError("SignerPIN", "動態密碼輸入錯誤，請確認後再重新輸入");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            if (item.InstallmentID.HasValue)
             {
                 foreach(var c in models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID))
+                {
+                    var contract = await commitSignatureAsync(viewModel, signatureViewModel, c);
+                    if (contract == null)
+                    {
+                        ModelState.AddModelError("Message", ModelState.ErrorMessage());
+                        ViewBag.AlertError = true;
+                        ViewBag.ModelState = this.ModelState;
+                        return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+                    }
+                }
+            }
+            else
+            {
+                item = await commitSignatureAsync(viewModel, signatureViewModel, item);
+                if (item == null)
+                {
+                    ModelState.AddModelError("Message", ModelState.ErrorMessage());
+                    ViewBag.AlertError = true;
+                    ViewBag.ModelState = this.ModelState;
+                    return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+                }
+            }
+
+            if (signatureViewModel.NextStep == true)
+            {
+                ViewBag.ViewModel = new QueryViewModel
+                {
+                    UrlAction = Url.Action("SignGDPRAgreement", "CornerKick", new { KeyID = item.ContractID.EncryptKey() }),
+                };
+                return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
+            }
+
+            String jsonData = await RenderViewToStringAsync("~/Views/LineEvents/Message/NotifyToContractPayment.cshtml", item);
+            jsonData.PushLineMessage();
+
+            ViewBag.ViewModel = new QueryViewModel
+            {
+                UrlAction = Url.Action("MyContract", "CornerKick"),
+            };
+            return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
+        }
+
+        [Authorize]
+        public async Task<ActionResult> ConfirmGDPRWithSignatureAsync(CourseContractViewModel viewModel, CourseContractSignatureViewModel signatureViewModel)
+        {
+            ViewBag.ViewModel = viewModel;
+            var profile = await HttpContext.GetUserAsync();
+
+            if (viewModel.KeyID != null)
+            {
+                viewModel.ContractID = viewModel.DecryptKeyValue();
+            }
+
+            CourseContract item = models.GetTable<CourseContract>().Where(c => c.ContractID == viewModel.ContractID).FirstOrDefault();
+
+            if (item == null)
+            {
+                ModelState.AddModelError("Message", "合約資料錯誤!!");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            if (item.InstallmentID.HasValue)
+            {
+                foreach (var c in models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID))
                 {
                     var contract = await commitSignatureAsync(viewModel, signatureViewModel, c);
                     if (contract == null)
@@ -707,7 +946,7 @@ namespace WebHome.Controllers
 
             ViewBag.ViewModel = new QueryViewModel
             {
-                UrlAction = Url.Action("MyContract"),
+                UrlAction = Url.Action("MyContract", "CornerKick"),
             };
             return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
         }
@@ -719,7 +958,16 @@ namespace WebHome.Controllers
 
             if (viewModel.Agree != true)
             {
-                ModelState.AddModelError("Message", "請勾選同意聲明!!");
+                ModelState.AddModelError("Message", "請閱讀並同意BF隱私政策、服務條款、相關使用及消費合約，即表示即日起您同意接受本合約正面及背面條款之相關約束及其責任");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
+            viewModel.SignerPIN = viewModel.SignerPIN.GetEfficientString();
+            if (viewModel.SignerPIN == null)
+            {
+                ModelState.AddModelError("SignerPIN", "動態密碼輸入錯誤，請確認後再重新輸入");
                 ViewBag.AlertError = true;
                 ViewBag.ModelState = this.ModelState;
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
@@ -740,6 +988,14 @@ namespace WebHome.Controllers
                 return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
             }
 
+            if (viewModel.SignerPIN != item.CourseContractExtension.SignerPIN)
+            {
+                ModelState.AddModelError("SignerPIN", "動態密碼輸入錯誤，請確認後再重新輸入");
+                ViewBag.AlertError = true;
+                ViewBag.ModelState = this.ModelState;
+                return View("~/Views/CornerKick/Shared/ReportInputError.cshtml");
+            }
+
             item = await commitSignatureAsync(viewModel, signatureViewModel, item);
             if (item == null)
             {
@@ -754,7 +1010,7 @@ namespace WebHome.Controllers
 
             ViewBag.ViewModel = new QueryViewModel
             {
-                UrlAction = Url.Action("MyContract"),
+                UrlAction = Url.Action("MyContract", "CornerKick"),
             };
             return View("~/Views/CornerKick/Shared/ViewModelCommitted.cshtml");
         }
@@ -790,6 +1046,10 @@ namespace WebHome.Controllers
             if (item.CourseContractRevision != null)
             {
                 return await viewModel.ConfirmContractServiceSignatureAsync(this, item.CourseContractRevision);
+            }
+            else if (signatureViewModel.NextStep == true)
+            {
+                return item;
             }
             else
             {
@@ -836,7 +1096,10 @@ namespace WebHome.Controllers
             {
                 if (item.PDQQuestionExtension != null)
                 {
-                    taskItem.PDQTaskBonus = new PDQTaskBonus { };
+                    taskItem.PDQTaskBonus = new PDQTaskBonus 
+                    {
+                        BonusPoint = item.PDQQuestionExtension.BonusPoint ?? 1,
+                    };
                     models.SubmitChanges();
                 }
             }
@@ -960,6 +1223,32 @@ namespace WebHome.Controllers
             var profile = (await HttpContext.GetUserAsync()).LoadInstance(models);
             return View(profile);
         }
+
+        [Authorize]
+        public async Task<ActionResult> AnnouncementAsync(UserEventViewModel viewModel)
+        {
+            var profile = (await HttpContext.GetUserAsync()).LoadInstance(models);
+            if (viewModel.KeyID != null)
+            {
+                viewModel.EventID = viewModel.DecryptKeyValue();
+            }
+
+            var eventItem = models.GetTable<UserEvent>()
+                    .Where(v => v.EventID == viewModel.EventID)
+                    .Where(v => v.UID == profile.UID)
+                    .FirstOrDefault();
+
+            if (eventItem != null)
+            {
+                ViewBag.EventItem = eventItem;
+                return View(profile);
+            }
+            else
+            {
+                return View("~/Views/CornerKick/LearnerIndex.cshtml", profile);
+            }
+        }
+
 
         [Authorize]
         public async Task<ActionResult> LearnerTrainingGoalAsync()
@@ -1376,15 +1665,18 @@ namespace WebHome.Controllers
             models.GetTable<LearnerAward>().InsertOnSubmit(award);
 
             int usedPoints = item.PointValue;
-            foreach (var bounsItem in profile.BonusPointList(models))
+            foreach (var bonusItem in profile.BonusPointList(models))
             {
                 if (usedPoints <= 0)
                     break;
                 award.BonusExchange.Add(new BonusExchange
                 {
-                    TaskID = bounsItem.TaskID
+                    TaskID = bonusItem.TaskID
                 });
-                usedPoints -= bounsItem.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint.Value;
+                int currentUsed = Math.Min(usedPoints, bonusItem.BonusPoint.Value);
+                usedPoints -= currentUsed;
+                bonusItem.BonusPoint -= currentUsed;
+                //usedPoints -= bounsItem.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint.Value;
             }
 
             ///兌換課程

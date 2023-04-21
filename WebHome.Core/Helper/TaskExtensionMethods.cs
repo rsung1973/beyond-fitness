@@ -300,6 +300,8 @@ namespace WebHome.Helper
                         {
                             lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
                         }
+                        models.SubmitChanges();
+
                         ///2.回沖繳款餘額
                         ///
                         var original = item.SourceContract;
@@ -312,7 +314,7 @@ namespace WebHome.Helper
 
                             if (original.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA)
                             {
-                                var lessons = original.CountableRegisterLesson();
+                                var lessons = original.RegisterLessonContract.Select(c => c.RegisterLesson);
 
                                 returnAmt = totalPaid
                                         - lessons.Where(r => r.LessonPriceType.IsDietaryConsult)
@@ -382,16 +384,17 @@ namespace WebHome.Helper
                                     ReturnAmount = returnAmt,
                                 });
                             }
+                            models.SubmitChanges();
 
                             if (refund > 0)
                             {
                                 //Logger.Debug("RevisionID: " + item.RevisionID);
                                 //Logger.Debug("balance: " + balance);
                                 models.CreateAllowanceForContract(original, refund, handler);
+                                models.SubmitChanges();
                             }
                         }
 
-                        models.SubmitChanges();
                         original.TerminateRegisterLesson(models);
                     }
                 }
@@ -431,7 +434,7 @@ namespace WebHome.Helper
                             int? returnAmt;
                             if (original.ContractType == (int)CourseContractType.ContractTypeDefinition.CGA)
                             {
-                                var lessons = original.CountableRegisterLesson();
+                                var lessons = original.RegisterLessonContract.Select(c => c.RegisterLesson);
                                 returnAmt = totalPaid
                                         - lessons.Where(r => r.LessonPriceType.IsDietaryConsult)
                                             .Sum(r => r.LessonPriceType.ListPrice * r.LessonTime.Count)
@@ -497,6 +500,267 @@ namespace WebHome.Helper
                 }
             });
         }
+
+        public static void ProcessContractTermination2022(this CourseContractRevision item, UserProfile handler = null)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                try
+                {
+                    using (var models = new ModelSource<UserProfile>())
+                    {
+                        item = models.GetTable<CourseContractRevision>()
+                            .Where(r => r.RevisionID == item.RevisionID).First();
+                        ///1.變更狀態
+                        ///
+                        item.SourceContract.Status = (int)Naming.CourseContractStatus.已終止;
+                        item.SourceContract.ValidTo = DateTime.Now;
+                        item.CourseContract.EffectiveDate = DateTime.Now;
+                        foreach (var lesson in item.SourceContract.RegisterLessonContract)
+                        {
+                            lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
+                        }
+                        models.SubmitChanges();
+                        ///2.回沖繳款餘額
+                        ///
+                        var original = item.SourceContract;
+                        var totalPaid = original.TotalPaidAmount();
+                        if (totalPaid > 0)
+                        {
+                            int refund;
+                            int returnAmt = original.CalculateReturnAmount(totalPaid, out int processingFee);
+
+                            refund = returnAmt
+                                - (item.ProcessingFee ?? 0);
+
+                            refund = Math.Max(refund, 0);
+                            var adjustment = returnAmt - refund;
+
+                            var dummyInvoice = models.GetTable<InvoiceItem>().Where(i => i.No == "--").FirstOrDefault();
+                            Payment balancedPayment = null;
+                            balancedPayment = new Payment
+                            {
+                                Status = (int)Naming.CourseContractStatus.已生效,
+                                ContractPayment = new ContractPayment { },
+                                PaymentTransaction = new PaymentTransaction
+                                {
+                                    BranchID = item.SourceContract.CourseContractExtension.BranchID
+                                },
+                                PaymentAudit = new Models.DataEntity.PaymentAudit { },
+                                PayoffAmount = -refund,
+                                PayoffDate = DateTime.Today,
+                                Remark = "終止退款",
+                                HandlerID = handler != null ? handler.UID : item.CourseContract.AgentID,
+                                PaymentType = "現金",
+                                TransactionType = (int)Naming.PaymentTransactionType.合約終止沖銷,
+                                AdjustmentAmount = adjustment != 0 ? adjustment : (int?)null,
+                            };
+                            balancedPayment.ContractPayment.ContractID = item.OriginalContract.Value;
+                            if (dummyInvoice != null)
+                                balancedPayment.InvoiceID = dummyInvoice.InvoiceID;
+                            models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
+
+                            if (models.GetTable<ContractTrustTrack>().Any(a => a.ContractID == item.OriginalContract))
+                            {
+                                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                                {
+                                    ContractID = item.OriginalContract.Value,
+                                    EventDate = balancedPayment.PayoffDate.Value,
+                                    TrustType = Naming.TrustType.S.ToString(),
+                                    ReturnAmount = returnAmt,
+                                });
+                            }
+                            models.SubmitChanges();
+
+                            if (refund > 0)
+                            {
+                                //Logger.Debug("RevisionID: " + item.RevisionID);
+                                //Logger.Debug("balance: " + balance);
+                                models.CreateAllowanceForContract(original, refund, handler);
+                                models.SubmitChanges();
+                            }
+                        }
+
+                        original.TerminateRegisterLesson(models);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogging.LoggerFactory.CreateLogger(typeof(TaskExtensionMethods))
+                        .LogError(ex, ex.Message);
+                }
+            });
+        }
+
+        public static void ProcessContractQuickTermination2022(this CourseContractRevision item, UserProfile handler = null)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                try
+                {
+                    using (var models = new ModelSource<UserProfile>())
+                    {
+                        item = models.GetTable<CourseContractRevision>()
+                            .Where(r => r.RevisionID == item.RevisionID).First();
+                        ///1.變更狀態
+                        ///
+                        item.SourceContract.Status = (int)Naming.CourseContractStatus.已終止;
+                        item.SourceContract.ValidTo = DateTime.Now;
+                        item.CourseContract.EffectiveDate = DateTime.Now;
+                        foreach (var lesson in item.SourceContract.RegisterLessonContract)
+                        {
+                            lesson.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
+                        }
+                        ///2.回沖繳款餘額
+                        ///
+                        var original = item.SourceContract;
+                        var totalPaid = original.TotalPaidAmount();
+                        if (totalPaid > 0)
+                        {
+                            int returnAmt = original.CalculateReturnAmount(totalPaid, out int processingFee);
+
+                            var dummyInvoice = models.GetTable<InvoiceItem>().Where(i => i.No == "--").FirstOrDefault();
+                            Payment balancedPayment = null;
+                            balancedPayment = new Payment
+                            {
+                                Status = (int)Naming.CourseContractStatus.已生效,
+                                ContractPayment = new ContractPayment { },
+                                PaymentTransaction = new PaymentTransaction
+                                {
+                                    BranchID = item.SourceContract.CourseContractExtension.BranchID
+                                },
+                                PaymentAudit = new Models.DataEntity.PaymentAudit { },
+                                PayoffAmount = -returnAmt,
+                                PayoffDate = DateTime.Today,
+                                Remark = "終止退款",
+                                HandlerID = handler != null ? handler.UID : item.CourseContract.AgentID,
+                                PaymentType = "現金",
+                                TransactionType = (int)Naming.PaymentTransactionType.合約終止沖銷,
+                                AdjustmentAmount = returnAmt,
+                            };
+                            balancedPayment.ContractPayment.ContractID = item.OriginalContract.Value;
+                            if (dummyInvoice != null)
+                                balancedPayment.InvoiceID = dummyInvoice.InvoiceID;
+                            models.GetTable<Payment>().InsertOnSubmit(balancedPayment);
+
+                            if (models.GetTable<ContractTrustTrack>().Any(a => a.ContractID == item.OriginalContract))
+                            {
+                                models.GetTable<ContractTrustTrack>().InsertOnSubmit(new ContractTrustTrack
+                                {
+                                    ContractID = item.OriginalContract.Value,
+                                    EventDate = balancedPayment.PayoffDate.Value,
+                                    TrustType = Naming.TrustType.S.ToString(),
+                                    ReturnAmount = returnAmt,
+                                });
+                            }
+
+                        }
+
+                        models.SubmitChanges();
+                        original.TerminateRegisterLesson(models);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogging.LoggerFactory.CreateLogger(typeof(TaskExtensionMethods))
+                        .LogError(ex, ex.Message);
+                }
+            });
+        }
+
+
+        public static void ProcessContractLessonExchange(this CourseContractRevision item, UserProfile handler = null)
+        {
+            ThreadPool.QueueUserWorkItem(t =>
+            {
+                try
+                {
+                    using (var models = new ModelSource<UserProfile>())
+                    {
+                        item = models.GetTable<CourseContractRevision>()
+                            .Where(r => r.RevisionID == item.RevisionID).First();
+
+                        var newItem = item.CourseContract;
+                        var original = item.SourceContract;
+
+                        void clearSubtotal(RegisterLesson lesson)
+                        {
+
+                            //models.ExecuteCommand(@"UPDATE RegisterLesson
+                            //    SET        Lessons = {0}
+                            //    FROM     RegisterLesson INNER JOIN
+                            //                   RegisterLessonSharing ON RegisterLesson.RegisterID = RegisterLessonSharing.RegisterID
+                            //    WHERE   (RegisterLessonSharing.ShareID = {1})", lesson.RemainedLessonCount(), lesson.RegisterID);
+
+                            models.ExecuteCommand(@"DELETE FROM RegisterLessonBooking
+                                FROM     RegisterLessonSharing INNER JOIN
+                                               RegisterLessonBooking ON RegisterLessonSharing.RegisterID = RegisterLessonBooking.RegisterID
+                                WHERE   (RegisterLessonSharing.ShareID = {0}) AND (RegisterLessonBooking.LessonID IS NULL)", lesson.RegisterID);
+                        }
+
+                        void resetSubtotal(RegisterLesson lesson, int lessons)
+                        {
+                            models.ExecuteCommand("update RegisterLesson set Lessons = {0} where RegisterID = {1}",
+                                    lessons, lesson.RegisterID);
+
+                            if (lesson.SharingReference.Any())
+                            {
+                                var bookingCount = models.GetTable<RegisterLessonBooking>()
+                                        .Where(b => b.RegisterID == lesson.RegisterID).Count();
+                                int bookingID = models.GetTable<RegisterLessonBooking>()
+                                        .Where(b => b.RegisterID == lesson.RegisterID)
+                                        .OrderByDescending(b => b.BookingID)
+                                        .FirstOrDefault()?.BookingID ?? 0;
+                                for (int i = bookingCount; i < lessons; i++)
+                                {
+                                    bookingID++;
+                                    models.ExecuteCommand("insert RegisterLessonBooking (BookingID,RegisterID) values ({0},{1})",
+                                            bookingID, lesson.RegisterID);
+                                }
+                            }
+                        }
+
+                        foreach (var exchangeItem in item.CourseContractLessonExchange)
+                        {
+                            RegisterLesson register = exchangeItem.RegisterLessonContract?.RegisterLesson;
+                            if (register != null)
+                            {
+                                int resetCount = register.Lessons + ((exchangeItem.TargetSubtotal ?? 0) - register.RemainedLessonCount());
+                                clearSubtotal(register);
+                                foreach(var l in register.RegisterLessonSharing.LessonRefernece.SharingReference
+                                    .Select(r => r.RegisterLesson).ToList())
+                                {
+                                    resetSubtotal(l, resetCount);
+                                }
+                            }
+                            else
+                            {
+                                var targetPrice = models.GetTable<LessonPriceType>()
+                                    .Where(p => p.PriceID == exchangeItem.TargetPriceID).FirstOrDefault();
+
+                                if (targetPrice != null)
+                                {
+                                    var sharingItems = original.CreateRegisterLesson(models, targetPrice, exchangeItem.TargetSubtotal ?? 0, "轉換");
+                                    register = sharingItems[0];
+                                }
+
+                                models.SubmitChanges();
+
+                            }
+
+                        }
+
+                        models.ExecuteCommand("delete CourseContractAction where ContractID = {0} and ActionID = {1}", original.ContractID, (int)CourseContractAction.ActionType.轉換課程堂數);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ApplicationLogging.LoggerFactory.CreateLogger(typeof(TaskExtensionMethods))
+                        .LogError(ex, ex.Message);
+                }
+            });
+        }
+
 
         public readonly static String C0401Outbound ;
         public readonly static String C0501Outbound ;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
     <RootNamespace>WebHome</RootNamespace>
     <AssemblyName>WebHome</AssemblyName>
@@ -16,12 +16,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.14" />
+    <PackageReference Include="netstandard-System.Data.Linq" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CommonLib.Core\CommonLib.Core.csproj" />
     <ProjectReference Include="..\CommonLib.Utility\CommonLib.Utility.csproj" />
-    <ProjectReference Include="..\DotNetLib\System.Data.Linq\System.Data.Linq.csproj" />
     <ProjectReference Include="..\WebHome.Core\WebHome.Core.csproj" />
     <ProjectReference Include="..\WebHome.MainActivity.View\WebHome.MainActivity.View.csproj" />
   </ItemGroup>

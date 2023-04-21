@@ -27,6 +27,7 @@ using WebHome.Security.Authorization;
 using WebHome.Properties;
 using System.Data;
 using Microsoft.Extensions.Logging;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace WebHome.Controllers
 {
@@ -326,11 +327,23 @@ namespace WebHome.Controllers
             return View("~/Views/Learner/Module/AssignFitnessAdvisor.ascx", item);
         }
 
-        public ActionResult CommitAdvisorAssignment(int uid, int? CoachID)
+        public ActionResult CommitAdvisorAssignment(LearnerQueryViewModel viewModel)
         {
-            if (!CoachID.HasValue)
+            ViewBag.ViewModel = viewModel;
+
+            if(viewModel.KeyID!=null)
+            {
+                viewModel.UID = viewModel.DecryptKeyValue();
+            }
+
+            if (!viewModel.CoachID.HasValue)
             {
                 ModelState.AddModelError("CoachID", "請選擇體能顧問");
+            }
+
+            if (!viewModel.UID.HasValue)
+            {
+                ModelState.AddModelError("UID", "請選擇學員");
             }
 
             if (!ModelState.IsValid)
@@ -339,14 +352,25 @@ namespace WebHome.Controllers
                 return View("~/Views/Shared/ReportInputError.ascx");
             }
 
-            if (!models.GetTable<LearnerFitnessAdvisor>().Any(f => f.UID == uid && f.CoachID == CoachID))
+            if (viewModel.DataOperation == Naming.DataOperationMode.Delete)
             {
-                models.GetTable<LearnerFitnessAdvisor>().InsertOnSubmit(new LearnerFitnessAdvisor
+                models.DeleteAny<LearnerFitnessAdvisor>(a => a.UID == viewModel.UID && a.CoachID == viewModel.CoachID);
+                models.ExecuteCommand(@"DELETE  LearnerCoachProperty
+                                                    WHERE   (CoachID = {0}) AND (UID = {1}) AND (PropertyID = {2})",
+                                                   viewModel.CoachID, viewModel.UID,
+                                                   (int)LearnerCoachProperty.PropertyType.PrimaryCoach);
+            }
+            else
+            {
+                if (!models.GetTable<LearnerFitnessAdvisor>().Any(f => f.UID == viewModel.UID && f.CoachID == viewModel.CoachID))
                 {
-                    UID = uid,
-                    CoachID = CoachID.Value
-                });
-                models.SubmitChanges();
+                    models.GetTable<LearnerFitnessAdvisor>().InsertOnSubmit(new LearnerFitnessAdvisor
+                    {
+                        UID = viewModel.UID.Value,
+                        CoachID = viewModel.CoachID.Value
+                    });
+                    models.SubmitChanges();
+                }
             }
 
             return Json(new { result = true });

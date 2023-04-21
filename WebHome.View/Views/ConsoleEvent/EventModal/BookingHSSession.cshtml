@@ -1,0 +1,251 @@
+
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@{
+
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    CalendarEventViewModel _viewModel;
+    String _dialogID = $"booking{DateTime.Now.Ticks}";
+    UserProfile _profile;
+    IQueryable<CourseContract> _contracts;
+    IQueryable<EnterpriseCourseContract> _enterpriseContract;
+
+    BookingLessonPageModel _pageModel = (BookingLessonPageModel)ViewBag.PageModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
+    _model = (UserProfile)this.Model;
+    _viewModel = (CalendarEventViewModel)ViewBag.ViewModel;
+    _profile = await Context.GetUserAsync();
+    _contracts = models.GetTable<CourseContractMember>()
+        .Where(m => m.UID == _model.UID)
+            .Join(models.GetTable<CourseContract>(), m => m.ContractID, t => t.ContractID, (m, t) => t);
+    _enterpriseContract = models.GetTable<EnterpriseCourseMember>()
+        .Where(m => m.UID == _model.UID)
+            .Join(models.GetTable<EnterpriseCourseContract>()
+                .Where(c => c.Expiration >= DateTime.Today)
+                , m => m.ContractID, t => t.ContractID, (m, t) => t);
+
+    bool _currentDisabled = false;
+}
+@{
+    var enterpriseLessons = _enterpriseContract.Join(models.GetTable<RegisterLessonEnterprise>(), t => t.ContractID, r => r.ContractID, (t, r) => r);
+    var enterpriseTrial = enterpriseLessons.Where(r => r.EnterpriseCourseContent.EnterpriseLessonType.Status == (int)Naming.LessonPriceStatus.體驗課程);
+    var enterpriseTrialItem = enterpriseTrial.FirstOrDefault();
+}
+
+@{
+    var contractLessons = _contracts.Join(models.GetTable<RegisterLessonContract>(), c => c.ContractID, r => r.ContractID, (c, r) => r)
+                            .Select(r => r.RegisterLesson)
+                            .Where(r => r.UID == _model.UID)
+                            .Where(r => r.Attended != (int)Naming.LessonStatus.課程結束);
+
+    List<KeyValuePair<int, int>> installmentID = new List<KeyValuePair<int, int>>();
+
+    var lessons = models.GetTable<RegisterLesson>()
+                    .Where(r => r.UID == _model.UID)
+                    .Where(r => r.Attended != (int)Naming.LessonStatus.課程結束);
+
+}
+@{
+    _currentDisabled = _profile.IsHealthCare() == false;
+}
+@{
+    LessonPriceType price = null;
+    var singleChargeItems = models.GetTable<LessonPriceType>()
+                                    .Where(p => p.Status == (int)Naming.LessonPriceStatus.運動恢復課程)
+                                    .Where(p => p.LessonPriceProperty.Any(t => t.PropertyID == (int)Naming.LessonPriceFeature.單堂現場付款));
+    if (_model.IsRegular)
+    {
+        price = singleChargeItems.Where(p => p.LessonPriceProperty.Any(t => t.PropertyID == (int)Naming.LessonPriceFeature.舊會員續約))
+                    .FirstOrDefault();
+    }
+
+    if (price == null)
+    {
+        price = singleChargeItems.FirstOrDefault();
+    }
+
+    if (price != null)
+    {
+        <li class="list-group-item">
+            <div class="media">
+                <div class="pull-left">
+                    <div class="controls">
+                        <label class="fancy-checkbox">
+                            <input type="checkbox" name="RegisterID" value="" disabled="@(_currentDisabled)" data-version="@((int)Naming.ContractVersion.Ver2022)"
+                               onclick="selectBooking(this, '@(price.Status)',@(price.PriceID));">
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <a class="m-r-10">
+                            《單堂購買》S.R Session(@(price.DurationInMinutes)分鐘)
+                        </a>
+                        <small class="float-right text-muted"><time>NT @(price.ListPrice)</time></small>
+                        <div class="msg">
+                            <span class="float-right">
+                                <span class="badge bg-blue"><i class="zmdi zmdi-money"></i> 現場付款</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    }
+}
+@foreach (var item in contractLessons
+    .Where(r => r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.營養課程
+        || r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.運動恢復課程
+        || r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.運動防護課程)
+    .OrderBy(r => r.RegisterLessonContract.ContractID))
+{
+    var contract = item.RegisterLessonContract.CourseContract;
+    if (contract != null)
+    {
+        if (contract.Status == (int)Naming.CourseContractStatus.已終止)
+        {
+            continue;
+        }
+
+        var remainedCount = item.RemainedLessonCount();
+        if (remainedCount <= 0)
+        {
+            continue;
+        }
+
+        var validContract = contract.Expiration.Value >= DateTime.Today;
+        @*var bookingCount = contract.AttendedLessonCount();*@
+        var totalPaid = contract.TotalPaidAmount();
+        @*var payoffStatus = contract.TotalCost / contract.Lessons * (bookingCount + 1) <= totalPaid;*@
+        var payoffStatus = totalPaid > 0;
+        bool revisionStatus = contract.RevisionList.Any(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效);
+        bool bookable = validContract && payoffStatus && !revisionStatus && !_currentDisabled;
+        if (bookable)
+        {
+            if (contract.InstallmentID.HasValue)
+            {
+                if (installmentID.Any(v => v.Key == contract.InstallmentID && v.Value == item.LessonPriceType.Status))
+                {
+                    bookable = false;
+                }
+                else
+                {
+                    installmentID.Add(new KeyValuePair<int, int>(contract.InstallmentID.Value, item.LessonPriceType.Status.Value));
+                }
+            }
+        }
+
+        @*if(bookable)
+        {
+            _pageModel.HasChoice = true;
+        }*@
+        <li class="list-group-item">
+            <div class="media">
+                <div class="pull-left">
+                    <div class="controls">
+                        <label class="fancy-checkbox">
+                            <input type="checkbox" id="PTSession@(item.RegisterID)" disabled="@(!(bookable && !_currentDisabled))"  name="RegisterID" value="@(item.RegisterID)" onclick="selectBooking(this, '@((int)Naming.LessonPriceStatus.一般課程)');" data-version="@(contract.CourseContractExtension.Version)" data-location="@(item.LessonPriceType.ForDietary ? "option.virtual-store" : "")"/>
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <a class="m-r-10">
+                            @(contract.CourseContractType.TypeName)
+                        </a>
+                        <small class="float-right text-muted"><time>@(remainedCount)/@(item.Lessons)</time></small>
+                        <div class="msg">
+                            @switch(item.LessonPriceType.Status)
+                            {
+                                case (int)Naming.LessonPriceStatus.營養課程:
+                                    <text>@(item.RegisterLessonContract.Title)S.D Session</text>
+                                    break;
+                                case (int)Naming.LessonPriceStatus.運動恢復課程:
+                                    <text>@(item.RegisterLessonContract.Title)S.R Session</text>
+                                    break;
+                                case (int)Naming.LessonPriceStatus.運動防護課程:
+                                    <text>@(item.RegisterLessonContract.Title)A.T Session</text>
+                                    break;
+                            }
+                            (@(item.LessonPriceType.DurationInMinutes)分鐘)
+                            <span class="float-right">
+                                @{
+                                    await Html.RenderPartialAsync("~/Views/Common/BranchStoreName.cshtml", item.LessonPriceType.BranchStore ?? contract.CourseContractExtension.BranchStore);
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <p class="msg col-blue">
+                        <i class="zmdi zmdi-alarm-check"></i> 合約迄日：@($"{contract.Expiration:yyyy/MM/dd}")
+                    </p>
+                    @if (!validContract)
+                    {
+                        <p class="msg col-red"><i class="zmdi zmdi-info-outline"></i>合約尚未生效或已過期</p>
+                    }
+                    @if (!payoffStatus)
+                    {
+                        <p class="msg col-red"><i class="zmdi zmdi-info-outline"></i>合約繳款餘額不足（未繳清：@(String.Format("{0:##,###,###,###}", contract.TotalCost - totalPaid))元）</p>
+                    }
+                    @if (revisionStatus)
+                    {
+                        <p class="msg col-red"><i class="zmdi zmdi-info-outline"></i>合約服務申請進行中</p>
+                    }
+                </div>
+            </div>
+        </li>
+    }
+}
+
+
+@foreach (var item in lessons
+   .Where(r => r.LessonPriceType.Status == (int)Naming.LessonPriceStatus.點數兌換課程)
+   .Where(r => models.GetTable<LessonPriceProperty>()
+       .Where(p => p.PropertyID == (int)Naming.LessonPriceFeature.營養課程
+            || p.PropertyID == (int)Naming.LessonPriceFeature.運動恢復課程
+            || p.PropertyID == (int)Naming.LessonPriceFeature.運動防護課程)
+       .Any(p => p.PriceID == r.ClassLevel)))
+{
+    var remainedCount = item.RemainedLessonCount();
+    bool bookable = remainedCount > 0;
+    if (bookable)
+    {
+        _pageModel.HasChoice = true && !_currentDisabled;
+    }
+    <li class="list-group-item">
+        <div class="media">
+            <div class="pull-left">
+                <div class="controls">
+                    <label class="fancy-checkbox">
+                        <input type="checkbox" id="Other@(item.RegisterID)" name="RegisterID" disabled="@(!bookable || _currentDisabled)" value="@(bookable ? item.RegisterID : -1)" onclick="selectBooking(this, '@((int)Naming.LessonPriceStatus.點數兌換課程)');">
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="media-body">
+                <div class="media-heading">
+                    <a class="m-r-10">@(item.LessonPriceType.SimpleDescription)</a>
+                    <small class="float-right text-muted"><time>@(remainedCount)/@(item.Lessons)</time></small>
+                </div>
+                @if(item.Expiration.HasValue)
+                {
+                    <p class="msg col-blue">
+                        <i class="zmdi zmdi-alarm-check"></i> 課程迄日：@($"{item.Expiration:yyyy/MM/dd}")
+                    </p>
+                }
+            </div>
+        </div>
+    </li>
+}

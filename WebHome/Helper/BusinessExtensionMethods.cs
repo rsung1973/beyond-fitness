@@ -21,8 +21,8 @@ namespace WebHome.Helper
 {
     public static class BusinessExtensionMethods
     {
-        public static void AttendLesson(this GenericManager<BFDataContext> models, LessonTime item,UserProfile actor, Naming.QuestionnaireGroup? groupID = null)
-                    
+        public static void AttendLesson(this GenericManager<BFDataContext> models, LessonTime item, UserProfile actor, Naming.QuestionnaireGroup? groupID = null)
+
         {
             if (!item.ContractTrustTrack.Any(t => t.SettlementID.HasValue))
             {
@@ -36,7 +36,7 @@ namespace WebHome.Helper
 
                 models.SubmitChanges();
 
-                if(item.IsPTSession())
+                if (item.IsPTSession())
                 {
                     foreach (var r in item.GroupingLesson.RegisterLesson)
                     {
@@ -77,7 +77,7 @@ namespace WebHome.Helper
             var contract = lesson.RegisterLessonContract?.CourseContract;
             if (contract != null && contract.RemainedLessonCount() == 0)
             {
-                foreach(var r in contract.RegisterLessonContract)
+                foreach (var r in contract.RegisterLessonContract)
                 {
                     r.RegisterLesson.Attended = (int)Naming.LessonStatus.課程結束;
                 }
@@ -159,7 +159,7 @@ namespace WebHome.Helper
         //}
 
         public static QuestionnaireRequest AssertQuestionnaire(this int learnerID, GenericManager<BFDataContext> models, UserProfile creator, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017, QuestionnaireRequest.PartIDEnum? partID = null)
-            
+
         {
             lock (typeof(BusinessExtensionMethods))
             {
@@ -183,8 +183,8 @@ namespace WebHome.Helper
             }
         }
 
-        public static QuestionnaireRequest CheckCurrentQuestionnaireRequest(this int learnerID, GenericManager<BFDataContext> models,UserProfile actor, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
-            
+        public static QuestionnaireRequest CheckCurrentQuestionnaireRequest(this int learnerID, GenericManager<BFDataContext> models, UserProfile actor, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
+
         {
             IQueryable<LessonAttendance> attendance = models.GetTable<LessonAttendance>();
 
@@ -240,7 +240,7 @@ namespace WebHome.Helper
 
 
         public static bool CheckCurrentQuestionnaireRequest(this GenericManager<BFDataContext> models, RegisterLesson item)
-            
+
         {
             if (item.LessonPriceType.ExcludeQuestionnaire.HasValue)
                 return false;
@@ -290,7 +290,7 @@ namespace WebHome.Helper
         }
 
         public static bool CouldMarkToAttendLesson(this GenericManager<BFDataContext> models, LessonTime item)
-            
+
         {
             if (models.IsAttendanceOverdue(item))
                 return false;
@@ -301,7 +301,7 @@ namespace WebHome.Helper
         }
 
         public static bool CheckToAttendLesson(this LessonTime lessonItem, GenericManager<BFDataContext> models)
-            
+
         {
 
             if (lessonItem.LessonAttendance != null)
@@ -309,7 +309,7 @@ namespace WebHome.Helper
                 return false;
             }
 
-            if(!(lessonItem.ClassTime < DateTime.Today.AddDays(1)))
+            if (!(lessonItem.ClassTime < DateTime.Today.AddDays(1)))
             {
                 return false;
             }
@@ -319,17 +319,17 @@ namespace WebHome.Helper
                 return false;
             }
 
-            if(lessonItem.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練)
+            if (lessonItem.RegisterLesson.LessonPriceType.Status == (int)Naming.LessonPriceStatus.自主訓練)
             {
                 return false;
             }
 
             bool result = true;
-            if(lessonItem.IsCoachPISession())
+            if (lessonItem.IsCoachPISession())
             {
                 result = !models.GetEffectiveQuestionnaireRequest(lessonItem.RegisterLesson.UserProfile, Naming.QuestionnaireGroup.身體心靈密碼).Any();
             }
-            else 
+            else
             {
                 result = !lessonItem.GetEffectiveQuestionnaireRequest(models, Naming.QuestionnaireGroup.身體心靈密碼).Any();
             }
@@ -339,7 +339,7 @@ namespace WebHome.Helper
 
 
         public static bool IsAttendanceOverdue(this GenericManager<BFDataContext> models, LessonTime item)
-            
+
         {
             var due = models.GetTable<LessonAttendanceDueDate>().OrderByDescending(d => d.DueDate).FirstOrDefault();
             return due != null && item.ClassTime < due.DueDate;
@@ -390,9 +390,7 @@ namespace WebHome.Helper
 
             items = items.Concat(dataItems
                 .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.正常
-                    || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.已刪除
-                    || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.點數兌換課程)
+                .Where(t => LessonExtensionMethods.PTScope.Contains(t.RegisterLesson.LessonPriceType.Status))
                 .GroupBy(t => t.ClassTime.Value.Date)
                 .Select(g => new CalendarEvent
                 {
@@ -510,9 +508,7 @@ namespace WebHome.Helper
             dataItems = sourceItems.Where(l => l.RegisterLesson.RegisterLessonEnterprise == null);
             items = items.Concat(dataItems
                 .Where(t => !t.TrainingBySelf.HasValue || t.TrainingBySelf == 0)
-                .Where(t => t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.正常
-                    || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.已刪除
-                    || t.RegisterLesson.LessonPriceType.Status == (int)Naming.DocumentLevelDefinition.點數兌換課程)
+                .Where(t => LessonExtensionMethods.PTScope.Contains(t.RegisterLesson.LessonPriceType.Status))
                 .Select(g => new CalendarEvent
                 {
                     id = g.LessonID.ToString(),
@@ -638,7 +634,7 @@ namespace WebHome.Helper
 
 
         public static IQueryable<UserProfile> CheckOverlappingBooking(this GenericManager<BFDataContext> models, LessonTime intendedBooking, LessonTime originalBooking)
-                    
+
         {
             //List<int> checkHour = new List<int>();
             //DateTime startTime = intendedBooking.ClassTime.Value.AddMinutes(-intendedBooking.ClassTime.Value.Minute);
@@ -669,7 +665,7 @@ namespace WebHome.Helper
         }
 
         public static UserProfile CreateLearner(this GenericManager<BFDataContext> models, LearnerViewModel viewModel)
-                    
+
         {
             String memberCode;
 
@@ -728,7 +724,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<QuestionnaireRequest> GetQuestionnaireRequest(this GenericManager<BFDataContext> models, UserProfile profile, Naming.QuestionnaireGroup groupID = Naming.QuestionnaireGroup.滿意度問卷調查_2017)
-            
+
         {
             return models.GetTable<QuestionnaireRequest>().Where(q => q.UID == profile.UID)
                 .Where(q => q.PDQTask.Count == 0)
@@ -737,13 +733,13 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest(this GenericManager<BFDataContext> models, UserProfile profile, Naming.QuestionnaireGroup? groupID = null)
-            
+
         {
             return models.GetEffectiveQuestionnaireRequest(profile.UID, groupID);
         }
 
         public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest(this GenericManager<BFDataContext> models, int uid, Naming.QuestionnaireGroup? groupID = null)
-            
+
         {
             var items = models.GetTable<QuestionnaireRequest>()
                 .Where(q => q.UID == uid)
@@ -757,7 +753,7 @@ namespace WebHome.Helper
         }
 
         public static QuestionnaireRequest GetLastCompleteQuestionnaireRequest(this GenericManager<BFDataContext> models, int uid, Naming.QuestionnaireGroup groupID)
-            
+
         {
             return models.GetTable<QuestionnaireRequest>()
                 .Where(q => q.UID == uid)
@@ -769,7 +765,7 @@ namespace WebHome.Helper
 
 
         public static IQueryable<QuestionnaireRequest> GetEffectiveQuestionnaireRequest(this LessonTime item, GenericManager<BFDataContext> models, Naming.QuestionnaireGroup group)
-            
+
         {
             return models.GetTable<RegisterLesson>().Where(r => r.RegisterGroupID == item.GroupID)
                 .Join(models.GetTable<QuestionnaireRequest>(), r => r.UID, q => q.UID, (r, q) => q)
@@ -780,33 +776,31 @@ namespace WebHome.Helper
 
 
         public static int? BonusPoint(this UserProfile item, GenericManager<BFDataContext> models)
-            
         {
             return models.GetTable<PDQTaskBonus>()
+                .Where(b => b.BonusPoint > 0)
                 .Where(t => t.PDQTask.UID == item.UID)
-                .Where(t => !t.BonusExchange.Any())
-                .Sum(x => x.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint);
+                .Sum(x => x.BonusPoint);
         }
 
         public static int? AwardedPoint(this UserProfile item, GenericManager<BFDataContext> models)
-            
         {
             return models.GetTable<PDQTaskBonus>()
+                .Where(b => b.BonusPoint > 0)
                 .Where(t => t.PDQTask.UID == item.UID)
-                .Sum(x => x.PDQTask.PDQQuestion.PDQQuestionExtension.BonusPoint);
+                .Sum(x => x.BonusPoint);
         }
 
 
         public static IEnumerable<PDQTaskBonus> BonusPointList(this UserProfile item, GenericManager<BFDataContext> models)
-            
         {
             return models.GetTable<PDQTaskBonus>()
-                .Where(t => t.PDQTask.UID == item.UID)
-                .Where(t => !t.BonusExchange.Any());
+                .Where(b => b.BonusPoint > 0)
+                .Where(t => t.PDQTask.UID == item.UID);
         }
 
         public static IQueryable<LessonTime> GetLessonAttendance(this GenericManager<BFDataContext> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month, int? branchID)
-            
+
         {
             DateTime? queryDateTo = dateTo;
 
@@ -852,7 +846,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<LessonTime> GetPISessionAttendance(this GenericManager<BFDataContext> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month, int? branchID)
-            
+
         {
             DateTime? queryDateTo = dateTo;
 
@@ -892,7 +886,7 @@ namespace WebHome.Helper
         }
 
         public static int CalcAchievement(this GenericManager<BFDataContext> models, IEnumerable<LessonTime> items)
-            
+
         {
             var lessons = items.FullAchievementLesson()
                 .Select(l => l.GroupingLesson)
@@ -1006,11 +1000,11 @@ namespace WebHome.Helper
 
 
         public static int CalcAchievement(this GenericManager<BFDataContext> models, IEnumerable<V_Tuition> items, out int shares)
-            
+
         {
             shares = 0;
 
-            var fullAchievement = items.FullAchievementLesson().CalcTuition(models); 
+            var fullAchievement = items.FullAchievementLesson().CalcTuition(models);
             var halfAchievement = items.HalfAchievementLesson().CalcTuition(models) / 2;
 
             shares = items.FullAchievementLesson().CalcTuitionShare(models)
@@ -1058,7 +1052,7 @@ namespace WebHome.Helper
         //}
 
         public static int CalcTuition(this IQueryable<V_Tuition> items, GenericManager<BFDataContext> models)
-            
+
         {
 
             var lessons = items.Where(r => !r.EnterpriseRegisterID.HasValue);
@@ -1074,7 +1068,7 @@ namespace WebHome.Helper
         }
 
         public static int CalcTuition(this IEnumerable<V_Tuition> items, GenericManager<BFDataContext> models)
-            
+
         {
 
             var lessons = items.Where(r => !r.EnterpriseRegisterID.HasValue);
@@ -1130,7 +1124,7 @@ namespace WebHome.Helper
         //}
 
         public static int CalcTuitionShare(this IQueryable<V_Tuition> items, GenericManager<BFDataContext> models)
-            
+
         {
             int shares = 0;
 
@@ -1150,7 +1144,7 @@ namespace WebHome.Helper
         }
 
         public static int CalcTuitionShare(this IEnumerable<V_Tuition> items, GenericManager<BFDataContext> models)
-            
+
         {
             int shares = 0;
 
@@ -1171,8 +1165,8 @@ namespace WebHome.Helper
 
 
 
-        public static IQueryable<TuitionAchievement> GetTuitionAchievement(this GenericManager<BFDataContext> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month,bool filterByEffective = true)
-            
+        public static IQueryable<TuitionAchievement> GetTuitionAchievement(this GenericManager<BFDataContext> models, int? coachID, DateTime? dateFrom, ref DateTime? dateTo, int? month, bool filterByEffective = true)
+
         {
             IQueryable<TuitionAchievement> items = models.GetTable<TuitionAchievement>();
 
@@ -1245,7 +1239,7 @@ namespace WebHome.Helper
         }
 
         public static void CheckProfessionalLevel2020(this GenericManager<BFDataContext> models, ServingCoach item)
-            
+
         {
             if (!item.LevelID.HasValue || item.ProfessionalLevel.ProfessionalLevelReview == null)
                 return;
@@ -1273,10 +1267,14 @@ namespace WebHome.Helper
 
             var attendanceCount = (indicators.Sum(i => i.ActualCompleteLessonCount) ?? 0)
                                 + (indicators.Sum(i => i.ActualCompleteTSCount) ?? 0)
+                                + (indicators.Sum(i => i.STCount) ?? 0)
+                                + (indicators.Sum(i => i.SDCount) ?? 0)
+                                + (indicators.Sum(i => i.SRCount) ?? 0)
                                 + (indicators.Sum(i => i.ActualCompletePICount) ?? 0) / 2;
 
             var tuition = models.GetTuitionAchievement(item.CoachID, quarterStart, ref quarterEnd, null);
-            var summary = tuition.Sum(t => t.ShareAmount) ?? 0;
+            var summary = (tuition.Sum(t => t.ShareAmount) ?? 0)
+                            - (tuition.Sum(t => t.VoidShare) ?? 0);
             bool qualifiedCert = item.CoachCertificate.Count(c => c.Expiration >= quarterStart) >= 2;
 
             CoachRating ratingItem = new CoachRating
@@ -1375,6 +1373,167 @@ namespace WebHome.Helper
 
         }
 
+        public static void CheckProfessionalLevel2023(this GenericManager<BFDataContext> models, ServingCoach item)
+        {
+            if (!item.LevelID.HasValue || item.ProfessionalLevel.ProfessionalLevelReview == null)
+                return;
+
+            DateTime? quarterEnd = new DateTime(DateTime.Today.Year, (DateTime.Today.Month - 1) / 3 * 3 + 1, 1);
+            DateTime quarterStart = quarterEnd.Value.AddMonths(-3);
+
+            if (models.GetTable<CoachRating>().Any(g => g.CoachID == item.CoachID && g.RatingDate >= quarterEnd))
+                return;
+
+            var indicators = models.GetTable<MonthlyIndicator>().Where(i => i.StartDate >= quarterStart && i.StartDate < quarterEnd)
+                                .Join(models.GetTable<MonthlyCoachRevenueIndicator>().Where(c => c.CoachID == item.CoachID),
+                                    i => i.PeriodID, c => c.PeriodID, (i, c) => c);
+
+            var indicator = indicators.OrderByDescending(i => i.PeriodID)
+                                .FirstOrDefault();
+
+            var attendanceCount = (indicators.Sum(i => i.ActualCompleteLessonCount) ?? 0)
+                                + (indicators.Sum(i => i.ActualCompleteTSCount) ?? 0)
+                                + (indicators.Sum(i => i.STCount) ?? 0)
+                                + (indicators.Sum(i => i.SDCount) ?? 0)
+                                + (indicators.Sum(i => i.SRCount) ?? 0)
+                                + (indicators.Sum(i => i.ActualCompletePICount) ?? 0) / 2;
+
+            var tuition = models.GetTuitionAchievement(item.CoachID, quarterStart, ref quarterEnd, null);
+            var summary = (tuition.Sum(t => t.ShareAmount) ?? 0)
+                            - (tuition.Sum(t => t.VoidShare) ?? 0);
+            var certCount = item.CoachCertificate.Count(c => c.Expiration >= quarterStart);
+
+            CoachRating ratingItem = new CoachRating
+            {
+                AttendanceCount = attendanceCount,
+                CoachID = item.CoachID,
+                RatingDate = DateTime.Now,
+                TuitionSummary = summary,
+                LevelID = item.LevelID.Value,
+            };
+            item.CoachRating.Add(ratingItem);
+
+            var review = item.ProfessionalLevel.ProfessionalLevelReview;
+
+            if(indicator == null
+                || indicator.AcademicGrades.HasValue == false
+                || indicator.TechnicalGrades.HasValue == false)
+            {
+                ratingItem.LevelID = item.LevelID.Value;
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_1)
+            {
+                if (attendanceCount >= review.PromotionAttendanceCount
+                        && summary >= review.PromotionAchievement
+                        && indicator?.AcademicGrades >= review.PromotionAcademicGrades
+                        && indicator?.TechnicalGrades >= review.PromotionTechnicalGrades)
+                {
+                    ratingItem.LevelID = review.PromotionID.Value;
+                }
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_2)
+            {
+                if (attendanceCount >= review.PromotionAttendanceCount 
+                    && summary >= review.PromotionAchievement
+                    && certCount >= review.PromotionCertificateCount
+                    && indicator?.AcademicGrades >= review.PromotionAcademicGrades
+                    && indicator?.TechnicalGrades >= review.PromotionTechnicalGrades)
+                {
+                    ratingItem.LevelID = review.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= review.NormalAttendanceCount 
+                            && summary >= review.NormalAchievement
+                            && certCount >= review.NormalCertificateCount
+                            && indicator?.AcademicGrades >= review.NormalAcademicGrades))
+                {
+                    ratingItem.LevelID = review.DemotionID.Value;
+                }
+
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_6)
+            {
+                if (!(attendanceCount >= review.NormalAttendanceCount 
+                        && summary >= review.NormalAchievement
+                        && certCount >= review.NormalCertificateCount
+                        && indicator?.AcademicGrades >= review.NormalAcademicGrades))
+                {
+                    ratingItem.LevelID = review.DemotionID.Value;
+                }
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_5)
+            {
+                if (attendanceCount >= review.PromotionAttendanceCount 
+                    && summary >= review.PromotionAchievement
+                    && certCount >= review.PromotionCertificateCount
+                    && indicator?.AcademicGrades >= review.PromotionAcademicGrades
+                    && indicator?.TechnicalGrades >= review.PromotionTechnicalGrades)
+                {
+                    ratingItem.LevelID = review.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= review.NormalAttendanceCount 
+                            && summary >= review.NormalAchievement
+                            && certCount >= review.NormalCertificateCount
+                            && indicator?.AcademicGrades >= review.NormalAcademicGrades
+                            && indicator?.TechnicalGrades >= review.NormalTechnicalGrades))
+                {
+                    ratingItem.LevelID = review.DemotionID.Value;
+                }
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_4)
+            {
+                if (attendanceCount >= review.PromotionAttendanceCount 
+                    && summary >= review.PromotionAchievement
+                    && certCount >= review.PromotionCertificateCount
+                    && indicator?.AcademicGrades >= review.PromotionAcademicGrades
+                    && indicator?.TechnicalGrades >= review.PromotionTechnicalGrades)
+                {
+                    ratingItem.LevelID = review.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= review.NormalAttendanceCount 
+                            && summary >= review.NormalAchievement
+                            && certCount >= review.NormalCertificateCount
+                            && indicator?.AcademicGrades >= review.NormalAcademicGrades
+                            && indicator?.TechnicalGrades >= review.NormalTechnicalGrades))
+                {
+                    ratingItem.LevelID = review.DemotionID.Value;
+                }
+            }
+            else if (review.CheckLevel == (int)Naming.ProfessionalLevelCheck.PT_3)
+            {
+                if (attendanceCount >= review.PromotionAttendanceCount 
+                    && summary >= review.PromotionAchievement
+                    && certCount >= review.PromotionCertificateCount
+                    && indicator?.AcademicGrades >= review.PromotionAcademicGrades
+                    && indicator?.TechnicalGrades >= review.PromotionTechnicalGrades)
+                {
+                    ratingItem.LevelID = review.PromotionID.Value;
+                }
+                else if (!(attendanceCount >= review.NormalAttendanceCount 
+                            && summary >= review.NormalAchievement
+                            && certCount >= review.NormalCertificateCount
+                            && indicator?.AcademicGrades >= review.NormalAcademicGrades
+                            && indicator?.TechnicalGrades >= review.NormalTechnicalGrades))
+                {
+                    ratingItem.LevelID = review.DemotionID.Value;
+                }
+            }
+            else
+            {
+                ratingItem.LevelID = item.LevelID.Value;
+            }
+
+            models.SubmitChanges();
+            models.ExecuteCommand("update ServingCoach set LevelID={0} where CoachID={1}", ratingItem.LevelID, item.CoachID);
+            models.ExecuteCommand(@"
+                UPDATE       LessonTimeSettlement
+                SET                ProfessionalLevelID = ServingCoach.LevelID, MarkedGradeIndex = ProfessionalLevel.GradeIndex
+                FROM            LessonTime INNER JOIN
+                                            LessonTimeSettlement ON LessonTime.LessonID = LessonTimeSettlement.LessonID INNER JOIN
+                                            ServingCoach ON LessonTime.AttendingCoach = ServingCoach.CoachID INNER JOIN
+                                            ProfessionalLevel ON ServingCoach.LevelID = ProfessionalLevel.LevelID
+                WHERE        (LessonTime.ClassTime >= {0}) AND (ServingCoach.CoachID = {1}) ", quarterEnd, item.CoachID);
+
+        }
 
         //public static void CheckProfessionalLevel2020(this GenericManager<BFDataContext> models, ServingCoach item)
         //    
@@ -1507,7 +1666,7 @@ namespace WebHome.Helper
 
 
         public static void CheckProfessionalLeve(this GenericManager<BFDataContext> models, ServingCoach item)
-            
+
         {
             if (!item.LevelID.HasValue || item.ProfessionalLevel.ProfessionalLevelReview == null)
                 return;
@@ -1767,7 +1926,7 @@ namespace WebHome.Helper
         //}
 
         public static IQueryable<CourseContract> PromptContractInEditing(this GenericManager<BFDataContext> models)
-            
+
         {
             return models.PromptContract()
                 .Where(c => c.Status == (int)Naming.CourseContractStatus.草稿);
@@ -1775,7 +1934,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> GetContractInEditingByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             if (agent.IsAssistant())
             {
@@ -1789,13 +1948,12 @@ namespace WebHome.Helper
         }
 
         public static UserProfile LoadInstance(this UserProfile profile, GenericManager<BFDataContext> models)
-            
         {
             return models.GetTable<UserProfile>().Where(u => u.UID == profile.UID).First();
         }
 
         public static IQueryable<CourseContract> PromptContract(this GenericManager<BFDataContext> models)
-            
+
         {
             var items = models.GetTable<CourseContract>()
                 .Where(c => c.CourseContractRevision == null);
@@ -1803,7 +1961,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> PromptApplyingContract(this GenericManager<BFDataContext> models)
-            
+
         {
             var items = models.PromptContract()
                 .Where(c => c.RegisterLessonContract.Count == 0);
@@ -1811,13 +1969,13 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> GetApplyingContractByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
-            return models.PromptApplyingContract().filterContractByAgent(models,agent);
+            return models.PromptApplyingContract().filterContractByAgent(models, agent);
         }
 
         public static IQueryable<CourseContractRevision> GetApplyingAmendmentByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status < (int)Naming.CourseContractStatus.已生效);
@@ -1826,13 +1984,13 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> FilterByBranchStoreManager(this GenericManager<BFDataContext> models, IQueryable<CourseContract> items, UserProfile agent)
-            
+
         {
             return models.FilterByBranchStoreManager(items, agent.UID);
         }
 
         public static IQueryable<CourseContract> FilterByBranchStoreManager(this GenericManager<BFDataContext> models, IQueryable<CourseContract> items, int? agentID)
-            
+
         {
             return items.Join(models.GetTable<CourseContractExtension>()
                     .Join(models.GetTable<BranchStore>()
@@ -1842,20 +2000,20 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> FilterByBranchStoreManager(this IQueryable<CourseContract> items, GenericManager<BFDataContext> models, int? agentID)
-            
+
         {
             return models.FilterByBranchStoreManager(items, agentID);
         }
 
-        public static IQueryable<CourseContract> FilterByLearnerMember(this IQueryable<CourseContract> items,GenericManager<BFDataContext> models,  int? memberID)
-            
+        public static IQueryable<CourseContract> FilterByLearnerMember(this IQueryable<CourseContract> items, GenericManager<BFDataContext> models, int? memberID)
+
         {
             return items.Join(models.GetTable<CourseContractMember>().Where(m => m.UID == memberID),
                 c => c.ContractID, p => p.ContractID, (c, p) => c);
         }
 
         public static IQueryable<CourseContract> GetContractToAllowByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.PromptContract()
                 .Where(c => c.Status == (int)Naming.CourseContractStatus.待確認);
@@ -1875,7 +2033,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContractRevision> GetAmendmentToAllowByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待確認);
@@ -1901,8 +2059,8 @@ namespace WebHome.Helper
             return items;
         }
 
-        public static IQueryable<CourseContract> PromptContractToSign(this GenericManager<BFDataContext> models,bool forInstallmentPlan = false)
-            
+        public static IQueryable<CourseContract> PromptContractToSign(this GenericManager<BFDataContext> models, bool forInstallmentPlan = false)
+
         {
             var items = models.PromptContract()
                 .Where(c => c.Status == (int)Naming.CourseContractStatus.待簽名);
@@ -1919,7 +2077,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> PromptContractServiceToSign(this GenericManager<BFDataContext> models)
-            
+
         {
             var items = models.GetTable<CourseContract>()
                 .Where(c => c.CourseContractRevision != null)
@@ -1930,14 +2088,14 @@ namespace WebHome.Helper
 
 
         public static IQueryable<CourseContract> GetContractToSignByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.PromptContractToSign().filterContractByAgent(models, agent);
             return items;
         }
 
         public static IQueryable<CourseContractRevision> GetAmendmentToSignByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待簽名);
@@ -1946,7 +2104,7 @@ namespace WebHome.Helper
         }
 
         private static IQueryable<CourseContract> filterContractByAgent(this IQueryable<CourseContract> items, GenericManager<BFDataContext> models, UserProfile agent)
-                        
+
         {
             if (agent.IsManager() || agent.IsViceManager())
             {
@@ -1969,7 +2127,7 @@ namespace WebHome.Helper
         }
 
         private static IQueryable<CourseContractRevision> filterAmendmentByAgent(this GenericManager<BFDataContext> models, UserProfile agent, IQueryable<CourseContractRevision> items)
-                        
+
         {
             if (agent.IsManager() || agent.IsViceManager())
             {
@@ -1993,7 +2151,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> PromptContractToConfirm(this GenericManager<BFDataContext> models)
-            
+
         {
             var items = models.PromptContract()
                 .Where(c => c.Status == (int)Naming.CourseContractStatus.待審核);
@@ -2002,7 +2160,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContract> GetContractToConfirmByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.PromptContractToConfirm();
             if (agent.IsManager())
@@ -2026,7 +2184,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<CourseContractRevision> GetAmendmentToConfirmByAgent(this GenericManager<BFDataContext> models, UserProfile agent)
-            
+
         {
             var items = models.GetTable<CourseContractRevision>()
                 .Where(c => c.CourseContract.Status == (int)Naming.CourseContractStatus.待審核);
@@ -2052,7 +2210,7 @@ namespace WebHome.Helper
             return items;
         }
 
-        public static Func<CourseContract, string> ContractViewUrl { get; set; } = item => 
+        public static Func<CourseContract, string> ContractViewUrl { get; set; } = item =>
             {
                 return $"{Startup.Properties["HostDomain"]}{VirtualPathUtility.ToAbsolute("~/CourseContract/ViewContract")}?pdf=1&contractID={item.ContractID}";
             };
@@ -2128,14 +2286,14 @@ namespace WebHome.Helper
 
 
         public static bool CheckLearnerDiscount(this GenericManager<BFDataContext> models, IEnumerable<int> uid)
-            
+
         {
             return models.GetTable<CourseContractMember>().Where(m => uid.Contains(m.UID))
                             .Any(m => m.CourseContract.Status >= (int)Naming.CourseContractStatus.已生效);
         }
 
         public static IQueryable<ServingCoach> GetServingCoachInSameStore(this UserProfile profile, GenericManager<BFDataContext> models, IQueryable<ServingCoach> items = null)
-            
+
         {
             if (items == null)
                 items = models.GetTable<ServingCoach>();
@@ -2147,7 +2305,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<PaymentAudit> GetPaymentToAuditByAgent(this GenericManager<BFDataContext> models, UserProfile profile)
-            
+
         {
             IQueryable<PaymentAudit> items;
             if (profile.IsAssistant() || profile.IsOfficer())
@@ -2171,7 +2329,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<VoidPayment> GetVoidPaymentToApproveByAgent(this GenericManager<BFDataContext> models, UserProfile profile)
-            
+
         {
             IQueryable<VoidPayment> items;
             if (profile.IsAssistant() || profile.IsOfficer())
@@ -2196,7 +2354,7 @@ namespace WebHome.Helper
         }
 
         public static IQueryable<VoidPayment> GetVoidPaymentToEditByAgent(this GenericManager<BFDataContext> models, UserProfile profile)
-            
+
         {
             IQueryable<VoidPayment> items;
             if (profile.IsAssistant() || profile.IsOfficer())
@@ -2216,8 +2374,8 @@ namespace WebHome.Helper
             return items;
         }
 
-        public static LessonPriceType CurrentTrialLessonPrice(this GenericManager<BFDataContext> models, bool isVirtual = false,int? priceID = null)
-            
+        public static LessonPriceType CurrentTrialLessonPrice(this GenericManager<BFDataContext> models, bool isVirtual = false, int? priceID = null)
+
         {
             IQueryable<LessonPriceType> items = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)Naming.DocumentLevelDefinition.體驗課程);
 
@@ -2234,11 +2392,11 @@ namespace WebHome.Helper
             return items.FirstOrDefault();
         }
 
-        public static LessonPriceType CurrentSessionPrice(this GenericManager<BFDataContext> models, Naming.LessonPriceStatus sessionStatus = Naming.LessonPriceStatus.自主訓練,int? priceID = null)
-            
+        public static LessonPriceType CurrentSessionPrice(this GenericManager<BFDataContext> models, Naming.LessonPriceStatus sessionStatus = Naming.LessonPriceStatus.自主訓練, int? priceID = null)
+
         {
             var items = models.GetTable<LessonPriceType>().Where(p => p.Status == (int)sessionStatus);
-            if(priceID.HasValue)
+            if (priceID.HasValue)
             {
                 items = items.Where(p => p.PriceID == priceID);
             }
@@ -2246,7 +2404,7 @@ namespace WebHome.Helper
         }
 
         public static void ExecuteSettlement(this GenericManager<BFDataContext> models, DateTime startDate, DateTime endExclusiveDate, DateTime? settlementDate = null)
-            
+
         {
             models.DataContext.DeleteRedundantTrack();
 
@@ -2265,6 +2423,13 @@ namespace WebHome.Helper
                     EndExclusiveDate = endExclusiveDate
                 };
                 models.GetTable<Settlement>().InsertOnSubmit(settlement);
+                models.SubmitChanges();
+
+                if (!models.GetTable<YearlySettlement>().Any(y => y.Year == startDate.Year))
+                {
+                    models.ExecuteCommand(@"INSERT INTO YearlySettlement (Year) VALUES ({0}) ", startDate.Year);
+                }
+                settlement.Year = startDate.Year;
                 models.SubmitChanges();
 
                 if (lastSettlementID.HasValue)
@@ -2384,23 +2549,49 @@ namespace WebHome.Helper
             }
         }
 
+        //public static IEnumerable<UserProfile> CheckOverlapedBooking(this GenericManager<BFDataContext> models, LessonTime timeItem, RegisterLesson lesson, LessonTime source = null)
+
+        //{
+        //    int durationHours = (timeItem.ClassTime.Value.Minute + timeItem.DurationInMinutes.Value + 59) / 60;
+        //    IQueryable<LessonTimeExpansion> items;
+        //    if (source == null)
+        //    {
+        //        items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+        //            && t.Hour >= timeItem.ClassTime.Value.Hour
+        //            && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours));
+        //    }
+        //    else
+        //    {
+        //        items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
+        //            && t.Hour >= timeItem.ClassTime.Value.Hour
+        //            && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours)
+        //            && t.LessonID != source.LessonID);
+        //    }
+
+        //    if (lesson.GroupingMemberCount > 1)
+        //    {
+        //        return items.Select(t => t.RegisterLesson)
+        //            .Join(models.GetTable<RegisterLesson>().Where(r => r.RegisterGroupID == lesson.RegisterGroupID),
+        //                t => t.UID, l => l.UID, (t, l) => l)
+        //            .Select(l => l.UserProfile);
+        //    }
+        //    else
+        //    {
+        //        return items.Select(t => t.RegisterLesson.UserProfile)
+        //            .Where(u => u.UID == lesson.UID);
+        //    }
+        //}
+
         public static IEnumerable<UserProfile> CheckOverlapedBooking(this GenericManager<BFDataContext> models, LessonTime timeItem, RegisterLesson lesson, LessonTime source = null)
-            
+
         {
-            int durationHours = (timeItem.ClassTime.Value.Minute + timeItem.DurationInMinutes.Value + 59) / 60;
-            IQueryable<LessonTimeExpansion> items;
-            if (source == null)
+            IQueryable<LessonTime> items = models.GetTable<LessonTime>()
+                .Where(l => (timeItem.ClassTime >= l.ClassTime && timeItem.ClassTime < l.ClassTime.Value.AddMinutes(l.DurationInMinutes.Value))
+                        || (l.ClassTime >= timeItem.ClassTime && l.ClassTime < timeItem.ClassTime.Value.AddMinutes(timeItem.DurationInMinutes.Value)));
+
+            if (source != null)
             {
-                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
-                    && t.Hour >= timeItem.ClassTime.Value.Hour
-                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours));
-            }
-            else
-            {
-                items = models.GetTable<LessonTimeExpansion>().Where(t => t.ClassDate == timeItem.ClassTime.Value.Date
-                    && t.Hour >= timeItem.ClassTime.Value.Hour
-                    && t.Hour < (timeItem.ClassTime.Value.Hour + durationHours)
-                    && t.LessonID != source.LessonID);
+                items = items.Where(t => t.LessonID != source.LessonID);
             }
 
             if (lesson.GroupingMemberCount > 1)
@@ -2484,10 +2675,14 @@ namespace WebHome.Helper
                                     WHERE        (SettlementDate = {0})", calcDate);
 
             var table = models.GetTable<ContractMonthlySummary>();
+            //var items = models.GetTable<CourseContract>()
+            //        .Where(c => c.CourseContractRevision == null)
+            //        .Where(c => c.EffectiveDate < calcDate)
+            //        .Where(c => c.Status >= (int)Naming.CourseContractStatus.已生效);
+            var actionItems = models.GetTable<CourseContractAction>()
+                                .Where(a => a.ActionID == (int)CourseContractAction.ActionType.盤點);
             var items = models.GetTable<CourseContract>()
-                    .Where(c => c.CourseContractRevision == null)
-                    .Where(c => c.EffectiveDate < calcDate)
-                    .Where(c => c.Status >= (int)Naming.CourseContractStatus.已生效);
+                            .Where(c => actionItems.Any(a => a.ContractID == c.ContractID));
 
             foreach (var c in items)
             {
@@ -2515,10 +2710,10 @@ namespace WebHome.Helper
                     }
 
                     item.TotalLessonCost = c.TotalAttendedCost(calcDate);
-                    if (c.CourseContractType.GroupingLessonDiscount != null)
-                    {
-                        item.TotalLessonCost = item.TotalLessonCost * c.CourseContractType.GroupingLessonDiscount.GroupingMemberCount * (c.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
-                    }
+                    //if (c.CourseContractType.GroupingLessonDiscount != null)
+                    //{
+                    //    item.TotalLessonCost = item.TotalLessonCost * c.CourseContractType.GroupingLessonDiscount.GroupingMemberCount * (c.CourseContractType.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
+                    //}
 
                     var allowanceItems = c.ContractPayment.Select(p => p.Payment)
                             //.Where(p => p.TransactionType == (int)Naming.PaymentTransactionType.體能顧問費
@@ -2579,8 +2774,8 @@ namespace WebHome.Helper
                     b => b.BranchID, c => c.BranchID, (b, c) => b);
         }
 
-        public static bool IsVirtualClassOccurrence(this GenericManager<BFDataContext> models,BranchStore store)
-            
+        public static bool IsVirtualClassOccurrence(this BranchStore store, GenericManager<BFDataContext> models)
+
         {
             return models.GetTable<ObjectiveLessonLocation>()
                 .Where(c => c.CatalogID == (int)ObjectiveLessonCatalog.CatalogDefinition.OnLine)

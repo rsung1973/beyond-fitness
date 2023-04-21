@@ -42,7 +42,11 @@ namespace CommonLib.MvcExtension
                 {
                     view = new WebFormView(controller.ControllerContext, viewPath);
                 }
-                var dataDict = new ViewDataDictionary<T>(model);
+                //var dataDict = new ViewDataDictionary<T>(model);
+                var dataDict = new ViewDataDictionary<T>(controller.ViewData)
+                {
+                    Model = model
+                };
                 var tempDict = new TempDataDictionary();
                 var viewContext = new ViewContext(controller.ControllerContext, view, dataDict,
                                             controller.TempData /*new TempDataDictionary()*/, writer);

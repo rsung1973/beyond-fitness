@@ -18,6 +18,7 @@
 
     models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
     _modelState = ViewContext.ModelState;
+    (ViewBag.Lang as String).SelectUICulture();
 
 }
 <!DOCTYPE html>
@@ -43,7 +44,6 @@
     </script>
     <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
-    <meta name="description" content="BeyondFitness透過一對一專業教練暖心指導並提供安全的訓練環境，上課內容包含專業訓練、增肌減脂，運動傷害、物理治療、營養規劃與運動防護一次包辦！透過科學化方法創造人性化之專屬個人健康分析資料庫+雲端數據化紀錄，保證更有效率的為您增進心肺、肌力與體能，即使為新手初學者也能達成理想的體態與健康目標。台北各區皆設有分店：台北小巨蛋、東門、台北東區與信義安和分店歡迎您隨時來免費體驗。" />
     <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
     <meta name="facebook-domain-verification" content="cb5tm38nnyzmpxesv7fscpdctpj2fa" />
     <title>Beyond Fitness | 專業與科學化的私人教練</title>
@@ -78,7 +78,7 @@
     <!-- Magnific Popup -->
     <link href="plugins/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
     <!-- Magnific Popup -->
-    <link href="css/main-landing.css?2.0" type="text/css" rel="stylesheet" />
+    <link href="css/main-landing.css?2.2" type="text/css" rel="stylesheet" />
 
     @RenderSection("CustomHeader", false)
 
@@ -91,8 +91,8 @@
     <!-- WOW Plugin -->
     <script src="js/wow.js"></script>
     <!-- Main Script -->
-    <script src="js/main-landing.js?1.5"></script>
-    <script src="js/common.js?1.8"></script>
+    <script src="js/main-landing.js?2.0"></script>
+    <script src="js/common.js?2.2"></script>
     <!-- Facebook Pixel Code -->
     <script>
         (function (f, b, e, v, n, t, s) {
@@ -133,7 +133,7 @@
             <a id="navigation" href="javascript:void(0);" class="hidden-md-up"><i class="zmdi zmdi-apps"></i></a>
             <div id="slide_out_menu">
                 <a href="javascript:void(0);" class="menu-close"><i class="zmdi zmdi-close"></i></a>
-                <div class="logo"><a href="javascript:bindTrackingCode('首頁', null, '@(VirtualPathUtility.ToAbsolute("~/MainActivity/Index"))', null)"><img src="images/logo.png" alt="BeyondFitness"></a></div>
+                <div class="logo"><a href="javascript:bindTrackingCode('首頁', null, '@(VirtualPathUtility.ToAbsolute("~/Official/Index"))', null)"><img src="images/logo.png" alt="BeyondFitness"></a></div>
                 <ul>
                     @{ await Html.RenderPartialAsync("~/Views/MainActivity/Module/MobileMenuItem.cshtml");}
 
@@ -149,7 +149,7 @@
             </div>
             <div class="row">
                 <div class="col-md-2 col-sm-2 col-xs-12 text-center">
-                    <a href="javascript:bindTrackingCode('首頁', null, '@(VirtualPathUtility.ToAbsolute("~/MainActivity/Index"))')" class="logo"><img src="images/logo.png" alt="BeyondFitness"></a>
+                    <a href="javascript:bindTrackingCode('首頁', null, '@(VirtualPathUtility.ToAbsolute("~/Official/Index"))')" class="logo"><img src="images/logo.png" alt="BeyondFitness"></a>
                 </div>
                 <div class="col-md-10 col-sm-10 col-xs-12">
                     <ul class="left nav-active">
@@ -158,7 +158,7 @@
                     <script>
                         var reloadPage;
                         function changeLanguage(lang) {
-                            $.post('@(Url.Action("ChangeLanguate", "MainActivity"))', { 'lang': lang }, function (data) {
+                            $.post('@(Url.Action("ChangeLanguage", "Official"))', { 'lang': lang }, function (data) {
                                 if ($.isPlainObject(data)) {
                                     if (data.result) {
                                         if (reloadPage) {

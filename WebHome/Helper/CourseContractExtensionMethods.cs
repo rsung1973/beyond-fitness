@@ -353,7 +353,7 @@ namespace WebHome.Helper
 
             return items
                 .Where(l => l.Status == (int)Naming.LessonSeriesStatus.已啟用)
-                .Where(l => l.LowerLimit.HasValue && (!l.SeriesID.HasValue || l.CurrentPriceSeries.Status == (int)Naming.LessonSeriesStatus.已啟用));
+                .Where(l => /*l.LowerLimit.HasValue &&*/ (!l.SeriesID.HasValue || l.CurrentPriceSeries.Status == (int)Naming.LessonSeriesStatus.已啟用));
         }
 
         public static IQueryable<UserProfile> PromptContractMembers(this int[] uid, GenericManager<BFDataContext> models)
@@ -375,11 +375,15 @@ namespace WebHome.Helper
         public static IQueryable<CourseContract> FilterByAlarmedContract(this IQueryable<CourseContract> items, GenericManager<BFDataContext> models, int alarmCount)
             
         {
-            var c0 = items.Where(c => c.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA);
-            var c1 = items.Where(c => c.ContractType != (int)CourseContractType.ContractTypeDefinition.CFA);
+            var c0 = items.Where(c => c.ContractType == (int)CourseContractType.ContractTypeDefinition.CFA 
+                                    || c.ContractType == (int)CourseContractType.ContractTypeDefinition.CGF
+                                    || c.ContractType == (int)CourseContractType.ContractTypeDefinition.CVF);
+            var c1 = items.Where(c => c.ContractType != (int)CourseContractType.ContractTypeDefinition.CFA
+                                    && c.ContractType != (int)CourseContractType.ContractTypeDefinition.CGF
+                                    && c.ContractType != (int)CourseContractType.ContractTypeDefinition.CVF);
 
-            var c2 = c0.Select(c => new { Contract = c, RemainedCount = c.Lessons - c.RegisterLessonContract.Sum(l => l.RegisterLesson.LessonTime.Count()) })
-                        .Concat(c1.Select(c => new { Contract = c, RemainedCount = c.Lessons - c.RegisterLessonContract.Select(r => r.RegisterLesson).Where(r => r.UID == c.OwnerID).Select(r => r.GroupingLesson.LessonTime).Count() }));
+            var c2 = c0.Select(c => new { Contract = c, RemainedCount = c.RemainedLessonCount(false) })
+                        .Concat(c1.Select(c => new { Contract = c, RemainedCount = c.RemainedLessonCount(false) }));
             return c2.Where(c => c.RemainedCount <= alarmCount).Select(c => c.Contract);
         }
 
@@ -455,5 +459,124 @@ namespace WebHome.Helper
             return item.InstallmentID.HasValue ? models.GetTable<CourseContract>().Where(c => c.InstallmentID == item.InstallmentID).Sum(c => c.Lessons) : (item.Lessons ?? item.LessonPriceType?.ExpandActualLessonCount(models));
         }
 
+        public static LessonPriceType GetCandidateCustomCombinationPrice(this GenericManager<BFDataContext> models)
+        {
+            return models.GetTable<ObjectiveLessonPrice>()
+                .Where(p => p.CatalogID == (int)ObjectiveLessonCatalog.CatalogDefinition.CustomCombination)
+                .Select(p => p.LessonPriceType)
+                .FirstOrDefault();
+        }
+
+        public static List<LessonPriceType> EvaluateCustomCombinationTotalCost(this GenericManager<BFDataContext> models,CourseContractViewModel viewModel, List<LessonPriceType> items, out int totalLessons,out int totalCost)
+        {
+            totalLessons = 0;
+            totalCost = 0;
+
+            CourseContractType typeItem;
+            if (viewModel.ContractType == CourseContractType.ContractTypeDefinition.CGA_Aux)
+            {
+                typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == (int?)viewModel.ContractTypeAux).FirstOrDefault();
+            }
+            else if (viewModel.ContractType == CourseContractType.ContractTypeDefinition.CVA_Aux)
+            {
+                typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == ((int?)viewModel.ContractTypeAux + CourseContractType.OffsetFromCGA2CVA)).FirstOrDefault();
+            }
+            else
+            {
+                typeItem = models.GetTable<CourseContractType>().Where(t => t.TypeID == (int?)viewModel.ContractType).FirstOrDefault();
+            }
+
+            bool isNullOrEmpty = items == null || items.Count == 0;
+            if (items == null)
+            {
+                items = new List<LessonPriceType>();
+            }
+
+            for (int i = 0; i < viewModel.OrderPriceID.Length; i++)
+            {
+                LessonPriceType item;
+                if(isNullOrEmpty)
+                {
+                    item = models.GetTable<LessonPriceType>().Where(p => p.PriceID == viewModel.OrderPriceID[i]).FirstOrDefault();
+                    items.Add(item);
+                }
+                else
+                {
+                    item = items[i];
+                }
+
+                if (viewModel.OrderLessons[i] > 0)
+                {
+                    if (item != null)
+                    {
+                        int lessons = ((item.BundleCount ?? 1) * viewModel.OrderLessons[i].Value);
+                        int cost = (item.ListPrice ?? 0) * lessons;
+                        totalLessons += lessons;
+
+                        if (typeItem != null)
+                        {
+                            if (item.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.一對一課程))
+                            {
+                                totalCost += cost;
+                            }
+                            else
+                            {
+                                totalCost += cost * (typeItem.GroupingMemberCount ?? 1) * (typeItem.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
+                            }
+                        }
+                    }
+                }
+            }
+            return items;
+        }
+
+        public static void EvaluateCustomCombinationTotalCost(this CourseContract item, out int totalLessons, out int totalCost)
+        {
+            totalLessons = 0;
+            totalCost = 0;
+
+            CourseContractType typeItem = item.CourseContractType;
+            foreach (var order in item.CourseContractOrder)
+            {
+                LessonPriceType priceItem = order.LessonPriceType;
+
+                int lessons = ((priceItem.BundleCount ?? 1) * order.Lessons);
+                int cost = (priceItem.ListPrice ?? 0) * lessons;
+                totalLessons += lessons;
+
+                if (typeItem != null)
+                {
+                    if (priceItem.LessonPriceProperty.Any(p => p.PropertyID == (int)Naming.LessonPriceFeature.一對一課程))
+                    {
+                        totalCost += cost;
+                    }
+                    else
+                    {
+                        totalCost += cost * (typeItem.GroupingMemberCount ?? 1) * (typeItem.GroupingLessonDiscount.PercentageOfDiscount ?? 100) / 100;
+                    }
+                }
+            }
+        }
+
+        public static int CalculateReturnAmount(this CourseContract contract,int totalPaid,out int processingFee)
+        {
+            int attendanceFee = 0;
+            foreach (var r in contract.RegisterLessonContract
+                    .Select(c => c.RegisterLesson))
+            {
+                attendanceFee += ((r.AttendedLessonCount(singleMode: true) * r.GroupingMemberCount * r.LessonPriceType.ListPrice * r.GroupingLessonDiscount.PercentageOfDiscount / 100) ?? 0);
+            }
+            int remained = totalPaid - attendanceFee;
+            processingFee = Math.Min(remained * 20 / 100, 9000);
+            return remained;
+        }
+
+        public static String CreatePIN(this GenericManager<BFDataContext> models, CourseContractExtension extension)
+        {
+            var pinCode = DateTime.Now.Ticks % 1000000;
+            extension.SignerPIN = $"{(char)('A' + (pinCode % 26))}{(char)('A' + (pinCode % 1000 % 26))}-{pinCode:000000}";
+            models.SubmitChanges();
+            return extension.SignerPIN;
+        }
     }
 }

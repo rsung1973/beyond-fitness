@@ -50,6 +50,12 @@
         body {
             background-color: #fff;
         }
+        @@page {
+            size: portrait; /* 直向 */
+            size: A4 portrait; /* 混合使用 */
+
+            margin: 1cm; /* 邊界與內容的距離 */
+        }
     </style>
 </head>
 
@@ -59,7 +65,7 @@
         <div class="container-fluid">
             @if (_model.Reason == "展延")
             {
-                await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExtensionView.cshtml", _model);
+                await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExtensionView20220601.cshtml", _model);
             }
             else if (_model.Reason == "轉讓")
             {
@@ -69,16 +75,20 @@
             {
                 if(_model.OperationMode==(int)Naming.OperationMode.快速終止)
                 {
-                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractQuickTerminationView.cshtml", _model);
+                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractQuickTerminationView20220601.cshtml", _model);
                 }
                 else
                 {
-                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractTerminationView.cshtml", _model);
+                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractTerminationView20220601.cshtml", _model);
                 }
             }
             else if (_model.Reason == "轉換體能顧問")
             {
                 await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/ContractConsultantReassignmentView.cshtml", _model);
+            }
+            else if (_model.Reason == "轉換課程堂數")
+            {
+                await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExchangeView20220601.cshtml", _model);
             }
         </div>
     </section>

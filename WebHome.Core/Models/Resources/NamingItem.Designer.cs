@@ -806,7 +806,25 @@ namespace WebHome.Models.Resources {
                 return ResourceManager.GetString("IndexFunFactsTitle", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;br/&gt;請放心&lt;br /&gt;教練會細心了解妳的身體狀況，設計最適合你的課程內容
+        /// </summary>
+        public static string IndexFunFactsContent {
+            get {
+                return ResourceManager.GetString("IndexFunFactsContent", resourceCulture);
+            }
+        }        
         
+        /// <summary>
+        ///   Looks up a localized string similar to 合作夥伴
+        /// </summary>
+        public static string IndexPartnerTitle {
+            get {
+                return ResourceManager.GetString("IndexPartnerTitle", resourceCulture);
+            }
+        }   
+
         /// <summary>
         ///   Looks up a localized string similar to 專業是細心且提升客戶的保障，Beyond 運動與物理治療的配合是有效的.
         /// </summary>
@@ -1103,6 +1121,15 @@ namespace WebHome.Models.Resources {
                 return ResourceManager.GetString("OnLine", resourceCulture);
             }
         }
+
+         /// <summary>
+        ///   Looks up a localized string similar to 線上課程.
+        /// </summary>
+        public static string Service {
+            get {
+                return ResourceManager.GetString("Service", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to 專屬營養教練.
@@ -1209,6 +1236,15 @@ namespace WebHome.Models.Resources {
         public static string OnlinePTTitle {
             get {
                 return ResourceManager.GetString("OnlinePTTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BEYOND Online &lt;br/&gt;私人教練也適合我嗎？.
+        /// </summary>
+        public static string PTTitle {
+            get {
+                return ResourceManager.GetString("PTTitle", resourceCulture);
             }
         }
         

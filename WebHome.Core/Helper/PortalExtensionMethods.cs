@@ -232,12 +232,36 @@ namespace WebHome.Helper
             
         {
             var items = models.GetTable<UserEvent>().Where(v => v.StartDate <= DateTime.Today && v.UID == profile.UID)
-                    .Join(models.GetTable<SystemEventBulletin>(), v => v.SystemEventID, b => b.EventID, (v, b) => v);
-            if (items.Count() > 0)
+                    .Join(models.GetTable<SystemEventBulletin>()
+                                .Where(s => s.EventID == (int)SystemEventBulletin.BulletinEventType.新手上路導覽推播
+                                        || s.EventID == (int)SystemEventBulletin.BulletinEventType.新手上路), v => v.SystemEventID, b => b.EventID, (v, b) => v);
+            if (items.Any())
             {
                 return new UserGuideEvent
                 {
                     GuideEventList = items,
+                    Profile = profile,
+                };
+            }
+
+            return null;
+        }
+
+        public static SimpleAnnouncementEvent CheckCurrentAnnouncementEvent(this UserProfile profile, GenericManager<BFDataContext> models, bool includeAfterToday = false)
+
+        {
+            var items = models.GetTable<UserEvent>()
+                    .Where(v => v.StartDate <= DateTime.Today && v.UID == profile.UID)
+                    .Where(v => !models.GetTable<UserEventCommitment>().Any(c => c.EventID == v.EventID))
+                    .Join(models.GetTable<SystemEventBulletin>()
+                                .Where(s => s.EventID == (int)SystemEventBulletin.BulletinEventType.系統公告), v => v.SystemEventID, b => b.EventID, (v, b) => v);
+
+            var item = items.FirstOrDefault();
+            if (item != null)
+            {
+                return new SimpleAnnouncementEvent
+                {
+                    Announcement = item,
                     Profile = profile,
                 };
             }
@@ -283,12 +307,15 @@ namespace WebHome.Helper
         public static PromptSignContractEvent CheckSignContractEvent(this UserProfile profile, GenericManager<BFDataContext> models, bool includeAfterToday = false)
             
         {
+            //var items = models.PromptContractToSign(true)
+            //    .Where(c => c.CourseContractExtension.SignOnline == true)
+            //    .Where(c => c.OwnerID == profile.UID
+            //        || (c.CourseContractType.IsGroup == true
+            //            && c.CourseContractMember.Any(m => m.UID == profile.UID)));
+
             var items = models.PromptContractToSign(true)
                 .Where(c => c.CourseContractExtension.SignOnline == true)
-                .Where(c => c.OwnerID == profile.UID
-                    || (c.CourseContractType.IsGroup == true
-                        && c.CourseContractMember.Any(m => m.UID == profile.UID)));
-
+                .Where(c => c.OwnerID == profile.UID);
 
             if (items.Count() > 0)
             {

@@ -1,0 +1,59 @@
+﻿
+@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Newtonsoft.Json
+@using WebHome.Models.Resources
+
+@{
+    ModelSource<UserProfile> models;
+    ModelStateDictionary _modelState;
+
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
+    _modelState = ViewContext.ModelState;
+
+    Layout = "~/Views/MainActivity/Template/MainPage.cshtml";
+}
+
+@section CustomHeader {
+    <meta name="description"
+        content="提供女性、年長者、孕婦、新手初學者達成健康體能、增肌減脂、減重、運動傷害復原、提升運動表現目標！館內還有運動按摩師、營養師、與聯新運醫物理治療專業團隊全方位的服務您所有需求。" />
+
+}
+<section class="section-service hidden-sm-down">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="images/landing/service/pc-0.png" alt="私人教練"></a>
+                <img src="images/landing/service/pc-1.png" alt="私人教練"></a>
+                <img src="images/landing/service/pc-2.png" alt="私人教練"></a>
+                <img src="images/landing/service/pc-3.png" alt="私人教練"></a>
+                <img src="images/landing/service/pc-4.png" alt="私人教練"></a>
+                <a href="javascript:bindTrackingCode('預約諮詢', 'AddToWishlist', '@(Url.Action("BookNow", "MainActivity"))', null)"><img src="images/landing/service/pc-5.png" alt="私人教練"></a></a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section-service hidden-md-up">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="images/landing/service/m-0.png" alt="私人教練"></a>
+                <img src="images/landing/service/m-1.png" alt="私人教練"></a>
+                <img src="images/landing/service/m-2.png" alt="私人教練"></a>
+                <img src="images/landing/service/m-3.png" alt="私人教練"></a>
+                <img src="images/landing/service/m-4.png" alt="私人教練"></a>
+                <a href="javascript:bindTrackingCode('預約諮詢', 'AddToWishlist', '@(Url.Action("BookNow", "MainActivity"))', null)"><img src="images/landing/service/m-5.png" alt="私人教練"></a></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section TailPageJavaScriptInclude {
+}

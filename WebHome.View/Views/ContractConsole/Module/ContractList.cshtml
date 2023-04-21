@@ -54,11 +54,11 @@
                 </td>
                 <td>
                     @(item.CourseContractExtension.BranchStore.BranchName)
-                    <span class="badge bg-blue">@(item.LessonPriceType.BranchStore.IsVirtualClassroom() ? "遠距" : null)</span>
+                    <span class="badge bg-blue">@(item.LessonPriceType.BranchStore?.IsVirtualClassroom() == true || item.CourseContractExtension.CourseBranch?.IsVirtualClassroom() == true ? "遠距" : null)</span>
                 </td>
                 <td>@(item.ServingCoach.UserProfile.FullName())</td>
                 <td>@(item.ContractNo())</td>
-                <td>@(item.CourseContractType.TypeName)(@(item.LessonPriceType.DurationInMinutes)分鐘)</td>
+                <td>@(item.CourseContractType.TypeName)(@(item.CurrentPrice.DurationInMinutes)分鐘)</td>
                 <td>
                     @(item.CourseContractRevision != null
                                         ? item.CourseContractRevision.OperationMode.HasValue

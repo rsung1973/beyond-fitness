@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib.Core\CommonLib.Core.csproj" />
+    <ProjectReference Include="..\CommonLib.Logger\CommonLib.Logger.csproj" />
+    <ProjectReference Include="..\CommonLib.PlugInAdapter\CommonLib.PlugInAdapter.csproj" />
+    <ProjectReference Include="..\CommonLib.Utility\CommonLib.Utility.csproj" />
+    <ProjectReference Include="..\WebHome.Core\WebHome.Core.csproj" />
+    <ProjectReference Include="..\WebHome.MainActivity.View\WebHome.MainActivity.View.csproj" />
+    <ProjectReference Include="..\WebHome.View\WebHome.View.csproj" />
+  </ItemGroup>
+
+</Project>

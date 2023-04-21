@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using WebHome.Models.DataEntity;
@@ -31,7 +32,8 @@ namespace WebHome.Models.ViewModel
         private DateTime? contractDate;
 
         public int? ContractID { get; set; }
-        public CourseContractType.ContractTypeDefinition? ContractType { get; set; } = CourseContractType.ContractTypeDefinition.CPA;
+        public CourseContractType.ContractTypeDefinition? ContractType { get; set; } /*= CourseContractType.ContractTypeDefinition.CPA;*/
+        public CourseContractType.ContractTypeDefinition? ContractTypeAux { get; set; }
         public DateTime? ContractDate { get => contractDate?.CurrentLocalTime(); set => contractDate = value; }
         public String Subject { get; set; }
         public DateTime? ValidFrom { get => validFrom?.CurrentLocalTime(); set => validFrom = value; }
@@ -40,6 +42,9 @@ namespace WebHome.Models.ViewModel
         public int? SequenceNo { get; set; } = 0;
         public int? Lessons { get; set; }
         public int? PriceID { get; set; }
+        public int?[] OrderLessons { get; set; }
+        public int?[] OrderPriceID { get; set; }
+
         public String Remark { get; set; }
         public int? FitnessConsultant { get; set; }
         public int? Status { get; set; }
@@ -61,6 +66,7 @@ namespace WebHome.Models.ViewModel
         public bool? Booking { get; set; }
         public bool? Cancel { get; set; }
         public bool? Agree { get; set; }
+        public bool? GDPRAgree { get; set; }
         public String PriceName { get; set; }
         public int? InstallmentID { get; set; }
         public int? ManagerID { get; set; }
@@ -78,6 +84,19 @@ namespace WebHome.Models.ViewModel
         public bool? PartialEffectiive { get; set; }
         public bool? SignOnline { get; set; }
         public int? SupervisorID { get; set; }
+        public CourseContractExtension.UnitPriceAdjustmentDefinition? PriceAdjustment { get; set; }
+        public int?[] SourcePriceID { get; set; }
+        public int?[] ContractLessonRegisterID { get; set; }
+        public int?[] TargetPriceID { get; set; }
+        public int?[] TargetSubtotal { get; set; }
+        public String BankID { get; set; }
+        public String BankAccount { get; set; }
+        public String SignerPIN { get; set; }
+        public bool? CheckBRLearner { get; set; }
+        public bool? CheckBRCoach { get; set; }
+        public int? BRLearner { get; set; }
+        public int? BRCoach { get; set; }
+
     }
 
     public class CourseContractQueryViewModel : CourseContractViewModel
@@ -123,6 +142,12 @@ namespace WebHome.Models.ViewModel
         public int? ContractType { get; set; }
         public bool? ProfileOnly { get; set; }
         public bool? HasReset { get; set; }
+        public enum PhoneUsage
+        {
+            MyOwn = 0,
+            Relational = 1,
+        }
+        public PhoneUsage?[] PhoneType { get; set; }
     }
 
     public class UserSignatureViewModel : QueryViewModel
@@ -137,6 +162,7 @@ namespace WebHome.Models.ViewModel
     {
         public int? ContractID { get; set; }
         public String SignatureName { get; set; }
+        public bool? NextStep { get; set; }
     }
 
     public class LessonPriceQueryViewModel : LessonPriceViewModel
@@ -161,6 +187,7 @@ namespace WebHome.Models.ViewModel
         public int? BirthIncomingDays { get; set; } = 14;
         public bool? IncludeTrial { get; set; }
         public DateTime? BirthDate { get; set; }
+        public String WriteoffCode { get; set; }
     }
 
     public class PaymentViewModel : InvoiceViewModel
@@ -302,6 +329,7 @@ namespace WebHome.Models.ViewModel
         public bool? BypassCondition { get; set; }
         public bool? DetailsOnly { get; set; }
         public bool? IgnoreAttendance { get; set; }
+        public int? Year { get; set; }
     }
 
     public class CoachBonusViewModel : QueryViewModel
@@ -541,10 +569,16 @@ namespace WebHome.Models.ViewModel
         public int? PeriodID { get; set; }
         public int? Year { get; set; }
         public int? Month { get; set; }
-        public int? BranchID { get; set; }
         public int? ChartType { get; set; }
         public Naming.SessionTypeDefinition[] SessionType { get; set; }
 
+    }
+
+    public class MonthlyAssessmentViewModel : MonthlyIndicatorQueryViewModel
+    {
+        public int?[] PersonID { get; set; }
+        public int?[] AcademicGrades { get; set; }
+        public int?[] TechnicalGrades { get; set; }
     }
 
     public class MonthlySelectorViewModel
@@ -569,6 +603,9 @@ namespace WebHome.Models.ViewModel
             "P.I",
             "S.T",
             "T.S",
+            "A.T",
+            "S.R",
+            "S.D",
         };
     }
 
@@ -583,13 +620,27 @@ namespace WebHome.Models.ViewModel
 
     }
 
-    public class ServingCoachQueryViewModel : QueryViewModel
+    public class SelectItemQueryViewModel : QueryViewModel
     {
         public int? Allotment { get; set; }
         public int? AllotmentCoach { get; set; }
         public bool? SelectAll { get; set; }
         public String SelectablePartial { get; set; }
+
+    }
+
+    public class ServingCoachQueryViewModel : SelectItemQueryViewModel
+    {
         public int? WorkPlace { get; set; }
     }
+
+    public class RegisterLessonViewModel : QueryViewModel
+    {
+        public int[] UID { get; set; }    
+        public Naming.LessonPriceFeature? FeatureID { get; set;}
+        public int? Month { get; set; }
+		public int? Lessons { get; set; }
+		public int? AdvisorID { get; set; }
+	}
 
 }

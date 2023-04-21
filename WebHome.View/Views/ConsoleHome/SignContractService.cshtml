@@ -28,9 +28,9 @@
     if (_item.Status < (int)Naming.ContractServiceStatus.待簽名)
     {
         ViewBag.ContractAgent = _model;
+        ViewBag.Supervisor = _model;
     }
 
-    ViewBag.Supervisor = _model;
 
 }
 @section CustomHeader {
@@ -51,22 +51,26 @@
                 @{ var revision = _item.CourseContractRevision;}
                 @if (revision.Reason == "展延")
                 {
-                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExtensionView.cshtml", revision);
+                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExtensionView20220601.cshtml", revision);
                 }
                 else if (revision.Reason == "終止")
                 {
                     if (revision.OperationMode == (int)Naming.OperationMode.快速終止)
                     {
-                        await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractQuickTerminationView.cshtml", revision);
+                        await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractQuickTerminationView20220601.cshtml", revision);
                     }
                     else
                     {
-                        await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractTerminationView.cshtml", revision);
+                        await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractTerminationView20220601.cshtml", revision);
                     }
                 }
                 else if (revision.Reason == "轉換體能顧問")
                 {
                     await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/ContractConsultantReassignmentView.cshtml", revision);
+                }
+                else if (revision.Reason == "轉換課程堂數")
+                {
+                    await Html.RenderPartialAsync("~/Views/ContractConsole/ContractService/CourseContractExchangeView20220601.cshtml", revision);
                 }
                 else if (revision.Reason == "其他")
                 {
@@ -107,12 +111,14 @@
         }
 
         function confirmSignature() {
+            clearErrors();
             showLoading();
             $.post('@Html.Raw(Url.Action("ConfirmContractServiceSignature","ContractConsole",new { KeyID = _item.ContractID.EncryptKey() }))',
                 {
-                    'Extension': $('input[name="extension"]').is(':checked'),
+                    'Extension': true/*$('input[name="extension"]').is(':checked')*/,
                     'Booking': $('input[name="booking"]').is(':checked'),
                     'Cancel': $('input[name="cancel"]').is(':checked'),
+                    'Agree': $('input[name="Agree"]').is(':checked'),
                 }, function (data) {
                     hideLoading();
                     if ($.isPlainObject(data)) {

@@ -1,0 +1,160 @@
+﻿@using System.IO
+@using System.Linq.Expressions
+
+@using WebHome.Helper
+@using WebHome.Models.Locale
+@using WebHome.Models.ViewModel
+@using WebHome.Models.DataEntity
+@using WebHome.Controllers
+@using CommonLib.Utility
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
+@using Newtonsoft.Json
+@{
+    ModelStateDictionary _modelState;
+    ModelSource<UserProfile> models;
+    UserProfile _model;
+    string _chartID = ViewBag.ChartID = "lessonsHeatmap";
+    IEnumerable<int> _hourIdx;
+    LessonTimeBookingViewModel _viewModel;
+
+    _modelState = ViewContext.ModelState;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
+    _model = (UserProfile)this.Model;
+    _hourIdx = Enumerable.Range(7, 16);
+    var _dateIdx = Enumerable.Range(0, 7)
+                    .OrderByDescending(d => d);
+    _viewModel = (LessonTimeBookingViewModel)ViewBag.ViewModel;
+}
+
+@{
+    DateTime start = _viewModel.ClassTimeStart.Value;
+    var items = models.GetTable<V_Tuition>().Where(l => l.ClassTime >= start && l.ClassTime < start.AddDays(7));
+    if (_viewModel.BranchID.HasValue)
+    {
+        items = items.Where(l => l.BranchID == _viewModel.BranchID);
+    }
+    else
+    {
+        items = items.Where(l => l.BranchID.HasValue);
+    }
+
+    var dataItems = items.ToList()
+        .GroupBy(l => new { DateIdx = (l.ClassTime.Value.Date - start).Days, Hour = l.ClassTime.Value.Hour });
+
+    var result = _dateIdx.SelectMany(d =>
+        _hourIdx.Select(h => new int[]
+                {
+                    d,
+                    h,
+                    dataItems.Where(g => g.Key.DateIdx == d && g.Key.Hour == h)
+                        .FirstOrDefault()?.Where(t => BusinessConsoleExtensions.SessionScopeForComleteLessonCount.Contains(t.PriceStatus)
+                            || BusinessConsoleExtensions.SessionScopeForComleteLessonCount.Contains(t.ELStatus)).Sum(l=>l.GroupingMemberCount) ?? 0,
+                    dataItems.Where(g => g.Key.DateIdx == d && g.Key.Hour == h)
+                        .FirstOrDefault()?.Where(l => l.PriceStatus == (int)Naming.LessonPriceStatus.自主訓練
+                        || l.ELStatus == (int)Naming.LessonPriceStatus.自主訓練).Count() ?? 0,
+                    dataItems.Where(g => g.Key.DateIdx == d && g.Key.Hour == h)
+                        .FirstOrDefault()?.Where(l => l.PriceStatus == (int)Naming.LessonPriceStatus.體驗課程
+                                    || (l.ELStatus == (int)Naming.LessonPriceStatus.體驗課程)).Count() ?? 0,
+                    dataItems.Where(g => g.Key.DateIdx == d && g.Key.Hour == h)
+                        .FirstOrDefault()?.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Count() ?? 0,
+                    dataItems.Where(g => g.Key.DateIdx == d && g.Key.Hour == h)
+                        .FirstOrDefault()?.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Count() ?? 0,
+
+                }))
+                .ToArray();
+
+}
+<script>
+    if ($global.echarts.hours === undefined) {
+        $global.echarts.hours = [];
+    }
+    if ($global.echarts.days === undefined) {
+        $global.echarts.days = [];
+    }
+    if ($global.echarts.data === undefined) {
+        $global.echarts.data = [];
+    }
+    $global.echarts.hours['@(_chartID)'] = @Html.Raw(_hourIdx.Select(h=>$"{h:00}").JsonStringify());
+    // prettier-ignore
+    $global.echarts.days['@(_chartID)'] = @Html.Raw(_dateIdx.Select(d=> BuildDateInfo(start.AddDays(d))).JsonStringify());
+    // prettier-ignore
+    $global.echarts.data['@(_chartID)'] = @Html.Raw(result.JsonStringify())
+        .map(function(item) {
+        return [item[1] - 7, 6 - item[0], item[2] + item[3] + item[4] + item[5] + item[6] || '-', item[2], item[3], item[4], item[5], item[6], item[2] + item[3] + item[4] + item[5] + item[6] || '-'];
+    });
+
+    $global.echarts.option['@(_chartID)'] = {
+        tooltip: {
+            position: 'top',
+            formatter: function(params, tickets) {
+                var str = "";
+    @* if (params.value[1] > 0) {
+                    str = str + ' P.T:' + params.value[1] +'<br/>';
+                    }
+                    if (params.value[2] > 0) {
+                    str = str + ' P.I:' + params.value[2] +'<br/>';
+                    }
+                    if (params.value[3] > 0) {
+                    str = str + ' T.S:' + params.value[3];
+                    }  *@
+
+                    str = ' P.T:' + params.value[3] + '<br/>' + ' T.S:' + params.value[5] + '<br/>' + ' P.I:' + params.value[4] + '<br/>' + ' S.R:' + params.value[6] + '<br/>' + ' S.D:' + params.value[7];
+                return str;
+            }
+        },
+        grid: {
+            // height: '80%',
+            top: '20%'
+        },
+        xAxis: {
+            type: 'category',
+            name: '時段',
+            nameLocation: 'middle',
+            nameGap: 20,
+            data: $global.echarts.hours['@(_chartID)'],
+            splitArea: {
+                show: true
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: $global.echarts.days['@(_chartID)'],
+            splitArea: {
+                show: true
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: @((result.Select(v=>v[2]+v[3]+v[4]+v[5]+v[6]).OrderByDescending(v=>v).First()+9)/10*10),
+            calculable: true,
+            orient: "horizontal",
+            left: 'center',
+            top: 0
+        },
+        series: [
+            {
+                type: 'heatmap',
+                data: $global.echarts.data['@(_chartID)'],
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+</script>
+
+@functions
+{
+    String BuildDateInfo(DateTime d)
+    {
+        return $"{d:MM/dd} ({Naming.DayOfWeek[(int)d.DayOfWeek]})";
+    }
+}

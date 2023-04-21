@@ -23,7 +23,7 @@ using WebHome.Controllers;
 
 namespace WebHome.Helper
 {
-    public static class BusinessConsoleExtensions
+    public static partial class BusinessConsoleExtensions
     {
         public static MonthlyIndicator InitializeMonthlyIndicator(this GenericManager<BFDataContext> models, int year, int month, bool? forcedPrepare = null)
                 
@@ -169,6 +169,13 @@ namespace WebHome.Helper
                         AverageLessonPrice = sampleItem.CalculateAverageLessonPrice(models, c.CoachID),
                     };
                     newItem.LessonTuitionGoal = newItem.CompleteLessonsGoal * newItem.AverageLessonPrice;
+
+                    models.GetTable<MonthlyCoachLearnerReview>()
+                        .InsertOnSubmit(new MonthlyCoachLearnerReview
+                        {
+                            MonthlyIndicator = item,
+                            CoachID = c.CoachID,
+                        });
                 }
             }
 
@@ -232,22 +239,6 @@ namespace WebHome.Helper
             return item;
         }
 
-        public static readonly int?[] SessionScopeForAchievement = new int?[]
-                    {
-                        (int)Naming.LessonPriceStatus.一般課程,
-                        (int)Naming.LessonPriceStatus.已刪除,
-                        (int)Naming.LessonPriceStatus.團體學員課程,
-                    };
-
-        public static readonly int?[] SessionScopeForComleteLessonCount = new int?[]
-        {
-                    (int)Naming.LessonPriceStatus.一般課程,
-                    (int)Naming.LessonPriceStatus.已刪除,
-                    (int)Naming.LessonPriceStatus.點數兌換課程,
-                    (int)Naming.LessonPriceStatus.員工福利課程,
-                    (int)Naming.LessonPriceStatus.團體學員課程,
-        };
-
         public static IQueryable<Payment> UpdateVoidShare(this GenericManager<BFDataContext> models, DateTime startDate, DateTime endExclusiveDate)
         {
 
@@ -296,7 +287,7 @@ namespace WebHome.Helper
             }
             else if (item.StartDate == DateTime.Today.FirstDayOfMonth())
             {
-                lessonItems = lessonItems.Where(l => l.ClassTime < DateTime.Today);
+                lessonItems = lessonItems.Where(l => l.ClassTime < DateTime.Today.AddDays(1));
             }
             else
             {
@@ -388,6 +379,12 @@ namespace WebHome.Helper
                     revenueItem.RenewContractAchievement = renewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
                     revenueItem.InstallmentAchievement = installmentContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
                     revenueItem.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+                    revenueItem.ATCount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Count();
+                    revenueItem.ATAchievement = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Sum(t => t.ListPrice) ?? 0;
+                    revenueItem.SRCount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Count();
+                    revenueItem.SRAchievement = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Sum(t => t.ListPrice) ?? 0;
+                    revenueItem.SDCount = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Count();
+                    revenueItem.SDAchievement = tuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Sum(t => t.ListPrice) ?? 0;
 
                     models.SubmitChanges();
                 }
@@ -398,8 +395,9 @@ namespace WebHome.Helper
                 foreach (var branchIndicator in item.MonthlyBranchIndicator)
                 {
                     var voidTuition = voidPayment
-                        .Join(models.GetTable<PaymentTransaction>().Where(t => t.BranchID == branchIndicator.BranchID), p => p.PaymentID, t => t.PaymentID, (p, t) => p)
-                        .Join(models.GetTable<TuitionAchievement>(), p => p.PaymentID, t => t.InstallmentID, (p, t) => t);
+                        .Join(models.GetTable<TuitionAchievement>(), 
+                            p => p.PaymentID, t => t.InstallmentID, (p, t) => t)
+                        .Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
 
                     var branchTuitionItems = tuitionItems.Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
                     var branchAchievementItems = achievementItems.Where(t => t.CoachWorkPlace == branchIndicator.BranchID);
@@ -465,6 +463,12 @@ namespace WebHome.Helper
                         revenueItem.RenewContractAchievement = branchRenewContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
                         revenueItem.InstallmentAchievement = branchInstallmentContractAchievementItems.Sum(t => t.ShareAmount) ?? 0;
                         revenueItem.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+                        revenueItem.ATCount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Count();
+                        revenueItem.ATAchievement = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Sum(t => t.ListPrice) ?? 0;
+                        revenueItem.SRCount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Count();
+                        revenueItem.SRAchievement = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Sum(t => t.ListPrice) ?? 0;
+                        revenueItem.SDCount = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Count();
+                        revenueItem.SDAchievement = branchTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Sum(t => t.ListPrice) ?? 0;
 
                         models.SubmitChanges();
                     }
@@ -549,6 +553,12 @@ namespace WebHome.Helper
 
                     coachIndicator.STCount = coachSTItems.Count();
                     coachIndicator.VoidShare = voidTuition.Sum(t => t.VoidShare) ?? 0;
+                    coachIndicator.ATCount = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Count();
+                    coachIndicator.ATAchievement = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動防護課程).Sum(t => t.ListPrice) ?? 0;
+                    coachIndicator.SRCount = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Count();
+                    coachIndicator.SRAchievement = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.運動恢復課程).Sum(t => t.ListPrice) ?? 0;
+                    coachIndicator.SDCount = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Count();
+                    coachIndicator.SDAchievement = coachTuitionItems.Where(t => t.PriceStatus == (int)Naming.LessonPriceStatus.營養課程).Sum(t => t.ListPrice) ?? 0;
 
                     models.SubmitChanges();
                 }
@@ -582,11 +592,11 @@ namespace WebHome.Helper
             IQueryable<V_Tuition> tuitionItems = lessonItems;
             int lessonAchievement;
             var coachTuitionItems = tuitionItems.Where(t => t.AttendingCoach == coachID);
-            lessonAchievement = coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.PriceStatus)).Sum(t => t.ListPrice * t.GroupingMemberCount * t.PercentageOfDiscount / 100) ?? 0;
-            lessonAchievement += (coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.ELStatus)).Sum(l => l.EnterpriseListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100) ?? 0);
+            lessonAchievement = coachTuitionItems.Where(t => SessionScopeForAveragePrice.Contains(t.PriceStatus)).Sum(t => t.ListPrice * t.GroupingMemberCount * t.PercentageOfDiscount / 100) ?? 0;
+            lessonAchievement += (coachTuitionItems.Where(t => SessionScopeForAveragePrice.Contains(t.ELStatus)).Sum(l => l.EnterpriseListPrice * l.GroupingMemberCount * l.PercentageOfDiscount / 100) ?? 0);
 
-            var completeLessonCount = Math.Max(coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.PriceStatus)).Count()
-                                    + coachTuitionItems.Where(t => SessionScopeForAchievement.Contains(t.ELStatus)).Count(), 1);
+            var completeLessonCount = Math.Max(coachTuitionItems.Where(t => SessionScopeForAveragePrice.Contains(t.PriceStatus)).Count()
+                                    + coachTuitionItems.Where(t => SessionScopeForAveragePrice.Contains(t.ELStatus)).Count(), 1);
 
             return (lessonAchievement + completeLessonCount - 1) / completeLessonCount;
         }
@@ -632,5 +642,6 @@ namespace WebHome.Helper
                 models.SubmitChanges();
             }
         }
+
     }
 }

@@ -19,21 +19,21 @@
 
 
     _modelState = ViewContext.ModelState;
-    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"];;
+    models = (ModelSource<UserProfile>)ViewContext.HttpContext.Items["Models"]; ;
     _model = (IQueryable<UserProfile>)this.Model;
     _viewModel = (CalendarEventQueryViewModel)ViewBag.ViewModel;
 }
-@{ 
+@{
     ViewBag.SelectMember = (Func<UserProfile, String>)(item =>
     {
-        return $"commitContractMember({item.UID});";
+        return $"selectContractMember({item.UID});";
     });
     ViewBag.ShowPhone = true;
     await Html.RenderPartialAsync("~/Views/ConsoleEvent/EventModal/MemberSelector.cshtml", _model);
-    }
+}
 
 <script>
-    function commitContractMember(uid) {
+    function selectContractMember(uid) {
         if (!$global.viewModel.UID) {
             $global.viewModel.UID = [];
         }
